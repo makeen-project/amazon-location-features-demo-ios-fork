@@ -1,0 +1,36 @@
+{
+  "configurations" : [
+    {
+      "id" : "40247A23-1918-4830-A2A3-819AD30DD221",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en",
+    "locationScenario" : {
+      "identifier" : "New York, NY, USA",
+      "referenceType" : "built-in"
+    },
+    "region" : "US"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:LocationServices.xcodeproj",
+        "identifier" : "963EBF4E29AF92F5001961F2",
+        "name" : "LocationServicesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LocationServices.xcodeproj",
+        "identifier" : "8AB3F18F29C8A1C3008FDF37",
+        "name" : "Amazon Location Demo UITests"
+      }
+    }
+  ],
+  "version" : 1
+}

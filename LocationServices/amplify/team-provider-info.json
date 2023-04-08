@@ -1,0 +1,22 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-locationservices-dev-221631-authRole",
+      "UnauthRoleArn": "arn:aws:iam::211423032795:role/amplify-locationservices-dev-221631-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::211423032795:role/amplify-locationservices-dev-221631-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-locationservices-dev-221631-deployment",
+      "UnauthRoleName": "amplify-locationservices-dev-221631-unauthRole",
+      "StackName": "amplify-locationservices-dev-221631",
+      "StackId": "arn:aws:cloudformation:us-east-1:211423032795:stack/amplify-locationservices-dev-221631/ee41f310-7418-11ed-a93c-127cd3700d0d",
+      "AmplifyAppId": "d1iuzzts56bhdu"
+    },
+    "categories": {
+      "auth": {
+        "locationservices3c8efb363c8efb36": {
+          "amazonAppId": "amzn1.application.3b52ee759e7940cc88d267f3ee142f54"
+        }
+      }
+    }
+  }
+}
