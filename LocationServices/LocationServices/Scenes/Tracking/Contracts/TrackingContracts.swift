@@ -1,0 +1,33 @@
+//
+//  TrackingContracts.swift
+//  LocationServices
+//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+import Foundation
+import CoreLocation
+
+protocol TrackingNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
+    func showNextTrackingScene()
+    func showTrackingHistory(isTrackingActive: Bool)
+    func showMapStyleScene()
+    func showLoginFlow()
+    func showLoginSuccess()
+    func showAttribution()
+}
+
+protocol TrackingViewModelProtocol: AnyObject {
+    var delegate: TrackingViewModelDelegate? { get set }
+    var isTrackingActive: Bool { get }
+    
+    func startTracking()
+    func stopTracking()
+    func trackLocationUpdate(location: CLLocation?)
+    func fetchListOfGeofences()
+}
+
+protocol TrackingViewModelDelegate: AnyObject, AlertPresentable {
+    func drawTrack(history: [TrackingHistoryPresentation])
+    func showGeofences(_ models: [GeofenceDataModel])
+}

@@ -1,0 +1,25 @@
+excluded: # excluded via string array
+- Pods
+
+#Function Body Lenght Constant. Default Value: 40
+function_body_length: 150
+
+#File lenght. Default value: 400
+file_length: 550
+
+line_length:
+  warning: 160
+  error: 250
+  ignores_comments: true
+  ignores_urls: true
+  ignores_interpolated_strings: true
+
+#Disabled Rules
+disabled_rules:
+- closure_parameter_position
+- large_tuple
+- syntactic_sugar
+- identifier_name
+- trailing_whitespace
+- force_cast
+- function_parameter_count

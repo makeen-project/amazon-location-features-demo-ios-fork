@@ -1,0 +1,72 @@
+//
+//  ExploreContracts.swift
+//  LocationServices
+//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+import Foundation
+import CoreLocation
+
+import AWSMobileClientXCF
+
+protocol ExploreViewModelProtocol: AnyObject {
+    var delegate: ExploreViewModelOutputDelegate? { get set }
+    func login()
+    func logout()
+    
+    func activateRoute(route: RouteModel)
+    func deactivateRoute()
+    func userLocationChanged(_ userLocation: CLLocationCoordinate2D)
+    func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?)
+    func shouldShowWelcome() -> Bool
+}
+
+protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {
+    func loginCompleted(_ presentation: ExplorePresentation)
+    func logoutCompleted()
+    
+    func routeReCalculated(route: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes)
+    func userReachedDestination(_ destination: MapModel)
+    func showAnnotation(model: SearchPresentation)
+}
+
+protocol ExploreVCProtocol: AnyObject {
+    var delegate: ExploreNavigationDelegate? { get set }
+}
+
+protocol ExploreNavigationDelegate: AnyObject {
+    func showMapStyles()
+    func showDirections(isRouteOptionEnabled: Bool?,
+                        firstDestionation: MapModel?,
+                        secondDestionation: MapModel?,
+                        lat: Double?,
+                        long: Double?)
+    func showSearchSceneWith(lat: Double?, long: Double?)
+    func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?)
+    func showNavigationview(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?)
+    func dismissSearchScene()
+    func showLoginFlow()
+    func showLoginSuccess()
+    func showAttribution()
+    func showWelcome()
+}
+
+protocol ExploreViewDelegate: AnyObject {
+    var delegate: ExploreViewOutputDelegate? { get set }
+    func getUserLocation()
+}
+
+protocol ExploreViewOutputDelegate: AnyObject {
+    func loginButtonTapped()
+    func searchTextTapped(userLocation: CLLocationCoordinate2D?)
+    func showPoiCard(cardData: [MapModel])
+    func showDirectionView(userLocation: CLLocationCoordinate2D?)
+    func getBottomSheetHeight() -> CGFloat
+    func getBottomSafeAreaWithTabBarHeight() -> CGFloat
+    func userLocationChanged(_ userLocation: CLLocationCoordinate2D)
+    func performLocationDependentAction(_ action: ()->())
+    func showMapStyles()
+    func showPoiCard(for location: CLLocationCoordinate2D)
+    func showAttribution()
+}

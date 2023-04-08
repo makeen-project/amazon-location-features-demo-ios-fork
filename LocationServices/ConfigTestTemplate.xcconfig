@@ -1,0 +1,20 @@
+//
+//  ConfigTestTemplate.xcconfig
+//  LocationServices
+//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+IDENTITY_POOL_ID = REGION:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+AWS_REGION = REGION
+
+TEST_IDENTITY_POOL_ID = REGION:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+TEST_USER_POOL_CLIENT_ID = USER_POOL_CLIENT_ID
+TEST_USER_POOL_ID = USER_POOL_ID
+TEST_USER_DOMAIN = USER_DOMAIN
+TEST_WEB_SOCKET_URL = WEB_SOCKET_URL
+TEST_SAMPLE_USER_NAME = USER_NAME
+TEST_SAMPLE_PASSWORD = PASSWORD

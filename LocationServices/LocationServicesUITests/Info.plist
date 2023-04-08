@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TestIdentityPoolId</key>
+	<string>$(TEST_IDENTITY_POOL_ID)</string>
+	<key>TestSamplePassword</key>
+	<string>$(TEST_SAMPLE_PASSWORD)</string>
+	<key>TestSampleUserName</key>
+	<string>$(TEST_SAMPLE_USER_NAME)</string>
+	<key>TestUserDomain</key>
+	<string>$(TEST_USER_DOMAIN)</string>
+	<key>TestUserPoolClientId</key>
+	<string>$(TEST_USER_POOL_CLIENT_ID)</string>
+	<key>TestUserPoolId</key>
+	<string>$(TEST_USER_POOL_ID)</string>
+	<key>TestWebSocketUrl</key>
+	<string>$(TEST_WEB_SOCKET_URL)</string>
+</dict>
+</plist>

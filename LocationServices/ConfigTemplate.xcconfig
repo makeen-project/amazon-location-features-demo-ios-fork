@@ -1,0 +1,12 @@
+//
+//  ConfigTemplate.xcconfig
+//  LocationServices
+//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+IDENTITY_POOL_ID = REGION:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+AWS_REGION = REGION

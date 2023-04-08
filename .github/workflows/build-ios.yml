@@ -1,0 +1,120 @@
+name: Build and Distribute iOS App
+concurrency:
+  group: main
+  cancel-in-progress: true
+on:
+  workflow_dispatch:
+  push:
+    branches: [ github, develop, stage, master ]
+jobs:
+  startSlackNotification:
+    name: Slack Starting Notification
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          export BUILD_NUM=$((${{ github.run_number }}))
+          export GITHUB_WORKFLOW_URL=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+          echo "BUILD_NUM=$BUILD_NUM" >> $GITHUB_ENV
+          echo "GITHUB_WORKFLOW_URL=$GITHUB_WORKFLOW_URL" >> $GITHUB_ENV
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: amazon-location-services-builds
+          SLACK_COLOR: '#FFFF00'
+          SLACK_ICON_EMOJI: ':hammer:'
+          SLACK_LINK_NAMES: true
+          SLACK_TITLE: ${{ format('iOS Build №{0} started...', env.BUILD_NUM) }}
+          SLACK_MESSAGE: |
+            ${{ format('Branch: `{0}`', github.ref_name) }}
+          SLACK_FOOTER: ${{ github.ref }} | ${{ env.GITHUB_WORKFLOW_URL }}
+          SLACK_USERNAME: CI/CD Bot
+          MSG_MINIMAL: true
+  build-iOS:
+    name: Build iOS
+    env:
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Setup Bundler
+        working-directory: ./LocationServices
+        run: |
+          bundle config --local path ./vendor/bundle
+          bundle config --local deployment true
+          bundle install
+
+      - name: Setup Config Files
+        working-directory: ./LocationServices
+        run: |
+          base64 -d <<< ${{ secrets.AWS_CONFIG }} > Config.xcconfig
+          base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
+
+      - name: Run tests
+        working-directory: ./LocationServices
+        run: bundle exec fastlane test
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: ${{ env.xcresult_path }}
+          retention-days: 1
+
+      - name: Build and distribute iOS
+        working-directory: ./LocationServices
+        run: |
+          export BUILD_NUM=$((${{ github.run_number }}))
+          echo Building $BUILD_NUM
+          bundle exec fastlane build_distribute \
+            build_number:$BUILD_NUM \
+            key_id:${{ secrets.KEY_ID }} \
+            issuer_id:${{ secrets.ISSUER_ID }} \
+            key_content:${{ secrets.KEY_CONTENT }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ios-${{ github.run_number }}
+          path: ./LocationServices/LocationServices.ipa
+
+      - run: cat /Users/runner/Library/Logs/gym/LocationServices-LocationServices.log
+        if: always()
+
+  slackNotification:
+    name: Slack Final Notification
+    needs: [
+      build-iOS
+    ]
+    if: always()
+    runs-on: ubuntu-latest
+    env:
+      SUCCESS: ${{ needs.build-iOS.result == 'success' }}
+    steps:
+      - run: |
+          export BUILD_NUM=$((${{ github.run_number }}))
+          export GITHUB_WORKFLOW_URL=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+          echo "BUILD_NUM=$BUILD_NUM" >> $GITHUB_ENV
+          echo "GITHUB_WORKFLOW_URL=$GITHUB_WORKFLOW_URL" >> $GITHUB_ENV
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: amazon-location-services-builds
+          SLACK_COLOR: ${{ env.SUCCESS == 'true' && 'success' || 'failure' }}
+          SLACK_ICON_EMOJI: ':tophat:'
+          SLACK_LINK_NAMES: true
+          SLACK_TITLE: ${{ format('iOS build №{0} {1}', env.BUILD_NUM, env.SUCCESS == 'true' && 'finished successfully :tada:' || 'failed!') }}
+          SLACK_MESSAGE: |
+            ${{ format('Branch: `{0}`', github.ref_name) }}
+            ${{ format('Build Number: `{0}`', env.BUILD_NUM) }}
+            ${{ format('URL: {0}', env.GITHUB_WORKFLOW_URL) }}
+          SLACK_FOOTER: ${{ github.ref }} | ${{ env.GITHUB_WORKFLOW_URL }}
+          SLACK_USERNAME: CI/CD Bot
+          MSG_MINIMAL: true

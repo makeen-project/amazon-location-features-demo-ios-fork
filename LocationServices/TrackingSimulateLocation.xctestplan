@@ -1,0 +1,27 @@
+{
+  "configurations" : [
+    {
+      "id" : "6AE4819F-B46C-42E6-ACC3-C7BFECB2C4BD",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "locationScenario" : {
+      "identifier" : "..\/..\/ToAllo.gpx"
+    },
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:LocationServices.xcodeproj",
+        "identifier" : "8AB3F18F29C8A1C3008FDF37",
+        "name" : "Amazon Location Demo UITests"
+      }
+    }
+  ],
+  "version" : 1
+}
