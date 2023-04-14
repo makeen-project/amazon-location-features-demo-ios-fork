@@ -40,30 +40,21 @@ final class LocationServicesTests: XCTestCase {
     func testSaveAndGetObject() throws {
         
         let mapStyle: MapStyleModel = DefaultUserSettings.mapStyle
-        
         UserDefaultsHelper.saveObject(value: mapStyle, key: .mapStyle)
-        
         let savedMapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        
         XCTAssertEqual(savedMapStyle?.type, mapStyle.type, "Expected \(mapStyle) value for this key.")
     }
     
     func testSetAndGetAppState() throws {
         
         UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
-        
         XCTAssertEqual(UserDefaultsHelper.getAppState(), .prepareDefaultAWSConnect, "Expected \(AppState.prepareDefaultAWSConnect) value for this key.")
     }
     
     func testDebounce() throws {
         let debounceManager = DebounceManager(debounceDuration: 1)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-
         let date1 = Date()
 
-        
         debounceManager.debounce {
             let date2 = Date()
             let secondsBetween = Int(date2.timeIntervalSince(date1))
