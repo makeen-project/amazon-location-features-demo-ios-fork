@@ -12,6 +12,10 @@
 		8A063EA129C9C256001FF40C /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */; };
 		8A063EA229C9C27C001FF40C /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
 		8A0EB58A2983F9CF00FBB3E5 /* GeofenceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0EB5892983F9CF00FBB3E5 /* GeofenceAnnotation.swift */; };
+		8A10E37D29E97948005165CD /* SplashBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10E37C29E97948005165CD /* SplashBuilder.swift */; };
+		8A10E37F29E97950005165CD /* SplashContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10E37E29E97950005165CD /* SplashContracts.swift */; };
+		8A10E38129E97959005165CD /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10E38029E97958005165CD /* SplashViewModel.swift */; };
+		8A10E38329E9795F005165CD /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10E38229E9795F005165CD /* SplashVC.swift */; };
 		8A1110D6297AB20300BC86E1 /* LSFaux3DUserLocationAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D5297AB20300BC86E1 /* LSFaux3DUserLocationAnnotationView.swift */; };
 		8A1110DA297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D7297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift */; };
 		8A1110DB297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D8297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift */; };
@@ -345,6 +349,10 @@
 
 /* Begin PBXFileReference section */
 		8A0EB5892983F9CF00FBB3E5 /* GeofenceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceAnnotation.swift; sourceTree = "<group>"; };
+		8A10E37C29E97948005165CD /* SplashBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashBuilder.swift; sourceTree = "<group>"; };
+		8A10E37E29E97950005165CD /* SplashContracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashContracts.swift; sourceTree = "<group>"; };
+		8A10E38029E97958005165CD /* SplashViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
+		8A10E38229E9795F005165CD /* SplashVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		8A1110D5297AB20300BC86E1 /* LSFaux3DUserLocationAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSFaux3DUserLocationAnnotationView.swift; sourceTree = "<group>"; };
 		8A1110D7297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingBeamLayer.swift; sourceTree = "<group>"; };
 		8A1110D8297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingIndicator.swift; sourceTree = "<group>"; };
@@ -704,6 +712,49 @@
 				8A190C0229DD74A600F8FD7C /* ImageAnnotation.swift */,
 			);
 			path = MapAnnotations;
+			sourceTree = "<group>";
+		};
+		8A10E37729E97908005165CD /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				8A10E37829E97911005165CD /* Builder */,
+				8A10E37929E9791D005165CD /* Contracts */,
+				8A10E37A29E9792A005165CD /* ViewModel */,
+				8A10E37B29E97939005165CD /* Controller */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		8A10E37829E97911005165CD /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				8A10E37C29E97948005165CD /* SplashBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		8A10E37929E9791D005165CD /* Contracts */ = {
+			isa = PBXGroup;
+			children = (
+				8A10E37E29E97950005165CD /* SplashContracts.swift */,
+			);
+			path = Contracts;
+			sourceTree = "<group>";
+		};
+		8A10E37A29E9792A005165CD /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8A10E38029E97958005165CD /* SplashViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8A10E37B29E97939005165CD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8A10E38229E9795F005165CD /* SplashVC.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		8A1110D4297AB1F200BC86E1 /* UserLocationAnnotation */ = {
@@ -1083,6 +1134,7 @@
 		AD2AF075292EA52D00149904 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				8A10E37729E97908005165CD /* Splash */,
 				ADD5D7A5296DFF6B0022480B /* PostLogin */,
 				AD20616B2968A827005F8BBB /* Login */,
 				AD2AF086292EA62200149904 /* Explore */,
@@ -2808,6 +2860,7 @@
 				AD300A30294BDE3A00355423 /* LocationServicesCustomFonts.swift in Sources */,
 				ADCF384E299166FB008289BB /* TrackingServiceable.swift in Sources */,
 				ADBD7FBB2949C687005DB4E4 /* POICardVC.swift in Sources */,
+				8A10E38329E9795F005165CD /* SplashVC.swift in Sources */,
 				ADC97381295EDA10005AE918 /* NavigationBuilder.swift in Sources */,
 				ADBDDEF829842CBD00696EC6 /* ExploreMapStyleContract.swift in Sources */,
 				AD146487293D00B900C29D82 /* PlacesEndpoint.swift in Sources */,
@@ -2831,6 +2884,7 @@
 				ADBDDEF12983176300696EC6 /* DataProviderVC+TableView.swift in Sources */,
 				ADABECDB293FD9CC00E66FC5 /* SearchPresentation.swift in Sources */,
 				8A85A75C29A40A1E0022ABE0 /* TrackingHistorySectionHeaderView.swift in Sources */,
+				8A10E37F29E97950005165CD /* SplashContracts.swift in Sources */,
 				ADD139AB2981D72C0003F917 /* MapStyleModel.swift in Sources */,
 				ADD139A82981C7F20003F917 /* MapStyleCell.swift in Sources */,
 				AD98974A298C57C10041E867 /* TrackingHistoryViewModel.swift in Sources */,
@@ -2882,6 +2936,7 @@
 				8AD67F9A29D1B243004A5F7D /* MapStyleTypes+Image.swift in Sources */,
 				ADD5D7C1296F7F970022480B /* GeofenceDashboard+Tableview.swift in Sources */,
 				ADD5D7BF296F7F880022480B /* GeofenceDashboardViewModel.swift in Sources */,
+				8A10E37D29E97948005165CD /* SplashBuilder.swift in Sources */,
 				AD2AF074292EA44500149904 /* ExploreCoordinator.swift in Sources */,
 				AD20617F296CB23C005F8BBB /* LoginFooterView.swift in Sources */,
 				AD2AF0CD292EAB7500149904 /* SettingsVCBuilder.swift in Sources */,
@@ -2917,6 +2972,7 @@
 				ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureDelegate.swift in Sources */,
 				8AFDA09629DDBC3800114BB7 /* AboutVCBuilder.swift in Sources */,
 				ADAF3653294A6A0700DC4774 /* POICardViewModel.swift in Sources */,
+				8A10E38129E97959005165CD /* SplashViewModel.swift in Sources */,
 				ADC97395295F3F9C005AE918 /* MapNavigationView.swift in Sources */,
 				AD2AF0E1292EAC1C00149904 /* MoreViewModel.swift in Sources */,
 				ADC1249C2978A56E00B08C20 /* GeofenceDashboardContracts.swift in Sources */,

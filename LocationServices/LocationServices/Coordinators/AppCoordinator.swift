@@ -23,11 +23,21 @@ final class AppCoordinator: AppCoordinatorProtocol {
     }
 
     func start() {
-        startMainFlow()
+        showSplash()
     }
 
     func startLoginFlow() {
 
+    }
+    
+    private func showSplash() {
+        let splashVC = SplashBuilder.create()
+        splashVC.setupCompleteHandler = { [weak self] in
+            self?.startMainFlow()
+        }
+        
+        navigationController.navigationBar.isHidden = true
+        navigationController.setViewControllers([splashVC], animated: false)
     }
 
     func startMainFlow() {
