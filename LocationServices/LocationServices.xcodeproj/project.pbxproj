@@ -319,9 +319,6 @@
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
-		F145193129E6EC38002A57CC /* SettingsDefaultValueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F145193029E6EC38002A57CC /* SettingsDefaultValueHelper.swift */; };
-		F145193529E8116B002A57CC /* CLLocationCoordinate2DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F145193429E8116B002A57CC /* CLLocationCoordinate2DTests.swift */; };
-		F145193729E81D31002A57CC /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F145193629E81D31002A57CC /* UtilTests.swift */; };
 		F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */; };
 		F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */; };
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
@@ -655,9 +652,6 @@
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
-		F145193029E6EC38002A57CC /* SettingsDefaultValueHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDefaultValueHelper.swift; sourceTree = "<group>"; };
-		F145193429E8116B002A57CC /* CLLocationCoordinate2DTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DTests.swift; sourceTree = "<group>"; };
-		F145193629E81D31002A57CC /* UtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilTests.swift; sourceTree = "<group>"; };
 		F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTabBarScreen.swift; sourceTree = "<group>"; };
 		F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTrackingScreen.swift; sourceTree = "<group>"; };
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
@@ -922,9 +916,6 @@
 			isa = PBXGroup;
 			children = (
 				963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */,
-				F145193029E6EC38002A57CC /* SettingsDefaultValueHelper.swift */,
-				F145193429E8116B002A57CC /* CLLocationCoordinate2DTests.swift */,
-				F145193629E81D31002A57CC /* UtilTests.swift */,
 			);
 			path = LocationServicesTests;
 			sourceTree = "<group>";
@@ -2795,10 +2786,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F145193129E6EC38002A57CC /* SettingsDefaultValueHelper.swift in Sources */,
 				963EBF5229AF92F7001961F2 /* LocationServicesTests.swift in Sources */,
-				F145193529E8116B002A57CC /* CLLocationCoordinate2DTests.swift in Sources */,
-				F145193729E81D31002A57CC /* UtilTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

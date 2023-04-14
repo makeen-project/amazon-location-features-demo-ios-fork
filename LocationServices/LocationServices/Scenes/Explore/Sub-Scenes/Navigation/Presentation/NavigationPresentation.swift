@@ -11,7 +11,7 @@ struct NavigationPresentation {
     var id: Int
     var duration: String
     var distance: String
-    var streetName: String
+    var streetAddress: String
 }
 
 

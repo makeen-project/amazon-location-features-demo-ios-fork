@@ -9,17 +9,17 @@ import UIKit
 import SnapKit
 
 enum StepType {
-    case first,last
+    case first, last
 }
 
 struct NavigationCellModel {
     var stepType: StepType
-    var streetName: String
+    var streetAddress: String
     var distance: String
     
     init(model: NavigationPresentation, stepType: StepType? = .first) {
         self.distance = model.distance
-        self.streetName = model.streetName
+        self.streetAddress = model.streetAddress
         self.stepType = stepType ?? .first
     }
 }
@@ -35,7 +35,7 @@ final class NavigationVCCell: UITableViewCell {
     
     var model: NavigationCellModel! {
         didSet {
-            self.streetLabel.text = model.streetName
+            self.streetLabel.text = model.streetAddress
             self.distanceLabel.text = model.distance
             self.stepImage.image = model.stepType == .first ? .stepIcon : .selectedPlace
             
@@ -77,7 +77,6 @@ final class NavigationVCCell: UITableViewCell {
         view.backgroundColor = .tabBarTintColor
         return view
     }()
-
     
     private var stepImage: UIImageView = {
         let imageView = UIImageView(image: .stepIcon)
@@ -110,7 +109,7 @@ final class NavigationVCCell: UITableViewCell {
         streetLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(14)
             $0.leading.equalToSuperview().offset(52)
-            $0.height.equalTo(18)
+            $0.trailing.equalToSuperview().offset(-10)
         }
         
         distanceLabel.snp.makeConstraints {
@@ -120,7 +119,7 @@ final class NavigationVCCell: UITableViewCell {
         }
         
         stepImage.snp.makeConstraints {
-            $0.top.equalTo(streetLabel.snp.centerY)
+            $0.top.equalToSuperview().offset(23)
             $0.leading.equalToSuperview().offset(20.5)
             $0.height.width.equalTo(16)
         }

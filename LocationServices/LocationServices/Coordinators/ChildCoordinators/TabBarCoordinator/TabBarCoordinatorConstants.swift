@@ -17,8 +17,8 @@ enum TabBarPage {
     var title: String {
         switch self {
         case .explore: return "Explore"
-        case .tracking: return "Tracking"
-        case .geofence: return "Geofence"
+        case .tracking: return "Trackers"
+        case .geofence: return "Geofences"
         case .settings: return "Settings"
         case .more: return "More"
         }

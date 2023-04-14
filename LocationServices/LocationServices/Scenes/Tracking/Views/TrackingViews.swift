@@ -163,7 +163,7 @@ private extension TrackingMapView {
             let coordinates = history.cooordinates.convertTextToCoordinate()
             guard coordinates.count == 2 else { return nil }
             
-            let location = CLLocationCoordinate2D(latitude: coordinates[1].doubleValue, longitude: coordinates[0].doubleValue)
+            let location = CLLocationCoordinate2D(latitude: coordinates[0].doubleValue, longitude: coordinates[1].doubleValue)
             return location
         }
     }

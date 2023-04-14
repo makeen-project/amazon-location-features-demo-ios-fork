@@ -19,6 +19,7 @@ struct SearchPresentation {
     let placeLat: Double?
     let placeLong: Double?
     let name: String?
+    let placeLabel: String?
     
     init( placeId: String?,
           fullLocationAddress: String?,
@@ -37,6 +38,7 @@ struct SearchPresentation {
         self.placeLat = placeLat
         self.placeLong = placeLong
         self.name = name
+        self.placeLabel = fullLocationAddress
     }
     
     init(model: AWSLocationSearchForTextResult) {
@@ -58,6 +60,7 @@ struct SearchPresentation {
             self.placeLat = nil
         }
         self.cityName = model.place?.municipality
+        self.placeLabel = model.place?.label
     }
     
     init(model: AWSLocationSearchForSuggestionsResult, placeLat: Double? = nil, placeLong: Double? = nil, userLocation: CLLocation? = nil) {
@@ -82,6 +85,7 @@ struct SearchPresentation {
         } else {
             self.distance = nil
         }
+        self.placeLabel = model.text
     }
     
     init(model: AWSLocationGetPlaceResponse) {
@@ -103,6 +107,7 @@ struct SearchPresentation {
         }
         self.distance = nil
         self.cityName = model.place?.municipality
+        self.placeLabel = model.place?.label
     }
     
     init(model: AWSLocationSearchForPositionResult, userLocation: CLLocation?) {
@@ -139,5 +144,6 @@ struct SearchPresentation {
         }
         
         self.cityName = model.place?.municipality
+        self.placeLabel = model.place?.label
     }
 }

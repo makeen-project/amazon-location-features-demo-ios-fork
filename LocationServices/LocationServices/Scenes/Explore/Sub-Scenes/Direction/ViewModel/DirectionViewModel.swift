@@ -35,9 +35,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     }
     
     func loadLocalOptions() {
-        let tollOption = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions)
-        let ferriesOptions = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions)
-        delegate?.getLocalRouteOptions(tollOption: tollOption ?? false, ferriesOption: ferriesOptions ?? false)
+        self.avoidFerries = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions) ?? false
+        self.avoidTolls = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions) ?? false
+        delegate?.getLocalRouteOptions(tollOption: avoidFerries, ferriesOption: avoidFerries)
     }
     
     func addMyLocationItem() {

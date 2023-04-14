@@ -19,7 +19,6 @@ final class CommonDashboardView: UIView {
     private let iconContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .searchBarBackgroundColor
-        view.layer.cornerRadius = 48
         return view
     }()
     private let iconView: UIImageView = {
@@ -84,6 +83,11 @@ final class CommonDashboardView: UIView {
         fatalError(.errorCannotInitializeView)
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        iconContainerView.layer.cornerRadius = iconContainerView.frame.width / 2
+    }
+    
     private func setupDefaultValues(title: String,
                                     detail: String,
                                     image: UIImage,
@@ -111,12 +115,13 @@ final class CommonDashboardView: UIView {
         self.addSubview(detailLabel)
         self.addSubview(maybeLaterButton)
         self.addSubview(comonButton)
-       
         
         iconContainerView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(48)
             $0.centerX.equalToSuperview()
-            $0.height.width.equalTo(96)
+            $0.height.equalTo(iconContainerView.snp.width)
+            $0.height.lessThanOrEqualTo(96)
+            $0.height.equalTo(96).priority(.medium)
         }
         
         iconView.snp.makeConstraints {
@@ -133,22 +138,20 @@ final class CommonDashboardView: UIView {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
-            $0.height.equalTo(36)
-        }
-        
-        maybeLaterButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(-20)
-            $0.leading.trailing.equalToSuperview()
         }
         
         comonButton.snp.makeConstraints {
+            $0.top.greaterThanOrEqualTo(detailLabel.snp.bottom).offset(30)
             $0.bottom.equalTo(maybeLaterButton.snp.top).offset(-16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
         }
         
-       
+        maybeLaterButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-20)
+            $0.leading.trailing.equalToSuperview()
+        }
     }
     
     @objc func commonButtonAction() {

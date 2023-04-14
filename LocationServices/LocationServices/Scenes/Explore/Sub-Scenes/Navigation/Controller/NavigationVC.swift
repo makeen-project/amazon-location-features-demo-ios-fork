@@ -85,7 +85,7 @@ private extension NavigationVC {
     func sendMapViewData() {
         let datas = viewModel.getData()
         if let mapData = datas[safe: 0] {
-            var mapHeaderData = (distance: mapData.distance, street: mapData.streetName)
+            var mapHeaderData = (distance: mapData.distance, street: mapData.streetAddress)
             let data: [String: Any] = ["MapViewValues" : mapHeaderData]
             NotificationCenter.default.post(name: Notification.Name("UpdateMapViewValues"), object: nil, userInfo: data)
         }

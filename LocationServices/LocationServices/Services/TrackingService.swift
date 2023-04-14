@@ -27,7 +27,7 @@ extension AWSTrackingServiceProtocol {
         let devicePositionUpdate = AWSLocationDevicePositionUpdate()
         
         devicePositionUpdate?.deviceId = TrackingServiceConstant.deviceId
-        devicePositionUpdate?.position = [NSNumber(value: lat), NSNumber(value: long)]
+        devicePositionUpdate?.position = [NSNumber(value: long), NSNumber(value: lat)]
         devicePositionUpdate?.sampleTime = Date()
        
         request.updates = Array(arrayLiteral: devicePositionUpdate!)

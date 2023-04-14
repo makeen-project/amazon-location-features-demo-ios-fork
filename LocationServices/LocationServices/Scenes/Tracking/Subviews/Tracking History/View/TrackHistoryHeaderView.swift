@@ -30,7 +30,9 @@ final class TrackingHistoryHeaderView: UIView {
         label.font = .amazonFont(type: .regular, size: 13)
         label.textAlignment = .left
         label.textColor = .searchBarTintColor
-        label.text = "Not tracking your activity"
+        label.text = StringConstant.Tracking.noTracking
+        label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -100,14 +102,14 @@ final class TrackingHistoryHeaderView: UIView {
             trackingActionButton.backgroundColor = .navigationRedButton
             trackingActionButton.titleLabel?.font = .amazonFont(type: .bold, size: 16)
             
-            detailLabel.text = "Tracking your activity"
+            detailLabel.text = StringConstant.Tracking.isTracking
             detailLabel.textColor = .navigationRedButton
         } else {
             trackingActionButton.setTitle(StringConstant.startTracking, for: .normal)
             trackingActionButton.backgroundColor = .tabBarTintColor
             trackingActionButton.titleLabel?.font = .amazonFont(type: .bold, size: 16)
             
-            detailLabel.text = "Not tracking your activity"
+            detailLabel.text = StringConstant.Tracking.noTracking
             detailLabel.textColor = .searchBarTintColor
         }
     }
@@ -135,6 +137,7 @@ final class TrackingHistoryHeaderView: UIView {
         detailLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalTo(trackingActionButton.snp.leading).offset(-5)
             $0.height.equalTo(18)
         }
         
@@ -142,7 +145,7 @@ final class TrackingHistoryHeaderView: UIView {
             $0.top.equalToSuperview().offset(31)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
-            $0.width.equalTo(152)
+            $0.width.equalTo(132)
         }
     }
 }

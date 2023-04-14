@@ -27,9 +27,9 @@
 		<string>We need your location to detect your location in map</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location to detect your location in map</string>
+	<string>You&apos;ll get to plan routes from your current location, improved search results, track your device and create geofences when you turn on Location Services for Amazon Location Demo App.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>We need your location to detect your location in map</string>
+	<string>You&apos;ll get to plan routes from your current location, improved search results, track your device and create geofences when you turn on Location Services for Amazon Location Demo App.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

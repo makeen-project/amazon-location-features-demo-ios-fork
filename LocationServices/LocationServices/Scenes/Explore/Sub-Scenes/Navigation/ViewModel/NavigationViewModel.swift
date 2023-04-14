@@ -40,7 +40,7 @@ final class NavigationVCViewModel {
                     case .success(let results):
                         guard let result = results.first else { break }
                             
-                        let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetName: result.fullLocationAddress ?? "")
+                        let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: result.placeLabel ?? "")
                         presentation.append(model)
                     case .failure:
                         break

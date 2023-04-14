@@ -75,7 +75,7 @@ enum StringConstant {
     static let deleteGeofenceAlertMessage = "Are you sure you want to delete geofence?"
     static let noInternetConnection = "No internet connection"
     static let enableTracking = "Enable Tracker"
-    static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
+    static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
     static let viewTermsAndConditions = "View Terms and Conditions"
     static let continueToTracker = "Continue"
     
@@ -153,6 +153,11 @@ enum StringConstant {
         static let appTermsOfUse = "Terms & Conditions"
         static let appTermsOfUseURL = termsAndConditionsURL
         static let copyright = "© 2023, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+    }
+    
+    enum Tracking {
+        static let noTracking = "Not tracking your device location"
+        static let isTracking = "Tracking your device location"
     }
     
     static let units = "Units"
