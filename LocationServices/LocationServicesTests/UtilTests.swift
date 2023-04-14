@@ -68,19 +68,19 @@ final class UtilTests: XCTestCase {
         XCTAssertEqual(coordinate.isCoordinate(), true, "testIsCoordinate successful")
     }
     
-    func testHighlightAsLinkWithNoOccurance() {
+    func testHighlightAsLinkWithNoOccurance() throws {
         let attributedString = NSMutableAttributedString(string: "Click here to run a CloudFormation template to securely create required resources.", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .bold, size: 13)])
         let linkWasSet = attributedString.highlightAsLink(textOccurances: "Tap Here")
         XCTAssertEqual(linkWasSet, false, "testHighlightAsLinkWithNoOccurance successful")
     }
     
-    func testHighlightAsLinkWithWithOccurances() {
+    func testHighlightAsLinkWithWithOccurances() throws {
         let attributedString = NSMutableAttributedString(string: "Click here to run a CloudFormation template to securely create required resources.", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .bold, size: 13)])
         let linkWasSet = attributedString.highlightAsLink(textOccurances: "Click here")
         XCTAssertEqual(linkWasSet, true, "testHighlightAsLinkWithWithOccurances successful")
     }
     
-    func testHighlightAsLinkWithWithMultipleOccurances() {
+    func testHighlightAsLinkWithWithMultipleOccurances() throws {
         let attributedString = NSMutableAttributedString(string: "Click here to run a CloudFormation template to securely create required resources. Or Click here to see the details", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .bold, size: 13)])
         let linkWasSet = attributedString.highlightAsLink(textOccurances: "Click here")
         XCTAssertEqual(linkWasSet, true, "testHighlightAsLinkWithWithMultipleOccurances successful")
