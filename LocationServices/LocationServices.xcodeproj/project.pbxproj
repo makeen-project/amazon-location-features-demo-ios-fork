@@ -332,6 +332,7 @@
 		F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F729E9898300639EEC /* StringExtensionTests.swift */; };
 		F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */; };
 		F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */; };
+		F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */; };
 		F1F8061829D571E9002BDF85 /* GeofenceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */; };
 		F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */; };
 /* End PBXBuildFile section */
@@ -675,6 +676,7 @@
 		F1E5F8F729E9898300639EEC /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensionTests.swift; sourceTree = "<group>"; };
+		F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLCoordinateBoundsExtensionTests.swift; sourceTree = "<group>"; };
 		F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceUITests.swift; sourceTree = "<group>"; };
 		F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingUITests.swift; sourceTree = "<group>"; };
 		F1F8063229D7683E002BDF85 /* TrackingSimulateLocation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackingSimulateLocation.xctestplan; sourceTree = "<group>"; };
@@ -946,6 +948,7 @@
 				F1E5F8F729E9898300639EEC /* StringExtensionTests.swift */,
 				F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */,
 				F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */,
+				F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */,
 			);
 			path = LocationServicesTests;
 			sourceTree = "<group>";
@@ -2817,6 +2820,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */,
+				F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */,
 				963EBF5229AF92F7001961F2 /* LocationServicesTests.swift in Sources */,
 				F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */,
 				F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */,
