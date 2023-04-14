@@ -324,10 +324,8 @@
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
 		F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */; };
 		F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */; };
-		F1E5F8EE29E94EF000639EEC /* CLLocationCoordinate2DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EB29E94EF000639EEC /* CLLocationCoordinate2DTests.swift */; };
 		F1E5F8F029E986F300639EEC /* UserDefaultsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EF29E986F300639EEC /* UserDefaultsHelperTests.swift */; };
 		F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F129E9880600639EEC /* DebounceManagerTests.swift */; };
-		F1E5F8F429E988B100639EEC /* AuthActionsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F329E988B100639EEC /* AuthActionsHelperTests.swift */; };
 		F1E5F8F629E988F900639EEC /* ReachabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F529E988F900639EEC /* ReachabilityTests.swift */; };
 		F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F729E9898300639EEC /* StringExtensionTests.swift */; };
 		F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */; };
@@ -668,10 +666,8 @@
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
 		F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDefaultValueHelperTests.swift; sourceTree = "<group>"; };
-		F1E5F8EB29E94EF000639EEC /* CLLocationCoordinate2DTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DTests.swift; sourceTree = "<group>"; };
 		F1E5F8EF29E986F300639EEC /* UserDefaultsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelperTests.swift; sourceTree = "<group>"; };
 		F1E5F8F129E9880600639EEC /* DebounceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebounceManagerTests.swift; sourceTree = "<group>"; };
-		F1E5F8F329E988B100639EEC /* AuthActionsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthActionsHelperTests.swift; sourceTree = "<group>"; };
 		F1E5F8F529E988F900639EEC /* ReachabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityTests.swift; sourceTree = "<group>"; };
 		F1E5F8F729E9898300639EEC /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
@@ -937,13 +933,11 @@
 		963EBF5029AF92F7001961F2 /* LocationServicesTests */ = {
 			isa = PBXGroup;
 			children = (
-				F1E5F8EB29E94EF000639EEC /* CLLocationCoordinate2DTests.swift */,
 				F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */,
 				F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */,
 				963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */,
 				F1E5F8EF29E986F300639EEC /* UserDefaultsHelperTests.swift */,
 				F1E5F8F129E9880600639EEC /* DebounceManagerTests.swift */,
-				F1E5F8F329E988B100639EEC /* AuthActionsHelperTests.swift */,
 				F1E5F8F529E988F900639EEC /* ReachabilityTests.swift */,
 				F1E5F8F729E9898300639EEC /* StringExtensionTests.swift */,
 				F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */,
@@ -2827,9 +2821,7 @@
 				F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */,
 				F1E5F8F029E986F300639EEC /* UserDefaultsHelperTests.swift in Sources */,
 				F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */,
-				F1E5F8F429E988B100639EEC /* AuthActionsHelperTests.swift in Sources */,
 				F1E5F8F629E988F900639EEC /* ReachabilityTests.swift in Sources */,
-				F1E5F8EE29E94EF000639EEC /* CLLocationCoordinate2DTests.swift in Sources */,
 				F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
