@@ -1,13 +1,14 @@
 //
-//  CLLocationCoordinate2DTests.swift
-//  CLLocationCoordinate2DTests
+//  IntExtensionTests.swift
+//  IntExtensionTests
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
 import XCTest
+@testable import LocationServices
 
-final class CLLocationCoordinate2DTests: XCTestCase {
+final class IntExtensionTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -17,8 +18,9 @@ final class CLLocationCoordinate2DTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testDistanceWithZeroDistance() throws {
-
+    func testConvertToKM() throws {
+        let km: Int = 1000
+       XCTAssertEqual(km.convertToKm(), "1000.0 m", "Expected string km")
     }
 
 }
