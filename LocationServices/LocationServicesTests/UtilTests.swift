@@ -20,32 +20,32 @@ final class UtilTests: XCTestCase {
 
     func testConvertSecondsToMinString() throws {
         let seconds: Double = 3600
-       XCTAssertEqual(seconds.convertSecondsToMinString(), "1 hr", "testConvertSecondsToMinString successful")
+       XCTAssertEqual(seconds.convertSecondsToMinString(), "1 hr", "Expected formatted 1 hr string")
     }
     
     func testConvertKMToM() throws {
         let km: Double = 1
-       XCTAssertEqual(km.convertKMToM(), 1000, "testConvertSecondsToMinString successful")
+       XCTAssertEqual(km.convertKMToM(), 1000, "Expected 1000 M")
     }
     
     func testConvertFormattedKMString() throws {
         let km: Double = 1
-       XCTAssertEqual(km.convertFormattedKMString(), "1000.0 m", "testConvertSecondsToMinString successful")
+       XCTAssertEqual(km.convertFormattedKMString(), "1000.0 m", "Expected formatted KM 1000.0 m string")
     }
     
     func testConvertToKM() throws {
         let km: Int = 1000
-       XCTAssertEqual(km.convertToKm(), "1000.0 m", "testConvertSecondsToMinString successful")
+       XCTAssertEqual(km.convertToKm(), "1000.0 m", "Expected string km")
     }
     
     func testConvertIdentityPoolIdToRegionType() throws {
         let idpID = "us-east-2:35841fd0-257a-46c5-b44e-fd289ab6e194"
-        XCTAssertEqual(idpID.toRegionType(), .USEast2, "testConvertIdentityPoolIdToRegionType successful")
+        XCTAssertEqual(idpID.toRegionType(), .USEast2, "Expected region type from the provided text")
     }
 
     func testConvertIdentityPoolIdToRegionString() throws {
         let idpID = "us-east-2:35841fd0-257a-46c5-b44e-fd289ab6e194"
-        XCTAssertEqual(idpID.toRegionString(), "us-east-2", "testConvertIdentityPoolIdToRegionString successful")
+        XCTAssertEqual(idpID.toRegionString(), "us-east-2", "Expected region string from the provided text")
     }
     
     func testCreateInitial() throws {
@@ -60,7 +60,7 @@ final class UtilTests: XCTestCase {
 
     func testFormatAddressField() throws {
        let address =  "1501 Broadway, New York, NY 10036, United States"
-        XCTAssertEqual(address.formatAddressField().first, "1501 Broadway", "testFormatAddressField successful")
+        XCTAssertEqual(address.formatAddressField().first, "1501 Broadway", "Expected formatted address")
     }
     
     func testIsCoordinate() throws {
@@ -71,19 +71,29 @@ final class UtilTests: XCTestCase {
     func testHighlightAsLinkWithNoOccurance() throws {
         let attributedString = NSMutableAttributedString(string: "Click here to run a CloudFormation template to securely create required resources.", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .bold, size: 13)])
         let linkWasSet = attributedString.highlightAsLink(textOccurances: "Tap Here")
-        XCTAssertEqual(linkWasSet, false, "testHighlightAsLinkWithNoOccurance successful")
+        XCTAssertEqual(linkWasSet, false, "No occurances found")
     }
     
     func testHighlightAsLinkWithWithOccurances() throws {
         let attributedString = NSMutableAttributedString(string: "Click here to run a CloudFormation template to securely create required resources.", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .bold, size: 13)])
         let linkWasSet = attributedString.highlightAsLink(textOccurances: "Click here")
-        XCTAssertEqual(linkWasSet, true, "testHighlightAsLinkWithWithOccurances successful")
+        XCTAssertEqual(linkWasSet, true, "Single occurance found and link was set")
     }
     
     func testHighlightAsLinkWithWithMultipleOccurances() throws {
         let attributedString = NSMutableAttributedString(string: "Click here to run a CloudFormation template to securely create required resources. Or Click here to see the details", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .bold, size: 13)])
         let linkWasSet = attributedString.highlightAsLink(textOccurances: "Click here")
-        XCTAssertEqual(linkWasSet, true, "testHighlightAsLinkWithWithMultipleOccurances successful")
+        XCTAssertEqual(linkWasSet, true, "Multiple occurances found and links were set")
+    }
+    
+    func testStartMonitoringReturnInternetIsReachable() throws {
+        Reachability.shared.startMonitoring()
+        XCTAssertEqual(Reachability.shared.isInternetReachable, true,  "Expected internet is reachable")
+    }
+    
+    func testStartMonitoringStatusValue() throws {
+        Reachability.shared.startMonitoring()
+        XCTAssertEqual(Reachability.shared.currentStatus, .satisfied,  "Expected internet status is satisfied")
     }
     
 }

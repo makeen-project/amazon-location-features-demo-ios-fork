@@ -23,6 +23,12 @@ final class LocationServicesTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
+    func testSaveAndGetPrimitiveValue() throws {
+        UserDefaults.standard.set("Test", forKey: "Primitive")
+        UserDefaults.standard.synchronize()
+        XCTAssertEqual(UserDefaults.standard.value(forKey: "Primitive") as! String, "Test", "Expected 'Test' for Key 'Primitive'")
+    }
 
     func testUserDefaultsSave() throws {
         // scenario
