@@ -322,6 +322,9 @@
 		F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */; };
 		F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */; };
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
+		F1E5F8EC29E94EF000639EEC /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8E929E94EEF00639EEC /* UtilTests.swift */; };
+		F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelper.swift */; };
+		F1E5F8EE29E94EF000639EEC /* CLLocationCoordinate2DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EB29E94EF000639EEC /* CLLocationCoordinate2DTests.swift */; };
 		F1F8061829D571E9002BDF85 /* GeofenceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */; };
 		F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */; };
 /* End PBXBuildFile section */
@@ -655,6 +658,9 @@
 		F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTabBarScreen.swift; sourceTree = "<group>"; };
 		F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTrackingScreen.swift; sourceTree = "<group>"; };
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
+		F1E5F8E929E94EEF00639EEC /* UtilTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilTests.swift; sourceTree = "<group>"; };
+		F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDefaultValueHelper.swift; sourceTree = "<group>"; };
+		F1E5F8EB29E94EF000639EEC /* CLLocationCoordinate2DTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DTests.swift; sourceTree = "<group>"; };
 		F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceUITests.swift; sourceTree = "<group>"; };
 		F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingUITests.swift; sourceTree = "<group>"; };
 		F1F8063229D7683E002BDF85 /* TrackingSimulateLocation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackingSimulateLocation.xctestplan; sourceTree = "<group>"; };
@@ -915,6 +921,9 @@
 		963EBF5029AF92F7001961F2 /* LocationServicesTests */ = {
 			isa = PBXGroup;
 			children = (
+				F1E5F8EB29E94EF000639EEC /* CLLocationCoordinate2DTests.swift */,
+				F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelper.swift */,
+				F1E5F8E929E94EEF00639EEC /* UtilTests.swift */,
 				963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */,
 			);
 			path = LocationServicesTests;
@@ -2787,6 +2796,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				963EBF5229AF92F7001961F2 /* LocationServicesTests.swift in Sources */,
+				F1E5F8EC29E94EF000639EEC /* UtilTests.swift in Sources */,
+				F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelper.swift in Sources */,
+				F1E5F8EE29E94EF000639EEC /* CLLocationCoordinate2DTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
