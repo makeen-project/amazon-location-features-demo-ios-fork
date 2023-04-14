@@ -12,7 +12,6 @@ import AWSIoT
 
 protocol AWSLoginServiceProtocol {
     var delegate: AWSLoginServiceOutputProtocol? { get set }
-    func setupAWSConfiguration()
     func login()
     func logout()
     func validate(identityPoolId: String, completion: @escaping (Result<Void, Error>)->())
@@ -36,113 +35,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
     var delegate: AWSLoginServiceOutputProtocol?
     private var error: Error?
     var viewController: UIViewController?
-    
-    func setupAWSConfiguration() {
-        let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
-        if let customConfiguration {
-            validate(identityPoolId: customConfiguration.identityPoolId) { [weak self] result in
-                switch result {
-                case .failure:
-                    // clear the cached credentials
-                    AWSMobileClient.default().clearCredentials()
-                    AWSMobileClient.default().clearKeychain()
-                    
-                    UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
-                    // remove custom configuration
-                    UserDefaultsHelper.removeObject(for: .awsConnect)
-                    
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: Notification.wasResetToDefaultConfig, object: self)
-                    }
-                default:
-                    break
-                }
-                self?.setupValidAWSConfiguration()
-            }
-        } else {
-            setupValidAWSConfiguration()
-        }
-    }
-    
-    private func setupValidAWSConfiguration() {
-        guard let configurationModel = getAWSConfigurationModel() else {
-            print("Can't read default configuration from awsconfiguration.json")
-            return
-        }
-        
-        let config = createAWSConfiguration(with: configurationModel)
-        
-        let credentialProvider = AWSCognitoCredentialsProvider(regionType: configurationModel.identityPoolId.toRegionType(), identityPoolId: configurationModel.identityPoolId)
-        
-        let configuration = AWSServiceConfiguration(region: configurationModel.identityPoolId.toRegionType(), credentialsProvider: credentialProvider)
-
-        AWSInfo.configureDefaultAWSInfo(config)
-        
-        // Here we connected and should set appropriate flags for it
-        // possible connection states:
-        // awsConnected - we are connected to default AWS configuration.
-        // awsCustomConnected - we are connected to custom AWS configuration.
-        
-        if let isCustomConnection = UserDefaultsHelper.get(for: Bool.self, key: .awsCustomConnect), isCustomConnection == true {
-            UserDefaultsHelper.save(value: true, key: .awsCustomConnected)
-            UserDefaultsHelper.removeObject(for: .awsCustomConnect)
-        }
-        
-        initializeMobileClient()
-    }
-    
-    private func initializeMobileClient() {
-        
-        AWSMobileClient.default().initialize { [weak self] (userState, error) in
-            // Calling getIdentityId in order to force refresh the AWSMobileClient identityId to the latest one
-            
-            print("AWS login?: \(AWSMobileClient.default().isSignedIn)")
-            
-            AWSMobileClient.default().getIdentityId().continueWith { [weak self] task in
-                
-                self?.updateAWSServicesCredentials()
-                
-                // here we are actually connect to Amazon location
-                // it can be either custom or default
-                let state = UserDefaultsHelper.getAppState()
-                
-                if state != .loggedIn {
-                    if UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) != nil {
-                        UserDefaultsHelper.setAppState(state: .customAWSConnected)
-                    } else {
-                        UserDefaultsHelper.setAppState(state: .defaultAWSConnected)
-                    }
-                }
-                
-                if state == .loggedIn {
-                    self?.attachPolicy()
-                }
-                
-                return nil
-            }
-            
-            if let userState = userState {
-                switch userState {
-                case .signedIn:
-                    print("Logged In")
-                case .signedOut:
-                    UserDefaultsHelper.save(value: "", key: .userInitial)
-                    print("Logged Out")
-                case .signedOutUserPoolsTokenInvalid:
-                    UserDefaultsHelper.save(value: "", key: .userInitial)
-                    print("User Pools refresh token is invalid or expired.")
-                case .signedOutFederatedTokensInvalid:
-                    UserDefaultsHelper.save(value: "", key: .userInitial)
-                    print("Federated refresh token is invalid or expired.")
-                default:
-                    AWSMobileClient.default().signOut()
-                }
-            } else if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-        }
-    }
      
     func login() {
         guard let navigationContoller = (UIApplication.shared.delegate as? AppDelegate)?.navigationController else { return }
@@ -247,7 +139,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         }
     }
     
-    private func createAWSConfiguration(with configurationModel: CustomConnectionModel) -> [String: Any] {
+    func createAWSConfiguration(with configurationModel: CustomConnectionModel) -> [String: Any] {
         let config: [String: Any] = [
             "UserAgent": "aws-amplify-cli/0.1.0",
             "Version": "0.1.0",
@@ -289,7 +181,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         return config
     }
     
-    private func getAWSConfigurationModel() -> CustomConnectionModel? {
+    func getAWSConfigurationModel() -> CustomConnectionModel? {
         var defaultConfiguration: CustomConnectionModel? = nil
         // default configuration
         if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String {
@@ -302,9 +194,12 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         return customConfiguration ?? defaultConfiguration
     }
     
-    private func attachPolicy() {
+    func attachPolicy(completion: ((Result<Void, Error>)->())? = nil) {
         let isPolicyAttached = UserDefaultsHelper.get(for: Bool.self, key: .attachedPolicy) ?? false
-        guard !isPolicyAttached else { return }
+        guard !isPolicyAttached else {
+            completion?(.success(()))
+            return
+        }
             
         let attachPolicyRequest = AWSIoTAttachPolicyRequest()!
         attachPolicyRequest.target = AWSMobileClient.default().identityId
@@ -312,9 +207,11 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         AWSIoT(forKey: "default").attachPolicy(attachPolicyRequest).continueWith(block: { task in
             if let error = task.error {
                 print("Failed: [\(error)]")
+                completion?(.failure(error))
             } else  {
                 UserDefaultsHelper.save(value: true, key: .attachedPolicy)
                 print("result: [\(String(describing: task.result))]")
+                completion?(.success(()))
             }
             return nil
         })
@@ -367,7 +264,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         return AWSCognitoIdentity(forKey: Constants.awsCognitoIdentityKey)
     }
     
-    private func updateAWSServicesCredentials() {
+    func updateAWSServicesCredentials() {
         guard let configurationModel = self.getAWSConfigurationModel() else {
             print("Can't read default configuration from awsconfiguration.json")
             return
