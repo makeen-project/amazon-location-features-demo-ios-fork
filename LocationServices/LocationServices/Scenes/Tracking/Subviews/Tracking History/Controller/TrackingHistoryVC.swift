@@ -95,6 +95,7 @@ final class TrackingHistoryVC: UIViewController {
     }
     
     @objc private func updateTrackingHistory(_ notification: Notification) {
+        guard (notification.object as? TrackingHistoryViewModelProtocol) !== viewModel else { return }
         guard let history = notification.userInfo?["history"] as? [TrackingHistoryPresentation] else { return }
         viewModel.setHistory(history)
         reloadTableView()

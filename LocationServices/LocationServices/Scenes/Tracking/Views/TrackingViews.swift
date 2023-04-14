@@ -130,7 +130,12 @@ final class TrackingMapView: UIView {
     }
     
     func drawTrack(history: [TrackingHistoryPresentation]) {
-        guard !history.isEmpty else { return }
+        guard !history.isEmpty else {
+            mapView.remove(annotations: trackingAnnotations)
+            mapView.removeLayer(with: "tracking-layer")
+            mapView.removeLayer(with: "dashed-layer")
+            return
+        }
         let source = createTrackingSource(history: history)
         let dashedLayer = createDashedLayer(source: source)
         mapView.draw(layer: dashedLayer, source: source)

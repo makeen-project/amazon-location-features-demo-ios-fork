@@ -80,7 +80,9 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
         trackingService.removeAllHistory { [weak self] result in
             switch result {
             case .success:
-                self?.setHistory([])
+                let history: [TrackingHistoryPresentation] = []
+                NotificationCenter.default.post(name: Notification.updateTrackingHistory, object: self, userInfo: ["history": history])
+                self?.setHistory(history)
                 self?.delegate?.reloadTableView()
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
