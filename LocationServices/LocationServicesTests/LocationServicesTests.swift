@@ -12,10 +12,6 @@ final class LocationServicesTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         // remove whole user defaults keys and values
         if let domain = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: domain)
@@ -23,6 +19,10 @@ final class LocationServicesTests: XCTestCase {
         }
     }
 
+    override func tearDownWithError() throws {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+    
     func testUserDefaultsSave() throws {
         // scenario
         // init UserDefaults
@@ -35,12 +35,4 @@ final class LocationServicesTests: XCTestCase {
         XCTAssertEqual(UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions), testBoolValue, "Expected \(testBoolValue) value for this key.")
         
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
