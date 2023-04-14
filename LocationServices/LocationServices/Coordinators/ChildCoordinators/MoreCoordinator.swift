@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
+import SafariServices
 
 final class MoreCoordinator: Coordinator {
     var delegate: CoordinatorCompletionDelegate?
@@ -39,6 +40,8 @@ extension MoreCoordinator: MoreNavigationDelegate {
             showTermsAndConditionsScene()
         case .about:
             showAboutScene()
+        case .help:
+            openSafariBrowser(with: URL(string: StringConstant.helpURL))
         }
     }
     
@@ -55,5 +58,12 @@ extension MoreCoordinator: MoreNavigationDelegate {
     private func showTermsAndConditionsScene() {
         let controller = TermsAndConditionsVCBuilder.create()
         navigationController.pushViewController(controller, animated: true)
+    }
+    
+    private func openSafariBrowser(with url: URL?) {
+        guard let url else { return }
+        
+        let vc = SFSafariViewController(url: url)
+        navigationController.present(vc, animated: true)
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 enum MoreCellType {
-    case attribution, termsAndConditions, about
+    case attribution, termsAndConditions, about, help
     
     var title: String {
         switch self {
@@ -19,6 +19,8 @@ enum MoreCellType {
             return StringConstant.MoreTab.cellLegalTitle
         case .about:
             return StringConstant.MoreTab.cellAboutTitle
+        case .help:
+            return StringConstant.MoreTab.cellHelpTitle
         }
     }
 }

@@ -34,7 +34,7 @@ enum StringConstant {
     static let hereDataProviderLearnMoreURL = "https://legal.here.com/en-gb/terms/general-content-supplier-terms-and-notices"
     static var softwareAttributionLearnMoreURL: String { baseDomain + "/demo/software-attributions" }
     static let termsAndConditionsTrackingURL = "https://aws.amazon.com/service-terms/#82._Amazon_Location_Service"
-    static var learnMoreURL: String { StringConstant.baseDomain + "/demo/help" }
+    static var helpURL: String { StringConstant.baseDomain + "/demo/help" }
     
     // urls constant:
     static var developmentUrl: String {
@@ -146,6 +146,7 @@ enum StringConstant {
         static let cellAttributionTitle = "Attribution"
         static let cellLegalTitle = "Terms & Conditions"
         static let cellAboutTitle = "About"
+        static let cellHelpTitle = "Help"
     }
     
     enum About {
@@ -206,7 +207,7 @@ extension ConstantsLoginInfoConfig {
     static var firstNumber: String { "1" }
     static var secondNumber: String { "2" }
     static var thirdNumber: String { "3" }
-    static var learnMoreURL: String { StringConstant.learnMoreURL }
+    static var learnMoreURL: String { StringConstant.helpURL }
     static var secondItemTitle: String { "Connect the demo app with the recently created AWS resources by copying in input fields." }
     static var secondItemText: String { "From your CloudFormation output section copy the corresponding named values as reflected in the right section form (IdentityPoolId etc.). Learn more" }
     static var secondItemTextClickablePart: String { "Learn more" }

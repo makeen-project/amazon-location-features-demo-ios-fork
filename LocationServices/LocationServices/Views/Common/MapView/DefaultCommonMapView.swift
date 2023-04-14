@@ -15,6 +15,7 @@ private enum Constant {
     static let singleAnnotationMapZoomValue: Double = 17
     static let directionMapZoomValue: Double = 14
     static let annotationMapZoomValue: Double = 10
+    static let locateMeMapZoomValue: Double = 14
     static let amazonHqMapPosition = (latitude: 47.61506909519956, longitude: -122.33826750882835)
     static let geofenceViewIdentifier = "GeofenceViewIdentifier"
     static let userLocationViewIdentifier = "UserLocationViewIdentifier"
@@ -214,7 +215,7 @@ extension DefaultCommonMapView {
     }
     
     private func setMapCenter(userCoordinates: CLLocationCoordinate2D) {
-        mapView.setCenter(userCoordinates, zoomLevel: Constant.singleAnnotationMapZoomValue, direction: mapView.direction, animated: true) { [weak self] in
+        mapView.setCenter(userCoordinates, zoomLevel: Constant.locateMeMapZoomValue, direction: mapView.direction, animated: true) { [weak self] in
             switch self?.mapMode {
             case .search, .none:
                 self?.mapView.userTrackingMode = .follow
