@@ -97,7 +97,18 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
         guard section < sortedKeys.count else { return "" }
         
         let day = sortedKeys[section]
-        return day.convertToRelativeString()
+        
+        let title: String
+        let relativeString = day.convertToRelativeString()
+        let mediumDateString = day.convertDateMediumString()
+        let dateString = day.convertDateString()
+        if relativeString == mediumDateString {
+            title = dateString
+        } else {
+            title = "\(relativeString), \(dateString)"
+        }
+        
+        return title
     }
     
     func getItemCount(for section: Int) -> Int {
