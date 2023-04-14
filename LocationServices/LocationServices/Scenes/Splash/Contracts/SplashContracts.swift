@@ -8,6 +8,10 @@
 import Foundation
 
 protocol SplashViewModelProtocol: AnyObject {
+    var delegate: SplashViewModelDelegate? { get set }
     var setupCompleteHandler: VoidHandler? { get set }
     func setupAWS()
+}
+
+protocol SplashViewModelDelegate: AnyObject, AlertPresentable {
 }

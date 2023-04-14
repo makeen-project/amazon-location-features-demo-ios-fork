@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SplashVC: UIViewController {
+final class SplashVC: UIViewController, SplashViewModelDelegate {
     
     var setupCompleteHandler: VoidHandler?
     var viewModel: SplashViewModelProtocol!
@@ -15,6 +15,7 @@ final class SplashVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        viewModel.delegate = self
         viewModel.setupCompleteHandler = setupCompleteHandler
         viewModel.setupAWS()
     }

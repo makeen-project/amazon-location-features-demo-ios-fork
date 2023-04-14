@@ -63,7 +63,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
                         print("Error: \(error.localizedDescription) \((error as NSError).userInfo)")
                     }
                     if let result = task.result {
-                        
+                        UserDefaultsHelper.save(value: AWSMobileClient.default().identityId, key: .signedInIdentityId)
                         UserDefaultsHelper.setAppState(state: .loggedIn)
                         
                         self.delegate?.loginResult(.success(()))
@@ -131,6 +131,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
 
                 // set initial state
                 UserDefaultsHelper.setAppState(state: .customAWSConnected)
+                UserDefaultsHelper.removeObject(for: .signedInIdentityId)
                 
                 self.updateAWSServicesCredentials()
     

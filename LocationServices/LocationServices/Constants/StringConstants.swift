@@ -103,6 +103,7 @@ enum StringConstant {
     static let cancel = "Cancel"
     static let settigns = "Settings"
     static let error = "Error"
+    static let warning = "Warning"
     static let ok = "OK"
     
     // dispatch queue
@@ -115,6 +116,7 @@ enum StringConstant {
     // errors
     static let domainErrorLocalizedDescription = "The operation couldn’t be completed. (kCLErrorDomain error 0.)"
     static let testExpectationError = "expectation not matched after waiting"
+    static let sessionExpiredError = "Session is expired. Please sign out and sign in back to continue access all features. Otherwise you could face unexpected behaviour in the app"
     
     //login
     enum LoginInfo {

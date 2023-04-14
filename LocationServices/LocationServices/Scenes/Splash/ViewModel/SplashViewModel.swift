@@ -8,13 +8,17 @@
 import Foundation
 import AWSMobileClientXCF
 
-final class SplashViewModel: SplashViewModelProtocol {
+final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProtocol {
     
     var setupCompleteHandler: VoidHandler?
     private let loginService: AWSLoginService
     
+    weak var delegate: SplashViewModelDelegate?
+    
     init(loginService: AWSLoginService) {
         self.loginService = loginService
+        
+        loginService.delegate = self
     }
     
     func setupAWS() {
@@ -79,32 +83,33 @@ final class SplashViewModel: SplashViewModelProtocol {
             // Calling getIdentityId in order to force refresh the AWSMobileClient identityId to the latest one
             
             print("AWS login?: \(AWSMobileClient.default().isSignedIn)")
-            
-            AWSMobileClient.default().getIdentityId().continueWith { [weak self] task in
-                
-                self?.loginService.updateAWSServicesCredentials()
-                
-                // here we are actually connect to Amazon location
-                // it can be either custom or default
-                let state = UserDefaultsHelper.getAppState()
-                
-                if state != .loggedIn {
-                    if UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) != nil {
-                        UserDefaultsHelper.setAppState(state: .customAWSConnected)
+            AWSMobileClient.default().getTokens { tokens, error in
+                AWSMobileClient.default().getIdentityId().continueWith { [weak self] task in
+                    
+                    self?.loginService.updateAWSServicesCredentials()
+                    
+                    // here we are actually connect to Amazon location
+                    // it can be either custom or default
+                    let state = UserDefaultsHelper.getAppState()
+                    
+                    if state != .loggedIn {
+                        if UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) != nil {
+                            UserDefaultsHelper.setAppState(state: .customAWSConnected)
+                        } else {
+                            UserDefaultsHelper.setAppState(state: .defaultAWSConnected)
+                        }
+                    }
+                    
+                    if state == .loggedIn {
+                        self?.loginService.attachPolicy { [weak self] _ in
+                            self?.validateIdentityId()
+                        }
                     } else {
-                        UserDefaultsHelper.setAppState(state: .defaultAWSConnected)
+                        self?.validateIdentityId()
                     }
+                    
+                    return nil
                 }
-                
-                if state == .loggedIn {
-                    self?.loginService.attachPolicy { [weak self] _ in
-                        self?.setupCompleted()
-                    }
-                } else {
-                    self?.setupCompleted()
-                }
-                
-                return nil
             }
             
             if let userState = userState {
@@ -130,9 +135,34 @@ final class SplashViewModel: SplashViewModelProtocol {
         }
     }
     
+    private func validateIdentityId() {
+        guard AWSMobileClient.default().isSignedIn,
+              let currentIdentityId = AWSMobileClient.default().identityId,
+              let actualId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId),
+              currentIdentityId != actualId else {
+
+            self.setupCompleted()
+            return
+        }
+        
+        //the identityId is different from the one that is represent the current signed in user
+        //in this case we make a sign out as new identityId doesn't have permissions for geofence and tracking
+        let alertModel = AlertModel(title: StringConstant.warning, message: StringConstant.sessionExpiredError, cancelButton: nil) { [weak self] in
+            self?.loginService.logout()
+        }
+        DispatchQueue.main.async {
+            self.delegate?.showAlert(alertModel)
+        }
+    }
+    
     private func setupCompleted() {
         DispatchQueue.main.async {
             self.setupCompleteHandler?()
         }
+    }
+    
+    // MARK: - AWSLoginServiceOutputProtocol
+    func logoutResult(_ error: Error?) {
+        setupCompleted()
     }
 }
