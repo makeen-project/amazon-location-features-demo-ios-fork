@@ -120,6 +120,13 @@ final class TrackingVC: UIViewController, AlertPresentable {
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
+    }
+    
+    @objc private func updateTrackingHistory(_ notification: Notification) {
+        guard (notification.object as? TrackingViewModelProtocol) !== viewModel else { return }
+        guard let history = notification.userInfo?["history"] as? [TrackingHistoryPresentation] else { return }
+        drawTrack(history: history)
     }
     
     @objc private func refreshMapView(_ notification: Notification) {

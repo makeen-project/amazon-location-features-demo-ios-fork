@@ -18,6 +18,14 @@ extension Date {
         return relativeDateFormatter
     }()
     
+    private static let defaultStylesDateFormatter = {
+        let relativeDateFormatter = DateFormatter()
+        relativeDateFormatter.timeStyle = .none
+        relativeDateFormatter.dateStyle = .medium
+        relativeDateFormatter.locale = .current
+        return relativeDateFormatter
+    }()
+    
     static func convertStringToDate(_ dateString: String) -> Date? {
         let format = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         if dateFormatter.dateFormat != format {
@@ -33,6 +41,17 @@ extension Date {
     
     func convertDateString() -> String {
         return convertToString(format: "MMM d, yyyy")
+    }
+    
+    func convertDateMediumString() -> String {
+        let dateFormatter = Self.defaultStylesDateFormatter
+        if dateFormatter.dateStyle != .medium {
+            dateFormatter.dateStyle = .medium
+        }
+        if dateFormatter.timeStyle != .none {
+            dateFormatter.timeStyle = .none
+        }
+        return dateFormatter.string(from: self)
     }
     
     func convertToString(format: String) -> String {

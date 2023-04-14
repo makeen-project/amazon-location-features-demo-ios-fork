@@ -80,7 +80,9 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
         trackingService.removeAllHistory { [weak self] result in
             switch result {
             case .success:
-                self?.setHistory([])
+                let history: [TrackingHistoryPresentation] = []
+                NotificationCenter.default.post(name: Notification.updateTrackingHistory, object: self, userInfo: ["history": history])
+                self?.setHistory(history)
                 self?.delegate?.reloadTableView()
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
@@ -95,7 +97,18 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
         guard section < sortedKeys.count else { return "" }
         
         let day = sortedKeys[section]
-        return day.convertToRelativeString()
+        
+        let title: String
+        let relativeString = day.convertToRelativeString()
+        let mediumDateString = day.convertDateMediumString()
+        let dateString = day.convertDateString()
+        if relativeString == mediumDateString {
+            title = dateString
+        } else {
+            title = "\(relativeString), \(dateString)"
+        }
+        
+        return title
     }
     
     func getItemCount(for section: Int) -> Int {

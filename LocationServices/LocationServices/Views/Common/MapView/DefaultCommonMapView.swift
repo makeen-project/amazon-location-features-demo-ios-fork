@@ -308,6 +308,12 @@ extension DefaultCommonMapView {
         }
     }
     
+    func removeLayer(with identifier: String) {
+        guard let style = mapView.style,
+              let layer = style.layer(withIdentifier: identifier) else { return }
+        style.removeLayer(layer)
+    }
+    
     func remove(annotations: [MGLAnnotation]) {
         mapView.removeAnnotations(annotations)
     }

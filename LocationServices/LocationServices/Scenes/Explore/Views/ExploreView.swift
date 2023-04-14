@@ -16,6 +16,7 @@ private enum Constant {
     static let singleAnnotationMapZoomValue: Double = 17
     static let directionMapZoomValue: Double = 14
     static let annotationMapZoomValue: Double = 10
+    static let navigationMapZoonValue: Double = 14
     static let amazonHqMapPosition = (latitude: 47.61506909519956, longitude: -122.33826750882835)
     static let userLocationViewIdentifier = "UserLocationViewIdentifier"
     static let imageAnnotationViewIdentifier = "ImageAnnotationViewIdentifier"
@@ -201,7 +202,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         self.mapMode = .turnByTurnNavigation
         if let userCoordinates = mapView.userLocation?.coordinate,
            CLLocationCoordinate2DIsValid(userCoordinates) {
-            mapView.setCenter(userCoordinates, zoomLevel: Constant.mapZoomValue, direction: mapView.direction, animated: true) { [weak self] in
+            mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
                 self?.mapView.userTrackingMode = .followWithCourse
             }
         }
@@ -226,7 +227,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     private func setMapCenter(userCoordinates: CLLocationCoordinate2D) {
-        mapView.setCenter(userCoordinates, zoomLevel: Constant.singleAnnotationMapZoomValue, direction: mapView.direction, animated: true) { [weak self] in
+        mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
             switch self?.mapMode {
             case .search, .none:
                 self?.mapView.userTrackingMode = .follow
@@ -411,8 +412,8 @@ final class ExploreView: UIView, NavigationMapProtocol {
         // it is just to force to redraw the mapView
         mapView.zoomLevel = mapView.zoomLevel + 0.01
         
-        locateMeAction(force: true)
         mapView.showsUserLocation = true
+        locateMeAction(force: true)
     }
     
     func setupTapGesture() {
@@ -798,10 +799,9 @@ extension ExploreView: MGLMapViewDelegate {
         switch reason {
         case .gesturePan, .gesturePinch, .gestureRotate, .gestureZoomIn, .gestureZoomOut, .gestureTilt:
             if mapMode == .turnByTurnNavigation {
-                
                 if let userCoordinates = mapView.userLocation?.coordinate,
                    CLLocationCoordinate2DIsValid(userCoordinates) {
-                    mapView.setCenter(userCoordinates, zoomLevel: Constant.mapZoomValue, direction: mapView.direction, animated: true) { [weak self] in
+                    mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
                         self?.mapView.userTrackingMode = .followWithCourse
                     }
                 }
