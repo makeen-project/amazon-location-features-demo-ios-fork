@@ -28,6 +28,7 @@ enum UserDefaultKeyType: String {
     // states of the application:
     case appState
     case termsAndConditionsAgreedVersion
+    case signedInIdentityId
 }
 
 enum AppState: Int {

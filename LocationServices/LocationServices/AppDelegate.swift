@@ -16,7 +16,6 @@ import AWSMobileClientXCF
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var navigationController: UINavigationController?
-    private let loginService = AWSLoginService()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -31,8 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AWSDDLog.sharedInstance.logLevel = .debug
         AWSDDLog.add(AWSDDTTYLogger.sharedInstance)
         
-        // configure AWS service
-        loginService.setupAWSConfiguration()
         Reachability.shared.startMonitoring()
         
         return true
