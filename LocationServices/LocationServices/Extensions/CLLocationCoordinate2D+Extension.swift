@@ -24,6 +24,18 @@ extension CLLocationCoordinate2D: Hashable {
         return isSameLocation(currentLocation, accuracy: 5)
     }
     
+    func location(radius: Double, radians: Double) -> CLLocationCoordinate2D {
+        let distRadians = radius / (6372797.6) // earth radius in meters
+
+        let lat1 = latitude * Double.pi / 180
+        let lon1 = longitude * Double.pi / 180
+
+        let lat2 = asin(sin(lat1) * cos(distRadians) + cos(lat1) * sin(distRadians) * cos(radians))
+        let lon2 = lon1 + atan2(sin(radians) * sin(distRadians) * cos(lat1), cos(distRadians) - sin(lat1) * sin(lat2))
+
+        return CLLocationCoordinate2D(latitude: lat2 * 180 / Double.pi, longitude: lon2 * 180 / Double.pi)
+    }
+    
     // MARK: Hashable
     public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude

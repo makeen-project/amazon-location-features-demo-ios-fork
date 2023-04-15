@@ -13,7 +13,7 @@ protocol TrackingMapViewDelegate {
     var delegate: GeofenceMapViewOutputDelegate { get set }
 }
 
-protocol TrackingMapViewOutputDelegate {
+protocol TrackingMapViewOutputDelegate: BottomSheetPresentable {
     func geofenceButtonAction()
     func showMapLayers()
     func showDirection()
@@ -21,7 +21,11 @@ protocol TrackingMapViewOutputDelegate {
 }
 
 final class TrackingMapView: UIView {
-    var delegate: TrackingMapViewOutputDelegate?
+    var delegate: TrackingMapViewOutputDelegate? {
+        didSet {
+            mapView.delegate = delegate
+        }
+    }
     
     private var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
@@ -47,6 +51,7 @@ final class TrackingMapView: UIView {
         super.init(frame: frame)
         self.isUserInteractionEnabled = true
         mapLayer.delegate = self
+        mapView.delegate = delegate
         setupViews()
     }
     
@@ -82,8 +87,7 @@ final class TrackingMapView: UIView {
             $0.top.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-16)
             $0.width.equalTo(50)
-        }
-        
+        }   
     }
     
     func adjustMapLayerItems(bottomSpace: Int) {

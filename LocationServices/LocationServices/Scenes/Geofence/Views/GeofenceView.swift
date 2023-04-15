@@ -13,7 +13,7 @@ protocol GeofenceMapViewDelegate {
     var delegate: GeofenceMapViewOutputDelegate { get set }
 }
 
-protocol GeofenceMapViewOutputDelegate {
+protocol GeofenceMapViewOutputDelegate: BottomSheetPresentable {
     func geofenceButtonAction()
     func showMapLayers()
     func directionHandlers()
@@ -23,7 +23,11 @@ protocol GeofenceMapViewOutputDelegate {
 }
 
 final class GeofenceMapView: UIView {
-    var delegate: GeofenceMapViewOutputDelegate?
+    var delegate: GeofenceMapViewOutputDelegate? {
+        didSet {
+            mapView.delegate = delegate
+        }
+    }
     
     private var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
@@ -54,6 +58,7 @@ final class GeofenceMapView: UIView {
         searchBarView.isUserInteractionEnabled = false
         mapLayer.delegate = self
         searchBarView.delegate = self
+        mapView.delegate = delegate
         setupViews()
         
         mapView.selectedAnnotationCallback = { [weak self] annotation in

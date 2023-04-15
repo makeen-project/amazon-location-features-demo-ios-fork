@@ -57,16 +57,25 @@ protocol ExploreViewDelegate: AnyObject {
     func getUserLocation()
 }
 
-protocol ExploreViewOutputDelegate: AnyObject {
+protocol ExploreViewOutputDelegate: AnyObject, BottomSheetPresentable {
     func loginButtonTapped()
     func searchTextTapped(userLocation: CLLocationCoordinate2D?)
     func showPoiCard(cardData: [MapModel])
     func showDirectionView(userLocation: CLLocationCoordinate2D?)
-    func getBottomSheetHeight() -> CGFloat
     func getBottomSafeAreaWithTabBarHeight() -> CGFloat
     func userLocationChanged(_ userLocation: CLLocationCoordinate2D)
     func performLocationDependentAction(_ action: ()->())
     func showMapStyles()
     func showPoiCard(for location: CLLocationCoordinate2D)
     func showAttribution()
+}
+
+protocol BottomSheetPresentable: AnyObject {
+    func getBottomSheetHeight() -> CGFloat
+}
+
+extension BottomSheetPresentable where Self: UIViewController {
+    func getBottomSheetHeight() -> CGFloat {
+        return self.presentedViewController?.view.frame.height ?? 0
+    }
 }

@@ -39,4 +39,18 @@ extension MGLCoordinateBounds {
         
         return coordinateBounds
     }
+    
+    static func create(centerLocation: CLLocationCoordinate2D, radius: CGFloat) -> MGLCoordinateBounds {
+        let north = centerLocation.location(radius: radius, radians: 0)
+        let east = centerLocation.location(radius: radius, radians: Double.pi/2)
+        let south = centerLocation.location(radius: radius, radians: Double.pi)
+        let west = centerLocation.location(radius: radius, radians: 3*Double.pi/2)
+        
+        let swBoundLocation = CLLocationCoordinate2D(latitude: south.latitude, longitude: west.longitude)
+        let neBoundLocation = CLLocationCoordinate2D(latitude: north.latitude, longitude: east.longitude)
+        
+        let coordinateBounds = MGLCoordinateBounds(sw: swBoundLocation, ne: neBoundLocation)
+        
+        return coordinateBounds
+    }
 }
