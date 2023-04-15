@@ -66,7 +66,6 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
         controller.modalPresentationStyle = .pageSheet
         
         controller.addGeofence = { [weak self] parameters in
-            self?.navigationController.dismiss(animated: false)
             self?.showAddGeofenceFlow(activeGeofencesLists: parameters.activeGeofences,
                                       isEditingSceneEnabled: parameters.isEditingSceneEnabled,
                                       model: parameters.geofenceData,
@@ -92,6 +91,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
                              model: GeofenceDataModel?,
                              lat: Double?,
                              long: Double?) {
+        dismissCurrentScene(geofences: [], shouldDashboardShow: false)
         let controller = AddGeofenceBuilder.create(activeGeofencesLists: activeGeofencesLists,
                                                    isEditingSceneEnabled: isEditingSceneEnabled,
                                                    model: model,
@@ -109,7 +109,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             sheet.largestUndimmedDetentIdentifier = .medium
         }
 
-        navigationController.present(controller, animated: false)
+        navigationController.present(controller, animated: true)
     }
     
     func showMapStyleScene() {
