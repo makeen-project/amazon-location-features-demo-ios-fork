@@ -26,10 +26,12 @@ private enum Constant {
 
 final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     
+    weak var delegate: BottomSheetPresentable?
     private var geofenceAnnotation: [MGLAnnotation] = []
     var isDrawCirle = false
     var geofenceAnnotationRadius: Int64 = 80
     private var signingDelegate: MGLOfflineStorageDelegate?
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     private(set) var mapMode: MapMode = .search
     private(set) var userLocation: CLLocation?
@@ -275,10 +277,28 @@ extension DefaultCommonMapView  {
         })
         
         let coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
+        let coordinateBounds = MGLCoordinateBounds.create(centerLocation: coordinates, radius: Double(radius))
+        let edgePadding = configureMapEdgePadding()
+        self.mapView.setVisibleCoordinateBounds(coordinateBounds, edgePadding: edgePadding, animated: false, completionHandler: nil)
+        
         let geofenceAnnotation = GeofenceAnnotation(id: id, radius: Double(radius), title: title, coordinate: coordinates)
         mapView.addAnnotation(geofenceAnnotation)
+    }
+    
+    private func configureMapEdgePadding() -> UIEdgeInsets {
+        let staticInset: CGFloat = 0
         
-        mapView.setCenter(CLLocationCoordinate2D(latitude: latitude, longitude: longitude), zoomLevel: 17, animated: false)
+        let topInset = staticInset + self.safeAreaInsets.top
+        let leftInset = staticInset + self.safeAreaInsets.left
+        // add small bottom padding on ipad
+        let IPAD_INTENTIONAL_BOTTOM_PADDING = CGFloat(200) // Introduces bottom gutter/padding on iPad to assure modals don't overlap with the rendered route
+        let bottomInset = (self.delegate?.getBottomSheetHeight() ?? 0) + (self.isiPad ? IPAD_INTENTIONAL_BOTTOM_PADDING : 0)
+        let rightInset = staticInset + self.safeAreaInsets.right
+        
+        let edgePadding = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        
+        return edgePadding
     }
     
     func deleteGeofence(latitude: Double?, longitude: Double?) {

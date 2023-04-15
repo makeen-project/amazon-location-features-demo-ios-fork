@@ -107,10 +107,6 @@ extension ExploreVC: ExploreViewOutputDelegate {
         }
     }
     
-    func getBottomSheetHeight() -> CGFloat {
-        return self.presentedViewController?.view.frame.height ?? 0
-    }
-    
     func getBottomSafeAreaWithTabBarHeight() -> CGFloat {
         let tabBarHeight = navigationController?.tabBarController?.tabBar.frame.height ?? 0
         let minimumBottomSheetHeight: CGFloat = 76
