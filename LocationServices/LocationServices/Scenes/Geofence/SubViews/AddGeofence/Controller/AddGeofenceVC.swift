@@ -289,6 +289,7 @@ extension AddGeofenceVC: AddGeofenceViewModelOutputProtocol {
                                       lat: mapModel.placeLat,
                                       long: mapModel.placeLong,
                                       radius: 80)
+        searchView.updateFields(model: model)
         self.cacheSaveModel = model
         self.enableSaveButton()
         self.postNotification(model: model)
