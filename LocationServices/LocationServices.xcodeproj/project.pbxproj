@@ -323,6 +323,10 @@
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
+		F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */; };
+		F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */; };
+		F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */; };
+		F139208B29EE918E0042CBC9 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208729EE918E0042CBC9 /* DateExtensionTests.swift */; };
 		F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */; };
 		F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */; };
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
@@ -669,6 +673,10 @@
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
+		F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocationTravelModeTests.swift; sourceTree = "<group>"; };
+		F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtensionTests.swift; sourceTree = "<group>"; };
+		F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationExtensionTests.swift; sourceTree = "<group>"; };
+		F139208729EE918E0042CBC9 /* DateExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTabBarScreen.swift; sourceTree = "<group>"; };
 		F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTrackingScreen.swift; sourceTree = "<group>"; };
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
@@ -984,6 +992,10 @@
 		963EBF5029AF92F7001961F2 /* LocationServicesTests */ = {
 			isa = PBXGroup;
 			children = (
+				F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */,
+				F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */,
+				F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */,
+				F139208729EE918E0042CBC9 /* DateExtensionTests.swift */,
 				F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */,
 				F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */,
 				963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */,
@@ -2868,11 +2880,15 @@
 				F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */,
 				F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */,
 				963EBF5229AF92F7001961F2 /* LocationServicesTests.swift in Sources */,
+				F139208B29EE918E0042CBC9 /* DateExtensionTests.swift in Sources */,
+				F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */,
+				F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */,
 				F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */,
 				F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */,
 				F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */,
 				F1E5F8F029E986F300639EEC /* UserDefaultsHelperTests.swift in Sources */,
 				F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */,
+				F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */,
 				F1E5F8F629E988F900639EEC /* ReachabilityTests.swift in Sources */,
 				F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */,
 			);
