@@ -58,11 +58,47 @@ final class DirectionView: UIView {
     private var truckRouteTypeView: RouteTypeView = RouteTypeView(viewType: .truck)
     
     private var routeTypeStackView: UIStackView = {
-      let stackView = UIStackView()
+        let stackView = UIStackView()
+        stackView.isHidden = true
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.spacing = 1
         return stackView
+    }()
+    
+    private let distanceErrorTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = StringConstant.greatDistanceErrorTitle
+        label.textColor = .lsTetriary
+        label.font = .amazonFont(type: .bold, size: 16)
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    private let distanceErrorMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = StringConstant.greatDistanceErrorMessage
+        label.numberOfLines = 2
+        label.textColor = .lsGrey
+        label.font = .amazonFont(type: .regular, size: 13)
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private var errorIconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "exclamationmark.triangle")
+        imageView.tintColor = .searchBarTintColor
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private var errorContainer: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.backgroundColor = .clear
+        return view
     }()
     
     override init(frame: CGRect) {
@@ -75,6 +111,7 @@ final class DirectionView: UIView {
         }
         setupHandlers()
         setupViews()
+        setupErrorViews()
     }
     
     func setLocalValues(toll: Bool, ferries: Bool) {
@@ -84,6 +121,16 @@ final class DirectionView: UIView {
     func setup(model: DirectionVM, isPreview: Bool) {
         self.isPreview = isPreview
         self.model = model
+    }
+    
+    func showOptionsStackView() {
+        routeTypeStackView.isHidden = false
+        errorContainer.isHidden = true
+    }
+    
+    func showErrorStackView() {
+        routeTypeStackView.isHidden = true
+        errorContainer.isHidden = false
     }
     
     private func setupHandlers() {
@@ -196,6 +243,38 @@ final class DirectionView: UIView {
         
         routeTypeStackView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+    
+    private func setupErrorViews() {
+        containerView.addSubview(errorContainer)
+        errorContainer.addSubview(errorIconImageView)
+        errorContainer.addSubview(distanceErrorTitleLabel)
+        errorContainer.addSubview(distanceErrorMessageLabel)
+        
+        errorContainer.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+        
+        errorIconImageView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(40)
+            $0.width.equalTo(40)
+        }
+        
+        distanceErrorTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(errorIconImageView.snp.bottom).offset(32)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        
+        distanceErrorMessageLabel.snp.makeConstraints {
+            $0.top.equalTo(distanceErrorTitleLabel.snp.bottom).offset(8)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview()
         }
     }
 }

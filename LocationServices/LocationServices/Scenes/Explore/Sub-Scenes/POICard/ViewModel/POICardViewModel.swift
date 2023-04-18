@@ -54,9 +54,8 @@ final class POICardViewModel: POICardViewModelProcotol {
             let userLocation = CLLocation(location: userLocation)
             let placeLocation = CLLocation(location: destinationPosition)
             
-            let fourHundredKMInMeters: Double = 400000
             let distance = userLocation.distance(from: placeLocation)
-            guard distance < fourHundredKMInMeters else {
+            guard distance < NumberConstants.fourHundredKMInMeters else {
                 delegate?.populateDatas(cardData: cardData, isLoadingData: false, errorMessage: StringConstant.esriDistanceError, errorInfoMessage: nil)
                 return
             }
