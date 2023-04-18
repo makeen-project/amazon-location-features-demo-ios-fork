@@ -117,6 +117,8 @@ enum StringConstant {
     static let domainErrorLocalizedDescription = "The operation couldn’t be completed. (kCLErrorDomain error 0.)"
     static let testExpectationError = "expectation not matched after waiting"
     static let sessionExpiredError = "Session is expired. Please sign out and sign in back to continue access all features. Otherwise you could face unexpected behaviour in the app"
+    static let greatDistanceErrorTitle = "Distance is greater than 400 km"
+    static let greatDistanceErrorMessage = "Can`t calculate via Esri, kindly switch to HERE provider"
     
     //login
     enum LoginInfo {
