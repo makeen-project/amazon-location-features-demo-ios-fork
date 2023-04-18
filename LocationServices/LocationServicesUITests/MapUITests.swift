@@ -111,10 +111,12 @@ final class MapUITests: LocationServicesUITests {
             .waitForMapToBeRendered()
         
         let screenshotAfter = exploreScreen.takeMapScreenshot()
+        let comparator = UITestScreenshotComparator(allowedDifference: 0.01)
+        let areScreenshotsEqual = comparator.areEqual(originalImage: screenshotBefore.image, changedImage: screenshotAfter.image)
         if screenShotShouldBeChanged {
-            XCTAssertNotEqual(screenshotBefore.pngRepresentation, screenshotAfter.pngRepresentation)
+            XCTAssertFalse(areScreenshotsEqual, UITestConstants.mapNotChangedError)
         } else {
-            XCTAssertEqual(screenshotBefore.pngRepresentation, screenshotAfter.pngRepresentation)
+            XCTAssertTrue(areScreenshotsEqual, UITestConstants.mapChangedError)
         }
         
         return exploreScreen

@@ -45,6 +45,8 @@
 		8A6B834A29DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */; };
 		8A6C390629A25E480003666C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390529A25E480003666C /* Reachability.swift */; };
 		8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */; };
+		8A7088B729EE96000066BF60 /* UITestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B429EE95AB0066BF60 /* UITestConstants.swift */; };
+		8A7088B929EE972C0066BF60 /* UITestScreenshotComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */; };
 		8A76327C297EAE270064D60F /* MGLMapViewDelegate+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76327B297EAE270064D60F /* MGLMapViewDelegate+Extension.swift */; };
 		8A7B920129CDCE5D006F8814 /* SearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7B920029CDCE5D006F8814 /* SearchUITests.swift */; };
 		8A7B920329CDD6A4006F8814 /* UITestSearchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7B920229CDD6A4006F8814 /* UITestSearchScreen.swift */; };
@@ -392,6 +394,8 @@
 		8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+Extensions.swift"; sourceTree = "<group>"; };
 		8A6C390529A25E480003666C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetConnectionView.swift; sourceTree = "<group>"; };
+		8A7088B429EE95AB0066BF60 /* UITestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConstants.swift; sourceTree = "<group>"; };
+		8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestScreenshotComparator.swift; sourceTree = "<group>"; };
 		8A76327B297EAE270064D60F /* MGLMapViewDelegate+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGLMapViewDelegate+Extension.swift"; sourceTree = "<group>"; };
 		8A7B920029CDCE5D006F8814 /* SearchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUITests.swift; sourceTree = "<group>"; };
 		8A7B920229CDD6A4006F8814 /* UITestSearchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSearchScreen.swift; sourceTree = "<group>"; };
@@ -911,10 +915,19 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
+		8A7088B129EE95810066BF60 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		8AB3F19129C8A1C3008FDF37 /* LocationServicesUITests */ = {
 			isa = PBXGroup;
 			children = (
 				8A94BA8F29E0281D0070D3E0 /* Info.plist */,
+				8A7088B129EE95810066BF60 /* Helpers */,
 				8AD0A6E029DDFC0800B79078 /* Extensions */,
 				8AD0E39229CCC74400C338F5 /* Models */,
 				8A47805529C9BD8E00B098CA /* Screens */,
@@ -944,6 +957,7 @@
 				8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */,
 				8AD0E39029CCC72500C338F5 /* UITestSwipeDirection.swift */,
 				8AD67F9F29D1E39C004A5F7D /* UITestRouteType.swift */,
+				8A7088B429EE95AB0066BF60 /* UITestConstants.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2835,6 +2849,7 @@
 				8A7B920129CDCE5D006F8814 /* SearchUITests.swift in Sources */,
 				F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */,
 				8AD0E38F29CCC1ED00C338F5 /* UITestWaitTime.swift in Sources */,
+				8A7088B729EE96000066BF60 /* UITestConstants.swift in Sources */,
 				8A063EA229C9C27C001FF40C /* StringConstants.swift in Sources */,
 				8A063EA129C9C256001FF40C /* UIApplication+Extension.swift in Sources */,
 				8AD0E39129CCC72500C338F5 /* UITestSwipeDirection.swift in Sources */,
@@ -2849,6 +2864,7 @@
 				8AD6029029D2FF07009E6F9E /* UITestPoiCardScreen.swift in Sources */,
 				F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */,
 				8AD67F9829D1AA11004A5F7D /* MapStyleTypes.swift in Sources */,
+				8A7088B929EE972C0066BF60 /* UITestScreenshotComparator.swift in Sources */,
 				8A7B920329CDD6A4006F8814 /* UITestSearchScreen.swift in Sources */,
 				F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */,
 				8A4D5FB329D6F64A00A79D3C /* SettingsUITests.swift in Sources */,
