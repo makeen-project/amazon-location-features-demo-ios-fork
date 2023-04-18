@@ -1,9 +1,9 @@
 //
 //  DateExtensionTests.swift
-//  LocationServicesTests
+//  DateExtensionTests
 //
-//  Created by Zeeshan Sheikh on 17/04/2023.
-//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 
 import XCTest
 @testable import LocationServices
