@@ -15,6 +15,7 @@ private enum Constant {
 
 protocol SearchBarViewOutputDelegate {
     func searchTextActivated()
+    func searchTextDeactivated()
     func searchText(_ text: String?)
     func searchTextWith(_ text: String?)
 }
@@ -80,7 +81,7 @@ final class SearchBarView: UIView {
         }
         
         searchView.textFieldDeactivated = { [weak self] in
-            self?.delegate?.searchTextActivated()
+            self?.delegate?.searchTextDeactivated()
         }
                 
         SearchBarCache.shared.addObserver(self,
