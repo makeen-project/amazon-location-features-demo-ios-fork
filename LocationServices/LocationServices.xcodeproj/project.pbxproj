@@ -47,6 +47,7 @@
 		8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */; };
 		8A7088B729EE96000066BF60 /* UITestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B429EE95AB0066BF60 /* UITestConstants.swift */; };
 		8A7088B929EE972C0066BF60 /* UITestScreenshotComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */; };
+		8A75093729EEE1D100B9985F /* NumberConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A75093629EEE1D100B9985F /* NumberConstants.swift */; };
 		8A76327C297EAE270064D60F /* MGLMapViewDelegate+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76327B297EAE270064D60F /* MGLMapViewDelegate+Extension.swift */; };
 		8A7B920129CDCE5D006F8814 /* SearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7B920029CDCE5D006F8814 /* SearchUITests.swift */; };
 		8A7B920329CDD6A4006F8814 /* UITestSearchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7B920229CDD6A4006F8814 /* UITestSearchScreen.swift */; };
@@ -396,6 +397,7 @@
 		8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetConnectionView.swift; sourceTree = "<group>"; };
 		8A7088B429EE95AB0066BF60 /* UITestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConstants.swift; sourceTree = "<group>"; };
 		8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestScreenshotComparator.swift; sourceTree = "<group>"; };
+		8A75093629EEE1D100B9985F /* NumberConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberConstants.swift; sourceTree = "<group>"; };
 		8A76327B297EAE270064D60F /* MGLMapViewDelegate+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGLMapViewDelegate+Extension.swift"; sourceTree = "<group>"; };
 		8A7B920029CDCE5D006F8814 /* SearchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUITests.swift; sourceTree = "<group>"; };
 		8A7B920229CDD6A4006F8814 /* UITestSearchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSearchScreen.swift; sourceTree = "<group>"; };
@@ -1168,6 +1170,7 @@
 				AD300A2F294BDE3A00355423 /* LocationServicesCustomFonts.swift */,
 				9660600029A4F20100FB88D0 /* StringConstants.swift */,
 				8AB3F19D29C8AF22008FDF37 /* ViewsIdentifiers.swift */,
+				8A75093629EEE1D100B9985F /* NumberConstants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -2928,6 +2931,7 @@
 				ADD139952980A34E0003F917 /* RouteOptionRowView.swift in Sources */,
 				ADD5D7B1296E00340022480B /* PostLoginView.swift in Sources */,
 				ADD1396A2980966E0003F917 /* DataProviderVC.swift in Sources */,
+				8A75093729EEE1D100B9985F /* NumberConstants.swift in Sources */,
 				ADD1395A2980874A0003F917 /* UnitSceneViewModel.swift in Sources */,
 				ADD5D7D7296F87640022480B /* AddGeofenceHeaderView.swift in Sources */,
 				ADBD7FB229493A9B005DB4E4 /* Int+Extension.swift in Sources */,
