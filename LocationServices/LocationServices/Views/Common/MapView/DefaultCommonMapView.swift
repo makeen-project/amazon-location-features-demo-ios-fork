@@ -202,9 +202,12 @@ extension DefaultCommonMapView: MGLMapViewDelegate {
     }
     
     func updateVisibleGeofenceAnnotations(on mapView: MGLMapView) {
-        mapView.visibleAnnotations?.forEach({
+        //visibleAnnotations return incorrect values in current (v5.12.1) MGLLibre version
+        //fixed and can be used in MGLLibre v5.13.0
+//        mapView.visibleAnnotations?.forEach({
+        mapView.annotations?.forEach({
             guard let geofenceAnnotationView = mapView.view(for: $0) as? GeofenceAnnotationView else { return }
-            
+
             geofenceAnnotationView.update(mapView: mapView)
         })
     }
