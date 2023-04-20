@@ -64,6 +64,8 @@
 		8ABDF63829A5272B00122966 /* MapStyleSectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABDF63729A5272B00122966 /* MapStyleSectionFooterView.swift */; };
 		8ABDF63A29A52AE300122966 /* ExploreMapStyleCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABDF63929A52AE300122966 /* ExploreMapStyleCellViewModel.swift */; };
 		8AC0806929A90BFC0000D79B /* DeleteTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC0806829A90BFC0000D79B /* DeleteTrackingView.swift */; };
+		8ACAAD7429F13FA400523256 /* LocationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACAAD7329F13FA400523256 /* LocationManagerTests.swift */; };
+		8ACAAD7629F14B9D00523256 /* CLLocationManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */; };
 		8AD0A6E329DDFC9700B79078 /* XCTWaiter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0A6E129DDFC5700B79078 /* XCTWaiter+Extension.swift */; };
 		8AD0E38F29CCC1ED00C338F5 /* UITestWaitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */; };
 		8AD0E39129CCC72500C338F5 /* UITestSwipeDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0E39029CCC72500C338F5 /* UITestSwipeDirection.swift */; };
@@ -443,6 +445,8 @@
 		8ABDF63729A5272B00122966 /* MapStyleSectionFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapStyleSectionFooterView.swift; sourceTree = "<group>"; };
 		8ABDF63929A52AE300122966 /* ExploreMapStyleCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreMapStyleCellViewModel.swift; sourceTree = "<group>"; };
 		8AC0806829A90BFC0000D79B /* DeleteTrackingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteTrackingView.swift; sourceTree = "<group>"; };
+		8ACAAD7329F13FA400523256 /* LocationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerTests.swift; sourceTree = "<group>"; };
+		8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Extension.swift"; sourceTree = "<group>"; };
 		8AD0A6E129DDFC5700B79078 /* XCTWaiter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTWaiter+Extension.swift"; sourceTree = "<group>"; };
 		8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestWaitTime.swift; sourceTree = "<group>"; };
 		8AD0E39029CCC72500C338F5 /* UITestSwipeDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSwipeDirection.swift; sourceTree = "<group>"; };
@@ -1093,6 +1097,7 @@
 				F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */,
 				8ADB629A29F291C3002C7971 /* AddGeofenceViewModelTests.swift */,
 				8A834D8F29F2E9890091D89C /* GeofenceViewModelTests.swift */,
+				8ACAAD7329F13FA400523256 /* LocationManagerTests.swift */,
 			);
 			path = LocationServicesTests;
 			sourceTree = "<group>";
@@ -2709,6 +2714,7 @@
 				960968A429A2C83D0026C05A /* AWSEndpoint+Extension.swift */,
 				8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */,
 				8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */,
+				8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2979,6 +2985,7 @@
 				8ADB629B29F291C3002C7971 /* AddGeofenceViewModelTests.swift in Sources */,
 				8ADB62A529F2B671002C7971 /* XCTWaiter+Extension.swift in Sources */,
 				8A834D9529F2EF4F0091D89C /* GeofenceDataModel+Extension.swift in Sources */,
+				8ACAAD7429F13FA400523256 /* LocationManagerTests.swift in Sources */,
 				F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */,
 				8ADB62A629F2B677002C7971 /* UITestWaitTime.swift in Sources */,
 				F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */,
@@ -3138,6 +3145,7 @@
 				ADABECD7293FD56B00E66FC5 /* SearchModel.swift in Sources */,
 				ADC124A02979E3C200B08C20 /* AddGeofenceVC+TableView.swift in Sources */,
 				ADAF3657294A841000DC4774 /* Array+Extension.swift in Sources */,
+				8ACAAD7629F14B9D00523256 /* CLLocationManager+Extension.swift in Sources */,
 				AD2AF0EB292EAEDF00149904 /* AppColorsConstants.swift in Sources */,
 				AD2AF030292E892000149904 /* AppDelegate.swift in Sources */,
 				AD2AF0CF292EAB9000149904 /* SettingsContracts.swift in Sources */,
