@@ -38,6 +38,13 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         selectedRoute = nil
     }
     
+    func isSelectedRouteHasValue() -> Bool {
+        guard selectedRoute != nil else {
+            return false
+        }
+        return true
+    }
+    
     func userLocationChanged(_ userLocation: CLLocationCoordinate2D) {
         guard let selectedRoute else { return }
         

@@ -13,6 +13,10 @@ final class MapStyleViewModelTests: XCTestCase {
     let mapStyleViewModel = MapStyleViewModel()
     
     override func setUpWithError() throws {
+        if let domain = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: domain)
+            UserDefaults.standard.synchronize()
+        }
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
