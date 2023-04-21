@@ -9,13 +9,13 @@ import Foundation
 
 final class GeofenceViewModel: GeofenceViewModelProtocol {
     
-    private let geofenceService: GeofenceAPIService
+    private let geofenceService: GeofenceServiceable
 
     private(set) var geofences: [GeofenceDataModel] = []
     
     weak var delegate: GeofenceViewModelDelegate?
     
-    init(geofenceService: GeofenceAPIService) {
+    init(geofenceService: GeofenceServiceable) {
         self.geofenceService = geofenceService
     }
     
