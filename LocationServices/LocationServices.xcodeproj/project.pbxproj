@@ -72,6 +72,9 @@
 		8AD67F9C29D1D594004A5F7D /* UITestRoutingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD67F9B29D1D594004A5F7D /* UITestRoutingScreen.swift */; };
 		8AD67FA029D1E39C004A5F7D /* UITestRouteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD67F9F29D1E39C004A5F7D /* UITestRouteType.swift */; };
 		8AD67FA229D1E5B3004A5F7D /* UITestNavigationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD67FA129D1E5B3004A5F7D /* UITestNavigationScreen.swift */; };
+		8ADB629B29F291C3002C7971 /* AddGeofenceViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB629A29F291C3002C7971 /* AddGeofenceViewModelTests.swift */; };
+		8ADB629E29F2A051002C7971 /* GeofenceAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB629D29F2A051002C7971 /* GeofenceAPIServiceMock.swift */; };
+		8ADB62A029F2A074002C7971 /* LocationAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB629F29F2A074002C7971 /* LocationAPIServiceMock.swift */; };
 		8AF7D2AB2976B3F700E1563E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7D2AA2976B3F700E1563E /* LocationManager.swift */; };
 		8AF7D2AD2976C02100E1563E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7D2AC2976C02100E1563E /* AlertPresenter.swift */; };
 		8AFBAFDA296F002A0022A7E3 /* RouteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFBAFD9296F002A0022A7E3 /* RouteModel.swift */; };
@@ -439,6 +442,9 @@
 		8AD67F9B29D1D594004A5F7D /* UITestRoutingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRoutingScreen.swift; sourceTree = "<group>"; };
 		8AD67F9F29D1E39C004A5F7D /* UITestRouteType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRouteType.swift; sourceTree = "<group>"; };
 		8AD67FA129D1E5B3004A5F7D /* UITestNavigationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestNavigationScreen.swift; sourceTree = "<group>"; };
+		8ADB629A29F291C3002C7971 /* AddGeofenceViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGeofenceViewModelTests.swift; sourceTree = "<group>"; };
+		8ADB629D29F2A051002C7971 /* GeofenceAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceAPIServiceMock.swift; sourceTree = "<group>"; };
+		8ADB629F29F2A074002C7971 /* LocationAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAPIServiceMock.swift; sourceTree = "<group>"; };
 		8AF7D2AA2976B3F700E1563E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		8AF7D2AC2976C02100E1563E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		8AFBAFD9296F002A0022A7E3 /* RouteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteModel.swift; sourceTree = "<group>"; };
@@ -990,7 +996,16 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		8AFDA09029DDBB0500114BB7 /* Version */ = {
+		8ADB629C29F2A041002C7971 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				8ADB629D29F2A051002C7971 /* GeofenceAPIServiceMock.swift */,
+				8ADB629F29F2A074002C7971 /* LocationAPIServiceMock.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+        8AFDA09029DDBB0500114BB7 /* Version */ = {
 			isa = PBXGroup;
 			children = (
 				8AFDA09229DDBB1A00114BB7 /* Controller */,
@@ -1030,6 +1045,7 @@
 				F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */,
 				F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */,
 				F139208729EE918E0042CBC9 /* DateExtensionTests.swift */,
+				8ADB629C29F2A041002C7971 /* Mocks */,
 				F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */,
 				F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */,
 				963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */,
@@ -1050,6 +1066,7 @@
 				F139DBC729F0283900D4BA98 /* DataProviderViewModelTests.swift */,
 				F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */,
 				F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */,
+				8ADB629A29F291C3002C7971 /* AddGeofenceViewModelTests.swift */,
 			);
 			path = LocationServicesTests;
 			sourceTree = "<group>";
@@ -2918,6 +2935,7 @@
 				F139208D29EEA19D0042CBC9 /* LoginViewModelTests.swift in Sources */,
 				F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */,
 				F139DBC829F0283900D4BA98 /* DataProviderViewModelTests.swift in Sources */,
+				8ADB629E29F2A051002C7971 /* GeofenceAPIServiceMock.swift in Sources */,
 				F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */,
 				F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */,
 				F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */,
@@ -2929,6 +2947,7 @@
 				F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */,
 				F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */,
 				F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */,
+				8ADB629B29F291C3002C7971 /* AddGeofenceViewModelTests.swift in Sources */,
 				F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */,
 				F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */,
 				F1B2388729F01B88001E2066 /* AboutViewModelTests.swift in Sources */,
@@ -2938,6 +2957,7 @@
 				F111DF0F29F0214B00D08641 /* MapStyleViewModelTests.swift in Sources */,
 				F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */,
 				F1E5F8F629E988F900639EEC /* ReachabilityTests.swift in Sources */,
+				8ADB62A029F2A074002C7971 /* LocationAPIServiceMock.swift in Sources */,
 				F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

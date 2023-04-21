@@ -15,13 +15,13 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     private var presentation: [SearchPresentation] = []
     private var searchCellModel: [SearchCellViewModel] = []
     
-    private var searchService: LocationService
-    private var geofenceService: GeofenceAPIService
+    private var searchService: LocationServiceable
+    private var geofenceService: GeofenceServiceable
     
     private(set) var activeGeofencesLists: [GeofenceDataModel]
     
-    init(searchService: LocationService,
-         geofenceService: GeofenceAPIService,
+    init(searchService: LocationServiceable,
+         geofenceService: GeofenceServiceable,
          activeGeofencesLists: [GeofenceDataModel]) {
         self.searchService = searchService
         self.geofenceService = geofenceService

@@ -12,6 +12,9 @@ import AWSLocationXCF
 
 protocol GeofenceServiceable {
     func putGeofence(with id: String, lat: Double, long: Double, radius: Int, completion: @escaping(Result<GeofenceDataModel, Error>) -> Void)
+    func deleteGeofence(with id: String, completion: @escaping(Result<String, Error>) -> Void)
+    func getGeofenceList(completion: @escaping (Result<[GeofenceDataModel], Error>)->())
+    func evaluateGeofence(lat: Double, long: Double)
 }
 
 struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
