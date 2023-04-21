@@ -9,9 +9,9 @@ import Foundation
 @testable import LocationServices
 
 class GeofenceAPIServiceMock: GeofenceServiceable {
-    var itemResult: Result<GeofenceDataModel, Error>?
-    var stringResult: Result<String, Error>?
-    var arrayResult: Result<[GeofenceDataModel], Error>?
+    var putResult: Result<GeofenceDataModel, Error>?
+    var deleteResult: Result<String, Error>?
+    var getResult: Result<[GeofenceDataModel], Error>?
     
     let delay: TimeInterval
     
@@ -21,21 +21,21 @@ class GeofenceAPIServiceMock: GeofenceServiceable {
     
     func putGeofence(with id: String, lat: Double, long: Double, radius: Int, completion: @escaping (Result<GeofenceDataModel, Error>) -> Void) {
         perform { [weak self] in
-            guard let result = self?.itemResult else { return }
+            guard let result = self?.putResult else { return }
             completion(result)
         }
     }
     
     func deleteGeofence(with id: String, completion: @escaping (Result<String, Error>) -> Void) {
         perform { [weak self] in
-            guard let result = self?.stringResult else { return }
+            guard let result = self?.deleteResult else { return }
             completion(result)
         }
     }
     
     func getGeofenceList(completion: @escaping (Result<[GeofenceDataModel], Error>) -> ()) {
         perform { [weak self] in
-            guard let result = self?.arrayResult else { return }
+            guard let result = self?.getResult else { return }
             completion(result)
         }
     }

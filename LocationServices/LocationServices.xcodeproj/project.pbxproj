@@ -75,6 +75,11 @@
 		8ADB629B29F291C3002C7971 /* AddGeofenceViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB629A29F291C3002C7971 /* AddGeofenceViewModelTests.swift */; };
 		8ADB629E29F2A051002C7971 /* GeofenceAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB629D29F2A051002C7971 /* GeofenceAPIServiceMock.swift */; };
 		8ADB62A029F2A074002C7971 /* LocationAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB629F29F2A074002C7971 /* LocationAPIServiceMock.swift */; };
+		8ADB62A229F2A455002C7971 /* AlertPresentableMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB62A129F2A455002C7971 /* AlertPresentableMock.swift */; };
+		8ADB62A429F2A4B6002C7971 /* AddGeofenceViewModelOutputProtocolMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB62A329F2A4B6002C7971 /* AddGeofenceViewModelOutputProtocolMock.swift */; };
+		8ADB62A529F2B671002C7971 /* XCTWaiter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0A6E129DDFC5700B79078 /* XCTWaiter+Extension.swift */; };
+		8ADB62A629F2B677002C7971 /* UITestWaitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */; };
+		8ADB62A729F2B67C002C7971 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
 		8AF7D2AB2976B3F700E1563E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7D2AA2976B3F700E1563E /* LocationManager.swift */; };
 		8AF7D2AD2976C02100E1563E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7D2AC2976C02100E1563E /* AlertPresenter.swift */; };
 		8AFBAFDA296F002A0022A7E3 /* RouteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFBAFD9296F002A0022A7E3 /* RouteModel.swift */; };
@@ -445,6 +450,8 @@
 		8ADB629A29F291C3002C7971 /* AddGeofenceViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGeofenceViewModelTests.swift; sourceTree = "<group>"; };
 		8ADB629D29F2A051002C7971 /* GeofenceAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceAPIServiceMock.swift; sourceTree = "<group>"; };
 		8ADB629F29F2A074002C7971 /* LocationAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAPIServiceMock.swift; sourceTree = "<group>"; };
+		8ADB62A129F2A455002C7971 /* AlertPresentableMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresentableMock.swift; sourceTree = "<group>"; };
+		8ADB62A329F2A4B6002C7971 /* AddGeofenceViewModelOutputProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGeofenceViewModelOutputProtocolMock.swift; sourceTree = "<group>"; };
 		8AF7D2AA2976B3F700E1563E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		8AF7D2AC2976C02100E1563E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		8AFBAFD9296F002A0022A7E3 /* RouteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteModel.swift; sourceTree = "<group>"; };
@@ -1001,6 +1008,8 @@
 			children = (
 				8ADB629D29F2A051002C7971 /* GeofenceAPIServiceMock.swift */,
 				8ADB629F29F2A074002C7971 /* LocationAPIServiceMock.swift */,
+				8ADB62A129F2A455002C7971 /* AlertPresentableMock.swift */,
+				8ADB62A329F2A4B6002C7971 /* AddGeofenceViewModelOutputProtocolMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -2935,7 +2944,9 @@
 				F139208D29EEA19D0042CBC9 /* LoginViewModelTests.swift in Sources */,
 				F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */,
 				F139DBC829F0283900D4BA98 /* DataProviderViewModelTests.swift in Sources */,
+				8ADB62A429F2A4B6002C7971 /* AddGeofenceViewModelOutputProtocolMock.swift in Sources */,
 				8ADB629E29F2A051002C7971 /* GeofenceAPIServiceMock.swift in Sources */,
+				8ADB62A729F2B67C002C7971 /* StringConstants.swift in Sources */,
 				F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */,
 				F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */,
 				F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */,
@@ -2948,10 +2959,13 @@
 				F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */,
 				F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */,
 				8ADB629B29F291C3002C7971 /* AddGeofenceViewModelTests.swift in Sources */,
+				8ADB62A529F2B671002C7971 /* XCTWaiter+Extension.swift in Sources */,
 				F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */,
+				8ADB62A629F2B677002C7971 /* UITestWaitTime.swift in Sources */,
 				F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */,
 				F1B2388729F01B88001E2066 /* AboutViewModelTests.swift in Sources */,
 				F139DBCA29F0346300D4BA98 /* RouteOptionViewModelTests.swift in Sources */,
+				8ADB62A229F2A455002C7971 /* AlertPresentableMock.swift in Sources */,
 				F1E5F8F029E986F300639EEC /* UserDefaultsHelperTests.swift in Sources */,
 				F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */,
 				F111DF0F29F0214B00D08641 /* MapStyleViewModelTests.swift in Sources */,
