@@ -49,7 +49,7 @@ private extension TabBarCoordinator {
 
 private extension TabBarCoordinator {
     func getAllPages() -> [UINavigationController] {
-        let allPages: [TabBarPage] = [.explore, .tracking, .geofence, .settings, .more]
+        let allPages: [TabBarPage] = [.explore, .tracking, .geofence, .settings, .about]
         return allPages.map { getTabBarController($0) }
     }
 
@@ -62,7 +62,7 @@ private extension TabBarCoordinator {
         case .explore: startExploreScene(navigationController)
         case .tracking: startTrackingScene(navigationController)
         case .geofence: startGeofenceScene(navigationController)
-        case .more: startMoreScene(navigationController)
+        case .about: startAboutScene(navigationController)
         case .settings: startSettingsScene(navigationController)
         }
 
@@ -123,11 +123,11 @@ private extension TabBarCoordinator {
         exploreCoordinator.start()
     }
 
-    func startMoreScene(_ navigationController: UINavigationController) {
-        let exploreCoordinator = MoreCoordinator(navigationController: navigationController)
-        exploreCoordinator.delegate = self
-        childCoordinators.append(exploreCoordinator)
-        exploreCoordinator.start()
+    func startAboutScene(_ navigationController: UINavigationController) {
+        let coordinator = AboutCoordinator(navigationController: navigationController)
+        coordinator.delegate = self
+        childCoordinators.append(coordinator)
+        coordinator.start()
     }
 }
 

@@ -29,8 +29,8 @@
 		8A3FD14C29A69CE000DFA6F6 /* PlaceholderAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD14B29A69CE000DFA6F6 /* PlaceholderAnimator.swift */; };
 		8A439EF929BB965100B59D0B /* AttributionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439EF829BB965100B59D0B /* AttributionVC.swift */; };
 		8A439EFB29BB968800B59D0B /* AttributionVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439EFA29BB968800B59D0B /* AttributionVCBuilder.swift */; };
-		8A439EFD29BF69B000B59D0B /* MoreVC+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439EFC29BF69B000B59D0B /* MoreVC+TableView.swift */; };
-		8A439EFF29BF6A5B00B59D0B /* MoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439EFE29BF6A5B00B59D0B /* MoreCell.swift */; };
+		8A439EFD29BF69B000B59D0B /* AboutVC+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439EFC29BF69B000B59D0B /* AboutVC+TableView.swift */; };
+		8A439EFF29BF6A5B00B59D0B /* AboutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439EFE29BF6A5B00B59D0B /* AboutCell.swift */; };
 		8A439F0429C0A7D900B59D0B /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439F0329C0A7D900B59D0B /* WelcomeVC.swift */; };
 		8A439F0629C0A80300B59D0B /* WelcomeVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439F0529C0A80300B59D0B /* WelcomeVCBuilder.swift */; };
 		8A439F0829C0BA1B00B59D0B /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */; };
@@ -75,8 +75,8 @@
 		8AFBAFDC296F13F40022A7E3 /* CLLocationCoordinate2D+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFBAFDB296F13F40022A7E3 /* CLLocationCoordinate2D+Extension.swift */; };
 		8AFBAFDE296F14A30022A7E3 /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFBAFDD296F14A30022A7E3 /* CLLocation+Extension.swift */; };
 		8AFBAFE0296F19BC0022A7E3 /* AWSLocationTravelMode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFBAFDF296F19BC0022A7E3 /* AWSLocationTravelMode+Extension.swift */; };
-		8AFDA09429DDBB3600114BB7 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFDA09329DDBB3600114BB7 /* AboutVC.swift */; };
-		8AFDA09629DDBC3800114BB7 /* AboutVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFDA09529DDBC3800114BB7 /* AboutVCBuilder.swift */; };
+		8AFDA09429DDBB3600114BB7 /* VersionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFDA09329DDBB3600114BB7 /* VersionVC.swift */; };
+		8AFDA09629DDBC3800114BB7 /* VersionVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFDA09529DDBC3800114BB7 /* VersionVCBuilder.swift */; };
 		960968A529A2C83D0026C05A /* AWSEndpoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960968A429A2C83D0026C05A /* AWSEndpoint+Extension.swift */; };
 		963EBF5229AF92F7001961F2 /* LocationServicesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */; };
 		96605FF329A4E7E000FB88D0 /* AWSAuthCore in Frameworks */ = {isa = PBXBuildFile; productRef = 96605FF229A4E7E000FB88D0 /* AWSAuthCore */; };
@@ -135,13 +135,12 @@
 		AD2AF0D3292EABC800149904 /* SettingsPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0D2292EABC800149904 /* SettingsPresentation.swift */; };
 		AD2AF0D5292EABD000149904 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0D4292EABD000149904 /* SettingsViewModel.swift */; };
 		AD2AF0D7292EABD800149904 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0D6292EABD800149904 /* SettingsView.swift */; };
-		AD2AF0D9292EABE700149904 /* MoreVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0D8292EABE700149904 /* MoreVCBuilder.swift */; };
-		AD2AF0DB292EABFE00149904 /* MoreContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0DA292EABFE00149904 /* MoreContracts.swift */; };
-		AD2AF0DD292EAC0500149904 /* MoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0DC292EAC0500149904 /* MoreVC.swift */; };
-		AD2AF0DF292EAC1000149904 /* MorePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0DE292EAC1000149904 /* MorePresentation.swift */; };
-		AD2AF0E1292EAC1C00149904 /* MoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0E0292EAC1C00149904 /* MoreViewModel.swift */; };
+		AD2AF0D9292EABE700149904 /* AboutVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0D8292EABE700149904 /* AboutVCBuilder.swift */; };
+		AD2AF0DB292EABFE00149904 /* AboutContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0DA292EABFE00149904 /* AboutContracts.swift */; };
+		AD2AF0DD292EAC0500149904 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0DC292EAC0500149904 /* AboutVC.swift */; };
+		AD2AF0E1292EAC1C00149904 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0E0292EAC1C00149904 /* AboutViewModel.swift */; };
 		AD2AF0E3292EAC2300149904 /* WelcomeBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0E2292EAC2300149904 /* WelcomeBottomView.swift */; };
-		AD2AF0E5292EAC8700149904 /* MoreCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0E4292EAC8700149904 /* MoreCoordinator.swift */; };
+		AD2AF0E5292EAC8700149904 /* AboutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0E4292EAC8700149904 /* AboutCoordinator.swift */; };
 		AD2AF0E7292EAC8E00149904 /* TrackingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0E6292EAC8E00149904 /* TrackingCoordinator.swift */; };
 		AD2AF0E9292EAC9800149904 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0E8292EAC9800149904 /* SettingsCoordinator.swift */; };
 		AD2AF0EB292EAEDF00149904 /* AppColorsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF0EA292EAEDF00149904 /* AppColorsConstants.swift */; };
@@ -375,8 +374,8 @@
 		8A3FD14B29A69CE000DFA6F6 /* PlaceholderAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderAnimator.swift; sourceTree = "<group>"; };
 		8A439EF829BB965100B59D0B /* AttributionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionVC.swift; sourceTree = "<group>"; };
 		8A439EFA29BB968800B59D0B /* AttributionVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionVCBuilder.swift; sourceTree = "<group>"; };
-		8A439EFC29BF69B000B59D0B /* MoreVC+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoreVC+TableView.swift"; sourceTree = "<group>"; };
-		8A439EFE29BF6A5B00B59D0B /* MoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreCell.swift; sourceTree = "<group>"; };
+		8A439EFC29BF69B000B59D0B /* AboutVC+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AboutVC+TableView.swift"; sourceTree = "<group>"; };
+		8A439EFE29BF6A5B00B59D0B /* AboutCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutCell.swift; sourceTree = "<group>"; };
 		8A439F0329C0A7D900B59D0B /* WelcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		8A439F0529C0A80300B59D0B /* WelcomeVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVCBuilder.swift; sourceTree = "<group>"; };
 		8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
@@ -426,8 +425,8 @@
 		8AFBAFDB296F13F40022A7E3 /* CLLocationCoordinate2D+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extension.swift"; sourceTree = "<group>"; };
 		8AFBAFDD296F14A30022A7E3 /* CLLocation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extension.swift"; sourceTree = "<group>"; };
 		8AFBAFDF296F19BC0022A7E3 /* AWSLocationTravelMode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AWSLocationTravelMode+Extension.swift"; sourceTree = "<group>"; };
-		8AFDA09329DDBB3600114BB7 /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
-		8AFDA09529DDBC3800114BB7 /* AboutVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVCBuilder.swift; sourceTree = "<group>"; };
+		8AFDA09329DDBB3600114BB7 /* VersionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionVC.swift; sourceTree = "<group>"; };
+		8AFDA09529DDBC3800114BB7 /* VersionVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionVCBuilder.swift; sourceTree = "<group>"; };
 		960968A429A2C83D0026C05A /* AWSEndpoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AWSEndpoint+Extension.swift"; sourceTree = "<group>"; };
 		963EBF4F29AF92F5001961F2 /* LocationServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocationServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServicesTests.swift; sourceTree = "<group>"; };
@@ -481,13 +480,12 @@
 		AD2AF0D2292EABC800149904 /* SettingsPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresentation.swift; sourceTree = "<group>"; };
 		AD2AF0D4292EABD000149904 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		AD2AF0D6292EABD800149904 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		AD2AF0D8292EABE700149904 /* MoreVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreVCBuilder.swift; sourceTree = "<group>"; };
-		AD2AF0DA292EABFE00149904 /* MoreContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreContracts.swift; sourceTree = "<group>"; };
-		AD2AF0DC292EAC0500149904 /* MoreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreVC.swift; sourceTree = "<group>"; };
-		AD2AF0DE292EAC1000149904 /* MorePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePresentation.swift; sourceTree = "<group>"; };
-		AD2AF0E0292EAC1C00149904 /* MoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewModel.swift; sourceTree = "<group>"; };
+		AD2AF0D8292EABE700149904 /* AboutVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVCBuilder.swift; sourceTree = "<group>"; };
+		AD2AF0DA292EABFE00149904 /* AboutContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutContracts.swift; sourceTree = "<group>"; };
+		AD2AF0DC292EAC0500149904 /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
+		AD2AF0E0292EAC1C00149904 /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		AD2AF0E2292EAC2300149904 /* WelcomeBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeBottomView.swift; sourceTree = "<group>"; };
-		AD2AF0E4292EAC8700149904 /* MoreCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreCoordinator.swift; sourceTree = "<group>"; };
+		AD2AF0E4292EAC8700149904 /* AboutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutCoordinator.swift; sourceTree = "<group>"; };
 		AD2AF0E6292EAC8E00149904 /* TrackingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingCoordinator.swift; sourceTree = "<group>"; };
 		AD2AF0E8292EAC9800149904 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		AD2AF0EA292EAEDF00149904 /* AppColorsConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorsConstants.swift; sourceTree = "<group>"; };
@@ -815,7 +813,7 @@
 			isa = PBXGroup;
 			children = (
 				8A276E2029DFF99200B74136 /* TermsAndConditions */,
-				8AFDA09029DDBB0500114BB7 /* About */,
+				8AFDA09029DDBB0500114BB7 /* Version */,
 				8A439F0029C0A79100B59D0B /* Welcome */,
 				8A439EF329BB941700B59D0B /* Attribution */,
 			);
@@ -948,19 +946,19 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		8AFDA09029DDBB0500114BB7 /* About */ = {
+		8AFDA09029DDBB0500114BB7 /* Version */ = {
 			isa = PBXGroup;
 			children = (
 				8AFDA09229DDBB1A00114BB7 /* Controller */,
 				8AFDA09129DDBB1300114BB7 /* Builder */,
 			);
-			path = About;
+			path = Version;
 			sourceTree = "<group>";
 		};
 		8AFDA09129DDBB1300114BB7 /* Builder */ = {
 			isa = PBXGroup;
 			children = (
-				8AFDA09529DDBC3800114BB7 /* AboutVCBuilder.swift */,
+				8AFDA09529DDBC3800114BB7 /* VersionVCBuilder.swift */,
 			);
 			path = Builder;
 			sourceTree = "<group>";
@@ -968,7 +966,7 @@
 		8AFDA09229DDBB1A00114BB7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				8AFDA09329DDBB3600114BB7 /* AboutVC.swift */,
+				8AFDA09329DDBB3600114BB7 /* VersionVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1129,7 +1127,7 @@
 				AD2AF068292E98C700149904 /* LoginCoordinator.swift */,
 				AD2AF09E292EA91200149904 /* GeofenceCoordinator.swift */,
 				AD2AF073292EA44500149904 /* ExploreCoordinator.swift */,
-				AD2AF0E4292EAC8700149904 /* MoreCoordinator.swift */,
+				AD2AF0E4292EAC8700149904 /* AboutCoordinator.swift */,
 				AD2AF0E6292EAC8E00149904 /* TrackingCoordinator.swift */,
 				AD2AF0E8292EAC9800149904 /* SettingsCoordinator.swift */,
 			);
@@ -1166,7 +1164,7 @@
 				AD20616B2968A827005F8BBB /* Login */,
 				AD2AF086292EA62200149904 /* Explore */,
 				AD2AF088292EA80C00149904 /* Geofence */,
-				AD2AF08B292EA82500149904 /* More */,
+				AD2AF08B292EA82500149904 /* About */,
 				AD2AF08A292EA81D00149904 /* Settings */,
 				AD2AF089292EA81700149904 /* Tracking */,
 			);
@@ -1271,18 +1269,17 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		AD2AF08B292EA82500149904 /* More */ = {
+		AD2AF08B292EA82500149904 /* About */ = {
 			isa = PBXGroup;
 			children = (
 				8A439EF229BB93FD00B59D0B /* Sub-Scenes */,
 				AD2AF0C2292EAB5500149904 /* Builder */,
 				AD2AF0C1292EAB5500149904 /* Contracts */,
 				AD2AF0C3292EAB5500149904 /* Controller */,
-				AD2AF0C4292EAB5500149904 /* Presentation */,
 				AD2AF0C5292EAB5600149904 /* ViewModel */,
 				AD2AF0C0292EAB5500149904 /* Views */,
 			);
-			path = More;
+			path = About;
 			sourceTree = "<group>";
 		};
 		AD2AF08C292EA82F00149904 /* Controller */ = {
@@ -1390,7 +1387,7 @@
 		AD2AF0C0292EAB5500149904 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8A439EFE29BF6A5B00B59D0B /* MoreCell.swift */,
+				8A439EFE29BF6A5B00B59D0B /* AboutCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1398,7 +1395,7 @@
 		AD2AF0C1292EAB5500149904 /* Contracts */ = {
 			isa = PBXGroup;
 			children = (
-				AD2AF0DA292EABFE00149904 /* MoreContracts.swift */,
+				AD2AF0DA292EABFE00149904 /* AboutContracts.swift */,
 			);
 			path = Contracts;
 			sourceTree = "<group>";
@@ -1406,7 +1403,7 @@
 		AD2AF0C2292EAB5500149904 /* Builder */ = {
 			isa = PBXGroup;
 			children = (
-				AD2AF0D8292EABE700149904 /* MoreVCBuilder.swift */,
+				AD2AF0D8292EABE700149904 /* AboutVCBuilder.swift */,
 			);
 			path = Builder;
 			sourceTree = "<group>";
@@ -1414,24 +1411,16 @@
 		AD2AF0C3292EAB5500149904 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				AD2AF0DC292EAC0500149904 /* MoreVC.swift */,
-				8A439EFC29BF69B000B59D0B /* MoreVC+TableView.swift */,
+				AD2AF0DC292EAC0500149904 /* AboutVC.swift */,
+				8A439EFC29BF69B000B59D0B /* AboutVC+TableView.swift */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		AD2AF0C4292EAB5500149904 /* Presentation */ = {
-			isa = PBXGroup;
-			children = (
-				AD2AF0DE292EAC1000149904 /* MorePresentation.swift */,
-			);
-			path = Presentation;
 			sourceTree = "<group>";
 		};
 		AD2AF0C5292EAB5600149904 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				AD2AF0E0292EAC1C00149904 /* MoreViewModel.swift */,
+				AD2AF0E0292EAC1C00149904 /* AboutViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2933,7 +2922,7 @@
 				ADAF3655294A6A4700DC4774 /* POICardVCContracts.swift in Sources */,
 				ADCF384C29902815008289BB /* TrackingService.swift in Sources */,
 				ADD5D7BD296F7F410022480B /* GeofenceDashboardBuilder.swift in Sources */,
-				8A439EFD29BF69B000B59D0B /* MoreVC+TableView.swift in Sources */,
+				8A439EFD29BF69B000B59D0B /* AboutVC+TableView.swift in Sources */,
 				AD2AF072292E9BC100149904 /* AppIconConstants.swift in Sources */,
 				ADF26F57292FEC0A000147A0 /* SearchBarView.swift in Sources */,
 				8AB2508A29B8F067004FE61C /* LoginCloseAppAlertView.swift in Sources */,
@@ -2961,7 +2950,7 @@
 				AD2AF099292EA8D600149904 /* GeofenceView.swift in Sources */,
 				AD2AF09B292EA8E000149904 /* GeofenceContracts.swift in Sources */,
 				ADC1249E2979BB8300B08C20 /* Notificaton+Extension.swift in Sources */,
-				8A439EFF29BF6A5B00B59D0B /* MoreCell.swift in Sources */,
+				8A439EFF29BF6A5B00B59D0B /* AboutCell.swift in Sources */,
 				ADD1399E2981C4140003F917 /* MapStyleBuilder.swift in Sources */,
 				ADC9738E295EEA4D005AE918 /* NavigationVCView.swift in Sources */,
 				AD2AF092292EA85900149904 /* GeofenceVCBuilder.swift in Sources */,
@@ -2985,7 +2974,7 @@
 				ADD5D7D3296F87320022480B /* AddGeofenceBuilder.swift in Sources */,
 				ADB0B9A0295AF59600C219EC /* DirectionPresentation.swift in Sources */,
 				ADD5D7D5296F87430022480B /* AddGeofenceViewModel.swift in Sources */,
-				AD2AF0E5292EAC8700149904 /* MoreCoordinator.swift in Sources */,
+				AD2AF0E5292EAC8700149904 /* AboutCoordinator.swift in Sources */,
 				ADF26F72293028BE000147A0 /* AWSLoginService.swift in Sources */,
 				ADB0B9A5295BAE2B00C219EC /* Double+Extension.swift in Sources */,
 				AD20616D2968A83A005F8BBB /* LoginVC.swift in Sources */,
@@ -3006,11 +2995,11 @@
 				ADD5D7D9296F87710022480B /* AddGeofenceSearchView.swift in Sources */,
 				ADC124A22979EA5F00B08C20 /* GeofenceService.swift in Sources */,
 				ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureDelegate.swift in Sources */,
-				8AFDA09629DDBC3800114BB7 /* AboutVCBuilder.swift in Sources */,
+				8AFDA09629DDBC3800114BB7 /* VersionVCBuilder.swift in Sources */,
 				ADAF3653294A6A0700DC4774 /* POICardViewModel.swift in Sources */,
 				8A10E38129E97959005165CD /* SplashViewModel.swift in Sources */,
 				ADC97395295F3F9C005AE918 /* MapNavigationView.swift in Sources */,
-				AD2AF0E1292EAC1C00149904 /* MoreViewModel.swift in Sources */,
+				AD2AF0E1292EAC1C00149904 /* AboutViewModel.swift in Sources */,
 				ADC1249C2978A56E00B08C20 /* GeofenceDashboardContracts.swift in Sources */,
 				ADD5D7E2296F87FF0022480B /* AddGeofenceContracts.swift in Sources */,
 				AD2AF09F292EA91200149904 /* GeofenceCoordinator.swift in Sources */,
@@ -3045,7 +3034,7 @@
 				AD2AF07B292EA57400149904 /* ExploreViewModel.swift in Sources */,
 				8A6B834A29DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift in Sources */,
 				8A1110DB297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift in Sources */,
-				8AFDA09429DDBB3600114BB7 /* AboutVC.swift in Sources */,
+				8AFDA09429DDBB3600114BB7 /* VersionVC.swift in Sources */,
 				8AF7D2AB2976B3F700E1563E /* LocationManager.swift in Sources */,
 				AD2AF097292EA8CE00149904 /* GeofenceViewModel.swift in Sources */,
 				ADABECE12940F5BF00E66FC5 /* MapModel.swift in Sources */,
@@ -3061,9 +3050,8 @@
 				AD2AF0D1292EAB9A00149904 /* SettingsVC.swift in Sources */,
 				AD989746298C53E40041E867 /* TrackingHistoryContracts.swift in Sources */,
 				8A3471CC2975D30B00BAF374 /* Locale+Extension.swift in Sources */,
-				AD2AF0DB292EABFE00149904 /* MoreContracts.swift in Sources */,
+				AD2AF0DB292EABFE00149904 /* AboutContracts.swift in Sources */,
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
-				AD2AF0DF292EAC1000149904 /* MorePresentation.swift in Sources */,
 				ADD1394F298073040003F917 /* SettingsLogoutButtonView.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
 				ADC474FE2971E7A300AAE7A3 /* AmazonLocationLabel.swift in Sources */,
@@ -3081,7 +3069,7 @@
 				ADBDDEED29830D9E00696EC6 /* UnitVC+TableView.swift in Sources */,
 				AD98973A298B2E6A0041E867 /* TrackingDashboardContracts.swift in Sources */,
 				8AC0806929A90BFC0000D79B /* DeleteTrackingView.swift in Sources */,
-				AD2AF0DD292EAC0500149904 /* MoreVC.swift in Sources */,
+				AD2AF0DD292EAC0500149904 /* AboutVC.swift in Sources */,
 				ADD1398229809C640003F917 /* ResetPasswordViewModel.swift in Sources */,
 				9660600129A4F20100FB88D0 /* StringConstants.swift in Sources */,
 				AD2AF0D5292EABD000149904 /* SettingsViewModel.swift in Sources */,
@@ -3120,7 +3108,7 @@
 				AD2AF079292EA55300149904 /* ExploreView.swift in Sources */,
 				AD2AF032292E892000149904 /* SceneDelegate.swift in Sources */,
 				AD625E96293BCEE800C67B44 /* SearchViewModel.swift in Sources */,
-				AD2AF0D9292EABE700149904 /* MoreVCBuilder.swift in Sources */,
+				AD2AF0D9292EABE700149904 /* AboutVCBuilder.swift in Sources */,
 				AD989744298C534C0041E867 /* TrackingHistory+TableView.swift in Sources */,
 				AD2AF0E9292EAC9800149904 /* SettingsCoordinator.swift in Sources */,
 				AD2AF081292EA5C900149904 /* ExplorePresentation.swift in Sources */,

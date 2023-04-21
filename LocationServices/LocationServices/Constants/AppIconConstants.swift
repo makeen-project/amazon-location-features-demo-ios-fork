@@ -17,7 +17,7 @@ extension UIImage {
     static let trackingIcon = UIImage(named: "icon-route")!
     static let geofenceIcon = UIImage(named: "icon-geofence")!
     static let settingsIcon = UIImage(named: "icon-gear")!
-    static let moreIcon = UIImage(named: "icon-info")!
+    static let about = UIImage(named: "icon-info")!
     
     /// Search Bar Icons
     static let searchIcon = UIImage(systemName: "magnifyingglass")!

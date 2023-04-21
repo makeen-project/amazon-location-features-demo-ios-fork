@@ -177,6 +177,7 @@ enum StringConstant {
     static let learnMore = "Learn More"
     static let attribution = "Attribution"
     static let about = "About"
+    static let version = "Version"
     static let welcomeTitle = "Welcome to\nAmazon Location Demo"
     static let continueString = "Continue"
     static let avoidTolls = "Avoid tolls"

@@ -1,5 +1,5 @@
 //
-//  MoreVC.swift
+//  AboutVC.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -7,15 +7,15 @@
 
 import UIKit
 
-final class MoreVC: UIViewController {
+final class AboutVC: UIViewController {
     let tableView: UITableView = {
         var tableView = UITableView()
         tableView.separatorColor = .searchBarTintColor
         return tableView
     }()
     
-    weak var delegate: MoreNavigationDelegate?
-    var viewModel: MoreViewModelProtocol!
+    weak var delegate: AboutNavigationDelegate?
+    var viewModel: AboutViewModelProtocol!
     
     override func viewDidLoad() {
         super.viewDidLoad()

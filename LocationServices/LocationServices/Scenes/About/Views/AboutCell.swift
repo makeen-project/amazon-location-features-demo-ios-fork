@@ -1,5 +1,5 @@
 //
-//  MoreCell.swift
+//  AboutCell.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-enum MoreCellType {
+enum AboutCellType {
     case attribution, termsAndConditions, version, help
     
     var title: String {
@@ -25,19 +25,19 @@ enum MoreCellType {
     }
 }
 
-struct MoreCellModel {
-    let type: MoreCellType
+struct AboutCellModel {
+    let type: AboutCellType
 }
 
-final class MoreCell: UITableViewCell {
+final class AboutCell: UITableViewCell {
 
     enum Constants {
         static let itemTitleFont: UIFont = .amazonFont(type: .regular, size: 16)
     }
     
-    static let reuseId: String = "MoreCell"
+    static let reuseId: String = "AboutCell"
     
-    var model: MoreCellModel! {
+    var model: AboutCellModel! {
         didSet {
             self.itemTitle.text = model.type.title
         }
