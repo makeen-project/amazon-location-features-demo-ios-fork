@@ -75,13 +75,6 @@ final class SearchTextField: UIView {
         }
     }
     
-    @objc func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        
-        self.textFieldDeactivated?()
-        
-        return true
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         searchTextField.delegate = self
@@ -155,6 +148,11 @@ extension SearchTextField: UITextFieldDelegate {
                 self?.searchText?("")
             }
         }
+        return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        self.textFieldDeactivated?()
         return true
     }
 }

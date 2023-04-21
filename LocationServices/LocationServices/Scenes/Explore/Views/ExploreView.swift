@@ -38,7 +38,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     weak var delegate: ExploreViewOutputDelegate?
     var geofenceButtonAction: VoidHandler?
     
-    private let debounceForMapRendering = DebounceManager(debounceDuration: 30)
+    private let debounceForMapRendering = DebounceManager(debounceDuration: 10)
     private(set) var mapMode: MapMode = .search
     private(set) var userLocation: CLLocation?
     private(set) var userHeading: CLHeading?
