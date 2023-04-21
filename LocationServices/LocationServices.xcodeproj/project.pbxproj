@@ -57,6 +57,7 @@
 		8A85A75A29A3A9C80022ABE0 /* TrackingEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A85A75929A3A9C80022ABE0 /* TrackingEventModel.swift */; };
 		8A85A75C29A40A1E0022ABE0 /* TrackingHistorySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A85A75B29A40A1E0022ABE0 /* TrackingHistorySectionHeaderView.swift */; };
 		8A85A75E29A5059D0022ABE0 /* MapStyleSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A85A75D29A5059D0022ABE0 /* MapStyleSectionHeaderView.swift */; };
+		8AA33B1529F1604F00AEF483 /* PlaceholderAnimatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA33B1429F1604F00AEF483 /* PlaceholderAnimatorTests.swift */; };
 		8AB2508A29B8F067004FE61C /* LoginCloseAppAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2508929B8F067004FE61C /* LoginCloseAppAlertView.swift */; };
 		8AB3F19329C8A1C3008FDF37 /* LocationServicesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB3F19229C8A1C3008FDF37 /* LocationServicesUITests.swift */; };
 		8AB3F19C29C8ABF8008FDF37 /* MapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB3F19B29C8ABF8008FDF37 /* MapUITests.swift */; };
@@ -437,6 +438,7 @@
 		8A94BA8D29E01F1E0070D3E0 /* ConfigTestTemplate.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ConfigTestTemplate.xcconfig; sourceTree = "<group>"; };
 		8A94BA8E29E01F1E0070D3E0 /* ConfigTest.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ConfigTest.xcconfig; sourceTree = "<group>"; };
 		8A94BA8F29E0281D0070D3E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8AA33B1429F1604F00AEF483 /* PlaceholderAnimatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderAnimatorTests.swift; sourceTree = "<group>"; };
 		8AB2508929B8F067004FE61C /* LoginCloseAppAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCloseAppAlertView.swift; sourceTree = "<group>"; };
 		8AB3F19029C8A1C3008FDF37 /* Amazon Location Demo UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Amazon Location Demo UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AB3F19229C8A1C3008FDF37 /* LocationServicesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServicesUITests.swift; sourceTree = "<group>"; };
@@ -1098,6 +1100,7 @@
 				8ADB629A29F291C3002C7971 /* AddGeofenceViewModelTests.swift */,
 				8A834D8F29F2E9890091D89C /* GeofenceViewModelTests.swift */,
 				8ACAAD7329F13FA400523256 /* LocationManagerTests.swift */,
+				8AA33B1429F1604F00AEF483 /* PlaceholderAnimatorTests.swift */,
 			);
 			path = LocationServicesTests;
 			sourceTree = "<group>";
@@ -2997,6 +3000,7 @@
 				F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */,
 				F111DF0F29F0214B00D08641 /* MapStyleViewModelTests.swift in Sources */,
 				F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */,
+				8AA33B1529F1604F00AEF483 /* PlaceholderAnimatorTests.swift in Sources */,
 				F1E5F8F629E988F900639EEC /* ReachabilityTests.swift in Sources */,
 				8ADB62A029F2A074002C7971 /* LocationAPIServiceMock.swift in Sources */,
 				F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */,
