@@ -12,16 +12,27 @@ final class AddGeofenceViewModelTests: XCTestCase {
     
     enum Constants {
         static let apiRequestDuration: TimeInterval = 1
-        static let waitRequestDuration: TimeInterval = 2
+        static let waitRequestDuration: TimeInterval = 10
+        
+        static let geofenceId = "TestGeofence"
+        static let geofenceLat: TimeInterval = 10
+        static let geofenceLong: TimeInterval = 15
+        static let geofenceRadius: Int = 20
+        
+        static let updatedGeofenceLat: TimeInterval = 15
+        static let updatedGeofenceLong: TimeInterval = 10
+        static let updatedGeofenceRadius: Int = 25
+        
+        static var testGeofenceModel: GeofenceDataModel {
+            return GeofenceDataModel(id: geofenceId, lat: geofenceLat, long: geofenceLong, radius: Int64(geofenceRadius))
+        }
+        static let defaultError = NSError(domain: "Geofence error", code: -1)
     }
     
     var viewModel: AddGeofenceViewModel!
     var geofenceService: GeofenceAPIServiceMock!
     var locationService: LocationAPIServiceMock!
     var viewModelDelegate: AddGeofenceViewModelOutputProtocolMock!
-    
-    private let testGeofenceModel = GeofenceDataModel(id: "TestGeofence", lat: 0, long: 0, radius: 0)
-    private let defaultError = NSError(domain: "Geofence error", code: -1)
     
     override func setUpWithError() throws {
         geofenceService = GeofenceAPIServiceMock(delay: Constants.apiRequestDuration)
@@ -91,25 +102,25 @@ final class AddGeofenceViewModelTests: XCTestCase {
     }
     
     func test_deleteData_declined() throws {
-        let defaultGeofenceList = [testGeofenceModel]
+        let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
-        viewModel.deleteData(with: testGeofenceModel)
+        viewModel.deleteData(with: Constants.testGeofenceModel)
         XCTAssertEqual(viewModelDelegate.alertMock.alertModel?.message, StringConstant.deleteGeofenceAlertMessage)
         XCTAssertNotNil(viewModelDelegate.alertMock.alertModel?.okHandler)
         XCTAssertEqual(viewModel.activeGeofencesLists.count, defaultGeofenceList.count)
-        XCTAssertEqual(viewModel.activeGeofencesLists.first?.id, testGeofenceModel.id)
+        XCTAssertEqual(viewModel.activeGeofencesLists.first?.id, Constants.geofenceId)
     }
     
     func test_deleteData_accepted_success() throws {
-        let defaultGeofenceList = [testGeofenceModel]
+        let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
-        viewModel.deleteData(with: testGeofenceModel)
+        viewModel.deleteData(with: Constants.testGeofenceModel)
         XCTAssertEqual(viewModelDelegate.alertMock.alertModel?.message, StringConstant.deleteGeofenceAlertMessage)
         XCTAssertNotNil(viewModelDelegate.alertMock.alertModel?.okHandler)
         
-        geofenceService.deleteResult = .success(testGeofenceModel.id ?? "")
+        geofenceService.deleteResult = .success(Constants.geofenceId)
         viewModelDelegate.alertMock.tapMainActionButton()
         
         XCTWaiter().wait(until: { [weak self] in
@@ -119,19 +130,129 @@ final class AddGeofenceViewModelTests: XCTestCase {
     }
     
     func test_deleteData_accepted_failure() throws {
-        let defaultGeofenceList = [testGeofenceModel]
+        let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
-        viewModel.deleteData(with: testGeofenceModel)
+        viewModel.deleteData(with: Constants.testGeofenceModel)
         XCTAssertEqual(viewModelDelegate.alertMock.alertModel?.message, StringConstant.deleteGeofenceAlertMessage)
         XCTAssertNotNil(viewModelDelegate.alertMock.alertModel?.okHandler)
         
-        geofenceService.deleteResult = .failure(defaultError)
+        geofenceService.deleteResult = .failure(Constants.defaultError)
         viewModelDelegate.alertMock.tapMainActionButton()
         
         XCTWaiter().wait(until: { [weak self] in
             return self?.viewModelDelegate.alertMock.showAlertCalled ?? false
         }, timeout: Constants.waitRequestDuration, message: "Error alert should've been displayed")
-        XCTAssertEqual(viewModelDelegate.alertMock.alertModel?.message, defaultError.localizedDescription)
+        XCTAssertEqual(viewModelDelegate.alertMock.alertModel?.message, Constants.defaultError.localizedDescription)
+    }
+    
+    func test_saveData_new_succeed() throws {
+        geofenceService.putResult = .success(Constants.testGeofenceModel)
+        
+        let expectation = expectation(description: "Save data completion should be called")
+        var saveResult: Result<GeofenceDataModel, Error>? = nil
+        viewModel.saveData(with: Constants.geofenceId, lat: Constants.geofenceLat, long: Constants.geofenceLong, radius: Constants.geofenceRadius) { result in
+            saveResult = result
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: Constants.waitRequestDuration)
+        
+        switch saveResult {
+        case .success(let geofenceModel):
+            XCTAssertEqual(viewModel.activeGeofencesLists.count, 1)
+            let firstModel = try XCTUnwrap(viewModel.activeGeofencesLists.first)
+            [firstModel, geofenceModel].forEach { model in
+                XCTAssertEqual(model.id, Constants.testGeofenceModel.id)
+                XCTAssertEqual(model.lat, Constants.testGeofenceModel.lat)
+                XCTAssertEqual(model.long, Constants.testGeofenceModel.long)
+                XCTAssertEqual(model.radius, Constants.testGeofenceModel.radius)
+            }
+        case .failure:
+            XCTFail("Result should be success")
+        case .none:
+            XCTFail("Result is nil")
+        }
+    }
+    
+    func test_saveData_new_failure() throws {
+        geofenceService.putResult = .failure(Constants.defaultError)
+        
+        let expectation = expectation(description: "Save data completion should be called")
+        var saveResult: Result<GeofenceDataModel, Error>? = nil
+        viewModel.saveData(with: Constants.geofenceId, lat: Constants.geofenceLat, long: Constants.geofenceLong, radius: Constants.geofenceRadius) { result in
+            saveResult = result
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: Constants.waitRequestDuration)
+        
+        switch saveResult {
+        case .success:
+            XCTFail("Result should be failure")
+        case .failure(let error):
+            XCTAssertEqual(error as NSError, Constants.defaultError)
+            XCTAssertEqual(viewModel.activeGeofencesLists.count, 0)
+        case .none:
+            XCTFail("Result is nil")
+        }
+    }
+    
+    func test_saveData_old_succeed() throws {
+        let defaultGeofenceList = [Constants.testGeofenceModel]
+        setupViewModel(with: defaultGeofenceList)
+        
+        let updatedGeofence = GeofenceDataModel(id: Constants.geofenceId, lat: Constants.updatedGeofenceLat, long: Constants.updatedGeofenceLong, radius: Int64(Constants.updatedGeofenceRadius))
+        geofenceService.putResult = .success(updatedGeofence)
+        
+        let expectation = expectation(description: "Save data completion should be called")
+        var saveResult: Result<GeofenceDataModel, Error>? = nil
+        viewModel.saveData(with: Constants.geofenceId, lat: Constants.updatedGeofenceLat, long: Constants.updatedGeofenceLong, radius: Constants.updatedGeofenceRadius) { result in
+            saveResult = result
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: Constants.waitRequestDuration)
+        
+        switch saveResult {
+        case .success(let geofenceModel):
+            XCTAssertEqual(viewModel.activeGeofencesLists.count, 1)
+            let firstModel = try XCTUnwrap(viewModel.activeGeofencesLists.first)
+            [firstModel, geofenceModel].forEach { model in
+                XCTAssertEqual(model.id, Constants.testGeofenceModel.id)
+                XCTAssertEqual(model.lat, Constants.updatedGeofenceLat)
+                XCTAssertEqual(model.long, Constants.updatedGeofenceLong)
+                XCTAssertEqual(model.radius, Int64(Constants.updatedGeofenceRadius))
+            }
+        case .failure:
+            XCTFail("Result should be success")
+        case .none:
+            XCTFail("Result is nil")
+        }
+    }
+    
+    func test_saveData_old_failure() throws {
+        let defaultGeofenceList = [Constants.testGeofenceModel]
+        setupViewModel(with: defaultGeofenceList)
+        
+        geofenceService.putResult = .failure(Constants.defaultError)
+        let expectation = expectation(description: "Save data completion should be called")
+        var saveResult: Result<GeofenceDataModel, Error>? = nil
+        viewModel.saveData(with: Constants.geofenceId, lat: Constants.updatedGeofenceLat, long: Constants.updatedGeofenceLong, radius: Constants.updatedGeofenceRadius) { result in
+            saveResult = result
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: Constants.waitRequestDuration)
+        
+        switch saveResult {
+        case .success:
+            XCTFail("Result should be failure")
+        case .failure(let error):
+            XCTAssertEqual(error as NSError, Constants.defaultError)
+            XCTAssertEqual(viewModel.activeGeofencesLists.count, 1)
+        case .none:
+            XCTFail("Result is nil")
+        }
     }
 }

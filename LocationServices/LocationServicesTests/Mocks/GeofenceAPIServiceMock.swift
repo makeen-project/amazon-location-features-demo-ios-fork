@@ -44,7 +44,7 @@ class GeofenceAPIServiceMock: GeofenceServiceable {
     }
     
     private func perform(action: @escaping ()->()) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
             action()
         }
     }
