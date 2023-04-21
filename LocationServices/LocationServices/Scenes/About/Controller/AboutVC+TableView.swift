@@ -1,5 +1,5 @@
 //
-//  MoreVC+TableView.swift
+//  AboutVC+TableView.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -8,23 +8,23 @@
 import UIKit
 import SnapKit
 
-extension MoreVC {
+extension AboutVC {
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(MoreCell.self, forCellReuseIdentifier: MoreCell.reuseId)
+        tableView.register(AboutCell.self, forCellReuseIdentifier: AboutCell.reuseId)
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = false
     }
 }
 
-extension MoreVC: UITableViewDataSource {
+extension AboutVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.getItemCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MoreCell.reuseId, for: indexPath) as? MoreCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: AboutCell.reuseId, for: indexPath) as? AboutCell else {
             fatalError("Settings Cell can't be deque")
         }
         let data = viewModel.getCellItems(indexPath)
@@ -38,7 +38,7 @@ extension MoreVC: UITableViewDataSource {
     }
 }
 
-extension MoreVC: UITableViewDelegate {
+extension AboutVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 56
     }

@@ -1,5 +1,5 @@
 //
-//  AboutVCBuilder.swift
+//  VersionVCBuilder.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-final class AboutVCBuilder {
-    static func create() -> AboutVC {
-        let controller = AboutVC()
+final class VersionVCBuilder {
+    static func create() -> VersionVC {
+        let controller = VersionVC()
         return controller
     }
 }

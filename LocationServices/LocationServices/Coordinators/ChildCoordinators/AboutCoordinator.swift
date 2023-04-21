@@ -1,5 +1,5 @@
 //
-//  MoreCoordinator.swift
+//  AboutCoordinator.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-final class MoreCoordinator: Coordinator {
+final class AboutCoordinator: Coordinator {
     var delegate: CoordinatorCompletionDelegate?
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
@@ -19,27 +19,27 @@ final class MoreCoordinator: Coordinator {
     }
 
     func start() {
-        showMoreScene()
+        showAboutScene()
     }
 }
 
-private extension MoreCoordinator {
-    func showMoreScene() {
-        let controller = MoreVCBuilder.create()
+private extension AboutCoordinator {
+    func showAboutScene() {
+        let controller = AboutVCBuilder.create()
         controller.delegate = self
         navigationController.pushViewController(controller, animated: true)
     }
 }
 
-extension MoreCoordinator: MoreNavigationDelegate {
-    func showNextScene(type: MoreCellType) {
+extension AboutCoordinator: AboutNavigationDelegate {
+    func showNextScene(type: AboutCellType) {
         switch type {
         case .attribution:
             showAttributionScene()
         case .termsAndConditions:
             showTermsAndConditionsScene()
-        case .about:
-            showAboutScene()
+        case .version:
+            showVersionScene()
         case .help:
             openSafariBrowser(with: URL(string: StringConstant.helpURL))
         }
@@ -50,8 +50,8 @@ extension MoreCoordinator: MoreNavigationDelegate {
         navigationController.pushViewController(controller, animated: true)
     }
     
-    private func showAboutScene() {
-        let controller = AboutVCBuilder.create()
+    private func showVersionScene() {
+        let controller = VersionVCBuilder.create()
         navigationController.pushViewController(controller, animated: true)
     }
     
