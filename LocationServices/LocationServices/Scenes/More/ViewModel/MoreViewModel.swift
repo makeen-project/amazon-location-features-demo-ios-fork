@@ -8,7 +8,7 @@
 import Foundation
 
 final class MoreViewModel: MoreViewModelProtocol {
-    private let datas: [MoreCellModel] = [MoreCellModel(type: .attribution), MoreCellModel(type: .about), MoreCellModel(type: .termsAndConditions), MoreCellModel(type: .help)]
+    private let datas: [MoreCellModel] = [MoreCellModel(type: .attribution), MoreCellModel(type: .version), MoreCellModel(type: .termsAndConditions), MoreCellModel(type: .help)]
     
     func getCellItems(_ indexPath: IndexPath) -> MoreCellModel {
         return datas[indexPath.row]

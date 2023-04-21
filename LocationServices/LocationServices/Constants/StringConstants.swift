@@ -143,11 +143,11 @@ enum StringConstant {
         }
     }
     
-    enum MoreTab {
-        static let title = "More"
+    enum AboutTab {
+        static let title = "About"
         static let cellAttributionTitle = "Attribution"
         static let cellLegalTitle = "Terms & Conditions"
-        static let cellAboutTitle = "About"
+        static let cellVersionTitle = "Version"
         static let cellHelpTitle = "Help"
     }
     

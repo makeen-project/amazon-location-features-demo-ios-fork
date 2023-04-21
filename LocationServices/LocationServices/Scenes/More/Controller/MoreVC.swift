@@ -23,7 +23,7 @@ final class MoreVC: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .always
         self.view.backgroundColor = .white
-        self.navigationItem.title = StringConstant.MoreTab.title
+        self.navigationItem.title = StringConstant.AboutTab.title
         setupViews()
         setupTableView()
     }

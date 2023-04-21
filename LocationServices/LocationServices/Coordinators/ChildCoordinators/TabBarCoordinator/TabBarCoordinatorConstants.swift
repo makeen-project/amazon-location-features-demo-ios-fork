@@ -20,7 +20,7 @@ enum TabBarPage {
         case .tracking: return "Trackers"
         case .geofence: return "Geofences"
         case .settings: return "Settings"
-        case .more: return "More"
+        case .more: return "About"
         }
     }
 

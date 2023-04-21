@@ -38,7 +38,7 @@ extension MoreCoordinator: MoreNavigationDelegate {
             showAttributionScene()
         case .termsAndConditions:
             showTermsAndConditionsScene()
-        case .about:
+        case .version:
             showAboutScene()
         case .help:
             openSafariBrowser(with: URL(string: StringConstant.helpURL))
