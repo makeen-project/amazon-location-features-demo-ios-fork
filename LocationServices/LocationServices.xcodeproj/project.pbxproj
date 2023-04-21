@@ -323,9 +323,23 @@
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
+		F111DF0F29F0214B00D08641 /* MapStyleViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F111DF0E29F0214B00D08641 /* MapStyleViewModelTests.swift */; };
+		F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */; };
+		F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */; };
+		F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */; };
+		F139208B29EE918E0042CBC9 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208729EE918E0042CBC9 /* DateExtensionTests.swift */; };
+		F139208D29EEA19D0042CBC9 /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208C29EEA19D0042CBC9 /* LoginViewModelTests.swift */; };
+		F139208F29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208E29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift */; };
+		F139DBC829F0283900D4BA98 /* DataProviderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBC729F0283900D4BA98 /* DataProviderViewModelTests.swift */; };
+		F139DBCA29F0346300D4BA98 /* RouteOptionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */; };
+		F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */; };
 		F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */; };
 		F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */; };
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
+		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
+		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
+		F1B2388729F01B88001E2066 /* MoreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388629F01B88001E2066 /* MoreViewModelTests.swift */; };
+		F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */; };
 		F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */; };
 		F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */; };
 		F1E5F8F029E986F300639EEC /* UserDefaultsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EF29E986F300639EEC /* UserDefaultsHelperTests.swift */; };
@@ -669,9 +683,23 @@
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
+		F111DF0E29F0214B00D08641 /* MapStyleViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStyleViewModelTests.swift; sourceTree = "<group>"; };
+		F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocationTravelModeTests.swift; sourceTree = "<group>"; };
+		F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtensionTests.swift; sourceTree = "<group>"; };
+		F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationExtensionTests.swift; sourceTree = "<group>"; };
+		F139208729EE918E0042CBC9 /* DateExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
+		F139208C29EEA19D0042CBC9 /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
+		F139208E29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreMapStyleViewModelTests.swift; sourceTree = "<group>"; };
+		F139DBC729F0283900D4BA98 /* DataProviderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProviderViewModelTests.swift; sourceTree = "<group>"; };
+		F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteOptionViewModelTests.swift; sourceTree = "<group>"; };
+		F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewModelTests.swift; sourceTree = "<group>"; };
 		F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTabBarScreen.swift; sourceTree = "<group>"; };
 		F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTrackingScreen.swift; sourceTree = "<group>"; };
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
+		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
+		F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POICardViewModelTests.swift; sourceTree = "<group>"; };
+		F1B2388629F01B88001E2066 /* MoreViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewModelTests.swift; sourceTree = "<group>"; };
+		F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVCViewModelTests.swift; sourceTree = "<group>"; };
 		F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDefaultValueHelperTests.swift; sourceTree = "<group>"; };
 		F1E5F8EF29E986F300639EEC /* UserDefaultsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelperTests.swift; sourceTree = "<group>"; };
@@ -984,6 +1012,10 @@
 		963EBF5029AF92F7001961F2 /* LocationServicesTests */ = {
 			isa = PBXGroup;
 			children = (
+				F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */,
+				F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */,
+				F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */,
+				F139208729EE918E0042CBC9 /* DateExtensionTests.swift */,
 				F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */,
 				F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */,
 				963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */,
@@ -994,6 +1026,16 @@
 				F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */,
 				F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */,
 				F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */,
+				F139208C29EEA19D0042CBC9 /* LoginViewModelTests.swift */,
+				F139208E29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift */,
+				F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */,
+				F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */,
+				F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */,
+				F1B2388629F01B88001E2066 /* MoreViewModelTests.swift */,
+				F111DF0E29F0214B00D08641 /* MapStyleViewModelTests.swift */,
+				F139DBC729F0283900D4BA98 /* DataProviderViewModelTests.swift */,
+				F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */,
+				F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */,
 			);
 			path = LocationServicesTests;
 			sourceTree = "<group>";
@@ -2857,14 +2899,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F139208D29EEA19D0042CBC9 /* LoginViewModelTests.swift in Sources */,
+				F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */,
+				F139DBC829F0283900D4BA98 /* DataProviderViewModelTests.swift in Sources */,
 				F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */,
+				F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */,
 				F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */,
+				F139208F29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift in Sources */,
+				F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */,
 				963EBF5229AF92F7001961F2 /* LocationServicesTests.swift in Sources */,
+				F139208B29EE918E0042CBC9 /* DateExtensionTests.swift in Sources */,
+				F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */,
+				F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */,
+				F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */,
 				F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */,
 				F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */,
 				F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */,
+				F1B2388729F01B88001E2066 /* MoreViewModelTests.swift in Sources */,
+				F139DBCA29F0346300D4BA98 /* RouteOptionViewModelTests.swift in Sources */,
 				F1E5F8F029E986F300639EEC /* UserDefaultsHelperTests.swift in Sources */,
 				F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */,
+				F111DF0F29F0214B00D08641 /* MapStyleViewModelTests.swift in Sources */,
+				F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */,
 				F1E5F8F629E988F900639EEC /* ReachabilityTests.swift in Sources */,
 				F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */,
 			);
