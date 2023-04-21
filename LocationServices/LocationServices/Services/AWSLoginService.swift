@@ -13,7 +13,7 @@ import AWSIoT
 protocol AWSLoginServiceProtocol {
     var delegate: AWSLoginServiceOutputProtocol? { get set }
     func login()
-    func logout()
+    func logout(skipPolicy: Bool)
     func validate(identityPoolId: String, completion: @escaping (Result<Void, Error>)->())
 }
 
@@ -34,7 +34,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
     
     var delegate: AWSLoginServiceOutputProtocol?
     private var error: Error?
-    var viewController: UIViewController?
+    weak var viewController: UIViewController?
      
     func login() {
         guard let navigationContoller = (UIApplication.shared.delegate as? AppDelegate)?.navigationController else { return }
@@ -101,9 +101,9 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         }
     }
     
-    func logout() {
+    func logout(skipPolicy: Bool = false) {
         let isPolicyAttached = UserDefaultsHelper.get(for: Bool.self, key: .attachedPolicy) ?? false
-        if isPolicyAttached {
+        if isPolicyAttached && !skipPolicy {
             detachPolicy { [weak self] result in
                 //we shouldn't prevent user from logout if detach policy failed. If policy has been corrupted then user won't be able to sign out.
                 self?.awsLogout()
