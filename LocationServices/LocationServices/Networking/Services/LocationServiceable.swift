@@ -7,11 +7,12 @@
 
 import Foundation
 import CoreLocation
+import AWSLocationXCF
 
 protocol LocationServiceable {
     func searchText(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void))
     func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void))
-    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[SearchPresentation], Error>) -> Void))
+    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[SearchPresentation], Error>) -> Void)) -> AWSLocationSearchPlaceIndexForPositionRequest
     func getPlace(with placeId: String, completion: @escaping(SearchPresentation?)->Void )
     
 }
@@ -43,8 +44,9 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
         }
     }
     
-    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[SearchPresentation], Error>) -> Void)) {
-        searchWithPositionRequest(text: text) { response in
+    @discardableResult
+    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[SearchPresentation], Error>) -> Void)) -> AWSLocationSearchPlaceIndexForPositionRequest {
+        return searchWithPositionRequest(text: text) { response in
             switch response {
             case .success(let resluts):
                 var userLocation: CLLocation? = nil
