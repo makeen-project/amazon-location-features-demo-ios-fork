@@ -17,8 +17,7 @@ final class POICardViewModelTests: XCTestCase {
     var pOICardViewModel: POICardViewModel!
     
     enum Constants {
-        static let waitExpectationDuration: TimeInterval = 10
-        static let expectationTimeout: TimeInterval = 10
+        static let waitRequestDuration: TimeInterval = 10
     }
 
     override func setUpWithError() throws {
@@ -42,45 +41,30 @@ final class POICardViewModelTests: XCTestCase {
     }
     
     func testFetchDatasWithMaxDistance() throws {
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
         pOICardViewModel.setUserLocation(lat: userLocation.latitude, long: userLocation.longitude)
         pOICardViewModel.fetchDatas()
         
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-        XCTAssertEqual(delegate.populateDatasErrorMessage, "In DataSource Esri, all waypoints must be within 400km", "Expected max distance error true")
+        XCTWaiter().wait(until: { [weak self] in
+            return self?.delegate.populateDatasErrorMessage == "In DataSource Esri, all waypoints must be within 400km"
+        }, timeout: Constants.waitRequestDuration, message: "MapModel should've throw max distance error")
     }
     
     func testFetchDatasWithSuccess() throws {
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
         pOICardViewModel.setUserLocation(lat: 40.4400930458457, long: -80.00348250162394)
         pOICardViewModel.fetchDatas()
         
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-        XCTAssertEqual(pOICardViewModel.getMapModel()?.distance, 1664, "Expected distance value")
+        XCTWaiter().wait(until: { [weak self] in
+            return self?.pOICardViewModel.getMapModel()?.distance == 1664
+        }, timeout: Constants.waitRequestDuration, message: "MapModel should've valid distance")
     }
     
     func testFetchDatasWithFailure() throws {
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
         pOICardViewModel.setUserLocation(lat: 0, long: -100)
         pOICardViewModel.fetchDatas()
-        
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-        XCTAssertEqual(delegate.populateDatasErrorMessage, "In DataSource Esri, all waypoints must be within 400km", "Expected max distance error true")
+
+        XCTWaiter().wait(until: { [weak self] in
+            return (self?.delegate.populateDatasErrorMessage == "In DataSource Esri, all waypoints must be within 400km")
+        }, timeout: Constants.waitRequestDuration, message: "populateDatas should've been called with failure")
     }
 
 }

@@ -17,8 +17,7 @@ final class ExploreViewModelTests: XCTestCase {
     var routeModel: RouteModel!
     
     enum Constants {
-        static let waitExpectationDuration: TimeInterval = 10
-        static let expectationTimeout: TimeInterval = 10
+        static let waitRequestDuration: TimeInterval = 10
     }
     
     override func setUpWithError() throws {
@@ -51,106 +50,63 @@ final class ExploreViewModelTests: XCTestCase {
         let delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
         
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
-        exploreViewModel.userLocationChanged(departureLocation)
-        
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-        
-        XCTAssertEqual(delegate.isUserReachedDestination, false, "Expected isUserReachedDestination false")
+        XCTWaiter().wait(until: {
+            return !delegate.hasUserReachedDestination
+        }, timeout: Constants.waitRequestDuration, message: "Expected isUserReachedDestination false")
     }
     
     func testUserLocationChangedWithSelectedRoute() throws {
         let delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
-        
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
         exploreViewModel.activateRoute(route: routeModel)
         exploreViewModel.userLocationChanged(destinationLocation)
+
+        XCTWaiter().wait(until: {
+            return delegate.hasUserReachedDestination
+        }, timeout: Constants.waitRequestDuration, message: "Expected isUserReachedDestination true")
         
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-        
-        XCTAssertEqual(delegate.isUserReachedDestination, true, "Expected isUserReachedDestination true")
+        XCTAssertEqual(delegate.hasUserReachedDestination, true, "Expected isUserReachedDestination true")
     }
 
     func testReCalculateRouteReturnSuccess() throws {
         let delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
-        
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
         exploreViewModel.activateRoute(route: routeModel)
         exploreViewModel.reCalculateRoute(with: destinationLocation)
         
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-        
-        XCTAssertEqual(delegate.isRouteReCalculated, true, "Expected isRouteReCalculated true")
+        XCTWaiter().wait(until: {
+            return delegate.isRouteReCalculated
+        }, timeout: Constants.waitRequestDuration, message: "Expected isRouteReCalculated true")
     }
     
     func testReCalculateRouteReturnFailure() throws {
         let delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
-        
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
         exploreViewModel.reCalculateRoute(with: destinationLocation)
         
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-        
-        XCTAssertEqual(delegate.isRouteReCalculated, false, "Expected isRouteReCalculated false")
+        XCTWaiter().wait(until: {
+            return !delegate.isRouteReCalculated
+        }, timeout: Constants.waitRequestDuration, message: "Expected isRouteReCalculated true")
     }
     
     func testLoadPlaceSuccess() throws {
         let delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
-        
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
-
         exploreViewModel.loadPlace(for: destinationLocation, userLocation: departureLocation)
         
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-
-        XCTAssertEqual(delegate.hasAnnotationShown, true, "Expected hasAnnotationShown true")
+        XCTWaiter().wait(until: {
+            return delegate.hasAnnotationShown
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasAnnotationShown true")
     }
     
     func testLoadPlaceFailure() throws {
         let delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
-        
-        let myDelegateExpectation = expectation(description: "The delegate method was called")
-
         exploreViewModel.loadPlace(for: destinationLocation, userLocation: nil)
         
-        // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            myDelegateExpectation.fulfill()
-        }
-        
-        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
-
-        XCTAssertEqual(delegate.hasAnnotationShown, false, "Expected hasAnnotationShown false")
+        XCTWaiter().wait(until: {
+            return !delegate.hasAnnotationShown
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasAnnotationShown true")
     }
 
     func testShouldShowWelcomeWithEmptyStorage() throws {
@@ -173,7 +129,7 @@ class MockExploreViewModelOutputDelegate : ExploreViewModelOutputDelegate {
     var isLoginCompleted = false
     var isLogoutCompleted = false
     var isRouteReCalculated = false
-    var isUserReachedDestination = false
+    var hasUserReachedDestination = false
     var hasAnnotationShown = false
     var hasAlertShown = false
     
@@ -190,7 +146,7 @@ class MockExploreViewModelOutputDelegate : ExploreViewModelOutputDelegate {
     }
     
     func userReachedDestination(_ destination: LocationServices.MapModel) {
-        self.isUserReachedDestination = true
+        self.hasUserReachedDestination = true
     }
     
     func showAnnotation(model: LocationServices.SearchPresentation) {
