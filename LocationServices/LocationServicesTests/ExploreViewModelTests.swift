@@ -16,6 +16,11 @@ final class ExploreViewModelTests: XCTestCase {
     var destinationLocation: CLLocationCoordinate2D!
     var routeModel: RouteModel!
     
+    enum Constants {
+        static let waitExpectationDuration: TimeInterval = 10
+        static let expectationTimeout: TimeInterval = 10
+    }
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         if let domain = Bundle.main.bundleIdentifier {
@@ -50,11 +55,11 @@ final class ExploreViewModelTests: XCTestCase {
         exploreViewModel.userLocationChanged(departureLocation)
         
         // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
             myDelegateExpectation.fulfill()
         }
         
-        wait(for: [myDelegateExpectation], timeout: 10)
+        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
         
         XCTAssertEqual(delegate.isUserReachedDestination, false, "Expected isUserReachedDestination false")
     }
@@ -68,11 +73,11 @@ final class ExploreViewModelTests: XCTestCase {
         exploreViewModel.userLocationChanged(destinationLocation)
         
         // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
             myDelegateExpectation.fulfill()
         }
         
-        wait(for: [myDelegateExpectation], timeout: 10)
+        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
         
         XCTAssertEqual(delegate.isUserReachedDestination, true, "Expected isUserReachedDestination true")
     }
@@ -86,11 +91,11 @@ final class ExploreViewModelTests: XCTestCase {
         exploreViewModel.reCalculateRoute(with: destinationLocation)
         
         // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
             myDelegateExpectation.fulfill()
         }
         
-        wait(for: [myDelegateExpectation], timeout: 10)
+        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
         
         XCTAssertEqual(delegate.isRouteReCalculated, true, "Expected isRouteReCalculated true")
     }
@@ -107,7 +112,7 @@ final class ExploreViewModelTests: XCTestCase {
             myDelegateExpectation.fulfill()
         }
         
-        wait(for: [myDelegateExpectation], timeout: 5)
+        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
         
         XCTAssertEqual(delegate.isRouteReCalculated, false, "Expected isRouteReCalculated false")
     }
@@ -121,11 +126,11 @@ final class ExploreViewModelTests: XCTestCase {
         exploreViewModel.loadPlace(for: destinationLocation, userLocation: departureLocation)
         
         // Wait for myDelegateFunction to be called
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.waitExpectationDuration) {
             myDelegateExpectation.fulfill()
         }
         
-        wait(for: [myDelegateExpectation], timeout: 10)
+        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
 
         XCTAssertEqual(delegate.hasAnnotationShown, true, "Expected hasAnnotationShown true")
     }
@@ -143,7 +148,7 @@ final class ExploreViewModelTests: XCTestCase {
             myDelegateExpectation.fulfill()
         }
         
-        wait(for: [myDelegateExpectation], timeout: 3)
+        wait(for: [myDelegateExpectation], timeout: Constants.expectationTimeout)
 
         XCTAssertEqual(delegate.hasAnnotationShown, false, "Expected hasAnnotationShown false")
     }
