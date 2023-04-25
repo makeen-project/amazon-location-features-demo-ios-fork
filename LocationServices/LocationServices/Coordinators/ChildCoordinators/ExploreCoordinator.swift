@@ -185,7 +185,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
                 sheet.detents = [self.getCollapsedDetent(), .medium(), .large()]
                 sheet.selectedDetentIdentifier = .medium
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.largestUndimmedDetentIdentifier = self.getCollapsedDetentId()
+                sheet.largestUndimmedDetentIdentifier = .large
                 sheet.preferredCornerRadius = 10
                 sheet.prefersGrabberVisible = true
             }
