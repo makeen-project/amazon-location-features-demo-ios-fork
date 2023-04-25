@@ -58,6 +58,11 @@ final class ExploreVC: UIViewController, AlertPresentable {
         showWelcomeScreenIfNeeded()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.cancelActiveRequests()
+    }
+    
     func setupHandlers() {
         exploreView.geofenceButtonAction = {
             self.delegate?.dismissSearchScene()
@@ -345,7 +350,8 @@ extension ExploreVC: CLLocationManagerDelegate {
         self.exploreView.show(selectedPlace: destination)
     }
     
-    func showAnnotation(model: SearchPresentation) {
+    func showAnnotation(model: SearchPresentation, force: Bool) {
+        guard force || (presentedViewController == nil && viewIfLoaded?.window != nil) else { return }
         showPoiCard(cardData: [MapModel(model: model)])
     }
 }

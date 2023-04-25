@@ -15,7 +15,7 @@ enum LocationServiceConstant {
 protocol AWSLocationSearchService {
     func searchTextRequest(text: String, userLat: Double?, userLong: Double?, completion: @escaping([AWSLocationSearchForTextResult]?)->Void )
     func searchTextWithSuggesstionRequest(text: String, userLat: Double?, userLong: Double?, completion: @escaping([AWSLocationSearchForSuggestionsResult]?)->Void )
-    func searchWithPositionRequest(text: [NSNumber], completion: @escaping ((Result<[AWSLocationSearchForPositionResult], Error>) -> Void))
+    func searchWithPositionRequest(text: [NSNumber], completion: @escaping ((Result<[AWSLocationSearchForPositionResult], Error>) -> Void)) -> AWSLocationSearchPlaceIndexForPositionRequest
     func getPlaceRequest(with placeId: String, completion: @escaping(AWSLocationGetPlaceResponse?)->Void )
 }
 
@@ -95,7 +95,7 @@ extension AWSLocationSearchService {
         }
     }
     
-    func searchWithPositionRequest(text: [NSNumber], completion: @escaping ((Result<[AWSLocationSearchForPositionResult], Error>) -> Void)) {
+    func searchWithPositionRequest(text: [NSNumber], completion: @escaping ((Result<[AWSLocationSearchForPositionResult], Error>) -> Void)) -> AWSLocationSearchPlaceIndexForPositionRequest {
         let request = AWSLocationSearchPlaceIndexForPositionRequest()!
         request.language = Locale.currentLanguageIdentifier()
         request.position = text
@@ -114,6 +114,8 @@ extension AWSLocationSearchService {
             }
             return nil
         }
+        
+        return request
     }
 }
 
