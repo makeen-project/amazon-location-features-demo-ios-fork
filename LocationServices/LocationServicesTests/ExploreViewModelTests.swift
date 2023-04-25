@@ -52,7 +52,7 @@ final class ExploreViewModelTests: XCTestCase {
         
         XCTWaiter().wait(until: {
             return !delegate.hasUserReachedDestination
-        }, timeout: Constants.waitRequestDuration, message: "Expected isUserReachedDestination false")
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasUserReachedDestination false")
     }
     
     func testUserLocationChangedWithSelectedRoute() throws {
@@ -63,7 +63,7 @@ final class ExploreViewModelTests: XCTestCase {
 
         XCTWaiter().wait(until: {
             return delegate.hasUserReachedDestination
-        }, timeout: Constants.waitRequestDuration, message: "Expected isUserReachedDestination true")
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasUserReachedDestination true")
         
         XCTAssertEqual(delegate.hasUserReachedDestination, true, "Expected isUserReachedDestination true")
     }
