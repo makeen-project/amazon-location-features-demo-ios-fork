@@ -9,12 +9,12 @@ import UIKit
 import CoreLocation
 
 class LocationManager {
-    private let locationManager: CLLocationManager
+    private let locationManager: CLLocationManagerProtocol
     private let alertPresenter: AlertPresentable
     
-    init(alertPresenter: AlertPresentable) {
+    init(alertPresenter: AlertPresentable, locationManager: CLLocationManagerProtocol = CLLocationManager()) {
         self.alertPresenter = alertPresenter
-        self.locationManager = CLLocationManager()
+        self.locationManager = locationManager
     }
     
     func getAuthorizationStatus() -> CLAuthorizationStatus {

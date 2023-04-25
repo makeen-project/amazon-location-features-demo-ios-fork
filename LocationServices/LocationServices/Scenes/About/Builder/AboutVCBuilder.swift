@@ -1,5 +1,5 @@
 //
-//  MoreVCBuilder.swift
+//  AboutVCBuilder.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-final class MoreVCBuilder {
-    static func create() -> MoreVC {
-        let viewModel = MoreViewModel()
-        let controller = MoreVC()
+final class AboutVCBuilder {
+    static func create() -> AboutVC {
+        let viewModel = AboutViewModel()
+        let controller = AboutVC()
         controller.viewModel = viewModel
         return controller
     }

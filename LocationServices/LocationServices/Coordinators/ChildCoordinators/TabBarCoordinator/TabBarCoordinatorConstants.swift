@@ -12,7 +12,7 @@ enum TabBarPage {
         case first = 0, second, third, fourth, fifth
     }
 
-    case explore, tracking, geofence, settings, more
+    case explore, tracking, geofence, settings, about
 
     var title: String {
         switch self {
@@ -20,7 +20,7 @@ enum TabBarPage {
         case .tracking: return "Trackers"
         case .geofence: return "Geofences"
         case .settings: return "Settings"
-        case .more: return "More"
+        case .about: return "About"
         }
     }
 
@@ -30,7 +30,7 @@ enum TabBarPage {
         case .tracking: return UIImage.trackingIcon
         case .geofence: return UIImage.geofenceIcon
         case .settings: return UIImage.settingsIcon
-        case .more: return UIImage.moreIcon
+        case .about: return UIImage.about
         }
     }
 
@@ -40,7 +40,7 @@ enum TabBarPage {
         case .tracking: return PageOrder.second.rawValue
         case .geofence: return PageOrder.third.rawValue
         case .settings: return PageOrder.fourth.rawValue
-        case .more: return PageOrder.fifth.rawValue
+        case .about: return PageOrder.fifth.rawValue
         }
     }
 }

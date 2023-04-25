@@ -1,5 +1,5 @@
 //
-//  AboutVC.swift
+//  VersionVC.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class AboutVC: UIViewController {
+final class VersionVC: UIViewController {
     
     // MARK: - Views
     private var appVersionLabel: UILabel = {
@@ -58,7 +58,7 @@ final class AboutVC: UIViewController {
     // MARK: - Functions
     private func setupNavigationItems() {
         navigationController?.navigationBar.tintColor = .lsTetriary
-        self.title = StringConstant.about
+        self.title = StringConstant.version
     }
     
     private func setupViews() {
