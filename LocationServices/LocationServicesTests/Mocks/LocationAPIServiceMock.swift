@@ -17,18 +17,35 @@ class LocationAPIServiceMock: LocationServiceable {
         self.delay = delay
     }
     
-    var putResult: Result<[LocationServices.SearchPresentation], Error>?
+    var putSearchWithPositionResult: Result<[LocationServices.SearchPresentation], Error>?
     
-    func searchText(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void)) {}
+    var putSearchTextResult: [LocationServices.SearchPresentation]?
     
-    func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void)) {}
+    func searchText(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void)) {
+        perform { [weak self] in
+             guard let result = self?.putSearchTextResult else { return }
+             completion(result)
+         }
+    }
     
-    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[SearchPresentation], Error>) -> Void)) {}
+    func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void)) {
+        perform { [weak self] in
+             guard let result = self?.putSearchTextResult else { return }
+             completion(result)
+         }
+    }
+    
+    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[SearchPresentation], Error>) -> Void)) {
+        perform { [weak self] in
+             guard let result = self?.putSearchWithPositionResult else { return }
+             completion(result)
+         }
+    }
     
     @discardableResult
     func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[LocationServices.SearchPresentation], Error>) -> Void)) -> AWSLocationSearchPlaceIndexForPositionRequest {
        perform { [weak self] in
-            guard let result = self?.putResult else { return }
+            guard let result = self?.putSearchWithPositionResult else { return }
             completion(result)
         }
         return AWSLocationSearchPlaceIndexForPositionRequest()

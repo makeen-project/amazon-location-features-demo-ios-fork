@@ -103,7 +103,7 @@ final class ExploreViewModelTests: XCTestCase {
                                        placeLat: departureLocation?.latitude,
                                        placeLong: departureLocation?.longitude,
                                        name: "My Location")
-        locationService.putResult = .success([search])
+        locationService.putSearchWithPositionResult = .success([search])
         exploreViewModel.loadPlace(for: destinationLocation, userLocation: departureLocation)
         
         XCTWaiter().wait(until: {
