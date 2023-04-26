@@ -1,6 +1,6 @@
 //
 //  ExploreViewModelTests.swift
-//  ExploreViewModelTests
+//  LocationServicesTests
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
@@ -8,16 +8,20 @@
 import XCTest
 @testable import LocationServices
 import CoreLocation
+import AWSLocationXCF
 
 final class ExploreViewModelTests: XCTestCase {
 
-    let exploreViewModel = ExploreViewModel(routingService: RoutingAPIService(), locationService: LocationService())
+    var routingService: RoutingAPIServiceMock!
+    var locationService: LocationAPIServiceMock!
+    var exploreViewModel: ExploreViewModel!
     var departureLocation: CLLocationCoordinate2D!
     var destinationLocation: CLLocationCoordinate2D!
     var routeModel: RouteModel!
-    
+    var delegate: MockExploreViewModelOutputDelegate!
     enum Constants {
         static let waitRequestDuration: TimeInterval = 10
+        static let apiRequestDuration: TimeInterval = 1
     }
     
     override func setUpWithError() throws {
@@ -26,6 +30,12 @@ final class ExploreViewModelTests: XCTestCase {
             UserDefaults.standard.removePersistentDomain(forName: domain)
             UserDefaults.standard.synchronize()
         }
+        
+        routingService = RoutingAPIServiceMock(delay: Constants.apiRequestDuration)
+        locationService = LocationAPIServiceMock(delay: Constants.apiRequestDuration)
+        exploreViewModel = ExploreViewModel(routingService: routingService, locationService: locationService)
+        delegate = MockExploreViewModelOutputDelegate()
+        exploreViewModel.delegate = delegate
         
         departureLocation  = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
         destinationLocation = CLLocationCoordinate2D(latitude:40.75474012009525, longitude: -73.98387963388527)
@@ -47,65 +57,65 @@ final class ExploreViewModelTests: XCTestCase {
     }
     
     func testUserLocationChangedWithoutSelectedRoute() throws {
-        let delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
         
         XCTWaiter().wait(until: {
-            return !delegate.hasUserReachedDestination
+            return !self.delegate.hasUserReachedDestination
         }, timeout: Constants.waitRequestDuration, message: "Expected hasUserReachedDestination false")
     }
     
     func testUserLocationChangedWithSelectedRoute() throws {
-        let delegate = MockExploreViewModelOutputDelegate()
-        exploreViewModel.delegate = delegate
         exploreViewModel.activateRoute(route: routeModel)
         exploreViewModel.userLocationChanged(destinationLocation)
 
         XCTWaiter().wait(until: {
-            return delegate.hasUserReachedDestination
+            return self.delegate.hasUserReachedDestination
         }, timeout: Constants.waitRequestDuration, message: "Expected hasUserReachedDestination true")
         
         XCTAssertEqual(delegate.hasUserReachedDestination, true, "Expected isUserReachedDestination true")
     }
 
     func testReCalculateRouteReturnSuccess() throws {
-        let delegate = MockExploreViewModelOutputDelegate()
-        exploreViewModel.delegate = delegate
+        let direction = DirectionPresentation(model:AWSLocationCalculateRouteResponse(), travelMode: .car)
+        routingService.putResult = [AWSLocationTravelMode.car: .success(direction)]
         exploreViewModel.activateRoute(route: routeModel)
         exploreViewModel.reCalculateRoute(with: destinationLocation)
         
         XCTWaiter().wait(until: {
-            return delegate.isRouteReCalculated
+            return self.delegate.isRouteReCalculated
         }, timeout: Constants.waitRequestDuration, message: "Expected isRouteReCalculated true")
     }
     
     func testReCalculateRouteReturnFailure() throws {
-        let delegate = MockExploreViewModelOutputDelegate()
-        exploreViewModel.delegate = delegate
         exploreViewModel.reCalculateRoute(with: destinationLocation)
         
         XCTWaiter().wait(until: {
-            return !delegate.isRouteReCalculated
+            return !self.delegate.isRouteReCalculated
         }, timeout: Constants.waitRequestDuration, message: "Expected isRouteReCalculated true")
     }
     
     func testLoadPlaceSuccess() throws {
-        let delegate = MockExploreViewModelOutputDelegate()
-        exploreViewModel.delegate = delegate
+        let search = SearchPresentation(placeId: "myLocation",
+                                       fullLocationAddress: "My Location",
+                                       distance: nil,
+                                       countryName: nil,
+                                       cityName: nil,
+                                       placeLat: departureLocation?.latitude,
+                                       placeLong: departureLocation?.longitude,
+                                       name: "My Location")
+        locationService.putSearchWithPositionResult = .success([search])
         exploreViewModel.loadPlace(for: destinationLocation, userLocation: departureLocation)
         
         XCTWaiter().wait(until: {
-            return delegate.hasAnnotationShown
+            return !self.delegate.hasAnnotationShown
         }, timeout: Constants.waitRequestDuration, message: "Expected hasAnnotationShown true")
     }
     
     func testLoadPlaceFailure() throws {
-        let delegate = MockExploreViewModelOutputDelegate()
-        exploreViewModel.delegate = delegate
         exploreViewModel.loadPlace(for: destinationLocation, userLocation: nil)
         
         XCTWaiter().wait(until: {
-            return !delegate.hasAnnotationShown
+            return !self.delegate.hasAnnotationShown
         }, timeout: Constants.waitRequestDuration, message: "Expected hasAnnotationShown true")
     }
 
@@ -150,6 +160,10 @@ class MockExploreViewModelOutputDelegate : ExploreViewModelOutputDelegate {
     }
     
     func showAnnotation(model: LocationServices.SearchPresentation) {
+        self.hasAnnotationShown = true
+    }
+    
+    func showAnnotation(model: LocationServices.SearchPresentation, force: Bool) {
         self.hasAnnotationShown = true
     }
     

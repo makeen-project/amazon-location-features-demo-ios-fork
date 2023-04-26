@@ -1,6 +1,6 @@
 //
 //  ExploreViewModel.swift
-//  LocationServices
+//  LocationServicesTests
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
@@ -13,7 +13,7 @@ import AWSLocationXCF
 
 final class ExploreViewModel: ExploreViewModelProtocol {
     
-    private let routingService: RoutingAPIService
+    private let routingService: RoutingServiceable
     private var selectedRoute: RouteModel?
     
     var delegate: ExploreViewModelOutputDelegate?
@@ -23,11 +23,11 @@ final class ExploreViewModel: ExploreViewModelProtocol {
             awsLoginService.delegate = self
         }
     }
-    let locationService: LocationService
+    let locationService: LocationServiceable
     
     private var activeRequests: [AWSRequest] = []
     
-    init(routingService: RoutingAPIService, locationService: LocationService) {
+    init(routingService: RoutingServiceable, locationService: LocationServiceable) {
         self.routingService = routingService
         self.locationService = locationService
     }
