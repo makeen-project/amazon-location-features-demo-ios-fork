@@ -165,6 +165,15 @@ enum StringConstant {
         static let isTracking = "Tracking your device location"
     }
     
+    enum TabBar {
+        static let explore: String = "Explore"
+        static let tracking: String = "Trackers"
+        static let geofence: String = "Geofences"
+        static let settings: String = "Settings"
+        static let about: String = "About"
+        static let more: String = "More"
+    }
+    
     static let units = "Units"
     static let dataProvider = "Data Provider"
     static let mapStyle = "Map style"
@@ -187,6 +196,7 @@ enum StringConstant {
     static let myLocation = "My Location"
     static let appVersion = "App version: "
     static let termsAndConditions = "Terms & Conditions"
+    static let demo = "Demo"
 }
 
 protocol ConstantsLoginInfoConfig {

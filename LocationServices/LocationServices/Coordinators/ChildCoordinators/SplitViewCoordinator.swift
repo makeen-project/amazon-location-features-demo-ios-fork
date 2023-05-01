@@ -19,12 +19,13 @@ final class SplitViewCoordinator: Coordinator {
     init(window: UIWindow?) {
         self.window = window
         self.splitViewController = UISplitViewController(style: .tripleColumn)
-        splitViewController.presentsWithGesture = false
+        self.splitViewController.presentsWithGesture = false
     }
     
     func start() {
         window?.rootViewController = splitViewController
         splitViewController.preferredDisplayMode = .secondaryOnly
+        splitViewController.maximumPrimaryColumnWidth = 200
         showMapScene()
     }
 }
@@ -33,5 +34,9 @@ extension SplitViewCoordinator {
     func showMapScene() {
         let controller = MapBuilder.create()
         splitViewController.setViewController(controller, for: .secondary)
+        
+        let sideBarController = SideBarBuilder.create()
+        splitViewController.setViewController(sideBarController, for: .primary)
+        splitViewController.show(.primary)
     }
 }
