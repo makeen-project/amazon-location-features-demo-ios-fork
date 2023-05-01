@@ -36,7 +36,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         geofenceService = GeofenceAPIServiceMock(delay: Constants.apiRequestDuration)
-        locationService = LocationAPIServiceMock()
+        locationService = LocationAPIServiceMock(delay: Constants.apiRequestDuration)
         viewModelDelegate = AddGeofenceViewModelOutputProtocolMock()
         setupViewModel(with: [])
     }

@@ -83,6 +83,7 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        geofenceMapView.reloadMap()
         viewModel.fetchListOfGeofences()
     }
     

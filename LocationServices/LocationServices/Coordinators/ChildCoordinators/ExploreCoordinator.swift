@@ -183,9 +183,9 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             controller.isModalInPresentation = true
             if let sheet = controller.sheetPresentationController {
                 sheet.detents = [self.getCollapsedDetent(), .medium(), .large()]
-                sheet.selectedDetentIdentifier = .medium
+                sheet.selectedDetentIdentifier = self.getCollapsedDetentId()
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.largestUndimmedDetentIdentifier = self.getCollapsedDetentId()
+                sheet.largestUndimmedDetentIdentifier = .large
                 sheet.preferredCornerRadius = 10
                 sheet.prefersGrabberVisible = true
             }
