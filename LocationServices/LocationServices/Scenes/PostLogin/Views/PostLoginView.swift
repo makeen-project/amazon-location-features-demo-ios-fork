@@ -55,7 +55,7 @@ final class PostLoginView: UIView {
     
     private lazy var signInButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Sign In", for: .normal)
@@ -68,16 +68,16 @@ final class PostLoginView: UIView {
     
     private lazy var continueButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = UIColor.tabBarTintColor.withAlphaComponent(0.3)
+        button.backgroundColor = UIColor.lsPrimary.withAlphaComponent(0.3)
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 8
         button.setTitle("Continue to Explore", for: .normal)
-        button.setTitleColor(.tabBarTintColor, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
         button.titleLabel?.font = .amazonFont(type: .medium, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(exploreAction), for: .touchUpInside)
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.tabBarTintColor.cgColor
+        button.layer.borderColor = UIColor.lsPrimary.cgColor
         return button
     }()
     

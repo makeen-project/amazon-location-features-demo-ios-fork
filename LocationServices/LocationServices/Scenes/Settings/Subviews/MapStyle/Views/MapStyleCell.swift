@@ -62,8 +62,8 @@ final class MapStyleCell: UICollectionViewCell {
         if state {
             accessibilityTraits = [.selected]
             mapImage.layer.borderWidth = 1
-            mapImage.layer.borderColor = UIColor.tabBarTintColor.cgColor
-            titleLabel.textColor = .tabBarTintColor
+            mapImage.layer.borderColor = UIColor.lsPrimary.cgColor
+            titleLabel.textColor = .lsPrimary
         } else {
             accessibilityTraits = []
             mapImage.layer.borderWidth = 0

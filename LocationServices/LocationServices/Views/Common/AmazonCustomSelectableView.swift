@@ -73,9 +73,9 @@ final class AmazonCustomSelectableView: UIView {
         self.subtitle.isHidden = subTitle != nil ? false : true
         if isSelected {
             selectionButton.setImage(CustomSelectableConstants.checkMarkImage, for: .normal)
-            selectionButton.tintColor = .tabBarTintColor
+            selectionButton.tintColor = .lsPrimary
             selectionButton.layer.borderWidth = 1
-            selectionButton.layer.borderColor = UIColor.tabBarTintColor.cgColor
+            selectionButton.layer.borderColor = UIColor.lsPrimary.cgColor
         } else {
             selectionButton.setImage(CustomSelectableConstants.circleImage, for: .normal)
             selectionButton.tintColor = .searchBarBackgroundColor
@@ -93,9 +93,9 @@ final class AmazonCustomSelectableView: UIView {
         
         if isSelected {
             selectionButton.setImage(CustomSelectableConstants.checkMarkImage, for: .normal)
-            selectionButton.tintColor = .tabBarTintColor
+            selectionButton.tintColor = .lsPrimary
             selectionButton.layer.borderWidth = 1
-            selectionButton.layer.borderColor = UIColor.tabBarTintColor.cgColor
+            selectionButton.layer.borderColor = UIColor.lsPrimary.cgColor
         } else {
             selectionButton.setImage(CustomSelectableConstants.circleImage, for: .normal)
             selectionButton.tintColor = .searchBarBackgroundColor

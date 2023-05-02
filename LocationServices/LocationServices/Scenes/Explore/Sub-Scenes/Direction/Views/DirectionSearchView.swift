@@ -55,7 +55,7 @@ final class DirectionSearchView: UIView {
             string: "Search Starting Point",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
-        tf.tintColor = .tabBarTintColor
+        tf.tintColor = .lsPrimary
         tf.textColor = .mapDarkBlackColor
         tf.clearButtonMode = .whileEditing
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -78,7 +78,7 @@ final class DirectionSearchView: UIView {
             string: "Search Destination",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
-        tf.tintColor = .tabBarTintColor
+        tf.tintColor = .lsPrimary
         tf.textColor = .mapDarkBlackColor
         tf.clearButtonMode = .whileEditing
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)

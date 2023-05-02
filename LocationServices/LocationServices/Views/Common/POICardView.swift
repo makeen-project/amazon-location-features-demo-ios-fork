@@ -149,7 +149,7 @@ final class POICardView: UIView {
     private lazy var directionButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.PoiCard.directionButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.isUserInteractionEnabled = true

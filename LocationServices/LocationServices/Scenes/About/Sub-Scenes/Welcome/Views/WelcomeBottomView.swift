@@ -30,7 +30,7 @@ final class WelcomeBottomView: UIView {
         }
         
         tw.linkTextAttributes = [
-            .foregroundColor: UIColor.tabBarTintColor,
+            .foregroundColor: UIColor.lsPrimary,
             .font: UIFont.amazonFont(type: .regular, size: 10)
         ]
         

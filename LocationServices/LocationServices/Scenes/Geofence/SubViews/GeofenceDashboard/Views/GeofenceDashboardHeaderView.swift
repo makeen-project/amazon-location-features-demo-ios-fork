@@ -21,7 +21,7 @@ final class GeofenceDashboardHeaderView: UIView {
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.Geofence.addGeofenceButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(addButtonAction), for: .touchUpInside)
         return button

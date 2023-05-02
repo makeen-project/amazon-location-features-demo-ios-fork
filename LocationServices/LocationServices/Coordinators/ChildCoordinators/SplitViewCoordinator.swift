@@ -7,36 +7,79 @@
 
 import UIKit
 
+protocol SplitViewVisibilityProtocol {
+    func showPrimary()
+    func showOnlySecondary()
+}
+
 final class SplitViewCoordinator: Coordinator {
 
-    var splitViewController: UISplitViewController
     weak var delegate: CoordinatorCompletionDelegate?
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController = UINavigationController()
     var type: CoordinatorType { .main }
     var window: UIWindow?
     
+    private let splitViewController: UISplitViewController
+    private var showSearchOnMap: Bool = true
+    
+    private lazy var mapController: MapVC = {
+        let vc = MapBuilder.create()
+        vc.delegate = self
+        return vc
+    }()
+    
+    private lazy var sideBarController = SideBarBuilder.create()
+    
     init(window: UIWindow?) {
         self.window = window
-        self.splitViewController = UISplitViewController(style: .tripleColumn)
-        self.splitViewController.presentsWithGesture = false
+        
+        splitViewController = UISplitViewController(style: .tripleColumn)
+        setupSplitViewController()
     }
     
     func start() {
         window?.rootViewController = splitViewController
+        showMapScene()
+    }
+    
+    private func setupSplitViewController() {
+        splitViewController.presentsWithGesture = false
         splitViewController.preferredDisplayMode = .secondaryOnly
         splitViewController.maximumPrimaryColumnWidth = 200
-        showMapScene()
+        splitViewController.delegate = self
+    }
+    
+    private func showMapScene() {
+        splitViewController.setViewController(mapController, for: .secondary)
+        splitViewController.setViewController(sideBarController, for: .primary)
+        splitViewController.setViewController(UIViewController(), for: .supplementary)
     }
 }
 
-extension SplitViewCoordinator {
-    func showMapScene() {
-        let controller = MapBuilder.create()
-        splitViewController.setViewController(controller, for: .secondary)
-        
-        let sideBarController = SideBarBuilder.create()
-        splitViewController.setViewController(sideBarController, for: .primary)
+extension SplitViewCoordinator: SplitViewVisibilityProtocol {
+    func showPrimary() {
         splitViewController.show(.primary)
+    }
+    
+    func showOnlySecondary() {
+        splitViewController.hide(.primary)
+        splitViewController.hide(.supplementary)
+    }
+}
+
+extension SplitViewCoordinator: MapNavigationDelegate { }
+
+
+extension SplitViewCoordinator: UISplitViewControllerDelegate {
+    func splitViewController(_ svc: UISplitViewController, willChangeTo displayMode: UISplitViewController.DisplayMode) {
+        guard showSearchOnMap else { return }
+        
+        switch displayMode {
+        case .secondaryOnly, .primaryHidden:
+            mapController.setupNavigationSearch(state: .onlySecondaryVisible)
+        default:
+            mapController.setupNavigationSearch(state: .primaryVisible)
+        }
     }
 }

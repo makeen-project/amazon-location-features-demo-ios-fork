@@ -47,11 +47,11 @@ final class AttributionVC: UIViewController {
     private lazy var partnerAttributionlearnButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.learnMore, for: .normal)
-        button.setTitleColor(.tabBarTintColor, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
         button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
-        button.backgroundColor = .tabBarTintColor.withAlphaComponent(0.1)
+        button.backgroundColor = .lsPrimary.withAlphaComponent(0.1)
         button.layer.cornerRadius = 8
-        button.layer.borderColor = UIColor.tabBarTintColor.cgColor
+        button.layer.borderColor = UIColor.lsPrimary.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(partnerLearnButtonTapped), for: .touchUpInside)
         return button
@@ -79,11 +79,11 @@ final class AttributionVC: UIViewController {
     private lazy var softwareAttributionlearnButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.learnMore, for: .normal)
-        button.setTitleColor(.tabBarTintColor, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
         button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
-        button.backgroundColor = .tabBarTintColor.withAlphaComponent(0.1)
+        button.backgroundColor = .lsPrimary.withAlphaComponent(0.1)
         button.layer.cornerRadius = 8
-        button.layer.borderColor = UIColor.tabBarTintColor.cgColor
+        button.layer.borderColor = UIColor.lsPrimary.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(softwareLearnButtonTapped), for: .touchUpInside)
         return button

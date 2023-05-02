@@ -37,7 +37,7 @@ final class SearchTextField: UIView {
     private lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.Search.searchTextField
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(

@@ -53,6 +53,7 @@
 		8A6B834A29DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */; };
 		8A6C390629A25E480003666C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390529A25E480003666C /* Reachability.swift */; };
 		8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */; };
+		8A6CCB9129FBCBB50009C4A4 /* MapSearchFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6CCB9029FBCBB50009C4A4 /* MapSearchFloatingView.swift */; };
 		8A7088B729EE96000066BF60 /* UITestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B429EE95AB0066BF60 /* UITestConstants.swift */; };
 		8A7088B929EE972C0066BF60 /* UITestScreenshotComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */; };
 		8A75093729EEE1D100B9985F /* NumberConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A75093629EEE1D100B9985F /* NumberConstants.swift */; };
@@ -442,6 +443,7 @@
 		8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+Extensions.swift"; sourceTree = "<group>"; };
 		8A6C390529A25E480003666C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetConnectionView.swift; sourceTree = "<group>"; };
+		8A6CCB9029FBCBB50009C4A4 /* MapSearchFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchFloatingView.swift; sourceTree = "<group>"; };
 		8A7088B429EE95AB0066BF60 /* UITestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConstants.swift; sourceTree = "<group>"; };
 		8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestScreenshotComparator.swift; sourceTree = "<group>"; };
 		8A75093629EEE1D100B9985F /* NumberConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberConstants.swift; sourceTree = "<group>"; };
@@ -1129,6 +1131,7 @@
 			isa = PBXGroup;
 			children = (
 				8A30A7E329F93AD00012AE71 /* MapContainerView.swift */,
+				8A6CCB9029FBCBB50009C4A4 /* MapSearchFloatingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3251,6 +3254,7 @@
 				AD625E98293BEEA000C67B44 /* SearchVC+TableView.swift in Sources */,
 				ADD5D7D3296F87320022480B /* AddGeofenceBuilder.swift in Sources */,
 				ADB0B9A0295AF59600C219EC /* DirectionPresentation.swift in Sources */,
+				8A6CCB9129FBCBB50009C4A4 /* MapSearchFloatingView.swift in Sources */,
 				ADD5D7D5296F87430022480B /* AddGeofenceViewModel.swift in Sources */,
 				AD2AF0E5292EAC8700149904 /* AboutCoordinator.swift in Sources */,
 				ADF26F72293028BE000147A0 /* AWSLoginService.swift in Sources */,

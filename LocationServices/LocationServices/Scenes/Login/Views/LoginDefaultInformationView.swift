@@ -140,7 +140,7 @@ final class LoginDefaultInformationView: UIView {
         }
         
         tw.linkTextAttributes = [
-            .foregroundColor: UIColor.tabBarTintColor,
+            .foregroundColor: UIColor.lsPrimary,
             .font: UIFont.amazonFont(type: .bold, size: 13)
         ]
         

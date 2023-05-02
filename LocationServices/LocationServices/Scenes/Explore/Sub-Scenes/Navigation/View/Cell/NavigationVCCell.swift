@@ -74,7 +74,7 @@ final class NavigationVCCell: UITableViewCell {
     
     private var stepLine: UIView = {
         let view = UIView()
-        view.backgroundColor = .tabBarTintColor
+        view.backgroundColor = .lsPrimary
         return view
     }()
     

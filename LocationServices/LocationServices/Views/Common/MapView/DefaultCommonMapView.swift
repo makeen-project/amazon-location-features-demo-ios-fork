@@ -45,7 +45,7 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     
     var mapView: MGLMapView = {
         let mapView = MGLMapView()
-        mapView.tintColor = .tabBarTintColor
+        mapView.tintColor = .lsPrimary
         mapView.compassView.isHidden = true
         mapView.zoomLevel = 12
         mapView.logoView.isHidden = true
