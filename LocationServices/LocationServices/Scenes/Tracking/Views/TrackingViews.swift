@@ -186,7 +186,7 @@ private extension TrackingMapView {
         let dashedLayer = MGLLineStyleLayer(identifier: identifier, source: source)
         dashedLayer.lineJoin = lineJoinCap
         dashedLayer.lineCap = lineJoinCap
-        dashedLayer.lineColor = NSExpression(forConstantValue: UIColor.tabBarTintColor)
+        dashedLayer.lineColor = NSExpression(forConstantValue: UIColor.lsPrimary)
         dashedLayer.lineWidth = lineWidth
         dashedLayer.lineDashPattern = NSExpression(forConstantValue: [0, 1.5])
         

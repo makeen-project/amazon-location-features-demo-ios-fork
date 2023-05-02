@@ -106,7 +106,7 @@ final class TrackingHistoryHeaderView: UIView {
             detailLabel.textColor = .navigationRedButton
         } else {
             trackingActionButton.setTitle(StringConstant.startTracking, for: .normal)
-            trackingActionButton.backgroundColor = .tabBarTintColor
+            trackingActionButton.backgroundColor = .lsPrimary
             trackingActionButton.titleLabel?.font = .amazonFont(type: .bold, size: 16)
             
             detailLabel.text = StringConstant.Tracking.noTracking

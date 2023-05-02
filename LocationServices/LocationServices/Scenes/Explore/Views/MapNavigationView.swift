@@ -12,7 +12,7 @@ final class MapNavigationView: UIView {
     private var containerView: UIView = {
         
        let view = UIView()
-        view.backgroundColor = .tabBarTintColor
+        view.backgroundColor = .lsPrimary
         view.layer.cornerRadius = 8
         return view
     }()

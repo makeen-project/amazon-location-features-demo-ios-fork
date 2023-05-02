@@ -24,7 +24,7 @@ final class LoginFooterView: UIView {
     private lazy var footerButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Terms & Conditions", for: .normal)
-        button.setTitleColor(.tabBarTintColor, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.font = .amazonFont(type: .bold, size: 13)
         button.addTarget(self, action: #selector(footerButtonTapped), for: .touchUpInside)

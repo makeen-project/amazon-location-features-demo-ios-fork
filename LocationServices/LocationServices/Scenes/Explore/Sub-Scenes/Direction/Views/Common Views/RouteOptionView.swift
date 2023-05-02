@@ -27,7 +27,7 @@ final class RouteOptionView: UIView {
     private lazy var optionSwitch: UISwitch = {
         let switchView = UISwitch()
         switchView.accessibilityIdentifier = ViewsIdentifiers.Routing.routeOptionSwitchButton
-        switchView.onTintColor = .tabBarTintColor
+        switchView.onTintColor = .lsPrimary
         switchView.addTarget(self, action: #selector(changeState), for: .valueChanged)
         return switchView
     }()

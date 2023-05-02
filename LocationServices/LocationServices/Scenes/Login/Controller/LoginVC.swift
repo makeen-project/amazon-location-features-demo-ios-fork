@@ -54,7 +54,7 @@ final class LoginVC: UIViewController {
     private lazy var signInButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.signInButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Sign In", for: .normal)
@@ -82,7 +82,7 @@ final class LoginVC: UIViewController {
     private lazy var connectButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.connectButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Connect", for: .normal)
