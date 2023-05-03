@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Execute the run_tests.sh script
+./git_hooks/run_unit_tests.sh
+
+# If tests failed, exit with a non-zero code to prevent the commit
+if [ $? -ne 0 ]; then
+    echo "Unit tests failed. Aborting commit."
+    exit 1
+fi

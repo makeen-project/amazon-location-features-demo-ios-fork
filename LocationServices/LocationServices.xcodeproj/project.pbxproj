@@ -2804,6 +2804,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AD2AF059292E892300149904 /* Build configuration list for PBXNativeTarget "LocationServices" */;
 			buildPhases = (
+				F1D67B392A000F2C0068997C /* ShellScript */,
 				AD2AF028292E892000149904 /* Sources */,
 				AD2AF029292E892000149904 /* Frameworks */,
 				AD2AF02A292E892000149904 /* Resources */,
@@ -2926,6 +2927,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F1D67B392A000F2C0068997C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PROJECT_DIR}/../git_hooks/update_pre_commit.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8AB3F18C29C8A1C3008FDF37 /* Sources */ = {
