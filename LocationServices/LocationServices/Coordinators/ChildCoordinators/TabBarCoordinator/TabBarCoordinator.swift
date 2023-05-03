@@ -58,6 +58,8 @@ private extension TabBarCoordinator {
         navigationController.tabBarItem = UITabBarItem(title: page.title,
                                                        image: page.pageIcon,
                                                        tag: page.pageOrder)
+        
+        navigationController.tabBarItem.accessibilityIdentifier = page.accessbilityIdentifier
         switch page {
         case .explore: startExploreScene(navigationController)
         case .tracking: startTrackingScene(navigationController)

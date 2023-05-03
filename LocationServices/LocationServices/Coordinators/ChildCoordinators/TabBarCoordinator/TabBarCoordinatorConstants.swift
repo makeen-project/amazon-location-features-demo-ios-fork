@@ -43,4 +43,14 @@ enum TabBarPage {
         case .about: return PageOrder.fifth.rawValue
         }
     }
+    
+    var accessbilityIdentifier: String {
+        switch self {
+        case .explore: return ViewsIdentifiers.General.exploreTabBarButton
+        case .tracking: return ViewsIdentifiers.General.trackingTabBarButton
+        case .geofence: return ViewsIdentifiers.General.geofenceTabBarButton
+        case .settings: return ViewsIdentifiers.General.settingsTabBarButton
+        case .about: return ViewsIdentifiers.General.aboutTabBarButton
+        }
+    }
 }

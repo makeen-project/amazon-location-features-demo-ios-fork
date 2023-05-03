@@ -20,6 +20,7 @@ struct ViewsIdentifiers {
         static let settingsTabBarButton = "Settings"
         static let trackingTabBarButton = "Tracking"
         static let geofenceTabBarButton = "Geofence"
+        static let aboutTabBarButton = "About"
         static let mapStyles = "MapStyles"
         static let routingButton = "RoutingButton"
         static let closeButton = "CloseButton"
