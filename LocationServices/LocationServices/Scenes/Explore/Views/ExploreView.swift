@@ -194,6 +194,10 @@ final class ExploreView: UIView, NavigationMapProtocol {
         topStackView.isHidden = state
     }
     
+    func hideDirectionButton(state: Bool) {
+        directonButton.isHidden = state
+    }
+    
     @objc func openGeofence() {
         self.geofenceButtonAction?()
     }
@@ -334,14 +338,12 @@ final class ExploreView: UIView, NavigationMapProtocol {
                 $0.bottom.equalTo(searchBarView.snp.top).offset(-96)
                 $0.trailing.equalToSuperview().offset(-16)
                 $0.width.equalTo(48)
-                $0.height.equalTo(104)
             }
         } else {
             bottomStackView.snp.remakeConstraints {
                 $0.bottom.equalTo(searchBarView.snp.top).offset(-16)
                 $0.trailing.equalToSuperview().offset(-16)
                 $0.width.equalTo(48)
-                $0.height.equalTo(104)
             }
         }
     }
@@ -753,7 +755,6 @@ private extension ExploreView {
             $0.bottom.equalTo(searchBarView.snp.top).offset(-16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(48)
-            $0.height.equalTo(104)
         }
         
         updateMapHelperConstraints()
