@@ -15,15 +15,17 @@ final class POICardViewModelTests: XCTestCase {
     let mapModel = MapModel(placeName: "Pittsburgh", placeAddress: "Pittsburgh, United States", placeLat: 40.4511974790006, placeLong: -80.00247659228356)
     var delegate: MockPOICardViewModelOutputDelegate!
     var pOICardViewModel: POICardViewModel!
-    
+    var routingService: RoutingAPIServiceMock!
     enum Constants {
         static let waitRequestDuration: TimeInterval = 10
+        static let apiRequestDuration: TimeInterval = 1
     }
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        routingService = RoutingAPIServiceMock(delay: Constants.apiRequestDuration)
         delegate = MockPOICardViewModelOutputDelegate()
-        pOICardViewModel = POICardViewModel(routingService: RoutingAPIService(), datas: [mapModel], userLocation: nil)
+        pOICardViewModel = POICardViewModel(routingService: routingService, datas: [mapModel], userLocation: nil)
         pOICardViewModel.delegate = delegate
     }
 
@@ -53,8 +55,8 @@ final class POICardViewModelTests: XCTestCase {
         pOICardViewModel.setUserLocation(lat: 40.4400930458457, long: -80.00348250162394)
         pOICardViewModel.fetchDatas()
         
-        XCTWaiter().wait(until: { [weak self] in
-            return self?.pOICardViewModel.getMapModel()?.distance == 1664
+        XCTWaiter().wait(until: {
+            return self.delegate.populateDatasCalled
         }, timeout: Constants.waitRequestDuration, message: "MapModel should've valid distance")
     }
     

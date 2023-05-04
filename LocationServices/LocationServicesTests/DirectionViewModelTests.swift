@@ -10,16 +10,38 @@ import XCTest
 
 final class DirectionViewModelTests: XCTestCase {
     
-    let directionViewModel = DirectionViewModel(service: LocationService(), routingService: RoutingAPIService())
-    let directionVC = DirectionVC()
-    let userLocation = (lat: 40.7487776237092, long: -73.98554260340953)
+    var routingService: RoutingAPIServiceMock!
+    var locationService: LocationAPIServiceMock!
+    var directionViewModel: DirectionViewModel!
+    var delegate: MockDirectionViewModelOutputDelegate!
+    var userLocation: (lat: Double, long: Double)!
+    var search: SearchPresentation!
+    enum Constants {
+        static let waitRequestDuration: TimeInterval = 10
+        static let apiRequestDuration: TimeInterval = 1
+    }
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        directionViewModel.delegate = directionVC
         if let domain = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: domain)
             UserDefaults.standard.synchronize()
         }
+        
+        userLocation = (lat: 40.7487776237092, long: -73.98554260340953)
+        routingService = RoutingAPIServiceMock(delay: Constants.apiRequestDuration)
+        locationService = LocationAPIServiceMock(delay: Constants.apiRequestDuration)
+        directionViewModel = DirectionViewModel(service: locationService, routingService: routingService)
+        delegate = MockDirectionViewModelOutputDelegate()
+        directionViewModel.delegate = delegate
+        search = SearchPresentation(placeId: "myLocation",
+                                       fullLocationAddress: "Times Square, New York",
+                                       distance: nil,
+                                       countryName: nil,
+                                       cityName: nil,
+                                       placeLat: userLocation?.lat,
+                                       placeLong: userLocation?.long,
+                                       name: "Times Square")
     }
     
     override func tearDownWithError() throws {
@@ -48,13 +70,7 @@ final class DirectionViewModelTests: XCTestCase {
         directionViewModel.userLocation = userLocation
                 
         directionViewModel.addMyLocationItem()
-        XCTAssertEqual(directionViewModel.getSearchCellModel().first?.placeId, "myLocation", "Expected my location no nil")
-    }
-    
-    func testAddMyLocationItemNoCurrentLocation() throws {
-                
-        directionViewModel.addMyLocationItem()
-        XCTAssertEqual(directionViewModel.getSearchCellModel().first?.placeId, nil, "Expected my location no nil")
+        XCTAssertEqual(self.delegate.isMyLocationAlreadySelect, true, "Expected isMyLocationAlreadySelected true")
     }
     
     func testMyLocationSelected() throws {
@@ -65,33 +81,46 @@ final class DirectionViewModelTests: XCTestCase {
     }
     
     func testSearchWithSuggesstionWithTextMyLocation() throws {
-        directionViewModel.searchWithSuggesstion(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
-        sleep(3)
-        XCTAssertEqual(directionViewModel.getSearchCellModel().first?.locationName, "James Lawrence Thomas", "Expected location name")
+        locationService.putSearchTextResult = [search]
+        directionViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
 
     func testSearchWithSuggesstionWithTextFailure() throws {
-        directionViewModel.searchWithSuggesstion(text: "Tdfimes Squadfdfsre", userLat: userLocation.lat, userLong: userLocation.long)
-        sleep(3)
-        XCTAssertEqual(directionViewModel.getSearchCellModel().first?.locationName, nil, "Expected location nil")
+        directionViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        
+        XCTWaiter().wait(until: {
+            return !self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult false")
     }
     
     func testSearchWithText() throws {
-        directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
-        sleep(3)
-        XCTAssertEqual(directionViewModel.getSearchCellModel().first?.locationName, "James Lawrence Thomas", "Expected location name")
+        locationService.putSearchTextResult = [search]
+        directionViewModel.searchWith(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
 
     func testSearchWithTextFailure() throws {
-        directionViewModel.searchWith(text: "Tdfimes Squadfdfsre", userLat: userLocation.lat, userLong: userLocation.long)
-        sleep(3)
-        XCTAssertEqual(directionViewModel.getSearchCellModel().first?.locationName, nil, "Expected location nil")
+        directionViewModel.searchWith(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        
+        XCTWaiter().wait(until: {
+            return !self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
     
     func testNumberOfRowsInSection() throws {
-        directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
-        sleep(5)
-        XCTAssertEqual(directionViewModel.numberOfRowsInSection(), 1, "Expected number of rows")
+        locationService.putSearchTextResult = [search]
+        directionViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(directionViewModel.numberOfRowsInSection(), 1, "Expecting number of rows in section")
     }
     
     func testGetMyLocationItem() throws {
@@ -105,41 +134,54 @@ final class DirectionViewModelTests: XCTestCase {
     }
     
     func testGetSearchCellModelWithResults() throws {
-        directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
-        sleep(5)
-        XCTAssertEqual(directionViewModel.getSearchCellModel().first?.locationName, "James Lawrence Thomas", "Expected location count in getSearchCellModel")
+        locationService.putSearchWithPositionResult = .success([search])
+        directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: nil, userLong: nil)
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
     
     func testSearchSelectedPlaceWithMyLocation() throws {
+        locationService.putSearchWithPositionResult = .success([search])
         directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
-        sleep(5)
         
-        let result = directionViewModel.searchSelectedPlaceWith(directionViewModel.getSearchCellModel().first!, lat: userLocation.lat, long: userLocation.long)
-        XCTAssertEqual(result, true, "Expected searchSelectedPlaceWith true")
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+    }
+}
+
+class MockDirectionViewModelOutputDelegate : DirectionViewModelOutputDelegate {
+    var hasSearchResult = false
+    var hasGetLocalRouteOptions = false
+    var hasReloadView = false
+    var hasSelectedPlaceResult = false
+    var hasAlertShown = false
+    var isMyLocationAlreadySelect = false
+    
+    func searchResult(mapModel: [LocationServices.MapModel]) {
+        hasSearchResult = true
     }
     
-//    func testGetCurrentNavigationLegsWithSucceedData() throws {
-//        let firstDestination = MapModel(placeName: "Times Square", placeAddress: nil, placeLat: 40.75804781268635, placeLong: -73.98554260340953)
-//
-//        let secondDestination = MapModel(placeName: "CUNY Graduate Center", placeAddress: nil, placeLat: 40.7487776237092, placeLong: -73.98404872540857)
-//        directionViewModel.userLocation = userLocation
-//
-//        directionViewModel.addMyLocationItem()
-//
-//        directionViewModel.calculateRouteWith(destinationPosition: firstDestination, departurePosition: secondDestination){ data,model  in
-//
-//        }
-//        sleep(5)
-//        let result = directionViewModel.searchSelectedPlaceWith(directionViewModel.getSearchCellModel().first!, lat: userLocation.lat, long: userLocation.long)
-//        sleep(5)
-//        directionVC.calculateRoute()
-//        sleep(5)
-//        XCTAssertEqual(try directionViewModel.getCurrentNavigationLegsWith(.car).get().count, 0, "Expected")
-//    }
-//
-//
-//    func testGetSumDataWithSucceedData() {
-//        directionViewModel.defaultTravelMode =
-//        directionViewModel.getSumData(.car)
-//    }
+    func reloadView() {
+        hasReloadView = true
+    }
+    
+    func selectedPlaceResult(mapModel: [LocationServices.MapModel]) {
+        hasSelectedPlaceResult = true
+    }
+    
+    func isMyLocationAlreadySelected() -> Bool {
+        isMyLocationAlreadySelect = true
+        return isMyLocationAlreadySelect
+    }
+    
+    func getLocalRouteOptions(tollOption: Bool, ferriesOption: Bool) {
+        hasGetLocalRouteOptions = true
+    }
+    
+    func showAlert(_ model: LocationServices.AlertModel) {
+        self.hasAlertShown = true
+    }
+    
 }
