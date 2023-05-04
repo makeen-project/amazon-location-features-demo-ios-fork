@@ -73,5 +73,9 @@ extension UIImage {
     static let alertTriangleSolid = UIImage(named: "alert-triangle-solid")!
     static let infoIcon = UIImage(named: "info-icon")
     static let logoPoweredByAWS = UIImage(named: "logo-powered-by-aws")
+    
+    //system
+    static let sidebarLeft = UIImage(systemName: "sidebar.left")
+    static let arrowUpLeftAndArrowDownRight = UIImage(systemName: "arrow.up.left.and.arrow.down.right")
 }
 

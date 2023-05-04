@@ -68,6 +68,11 @@ final class SplitViewCoordinator: Coordinator {
         case .about: return SplitViewAboutCoordinator(splitViewController: splitViewController)
         }
     }
+    
+    @objc private func showMapSecondaryOnly() {
+        splitViewController.changeSecondaryViewController(to: mapController)
+        showOnlySecondary()
+    }
 }
 
 extension SplitViewCoordinator: SideBarDelegate {
@@ -98,11 +103,30 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
     func splitViewController(_ svc: UISplitViewController, willChangeTo displayMode: UISplitViewController.DisplayMode) {
         guard showSearchOnMap else { return }
         
+        let mapState: MapSearchState
+        let viewControllerForShowSecondaryButton: UIViewController?
+        let viewControllerWithoutShowSecondaryButton: UIViewController?
+        
         switch displayMode {
-        case .secondaryOnly, .primaryHidden:
-            mapController.setupNavigationSearch(state: .onlySecondaryVisible)
+        case .secondaryOnly:
+            mapState = .onlySecondaryVisible
+            viewControllerForShowSecondaryButton = nil
+            viewControllerWithoutShowSecondaryButton = nil
+        case .twoBesideSecondary, .twoOverSecondary, .twoDisplaceSecondary:
+            mapState = .primaryVisible
+            viewControllerForShowSecondaryButton = splitViewController.viewController(for: .primary)
+            viewControllerWithoutShowSecondaryButton = splitViewController.viewController(for: .supplementary)
         default:
-            mapController.setupNavigationSearch(state: .primaryVisible)
+            mapState = .primaryVisible
+            viewControllerForShowSecondaryButton = splitViewController.viewController(for: .supplementary)
+            viewControllerWithoutShowSecondaryButton = splitViewController.viewController(for: .primary)
         }
+        
+        mapController.setupNavigationSearch(state: mapState)
+        
+        let showOnlySecondaryBarButtonItem = UIBarButtonItem(image: .sidebarLeft, style: .done, target: self, action: #selector(showMapSecondaryOnly))
+        showOnlySecondaryBarButtonItem.tintColor = .lsPrimary
+        viewControllerForShowSecondaryButton?.navigationItem.leftBarButtonItem = showOnlySecondaryBarButtonItem
+        viewControllerWithoutShowSecondaryButton?.navigationItem.leftBarButtonItem = nil
     }
 }
