@@ -64,7 +64,7 @@ final class SplitViewCoordinator: Coordinator {
         case .explore: fatalError(.errorToBeImplemented)
         case .tracking: fatalError(.errorToBeImplemented)
         case .geofence: fatalError(.errorToBeImplemented)
-        case .settings: fatalError(.errorToBeImplemented)
+        case .settings: return SplitViewSettingsCoordinator(splitViewController: splitViewController)
         case .about: return SplitViewAboutCoordinator(splitViewController: splitViewController)
         }
     }
