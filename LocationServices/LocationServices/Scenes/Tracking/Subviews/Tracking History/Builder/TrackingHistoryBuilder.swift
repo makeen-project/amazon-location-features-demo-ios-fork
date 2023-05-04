@@ -13,6 +13,7 @@ final class TrackingHistoryBuilder {
         let service = TrackingAPIService()
         let vm = TrackingHistoryViewModel(serivce: service, isTrackingActive: isTrackingActive)
         controller.viewModel = vm
+        controller.updateButtonStyle(state: isTrackingActive)
         return controller
     }
 }

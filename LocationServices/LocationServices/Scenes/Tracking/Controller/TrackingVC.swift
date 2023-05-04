@@ -13,8 +13,10 @@ final class TrackingVC: UIViewController, AlertPresentable {
     var geofenceHandler: VoidHandler?
     var directionHandler: VoidHandler?
     
+    private var isTrackingActive: Bool = false
     private var trackingMapView: TrackingMapView = TrackingMapView()
     private var userLocation: CLLocation?
+    
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         locationManager.setDelegate(self)
@@ -72,7 +74,6 @@ final class TrackingVC: UIViewController, AlertPresentable {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.stopTracking()
         historyHeaderView.updateButtonStyle(isTrackingStarted: false)
     }
     
@@ -178,11 +179,12 @@ final class TrackingVC: UIViewController, AlertPresentable {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         historyHeaderView.isHidden = isVisible
         grabberIcon.isHidden = isVisible
+        historyHeaderView.updateButtonStyle(isTrackingStarted: viewModel.isTrackingActive)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        openLoginFlow(skipDashboard: false)
+        openLoginFlow(skipDashboard: viewModel.isTrackingActive)
         showGeofenceAnnotations()
     }
     
