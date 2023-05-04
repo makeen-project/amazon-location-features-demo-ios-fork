@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import CoreLocation
 
-final class TrackingVC: UIViewController, AlertPresentable {
+final class TrackingVC: UIViewController {
     var geofenceHandler: VoidHandler?
     var directionHandler: VoidHandler?
     

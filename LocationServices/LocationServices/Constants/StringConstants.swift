@@ -21,6 +21,8 @@ extension String {
     
     static let errorCellCannotBeInititalized = "Cell can't be initilized"
     static let errorJSONDecoder = "JSON Decoder Error"
+    
+    static let errorToBeImplemented = "to be implemented"
 }
 
 // Strings
@@ -119,6 +121,7 @@ enum StringConstant {
     static let sessionExpiredError = "Session is expired. Please sign out and sign in back to continue access all features. Otherwise you could face unexpected behaviour in the app"
     static let greatDistanceErrorTitle = "Distance is greater than 400 km"
     static let greatDistanceErrorMessage = "Can`t calculate via Esri, kindly switch to HERE provider"
+    static let invalidUrlError = "URL is invalid. Can't open it"
     
     //login
     enum LoginInfo {

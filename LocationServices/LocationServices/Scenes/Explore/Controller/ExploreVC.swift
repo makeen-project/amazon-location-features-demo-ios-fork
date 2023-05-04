@@ -13,7 +13,7 @@ import AWSLocationXCF
 import AWSMobileClientXCF
 import AWSCore
 
-final class ExploreVC: UIViewController, AlertPresentable {
+final class ExploreVC: UIViewController {
     weak var delegate: ExploreNavigationDelegate?
     private var userCoreLocation: CLLocationCoordinate2D?
     

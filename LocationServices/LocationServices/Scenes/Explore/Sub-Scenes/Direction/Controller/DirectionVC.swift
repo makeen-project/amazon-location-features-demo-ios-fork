@@ -8,7 +8,7 @@
 import UIKit
 import CoreLocation
 
-final class DirectionVC: UIViewController, AlertPresentable {
+final class DirectionVC: UIViewController {
     
     enum Constants {
         static let mediumId = UISheetPresentationController.Detent.Identifier("medium")
