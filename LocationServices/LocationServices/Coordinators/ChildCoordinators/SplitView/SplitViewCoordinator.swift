@@ -35,6 +35,7 @@ final class SplitViewCoordinator: Coordinator {
         self.window = window
         
         splitViewController = UISplitViewController(style: .tripleColumn)
+        splitViewController.preferredSplitBehavior = .tile
         setupSplitViewController()
     }
     
@@ -51,9 +52,31 @@ final class SplitViewCoordinator: Coordinator {
     }
     
     private func showMapScene() {
+        sideBarController.delegate = self
+        
         splitViewController.setViewController(mapController, for: .secondary)
         splitViewController.setViewController(sideBarController, for: .primary)
         splitViewController.setViewController(UIViewController(), for: .supplementary)
+    }
+    
+    private func createSelectedCoordinator(type: SideBarCellType) -> Coordinator {
+        switch type {
+        case .explore: fatalError(.errorToBeImplemented)
+        case .tracking: fatalError(.errorToBeImplemented)
+        case .geofence: fatalError(.errorToBeImplemented)
+        case .settings: fatalError(.errorToBeImplemented)
+        case .about: return SplitViewAboutCoordinator(splitViewController: splitViewController)
+        }
+    }
+}
+
+extension SplitViewCoordinator: SideBarDelegate {
+    func showNextScene(type: SideBarCellType) {
+        childCoordinators.removeAll()
+        let coordinator = createSelectedCoordinator(type: type)
+        childCoordinators.append(coordinator)
+        coordinator.start()
+        
     }
 }
 

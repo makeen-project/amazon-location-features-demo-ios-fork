@@ -11,6 +11,7 @@
 		8A063EA029C9C245001FF40C /* ViewsIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB3F19D29C8AF22008FDF37 /* ViewsIdentifiers.swift */; };
 		8A063EA129C9C256001FF40C /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */; };
 		8A063EA229C9C27C001FF40C /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
+		8A0AF02A2A03CBE9003E503D /* UISplitViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */; };
 		8A0EB58A2983F9CF00FBB3E5 /* GeofenceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0EB5892983F9CF00FBB3E5 /* GeofenceAnnotation.swift */; };
 		8A10E37D29E97948005165CD /* SplashBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10E37C29E97948005165CD /* SplashBuilder.swift */; };
 		8A10E37F29E97950005165CD /* SplashContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10E37E29E97950005165CD /* SplashContracts.swift */; };
@@ -50,6 +51,7 @@
 		8A4EE62E29D4B0EE00B699A9 /* NavigationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4EE62D29D4B0EE00B699A9 /* NavigationUITests.swift */; };
 		8A4EE63029D4B45D00B699A9 /* UITestRouteOptionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4EE62F29D4B45D00B699A9 /* UITestRouteOptionsScreen.swift */; };
 		8A50572329A0329B0047A203 /* AuthActionsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A50572229A0329B0047A203 /* AuthActionsHelper.swift */; };
+		8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54FFD92A02722400694CE6 /* SplitViewAboutCoordinator.swift */; };
 		8A6B834A29DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */; };
 		8A6C390629A25E480003666C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390529A25E480003666C /* Reachability.swift */; };
 		8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */; };
@@ -400,6 +402,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISplitViewController+Extension.swift"; sourceTree = "<group>"; };
 		8A0EB5892983F9CF00FBB3E5 /* GeofenceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceAnnotation.swift; sourceTree = "<group>"; };
 		8A10E37C29E97948005165CD /* SplashBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashBuilder.swift; sourceTree = "<group>"; };
 		8A10E37E29E97950005165CD /* SplashContracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashContracts.swift; sourceTree = "<group>"; };
@@ -439,6 +442,7 @@
 		8A4EE62D29D4B0EE00B699A9 /* NavigationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationUITests.swift; sourceTree = "<group>"; };
 		8A4EE62F29D4B45D00B699A9 /* UITestRouteOptionsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRouteOptionsScreen.swift; sourceTree = "<group>"; };
 		8A50572229A0329B0047A203 /* AuthActionsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthActionsHelper.swift; sourceTree = "<group>"; };
+		8A54FFD92A02722400694CE6 /* SplitViewAboutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewAboutCoordinator.swift; sourceTree = "<group>"; };
 		8A60E81E29D3272100F40DC8 /* LocationServices.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = LocationServices.xctestplan; path = LocationServices.xcodeproj/LocationServices.xctestplan; sourceTree = "<group>"; };
 		8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+Extensions.swift"; sourceTree = "<group>"; };
 		8A6C390529A25E480003666C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -1047,6 +1051,15 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
+		8A54FFD82A026E5500694CE6 /* SplitView */ = {
+			isa = PBXGroup;
+			children = (
+				8AB4835729F930EE00A3501C /* SplitViewCoordinator.swift */,
+				8A54FFD92A02722400694CE6 /* SplitViewAboutCoordinator.swift */,
+			);
+			path = SplitView;
+			sourceTree = "<group>";
+		};
 		8A7088B129EE95810066BF60 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1364,6 +1377,7 @@
 		AD2AF067292E98B500149904 /* ChildCoordinators */ = {
 			isa = PBXGroup;
 			children = (
+				8A54FFD82A026E5500694CE6 /* SplitView */,
 				AD2AF06A292E99A200149904 /* TabBarCoordinator */,
 				AD2AF068292E98C700149904 /* LoginCoordinator.swift */,
 				AD2AF09E292EA91200149904 /* GeofenceCoordinator.swift */,
@@ -1371,7 +1385,6 @@
 				AD2AF0E4292EAC8700149904 /* AboutCoordinator.swift */,
 				AD2AF0E6292EAC8E00149904 /* TrackingCoordinator.swift */,
 				AD2AF0E8292EAC9800149904 /* SettingsCoordinator.swift */,
-				8AB4835729F930EE00A3501C /* SplitViewCoordinator.swift */,
 			);
 			path = ChildCoordinators;
 			sourceTree = "<group>";
@@ -2853,6 +2866,7 @@
 				8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */,
 				8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */,
 				8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */,
+				8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3336,6 +3350,7 @@
 				AD989746298C53E40041E867 /* TrackingHistoryContracts.swift in Sources */,
 				8A3471CC2975D30B00BAF374 /* Locale+Extension.swift in Sources */,
 				AD2AF0DB292EABFE00149904 /* AboutContracts.swift in Sources */,
+				8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */,
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
 				ADD1394F298073040003F917 /* SettingsLogoutButtonView.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
@@ -3409,6 +3424,7 @@
 				AD2AF0AA292EAA2700149904 /* TrackingViewModel.swift in Sources */,
 				8AB4836229F937D700A3501C /* MapViewModel.swift in Sources */,
 				ADF26F7829303E16000147A0 /* AWSUserModel.swift in Sources */,
+				8A0AF02A2A03CBE9003E503D /* UISplitViewController+Extension.swift in Sources */,
 				8A3FD14C29A69CE000DFA6F6 /* PlaceholderAnimator.swift in Sources */,
 				ADD139582980867D0003F917 /* UnitSceneContracts.swift in Sources */,
 			);

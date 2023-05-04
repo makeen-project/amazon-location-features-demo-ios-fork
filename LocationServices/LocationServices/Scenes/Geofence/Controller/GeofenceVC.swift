@@ -10,7 +10,7 @@ import SnapKit
 import CoreLocation
 import Mapbox
 
-final class GeofenceVC: UIViewController, AlertPresentable {
+final class GeofenceVC: UIViewController {
     weak var delegate: GeofenceNavigationDelegate?
     var directioButtonHandler: VoidHandler?
     
