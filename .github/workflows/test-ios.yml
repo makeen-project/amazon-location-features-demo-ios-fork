@@ -17,11 +17,6 @@ jobs:
         with:
           version: "14.3"
 
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
-
       - name: Setup Bundler
         working-directory: ./LocationServices
         run: |
