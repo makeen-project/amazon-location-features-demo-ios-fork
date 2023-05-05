@@ -22,11 +22,11 @@ platform :ios do
       run_tests(
         project: "LocationServices.xcodeproj",
         device: "iPhone 14",
-        scheme: "LocationServices"
+        scheme: "LocationServices",
+        result_bundle: true,
+        output_directory: Dir.pwd + "/test_output"
       )
-      xcresult_path = Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]
-      sh("echo xcresult_path=" + xcresult_path + " >> $GITHUB_ENV")
-    rescue
+    ensure
       xcresult_path = Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]
       sh("echo xcresult_path=" + xcresult_path + " >> $GITHUB_ENV")
     end

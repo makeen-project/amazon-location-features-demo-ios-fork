@@ -4,8 +4,6 @@ concurrency:
   cancel-in-progress: true
 on:
   workflow_dispatch:
-  push:
-    branches: [ github, develop, stage, master ]
 jobs:
   startSlackNotification:
     name: Slack Starting Notification
@@ -86,7 +84,6 @@ jobs:
 
       - run: cat /Users/runner/Library/Logs/gym/LocationServices-LocationServices.log
         if: always()
-
   slackNotification:
     name: Slack Final Notification
     needs: [

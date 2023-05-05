@@ -2,15 +2,20 @@ name: Test IOS App
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ github, develop, stage, master ]
+    branches: [ develop, main ]
 jobs:
   test-iOS:
     name: Test iOS
     env:
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-    runs-on: self-hosted
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v2
+
+      - name: Select xcode version
+        uses: devbotsxyz/xcode-select@v1
+        with:
+          version: "14.3"
 
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.5.3
@@ -27,7 +32,6 @@ jobs:
       - name: Setup Config Files
         working-directory: ./LocationServices
         run: |
-          base64 -d <<< ${{ secrets.AWS_CONFIG }} > Config.xcconfig
           base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
 
       - name: Run tests
