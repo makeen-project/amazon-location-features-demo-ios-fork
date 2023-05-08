@@ -27,6 +27,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
         controller.delegate = self
         return controller
     }()
+    
     private lazy var secondaryController: ExploreVC = {
         let controller = ExploreVCBuilder.create()
         controller.delegate = self
@@ -54,10 +55,6 @@ final class SplitViewExploreMapCoordinator: Coordinator {
 }
 
 extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
-    func dismissSearchScene() {
-        splitDelegate?.showOnlySecondary()
-    }
-    
     func showMapStyles() {
         let controller = ExploreMapStyleBuilder.create()
         
@@ -189,6 +186,15 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         }
         
         splitViewController.present(controller, animated: true)
+    }
+    
+    //close
+    func closePOICardScene() {
+        supplementaryNavigationController?.popViewController(animated: true)
+    }
+    
+    func dismissSearchScene() {
+        splitDelegate?.showOnlySecondary()
     }
 }
 

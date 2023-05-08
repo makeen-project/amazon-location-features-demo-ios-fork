@@ -31,6 +31,7 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     
     private let poiCardView: POICardView = POICardView()
     weak var delegate: ExploreNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     var userLocation: (lat: Double?, long: Double?)?
     
     private var authorizationStatusChanged: Bool = false
@@ -44,12 +45,22 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .searchBarBackgroundColor
         locationManager.setDelegate(self)
         poiCardView.delegate = self
         viewModel.fetchDatas()
         showCurrentAnnotation()
         setupViews()
+        poiCardView.changeHeaderVisibility(isHidden: isInSplitViewController)
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissPoiView))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -60,7 +71,8 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     private func setupViews() {
         self.view.addSubview(poiCardView)
         poiCardView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -101,13 +113,13 @@ extension POICardVC: POICardViewModelOutputDelegate {
         poiCardView.errorMessage = errorMessage
         poiCardView.errorInfoMessage = errorInfoMessage
         poiCardView.dataModel = cardData
+        title = cardData.placeName
     }
     
-    func dismissPoiView() {
+    @objc func dismissPoiView() {
         self.updateMapViewBottomIcons()
-        self.dismiss(animated: true)
+        delegate?.closePOICardScene()
     }
-    
     
     func showDirections(secondDestination: MapModel) {
         delegate?.showDirections(isRouteOptionEnabled: true,

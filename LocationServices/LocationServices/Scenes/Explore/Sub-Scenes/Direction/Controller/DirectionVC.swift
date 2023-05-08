@@ -183,7 +183,8 @@ final class DirectionVC: UIViewController {
         self.view.addSubview(tableView)
         
         directionSearchView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview().offset(14)
+            $0.leading.trailing.equalToSuperview().offset(14)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(14)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(140)
         }

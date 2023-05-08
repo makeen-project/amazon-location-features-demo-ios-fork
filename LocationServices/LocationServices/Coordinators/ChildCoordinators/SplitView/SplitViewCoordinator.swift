@@ -111,6 +111,7 @@ extension SplitViewCoordinator: SideBarDelegate {
 }
 
 extension SplitViewCoordinator: SplitViewVisibilityProtocol {
+    
     @objc func showPrimary() {
         splitViewController.show(.primary)
     }
@@ -126,6 +127,10 @@ extension SplitViewCoordinator: SplitViewVisibilityProtocol {
     func showOnlySecondary() {
         splitViewController.hide(.primary)
         splitViewController.hide(.supplementary)
+    }
+    
+    @objc func popSupplementary() {
+        splitViewController.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -152,7 +157,9 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
         default:
             mapState = .primaryVisible
             sideBarButtonItem = UIBarButtonItem(image: .sidebarLeft, style: .done, target: self, action: #selector(showPrimary))
-            viewControllerForShowSecondaryButton = splitViewController.viewController(for: .supplementary)
+            
+            viewControllerForShowSecondaryButton = splitViewController.viewController(for: .supplementary)?.navigationController?.viewControllers.first
+            
             viewControllerWithoutShowSecondaryButton = splitViewController.viewController(for: .primary)
         }
         

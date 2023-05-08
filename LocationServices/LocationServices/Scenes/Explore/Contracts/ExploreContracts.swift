@@ -45,11 +45,13 @@ protocol ExploreNavigationDelegate: AnyObject {
     func showSearchSceneWith(lat: Double?, long: Double?)
     func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?)
     func showNavigationview(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?)
-    func dismissSearchScene()
     func showLoginFlow()
     func showLoginSuccess()
     func showAttribution()
     func showWelcome()
+    
+    func dismissSearchScene()
+    func closePOICardScene()
 }
 
 protocol ExploreViewDelegate: AnyObject {
