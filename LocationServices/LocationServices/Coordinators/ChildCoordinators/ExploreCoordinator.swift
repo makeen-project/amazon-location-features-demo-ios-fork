@@ -25,10 +25,6 @@ final class ExploreCoordinator: Coordinator {
 }
 
 extension ExploreCoordinator: ExploreNavigationDelegate {
-    func dismissSearchScene() {
-        self.navigationController.dismiss(animated: true)
-    }
-    
     func showMapStyles() {
         dismissSearchScene()
         let controller = ExploreMapStyleBuilder.create()
@@ -251,6 +247,15 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         }
         
         navigationController.present(controller, animated: true)
+    }
+    
+    //close
+    func closePOICardScene() {
+        navigationController.dismiss(animated: true)
+    }
+    
+    func dismissSearchScene() {
+        navigationController.dismiss(animated: true)
     }
 }
 

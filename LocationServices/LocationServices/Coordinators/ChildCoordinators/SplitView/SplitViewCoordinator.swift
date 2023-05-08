@@ -7,8 +7,9 @@
 
 import UIKit
 
-protocol SplitViewVisibilityProtocol {
+protocol SplitViewVisibilityProtocol: AnyObject {
     func showPrimary()
+    func showSupplementary()
     func showOnlySecondary()
 }
 
@@ -22,12 +23,6 @@ final class SplitViewCoordinator: Coordinator {
     
     private let splitViewController: UISplitViewController
     private var showSearchOnMap: Bool = true
-    
-    private lazy var mapController: MapVC = {
-        let vc = MapBuilder.create()
-        vc.delegate = self
-        return vc
-    }()
     
     private lazy var sideBarController = SideBarBuilder.create()
     
@@ -54,79 +49,124 @@ final class SplitViewCoordinator: Coordinator {
     private func showMapScene() {
         sideBarController.delegate = self
         
-        splitViewController.setViewController(mapController, for: .secondary)
         splitViewController.setViewController(sideBarController, for: .primary)
-        splitViewController.setViewController(UIViewController(), for: .supplementary)
+        showNextScene(type: .explore)
     }
     
-    private func createSelectedCoordinator(type: SideBarCellType) -> Coordinator {
+    private func getSelectedCoordinator(type: SideBarCellType) -> Coordinator {
         switch type {
-        case .explore: fatalError(.errorToBeImplemented)
-        case .tracking: fatalError(.errorToBeImplemented)
-        case .geofence: fatalError(.errorToBeImplemented)
-        case .settings: return SplitViewSettingsCoordinator(splitViewController: splitViewController)
-        case .about: return SplitViewAboutCoordinator(splitViewController: splitViewController)
+        case .explore: return getExploreCoordinator()
+        case .tracking: return getTrackingCoordinator()
+        case .geofence: return getGeofenceCoordinator()
+        case .settings: return getSettingsCoordinator()
+        case .about: return getAboutCoordinator()
         }
     }
     
-    @objc private func showMapSecondaryOnly() {
-        splitViewController.changeSecondaryViewController(to: mapController)
-        showOnlySecondary()
+    private func getExploreCoordinator() -> Coordinator {
+        if let coordinator = childCoordinators.first(where: { $0 is SplitViewExploreMapCoordinator }) {
+            return coordinator
+        }
+        
+        let coordinator = SplitViewExploreMapCoordinator(splitViewController: splitViewController)
+        coordinator.geofenceHandler = { [weak self] in
+            self?.showNextScene(type: .geofence)
+        }
+        coordinator.splitDelegate = self
+        return coordinator
+    }
+    
+    private func getTrackingCoordinator() -> Coordinator {
+        fatalError(.errorToBeImplemented)
+    }
+    
+    private func getGeofenceCoordinator() -> Coordinator {
+        fatalError(.errorToBeImplemented)
+    }
+    
+    private func getSettingsCoordinator() -> Coordinator {
+        if let coordinator = childCoordinators.first(where: { $0 is SplitViewSettingsCoordinator }) {
+            return coordinator
+        } else {
+            return SplitViewSettingsCoordinator(splitViewController: splitViewController)
+        }
+    }
+    
+    private func getAboutCoordinator() -> Coordinator {
+        if let coordinator = childCoordinators.first(where: { $0 is SplitViewAboutCoordinator }) {
+            return coordinator
+        } else {
+            return SplitViewAboutCoordinator(splitViewController: splitViewController)
+        }
     }
 }
 
 extension SplitViewCoordinator: SideBarDelegate {
     func showNextScene(type: SideBarCellType) {
-        childCoordinators.removeAll()
-        let coordinator = createSelectedCoordinator(type: type)
+        let coordinator = getSelectedCoordinator(type: type)
+        coordinator.delegate = delegate
         childCoordinators.append(coordinator)
         coordinator.start()
-        
     }
 }
 
 extension SplitViewCoordinator: SplitViewVisibilityProtocol {
-    func showPrimary() {
+    
+    @objc func showPrimary() {
         splitViewController.show(.primary)
+    }
+    
+    @objc func hidePrimary() {
+        splitViewController.hide(.primary)
+    }
+    
+    func showSupplementary() {
+        splitViewController.show(.supplementary)
     }
     
     func showOnlySecondary() {
         splitViewController.hide(.primary)
         splitViewController.hide(.supplementary)
     }
+    
+    @objc func popSupplementary() {
+        splitViewController.navigationController?.popViewController(animated: true)
+    }
 }
-
-extension SplitViewCoordinator: MapNavigationDelegate { }
-
 
 extension SplitViewCoordinator: UISplitViewControllerDelegate {
     func splitViewController(_ svc: UISplitViewController, willChangeTo displayMode: UISplitViewController.DisplayMode) {
         guard showSearchOnMap else { return }
         
         let mapState: MapSearchState
+        let sideBarButtonItem: UIBarButtonItem?
         let viewControllerForShowSecondaryButton: UIViewController?
         let viewControllerWithoutShowSecondaryButton: UIViewController?
         
         switch displayMode {
         case .secondaryOnly:
             mapState = .onlySecondaryVisible
+            sideBarButtonItem = nil
             viewControllerForShowSecondaryButton = nil
             viewControllerWithoutShowSecondaryButton = nil
         case .twoBesideSecondary, .twoOverSecondary, .twoDisplaceSecondary:
             mapState = .primaryVisible
+            sideBarButtonItem = UIBarButtonItem(image: .sidebarLeft, style: .done, target: self, action: #selector(hidePrimary))
             viewControllerForShowSecondaryButton = splitViewController.viewController(for: .primary)
             viewControllerWithoutShowSecondaryButton = splitViewController.viewController(for: .supplementary)
         default:
             mapState = .primaryVisible
-            viewControllerForShowSecondaryButton = splitViewController.viewController(for: .supplementary)
+            sideBarButtonItem = UIBarButtonItem(image: .sidebarLeft, style: .done, target: self, action: #selector(showPrimary))
+            
+            viewControllerForShowSecondaryButton = splitViewController.viewController(for: .supplementary)?.navigationController?.viewControllers.first
+            
             viewControllerWithoutShowSecondaryButton = splitViewController.viewController(for: .primary)
         }
         
-        mapController.setupNavigationSearch(state: mapState)
+        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
         
-        let showOnlySecondaryBarButtonItem = UIBarButtonItem(image: .sidebarLeft, style: .done, target: self, action: #selector(showMapSecondaryOnly))
-        showOnlySecondaryBarButtonItem.tintColor = .lsPrimary
-        viewControllerForShowSecondaryButton?.navigationItem.leftBarButtonItem = showOnlySecondaryBarButtonItem
+        sideBarButtonItem?.tintColor = .lsPrimary
+        viewControllerForShowSecondaryButton?.navigationItem.leftBarButtonItem = sideBarButtonItem
         viewControllerWithoutShowSecondaryButton?.navigationItem.leftBarButtonItem = nil
     }
 }

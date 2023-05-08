@@ -15,6 +15,8 @@ import AWSCore
 
 final class ExploreVC: UIViewController {
     weak var delegate: ExploreNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
+    
     private var userCoreLocation: CLLocationCoordinate2D?
     
     var geofenceHandler: VoidHandler?
@@ -36,7 +38,6 @@ final class ExploreVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
-        self.navigationItem.backButtonTitle = ""
         setupHandlers()
         setupNotifications()
         
@@ -182,7 +183,11 @@ private extension ExploreVC {
     
     func setupView() {
         mapNavigationView.isHidden = true
-        navigationController?.navigationBar.isHidden = true
+        changeSeachBarVisibility(isHidden: false)
+        if !isInSplitViewController {
+            self.navigationItem.backButtonTitle = ""
+            navigationController?.navigationBar.isHidden = true
+        }
         self.view.backgroundColor = .white
     
         self.view.addSubview(exploreView)
@@ -190,13 +195,26 @@ private extension ExploreVC {
         
         exploreView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            if isInSplitViewController {
+                $0.bottom.equalToSuperview()
+            } else {
+                $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            }
+            
         }
         
         mapNavigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaInsets).offset(53)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
+        }
+    }
+    
+    private func changeSeachBarVisibility(isHidden: Bool) {
+        if isInSplitViewController {
+            exploreView.searchBarView.isHidden = true
+        } else {
+            exploreView.searchBarView.isHidden = isHidden
         }
     }
     
@@ -283,7 +301,7 @@ private extension ExploreVC {
         
     @objc private func searchAppearanceChanged(_ notification: Notification) {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
-        exploreView.searchBarView.isHidden = isVisible
+        changeSeachBarVisibility(isHidden: isVisible)
     }
     
     /// Alert view refactored to generic later

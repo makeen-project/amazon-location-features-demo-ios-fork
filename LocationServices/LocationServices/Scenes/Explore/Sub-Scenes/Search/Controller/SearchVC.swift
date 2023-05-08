@@ -56,6 +56,7 @@ final class SearchVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
         searchAppearanceChanged(isVisible: true)
     }
     
@@ -83,7 +84,7 @@ final class SearchVC: UIViewController {
         view.addSubview(tableView)
         
         searchBarView.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(76)
             $0.leading.trailing.equalToSuperview()
         }
