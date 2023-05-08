@@ -10,13 +10,13 @@ import CoreLocation
 
 final class POICardViewModel: POICardViewModelProcotol {
     
-    private let routingService: RoutingAPIService
+    private let routingService: RoutingServiceable
     private var datas: [MapModel]
     private var userLocation: CLLocationCoordinate2D?
     
     var delegate: POICardViewModelOutputDelegate?
     
-    init(routingService: RoutingAPIService, datas: [MapModel], userLocation: CLLocationCoordinate2D?) {
+    init(routingService: RoutingServiceable, datas: [MapModel], userLocation: CLLocationCoordinate2D?) {
         self.routingService = routingService
         self.datas = datas
         self.userLocation = userLocation

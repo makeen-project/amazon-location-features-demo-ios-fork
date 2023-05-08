@@ -22,14 +22,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     var userLocation: (lat: Double?, long: Double?)?
     
     var delegate: DirectionViewModelOutputDelegate?
-    var service: LocationService
-    var routingService: RoutingAPIService
+    var service: LocationServiceable
+    var routingService: RoutingServiceable
     var selectedTravelMode: RouteTypes?
     var avoidFerries: Bool = false
     var avoidTolls: Bool = false
     
-    init(service: LocationService,
-         routingService: RoutingAPIService) {
+    init(service: LocationServiceable, routingService: RoutingServiceable) {
         self.service = service
         self.routingService = routingService
     }
