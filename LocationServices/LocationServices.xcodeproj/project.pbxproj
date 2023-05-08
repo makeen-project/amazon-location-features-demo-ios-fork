@@ -52,6 +52,7 @@
 		8A4EE63029D4B45D00B699A9 /* UITestRouteOptionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4EE62F29D4B45D00B699A9 /* UITestRouteOptionsScreen.swift */; };
 		8A50572329A0329B0047A203 /* AuthActionsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A50572229A0329B0047A203 /* AuthActionsHelper.swift */; };
 		8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54FFD92A02722400694CE6 /* SplitViewAboutCoordinator.swift */; };
+		8A663BD02A03E5750092645E /* SplitViewSettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A663BCF2A03E5750092645E /* SplitViewSettingsCoordinator.swift */; };
 		8A6B834A29DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */; };
 		8A6C390629A25E480003666C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390529A25E480003666C /* Reachability.swift */; };
 		8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */; };
@@ -444,6 +445,7 @@
 		8A50572229A0329B0047A203 /* AuthActionsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthActionsHelper.swift; sourceTree = "<group>"; };
 		8A54FFD92A02722400694CE6 /* SplitViewAboutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewAboutCoordinator.swift; sourceTree = "<group>"; };
 		8A60E81E29D3272100F40DC8 /* LocationServices.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = LocationServices.xctestplan; path = LocationServices.xcodeproj/LocationServices.xctestplan; sourceTree = "<group>"; };
+		8A663BCF2A03E5750092645E /* SplitViewSettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewSettingsCoordinator.swift; sourceTree = "<group>"; };
 		8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+Extensions.swift"; sourceTree = "<group>"; };
 		8A6C390529A25E480003666C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetConnectionView.swift; sourceTree = "<group>"; };
@@ -1056,6 +1058,7 @@
 			children = (
 				8AB4835729F930EE00A3501C /* SplitViewCoordinator.swift */,
 				8A54FFD92A02722400694CE6 /* SplitViewAboutCoordinator.swift */,
+				8A663BCF2A03E5750092645E /* SplitViewSettingsCoordinator.swift */,
 			);
 			path = SplitView;
 			sourceTree = "<group>";
@@ -3321,6 +3324,7 @@
 				8A439F0429C0A7D900B59D0B /* WelcomeVC.swift in Sources */,
 				8A1110D6297AB20300BC86E1 /* LSFaux3DUserLocationAnnotationView.swift in Sources */,
 				ADC97383295EDA17005AE918 /* NavigationVC.swift in Sources */,
+				8A663BD02A03E5750092645E /* SplitViewSettingsCoordinator.swift in Sources */,
 				ADC1249A29788D0100B08C20 /* GeofenceDataModel.swift in Sources */,
 				8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */,
 				ADBDDF032984386400696EC6 /* ExploreMapStyleHeaderView.swift in Sources */,

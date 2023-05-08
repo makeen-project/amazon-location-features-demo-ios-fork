@@ -14,9 +14,9 @@ enum SideBarButtonState {
     var image: UIImage? {
         switch self {
         case .sidebar:
-            return UIImage(systemName: "sidebar.left")
+            return .sidebarLeft
         case .fullscreen:
-            return UIImage(systemName: "arrow.up.left.and.arrow.down.right")
+            return .arrowUpLeftAndArrowDownRight
         }
     }
 }
