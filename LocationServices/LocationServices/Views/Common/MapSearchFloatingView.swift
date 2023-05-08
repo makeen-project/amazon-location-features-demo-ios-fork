@@ -21,6 +21,17 @@ enum SideBarButtonState {
     }
 }
 
+enum MapSearchState {
+    case hidden
+    case primaryVisible
+    case onlySecondaryVisible
+}
+
+protocol MapSearchFloatingViewDelegate: AnyObject {
+    func changeSplitState(to state: SideBarButtonState)
+    func searchActivated()
+}
+
 final class MapSearchFloatingView: UIView {
     
     private let containerView: UIView =  {

@@ -823,7 +823,6 @@ extension ExploreView: MGLMapViewDelegate {
             mapView?.setCenter(CLLocationCoordinate2D(latitude: lat, longitude: long), zoomLevel: Constant.singleAnnotationMapZoomValue, animated: false)
         }
         
-        
         delegate?.showPoiCard(cardData: cardData)
     }
     

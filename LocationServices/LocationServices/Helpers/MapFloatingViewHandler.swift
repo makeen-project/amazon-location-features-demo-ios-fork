@@ -1,36 +1,22 @@
 //
-//  MapVC.swift
+//  MapFloatingViewHandler.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
-import SnapKit
 
-enum MapSearchState {
-    case hidden
-    case primaryVisible
-    case onlySecondaryVisible
-}
-
-final class MapVC: UIViewController {
+class MapFloatingViewHandler {
+    weak var delegate: SplitViewVisibilityProtocol?
     
-    var viewModel: MapViewModelProtocol! {
-        didSet {
-            viewModel.delegate = self
-        }
-    }
-    
-    private let mapContainerView = MapContainerView()
+    private weak var viewController: UIViewController?
     private let mapSearchFloatingView = MapSearchFloatingView()
     
-    weak var delegate: MapNavigationDelegate?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupNavigationSearch(state: .onlySecondaryVisible)
+    init(viewController: UIViewController) {
+        self.viewController = viewController
+        
+        mapSearchFloatingView.delegate = self
     }
     
     func setupNavigationSearch(state: MapSearchState) {
@@ -49,31 +35,18 @@ final class MapVC: UIViewController {
             sideBarButtonState = .sidebar
         }
         
-        navigationItem.leftBarButtonItem = item
+        viewController?.navigationItem.leftBarButtonItem = item
         if let sideBarButtonState {
             mapSearchFloatingView.setSideBarButtonState(sideBarButtonState)
         }
     }
-    
-    private func setupView() {
-        view.addSubview(mapContainerView)
-        
-        mapContainerView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
-        }
-        
-        mapSearchFloatingView.delegate = self
-    }
 }
 
-extension MapVC: MapViewModelProtocolDelegate {
-}
-
-extension MapVC: MapSearchFloatingViewDelegate {
+extension MapFloatingViewHandler: MapSearchFloatingViewDelegate {
     func changeSplitState(to state: SideBarButtonState) {
         switch state {
         case .sidebar:
-            delegate?.showPrimary()
+            delegate?.showSupplementary()
         case .fullscreen:
             delegate?.showOnlySecondary()
         }
