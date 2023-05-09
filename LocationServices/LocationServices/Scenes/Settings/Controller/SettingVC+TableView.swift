@@ -29,6 +29,12 @@ extension SettingsVC: UITableViewDataSource {
         }
         let data = viewModel.getCellItems(indexPath)
         cell.data = data
+        if UIDevice.current.userInterfaceIdiom == .pad,
+           tableView.indexPathForSelectedRow == nil {
+            tableView.selectRow(at: indexPath,
+                                animated: true,
+                                scrollPosition: .none)
+        }
         return cell
     }
     
