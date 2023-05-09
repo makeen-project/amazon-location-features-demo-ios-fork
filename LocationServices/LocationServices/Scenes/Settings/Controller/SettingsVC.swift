@@ -86,7 +86,11 @@ final class SettingsVC: UIViewController {
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(self.headerTitle.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview()
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                $0.leading.trailing.equalToSuperview()
+            } else {
+                $0.leading.trailing.equalToSuperview().inset(16)
+            }
             $0.bottom.equalTo(logoutButton.snp.top)
         }
     }
