@@ -27,6 +27,7 @@ jobs:
       - name: Setup Config Files
         working-directory: ./LocationServices
         run: |
+          base64 -d <<< ${{ secrets.CONFIG }} > Config.xcconfig
           base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
 
       - name: Run tests
