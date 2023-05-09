@@ -100,12 +100,20 @@ final class AttributionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = false
+        } else {
+            navigationController?.navigationBar.isHidden = true
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = true
+        } else {
+            navigationController?.navigationBar.isHidden = false
+        }
     }
     
     // MARK: - Functions
@@ -129,6 +137,7 @@ final class AttributionVC: UIViewController {
         let learnMoreButtonTopPadding = 24
         let learnMoreButtonHeight = 48
         
+        separatorView.isHidden = UIDevice.current.userInterfaceIdiom == .pad
         separatorView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
@@ -150,7 +159,11 @@ final class AttributionVC: UIViewController {
         partnerAttributionlearnButton.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionDescriptionLabel.snp.bottom).offset(learnMoreButtonTopPadding)
             $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                $0.trailing.equalToSuperview().offset(trailingPadding)
+            } else {
+                $0.trailing.greaterThanOrEqualToSuperview().offset(trailingPadding)
+            }
             $0.height.equalTo(learnMoreButtonHeight)
         }
         
