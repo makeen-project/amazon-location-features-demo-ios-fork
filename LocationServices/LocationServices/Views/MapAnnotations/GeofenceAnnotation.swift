@@ -42,7 +42,7 @@ class GeofenceAnnotationView: MGLAnnotationView {
     enum Constants {
         static let iconSize: CGSize = CGSize(width: 30, height: 30)
     }
-    private var resizeHandleView: UIView?
+    weak private var resizeHandleView: UIView?
     
     weak var mapView: MGLMapView?
     
@@ -143,11 +143,13 @@ class GeofenceAnnotationView: MGLAnnotationView {
                 accuracyRingLayer?.cornerRadius = accuracyRingSize / 2.0
                 
                 CATransaction.commit()
+                positionResizeHandle()
             } else {
                 accuracyRingLayer?.isHidden = true
+                resizeHandleView?.isHidden = true
             }
             
-            positionResizeHandle()
+
         }
         
         oldZoom = mapView.zoomLevel
@@ -178,10 +180,8 @@ class GeofenceAnnotationView: MGLAnnotationView {
     func addResizeHandle() {
             let resizeHandleSize: CGFloat = 20.0
             let resizeHandleView = UIView(frame: CGRect(x: 0, y: 0, width: resizeHandleSize, height: resizeHandleSize))
-            resizeHandleView.backgroundColor = .white
+            resizeHandleView.backgroundColor = mapView?.tintColor
             resizeHandleView.layer.cornerRadius = resizeHandleSize / 2.0
-            resizeHandleView.layer.borderWidth = 2.0
-            resizeHandleView.layer.borderColor = UIColor.black.cgColor
         resizeHandleView.isUserInteractionEnabled = true
         addSubview(resizeHandleView)
         self.bringSubviewToFront(resizeHandleView)
@@ -192,7 +192,7 @@ class GeofenceAnnotationView: MGLAnnotationView {
 
         func positionResizeHandle() {
             guard let resizeHandleView = resizeHandleView else { return }
-            resizeHandleView.center = CGPoint(x: accuracyRingLayer!.cornerRadius+15, y: 10)
+            resizeHandleView.center = CGPoint(x: accuracyRingLayer!.cornerRadius+13, y: 10)
         }
 
         @objc func handleResizeHandlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
@@ -213,8 +213,17 @@ class GeofenceAnnotationView: MGLAnnotationView {
             
             // Update the geofenceAnnotation radius with some minimum radius constraint
             let minimumRadius: CLLocationDistance = 50
-            geofenceAnnotation.radius = max(minimumRadius, updatedRadius)
-            drawCircle()
+            geofenceAnnotation.radius = round(max(minimumRadius, updatedRadius))
+            
+            let userInfo = ["radius": geofenceAnnotation.radius]
+            NotificationCenter.default.post(name: Notification.geofenceRadiusDragged, object: nil, userInfo: userInfo)
+            
+            let model = GeofenceDataModel(id: geofenceAnnotation.id,
+                                          lat: geofenceAnnotation.coordinate.latitude,
+                                          long: geofenceAnnotation.coordinate.longitude,
+                                          radius: Int64(geofenceAnnotation.radius))
+            let geofenceModel = ["geofenceModel" : model]
+            NotificationCenter.default.post(name: Notification.geofenceEditScene, object: nil, userInfo: geofenceModel)
             
             gestureRecognizer.setTranslation(.zero, in: self)
         }
