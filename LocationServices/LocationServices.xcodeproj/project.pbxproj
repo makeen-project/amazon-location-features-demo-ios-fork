@@ -351,6 +351,7 @@
 		ADF26F7829303E16000147A0 /* AWSUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF26F7729303E16000147A0 /* AWSUserModel.swift */; };
 		DF8005DF2A0A6C6A00758BBE /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */; };
 		DF8005E12A0A737000758BBE /* WebViewVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */; };
+		DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */; };
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
@@ -739,6 +740,7 @@
 		ADF26F7729303E16000147A0 /* AWSUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSUserModel.swift; sourceTree = "<group>"; };
 		DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
 		DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVCBuilder.swift; sourceTree = "<group>"; };
+		DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
@@ -2818,6 +2820,7 @@
 				8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */,
 				8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */,
 				8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */,
+				DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3137,6 +3140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADC475002971E9E900AAE7A3 /* AmazonLocationButton.swift in Sources */,
+				DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */,
 				AD2061772968A871005F8BBB /* LoginDefaultInformationView.swift in Sources */,
 				ADC97385295EDA23005AE918 /* NavigationViewModel.swift in Sources */,
 				ADC1245629774B4000B08C20 /* MapviewOverlayItems.swift in Sources */,
