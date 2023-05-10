@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import SnapKit
 
 final class AttributionVC: UIViewController {
     
@@ -89,6 +90,22 @@ final class AttributionVC: UIViewController {
         return button
     }()
     
+    private var partnerAttributionButtonTrailingConstraint: Constraint?
+    private var softwareAttributionButtonTrailingConstraint: Constraint?
+    
+    private let horizontalPadding: CGFloat = 24
+    private let largeTrailingPadding: CGFloat = 127
+    
+    private var currentButtonPadding: CGFloat {
+        switch UIDevice.current.getDeviceOrientation() {
+        case .landscapeLeft,
+                .landscapeRight:
+            return largeTrailingPadding
+        default:
+            return horizontalPadding
+        }
+    }
+    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,16 +113,30 @@ final class AttributionVC: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         setupNavigationItems()
         setupViews()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(deviceOrientationDidChange(_:)),
+                                                   name: UIDevice.orientationDidChangeNotification,
+                                                   object: nil)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = false
+        } else {
+            navigationController?.navigationBar.isHidden = true
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = true
+        } else {
+            navigationController?.navigationBar.isHidden = false
+        }
     }
     
     // MARK: - Functions
@@ -123,12 +154,11 @@ final class AttributionVC: UIViewController {
         view.addSubview(softwareAttributionDescriptionLabel)
         view.addSubview(softwareAttributionlearnButton)
         
-        let leadingPadding = 24
-        let trailingPadding = -24
         let descriptionTopPadding = 10
         let learnMoreButtonTopPadding = 24
         let learnMoreButtonHeight = 48
         
+        separatorView.isHidden = UIDevice.current.userInterfaceIdiom == .pad
         separatorView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
@@ -137,41 +167,39 @@ final class AttributionVC: UIViewController {
         
         partnerAttributionTitleLabel.snp.makeConstraints {
             $0.top.equalTo(separatorView.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
         }
         
         partnerAttributionDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionTitleLabel.snp.bottom).offset(descriptionTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
         }
         
         partnerAttributionlearnButton.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionDescriptionLabel.snp.bottom).offset(learnMoreButtonTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.leading.equalToSuperview().offset(self.horizontalPadding)
+            self.partnerAttributionButtonTrailingConstraint = $0.trailing.equalToSuperview().inset(self.currentButtonPadding).constraint
             $0.height.equalTo(learnMoreButtonHeight)
         }
+        partnerAttributionButtonTrailingConstraint?.activate()
         
         softwareAttributionTitleLabel.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionlearnButton.snp.bottom).offset(40)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
         }
         
         softwareAttributionDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(softwareAttributionTitleLabel.snp.bottom).offset(descriptionTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
         }
         
         softwareAttributionlearnButton.snp.makeConstraints {
             $0.top.equalTo(softwareAttributionDescriptionLabel.snp.bottom).offset(learnMoreButtonTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.leading.equalToSuperview().offset(self.horizontalPadding)
+            self.softwareAttributionButtonTrailingConstraint = $0.trailing.equalToSuperview().inset(self.currentButtonPadding).constraint
             $0.height.equalTo(learnMoreButtonHeight)
         }
+        softwareAttributionButtonTrailingConstraint?.activate()
     }
     
     private func openSafariBrowser(with url: URL?) {
@@ -179,6 +207,15 @@ final class AttributionVC: UIViewController {
         
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true)
+    }
+    
+    @objc private func deviceOrientationDidChange(_ notification: Notification) {
+        updateButtonConstraints()
+    }
+    
+    private func updateButtonConstraints() {
+        partnerAttributionButtonTrailingConstraint?.update(inset: currentButtonPadding)
+        softwareAttributionButtonTrailingConstraint?.update(inset: currentButtonPadding)
     }
     
     // NARK: - Actions

@@ -36,4 +36,7 @@ extension UIColor {
     static let lsInfo = UIColor(named: "lsInfo")!
     static let lsLight3 = UIColor(named: "lsLight3")!
     
+    // Settings & About Colors
+    static let settingsSelectionColor = UIColor(named: "settingsSelectionColor")!
+    
 }

@@ -349,6 +349,9 @@
 		ADF26F6529300E59000147A0 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADF26F6429300E59000147A0 /* SafariServices.framework */; };
 		ADF26F72293028BE000147A0 /* AWSLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF26F71293028BD000147A0 /* AWSLoginService.swift */; };
 		ADF26F7829303E16000147A0 /* AWSUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF26F7729303E16000147A0 /* AWSUserModel.swift */; };
+		DF8005DF2A0A6C6A00758BBE /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */; };
+		DF8005E12A0A737000758BBE /* WebViewVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */; };
+		DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */; };
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
@@ -735,6 +738,9 @@
 		ADF26F6429300E59000147A0 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		ADF26F71293028BD000147A0 /* AWSLoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSLoginService.swift; sourceTree = "<group>"; };
 		ADF26F7729303E16000147A0 /* AWSUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSUserModel.swift; sourceTree = "<group>"; };
+		DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
+		DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVCBuilder.swift; sourceTree = "<group>"; };
+		DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
@@ -2118,6 +2124,7 @@
 		ADBD7FB42949B55C005DB4E4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				DF8005DB2A0A6B6C00758BBE /* WebViewController */,
 				ADC1245129774A6700B08C20 /* MapView */,
 				ADBD7FBE2949CB9C005DB4E4 /* BottomSheet Controller */,
 				ADF26F56292FEC0A000147A0 /* SearchBarView.swift */,
@@ -2813,6 +2820,7 @@
 				8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */,
 				8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */,
 				8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */,
+				DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2848,6 +2856,31 @@
 				ADC1249929788D0100B08C20 /* GeofenceDataModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		DF8005DB2A0A6B6C00758BBE /* WebViewController */ = {
+			isa = PBXGroup;
+			children = (
+				DF8005DC2A0A6C5500758BBE /* Builder */,
+				DF8005DD2A0A6C5B00758BBE /* Controller */,
+			);
+			path = WebViewController;
+			sourceTree = "<group>";
+		};
+		DF8005DC2A0A6C5500758BBE /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		DF8005DD2A0A6C5B00758BBE /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3107,6 +3140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADC475002971E9E900AAE7A3 /* AmazonLocationButton.swift in Sources */,
+				DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */,
 				AD2061772968A871005F8BBB /* LoginDefaultInformationView.swift in Sources */,
 				ADC97385295EDA23005AE918 /* NavigationViewModel.swift in Sources */,
 				ADC1245629774B4000B08C20 /* MapviewOverlayItems.swift in Sources */,
@@ -3214,6 +3248,7 @@
 				ADB0B9A0295AF59600C219EC /* DirectionPresentation.swift in Sources */,
 				ADD5D7D5296F87430022480B /* AddGeofenceViewModel.swift in Sources */,
 				AD2AF0E5292EAC8700149904 /* AboutCoordinator.swift in Sources */,
+				DF8005DF2A0A6C6A00758BBE /* WebViewVC.swift in Sources */,
 				8ACD71D42A091AFC00EC23F3 /* MapSearchFloatingView.swift in Sources */,
 				ADF26F72293028BE000147A0 /* AWSLoginService.swift in Sources */,
 				ADB0B9A5295BAE2B00C219EC /* Double+Extension.swift in Sources */,
@@ -3279,6 +3314,7 @@
 				8A1110DB297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift in Sources */,
 				8AFDA09429DDBB3600114BB7 /* VersionVC.swift in Sources */,
 				8AF7D2AB2976B3F700E1563E /* LocationManager.swift in Sources */,
+				DF8005E12A0A737000758BBE /* WebViewVCBuilder.swift in Sources */,
 				AD2AF097292EA8CE00149904 /* GeofenceViewModel.swift in Sources */,
 				ADABECE12940F5BF00E66FC5 /* MapModel.swift in Sources */,
 				8AD67F9729D1A9E4004A5F7D /* MapStyleTypes.swift in Sources */,

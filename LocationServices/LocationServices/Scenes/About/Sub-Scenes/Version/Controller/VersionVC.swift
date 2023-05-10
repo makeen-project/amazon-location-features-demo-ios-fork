@@ -11,6 +11,14 @@ import SnapKit
 final class VersionVC: UIViewController {
     
     // MARK: - Views
+    private var screenTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .amazonFont(type: .bold,
+                                 size: 20)
+        label.text = StringConstant.version
+        return label
+    }()
+    
     private var appVersionLabel: UILabel = {
         var label = UILabel()
         label.text = StringConstant.appVersion + UIApplication.appVersion()
@@ -47,12 +55,20 @@ final class VersionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = false
+        } else {
+            navigationController?.navigationBar.isHidden = true
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = true
+        } else {
+            navigationController?.navigationBar.isHidden = false
+        }
     }
     
     // MARK: - Functions
@@ -62,12 +78,24 @@ final class VersionVC: UIViewController {
     }
     
     private func setupViews() {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+                make.leading.equalToSuperview().offset(24)
+            }
+        }
         view.addSubview(appVersionLabel)
         view.addSubview(copyrightLabel)
         view.addSubview(logoIcon)
         
         appVersionLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            if isPad {
+                $0.top.equalTo(screenTitleLabel.snp.bottom).offset(16)
+            } else {
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            }
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
         }

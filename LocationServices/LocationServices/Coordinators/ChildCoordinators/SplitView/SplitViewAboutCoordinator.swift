@@ -45,7 +45,7 @@ extension SplitViewAboutCoordinator: AboutNavigationDelegate {
         case .version:
             showVersionScene()
         case .help:
-            openSafariBrowser(with: URL(string: StringConstant.helpURL))
+            showHelpScene()
         }
     }
     
@@ -61,6 +61,11 @@ extension SplitViewAboutCoordinator: AboutNavigationDelegate {
     
     private func showTermsAndConditionsScene() {
         let controller = TermsAndConditionsVCBuilder.create()
+        changeSecondaryVC(to: controller)
+    }
+    
+    private func showHelpScene() {
+        let controller = WebViewVCBuilder.create(rawUrl: StringConstant.helpURL)
         changeSecondaryVC(to: controller)
     }
     

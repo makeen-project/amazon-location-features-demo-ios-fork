@@ -33,7 +33,11 @@ final class AboutVC: UIViewController {
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                $0.leading.trailing.equalToSuperview()
+            } else {
+                $0.leading.trailing.equalToSuperview().inset(16)
+            }
             $0.bottom.equalToSuperview().offset(-16)
         }
     }

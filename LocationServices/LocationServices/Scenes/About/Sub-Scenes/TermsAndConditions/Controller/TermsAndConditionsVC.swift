@@ -12,6 +12,14 @@ import SafariServices
 final class TermsAndConditionsVC: UIViewController {
     
     // MARK: - Views
+    private var screenTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .amazonFont(type: .bold,
+                                 size: 20)
+        label.text = StringConstant.termsAndConditions
+        return label
+    }()
+    
     private var desctiptionTextView: UITextView = {
         let tw = UITextView()
         
@@ -54,12 +62,20 @@ final class TermsAndConditionsVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = false
+        } else {
+            navigationController?.navigationBar.isHidden = true
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = true
+        } else {
+            navigationController?.navigationBar.isHidden = false
+        }
     }
     
     // MARK: - Functions
@@ -69,10 +85,23 @@ final class TermsAndConditionsVC: UIViewController {
     }
     
     private func setupViews() {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+                make.leading.equalToSuperview().offset(24)
+            }
+        }
+        
         view.addSubview(desctiptionTextView)
         
         desctiptionTextView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            if isPad {
+                $0.top.equalTo(screenTitleLabel.snp.bottom).offset(16)
+            } else {
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            }
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
         }
