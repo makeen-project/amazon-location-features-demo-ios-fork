@@ -61,7 +61,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         controller.modalPresentationStyle = .formSheet
         controller.isModalInPresentation = true
         controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
+            self?.splitViewController.dismiss(animated: true)
         }
         if let sheet = controller.sheetPresentationController {
             sheet.preferredCornerRadius = 10
