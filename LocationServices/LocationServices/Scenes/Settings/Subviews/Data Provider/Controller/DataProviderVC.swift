@@ -12,9 +12,18 @@ final class DataProviderVC: UIViewController {
     var selectedCell: Int = 0
     var viewModel: DataProviderViewModelProtocol! {
         didSet {
-         viewModel.delegate = self
+            viewModel.delegate = self
         }
     }
+    
+    private var screenTitleLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = .amazonFont(type: .bold,
+                                 size: 20)
+        label.text = StringConstant.dataProvider
+        return label
+    }()
         
     var tableView: UITableView = {
         let tableView = UITableView()
@@ -29,16 +38,45 @@ final class DataProviderVC: UIViewController {
         viewModel.loadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = false
+        } else {
+            navigationController?.navigationBar.isHidden = true
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = true
+        } else {
+            navigationController?.navigationBar.isHidden = false
+        }
+    }
+    
     private func setupViews() {
-        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-        self.navigationItem.title = "Data Provider"
+        self.navigationItem.title = StringConstant.dataProvider
         self.view.backgroundColor = .white
         
-        self.view.addSubview(tableView)
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+                make.horizontalEdges.equalToSuperview().inset(24)
+            }
+        }
         
+        self.view.addSubview(tableView)
         tableView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            if isPad {
+                $0.top.equalTo(screenTitleLabel.snp.bottom)
+            } else {
+                $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            }
             $0.leading.bottom.trailing.equalToSuperview()
         }
     }

@@ -10,6 +10,16 @@ import SnapKit
 
 final class RouteOptionVC: UIViewController {
     
+    private var screenTitleLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.font = .amazonFont(type: .bold,
+                                 size: 20)
+        label.text = StringConstant.defaultRouteOptions
+        return label
+    }()
+    
     private var routeOptions = RouteOptionRowView()
     
     var viewModel: RouteOptionViewModelProtocol! {
@@ -25,16 +35,45 @@ final class RouteOptionVC: UIViewController {
         viewModel.loadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = false
+        } else {
+            navigationController?.navigationBar.isHidden = true
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = true
+        } else {
+            navigationController?.navigationBar.isHidden = false
+        }
+    }
+    
     private func setupViews() {
-        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
         self.navigationItem.title = StringConstant.defaultRouteOptions
         self.view.backgroundColor = .white
         
-        self.view.addSubview(routeOptions)
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+                make.horizontalEdges.equalToSuperview().inset(24)
+            }
+        }
         
+        self.view.addSubview(routeOptions)
         routeOptions.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            if isPad {
+                $0.top.equalTo(screenTitleLabel.snp.bottom)
+            } else {
+                $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            }
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }
