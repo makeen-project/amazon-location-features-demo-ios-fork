@@ -78,6 +78,16 @@ final class AddGeofenceSearchView: UIView {
                                                         fontColor: .searchBarTintColor,
                                                         textAlignment: .center)
     
+    func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(geofenceRadiusDragged(_:)), name: Notification.geofenceRadiusDragged, object: nil)
+    }
+    
+    @objc private func geofenceRadiusDragged(_ notification: Notification){
+        let radius = notification.userInfo?["radius"] as! Double
+        radiusSlider.value = Float(radius)
+        radiusSliderValue.text = Int(radius).convertToKm()
+    }
+    
     func hideRadiusViews(state: Bool) {
         self.radiusSliderValue.isHidden = state
         self.radiusSlider.isHidden = state
@@ -89,6 +99,7 @@ final class AddGeofenceSearchView: UIView {
         super.init(frame: frame)
         searchTextField.delegate = self
         setupViews()
+        setupNotifications()
     }
     
     required init?(coder: NSCoder) {
