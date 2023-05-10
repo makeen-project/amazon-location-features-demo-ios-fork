@@ -13,9 +13,6 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController = UINavigationController()
     var type: CoordinatorType { .tracking }
-    var didSendEventClosure: VoidHandler?
-    var didSendDirectionEvent: VoidHandler?
-    var geofenceHandler: VoidHandler?
     
     private let splitViewController: UISplitViewController
     private var supplementaryNavigationController: UINavigationController? {
@@ -26,6 +23,12 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     
     private lazy var supplementaryController: TrackingDashboardController = {
         let controller = TrackingDashboardBuilder.create()
+        controller.trackingHistoryHandler = { [weak self] in
+            self?.showTrackingHistory()
+        }
+        controller.closeHandler = { [weak self] in
+            self?.navigationController.dismiss(animated: true, completion: nil)
+        }
         return controller
     }()
     
@@ -35,7 +38,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         
         floatingView = MapFloatingViewHandler(viewController: controller)
         floatingView?.delegate = splitDelegate
-        floatingView?.setupNavigationSearch(state: .primaryVisible)
+        floatingView?.setupNavigationSearch(state: .onlySecondaryVisible)
         return controller
     }()
     
@@ -50,19 +53,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
 
 extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     func showNextTrackingScene() {
-        showDashboardFlow()
-    }
-    
-    func showDashboardFlow() {
-        let controller = TrackingDashboardBuilder.create()
-        controller.trackingHistoryHandler = { [weak self] in
-            self?.showTrackingHistory()
-        }
-        controller.closeHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: nil)
-        }
         
-        supplementaryNavigationController?.pushViewController(controller, animated: true)
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
@@ -86,7 +77,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     }
     
     func showLoginFlow() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = splitViewController.navigationController
+        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
         
         let controller = LoginVCBuilder.create()
         controller.dismissHandler = { [weak self] in
@@ -106,7 +97,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     }
     
     func showLoginSuccess() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = splitViewController.navigationController
+        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
         
         splitViewController.dismiss(animated: true) { [weak self] in
             let controller = PostLoginBuilder.create()

@@ -32,7 +32,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showNextTrackingScene() {
-        showDashboardFlow()
+        //showDashboardFlow()
     }
     
     func showDashboardFlow() {

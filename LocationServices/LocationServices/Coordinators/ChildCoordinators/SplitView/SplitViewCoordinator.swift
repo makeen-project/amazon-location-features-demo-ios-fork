@@ -79,9 +79,10 @@ final class SplitViewCoordinator: Coordinator {
     private func getTrackingCoordinator() -> Coordinator {
         if let coordinator = childCoordinators.first(where: { $0 is SplitViewTrackingMapCoordinator }) {
             return coordinator
-        } else {
-            return SplitViewTrackingMapCoordinator(splitViewController: splitViewController)
         }
+        let coordinator = SplitViewTrackingMapCoordinator(splitViewController: splitViewController)
+        coordinator.splitDelegate = self
+        return coordinator
     }
     
     private func getGeofenceCoordinator() -> Coordinator {

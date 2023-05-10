@@ -40,7 +40,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         guard let navigationContoller = (UIApplication.shared.delegate as? AppDelegate)?.navigationController else { return }
         
         let hostedUIOptions = HostedUIOptions(scopes: ["openid", "email", "profile"], federationProviderName: "LoginWithAmazon")
-        
         AWSMobileClient.default().showSignIn(navigationController: navigationContoller, hostedUIOptions: hostedUIOptions) { (userState, error) in
             if let error = error as? AWSMobileClientError {
                 print(error.localizedDescription)
