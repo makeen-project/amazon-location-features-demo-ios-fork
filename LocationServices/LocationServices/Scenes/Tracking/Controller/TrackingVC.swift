@@ -43,6 +43,7 @@ final class TrackingVC: UIViewController {
     }()
     
     weak var delegate: TrackingNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewTrackingMapCoordinator }
     
     var viewModel: TrackingViewModelProtocol! {
         didSet {
@@ -203,8 +204,7 @@ final class TrackingVC: UIViewController {
     }
     
     private func setupViews() {
-        self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
-        
+        self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)        
         navigationController?.navigationBar.isHidden = true
         self.view.addSubview(trackingMapView)
         self.view.addSubview(historyHeaderView)
