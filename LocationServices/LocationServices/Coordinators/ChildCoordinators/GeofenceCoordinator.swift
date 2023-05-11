@@ -43,23 +43,6 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             }
         }
     }
-
-    func showSearchSceneWith(lat: Double?, long: Double?) {
-      
-        let controller = SearchVCBuilder.create()
-        controller.userLocation = (lat, long)
-        controller.modalPresentationStyle = .pageSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.large(), .medium()]
-            sheet.selectedDetentIdentifier = .large
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.preferredCornerRadius = 10
-        }
-        
-        navigationController.present(controller, animated: true)
-    }
     
     func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?) {
         let controller = GeofenceDashboardBuilder.create(lat: lat, long: long, geofences: geofences)

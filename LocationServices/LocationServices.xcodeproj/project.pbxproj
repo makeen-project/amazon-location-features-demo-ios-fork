@@ -54,6 +54,7 @@
 		8A6B834A29DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */; };
 		8A6C390629A25E480003666C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390529A25E480003666C /* Reachability.swift */; };
 		8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */; };
+		8A6C40772A0CE84F00A4C40D /* SplitViewGeofencingMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C40762A0CE84F00A4C40D /* SplitViewGeofencingMapCoordinator.swift */; };
 		8A7088B729EE96000066BF60 /* UITestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B429EE95AB0066BF60 /* UITestConstants.swift */; };
 		8A7088B929EE972C0066BF60 /* UITestScreenshotComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */; };
 		8A75093729EEE1D100B9985F /* NumberConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A75093629EEE1D100B9985F /* NumberConstants.swift */; };
@@ -448,6 +449,7 @@
 		8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+Extensions.swift"; sourceTree = "<group>"; };
 		8A6C390529A25E480003666C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetConnectionView.swift; sourceTree = "<group>"; };
+		8A6C40762A0CE84F00A4C40D /* SplitViewGeofencingMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewGeofencingMapCoordinator.swift; sourceTree = "<group>"; };
 		8A7088B429EE95AB0066BF60 /* UITestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConstants.swift; sourceTree = "<group>"; };
 		8A7088B829EE972C0066BF60 /* UITestScreenshotComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestScreenshotComparator.swift; sourceTree = "<group>"; };
 		8A75093629EEE1D100B9985F /* NumberConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberConstants.swift; sourceTree = "<group>"; };
@@ -1063,6 +1065,7 @@
 				8A663BCF2A03E5750092645E /* SplitViewSettingsCoordinator.swift */,
 				8ACD71C72A08F6F200EC23F3 /* SplitViewExploreMapCoordinator.swift */,
 				DF8005E42A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift */,
+				8A6C40762A0CE84F00A4C40D /* SplitViewGeofencingMapCoordinator.swift */,
 			);
 			path = SplitView;
 			sourceTree = "<group>";
@@ -3382,6 +3385,7 @@
 				8A30A7FB29FA88EE0012AE71 /* SideBarBuilder.swift in Sources */,
 				AD16A42229357F38006AEA8E /* UserDefaultsHelper.swift in Sources */,
 				8A1110DC297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift in Sources */,
+				8A6C40772A0CE84F00A4C40D /* SplitViewGeofencingMapCoordinator.swift in Sources */,
 				AD989736298B2DF00041E867 /* TrackingDashboardBuilder.swift in Sources */,
 				8AB3F19E29C8AF22008FDF37 /* ViewsIdentifiers.swift in Sources */,
 				8A1110DC297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift in Sources */,

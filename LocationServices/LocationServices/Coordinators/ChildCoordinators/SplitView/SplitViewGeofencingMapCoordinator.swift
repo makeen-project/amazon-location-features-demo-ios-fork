@@ -1,5 +1,5 @@
 //
-//  SplitViewTrackingMapCoordinator.swift
+//  SplitViewGeofencingMapCoordinator.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -7,12 +7,13 @@
 
 import UIKit
 
-final class SplitViewTrackingMapCoordinator: Coordinator {
+final class SplitViewGeofencingMapCoordinator: Coordinator {
     weak var delegate: CoordinatorCompletionDelegate?
     weak var splitDelegate: SplitViewVisibilityProtocol?
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController = UINavigationController()
-    var type: CoordinatorType { .tracking }
+    var type: CoordinatorType { .geofence }
+    var directionHandler: VoidHandler?
     
     private let splitViewController: UISplitViewController
     private var supplementaryNavigationController: UINavigationController? {
@@ -21,20 +22,25 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     
     private var floatingView: MapFloatingViewHandler?
     
-    private lazy var supplementaryController: TrackingDashboardController = {
-        let controller = TrackingDashboardBuilder.create()
-        controller.trackingHistoryHandler = { [weak self] in
-            self?.showTrackingHistory()
-        }
-        controller.closeHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: nil)
+    private lazy var supplementaryController: GeofenceDashboardVC = {
+        let controller = GeofenceDashboardBuilder.create(lat: nil, long: nil, geofences: [])
+        controller.addGeofence = { [weak self] parameters in
+            self?.showAddGeofenceFlow(activeGeofencesLists: parameters.activeGeofences,
+                                      isEditingSceneEnabled: parameters.isEditingSceneEnabled,
+                                      model: parameters.geofenceData,
+                                      lat: parameters.userlocation?.lat,
+                                      long: parameters.userlocation?.long)
+            
         }
         return controller
     }()
     
-    private lazy var secondaryController: TrackingVC = {
-        let controller = TrackingVCBuilder.create()
+    private lazy var secondaryController: GeofenceVC = {
+        let controller = GeofenceBuilder.create()
         controller.delegate = self
+        controller.directioButtonHandler = {
+            self.directionHandler?()
+        }
         
         floatingView = MapFloatingViewHandler(viewController: controller)
         floatingView?.delegate = splitDelegate
@@ -45,9 +51,9 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     init(splitViewController: UISplitViewController) {
         self.splitViewController = splitViewController
     }
-    
+
     func start() {
-        showTrackingScene()
+        showGeofenceScene()
     }
     
     func setupNavigationSearch(state: MapSearchState) {
@@ -55,14 +61,39 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     }
 }
 
-extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
-    func showNextTrackingScene() {
-        
+extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
+    func dismissCurrentScene(geofences: [GeofenceDataModel], shouldDashboardShow: Bool) {
+        if shouldDashboardShow {
+            showDashboardFlow(geofences: geofences, lat: nil, long: nil)
+        } else {
+            splitDelegate?.showOnlySecondary()
+            supplementaryNavigationController?.popToRootViewController(animated: false)
+        }
     }
     
-    func showTrackingHistory(isTrackingActive: Bool = false) {
-        let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
+    func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?) {
+        supplementaryController.userlocation = (lat, long)
+        supplementaryController.datas = geofences
+        supplementaryController.viewModel.geofences = geofences
+        
+        supplementaryNavigationController?.popToRootViewController(animated: false)
+        splitDelegate?.showSupplementary()
+    }
+    
+    func showAddGeofenceFlow(activeGeofencesLists: [GeofenceDataModel],
+                             isEditingSceneEnabled: Bool = false,
+                             model: GeofenceDataModel?,
+                             lat: Double?,
+                             long: Double?) {
+        let controller = AddGeofenceBuilder.create(activeGeofencesLists: activeGeofencesLists,
+                                                   isEditingSceneEnabled: isEditingSceneEnabled,
+                                                   model: model,
+                                                   lat: lat,
+                                                   long: long)
+        controller.delegate = self
+        
         supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitDelegate?.showSupplementary()
     }
     
     func showMapStyleScene() {
@@ -123,8 +154,8 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     }
 }
 
-private extension SplitViewTrackingMapCoordinator {
-    func showTrackingScene() {
+private extension SplitViewGeofencingMapCoordinator {
+    func showGeofenceScene() {
         setSupplementary()
         setSecondary()
     }

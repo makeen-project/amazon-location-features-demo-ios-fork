@@ -86,7 +86,12 @@ final class SplitViewCoordinator: Coordinator {
     }
     
     private func getGeofenceCoordinator() -> Coordinator {
-        fatalError(.errorToBeImplemented)
+        if let coordinator = childCoordinators.first(where: { $0 is SplitViewGeofencingMapCoordinator }) {
+            return coordinator
+        }
+        let coordinator = SplitViewGeofencingMapCoordinator(splitViewController: splitViewController)
+        coordinator.splitDelegate = self
+        return coordinator
     }
     
     private func getSettingsCoordinator() -> Coordinator {

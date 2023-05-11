@@ -209,6 +209,7 @@ private extension SplitViewExploreMapCoordinator {
     }
     
     private func setSecondary() {
-        splitViewController.setViewController(secondaryController, for: .secondary)
+        splitViewController.changeSecondaryViewController(to: secondaryController)
+        splitViewController.show(.secondary)
     }
 }
