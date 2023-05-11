@@ -32,6 +32,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showNextTrackingScene() {
+        //TODO: Made to fix flow for iPad, check if everything works fine for both iPhone and iPad
         //showDashboardFlow()
     }
     
@@ -53,7 +54,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .medium
         }
@@ -69,7 +70,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .medium
         }
@@ -89,7 +90,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -112,7 +113,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.detents = [.large()]
             sheet.selectedDetentIdentifier = .large
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -131,7 +132,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
                 sheet.detents = [.large()]
                 sheet.selectedDetentIdentifier = .large
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.navigationController.present(controller, animated: true)
         }

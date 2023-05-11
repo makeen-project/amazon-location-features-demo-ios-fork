@@ -125,7 +125,7 @@ final class SettingsCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

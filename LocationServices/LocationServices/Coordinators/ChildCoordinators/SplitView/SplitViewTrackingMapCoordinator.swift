@@ -74,7 +74,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
             self?.splitViewController.dismiss(animated: true)
         }
         if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         splitViewController.present(controller, animated: true)
@@ -95,7 +95,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         controller.modalPresentationStyle = .formSheet
 
         if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         splitViewController.present(controller, animated: true)
     }
@@ -111,7 +111,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
             controller.modalPresentationStyle = .formSheet
 
             if let sheet = controller.sheetPresentationController {
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.splitViewController.present(controller, animated: true)
         }

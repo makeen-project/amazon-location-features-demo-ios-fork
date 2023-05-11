@@ -55,7 +55,7 @@ final class MapStyleCell: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     func isCellSelected(state: Bool) {

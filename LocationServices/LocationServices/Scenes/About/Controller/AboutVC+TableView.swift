@@ -25,7 +25,7 @@ extension AboutVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AboutCell.reuseId, for: indexPath) as? AboutCell else {
-            fatalError("Settings Cell can't be deque")
+            fatalError("\(AboutCell.reuseId) \(String.cellCanNotBeDequed)")
         }
         let data = viewModel.getCellItems(indexPath)
         cell.model = data

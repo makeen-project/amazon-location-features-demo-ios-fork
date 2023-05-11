@@ -45,7 +45,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         navigationController.present(controller, animated: true)
@@ -109,7 +109,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .large
             sheet.selectedDetentIdentifier = mediumId
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         navigationController.present(controller, animated: true)
@@ -130,7 +130,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.selectedDetentIdentifier = .medium
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         navigationController.present(controller, animated: true)
@@ -158,7 +158,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
                 sheet.largestUndimmedDetentIdentifier = smallId
                 sheet.selectedDetentIdentifier = smallId
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             
             self.navigationController.present(controller, animated: true)
@@ -182,7 +182,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
                 sheet.selectedDetentIdentifier = .medium
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
                 sheet.largestUndimmedDetentIdentifier = self.getCollapsedDetentId()
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
                 sheet.prefersGrabberVisible = true
             }
             
@@ -208,7 +208,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.detents = [.large()]
             sheet.selectedDetentIdentifier = .large
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -227,7 +227,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
                 sheet.detents = [.large()]
                 sheet.selectedDetentIdentifier = .large
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.navigationController.present(controller, animated: true)
         }
