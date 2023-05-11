@@ -21,6 +21,7 @@ extension String {
     
     static let errorCellCannotBeInititalized = "Cell can't be initilized"
     static let errorJSONDecoder = "JSON Decoder Error"
+    static let cellCanNotBeDequed = "Cell can't be dequed"
     
     static let errorToBeImplemented = "to be implemented"
 }

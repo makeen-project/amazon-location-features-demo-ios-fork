@@ -61,10 +61,10 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         controller.modalPresentationStyle = .formSheet
         controller.isModalInPresentation = true
         controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
+            self?.splitViewController.dismiss(animated: true)
         }
         if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         splitViewController.present(controller, animated: true)
@@ -150,7 +150,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         controller.modalPresentationStyle = .formSheet
 
         if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         splitViewController.present(controller, animated: true)
     }
@@ -166,7 +166,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
             controller.modalPresentationStyle = .formSheet
 
             if let sheet = controller.sheetPresentationController {
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.splitViewController.present(controller, animated: true)
         }
@@ -209,6 +209,7 @@ private extension SplitViewExploreMapCoordinator {
     }
     
     private func setSecondary() {
-        splitViewController.setViewController(secondaryController, for: .secondary)
+        splitViewController.changeSecondaryViewController(to: secondaryController)
+        splitViewController.show(.secondary)
     }
 }

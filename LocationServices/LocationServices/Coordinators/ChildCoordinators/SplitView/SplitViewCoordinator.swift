@@ -77,11 +77,21 @@ final class SplitViewCoordinator: Coordinator {
     }
     
     private func getTrackingCoordinator() -> Coordinator {
-        fatalError(.errorToBeImplemented)
+        if let coordinator = childCoordinators.first(where: { $0 is SplitViewTrackingMapCoordinator }) {
+            return coordinator
+        }
+        let coordinator = SplitViewTrackingMapCoordinator(splitViewController: splitViewController)
+        coordinator.splitDelegate = self
+        return coordinator
     }
     
     private func getGeofenceCoordinator() -> Coordinator {
-        fatalError(.errorToBeImplemented)
+        if let coordinator = childCoordinators.first(where: { $0 is SplitViewGeofencingMapCoordinator }) {
+            return coordinator
+        }
+        let coordinator = SplitViewGeofencingMapCoordinator(splitViewController: splitViewController)
+        coordinator.splitDelegate = self
+        return coordinator
     }
     
     private func getSettingsCoordinator() -> Coordinator {
@@ -99,6 +109,24 @@ final class SplitViewCoordinator: Coordinator {
             return SplitViewAboutCoordinator(splitViewController: splitViewController)
         }
     }
+    
+    // MARK: - Utility
+    private func updateChildCoordinatorsNavState() {
+        let mapState: MapSearchState
+        switch splitViewController.displayMode {
+        case .secondaryOnly:
+            mapState = .onlySecondaryVisible
+        case .twoBesideSecondary,
+                .twoOverSecondary,
+                .twoDisplaceSecondary:
+            mapState = .primaryVisible
+        default:
+            mapState = .primaryVisible
+            break
+        }
+        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
+    }
 }
 
 extension SplitViewCoordinator: SideBarDelegate {
@@ -107,6 +135,8 @@ extension SplitViewCoordinator: SideBarDelegate {
         coordinator.delegate = delegate
         childCoordinators.append(coordinator)
         coordinator.start()
+        // TODO: Consider updating state more grecefully
+        updateChildCoordinatorsNavState()
     }
 }
 
@@ -164,6 +194,7 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
         }
         
         (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
         
         sideBarButtonItem?.tintColor = .lsPrimary
         viewControllerForShowSecondaryButton?.navigationItem.leftBarButtonItem = sideBarButtonItem

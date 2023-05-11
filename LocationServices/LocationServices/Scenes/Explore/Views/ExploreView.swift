@@ -187,7 +187,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     func hideGeoFence(state: Bool) {

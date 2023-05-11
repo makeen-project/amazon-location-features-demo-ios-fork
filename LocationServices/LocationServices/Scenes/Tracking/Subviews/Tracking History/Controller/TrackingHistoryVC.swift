@@ -148,7 +148,8 @@ final class TrackingHistoryVC: UIViewController {
         
         headerView.snp.makeConstraints {
             $0.height.equalTo(80)
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
         }
         
         scrollView.snp.makeConstraints {

@@ -43,6 +43,7 @@ final class TrackingVC: UIViewController {
     }()
     
     weak var delegate: TrackingNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewTrackingMapCoordinator }
     
     var viewModel: TrackingViewModelProtocol! {
         didSet {
@@ -68,6 +69,10 @@ final class TrackingVC: UIViewController {
         setupHandlers()
         setupViews()
         locationManagerSetup()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            historyHeaderView.isHidden = true
+            grabberIcon.isHidden = true
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -175,6 +180,7 @@ final class TrackingVC: UIViewController {
     }
     
     @objc private func trackingAppearanceChanged(_ notification: Notification) {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         historyHeaderView.isHidden = isVisible
         grabberIcon.isHidden = isVisible
@@ -203,9 +209,8 @@ final class TrackingVC: UIViewController {
     }
     
     private func setupViews() {
-        self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
-        
-        navigationController?.navigationBar.isHidden = true
+        self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)        
+        navigationController?.navigationBar.isHidden = !isInSplitViewController
         self.view.addSubview(trackingMapView)
         self.view.addSubview(historyHeaderView)
         self.view.addSubview(grabberIcon)

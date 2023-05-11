@@ -45,7 +45,7 @@ final class MapNavigationView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     func updateValues(distance: String?, street: String?) {

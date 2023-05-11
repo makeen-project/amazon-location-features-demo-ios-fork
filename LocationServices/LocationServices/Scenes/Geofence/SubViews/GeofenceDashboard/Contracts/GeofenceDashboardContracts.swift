@@ -9,7 +9,7 @@ import Foundation
 
 protocol GeofenceDasboardViewModelProtocol: AnyObject {
     var delegate: GeofenceDasboardViewModelOutputProtocol? { get set }
-    var geofences: [GeofenceDataModel] { get }
+    var geofences: [GeofenceDataModel] { get set }
     
     func fetchListOfGeofences()
     func deleteGeofenceData(model: GeofenceDataModel)
