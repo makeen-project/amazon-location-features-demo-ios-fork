@@ -202,6 +202,7 @@ enum StringConstant {
     static let appVersion = "App version: "
     static let termsAndConditions = "Terms & Conditions"
     static let demo = "Demo"
+    static let routeOverview = "Route Overview"
 }
 
 protocol ConstantsLoginInfoConfig {

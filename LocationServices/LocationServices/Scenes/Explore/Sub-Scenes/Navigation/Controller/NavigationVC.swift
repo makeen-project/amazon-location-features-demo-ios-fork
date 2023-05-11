@@ -9,11 +9,22 @@ import UIKit
 
 final class NavigationVC: UIViewController {
     weak var delegate: ExploreNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
+    
     var viewModel: NavigationVCViewModel! {
         didSet {
             viewModel.delegate = self
         }
     }
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        return stackView
+    }()
     
     private var navigationHeaderView: NavigationHeaderView = NavigationHeaderView()
     
@@ -32,36 +43,51 @@ final class NavigationVC: UIViewController {
         setupTableView()
         setupHandler()
         setupViews()
+        navigationHeaderView.isHidden = isInSplitViewController
+        title = StringConstant.routeOverview
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScreen))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     func setupHandler() {
         navigationHeaderView.dismissHandler = { [weak self] in
-            var lat: Double? = nil
-            var long: Double? = nil
-            if self?.viewModel.firstDestionation?.placeName == StringConstant.myLocation {
-                lat = self?.viewModel.firstDestionation?.placeLat
-                long = self?.viewModel.firstDestionation?.placeLong
-            } else if self?.viewModel.secondDestionation?.placeName == StringConstant.myLocation {
-                lat = self?.viewModel.secondDestionation?.placeLat
-                long = self?.viewModel.secondDestionation?.placeLong
-            }
-            
-            self?.delegate?.showDirections(isRouteOptionEnabled: true, firstDestionation: self?.viewModel.firstDestionation, secondDestionation: self?.viewModel.secondDestionation, lat: lat, long: long)
-            NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+            self?.closeScreen()
         }
     }
     
-    private func setupViews() {
-        self.view.addSubview(navigationHeaderView)
-        self.view.addSubview(tableView)
-        navigationHeaderView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(80)
+    @objc private func closeScreen() {
+        var lat: Double? = nil
+        var long: Double? = nil
+        if viewModel.firstDestionation?.placeName == StringConstant.myLocation {
+            lat = viewModel.firstDestionation?.placeLat
+            long = viewModel.firstDestionation?.placeLong
+        } else if viewModel.secondDestionation?.placeName == StringConstant.myLocation {
+            lat = viewModel.secondDestionation?.placeLat
+            long = viewModel.secondDestionation?.placeLong
         }
         
-        tableView.snp.makeConstraints {
-            $0.top.equalTo(navigationHeaderView.snp.bottom).offset(5)
-            $0.leading.trailing.bottom.equalToSuperview()
+        delegate?.showDirections(isRouteOptionEnabled: true, firstDestionation: viewModel.firstDestionation, secondDestionation: viewModel.secondDestionation, lat: lat, long: long)
+        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+    }
+    
+    private func setupViews() {
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(navigationHeaderView)
+        stackView.addArrangedSubview(tableView)
+        
+        stackView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview()
+        }
+        
+        navigationHeaderView.snp.makeConstraints {
+            $0.height.equalTo(80)
         }
     }
 }
