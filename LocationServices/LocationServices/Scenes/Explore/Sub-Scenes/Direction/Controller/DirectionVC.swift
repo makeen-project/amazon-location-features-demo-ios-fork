@@ -14,6 +14,7 @@ final class DirectionVC: UIViewController {
         static let mediumId = UISheetPresentationController.Detent.Identifier("medium")
     }
     
+    var isInSplitViewController: Bool = false
     var dismissHandler: VoidHandler?
     var isRoutingOptionsEnabled: Bool = false
     var firstDestionation: DirectionTextFieldModel?
@@ -73,6 +74,17 @@ final class DirectionVC: UIViewController {
             directionSearchView.setMyLocationText()
         }
         locationManagerSetup()
+        directionSearchView.changeHeaderVisibility(isHidden: isInSplitViewController)
+        title = StringConstant.directions
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissView))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -478,7 +490,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
 }
 
 extension DirectionVC: DirectionSearchViewOutputDelegate {
-    func dismissView() {
+    @objc func dismissView() {
         deleteScreenDrawing = false
         dismissHandler?()
     }

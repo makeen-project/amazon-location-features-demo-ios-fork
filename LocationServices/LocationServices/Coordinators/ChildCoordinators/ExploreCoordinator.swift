@@ -59,6 +59,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     ) {
         self.dismissSearchScene()
         let controller = DirectionVCBuilder.create()
+        controller.isInSplitViewController = false
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true, completion: {
                 NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
