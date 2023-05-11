@@ -29,6 +29,11 @@ extension SideBarVC: UITableViewDataSource {
         }
         let data = viewModel.getCellItems(indexPath)
         cell.model = data
+        if tableView.indexPathForSelectedRow == nil {
+            tableView.selectRow(at: indexPath,
+                                animated: true,
+                                scrollPosition: .none)
+        }
         return cell
     }
     
