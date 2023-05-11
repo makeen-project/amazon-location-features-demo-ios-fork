@@ -218,12 +218,7 @@ class GeofenceAnnotationView: MGLAnnotationView {
             let userInfo = ["radius": geofenceAnnotation.radius]
             NotificationCenter.default.post(name: Notification.geofenceRadiusDragged, object: nil, userInfo: userInfo)
             
-            let model = GeofenceDataModel(id: geofenceAnnotation.id,
-                                          lat: geofenceAnnotation.coordinate.latitude,
-                                          long: geofenceAnnotation.coordinate.longitude,
-                                          radius: Int64(geofenceAnnotation.radius))
-            let geofenceModel = ["geofenceModel" : model]
-            NotificationCenter.default.post(name: Notification.geofenceEditScene, object: nil, userInfo: geofenceModel)
+            drawCircle()
             
             gestureRecognizer.setTranslation(.zero, in: self)
         }
