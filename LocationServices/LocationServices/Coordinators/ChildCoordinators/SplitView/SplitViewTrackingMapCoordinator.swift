@@ -118,7 +118,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     }
     
     func showAttribution() {
-        let controller = AttributionVCBuilder.create(withNavBar: true)
+        let controller = AttributionVCBuilder.create()
         supplementaryNavigationController?.pushViewController(controller, animated: true)
     }
 }

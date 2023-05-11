@@ -106,18 +106,6 @@ final class AttributionVC: UIViewController {
         }
     }
     
-    private let navBarNeeded: Bool
-    
-    init(navBarNeeded: Bool) {
-        self.navBarNeeded = navBarNeeded
-        super.init(nibName: nil,
-                   bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
-    }
-    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,28 +120,10 @@ final class AttributionVC: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if navBarNeeded {
-            navigationController?.isNavigationBarHidden = false
-        } else {
-            navigationController?.navigationBar.isHidden = true
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if navBarNeeded {
-            navigationController?.isNavigationBarHidden = true
-        } else {
-            navigationController?.navigationBar.isHidden = false
-        }
-    }
-    
     // MARK: - Functions
     private func setupNavigationItems() {
         navigationController?.navigationBar.tintColor = .lsTetriary
-        self.title = StringConstant.attribution
+        title = UIDevice.current.userInterfaceIdiom == .phone ? StringConstant.attribution : ""
     }
     
     private func setupViews() {

@@ -31,6 +31,7 @@ final class TrackingDashboardController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        navigationItem.backButtonTitle = ""
         setupHandlers()
         setupViews()
     }
