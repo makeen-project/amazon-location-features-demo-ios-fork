@@ -44,11 +44,22 @@ final class SearchBarView: UIView {
         }
     }
     
-    private let containerView: UIView =  {
+    private let containerStackView: UIStackView =  {
+        let stackView = UIStackView()
+        stackView.backgroundColor = .searchBarBackgroundColor
+        stackView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        stackView.layer.cornerRadius = 20
+        
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let grabberIconContainerView: UIView =  {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        view.layer.cornerRadius = 20
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -113,9 +124,10 @@ final class SearchBarView: UIView {
         }
     }
     
-    convenience init(becomeFirstResponder: Bool) {
+    convenience init(becomeFirstResponder: Bool, showGrabberIcon: Bool = true) {
         self.init(frame: .zero)
         searchView.searchViewBecomeFirstResponder(state: becomeFirstResponder)
+        grabberIconContainerView.isHidden = !showGrabberIcon
         if becomeFirstResponder {
             let tap = UITapGestureRecognizer(target: self, action: #selector(gestureAction))
             addGestureRecognizer(tap)
@@ -133,25 +145,26 @@ final class SearchBarView: UIView {
     }
     
     private func configure() {
-        self.addSubview(containerView)
-        containerView.addSubview(grabberIcon)
-        containerView.addSubview(searchView)
+        self.addSubview(containerStackView)
+        containerStackView.addArrangedSubview(grabberIconContainerView)
+        grabberIconContainerView.addSubview(grabberIcon)
         
-        containerView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+        containerStackView.addArrangedSubview(searchView)
+        
+        containerStackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         grabberIcon.snp.makeConstraints {
             $0.top.equalToSuperview().offset(7)
             $0.width.equalTo(36)
             $0.height.equalTo(5)
-            $0.centerX.equalToSuperview()
+            $0.centerX.bottom.equalToSuperview()
         }
         
         searchView.snp.makeConstraints {
-            $0.top.equalTo(grabberIcon.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
         }
     }

@@ -11,6 +11,8 @@ import CoreLocation
 
 final class SearchVC: UIViewController {
     weak var delegate: ExploreNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
+    
     var userLocation: (lat: Double?, long: Double?)? {
         didSet {
             guard let lat = userLocation?.lat,
@@ -27,7 +29,9 @@ final class SearchVC: UIViewController {
     var isInitalState: Bool = true
     private var clearAnnotationsOnDisappear = true
     
-    private let searchBarView: SearchBarView = SearchBarView(becomeFirstResponder: false)
+    private lazy var searchBarView: SearchBarView = {
+        SearchBarView(becomeFirstResponder: false, showGrabberIcon: !isInSplitViewController)
+    }()
     
     // TODO: can be created later, marked with optional
     //var searchBarView: SearchBarView = SearchBarView(isAccountBarEnabled: false)

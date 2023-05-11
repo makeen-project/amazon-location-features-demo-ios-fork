@@ -55,7 +55,7 @@ final class MapSearchFloatingView: UIView {
         return view
     }()
     
-    private let searchView = SearchTextField()
+    private let searchView = SearchBarView(becomeFirstResponder: true, showGrabberIcon: false)
     
     weak var delegate: MapSearchFloatingViewDelegate?
     private var sideBarButtonState: SideBarButtonState = .sidebar
@@ -105,12 +105,16 @@ final class MapSearchFloatingView: UIView {
             $0.trailing.equalToSuperview()
         }
         
-        searchView.textFieldActivated = { [weak self] in
-            self?.delegate?.searchActivated()
-        }
+        searchView.delegate = self
     }
     
     @objc private func actionPerformed() {
         delegate?.changeSplitState(to: sideBarButtonState)
+    }
+}
+
+extension MapSearchFloatingView: SearchBarViewOutputDelegate {
+    func searchTextActivated() {
+        delegate?.searchActivated()
     }
 }
