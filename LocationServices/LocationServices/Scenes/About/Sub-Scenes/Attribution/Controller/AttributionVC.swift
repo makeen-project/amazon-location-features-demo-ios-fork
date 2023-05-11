@@ -45,6 +45,14 @@ final class AttributionVC: UIViewController {
         return label
     }()
     
+    private lazy var partnerAttributionControlStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .fillEqually
+        stackView.addArrangedSubview(partnerAttributionlearnButton)
+        stackView.addArrangedSubview(UIView())
+        return stackView
+    }()
+    
     private lazy var partnerAttributionlearnButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.learnMore, for: .normal)
@@ -77,6 +85,14 @@ final class AttributionVC: UIViewController {
         return label
     }()
     
+    private lazy var softwareAttributionControlStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .fillEqually
+        stackView.addArrangedSubview(softwareAttributionlearnButton)
+        stackView.addArrangedSubview(UIView())
+        return stackView
+    }()
+    
     private lazy var softwareAttributionlearnButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.learnMore, for: .normal)
@@ -90,28 +106,13 @@ final class AttributionVC: UIViewController {
         return button
     }()
     
-    private var partnerAttributionButtonTrailingConstraint: Constraint?
-    private var softwareAttributionButtonTrailingConstraint: Constraint?
-    
-    private let horizontalPadding: CGFloat = 24
-    private let largeTrailingPadding: CGFloat = 127
-    
-    private var currentButtonPadding: CGFloat {
-        switch UIDevice.current.getDeviceOrientation() {
-        case .landscapeLeft,
-                .landscapeRight:
-            return largeTrailingPadding
-        default:
-            return horizontalPadding
-        }
-    }
-    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavigationItems()
         setupViews()
+        updateSpacerViews()
         if UIDevice.current.userInterfaceIdiom == .pad {
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(deviceOrientationDidChange(_:)),
@@ -130,11 +131,12 @@ final class AttributionVC: UIViewController {
         view.addSubview(separatorView)
         view.addSubview(partnerAttributionTitleLabel)
         view.addSubview(partnerAttributionDescriptionLabel)
-        view.addSubview(partnerAttributionlearnButton)
+        view.addSubview(partnerAttributionControlStackView)
         view.addSubview(softwareAttributionTitleLabel)
         view.addSubview(softwareAttributionDescriptionLabel)
-        view.addSubview(softwareAttributionlearnButton)
+        view.addSubview(softwareAttributionControlStackView)
         
+        let horizontalPadding = 24
         let descriptionTopPadding = 10
         let learnMoreButtonTopPadding = 24
         let learnMoreButtonHeight = 48
@@ -148,39 +150,35 @@ final class AttributionVC: UIViewController {
         
         partnerAttributionTitleLabel.snp.makeConstraints {
             $0.top.equalTo(separatorView.snp.bottom).offset(24)
-            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
         partnerAttributionDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionTitleLabel.snp.bottom).offset(descriptionTopPadding)
-            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
-        partnerAttributionlearnButton.snp.makeConstraints {
+        partnerAttributionControlStackView.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionDescriptionLabel.snp.bottom).offset(learnMoreButtonTopPadding)
-            $0.leading.equalToSuperview().offset(self.horizontalPadding)
-            self.partnerAttributionButtonTrailingConstraint = $0.trailing.equalToSuperview().inset(self.currentButtonPadding).constraint
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
             $0.height.equalTo(learnMoreButtonHeight)
         }
-        partnerAttributionButtonTrailingConstraint?.activate()
         
         softwareAttributionTitleLabel.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionlearnButton.snp.bottom).offset(40)
-            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
         softwareAttributionDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(softwareAttributionTitleLabel.snp.bottom).offset(descriptionTopPadding)
-            $0.horizontalEdges.equalToSuperview().inset(self.horizontalPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
-        softwareAttributionlearnButton.snp.makeConstraints {
+        softwareAttributionControlStackView.snp.makeConstraints {
             $0.top.equalTo(softwareAttributionDescriptionLabel.snp.bottom).offset(learnMoreButtonTopPadding)
-            $0.leading.equalToSuperview().offset(self.horizontalPadding)
-            self.softwareAttributionButtonTrailingConstraint = $0.trailing.equalToSuperview().inset(self.currentButtonPadding).constraint
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
             $0.height.equalTo(learnMoreButtonHeight)
         }
-        softwareAttributionButtonTrailingConstraint?.activate()
     }
     
     private func openSafariBrowser(with url: URL?) {
@@ -191,12 +189,19 @@ final class AttributionVC: UIViewController {
     }
     
     @objc private func deviceOrientationDidChange(_ notification: Notification) {
-        updateButtonConstraints()
+        updateSpacerViews()
     }
     
-    private func updateButtonConstraints() {
-        partnerAttributionButtonTrailingConstraint?.update(inset: currentButtonPadding)
-        softwareAttributionButtonTrailingConstraint?.update(inset: currentButtonPadding)
+    private func updateSpacerViews() {
+        let orientation = UIDevice.current.getDeviceOrientation()
+        switch orientation {
+        case .landscapeLeft, .landscapeRight:
+            partnerAttributionControlStackView.arrangedSubviews.last?.isHidden = false
+            softwareAttributionControlStackView.arrangedSubviews.last?.isHidden = false
+        default:
+            partnerAttributionControlStackView.arrangedSubviews.last?.isHidden = true
+            softwareAttributionControlStackView.arrangedSubviews.last?.isHidden = true
+        }
     }
     
     // NARK: - Actions
