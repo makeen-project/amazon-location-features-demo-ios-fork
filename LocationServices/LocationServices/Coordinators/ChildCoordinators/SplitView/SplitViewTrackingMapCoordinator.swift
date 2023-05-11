@@ -62,7 +62,8 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
         let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
-        supplementaryNavigationController?.pushViewController(controller, animated: true)
+        supplementaryNavigationController?.setViewControllers([controller],
+                                                              animated: true)
     }
     
     func showMapStyleScene() {

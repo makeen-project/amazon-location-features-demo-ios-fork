@@ -40,6 +40,6 @@ extension SideBarVC: UITableViewDataSource {
 
 extension SideBarVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
+        return 50
     }
 }

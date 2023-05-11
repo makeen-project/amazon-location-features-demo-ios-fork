@@ -30,6 +30,11 @@ enum SideBarCellType {
         case .about: return UIImage.about
         }
     }
+    
+    var selectedIcon: UIImage {
+        icon.withTintColor(.lsPrimary,
+                           renderingMode: .alwaysOriginal)
+    }
 }
 
 struct SideBarCellModel {
@@ -46,18 +51,25 @@ final class SideBarCell: UITableViewCell {
     
     var model: SideBarCellModel! {
         didSet {
-            self.titleLabel.text = model.type.title
-            self.iconImageView.image = model.type.icon
+            titleLabel.text = model.type.title
+            iconImageView.image = model.type.icon
         }
     }
     
+    private var selectionView: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 10
+        view.backgroundColor = .settingsSelectionColor
+        return view
+    }()
     
     private var containerView: UIView = UIView()
     
     private var iconImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        iv.tintColor = .lsGrey
         return iv
     }()
     
@@ -72,6 +84,7 @@ final class SideBarCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
+        self.tintColor = .clear
         setupViews()
     }
     
@@ -79,13 +92,26 @@ final class SideBarCell: UITableViewCell {
         fatalError(.errorInitWithCoder)
     }
     
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        selectionView.isHidden = !selected
+        iconImageView.image = selected ? model?.type.selectedIcon : model?.type.icon
+    }
+    
     private func setupViews() {
+        addSubview(selectionView)
+        selectionView.snp.makeConstraints {
+            $0.verticalEdges.equalToSuperview().inset(4)
+            $0.horizontalEdges.equalToSuperview().inset(6)
+        }
+        
         addSubview(containerView)
         containerView.addSubview(iconImageView)
         containerView.addSubview(titleLabel)
         
         containerView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.verticalEdges.equalToSuperview().inset(4)
         }
         
         iconImageView.snp.makeConstraints {
