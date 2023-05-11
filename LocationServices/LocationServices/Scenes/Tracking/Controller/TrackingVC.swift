@@ -210,7 +210,7 @@ final class TrackingVC: UIViewController {
     
     private func setupViews() {
         self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)        
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = !isInSplitViewController
         self.view.addSubview(trackingMapView)
         self.view.addSubview(historyHeaderView)
         self.view.addSubview(grabberIcon)

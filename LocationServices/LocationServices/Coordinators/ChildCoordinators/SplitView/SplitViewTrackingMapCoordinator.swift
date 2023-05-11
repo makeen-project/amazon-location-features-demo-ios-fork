@@ -49,6 +49,10 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     func start() {
         showTrackingScene()
     }
+    
+    func setupNavigationSearch(state: MapSearchState) {
+        floatingView?.setupNavigationSearch(state: state)
+    }
 }
 
 extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
@@ -114,7 +118,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     }
     
     func showAttribution() {
-        let controller = AttributionVCBuilder.create()
+        let controller = AttributionVCBuilder.create(withNavBar: true)
         supplementaryNavigationController?.pushViewController(controller, animated: true)
     }
 }

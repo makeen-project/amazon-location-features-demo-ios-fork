@@ -106,11 +106,22 @@ final class AttributionVC: UIViewController {
         }
     }
     
+    private let navBarNeeded: Bool
+    
+    init(navBarNeeded: Bool) {
+        self.navBarNeeded = navBarNeeded
+        super.init(nibName: nil,
+                   bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.largeTitleDisplayMode = .never
         setupNavigationItems()
         setupViews()
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -123,7 +134,7 @@ final class AttributionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
+        if navBarNeeded {
             navigationController?.isNavigationBarHidden = false
         } else {
             navigationController?.navigationBar.isHidden = true
@@ -132,7 +143,7 @@ final class AttributionVC: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
+        if navBarNeeded {
             navigationController?.isNavigationBarHidden = true
         } else {
             navigationController?.navigationBar.isHidden = false
