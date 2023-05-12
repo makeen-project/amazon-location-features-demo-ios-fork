@@ -125,7 +125,7 @@ final class SplitViewCoordinator: Coordinator {
             mapState = .primaryVisible
             break
         }
-        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: splitViewController.displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
         (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
     }
@@ -200,7 +200,7 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
             viewControllerWithoutShowSecondaryButton = splitViewController.viewController(for: .primary)
         }
         
-        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
         (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
         

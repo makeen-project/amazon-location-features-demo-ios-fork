@@ -21,6 +21,7 @@
 		8A1110DA297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D7297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift */; };
 		8A1110DB297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D8297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift */; };
 		8A1110DC297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D9297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift */; };
+		8A151BD82A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A151BD72A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift */; };
 		8A190C0329DD74A600F8FD7C /* ImageAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A190C0229DD74A600F8FD7C /* ImageAnnotation.swift */; };
 		8A276E2429DFF9C900B74136 /* TermsAndConditionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A276E2329DFF9C900B74136 /* TermsAndConditionsVC.swift */; };
 		8A276E2629DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A276E2529DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift */; };
@@ -415,6 +416,7 @@
 		8A1110D7297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingBeamLayer.swift; sourceTree = "<group>"; };
 		8A1110D8297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingIndicator.swift; sourceTree = "<group>"; };
 		8A1110D9297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingArrowLayer.swift; sourceTree = "<group>"; };
+		8A151BD72A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISplitViewControllerDisplayMode+Extension.swift"; sourceTree = "<group>"; };
 		8A190C0229DD74A600F8FD7C /* ImageAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnnotation.swift; sourceTree = "<group>"; };
 		8A276E2329DFF9C900B74136 /* TermsAndConditionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsVC.swift; sourceTree = "<group>"; };
 		8A276E2529DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsVCBuilder.swift; sourceTree = "<group>"; };
@@ -2827,6 +2829,7 @@
 				8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */,
 				8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */,
 				DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */,
+				8A151BD72A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3331,6 +3334,7 @@
 				ADD5D7E52970A9EB0022480B /* AddGeofenceMessageTextField.swift in Sources */,
 				AD2AF095292EA8A800149904 /* GeofenceVC.swift in Sources */,
 				AD989727298B0A250041E867 /* CommonDashboardView.swift in Sources */,
+				8A151BD82A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift in Sources */,
 				8A50572329A0329B0047A203 /* AuthActionsHelper.swift in Sources */,
 				ADBDDEF629842C9000696EC6 /* ExploreMapStyleBuilder.swift in Sources */,
 				AD2AF0D1292EAB9A00149904 /* SettingsVC.swift in Sources */,

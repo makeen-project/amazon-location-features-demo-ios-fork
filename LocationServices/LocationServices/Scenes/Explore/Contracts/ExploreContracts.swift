@@ -52,6 +52,8 @@ protocol ExploreNavigationDelegate: AnyObject {
     
     func dismissSearchScene()
     func closePOICardScene()
+    
+    func hideNavigationScene()
 }
 
 protocol ExploreViewDelegate: AnyObject {

@@ -15,6 +15,7 @@ import AWSCore
 
 final class ExploreVC: UIViewController {
     weak var delegate: ExploreNavigationDelegate?
+    weak var splitDelegate: SplitViewVisibilityProtocol?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     
     private(set) var userCoreLocation: CLLocationCoordinate2D?
@@ -29,6 +30,7 @@ final class ExploreVC: UIViewController {
     
     private let exploreView: ExploreView = ExploreView()
     private let mapNavigationView = MapNavigationView()
+    let mapNavigationActionsView = NavigationHeaderView()
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         locationManager.setDelegate(self)
@@ -57,6 +59,49 @@ final class ExploreVC: UIViewController {
         super.viewDidAppear(animated)
         exploreView.setupMapView()
         showWelcomeScreenIfNeeded()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setNavigationViewLayout()
+    }
+    
+    private var parentViewWidthForNavigationViews: CGFloat = 0
+    private func setNavigationViewLayout() {
+        guard parentViewWidthForNavigationViews != view.frame.width else { return }
+        
+        let optimalWidth: CGFloat = 361
+        let topOffset: CGFloat = 53
+        let horizontalOffset: CGFloat = 16
+        
+        let countOfNavigationViewsInParentView = view.frame.width / optimalWidth
+        let isLeftAlignment: Bool = countOfNavigationViewsInParentView > 1.5
+        
+        if isLeftAlignment {
+            mapNavigationView.snp.remakeConstraints {
+                $0.top.equalTo(view.safeAreaInsets).offset(topOffset)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.width.equalTo(optimalWidth)
+            }
+            mapNavigationActionsView.snp.remakeConstraints {
+                $0.bottom.equalTo(view.safeAreaInsets)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.width.equalTo(optimalWidth)
+                $0.height.equalTo(80)
+            }
+        } else {
+            mapNavigationView.snp.remakeConstraints {
+                $0.top.equalTo(view.safeAreaInsets).offset(topOffset)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.trailing.equalToSuperview().offset(-horizontalOffset)
+            }
+            mapNavigationActionsView.snp.remakeConstraints {
+                $0.bottom.equalTo(view.safeAreaInsets)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.trailing.equalToSuperview().offset(-horizontalOffset)
+                $0.height.equalTo(80)
+            }
+        }
     }
     
     func setupHandlers() {
@@ -183,6 +228,8 @@ private extension ExploreVC {
     
     func setupView() {
         mapNavigationView.isHidden = true
+        mapNavigationActionsView.isHidden = true
+        mapNavigationActionsView.update(style: .navigationActions)
         changeSeachBarVisibility(isHidden: false)
         if !isInSplitViewController {
             self.navigationItem.backButtonTitle = ""
@@ -192,6 +239,7 @@ private extension ExploreVC {
     
         self.view.addSubview(exploreView)
         exploreView.addSubview(mapNavigationView)
+        exploreView.addSubview(mapNavigationActionsView)
         
         exploreView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
@@ -203,10 +251,19 @@ private extension ExploreVC {
             
         }
         
-        mapNavigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaInsets).offset(53)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+        setNavigationViewLayout()
+        
+//        mapNavigationActionsView.dismissHandler = { [weak self] in
+//
+//        }
+        
+        mapNavigationActionsView.switchRouteVisibility = { [weak self] state in
+            switch state {
+            case .hideRoute:
+                self?.splitDelegate?.showOnlySecondary()
+            case .showRoute:
+                self?.splitDelegate?.showSupplementary()
+            }
         }
     }
     
@@ -227,6 +284,9 @@ private extension ExploreVC {
     @objc private func updateMapViewValue(_ notification: Notification) {
         if let data = notification.userInfo?["MapViewValues"] as? (distance: String, street: String) {
             mapNavigationView.updateValues(distance: data.distance, street: data.street)
+        }
+        if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String) {
+            mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
         }
     }
         
@@ -268,6 +328,7 @@ private extension ExploreVC {
             viewModel.activateRoute(route: routeModel)
             if !routeModel.isPreview {
                 mapNavigationView.isHidden = false
+                mapNavigationActionsView.isHidden = !self.isInSplitViewController
                 exploreView.focusNavigationMode()
             } else {
                 exploreView.focus(on: routeModel.departurePosition)
@@ -288,6 +349,7 @@ private extension ExploreVC {
         viewModel.deactivateRoute()
         exploreView.hideGeoFence(state: false)
         mapNavigationView.isHidden = true
+        mapNavigationActionsView.isHidden = true
         exploreView.deleteDrawing()
     }
     

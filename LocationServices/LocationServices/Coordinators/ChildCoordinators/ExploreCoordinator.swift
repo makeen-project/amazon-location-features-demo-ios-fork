@@ -260,6 +260,10 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     func dismissSearchScene() {
         navigationController.dismiss(animated: true)
     }
+    
+    func hideNavigationScene() {
+        navigationController.dismiss(animated: true)
+    }
 }
 
 private extension ExploreCoordinator {

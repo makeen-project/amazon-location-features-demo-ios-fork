@@ -21,6 +21,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     }
     
     private var floatingView: MapFloatingViewHandler?
+    private var isSearchHidden = false
     
     private lazy var supplementaryController: SearchVC = {
         let controller = SearchVCBuilder.create()
@@ -31,6 +32,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     private lazy var secondaryController: ExploreVC = {
         let controller = ExploreVCBuilder.create()
         controller.delegate = self
+        controller.splitDelegate = self
         controller.geofenceHandler = {
             self.geofenceHandler?()
         }
@@ -49,8 +51,12 @@ final class SplitViewExploreMapCoordinator: Coordinator {
         showExploreScene()
     }
     
-    func setupNavigationSearch(state: MapSearchState) {
-        floatingView?.setupNavigationSearch(state: state, hideSearch: true)
+    func displayModeChanged(displayMode: UISplitViewController.DisplayMode) {
+        let searchState: MapSearchState = isSearchHidden ? .hidden : displayMode.mapSearchState()
+        floatingView?.setupNavigationSearch(state: searchState, hideSearch: true)
+        
+        let routeButtonState: RouteButtonState = displayMode.isOnlySecondary ? .showRoute : .hideRoute
+        secondaryController.mapNavigationActionsView.updateRouteButton(state: routeButtonState)
     }
 }
 
@@ -136,8 +142,9 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         let controller = NavigationBuilder.create(steps: steps, summaryData: summaryData, firstDestionation: firstDestionation, secondDestionation: secondDestionation)
         controller.delegate = self
         
-        supplementaryNavigationController?.pushViewController(controller, animated: true)
-        splitDelegate?.showSupplementary()
+        isSearchHidden = true
+        splitDelegate?.showOnlySecondary()
+        supplementaryNavigationController?.pushViewController(controller, animated: false)
     }
     
     func showLoginFlow() {
@@ -199,6 +206,10 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     }
     
     func dismissSearchScene() {
+        splitDelegate?.showOnlySecondary()
+    }
+    
+    func hideNavigationScene() {
         splitDelegate?.showOnlySecondary()
     }
 }

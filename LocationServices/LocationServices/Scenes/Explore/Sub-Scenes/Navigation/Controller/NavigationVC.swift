@@ -44,9 +44,10 @@ final class NavigationVC: UIViewController {
         setupHandler()
         setupViews()
         navigationHeaderView.isHidden = isInSplitViewController
+        navigationHeaderView.update(style: .navigationHeader)
         title = StringConstant.routeOverview
         
-        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScreen))
+        let barButtonItem = UIBarButtonItem(title: nil, image: .arrowUpLeftAndArrowDownRight, target: self, action: #selector(hideScreen))
         barButtonItem.tintColor = .lsPrimary
         navigationItem.leftBarButtonItem = barButtonItem
     }
@@ -75,6 +76,10 @@ final class NavigationVC: UIViewController {
         
         delegate?.showDirections(isRouteOptionEnabled: true, firstDestionation: viewModel.firstDestionation, secondDestionation: viewModel.secondDestionation, lat: lat, long: long)
         NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+    }
+    
+    @objc private func hideScreen() {
+        delegate?.hideNavigationScene()
     }
     
     private func setupViews() {
@@ -106,13 +111,14 @@ extension NavigationVC: NavigationViewModelOutputDelegate {
 private extension NavigationVC {
     func updateNavigationHeaderData() {
         let data = viewModel.getSummaryData()
-        self.navigationHeaderView.updateDatas(distance: data?.totalDistance, duration: data?.totalDuration)
+        self.navigationHeaderView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
     }
     func sendMapViewData() {
         let datas = viewModel.getData()
         if let mapData = datas[safe: 0] {
             var mapHeaderData = (distance: mapData.distance, street: mapData.streetAddress)
-            let data: [String: Any] = ["MapViewValues" : mapHeaderData]
+            let summaryData = viewModel.getSummaryData()
+            let data: [String: Any] = ["MapViewValues" : mapHeaderData, "SummaryData": summaryData]
             NotificationCenter.default.post(name: Notification.Name("UpdateMapViewValues"), object: nil, userInfo: data)
         }
     }
