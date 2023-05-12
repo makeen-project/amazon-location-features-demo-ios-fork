@@ -118,8 +118,10 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
    
     func showSearchSceneWith(lat: Double?, long: Double?) {
         let controller = SearchVCBuilder.create()
+        controller.delegate = self
         controller.userLocation = (lat, long)
         controller.modalPresentationStyle = isiPad ? .formSheet : .pageSheet
+        controller.isModalInPresentation = true
         
         if let sheet = controller.sheetPresentationController {
             if isiPad {

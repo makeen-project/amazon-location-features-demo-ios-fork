@@ -18,6 +18,7 @@ protocol SearchBarViewOutputDelegate {
     func searchTextDeactivated()
     func searchText(_ text: String?)
     func searchTextWith(_ text: String?)
+    func searchCancel()
 }
 
 extension SearchBarViewOutputDelegate {
@@ -25,6 +26,7 @@ extension SearchBarViewOutputDelegate {
     func searchTextDeactivated() {}
     func searchText(_ text: String?) {}
     func searchTextWith(_ text: String?) {}
+    func searchCancel() {}
 }
 
 // to keep local history of searching between two screens. Explore and search detail
@@ -44,12 +46,16 @@ final class SearchBarView: UIView {
         }
     }
     
-    private let containerStackView: UIStackView =  {
+    private let containerView: UIView =  {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    private let stackView: UIStackView =  {
         let stackView = UIStackView()
-        stackView.backgroundColor = .searchBarBackgroundColor
-        stackView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        stackView.layer.cornerRadius = 20
-        
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.alignment = .fill
@@ -93,6 +99,10 @@ final class SearchBarView: UIView {
         
         searchView.textFieldDeactivated = { [weak self] in
             self?.delegate?.searchTextDeactivated()
+        }
+        
+        searchView.cancelSearchCallback = { [weak self] in
+            self?.delegate?.searchCancel()
         }
                 
         SearchBarCache.shared.addObserver(self,
@@ -145,13 +155,18 @@ final class SearchBarView: UIView {
     }
     
     private func configure() {
-        self.addSubview(containerStackView)
-        containerStackView.addArrangedSubview(grabberIconContainerView)
+        addSubview(containerView)
+        containerView.addSubview(stackView)
+        stackView.addArrangedSubview(grabberIconContainerView)
         grabberIconContainerView.addSubview(grabberIcon)
         
-        containerStackView.addArrangedSubview(searchView)
+        stackView.addArrangedSubview(searchView)
         
-        containerStackView.snp.makeConstraints {
+        containerView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        stackView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)

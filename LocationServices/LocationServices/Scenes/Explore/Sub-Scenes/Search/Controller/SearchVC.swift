@@ -27,7 +27,6 @@ final class SearchVC: UIViewController {
     }
     
     var isInitalState: Bool = true
-    private var clearAnnotationsOnDisappear = true
     
     private lazy var searchBarView: SearchBarView = {
         SearchBarView(becomeFirstResponder: false, showGrabberIcon: !isInSplitViewController)
@@ -62,14 +61,15 @@ final class SearchVC: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = false
         searchAppearanceChanged(isVisible: true)
+        
+        let mapModels = viewModel.mapModels
+        if !mapModels.isEmpty {
+            searchResult(mapModel: mapModels, shouldDismiss: false, showOnMap: false)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if clearAnnotationsOnDisappear {
-            clearAnnotations()
-        }
-        clearAnnotationsOnDisappear = true
         searchAppearanceChanged(isVisible: false)
     }
     
@@ -125,7 +125,6 @@ extension SearchVC: SearchViewModelOutputDelegate {
     }
     
     func selectedPlaceResult(mapModel: MapModel) {
-        clearAnnotationsOnDisappear = false
         let coordinates = ["place" : mapModel]
         NotificationCenter.default.post(name: Notification.selectedPlace, object: nil, userInfo: coordinates)
     }
@@ -138,5 +137,10 @@ extension SearchVC: SearchBarViewOutputDelegate {
     
     func searchTextWith(_ text: String?) {
         viewModel.searchWith(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
+    }
+    
+    func searchCancel() {
+        clearAnnotations()
+        delegate?.dismissSearchScene()
     }
 }
