@@ -55,7 +55,26 @@ extension MapStyleVC: UICollectionViewDataSource {
 extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return  CGSize(width: (collectionView.frame.size.width - 25) / 3, height: 106)
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad:
+            switch UIDevice.current.getDeviceOrientation() {
+            case .landscapeLeft,
+                    .landscapeRight:
+                if isLargerPad { // 12.9
+                    return  CGSize(width: (collectionView.frame.size.width - 80) / 6, height: 106)
+                } else { // 10.2
+                    return  CGSize(width: (collectionView.frame.size.width - 50) / 5, height: 106)
+                }
+            default:
+                if isLargerPad { // 12.9
+                    return  CGSize(width: (collectionView.frame.size.width - 100) / 3, height: 106)
+                } else { // 10.2
+                    return  CGSize(width: (collectionView.frame.size.width - 25) / 2, height: 106)
+                }
+            }
+        default:
+            return  CGSize(width: (collectionView.frame.size.width - 25) / 3, height: 106)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -77,5 +96,20 @@ extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayo
             cell.isCellSelected(state: true)
             self.viewModel.saveSelectedState(indexPath)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            switch UIDevice.current.getDeviceOrientation() {
+            case .landscapeLeft,
+                    .landscapeRight:
+                return 50
+            default:
+                return 0
+            }
+        }
+        return 0
     }
 }

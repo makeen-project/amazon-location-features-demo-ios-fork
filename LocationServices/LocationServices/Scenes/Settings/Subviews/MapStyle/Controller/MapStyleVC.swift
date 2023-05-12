@@ -31,11 +31,21 @@ final class MapStyleVC: UIViewController {
         return collectionView
     }()
     
+    var isLargerPad: Bool {
+        max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) > 1300
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.loadLocalMapData()
         setupCollectionView()
         setupViews()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        // Reloading view each time in case there has been an orientation change
+        collectionView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
