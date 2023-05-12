@@ -57,6 +57,6 @@ extension MapFloatingViewHandler: MapSearchFloatingViewDelegate {
     }
     
     func searchActivated() {
-        //TODO: show search view
+        delegate?.showSearchScene()
     }
 }

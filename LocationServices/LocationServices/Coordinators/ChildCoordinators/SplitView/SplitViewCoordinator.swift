@@ -11,6 +11,7 @@ protocol SplitViewVisibilityProtocol: AnyObject {
     func showPrimary()
     func showSupplementary()
     func showOnlySecondary()
+    func showSearchScene()
 }
 
 final class SplitViewCoordinator: Coordinator {
@@ -153,6 +154,11 @@ extension SplitViewCoordinator: SplitViewVisibilityProtocol {
     
     func showSupplementary() {
         splitViewController.show(.supplementary)
+    }
+    
+    func showSearchScene() {
+        showNextScene(type: .explore)
+        showSupplementary()
     }
     
     func showOnlySecondary() {

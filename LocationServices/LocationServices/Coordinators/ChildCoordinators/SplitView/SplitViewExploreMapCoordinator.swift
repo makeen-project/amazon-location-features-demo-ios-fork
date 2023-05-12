@@ -111,7 +111,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     }
    
     func showSearchSceneWith(lat: Double?, long: Double?) {
-        let controller = SearchVCBuilder.create()
+        let controller = supplementaryController
         controller.userLocation = (lat, long)
         splitDelegate?.showSupplementary()
         
@@ -205,13 +205,18 @@ private extension SplitViewExploreMapCoordinator {
         setSecondary()
     }
     
-    private func setSupplementary() {
+    func setSupplementary() {
+        updateSearchScreenLocation()
         splitViewController.setViewController(supplementaryController, for: .supplementary)
     }
     
-    private func setSecondary() {
+    func setSecondary() {
         splitViewController.changeSecondaryViewController(to: secondaryController)
         splitViewController.show(.secondary)
+    }
+    
+    func updateSearchScreenLocation() {
+        supplementaryController.userLocation = (secondaryController.userCoreLocation?.latitude, secondaryController.userCoreLocation?.longitude)
     }
 }
 
@@ -221,11 +226,16 @@ extension SplitViewExploreMapCoordinator: SplitViewVisibilityProtocol {
     }
     
     func showSupplementary() {
-        supplementaryController.userLocation = (secondaryController.userCoreLocation?.latitude, secondaryController.userCoreLocation?.longitude)
+        updateSearchScreenLocation()
         splitDelegate?.showSupplementary()
     }
     
     func showOnlySecondary() {
         splitDelegate?.showOnlySecondary()
+    }
+    
+    func showSearchScene() {
+        let location = secondaryController.userCoreLocation
+        showSearchSceneWith(lat: location?.latitude, long: location?.longitude)
     }
 }
