@@ -79,12 +79,8 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         let controller = DirectionVCBuilder.create()
         controller.isInSplitViewController = true
         controller.dismissHandler = { [weak self] in
-            self?.supplementaryNavigationController?.popViewController(animated: true)
             NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
-                
-            guard let secondDestionation, firstDestionation == nil else { return }
-            let userInfo = ["place" : secondDestionation]
-            NotificationCenter.default.post(name: Notification.selectedPlace, object: nil, userInfo: userInfo)
+            self?.supplementaryNavigationController?.popViewController(animated: true)
         }
         
         if let firstDestionation {
