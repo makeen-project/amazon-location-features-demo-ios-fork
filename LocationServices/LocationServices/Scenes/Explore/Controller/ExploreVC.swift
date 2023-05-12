@@ -17,7 +17,7 @@ final class ExploreVC: UIViewController {
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     
-    private var userCoreLocation: CLLocationCoordinate2D?
+    private(set) var userCoreLocation: CLLocationCoordinate2D?
     
     var geofenceHandler: VoidHandler?
     

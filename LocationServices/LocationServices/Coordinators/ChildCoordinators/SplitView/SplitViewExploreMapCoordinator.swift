@@ -36,7 +36,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
         }
         
         floatingView = MapFloatingViewHandler(viewController: controller)
-        floatingView?.delegate = splitDelegate
+        floatingView?.delegate = self
         floatingView?.setupNavigationSearch(state: .onlySecondaryVisible)
         return controller
     }()
@@ -212,5 +212,20 @@ private extension SplitViewExploreMapCoordinator {
     private func setSecondary() {
         splitViewController.changeSecondaryViewController(to: secondaryController)
         splitViewController.show(.secondary)
+    }
+}
+
+extension SplitViewExploreMapCoordinator: SplitViewVisibilityProtocol {
+    func showPrimary() {
+        splitDelegate?.showPrimary()
+    }
+    
+    func showSupplementary() {
+        supplementaryController.userLocation = (secondaryController.userCoreLocation?.latitude, secondaryController.userCoreLocation?.longitude)
+        splitDelegate?.showSupplementary()
+    }
+    
+    func showOnlySecondary() {
+        splitDelegate?.showOnlySecondary()
     }
 }
