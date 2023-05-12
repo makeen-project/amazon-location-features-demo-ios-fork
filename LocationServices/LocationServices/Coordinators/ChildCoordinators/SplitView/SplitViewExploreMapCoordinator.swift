@@ -125,6 +125,14 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         controller.userLocation = (lat, long)
         
         supplementaryNavigationController?.pushViewController(controller, animated: true)
+        
+        //always show poi card after search and it should be only one in navigation stack
+        if let viewControllers = supplementaryNavigationController?.viewControllers,
+           viewControllers.count > 2,
+           let firstController = viewControllers.first,
+           let lastController = viewControllers.last {
+            supplementaryNavigationController?.viewControllers = [firstController, lastController]
+        }
         splitDelegate?.showSupplementary()
     }
     
