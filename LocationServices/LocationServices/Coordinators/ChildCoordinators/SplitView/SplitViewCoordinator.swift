@@ -126,6 +126,7 @@ final class SplitViewCoordinator: Coordinator {
         }
         (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
     }
 }
 
@@ -195,6 +196,7 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
         
         (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
         
         sideBarButtonItem?.tintColor = .lsPrimary
         viewControllerForShowSecondaryButton?.navigationItem.leftBarButtonItem = sideBarButtonItem

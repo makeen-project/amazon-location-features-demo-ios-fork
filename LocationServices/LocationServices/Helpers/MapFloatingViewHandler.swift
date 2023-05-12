@@ -19,9 +19,9 @@ class MapFloatingViewHandler {
         mapSearchFloatingView.delegate = self
     }
     
-    func setupNavigationSearch(state: MapSearchState) {
+    func setupNavigationSearch(state: MapSearchState, hideSearch: Bool = false) {
         let item: UIBarButtonItem?
-        let sideBarButtonState: SideBarButtonState?
+        let sideBarButtonState: SideBarState?
         
         switch state {
         case .hidden:
@@ -29,10 +29,14 @@ class MapFloatingViewHandler {
             sideBarButtonState = nil
         case .primaryVisible:
             item = UIBarButtonItem(customView: mapSearchFloatingView)
-            sideBarButtonState = .fullscreen
+            if hideSearch {
+                sideBarButtonState = .onlyButtonSecondaryScreen
+            } else {
+                sideBarButtonState = .fullSecondaryScreen
+            }
         case .onlySecondaryVisible:
             item = UIBarButtonItem(customView: mapSearchFloatingView)
-            sideBarButtonState = .sidebar
+            sideBarButtonState = .fullSideBar
         }
         
         viewController?.navigationItem.leftBarButtonItem = item
@@ -43,11 +47,11 @@ class MapFloatingViewHandler {
 }
 
 extension MapFloatingViewHandler: MapSearchFloatingViewDelegate {
-    func changeSplitState(to state: SideBarButtonState) {
+    func changeSplitState(to state: SideBarState) {
         switch state {
-        case .sidebar:
+        case .fullSideBar:
             delegate?.showSupplementary()
-        case .fullscreen:
+        case .fullSecondaryScreen, .onlyButtonSecondaryScreen:
             delegate?.showOnlySecondary()
         }
     }

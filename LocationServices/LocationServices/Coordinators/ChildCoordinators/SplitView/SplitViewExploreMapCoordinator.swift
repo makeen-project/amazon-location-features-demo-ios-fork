@@ -50,7 +50,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     }
     
     func setupNavigationSearch(state: MapSearchState) {
-        floatingView?.setupNavigationSearch(state: state)
+        floatingView?.setupNavigationSearch(state: state, hideSearch: true)
     }
 }
 
