@@ -39,7 +39,6 @@ final class DirectionVC: UIViewController {
     }()
     
     var isDestination: Bool = true
-    var deleteScreenDrawing: Bool = true
     
     var viewModel: DirectionViewModel! {
         didSet {
@@ -95,9 +94,6 @@ final class DirectionVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         removeNotifications()
-        if deleteScreenDrawing {
-            self.dismissHandler?()
-        }
     }
     
     private func locationManagerSetup() {
@@ -468,7 +464,6 @@ extension DirectionVC: DirectionViewOutputDelegate {
         
         switch navigationLegs {
         case .success(let steps):
-            self.deleteScreenDrawing = false
             let routeModel = self.getRouteModel(for: type)
             let sumData = self.viewModel.getSumData(type)
             
@@ -491,7 +486,6 @@ extension DirectionVC: DirectionViewOutputDelegate {
 
 extension DirectionVC: DirectionSearchViewOutputDelegate {
     @objc func dismissView() {
-        deleteScreenDrawing = false
         dismissHandler?()
     }
     
