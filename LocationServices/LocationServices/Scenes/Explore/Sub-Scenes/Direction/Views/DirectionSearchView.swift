@@ -86,9 +86,26 @@ final class DirectionSearchView: UIView {
         return tf
     }()
     
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.backgroundColor = .clear
+        
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let headerContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     private var directionSearchTitle: UILabel = {
         let label = UILabel()
-        label.text = "Direction"
+        label.text = StringConstant.directions
         label.textAlignment = .left
         label.font = .amazonFont(type: .bold, size: 20)
         label.textColor = .black
@@ -164,31 +181,38 @@ final class DirectionSearchView: UIView {
         iconStackView.addArrangedSubview(dotDestinationImage)
         iconStackView.addArrangedSubview(secondDestinationImage)
         
-        self.addSubview(directionSearchTitle)
-        self.addSubview(closeButton)
-        self.addSubview(containerView)
+        self.addSubview(topStackView)
+        topStackView.addArrangedSubview(headerContainerView)
+        headerContainerView.addSubview(directionSearchTitle)
+        headerContainerView.addSubview(closeButton)
+        
+        topStackView.addArrangedSubview(containerView)
         containerView.addSubview(iconStackView)
         containerView.addSubview(firstDestinationTextField)
         containerView.addSubview(seperatorView)
         containerView.addSubview(secondDestinationTextField)
         containerView.addSubview(swapButton)
         
+        topStackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        
         directionSearchTitle.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview()
             $0.height.equalTo(28)
+            $0.bottom.equalToSuperview()
         }
         
         closeButton.snp.makeConstraints {
             $0.height.width.equalTo(30)
             $0.top.equalToSuperview().offset(14)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview()
         }
         
         containerView.snp.makeConstraints {
-            $0.top.equalTo(directionSearchTitle.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(80)
         }
         
@@ -226,7 +250,6 @@ final class DirectionSearchView: UIView {
             $0.trailing.equalToSuperview()
         }
         
-        
         secondDestinationTextField.snp.makeConstraints {
             $0.bottom.equalTo(iconStackView.snp.bottom)
             $0.leading.equalTo(iconStackView.snp.trailing).offset(18)
@@ -256,6 +279,10 @@ final class DirectionSearchView: UIView {
         } else {
             firstDestinationTextField.becomeFirstResponder()
         }
+    }
+    
+    func changeHeaderVisibility(isHidden: Bool) {
+        headerContainerView.isHidden = isHidden
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {

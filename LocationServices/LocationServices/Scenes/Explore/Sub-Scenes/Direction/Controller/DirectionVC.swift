@@ -14,6 +14,7 @@ final class DirectionVC: UIViewController {
         static let mediumId = UISheetPresentationController.Detent.Identifier("medium")
     }
     
+    var isInSplitViewController: Bool = false
     var dismissHandler: VoidHandler?
     var isRoutingOptionsEnabled: Bool = false
     var firstDestionation: DirectionTextFieldModel?
@@ -38,7 +39,6 @@ final class DirectionVC: UIViewController {
     }()
     
     var isDestination: Bool = true
-    var deleteScreenDrawing: Bool = true
     
     var viewModel: DirectionViewModel! {
         didSet {
@@ -73,6 +73,28 @@ final class DirectionVC: UIViewController {
             directionSearchView.setMyLocationText()
         }
         locationManagerSetup()
+        directionSearchView.changeHeaderVisibility(isHidden: isInSplitViewController)
+        title = StringConstant.directions
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissView))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        if isRoutingOptionsEnabled {
+            tableView.isHidden = true
+            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
+            calculateRoute()
+        } else {
+            tableView.isHidden = false
+            
+            let isDestination = firstDestionation?.placeName != nil
+            directionSearchView.becomeFirstResponder(isDestination: isDestination)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,9 +105,6 @@ final class DirectionVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         removeNotifications()
-        if deleteScreenDrawing {
-            self.dismissHandler?()
-        }
     }
     
     private func locationManagerSetup() {
@@ -201,16 +220,6 @@ final class DirectionVC: UIViewController {
         }
         
         directionView.isHidden = true
-        if isRoutingOptionsEnabled  {
-            tableView.isHidden = true
-            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
-            calculateRoute()
-        } else {
-            tableView.isHidden = false
-            
-            let isDestination = firstDestionation?.placeName != nil
-            directionSearchView.becomeFirstResponder(isDestination: isDestination)
-        }
     }
     
     private func calculateRoute(routeType: RouteTypes = .car,
@@ -456,7 +465,6 @@ extension DirectionVC: DirectionViewOutputDelegate {
         
         switch navigationLegs {
         case .success(let steps):
-            self.deleteScreenDrawing = false
             let routeModel = self.getRouteModel(for: type)
             let sumData = self.viewModel.getSumData(type)
             
@@ -478,8 +486,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
 }
 
 extension DirectionVC: DirectionSearchViewOutputDelegate {
-    func dismissView() {
-        deleteScreenDrawing = false
+    @objc func dismissView() {
         dismissHandler?()
     }
     

@@ -14,6 +14,10 @@ final class SearchViewModel: SearchViewModelProcotol {
     var delegate: SearchViewModelOutputDelegate?
     var service: LocationService
     
+    var mapModels: [MapModel] {
+        return presentation.map(MapModel.init)
+    }
+    
     init(service: LocationService) {
         self.service = service
     }

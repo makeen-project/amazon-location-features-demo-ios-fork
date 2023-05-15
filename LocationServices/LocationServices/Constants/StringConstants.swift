@@ -49,6 +49,7 @@ enum StringConstant {
     
     // strings:
     static let direction = "Direction"
+    static let directions = "Directions"
     static let geofence = "Geofence"
     static let login = "Login"
     static let amazonLocationDetail = """
@@ -201,6 +202,7 @@ enum StringConstant {
     static let appVersion = "App version: "
     static let termsAndConditions = "Terms & Conditions"
     static let demo = "Demo"
+    static let routeOverview = "Route Overview"
 }
 
 protocol ConstantsLoginInfoConfig {

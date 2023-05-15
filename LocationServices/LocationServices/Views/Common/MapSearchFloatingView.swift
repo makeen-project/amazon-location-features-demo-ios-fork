@@ -7,16 +7,26 @@
 
 import UIKit
 
-enum SideBarButtonState {
-    case sidebar
-    case fullscreen
+enum SideBarState {
+    case fullSideBar
+    case fullSecondaryScreen
+    case onlyButtonSecondaryScreen
     
     var image: UIImage? {
         switch self {
-        case .sidebar:
+        case .fullSideBar:
             return .sidebarLeft
-        case .fullscreen:
+        case .fullSecondaryScreen, .onlyButtonSecondaryScreen:
             return .arrowUpLeftAndArrowDownRight
+        }
+    }
+    
+    var showSearch: Bool {
+        switch self {
+        case .fullSideBar, .fullSecondaryScreen:
+            return true
+        case .onlyButtonSecondaryScreen:
+            return false
         }
     }
 }
@@ -28,17 +38,22 @@ enum MapSearchState {
 }
 
 protocol MapSearchFloatingViewDelegate: AnyObject {
-    func changeSplitState(to state: SideBarButtonState)
+    func changeSplitState(to state: SideBarState)
     func searchActivated()
 }
 
 final class MapSearchFloatingView: UIView {
     
-    private let containerView: UIView =  {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 8
-        return view
+    private let containerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.backgroundColor = .white
+        stackView.layer.cornerRadius = 8
+        
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .center
+        stackView.spacing = 0
+        return stackView
     }()
     
     private lazy var sideBarButton: UIButton = {
@@ -55,10 +70,10 @@ final class MapSearchFloatingView: UIView {
         return view
     }()
     
-    private let searchView = SearchTextField()
+    private let searchView = SearchBarView(becomeFirstResponder: true, showGrabberIcon: false)
     
     weak var delegate: MapSearchFloatingViewDelegate?
-    private var sideBarButtonState: SideBarButtonState = .sidebar
+    private var sideBarButtonState: SideBarState = .fullSideBar
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,48 +84,49 @@ final class MapSearchFloatingView: UIView {
         fatalError(.errorInitWithCoder)
     }
     
-    func setSideBarButtonState(_ state: SideBarButtonState) {
+    func setSideBarButtonState(_ state: SideBarState) {
         sideBarButtonState = state
         sideBarButton.setImage(state.image, for: .normal)
+        searchView.isHidden = !state.showSearch
+        separatorView.isHidden = !state.showSearch
     }
     
     private func configure() {
-        self.addSubview(containerView)
-        containerView.addSubview(sideBarButton)
-        containerView.addSubview(searchView)
-        containerView.addSubview(separatorView)
+        self.addSubview(containerStackView)
+        containerStackView.addArrangedSubview(sideBarButton)
+        containerStackView.addArrangedSubview(searchView)
+        containerStackView.addArrangedSubview(separatorView)
         
-        containerView.snp.makeConstraints {
+        containerStackView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(44)
         }
         
         sideBarButton.snp.makeConstraints {
+            $0.height.equalToSuperview()
             $0.width.equalTo(sideBarButton.snp.height)
-            $0.top.bottom.equalToSuperview()
-            $0.centerY.leading.equalToSuperview()
         }
         
         separatorView.snp.makeConstraints {
-            $0.leading.equalTo(sideBarButton.snp.trailing)
             $0.width.equalTo(1)
             $0.height.equalToSuperview().multipliedBy(0.8)
-            $0.centerY.equalToSuperview()
         }
         
         searchView.snp.makeConstraints {
-            $0.leading.equalTo(separatorView.snp.trailing)
+            $0.height.equalToSuperview()
             $0.width.equalTo(300)
-            $0.top.bottom.equalToSuperview()
-            $0.trailing.equalToSuperview()
         }
         
-        searchView.textFieldActivated = { [weak self] in
-            self?.delegate?.searchActivated()
-        }
+        searchView.delegate = self
     }
     
     @objc private func actionPerformed() {
         delegate?.changeSplitState(to: sideBarButtonState)
+    }
+}
+
+extension MapSearchFloatingView: SearchBarViewOutputDelegate {
+    func searchTextActivated() {
+        delegate?.searchActivated()
     }
 }

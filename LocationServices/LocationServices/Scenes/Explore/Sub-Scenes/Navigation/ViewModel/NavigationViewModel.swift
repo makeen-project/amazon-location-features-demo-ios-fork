@@ -63,7 +63,7 @@ final class NavigationVCViewModel {
         fetchStreetNames()
     }
     
-    func getSummaryData() -> (totalDistance: String, totalDuration: String)? {
+    func getSummaryData() -> (totalDistance: String, totalDuration: String) {
         return (summaryData.totalDistance.convertFormattedKMString(),
                 summaryData.totalDuration.convertSecondsToMinString())
     }

@@ -10,19 +10,18 @@ import UIKit
 final class MapNavigationView: UIView {
     
     private var containerView: UIView = {
-        
-       let view = UIView()
-        view.backgroundColor = .lsPrimary
+        let view = UIView()
+        view.backgroundColor = .white
         view.layer.cornerRadius = 8
         return view
     }()
     
     private var distanceLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.text = " "
         label.textAlignment = .center
-        label.font = .amazonFont(type: .bold, size: 24)
-        label.textColor = .white
+        label.font = .amazonFont(type: .bold, size: 20)
+        label.textColor = .lsTetriary
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
@@ -30,10 +29,10 @@ final class MapNavigationView: UIView {
     
     private let streetLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.text = " "
         label.textAlignment = .center
-        label.font = .amazonFont(type: .regular, size: 16)
-        label.textColor = .white
+        label.font = .amazonFont(type: .regular, size: 13)
+        label.textColor = .lsTetriary
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         return label
@@ -63,15 +62,14 @@ final class MapNavigationView: UIView {
         }
         
         distanceLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(11)
+            $0.top.equalToSuperview().offset(10)
             $0.centerX.leading.trailing.equalToSuperview()
-            $0.height.equalTo(32)
         }
         
         streetLabel.snp.makeConstraints {
-            $0.top.equalTo(distanceLabel.snp.bottom)
+            $0.top.equalTo(distanceLabel.snp.bottom).offset(5)
             $0.centerX.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-11)
+            $0.bottom.equalToSuperview().offset(-9)
         }
     }
 }

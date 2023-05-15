@@ -49,7 +49,6 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         locationManager.setDelegate(self)
         poiCardView.delegate = self
         viewModel.fetchDatas()
-        showCurrentAnnotation()
         setupViews()
         poiCardView.changeHeaderVisibility(isHidden: isInSplitViewController)
         
@@ -61,11 +60,7 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        clearAnnotations()
+        showCurrentAnnotation()
     }
         
     private func setupViews() {
@@ -117,7 +112,8 @@ extension POICardVC: POICardViewModelOutputDelegate {
     }
     
     @objc func dismissPoiView() {
-        self.updateMapViewBottomIcons()
+        clearAnnotations()
+        updateMapViewBottomIcons()
         delegate?.closePOICardScene()
     }
     

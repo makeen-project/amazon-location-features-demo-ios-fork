@@ -11,6 +11,7 @@ protocol SplitViewVisibilityProtocol: AnyObject {
     func showPrimary()
     func showSupplementary()
     func showOnlySecondary()
+    func showSearchScene()
 }
 
 final class SplitViewCoordinator: Coordinator {
@@ -124,8 +125,9 @@ final class SplitViewCoordinator: Coordinator {
             mapState = .primaryVisible
             break
         }
-        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: splitViewController.displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
     }
 }
 
@@ -152,6 +154,11 @@ extension SplitViewCoordinator: SplitViewVisibilityProtocol {
     
     func showSupplementary() {
         splitViewController.show(.supplementary)
+    }
+    
+    func showSearchScene() {
+        showNextScene(type: .explore)
+        showSupplementary()
     }
     
     func showOnlySecondary() {
@@ -193,8 +200,9 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
             viewControllerWithoutShowSecondaryButton = splitViewController.viewController(for: .primary)
         }
         
-        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
+        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
         
         sideBarButtonItem?.tintColor = .lsPrimary
         viewControllerForShowSecondaryButton?.navigationItem.leftBarButtonItem = sideBarButtonItem

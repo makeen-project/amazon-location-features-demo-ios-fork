@@ -59,6 +59,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     ) {
         self.dismissSearchScene()
         let controller = DirectionVCBuilder.create()
+        controller.isInSplitViewController = false
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true, completion: {
                 NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
@@ -117,8 +118,10 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
    
     func showSearchSceneWith(lat: Double?, long: Double?) {
         let controller = SearchVCBuilder.create()
+        controller.delegate = self
         controller.userLocation = (lat, long)
         controller.modalPresentationStyle = isiPad ? .formSheet : .pageSheet
+        controller.isModalInPresentation = true
         
         if let sheet = controller.sheetPresentationController {
             if isiPad {
@@ -255,6 +258,14 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     }
     
     func dismissSearchScene() {
+        navigationController.dismiss(animated: true)
+    }
+    
+    func closeNavigationScene() {
+        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+    }
+    
+    func hideNavigationScene() {
         navigationController.dismiss(animated: true)
     }
 }

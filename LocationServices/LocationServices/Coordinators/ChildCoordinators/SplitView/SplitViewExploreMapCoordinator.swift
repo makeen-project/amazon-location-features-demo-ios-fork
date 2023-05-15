@@ -21,6 +21,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     }
     
     private var floatingView: MapFloatingViewHandler?
+    private var isSearchHidden = false
     
     private lazy var supplementaryController: SearchVC = {
         let controller = SearchVCBuilder.create()
@@ -31,12 +32,13 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     private lazy var secondaryController: ExploreVC = {
         let controller = ExploreVCBuilder.create()
         controller.delegate = self
+        controller.splitDelegate = self
         controller.geofenceHandler = {
             self.geofenceHandler?()
         }
         
         floatingView = MapFloatingViewHandler(viewController: controller)
-        floatingView?.delegate = splitDelegate
+        floatingView?.delegate = self
         floatingView?.setupNavigationSearch(state: .onlySecondaryVisible)
         return controller
     }()
@@ -49,8 +51,12 @@ final class SplitViewExploreMapCoordinator: Coordinator {
         showExploreScene()
     }
     
-    func setupNavigationSearch(state: MapSearchState) {
-        floatingView?.setupNavigationSearch(state: state)
+    func displayModeChanged(displayMode: UISplitViewController.DisplayMode) {
+        let searchState: MapSearchState = isSearchHidden ? .hidden : displayMode.mapSearchState()
+        floatingView?.setupNavigationSearch(state: searchState, hideSearch: true)
+        
+        let routeButtonState: RouteButtonState = displayMode.isOnlySecondary ? .showRoute : .hideRoute
+        secondaryController.mapNavigationActionsView.updateRouteButton(state: routeButtonState)
     }
 }
 
@@ -77,13 +83,10 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
                         long: Double?
     ) {
         let controller = DirectionVCBuilder.create()
+        controller.isInSplitViewController = true
         controller.dismissHandler = { [weak self] in
-            self?.supplementaryNavigationController?.popViewController(animated: true)
             NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
-                
-            guard let secondDestionation, firstDestionation == nil else { return }
-            let userInfo = ["place" : secondDestionation]
-            NotificationCenter.default.post(name: Notification.selectedPlace, object: nil, userInfo: userInfo)
+            self?.supplementaryNavigationController?.popViewController(animated: true)
         }
         
         if let firstDestionation {
@@ -110,7 +113,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     }
    
     func showSearchSceneWith(lat: Double?, long: Double?) {
-        let controller = SearchVCBuilder.create()
+        let controller = supplementaryController
         controller.userLocation = (lat, long)
         splitDelegate?.showSupplementary()
         
@@ -124,6 +127,14 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         controller.userLocation = (lat, long)
         
         supplementaryNavigationController?.pushViewController(controller, animated: true)
+        
+        //always show poi card after search and it should be only one in navigation stack
+        if let viewControllers = supplementaryNavigationController?.viewControllers,
+           viewControllers.count > 2,
+           let firstController = viewControllers.first,
+           let lastController = viewControllers.last {
+            supplementaryNavigationController?.viewControllers = [firstController, lastController]
+        }
         splitDelegate?.showSupplementary()
     }
     
@@ -131,8 +142,9 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         let controller = NavigationBuilder.create(steps: steps, summaryData: summaryData, firstDestionation: firstDestionation, secondDestionation: secondDestionation)
         controller.delegate = self
         
-        supplementaryNavigationController?.pushViewController(controller, animated: true)
-        splitDelegate?.showSupplementary()
+        isSearchHidden = true
+        splitDelegate?.showOnlySecondary()
+        supplementaryNavigationController?.pushViewController(controller, animated: false)
     }
     
     func showLoginFlow() {
@@ -196,6 +208,16 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     func dismissSearchScene() {
         splitDelegate?.showOnlySecondary()
     }
+    
+    func closeNavigationScene() {
+        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+        supplementaryNavigationController?.popViewController(animated: true)
+        splitDelegate?.showSupplementary()
+    }
+    
+    func hideNavigationScene() {
+        splitDelegate?.showOnlySecondary()
+    }
 }
 
 private extension SplitViewExploreMapCoordinator {
@@ -204,12 +226,37 @@ private extension SplitViewExploreMapCoordinator {
         setSecondary()
     }
     
-    private func setSupplementary() {
+    func setSupplementary() {
+        updateSearchScreenLocation()
         splitViewController.setViewController(supplementaryController, for: .supplementary)
     }
     
-    private func setSecondary() {
+    func setSecondary() {
         splitViewController.changeSecondaryViewController(to: secondaryController)
         splitViewController.show(.secondary)
+    }
+    
+    func updateSearchScreenLocation() {
+        supplementaryController.userLocation = (secondaryController.userCoreLocation?.latitude, secondaryController.userCoreLocation?.longitude)
+    }
+}
+
+extension SplitViewExploreMapCoordinator: SplitViewVisibilityProtocol {
+    func showPrimary() {
+        splitDelegate?.showPrimary()
+    }
+    
+    func showSupplementary() {
+        updateSearchScreenLocation()
+        splitDelegate?.showSupplementary()
+    }
+    
+    func showOnlySecondary() {
+        splitDelegate?.showOnlySecondary()
+    }
+    
+    func showSearchScene() {
+        let location = secondaryController.userCoreLocation
+        showSearchSceneWith(lat: location?.latitude, long: location?.longitude)
     }
 }

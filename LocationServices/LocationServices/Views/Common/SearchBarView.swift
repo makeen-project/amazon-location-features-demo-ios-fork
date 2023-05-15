@@ -18,6 +18,7 @@ protocol SearchBarViewOutputDelegate {
     func searchTextDeactivated()
     func searchText(_ text: String?)
     func searchTextWith(_ text: String?)
+    func searchCancel()
 }
 
 extension SearchBarViewOutputDelegate {
@@ -25,6 +26,7 @@ extension SearchBarViewOutputDelegate {
     func searchTextDeactivated() {}
     func searchText(_ text: String?) {}
     func searchTextWith(_ text: String?) {}
+    func searchCancel() {}
 }
 
 // to keep local history of searching between two screens. Explore and search detail
@@ -49,6 +51,21 @@ final class SearchBarView: UIView {
         view.backgroundColor = .searchBarBackgroundColor
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    private let stackView: UIStackView =  {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let grabberIconContainerView: UIView =  {
+        let view = UIView()
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -83,6 +100,10 @@ final class SearchBarView: UIView {
         searchView.textFieldDeactivated = { [weak self] in
             self?.delegate?.searchTextDeactivated()
         }
+        
+        searchView.cancelSearchCallback = { [weak self] in
+            self?.delegate?.searchCancel()
+        }
                 
         SearchBarCache.shared.addObserver(self,
                                           forKeyPath: Constant.keyPathActiveSearchText,
@@ -113,9 +134,10 @@ final class SearchBarView: UIView {
         }
     }
     
-    convenience init(becomeFirstResponder: Bool) {
+    convenience init(becomeFirstResponder: Bool, showGrabberIcon: Bool = true) {
         self.init(frame: .zero)
         searchView.searchViewBecomeFirstResponder(state: becomeFirstResponder)
+        grabberIconContainerView.isHidden = !showGrabberIcon
         if becomeFirstResponder {
             let tap = UITapGestureRecognizer(target: self, action: #selector(gestureAction))
             addGestureRecognizer(tap)
@@ -133,25 +155,31 @@ final class SearchBarView: UIView {
     }
     
     private func configure() {
-        self.addSubview(containerView)
-        containerView.addSubview(grabberIcon)
-        containerView.addSubview(searchView)
+        addSubview(containerView)
+        containerView.addSubview(stackView)
+        stackView.addArrangedSubview(grabberIconContainerView)
+        grabberIconContainerView.addSubview(grabberIcon)
+        
+        stackView.addArrangedSubview(searchView)
         
         containerView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        stackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         grabberIcon.snp.makeConstraints {
             $0.top.equalToSuperview().offset(7)
             $0.width.equalTo(36)
             $0.height.equalTo(5)
-            $0.centerX.equalToSuperview()
+            $0.centerX.bottom.equalToSuperview()
         }
         
         searchView.snp.makeConstraints {
-            $0.top.equalTo(grabberIcon.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
         }
     }
