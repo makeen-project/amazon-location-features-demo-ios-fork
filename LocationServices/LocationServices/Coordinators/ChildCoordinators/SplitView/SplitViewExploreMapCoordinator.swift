@@ -148,7 +148,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     }
     
     func showLoginFlow() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = splitViewController.navigationController
+        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
         
         let controller = LoginVCBuilder.create()
         controller.dismissHandler = { [weak self] in
@@ -168,7 +168,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     }
     
     func showLoginSuccess() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = splitViewController.navigationController
+        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
         
         splitViewController.dismiss(animated: true) { [weak self] in
             let controller = PostLoginBuilder.create()
