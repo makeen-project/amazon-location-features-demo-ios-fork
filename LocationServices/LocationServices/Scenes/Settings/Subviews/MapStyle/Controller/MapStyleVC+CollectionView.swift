@@ -55,26 +55,11 @@ extension MapStyleVC: UICollectionViewDataSource {
 extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch UIDevice.current.userInterfaceIdiom {
-        case .pad:
-            switch UIDevice.current.getDeviceOrientation() {
-            case .landscapeLeft,
-                    .landscapeRight:
-                if isLargerPad { // 12.9
-                    return  CGSize(width: (collectionView.frame.size.width - 80) / 6, height: 106)
-                } else { // 10.2
-                    return  CGSize(width: (collectionView.frame.size.width - 50) / 5, height: 106)
-                }
-            default:
-                if isLargerPad { // 12.9
-                    return  CGSize(width: (collectionView.frame.size.width - 100) / 3, height: 106)
-                } else { // 10.2
-                    return  CGSize(width: (collectionView.frame.size.width - 25) / 2, height: 106)
-                }
-            }
-        default:
-            return  CGSize(width: (collectionView.frame.size.width - 25) / 3, height: 106)
-        }
+        let totalWidth = collectionView.frame.size.width
+        let interitemSpacingSum = minimumInteritemSpacing * (numberOfItemsInRow - 1)
+        let itemWidth = (totalWidth - horizontalItemPadding - interitemSpacingSum)/numberOfItemsInRow
+        return CGSize(width: itemWidth,
+                      height: itemHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -101,12 +86,6 @@ extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        let device = UIDevice.current
-        let deviceOrientation = device.getDeviceOrientation()
-        if device.userInterfaceIdiom == .pad,
-           deviceOrientation == .landscapeLeft || deviceOrientation == .landscapeRight {
-            return 50
-        }
-        return 0
+        return minimumInteritemSpacing
     }
 }
