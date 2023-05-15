@@ -67,7 +67,8 @@ final class CommonDashboardView: UIView {
                      iconBackgroundColor: UIColor,
                      buttonTitle: String,
                      titleFont: UIFont = CommonDashoardConstant.titleFont,
-                     detailLabelFont: UIFont = CommonDashoardConstant.detailLabelFont) {
+                     detailLabelFont: UIFont = CommonDashoardConstant.detailLabelFont,
+                     showMaybeLater: Bool = true) {
         self.init(frame: .zero)
         setupDefaultValues(title: title,
                            detail: detail,
@@ -77,6 +78,7 @@ final class CommonDashboardView: UIView {
                            titleFont: titleFont,
                            detailLabelFont: detailLabelFont)
         setupViews()
+        maybeLaterButton.isHidden = !showMaybeLater
     }
     
     required init?(coder: NSCoder) {

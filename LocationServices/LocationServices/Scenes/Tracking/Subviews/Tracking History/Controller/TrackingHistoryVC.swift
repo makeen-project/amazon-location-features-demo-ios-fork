@@ -71,6 +71,7 @@ final class TrackingHistoryVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingEventReceived(_:)), name: Notification.trackingEvent, object: nil)
+        navigationController?.navigationBar.tintColor = .lsTetriary
         
         scrollView.delegate = self
         tableView.delegate = self

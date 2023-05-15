@@ -149,7 +149,7 @@ extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
     }
     
     func showAttribution() {
-        let controller = AttributionVCBuilder.create(withNavBar: true)
+        let controller = AttributionVCBuilder.create()
         supplementaryNavigationController?.pushViewController(controller, animated: true)
     }
 }

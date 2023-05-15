@@ -13,11 +13,14 @@ final class TrackingDashboardController: UIViewController {
     var trackingHistoryHandler: VoidHandler?
     var closeHandler: VoidHandler?
     
-    private var dashboardView: CommonDashboardView = CommonDashboardView(title: "Enable Tracking",
-                                                                         detail: "Enabling the feature will allow you to track your device and get notified when the device enters or exits any of your geofences.",
-                                                                         image: .trackingIcon,
-                                                                         iconBackgroundColor: .white,
-                                                                         buttonTitle: "Enable Tracking")
+    private var dashboardView = CommonDashboardView(
+        title: StringConstant.enableTracking,
+        detail: StringConstant.enableTrackingDescription,
+        image: .trackingIcon,
+        iconBackgroundColor: .white,
+        buttonTitle: StringConstant.enableTracking,
+        showMaybeLater: UIDevice.current.userInterfaceIdiom == .phone
+    )
     
     var viewModel: TrackingDashboardViewModelProcotol! {
         didSet {
@@ -28,6 +31,7 @@ final class TrackingDashboardController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        navigationItem.backButtonTitle = ""
         setupHandlers()
         setupViews()
     }
@@ -35,7 +39,8 @@ final class TrackingDashboardController: UIViewController {
     private func setupViews() {
         self.view.addSubview(dashboardView)
         dashboardView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }

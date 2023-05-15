@@ -61,7 +61,7 @@ final class VersionVC: UIViewController {
             navigationController?.navigationBar.isHidden = true
         }
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if UIDevice.current.userInterfaceIdiom == .phone {

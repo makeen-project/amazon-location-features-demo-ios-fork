@@ -31,11 +31,70 @@ final class MapStyleVC: UIViewController {
         return collectionView
     }()
     
+    var isLargerPad: Bool {
+        max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) > largerPadSideSizeThreshold
+    }
+    
+    var numberOfItemsInRow: CGFloat {
+        let device = UIDevice.current
+        switch device.userInterfaceIdiom {
+        case .pad:
+            switch device.getDeviceOrientation() {
+            case .landscapeLeft,
+                    .landscapeRight:
+                return 4
+            default:
+                if isLargerPad {
+                    return 3
+                } else {
+                    return 2
+                }
+            }
+        default:
+            return 3
+        }
+    }
+    
+    private let largerPadSideSizeThreshold: CGFloat = 1300
+    let horizontalItemPadding: CGFloat = 25
+    var itemHeight: CGFloat {
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad:
+            return isLargerPad ? 120 : 106
+        default:
+            return 106
+        }
+    }
+    var minimumInteritemSpacing: CGFloat {
+        let device = UIDevice.current
+        switch device.userInterfaceIdiom {
+        case .pad:
+            switch device.getDeviceOrientation() {
+            case .landscapeLeft, .landscapeRight:
+                if isLargerPad {
+                    return 88
+                } else {
+                    return 50
+                }
+            default:
+                return 0
+            }
+        default:
+            return 0
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.loadLocalMapData()
         setupCollectionView()
         setupViews()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        // Reloading view each time in case there has been an orientation change
+        collectionView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {

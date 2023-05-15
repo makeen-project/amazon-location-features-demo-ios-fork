@@ -47,15 +47,26 @@ final class SettingsVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadData()
-        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navigationController?.isNavigationBarHidden = true
+        }
         // show logout button only if we are not signed in
         self.logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navigationController?.isNavigationBarHidden = false
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.navigationController?.navigationBar.isHidden = true
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController?.isNavigationBarHidden = true
+        }
         setupNavigationItems()
         setupViews()
         setupTableView()

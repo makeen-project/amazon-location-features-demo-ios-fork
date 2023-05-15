@@ -8,8 +8,8 @@
 import Foundation
 
 final class AttributionVCBuilder {
-    static func create(withNavBar: Bool = false) -> AttributionVC {
-        let controller = AttributionVC(navBarNeeded: withNavBar)
+    static func create() -> AttributionVC {
+        let controller = AttributionVC()
         return controller
     }
 }

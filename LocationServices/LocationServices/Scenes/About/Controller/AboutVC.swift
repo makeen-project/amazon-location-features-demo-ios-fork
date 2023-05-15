@@ -28,6 +28,20 @@ final class AboutVC: UIViewController {
         setupTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navigationController?.isNavigationBarHidden = false
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navigationController?.isNavigationBarHidden = true
+        }
+    }
+    
     private func setupViews() {
         view.addSubview(tableView)
         

@@ -42,7 +42,7 @@ final class SplitViewCoordinator: Coordinator {
     
     private func setupSplitViewController() {
         splitViewController.presentsWithGesture = false
-        splitViewController.preferredDisplayMode = .secondaryOnly
+        splitViewController.preferredDisplayMode = .twoBesideSecondary
         splitViewController.maximumPrimaryColumnWidth = 200
         splitViewController.delegate = self
     }

@@ -29,6 +29,11 @@ extension SideBarVC: UITableViewDataSource {
         }
         let data = viewModel.getCellItems(indexPath)
         cell.model = data
+        if tableView.indexPathForSelectedRow == nil {
+            tableView.selectRow(at: indexPath,
+                                animated: true,
+                                scrollPosition: .none)
+        }
         return cell
     }
     
@@ -40,6 +45,6 @@ extension SideBarVC: UITableViewDataSource {
 
 extension SideBarVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
+        return NumberConstants.sideBarCellHeight
     }
 }

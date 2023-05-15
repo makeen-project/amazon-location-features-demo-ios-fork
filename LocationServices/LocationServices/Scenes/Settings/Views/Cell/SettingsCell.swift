@@ -44,6 +44,11 @@ enum SettingsCellType {
             return .awsCloudFormationIcon
         }
     }
+    
+    var selectedIcon: UIImage {
+        itemIcon.withTintColor(.lsPrimary,
+                               renderingMode: .alwaysOriginal)
+    }
 }
 
 struct SettingsCellModel {
@@ -133,6 +138,7 @@ final class SettingsCell: UITableViewCell {
         if UIDevice.current.userInterfaceIdiom == .pad {
             selectionView.isHidden = !selected
         }
+        itemIcon.image = selected ? data?.type.selectedIcon : data?.type.itemIcon
     }
     
     private func setupViews() {
