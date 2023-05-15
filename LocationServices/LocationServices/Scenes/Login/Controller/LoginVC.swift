@@ -150,7 +150,7 @@ final class LoginVC: UIViewController {
     private func settingsViewsUpdate() {
         loginView.hideCloseButton(state: isFromSettingScene)
         if isFromSettingScene {
-            self.navigationController?.navigationBar.isHidden = false
+            self.navigationController?.isNavigationBarHidden = false
             self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
             self.navigationItem.title = "AWS CloudFormation"
             self.view.backgroundColor = .white

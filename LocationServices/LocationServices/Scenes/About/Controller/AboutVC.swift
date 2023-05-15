@@ -50,7 +50,7 @@ final class AboutVC: UIViewController {
             $0.top.equalTo(
                 isPad ? screenTitleLabel.snp.bottom : view.safeAreaLayoutGuide
             ).offset(
-                isPad ? 16 : 24
+                isPad ? 16 : 0
             )
             $0.horizontalEdges.equalToSuperview().inset(isPad ? 16 : 0)
             $0.bottom.equalToSuperview().offset(-16)

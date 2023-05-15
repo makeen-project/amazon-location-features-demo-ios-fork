@@ -42,6 +42,7 @@ final class GeofenceDashboardVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .searchBarBackgroundColor
         authActionsHelper.delegate = delegate
+        navigationController?.isNavigationBarHidden = !isInSplitViewController
         setupHandlers()
         setupTableView()
         setupViews()

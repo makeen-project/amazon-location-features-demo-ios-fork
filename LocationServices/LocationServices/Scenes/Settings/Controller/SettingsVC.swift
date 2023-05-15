@@ -15,7 +15,7 @@ final class SettingsVC: UIViewController {
     private var headerTitle: UILabel = {
         let label = UILabel()
         label.text = "Settings"
-        label.font = .amazonFont(type: .bold, size: 24)
+        label.font = .amazonFont(type: .bold, size: 20)
         label.textAlignment = .left
         return label
     }()
@@ -43,7 +43,6 @@ final class SettingsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        navigationController?.isNavigationBarHidden = !UIDevice.current.isPad
         setupNavigationItems()
         setupViews()
         setupTableView()
@@ -54,11 +53,12 @@ final class SettingsVC: UIViewController {
         super.viewWillAppear(animated)
         viewModel.loadData()
         // show logout button only if we are not signed in
-        self.logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
     }
     
     private func setupNavigationItems() {
-        self.navigationItem.backButtonTitle = ""
+        navigationController?.isNavigationBarHidden = !UIDevice.current.isPad
+        navigationItem.backButtonTitle = ""
     }
     
     @objc func logoutAction() {
