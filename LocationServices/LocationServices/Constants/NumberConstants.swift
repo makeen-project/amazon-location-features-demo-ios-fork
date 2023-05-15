@@ -10,4 +10,6 @@ import Foundation
 enum NumberConstants {
     static let fourHundredKMInMeters: Double = 400000
     static let formSheetDefaultCornerRadius: CGFloat = 10
+    static let sideBarCellHeight: CGFloat = 50
+    static let selectionViewCornerRadius: CGFloat = 10
 }

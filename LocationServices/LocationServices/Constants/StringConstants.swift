@@ -82,6 +82,7 @@ enum StringConstant {
     static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
     static let viewTermsAndConditions = "View Terms and Conditions"
     static let continueToTracker = "Continue"
+    static let enableTrackingDescription = "Enabling the feature will allow you to track your device and get notified when the device enters or exits any of your geofences."
     
     static let startTracking = "Start Tracking"
     static let stopTracking = "Stop Tracking"

@@ -32,8 +32,10 @@ final class MapStyleVC: UIViewController {
     }()
     
     var isLargerPad: Bool {
-        max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) > 1300
+        max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) > largerPadSideSizeThreshold
     }
+    
+    private let largerPadSideSizeThreshold: CGFloat = 1300
     
     override func viewDidLoad() {
         super.viewDidLoad()

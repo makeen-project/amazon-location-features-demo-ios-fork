@@ -14,11 +14,11 @@ final class TrackingDashboardController: UIViewController {
     var closeHandler: VoidHandler?
     
     private var dashboardView = CommonDashboardView(
-        title: "Enable Tracking",
-        detail: "Enabling the feature will allow you to track your device and get notified when the device enters or exits any of your geofences.",
+        title: StringConstant.enableTracking,
+        detail: StringConstant.enableTrackingDescription,
         image: .trackingIcon,
         iconBackgroundColor: .white,
-        buttonTitle: "Enable Tracking",
+        buttonTitle: StringConstant.enableTracking,
         showMaybeLater: UIDevice.current.userInterfaceIdiom == .phone
     )
     

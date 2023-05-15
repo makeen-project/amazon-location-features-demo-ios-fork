@@ -60,7 +60,7 @@ final class SideBarCell: UITableViewCell {
         let view = UIView()
         view.isHidden = true
         view.clipsToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = NumberConstants.selectionViewCornerRadius
         view.backgroundColor = .settingsSelectionColor
         return view
     }()

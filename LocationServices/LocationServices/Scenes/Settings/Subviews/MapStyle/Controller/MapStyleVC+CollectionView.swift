@@ -101,14 +101,11 @@ extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            switch UIDevice.current.getDeviceOrientation() {
-            case .landscapeLeft,
-                    .landscapeRight:
-                return 50
-            default:
-                return 0
-            }
+        let device = UIDevice.current
+        let deviceOrientation = device.getDeviceOrientation()
+        if device.userInterfaceIdiom == .pad,
+           deviceOrientation == .landscapeLeft || deviceOrientation == .landscapeRight {
+            return 50
         }
         return 0
     }
