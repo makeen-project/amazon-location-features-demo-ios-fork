@@ -261,6 +261,10 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         navigationController.dismiss(animated: true)
     }
     
+    func closeNavigationScene() {
+        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+    }
+    
     func hideNavigationScene() {
         navigationController.dismiss(animated: true)
     }

@@ -75,7 +75,7 @@ final class NavigationVC: UIViewController {
         }
         
         delegate?.showDirections(isRouteOptionEnabled: true, firstDestionation: viewModel.firstDestionation, secondDestionation: viewModel.secondDestionation, lat: lat, long: long)
-        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+        delegate?.closeNavigationScene()
     }
     
     @objc private func hideScreen() {

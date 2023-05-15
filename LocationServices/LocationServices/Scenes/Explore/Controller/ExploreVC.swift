@@ -253,9 +253,9 @@ private extension ExploreVC {
         
         setNavigationViewLayout()
         
-//        mapNavigationActionsView.dismissHandler = { [weak self] in
-//
-//        }
+        mapNavigationActionsView.dismissHandler = { [weak self] in
+            self?.delegate?.closeNavigationScene()
+        }
         
         mapNavigationActionsView.switchRouteVisibility = { [weak self] state in
             switch state {

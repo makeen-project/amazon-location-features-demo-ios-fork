@@ -209,6 +209,12 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         splitDelegate?.showOnlySecondary()
     }
     
+    func closeNavigationScene() {
+        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+        supplementaryNavigationController?.popViewController(animated: true)
+        splitDelegate?.showSupplementary()
+    }
+    
     func hideNavigationScene() {
         splitDelegate?.showOnlySecondary()
     }

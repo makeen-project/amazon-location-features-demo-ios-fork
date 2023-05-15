@@ -84,6 +84,17 @@ final class DirectionVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        if isRoutingOptionsEnabled {
+            tableView.isHidden = true
+            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
+            calculateRoute()
+        } else {
+            tableView.isHidden = false
+            
+            let isDestination = firstDestionation?.placeName != nil
+            directionSearchView.becomeFirstResponder(isDestination: isDestination)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -209,16 +220,6 @@ final class DirectionVC: UIViewController {
         }
         
         directionView.isHidden = true
-        if isRoutingOptionsEnabled  {
-            tableView.isHidden = true
-            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
-            calculateRoute()
-        } else {
-            tableView.isHidden = false
-            
-            let isDestination = firstDestionation?.placeName != nil
-            directionSearchView.becomeFirstResponder(isDestination: isDestination)
-        }
     }
     
     private func calculateRoute(routeType: RouteTypes = .car,
