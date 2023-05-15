@@ -15,7 +15,7 @@ final class GeofenceVC: UIViewController {
     var directioButtonHandler: VoidHandler?
     
     private lazy var headerView: GeofenceDashboardHeaderView = {
-        let view = GeofenceDashboardHeaderView()
+        let view = GeofenceDashboardHeaderView(containerTopOffset: 25)
         view.backgroundColor = .searchBarBackgroundColor
         view.layer.cornerRadius = 20
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -187,8 +187,6 @@ final class GeofenceVC: UIViewController {
         view.addSubview(geofenceMapView)
         view.addSubview(headerView)
         view.addSubview(grabberIcon)
-        
-        
         
         geofenceMapView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
