@@ -55,33 +55,14 @@ final class TermsAndConditionsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.largeTitleDisplayMode = .never
         setupNavigationItems()
         setupViews()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController?.isNavigationBarHidden = false
-        } else {
-            navigationController?.navigationBar.isHidden = true
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController?.isNavigationBarHidden = true
-        } else {
-            navigationController?.navigationBar.isHidden = false
-        }
     }
     
     // MARK: - Functions
     private func setupNavigationItems() {
         navigationController?.navigationBar.tintColor = .lsTetriary
-        self.title = StringConstant.termsAndConditions
+        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.termsAndConditions
     }
     
     private func setupViews() {

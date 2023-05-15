@@ -34,6 +34,9 @@ final class TrackingDashboardController: UIViewController {
         navigationItem.backButtonTitle = ""
         setupHandlers()
         setupViews()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navigationController?.isNavigationBarHidden = false
+        }
     }
     
     private func setupViews() {

@@ -97,28 +97,10 @@ final class MapStyleVC: UIViewController {
         collectionView.reloadData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController?.isNavigationBarHidden = false
-        } else {
-            navigationController?.navigationBar.isHidden = true
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController?.isNavigationBarHidden = true
-        } else {
-            navigationController?.navigationBar.isHidden = false
-        }
-    }
-    
     private func setupViews() {
-        self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-        self.navigationItem.title = StringConstant.mapStyle
-        self.view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .mapDarkBlackColor
+        navigationItem.title = UIDevice.current.isPad ? "" :  StringConstant.mapStyle
+        view.backgroundColor = .white
         
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         if isPad {

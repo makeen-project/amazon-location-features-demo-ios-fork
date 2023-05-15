@@ -46,4 +46,8 @@ extension UIDevice {
 
         return orientation
     }
+    
+    var isPad: Bool {
+        userInterfaceIdiom == .pad
+    }
 }

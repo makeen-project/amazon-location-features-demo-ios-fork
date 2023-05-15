@@ -40,37 +40,25 @@ final class SettingsVC: UIViewController {
         }
     }
     
-    private func setupNavigationItems() {
-        self.navigationItem.backButtonTitle = ""
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .white
+        navigationController?.isNavigationBarHidden = !UIDevice.current.isPad
+        setupNavigationItems()
+        setupViews()
+        setupTableView()
+        viewModel.loadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadData()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            navigationController?.isNavigationBarHidden = true
-        }
         // show logout button only if we are not signed in
         self.logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            navigationController?.isNavigationBarHidden = false
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .white
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController?.isNavigationBarHidden = true
-        }
-        setupNavigationItems()
-        setupViews()
-        setupTableView()
-        viewModel.loadData()
+    private func setupNavigationItems() {
+        self.navigationItem.backButtonTitle = ""
     }
     
     @objc func logoutAction() {
