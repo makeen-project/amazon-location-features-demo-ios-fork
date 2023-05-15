@@ -212,8 +212,9 @@ class GeofenceAnnotationView: MGLAnnotationView {
             let updatedRadius = CLLocationDistance(distance * pointsPerMeter)
             
             // Update the geofenceAnnotation radius with some minimum radius constraint
-            let minimumRadius: CLLocationDistance = 50
-            geofenceAnnotation.radius = round(max(minimumRadius, updatedRadius))
+            let minimumRadius: CLLocationDistance = 10
+            let maximumRadius: CLLocationDistance = 10000
+            geofenceAnnotation.radius = round(max(minimumRadius, min(maximumRadius, updatedRadius)))
             
             let userInfo = ["radius": geofenceAnnotation.radius]
             NotificationCenter.default.post(name: Notification.geofenceRadiusDragged, object: nil, userInfo: userInfo)
