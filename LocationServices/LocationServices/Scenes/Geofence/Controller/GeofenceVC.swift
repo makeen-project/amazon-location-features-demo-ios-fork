@@ -49,7 +49,6 @@ final class GeofenceVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.backButtonTitle = ""
         viewModel.delegate = self
         authActionsHelper.delegate = delegate
         setupNotification()
@@ -184,7 +183,10 @@ final class GeofenceVC: UIViewController {
     }
     
     func setupViews() {
-        navigationController?.navigationBar.isHidden = true
+        if !isInSplitViewController {
+            navigationItem.backButtonTitle = ""
+            navigationController?.navigationBar.isHidden = true
+        }
         
         view.addSubview(geofenceMapView)
         view.addSubview(headerView)
