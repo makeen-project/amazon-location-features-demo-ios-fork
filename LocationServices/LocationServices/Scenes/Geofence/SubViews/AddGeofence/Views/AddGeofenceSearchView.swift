@@ -86,6 +86,7 @@ final class AddGeofenceSearchView: UIView {
         let radius = notification.userInfo?["radius"] as! Double
         radiusSlider.value = Float(radius)
         radiusSliderValue.text = Int(radius).convertToKm()
+        radiusValueHander?(Int(radius))
     }
     
     func hideRadiusViews(state: Bool) {
