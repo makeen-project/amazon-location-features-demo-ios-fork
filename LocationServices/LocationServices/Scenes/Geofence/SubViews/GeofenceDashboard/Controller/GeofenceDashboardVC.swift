@@ -59,6 +59,7 @@ final class GeofenceDashboardVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         geofenceAppearanceChanged(isVisible: true)
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -64,12 +64,7 @@ final class SplitViewGeofencingMapCoordinator: Coordinator {
 
 extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
     func dismissCurrentScene(geofences: [GeofenceDataModel], shouldDashboardShow: Bool) {
-        if shouldDashboardShow {
-            showDashboardFlow(geofences: geofences, lat: nil, long: nil)
-        } else {
-            splitDelegate?.showOnlySecondary()
-            supplementaryNavigationController?.popToRootViewController(animated: false)
-        }
+        showDashboardFlow(geofences: geofences, lat: secondaryController.userCoreLocation?.latitude, long: secondaryController.userCoreLocation?.longitude)
     }
     
     func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?) {
@@ -77,7 +72,7 @@ extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
         supplementaryController.datas = geofences
         supplementaryController.viewModel.geofences = geofences
         
-        supplementaryNavigationController?.popToRootViewController(animated: false)
+        supplementaryNavigationController?.popToRootViewController(animated: true)
         splitDelegate?.showSupplementary()
     }
     
@@ -153,6 +148,10 @@ extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
         let controller = AttributionVCBuilder.create()
         supplementaryNavigationController?.pushViewController(controller, animated: true)
     }
+    
+    func updateGeofenceScreenLocation() {
+        supplementaryController.userlocation = (secondaryController.userCoreLocation?.latitude, secondaryController.userCoreLocation?.longitude)
+    }
 }
 
 private extension SplitViewGeofencingMapCoordinator {
@@ -162,6 +161,7 @@ private extension SplitViewGeofencingMapCoordinator {
     }
     
     private func setSupplementary() {
+        updateGeofenceScreenLocation()
         splitViewController.setViewController(supplementaryController, for: .supplementary)
     }
     

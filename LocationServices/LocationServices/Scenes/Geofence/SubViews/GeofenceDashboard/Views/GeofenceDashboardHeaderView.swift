@@ -71,7 +71,6 @@ final class GeofenceDashboardHeaderView: UIView {
         self.addButtonHandler?()
     }
     
-    
     private func setupViews() {
         self.addSubview(containerView)
         addButton.addSubview(buttonContainerView)

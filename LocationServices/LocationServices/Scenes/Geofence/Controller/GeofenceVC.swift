@@ -13,6 +13,7 @@ import Mapbox
 final class GeofenceVC: UIViewController {
     weak var delegate: GeofenceNavigationDelegate?
     var directioButtonHandler: VoidHandler?
+    private var isInSplitViewController: Bool { delegate is SplitViewGeofencingMapCoordinator }
     
     private lazy var headerView: GeofenceDashboardHeaderView = {
         let view = GeofenceDashboardHeaderView(containerTopOffset: 25)
@@ -38,7 +39,7 @@ final class GeofenceVC: UIViewController {
     private let authActionsHelper = AuthActionsHelper()
     
     private var geofenceMapView: GeofenceMapView = GeofenceMapView()
-    private var userCoreLocation: CLLocationCoordinate2D?
+    private(set) var userCoreLocation: CLLocationCoordinate2D?
     
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
@@ -60,6 +61,7 @@ final class GeofenceVC: UIViewController {
         setupNotifications()
         locationManagerSetup()
         setupViews()
+        changeHeaderVisibility(isHidden: false)
         geofenceMapView.setupTapGesture()
     }
     
@@ -177,7 +179,7 @@ final class GeofenceVC: UIViewController {
     
     @objc private func geofenceAppearanceChanged(_ notification: Notification) {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
-        headerView.isHidden = isVisible
+        changeHeaderVisibility(isHidden: isVisible)
         grabberIcon.isHidden = isVisible
     }
     
@@ -209,6 +211,14 @@ final class GeofenceVC: UIViewController {
     func locationManagerSetup() {
         locationManager.performLocationDependentAction {
             self.locationManager.startUpdatingLocation()
+        }
+    }
+    
+    private func changeHeaderVisibility(isHidden: Bool) {
+        if isInSplitViewController {
+            headerView.isHidden = true
+        } else {
+            headerView.isHidden = isHidden
         }
     }
 }
