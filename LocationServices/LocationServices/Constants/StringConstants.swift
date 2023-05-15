@@ -204,6 +204,8 @@ enum StringConstant {
     static let termsAndConditions = "Terms & Conditions"
     static let demo = "Demo"
     static let routeOverview = "Route Overview"
+    
+    static let loginVcTitle = "AWS CloudFormation"
 }
 
 protocol ConstantsLoginInfoConfig {
