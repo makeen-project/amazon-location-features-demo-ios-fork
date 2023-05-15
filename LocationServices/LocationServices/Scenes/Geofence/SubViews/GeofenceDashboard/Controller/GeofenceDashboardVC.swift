@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 final class GeofenceDashboardVC: UIViewController {
+    weak var delegate: GeofenceNavigationDelegate?
     var userlocation: (lat: Double?, long: Double?)?
     var addGeofence: Handler<(activeGeofences: [GeofenceDataModel], isEditingSceneEnabled: Bool, geofenceData: GeofenceDataModel?, userlocation: (lat: Double?, long: Double?)?)>?
     private let initialGeofenceView = InitialGeofenceView()
@@ -23,6 +24,8 @@ final class GeofenceDashboardVC: UIViewController {
         }
     }
     
+    private let authActionsHelper = AuthActionsHelper()
+    
     var tableView: UITableView = {
         let tableView = UITableView()
         tableView.accessibilityIdentifier = ViewsIdentifiers.Geofence.geofenceTableView
@@ -34,6 +37,7 @@ final class GeofenceDashboardVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .searchBarBackgroundColor
+        authActionsHelper.delegate = delegate
         setupHandlers()
         setupTableView()
         setupViews()
@@ -81,16 +85,20 @@ final class GeofenceDashboardVC: UIViewController {
         }
         
         initialGeofenceView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.centerY.equalToSuperview().multipliedBy(0.9)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
         }
     }
     
     private func setupHandlers() {
         initialGeofenceView.geofenceButtonHandler = { [weak self] in
-            self?.headerView.isHidden = false
-            self?.tableView.isHidden = false
-            self?.initialGeofenceView.isHidden = true
-            self?.tableView.reloadData()
+            self?.authActionsHelper.tryToPerformAuthAction { [weak self] in
+                self?.headerView.isHidden = false
+                self?.tableView.isHidden = false
+                self?.initialGeofenceView.isHidden = true
+                self?.tableView.reloadData()
+            }
         }
         
         headerView.addButtonHandler = { [weak self] in

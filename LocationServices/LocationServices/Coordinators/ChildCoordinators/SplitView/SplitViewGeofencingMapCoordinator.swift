@@ -24,6 +24,7 @@ final class SplitViewGeofencingMapCoordinator: Coordinator {
     
     private lazy var supplementaryController: GeofenceDashboardVC = {
         let controller = GeofenceDashboardBuilder.create(lat: nil, long: nil, geofences: [])
+        controller.delegate = self
         controller.addGeofence = { [weak self] parameters in
             self?.showAddGeofenceFlow(activeGeofencesLists: parameters.activeGeofences,
                                       isEditingSceneEnabled: parameters.isEditingSceneEnabled,
