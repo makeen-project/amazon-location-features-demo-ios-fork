@@ -10,30 +10,26 @@ import SnapKit
 
 final class TrackingDashboardController: UIViewController {
     
+    weak var delegate: TrackingNavigationDelegate?
     var trackingHistoryHandler: VoidHandler?
-    var closeHandler: VoidHandler?
     
     private var dashboardView = CommonDashboardView(
         title: StringConstant.enableTracking,
         detail: StringConstant.enableTrackingDescription,
         image: .trackingIcon,
         iconBackgroundColor: .white,
-        buttonTitle: StringConstant.enableTracking,
-        showMaybeLater: UIDevice.current.userInterfaceIdiom == .phone
+        buttonTitle: StringConstant.enableTracking
     )
     
-    var viewModel: TrackingDashboardViewModelProcotol! {
-        didSet {
-            viewModel.delegate = self
-        }
-    }
-
+    private let authActionsHelper = AuthActionsHelper()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         navigationItem.backButtonTitle = ""
         setupHandlers()
         setupViews()
+        authActionsHelper.delegate = delegate
         if UIDevice.current.userInterfaceIdiom == .pad {
             navigationController?.isNavigationBarHidden = false
         }
@@ -42,30 +38,17 @@ final class TrackingDashboardController: UIViewController {
     private func setupViews() {
         self.view.addSubview(dashboardView)
         dashboardView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.centerY.equalToSuperview().multipliedBy(0.9)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
         }
     }
     
     private func setupHandlers() {
-        dashboardView.maybeLaterButtonHander = { [weak self] in
-            self?.viewModel.saveData(state: false)
-        }
-        
         dashboardView.dashboardButtonHandler = { [weak self] in
-            self?.viewModel.saveData(state: true)
+            self?.authActionsHelper.tryToPerformAuthAction { [weak self] in
+                self?.trackingHistoryHandler?()
+            }
         }
-    }
-    
-}
-
-extension TrackingDashboardController: TrackingDashboardViewModelOutputProtocol {
-    func openHistoryPage() {
-        trackingHistoryHandler?()
-    }
-    
-    func close() {
-        closeHandler?()
     }
 }

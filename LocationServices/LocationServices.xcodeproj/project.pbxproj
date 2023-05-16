@@ -227,8 +227,6 @@
 		AD989727298B0A250041E867 /* CommonDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989726298B0A250041E867 /* CommonDashboardView.swift */; };
 		AD989734298B2B2D0041E867 /* TrackingDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989733298B2B2D0041E867 /* TrackingDashboard.swift */; };
 		AD989736298B2DF00041E867 /* TrackingDashboardBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989735298B2DF00041E867 /* TrackingDashboardBuilder.swift */; };
-		AD989738298B2E4C0041E867 /* TrackingDashboarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989737298B2E4C0041E867 /* TrackingDashboarViewModel.swift */; };
-		AD98973A298B2E6A0041E867 /* TrackingDashboardContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989739298B2E6A0041E867 /* TrackingDashboardContracts.swift */; };
 		AD989742298C521E0041E867 /* TrackingHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989741298C521E0041E867 /* TrackingHistoryVC.swift */; };
 		AD989744298C534C0041E867 /* TrackingHistory+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989743298C534C0041E867 /* TrackingHistory+TableView.swift */; };
 		AD989746298C53E40041E867 /* TrackingHistoryContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989745298C53E40041E867 /* TrackingHistoryContracts.swift */; };
@@ -621,8 +619,6 @@
 		AD989726298B0A250041E867 /* CommonDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonDashboardView.swift; sourceTree = "<group>"; };
 		AD989733298B2B2D0041E867 /* TrackingDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDashboard.swift; sourceTree = "<group>"; };
 		AD989735298B2DF00041E867 /* TrackingDashboardBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDashboardBuilder.swift; sourceTree = "<group>"; };
-		AD989737298B2E4C0041E867 /* TrackingDashboarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDashboarViewModel.swift; sourceTree = "<group>"; };
-		AD989739298B2E6A0041E867 /* TrackingDashboardContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDashboardContracts.swift; sourceTree = "<group>"; };
 		AD989741298C521E0041E867 /* TrackingHistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHistoryVC.swift; sourceTree = "<group>"; };
 		AD989743298C534C0041E867 /* TrackingHistory+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackingHistory+TableView.swift"; sourceTree = "<group>"; };
 		AD989745298C53E40041E867 /* TrackingHistoryContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHistoryContracts.swift; sourceTree = "<group>"; };
@@ -1924,21 +1920,10 @@
 		AD98972B298B291F0041E867 /* Tracking Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				AD989732298B2B210041E867 /* Cntroller */,
-				AD989730298B2B150041E867 /* View */,
-				AD98972F298B2B0A0041E867 /* ViewModel */,
+				AD989732298B2B210041E867 /* Controller */,
 				AD98972E298B2B000041E867 /* Builder */,
-				AD98972C298B2AEF0041E867 /* Contracts */,
 			);
 			path = "Tracking Dashboard";
-			sourceTree = "<group>";
-		};
-		AD98972C298B2AEF0041E867 /* Contracts */ = {
-			isa = PBXGroup;
-			children = (
-				AD989739298B2E6A0041E867 /* TrackingDashboardContracts.swift */,
-			);
-			path = Contracts;
 			sourceTree = "<group>";
 		};
 		AD98972E298B2B000041E867 /* Builder */ = {
@@ -1949,27 +1934,12 @@
 			path = Builder;
 			sourceTree = "<group>";
 		};
-		AD98972F298B2B0A0041E867 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				AD989737298B2E4C0041E867 /* TrackingDashboarViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		AD989730298B2B150041E867 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		AD989732298B2B210041E867 /* Cntroller */ = {
+		AD989732298B2B210041E867 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				AD989733298B2B2D0041E867 /* TrackingDashboard.swift */,
 			);
-			path = Cntroller;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		AD98973B298C4F670041E867 /* Tracking History */ = {
@@ -3265,7 +3235,6 @@
 				ADC9738E295EEA4D005AE918 /* NavigationVCView.swift in Sources */,
 				AD2AF092292EA85900149904 /* GeofenceVCBuilder.swift in Sources */,
 				ADD139A62981C7360003F917 /* MapStyleVC+CollectionView.swift in Sources */,
-				AD989738298B2E4C0041E867 /* TrackingDashboarViewModel.swift in Sources */,
 				AD38BA06294BE6A60087C2FC /* UITableView+Extension.swift in Sources */,
 				AD2AF0E3292EAC2300149904 /* WelcomeBottomView.swift in Sources */,
 				8AD67F9A29D1B243004A5F7D /* MapStyleTypes+Image.swift in Sources */,
@@ -3390,7 +3359,6 @@
 				ADC474FA2971E11E00AAE7A3 /* InitialGeofenceView.swift in Sources */,
 				ADB46519295D57A6004088AE /* DirectionTextFieldModel.swift in Sources */,
 				ADBDDEED29830D9E00696EC6 /* UnitVC+TableView.swift in Sources */,
-				AD98973A298B2E6A0041E867 /* TrackingDashboardContracts.swift in Sources */,
 				8AC0806929A90BFC0000D79B /* DeleteTrackingView.swift in Sources */,
 				AD2AF0DD292EAC0500149904 /* AboutVC.swift in Sources */,
 				ADD1398229809C640003F917 /* ResetPasswordViewModel.swift in Sources */,

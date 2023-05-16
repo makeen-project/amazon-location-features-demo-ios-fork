@@ -21,14 +21,26 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     
     private var floatingView: MapFloatingViewHandler?
     
-    private lazy var supplementaryController: TrackingDashboardController = {
+    private var historyIsRootController: Bool = false
+    private var supplementaryController: UIViewController {
+        if historyIsRootController {
+            return historyController
+        } else {
+            return dashboardController
+        }
+    }
+    
+    private lazy var dashboardController: TrackingDashboardController = {
         let controller = TrackingDashboardBuilder.create()
+        controller.delegate = self
         controller.trackingHistoryHandler = { [weak self] in
             self?.showTrackingHistory()
         }
-        controller.closeHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: nil)
-        }
+        return controller
+    }()
+    
+    private lazy var historyController: TrackingHistoryVC = {
+        let controller = TrackingHistoryBuilder.create(isTrackingActive: false)
         return controller
     }()
     
@@ -57,11 +69,14 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
 
 extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     func showNextTrackingScene() {
-        
+        setSupplementary()
+        splitViewController.show(.supplementary)
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
-        let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
+        historyIsRootController = true
+        let controller = historyController
+        controller.viewModel.changeTrackingStatus(isTrackingActive)
         supplementaryNavigationController?.setViewControllers([controller],
                                                               animated: true)
     }
