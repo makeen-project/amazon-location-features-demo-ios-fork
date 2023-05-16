@@ -42,7 +42,7 @@ final class SplitViewCoordinator: Coordinator {
     
     private func setupSplitViewController() {
         splitViewController.presentsWithGesture = false
-        splitViewController.preferredDisplayMode = .twoBesideSecondary
+        splitViewController.preferredDisplayMode = .secondaryOnly
         splitViewController.maximumPrimaryColumnWidth = 200
         splitViewController.delegate = self
     }
@@ -173,6 +173,9 @@ extension SplitViewCoordinator: SplitViewVisibilityProtocol {
 
 extension SplitViewCoordinator: UISplitViewControllerDelegate {
     func splitViewController(_ svc: UISplitViewController, willChangeTo displayMode: UISplitViewController.DisplayMode) {
+        DispatchQueue.main.async {
+            self.splitViewController.preferredDisplayMode = displayMode
+        }
         guard showSearchOnMap else { return }
         
         let mapState: MapSearchState
