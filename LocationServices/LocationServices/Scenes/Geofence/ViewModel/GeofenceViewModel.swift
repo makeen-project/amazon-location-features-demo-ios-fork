@@ -51,8 +51,13 @@ final class GeofenceViewModel: GeofenceViewModelProtocol {
                 self?.geofences = geofences
                 self?.delegate?.showGeofences(geofences)
             case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                self?.delegate?.showAlert(model)
+                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                }
+                else {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+                    self?.delegate?.showAlert(model)
+                }
             }
         }
     }
