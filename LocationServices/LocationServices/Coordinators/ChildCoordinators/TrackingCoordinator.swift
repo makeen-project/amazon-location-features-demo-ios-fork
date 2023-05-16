@@ -32,8 +32,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showNextTrackingScene() {
-        //TODO: Made to fix flow for iPad, check if everything works fine for both iPhone and iPad
-        //showDashboardFlow()
+        showDashboardFlow()
     }
     
     func showDashboardFlow() {
@@ -41,15 +40,9 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         controller.modalPresentationStyle = .pageSheet
         
         controller.trackingHistoryHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: false, completion: {
-                self?.showTrackingHistory()
-            })
+            self?.showTrackingHistory()
         }
         
-        controller.closeHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: nil)
-        }
-
         if let sheet = controller.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
@@ -63,19 +56,21 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
-        let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
-        controller.modalPresentationStyle = .pageSheet
-        
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
-        
-        navigationController.present(controller, animated: true)
+        navigationController.dismiss(animated: false, completion: { [weak self] in
+            let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
+            controller.modalPresentationStyle = .pageSheet
+            
+            if let sheet = controller.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+                sheet.selectedDetentIdentifier = .medium
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
+                sheet.prefersGrabberVisible = true
+                sheet.largestUndimmedDetentIdentifier = .medium
+            }
+            
+            self?.navigationController.present(controller, animated: true)
+        })
     }
     
     func showMapStyleScene() {

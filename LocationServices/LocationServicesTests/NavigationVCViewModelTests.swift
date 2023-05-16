@@ -67,7 +67,7 @@ final class NavigationVCViewModelTests: XCTestCase {
         
         navigationVCViewModel.update(steps: [steps], summaryData: (totalDistance: 0.7, totalDuration: 20))
         
-        XCTAssertEqual(navigationVCViewModel.getSummaryData()?.totalDistance, "700.0 m", "Expected summary total distance 700.0 m")
+        XCTAssertEqual(navigationVCViewModel.getSummaryData().totalDistance, "700.0 m", "Expected summary total distance 700.0 m")
     }
     
     func testGetDataWithZeroSteps() throws {

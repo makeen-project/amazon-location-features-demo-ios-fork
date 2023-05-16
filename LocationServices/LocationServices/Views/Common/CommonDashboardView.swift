@@ -14,7 +14,6 @@ enum CommonDashoardConstant {
 
 final class CommonDashboardView: UIView {
     var dashboardButtonHandler: VoidHandler?
-    var maybeLaterButtonHander: VoidHandler?
     
     private let iconContainerView: UIView = {
         let view = UIView()
@@ -45,16 +44,6 @@ final class CommonDashboardView: UIView {
         return button
     }()
     
-    private lazy var maybeLaterButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle(StringConstant.maybeLater, for: .normal)
-        button.titleLabel?.font = UIFont.amazonFont(type: .regular, size: 13)
-        button.titleLabel?.textAlignment = .center
-        button.addTarget(self, action: #selector(maybeLaterAction), for: .touchUpInside)
-        button.tintColor = .black
-        return button
-    }()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,8 +56,7 @@ final class CommonDashboardView: UIView {
                      iconBackgroundColor: UIColor,
                      buttonTitle: String,
                      titleFont: UIFont = CommonDashoardConstant.titleFont,
-                     detailLabelFont: UIFont = CommonDashoardConstant.detailLabelFont,
-                     showMaybeLater: Bool = true) {
+                     detailLabelFont: UIFont = CommonDashoardConstant.detailLabelFont) {
         self.init(frame: .zero)
         setupDefaultValues(title: title,
                            detail: detail,
@@ -78,7 +66,6 @@ final class CommonDashboardView: UIView {
                            titleFont: titleFont,
                            detailLabelFont: detailLabelFont)
         setupViews()
-        maybeLaterButton.isHidden = !showMaybeLater
     }
     
     required init?(coder: NSCoder) {
@@ -106,24 +93,17 @@ final class CommonDashboardView: UIView {
         self.comonButton.setTitle(buttonTitle, for: .normal)
     }
     
-    func hideMaybeLaterButton(state: Bool) {
-        self.maybeLaterButton.isHidden = state
-    }
-    
     private func setupViews() {
         self.addSubview(iconContainerView)
         iconContainerView.addSubview(iconView)
         self.addSubview(titleLabel)
         self.addSubview(detailLabel)
-        self.addSubview(maybeLaterButton)
         self.addSubview(comonButton)
         
         iconContainerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(48)
+            $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(iconContainerView.snp.width)
-            $0.height.lessThanOrEqualTo(96)
-            $0.height.equalTo(96).priority(.medium)
+            $0.height.width.equalTo(96)
         }
         
         iconView.snp.makeConstraints {
@@ -138,29 +118,17 @@ final class CommonDashboardView: UIView {
         
         detailLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalToSuperview().offset(-24)
+            $0.leading.trailing.equalToSuperview()
         }
         
         comonButton.snp.makeConstraints {
             $0.top.greaterThanOrEqualTo(detailLabel.snp.bottom).offset(30)
-            $0.bottom.equalTo(maybeLaterButton.snp.top).offset(-16)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(48)
-        }
-        
-        maybeLaterButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(-20)
-            $0.leading.trailing.equalToSuperview()
         }
     }
     
     @objc func commonButtonAction() {
         dashboardButtonHandler?()
-    }
-    
-    @objc func maybeLaterAction() {
-        maybeLaterButtonHander?()
     }
 }

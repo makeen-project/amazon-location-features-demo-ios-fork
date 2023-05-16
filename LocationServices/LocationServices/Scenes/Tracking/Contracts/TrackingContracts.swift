@@ -20,14 +20,17 @@ protocol TrackingNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
 protocol TrackingViewModelProtocol: AnyObject {
     var delegate: TrackingViewModelDelegate? { get set }
     var isTrackingActive: Bool { get }
+    var hasHistory: Bool { get }
     
     func startTracking()
     func stopTracking()
     func trackLocationUpdate(location: CLLocation?)
     func fetchListOfGeofences()
+    func updateHistory()
 }
 
 protocol TrackingViewModelDelegate: AnyObject, AlertPresentable {
     func drawTrack(history: [TrackingHistoryPresentation])
+    func historyLoaded()
     func showGeofences(_ models: [GeofenceDataModel])
 }

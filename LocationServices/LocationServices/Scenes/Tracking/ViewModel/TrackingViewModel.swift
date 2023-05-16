@@ -23,6 +23,8 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     
     private var lastLocation: CLLocation?
     private(set) var isTrackingActive: Bool = false
+    private var history: [TrackingHistoryPresentation] = []
+    var hasHistory: Bool { !history.isEmpty }
     
     private var iotDataManager: AWSIoTDataManager?
     private var iotManager: AWSIoTManager?
@@ -97,13 +99,19 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         geofenceService.evaluateGeofence(lat: lat, long: long)
     }
     
-    private func updateHistory() {
+    func updateHistory() {
         trackingService.getAllTrackingHistory { [weak self] result in
             switch result {
             case .success(let history):
                 NotificationCenter.default.post(name: Notification.updateTrackingHistory, object: self, userInfo: ["history": history])
-                self?.delegate?.drawTrack(history: history)
+                self?.history = history
+                if self?.isTrackingActive ?? false {
+                    self?.delegate?.drawTrack(history: history)
+                } else {
+                    self?.delegate?.historyLoaded()
+                }
             case .failure(let error):
+                self?.history = []
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
                 DispatchQueue.main.async {
                     self?.delegate?.showAlert(model)
@@ -113,7 +121,6 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     }
     
     private func subscribeToAWSNotifications() {
-        
         createIoTManagerIfNeeded {
             guard let identityId = AWSMobileClient.default().identityId else {
                 return
@@ -159,7 +166,10 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     private func createIoTManagerIfNeeded(completion: @escaping ()->()) {
         guard iotDataManager == nil,
               let configuration = getAWSConfigurationModel(),
-              !configuration.webSocketUrl.isEmpty else { return }
+              !configuration.webSocketUrl.isEmpty else {
+            completion()
+            return
+        }
                 
         iotManager = AWSIoTManager.default()
         iot = AWSIoT(forKey: "default")
@@ -190,6 +200,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         }
         
         iotDataManager?.unsubscribeTopic("\(identityId)/tracker")
+        iotDataManager?.disconnect()
     }
     
     private func getAWSConfigurationModel() -> CustomConnectionModel? {

@@ -188,7 +188,7 @@ final class TrackingVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        openLoginFlow(skipDashboard: false)
+        openLoginFlow(skipDashboard: viewModel.hasHistory)
         showGeofenceAnnotations()
     }
     
@@ -199,6 +199,7 @@ final class TrackingVC: UIViewController {
             if skipDashboard {
                 delegate?.showTrackingHistory(isTrackingActive: viewModel.isTrackingActive)
             } else {
+                viewModel.updateHistory()
                 delegate?.showNextTrackingScene()
             }
         case .customConfig:
@@ -283,6 +284,16 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
 }
 
 extension TrackingVC: TrackingViewModelDelegate {
+    func historyLoaded() {
+        guard LoginViewModel.getAuthStatus() == .authorized,
+              viewModel.hasHistory else { return }
+        
+        DispatchQueue.main.async {
+            self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
+            self.delegate?.showTrackingHistory(isTrackingActive: self.viewModel.isTrackingActive)
+        }
+    }
+    
     func removeGeofencesFromMap() {
         trackingMapView.removeGeofencesFromMap()
     }
