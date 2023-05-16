@@ -24,7 +24,8 @@ platform :ios do
         device: "iPhone 14",
         scheme: "LocationServices",
         result_bundle: true,
-        output_directory: Dir.pwd + "/test_output"
+        output_directory: Dir.pwd + "/test_output",
+        xcargs: "-test-iterations='2' -retry-tests-on-failure"
       )
     ensure
       xcresult_path = Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]
