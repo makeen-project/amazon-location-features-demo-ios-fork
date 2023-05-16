@@ -29,7 +29,10 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         return locationManager
     }()
     
-    private let poiCardView: POICardView = POICardView()
+    private lazy var poiCardView: POICardView = {
+        let titleTopOffset: CGFloat = isInSplitViewController ? 0 : 20
+        return POICardView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
+    }()
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     var userLocation: (lat: Double?, long: Double?)?
@@ -50,7 +53,6 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         poiCardView.delegate = self
         viewModel.fetchDatas()
         setupViews()
-        poiCardView.changeHeaderVisibility(isHidden: isInSplitViewController)
         
         let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissPoiView))
         barButtonItem.tintColor = .lsPrimary
@@ -59,7 +61,6 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
         showCurrentAnnotation()
     }
         
@@ -108,7 +109,6 @@ extension POICardVC: POICardViewModelOutputDelegate {
         poiCardView.errorMessage = errorMessage
         poiCardView.errorInfoMessage = errorInfoMessage
         poiCardView.dataModel = cardData
-        title = cardData.placeName
     }
     
     @objc func dismissPoiView() {

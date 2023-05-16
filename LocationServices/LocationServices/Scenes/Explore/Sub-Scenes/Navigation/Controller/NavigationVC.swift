@@ -52,11 +52,6 @@ final class NavigationVC: UIViewController {
         navigationItem.leftBarButtonItem = barButtonItem
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
     func setupHandler() {
         navigationHeaderView.dismissHandler = { [weak self] in
             self?.closeScreen()

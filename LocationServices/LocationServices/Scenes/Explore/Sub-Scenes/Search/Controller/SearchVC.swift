@@ -59,7 +59,6 @@ final class SearchVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = false
         searchAppearanceChanged(isVisible: true)
         
         let mapModels = viewModel.mapModels

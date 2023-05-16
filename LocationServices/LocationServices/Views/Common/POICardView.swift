@@ -59,6 +59,8 @@ final class POICardView: UIView {
     var errorMessage: String?
     var errorInfoMessage: String?
     
+    private var titleTopOffset: CGFloat = 20
+    
     private let containerView: UIView =  {
        let view = UIView()
         view.backgroundColor = .searchBarBackgroundColor
@@ -235,18 +237,20 @@ final class POICardView: UIView {
         return PlaceholderAnimator(dataViews: dataViews, placeholderViews: placeholderViews)
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(titleTopOffset: CGFloat, isCloseButtonHidden: Bool) {
+        self.init()
+        self.titleTopOffset = titleTopOffset
         self.accessibilityIdentifier = ViewsIdentifiers.PoiCard.poiCardView
         setupViews()
+        closeButton.isHidden = isCloseButtonHidden
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {
         fatalError(.errorInitWithCoder)
-    }
-    
-    func changeHeaderVisibility(isHidden: Bool) {
-        headerView.isHidden = isHidden
     }
     
     @objc private func poiCardDismiss() {
@@ -298,7 +302,7 @@ final class POICardView: UIView {
         }
         
         poiTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+            $0.top.equalToSuperview().offset(titleTopOffset)
             $0.leading.equalToSuperview()
             $0.trailing.equalTo(closeButton.snp.leading).offset(-5)
             $0.height.equalTo(28)
