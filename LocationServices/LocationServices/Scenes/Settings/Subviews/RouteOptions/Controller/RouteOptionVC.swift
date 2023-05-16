@@ -37,26 +37,18 @@ final class RouteOptionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController?.isNavigationBarHidden = false
-        } else {
-            navigationController?.navigationBar.isHidden = true
-        }
+        navigationController?.isNavigationBarHidden = false
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController?.isNavigationBarHidden = true
-        } else {
-            navigationController?.navigationBar.isHidden = false
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
     
     private func setupViews() {
-        self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-        self.navigationItem.title = StringConstant.defaultRouteOptions
-        self.view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .mapDarkBlackColor
+        navigationItem.title = UIDevice.current.isPad ? "" :  StringConstant.defaultRouteOptions
+        view.backgroundColor = .white
         
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         if isPad {

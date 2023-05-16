@@ -124,7 +124,7 @@ final class AttributionVC: UIViewController {
     // MARK: - Functions
     private func setupNavigationItems() {
         navigationController?.navigationBar.tintColor = .lsTetriary
-        title = UIDevice.current.userInterfaceIdiom == .phone ? StringConstant.attribution : ""
+        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.attribution
     }
     
     private func setupViews() {
