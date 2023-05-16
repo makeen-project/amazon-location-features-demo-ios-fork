@@ -20,6 +20,7 @@ protocol ExploreViewModelProtocol: AnyObject {
     func userLocationChanged(_ userLocation: CLLocationCoordinate2D)
     func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?)
     func shouldShowWelcome() -> Bool
+    func cancelActiveRequests()
 }
 
 protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {
@@ -28,7 +29,7 @@ protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {
     
     func routeReCalculated(route: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes)
     func userReachedDestination(_ destination: MapModel)
-    func showAnnotation(model: SearchPresentation)
+    func showAnnotation(model: SearchPresentation, force: Bool)
 }
 
 protocol ExploreVCProtocol: AnyObject {

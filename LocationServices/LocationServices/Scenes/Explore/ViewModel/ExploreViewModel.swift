@@ -1,6 +1,6 @@
 //
 //  ExploreViewModel.swift
-//  LocationServices
+//  LocationServicesTests
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
@@ -13,7 +13,7 @@ import AWSLocationXCF
 
 final class ExploreViewModel: ExploreViewModelProtocol {
     
-    private let routingService: RoutingAPIService
+    private let routingService: RoutingServiceable
     private var selectedRoute: RouteModel?
     
     var delegate: ExploreViewModelOutputDelegate?
@@ -23,9 +23,11 @@ final class ExploreViewModel: ExploreViewModelProtocol {
             awsLoginService.delegate = self
         }
     }
-    let locationService: LocationService
+    let locationService: LocationServiceable
     
-    init(routingService: RoutingAPIService, locationService: LocationService) {
+    private var activeRequests: [AWSRequest] = []
+    
+    init(routingService: RoutingServiceable, locationService: LocationServiceable) {
         self.routingService = routingService
         self.locationService = locationService
     }
@@ -95,26 +97,38 @@ final class ExploreViewModel: ExploreViewModelProtocol {
     }
     
     func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) {
-        locationService.searchWithPosition(text: [NSNumber(value: coordinates.longitude), NSNumber(value: coordinates.latitude)], userLat: userLocation?.latitude, userLong: userLocation?.longitude) { [weak self] response in
+        var request: AWSLocationSearchPlaceIndexForPositionRequest? = nil
+        request = locationService.searchWithPosition(text: [NSNumber(value: coordinates.longitude), NSNumber(value: coordinates.latitude)], userLat: userLocation?.latitude, userLong: userLocation?.longitude) { [weak self] response in
             switch response {
             case .success(let results):
                 guard let result = results.first else { break }
                 DispatchQueue.main.async {
-                    self?.delegate?.showAnnotation(model: result)
+                    self?.delegate?.showAnnotation(model: result, force: false)
                 }
             case .failure(let error):
+                let nsError = error as NSError
+                guard nsError.code != StringConstant.Errors.requestCanceledCode else { break }
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
                 DispatchQueue.main.async {
                     self?.delegate?.showAlert(model)
                 }
             }
+            
+            self?.activeRequests.removeAll(where: { $0 == request })
         }
+        
+        guard let request else { return }
+        activeRequests.append(request)
     }
     
     func shouldShowWelcome() -> Bool {
         let welcomeShownVersion = UserDefaultsHelper.get(for: String.self, key: .termsAndConditionsAgreedVersion)
         let currentVersion = UIApplication.appVersion()
         return welcomeShownVersion != currentVersion
+    }
+    
+    func cancelActiveRequests() {
+        activeRequests.forEach { $0.cancel() }
     }
 }
 

@@ -27,6 +27,7 @@ extension AWSRoutingServiceProtocol {
                         completion: @escaping ((Result<AWSLocationCalculateRouteResponse, Error>) -> Void)) {
         
         let request = AWSLocationCalculateRouteRequest()!
+        request.departNow = true
         request.travelMode = travelMode
         request.calculatorName = getCalculatorName()
         request.includeLegGeometry = true

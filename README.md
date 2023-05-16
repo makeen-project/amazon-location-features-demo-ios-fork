@@ -49,6 +49,10 @@ TEST_WEB_SOCKET_URL = WEB_SOCKET_URL
 TEST_SAMPLE_USER_NAME = USER_NAME
 TEST_SAMPLE_PASSWORD = PASSWORD
 
+* How to create a new Cloud Formation on Amazon
+
+Follow this [Document](https://location.aws.com/demo/help) to create & configure a new Cloud formation
+
 ### Run from Xcode
 * Choose device/simulator as a destination
 * Press cmd+U

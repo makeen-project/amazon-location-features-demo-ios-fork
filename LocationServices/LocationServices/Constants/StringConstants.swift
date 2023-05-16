@@ -180,6 +180,10 @@ enum StringConstant {
         static let more: String = "More"
     }
     
+    enum Errors {
+        static let requestCanceledCode = -999
+    }
+    
     static let units = "Units"
     static let dataProvider = "Data Provider"
     static let mapStyle = "Map style"

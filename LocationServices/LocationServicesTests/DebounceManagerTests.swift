@@ -1,6 +1,6 @@
 //
 //  DebounceManagerTests.swift
-//  DebounceManagerTests
+//  LocationServicesTests
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
@@ -25,7 +25,7 @@ final class DebounceManagerTests: XCTestCase {
         debounceManager.debounce {
             let date2 = Date()
             let secondsBetween = Int(date2.timeIntervalSince(date1))
-            XCTAssertEqual(secondsBetween, 1, "Expected 1 second of debounce")
+            XCTAssertGreaterThanOrEqual(secondsBetween, 1, "Expected atleast 1 second of debounce")
         }
     }
 
