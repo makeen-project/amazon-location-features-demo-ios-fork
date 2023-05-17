@@ -15,6 +15,7 @@ protocol TrackingNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
     func showLoginFlow()
     func showLoginSuccess()
     func showAttribution()
+    func showDashboardFlow()
 }
 
 protocol TrackingViewModelProtocol: AnyObject {
@@ -27,6 +28,7 @@ protocol TrackingViewModelProtocol: AnyObject {
     func trackLocationUpdate(location: CLLocation?)
     func fetchListOfGeofences()
     func updateHistory()
+    func resetHistory()
 }
 
 protocol TrackingViewModelDelegate: AnyObject, AlertPresentable {

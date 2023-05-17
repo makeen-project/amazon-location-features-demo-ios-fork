@@ -74,12 +74,19 @@ final class GeofenceVC: UIViewController {
         }
     }
     
-    func setupNotification() {
+    private func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerPosition(_:)), name: Notification.geofenceMapLayerUpdate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
     }
     
     @objc private func updateMapLayerPosition(_ notification: Notification) {
         self.geofenceMapView.updateMapLayerPosition(value: 20)
+    }
+    
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.viewModel.fetchListOfGeofences()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

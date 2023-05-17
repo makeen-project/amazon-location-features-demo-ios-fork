@@ -47,13 +47,13 @@ final class SettingsVC: UIViewController {
         setupViews()
         setupTableView()
         viewModel.loadData()
+        setupNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadData()
-        // show logout button only if we are not signed in
-        logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        updateLogoutButtonVisibility()
     }
     
     private func setupNavigationItems() {
@@ -91,6 +91,21 @@ final class SettingsVC: UIViewController {
             }
             $0.bottom.equalTo(logoutButton.snp.top)
         }
+    }
+    
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
+    }
+    
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.updateLogoutButtonVisibility()
+        }
+    }
+    
+    private func updateLogoutButtonVisibility() {
+        // show logout button only if we are not signed in
+        logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
     }
 }
 

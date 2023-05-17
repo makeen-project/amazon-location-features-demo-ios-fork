@@ -103,7 +103,8 @@ final class GeofenceViewModelTests: XCTestCase {
         UserDefaultsHelper.setAppState(state: .initial)
         viewModel.fetchListOfGeofences()
         
-        XCTAssertNil(delegate?.models)
+        let models = try XCTUnwrap(delegate?.models)
+        XCTAssertTrue(models.isEmpty)
     }
     
     func test_fetchListOfGeofences_SignedIn_success() throws {

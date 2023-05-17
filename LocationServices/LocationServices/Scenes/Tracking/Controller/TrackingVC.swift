@@ -126,6 +126,7 @@ final class TrackingVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
     }
     
     @objc private func updateTrackingHistory(_ notification: Notification) {
@@ -184,6 +185,19 @@ final class TrackingVC: UIViewController {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         historyHeaderView.isHidden = isVisible
         grabberIcon.isHidden = isVisible
+    }
+    
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            switch LoginViewModel.getAuthStatus() {
+            case .authorized:
+                self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
+                self.viewModel.updateHistory()
+            case .customConfig, .defaultConfig:
+                self.delegate?.showDashboardFlow()
+            }
+            self.showGeofenceAnnotations()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
