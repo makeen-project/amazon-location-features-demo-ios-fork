@@ -21,9 +21,24 @@ final class NavigationVC: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 5
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
         stackView.alignment = .fill
         return stackView
+    }()
+    
+    private var titleLabelContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = StringConstant.routeOverview
+        label.textAlignment = .left
+        label.font = .amazonFont(type: .bold, size: 20)
+        label.textColor = .black
+        return label
     }()
     
     private var navigationHeaderView: NavigationHeaderView = NavigationHeaderView()
@@ -43,9 +58,9 @@ final class NavigationVC: UIViewController {
         setupTableView()
         setupHandler()
         setupViews()
+        titleLabelContainer.isHidden = !isInSplitViewController
         navigationHeaderView.isHidden = isInSplitViewController
         navigationHeaderView.update(style: .navigationHeader)
-        title = StringConstant.routeOverview
         
         let barButtonItem = UIBarButtonItem(title: nil, image: .arrowUpLeftAndArrowDownRight, target: self, action: #selector(hideScreen))
         barButtonItem.tintColor = .lsPrimary
@@ -79,15 +94,24 @@ final class NavigationVC: UIViewController {
     
     private func setupViews() {
         view.addSubview(stackView)
+        stackView.addArrangedSubview(titleLabelContainer)
         stackView.addArrangedSubview(navigationHeaderView)
         stackView.addArrangedSubview(tableView)
         
+        titleLabelContainer.addSubview(titleLabel)
+        
         stackView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.leading.trailing.equalToSuperview()
         }
         
         navigationHeaderView.snp.makeConstraints {
             $0.height.equalTo(80)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.top.bottom.trailing.equalToSuperview()
         }
     }
 }

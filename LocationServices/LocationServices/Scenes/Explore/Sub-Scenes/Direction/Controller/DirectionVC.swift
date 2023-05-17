@@ -46,7 +46,10 @@ final class DirectionVC: UIViewController {
         }
     }
     
-    var directionSearchView: DirectionSearchView = DirectionSearchView()
+    lazy var directionSearchView: DirectionSearchView = {
+        let titleTopOffset: CGFloat = isInSplitViewController ? 0 : 20
+        return DirectionSearchView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
+    }()
     
     lazy var directionView: DirectionView = DirectionView()
     
@@ -73,8 +76,6 @@ final class DirectionVC: UIViewController {
             directionSearchView.setMyLocationText()
         }
         locationManagerSetup()
-        directionSearchView.changeHeaderVisibility(isHidden: isInSplitViewController)
-        title = StringConstant.directions
         
         let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissView))
         barButtonItem.tintColor = .lsPrimary
@@ -202,7 +203,7 @@ final class DirectionVC: UIViewController {
         
         directionSearchView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().offset(14)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(14)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(140)
         }

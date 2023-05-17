@@ -20,6 +20,7 @@ final class DirectionSearchView: UIView {
     var delegate: DirectionSearchViewOutputDelegate?
     
     private let debounceManager = DebounceManager(debounceDuration: 0.5)
+    private var titleTopOffset: CGFloat = 20
     
     private var containerView: UIView = {
         let view = UIView()
@@ -144,10 +145,16 @@ final class DirectionSearchView: UIView {
         self.firstDestinationTextField.text = "My Location"
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(titleTopOffset: CGFloat, isCloseButtonHidden: Bool) {
+        self.init()
+        self.titleTopOffset = titleTopOffset
         setupDelegates()
         setupViews()
+        closeButton.isHidden = isCloseButtonHidden
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     @objc func closeModal() {
@@ -200,7 +207,7 @@ final class DirectionSearchView: UIView {
         }
         
         directionSearchTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+            $0.top.equalToSuperview().offset(titleTopOffset)
             $0.leading.equalToSuperview()
             $0.height.equalTo(28)
             $0.bottom.equalToSuperview()
@@ -279,10 +286,6 @@ final class DirectionSearchView: UIView {
         } else {
             firstDestinationTextField.becomeFirstResponder()
         }
-    }
-    
-    func changeHeaderVisibility(isHidden: Bool) {
-        headerContainerView.isHidden = isHidden
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
