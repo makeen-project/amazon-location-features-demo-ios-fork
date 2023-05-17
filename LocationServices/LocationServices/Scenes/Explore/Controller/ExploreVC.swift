@@ -133,12 +133,10 @@ extension ExploreVC: ExploreViewOutputDelegate {
                                  secondDestionation: nil,
                                  lat: userLocation?.latitude,
                                  long: userLocation?.longitude)
-        exploreView.hideDirectionButton(state: true)
     }
     
     func showPoiCard(cardData: [MapModel]) {
         exploreView.shouldBottomStackViewPositionUpdate(state: true)
-        exploreView.hideDirectionButton(state: true)
         delegate?.showPoiCardScene(cardData: cardData, lat: userCoreLocation?.latitude, long: userCoreLocation?.longitude)
     }
     
@@ -229,8 +227,7 @@ private extension ExploreVC {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showWasResetToDefaultConfigAlert(_:)), name: Notification.wasResetToDefaultConfig, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchAppearanceChanged(_:)), name: Notification.searchAppearanceChanged, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissPOICard(_:)), name: Notification.Name("POICardDismissed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(exploreActionButtonsVisibilityChanged(_:)), name: Notification.exploreActionButtonsVisibilityChanged, object: nil)
     }
     
     func setupView() {
@@ -340,8 +337,6 @@ private extension ExploreVC {
             } else {
                 exploreView.focus(on: routeModel.departurePosition)
             }
-            exploreView.hideGeoFence(state: true)
-            exploreView.hideDirectionButton(state: true)
             let firstDestination = MapModel(placeName: routeModel.departurePlaceName, placeAddress: routeModel.departurePlaceAddress, placeLat: routeModel.departurePosition.latitude, placeLong: routeModel.departurePosition.longitude)
             let secondDestination = MapModel(placeName: routeModel.destinationPlaceName, placeAddress: routeModel.destinationPlaceAddress, placeLat: routeModel.destinationPosition.latitude, placeLong: routeModel.destinationPosition.longitude)
             
@@ -354,15 +349,9 @@ private extension ExploreVC {
     
     @objc private func dismissNavigationScene(_ notification: Notification?) {
         viewModel.deactivateRoute()
-        exploreView.hideGeoFence(state: false)
-        exploreView.hideDirectionButton(state: false)
         mapNavigationView.isHidden = true
         mapNavigationActionsView.isHidden = true
         exploreView.deleteDrawing()
-    }
-    
-    @objc private func dismissPOICard(_ notification: Notification?) {
-        exploreView.hideDirectionButton(state: false)
     }
     
     @objc private func refreshMapView(_ notification: Notification) {
@@ -376,6 +365,15 @@ private extension ExploreVC {
     @objc private func searchAppearanceChanged(_ notification: Notification) {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         changeSeachBarVisibility(isHidden: isVisible)
+    }
+    
+    @objc private func exploreActionButtonsVisibilityChanged(_ notification: Notification) {
+        if let geofenceIsHidden = notification.userInfo?["geofenceIsHidden"] as? Bool {
+            exploreView.hideGeoFence(state: geofenceIsHidden)
+        }
+        if let directionIsHidden = notification.userInfo?["directionIsHidden"] as? Bool {
+            exploreView.hideDirectionButton(state: directionIsHidden)
+        }
     }
     
     /// Alert view refactored to generic later

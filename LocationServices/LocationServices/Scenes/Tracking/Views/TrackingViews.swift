@@ -27,6 +27,7 @@ final class TrackingMapView: UIView {
         }
     }
     
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     private var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
     
@@ -85,12 +86,17 @@ final class TrackingMapView: UIView {
         
         mapLayer.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-16)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(8)
+            } else {
+                $0.bottom.equalToSuperview().offset(-16)
+            }
             $0.width.equalTo(50)
         }   
     }
     
     func adjustMapLayerItems(bottomSpace: Int) {
+        guard !isiPad else { return }
         mapLayer.snp.removeConstraints()
         
         mapLayer.snp.makeConstraints {

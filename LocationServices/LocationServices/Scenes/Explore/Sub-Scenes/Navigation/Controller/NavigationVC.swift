@@ -67,6 +67,11 @@ final class NavigationVC: UIViewController {
         navigationItem.leftBarButtonItem = barButtonItem
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        changeExploreActionButtonsVisibility()
+    }
+    
     func setupHandler() {
         navigationHeaderView.dismissHandler = { [weak self] in
             self?.closeScreen()
@@ -113,6 +118,11 @@ final class NavigationVC: UIViewController {
             $0.leading.equalToSuperview().offset(16)
             $0.top.bottom.trailing.equalToSuperview()
         }
+    }
+    
+    private func changeExploreActionButtonsVisibility() {
+        let userInfo = ["geofenceIsHidden": true, "directionIsHidden": true]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
 }
 

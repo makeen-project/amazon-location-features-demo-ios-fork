@@ -95,6 +95,7 @@ final class DirectionVC: UIViewController {
             let isDestination = firstDestionation?.placeName != nil
             directionSearchView.becomeFirstResponder(isDestination: isDestination)
         }
+        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,6 +112,11 @@ final class DirectionVC: UIViewController {
         locationManager.performLocationDependentAction {
             self.locationManager.startUpdatingLocation()
         }
+    }
+    
+    private func changeExploreActionButtonsVisibility(geofenceIsHidden: Bool, directionIsHidden: Bool) {
+        let userInfo = ["geofenceIsHidden": geofenceIsHidden, "directionIsHidden": directionIsHidden]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func setupHandlers() {
@@ -486,6 +492,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
 
 extension DirectionVC: DirectionSearchViewOutputDelegate {
     @objc func dismissView() {
+        changeExploreActionButtonsVisibility(geofenceIsHidden: true, directionIsHidden: true)
         dismissHandler?()
     }
     

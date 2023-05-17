@@ -62,6 +62,7 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         showCurrentAnnotation()
+        changeExploreActionButtonsVisibility()
     }
         
     private func setupViews() {
@@ -70,6 +71,11 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
             $0.bottom.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    private func changeExploreActionButtonsVisibility() {
+        let userInfo = ["geofenceIsHidden": false, "directionIsHidden": false]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func updateMapViewBottomIcons() {

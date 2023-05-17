@@ -65,6 +65,7 @@ final class SearchVC: UIViewController {
         if !mapModels.isEmpty {
             searchResult(mapModel: mapModels, shouldDismiss: false, showOnMap: false)
         }
+        changeExploreActionButtonsVisibility()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -75,6 +76,11 @@ final class SearchVC: UIViewController {
     private func searchAppearanceChanged(isVisible: Bool) {
         let userInfo = ["isVisible" : isVisible]
         NotificationCenter.default.post(name: Notification.searchAppearanceChanged, object: nil, userInfo: userInfo)
+    }
+    
+    private func changeExploreActionButtonsVisibility() {
+        let userInfo = ["geofenceIsHidden": false, "directionIsHidden": false]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func clearAnnotations() {

@@ -35,4 +35,5 @@ extension Notification {
     static let geofenceAppearanceChanged = Notification.Name("GeofenceAppearanceChanged")
     
     static let authorizationStatusChanged = Notification.Name("AuthorizationStatusChanged")
+    static let exploreActionButtonsVisibilityChanged = Notification.Name("ExploreActionButtonsVisibilityChanged")
 }
