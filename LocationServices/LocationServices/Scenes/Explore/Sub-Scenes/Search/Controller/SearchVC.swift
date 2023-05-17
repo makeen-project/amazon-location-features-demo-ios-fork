@@ -88,7 +88,11 @@ final class SearchVC: UIViewController {
         
         searchBarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(76)
+            if isInSplitViewController {
+                $0.height.equalTo(40)
+            } else {
+                $0.height.equalTo(76)
+            }
             $0.leading.trailing.equalToSuperview()
         }
         

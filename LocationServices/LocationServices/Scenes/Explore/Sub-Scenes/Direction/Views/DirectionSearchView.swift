@@ -204,6 +204,7 @@ final class DirectionSearchView: UIView {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview()
         }
         
         directionSearchTitle.snp.makeConstraints {

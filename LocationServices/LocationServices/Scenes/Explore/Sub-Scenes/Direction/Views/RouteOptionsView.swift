@@ -87,7 +87,7 @@ final class RouteOptionsView: UIView {
         
         containerView.isHidden = !routeOptionState
         routeOptionImage.image = UIImage(systemName: routeOptionState ? "chevron.up" : "chevron.down")
-        changeRouteOptionHeight?(routeOptionState ? 203 : 32)
+        changeRouteOptionHeight?(routeOptionState ? 144 : 32)
         routeOptionState.toggle()
     }
     

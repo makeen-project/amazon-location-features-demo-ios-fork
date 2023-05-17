@@ -205,7 +205,6 @@ final class DirectionVC: UIViewController {
             $0.leading.trailing.equalToSuperview().offset(14)
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(140)
         }
         
         directionView.snp.makeConstraints {
