@@ -79,7 +79,7 @@ extension SplitViewSettingsCoordinator: SettingsNavigationDelegate {
     
     private func showAwsCloudFormationscene() {
         let controller = LoginVCBuilder.create(from: true)
-        controller.isFromSettingScene = false
+        controller.isFromSettingScene = true
         changeSecondaryVC(to: controller)
     }
     

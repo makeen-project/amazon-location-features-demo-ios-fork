@@ -19,8 +19,7 @@ final class MapStyleVC: UIViewController {
     private var screenTitleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = .amazonFont(type: .bold,
-                                 size: 20)
+        label.font = .amazonFont(type: .bold, size: 20)
         label.text = StringConstant.mapStyle
         return label
     }()
@@ -115,9 +114,9 @@ final class MapStyleVC: UIViewController {
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         if isPad {
             view.addSubview(screenTitleLabel)
-            screenTitleLabel.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
-                make.horizontalEdges.equalToSuperview().inset(24)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.horizontalEdges.equalToSuperview().inset(16)
             }
         }
         

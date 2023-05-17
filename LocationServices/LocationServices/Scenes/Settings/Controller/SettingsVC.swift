@@ -71,10 +71,9 @@ final class SettingsVC: UIViewController {
         self.view.addSubview(tableView)
         
         headerTitle.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(16)
-            $0.leading.equalToSuperview().offset(24)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(32)
         }
         
         logoutButton.snp.makeConstraints {

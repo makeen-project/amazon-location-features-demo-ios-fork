@@ -14,8 +14,7 @@ final class RouteOptionVC: UIViewController {
         let label = UILabel()
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.font = .amazonFont(type: .bold,
-                                 size: 20)
+        label.font = .amazonFont(type: .bold, size: 20)
         label.text = StringConstant.defaultRouteOptions
         return label
     }()
@@ -53,9 +52,9 @@ final class RouteOptionVC: UIViewController {
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         if isPad {
             view.addSubview(screenTitleLabel)
-            screenTitleLabel.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
-                make.horizontalEdges.equalToSuperview().inset(24)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.horizontalEdges.equalToSuperview().inset(16)
             }
         }
         
@@ -66,7 +65,7 @@ final class RouteOptionVC: UIViewController {
             } else {
                 $0.top.equalTo(self.view.safeAreaLayoutGuide)
             }
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.trailing.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
         }
     }
