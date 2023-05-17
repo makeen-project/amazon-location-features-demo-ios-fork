@@ -71,6 +71,7 @@ final class ResetPasswordView: UIView {
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Save", for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.setTitleColor(.white, for: .normal)
         button.isUserInteractionEnabled = true
         return button

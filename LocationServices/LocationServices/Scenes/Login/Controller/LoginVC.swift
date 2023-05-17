@@ -87,6 +87,7 @@ final class LoginVC: UIViewController {
         button.layer.cornerRadius = 10
         button.setTitle("Connect", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(connectButtonAction), for: .touchUpInside)
         return button
@@ -101,6 +102,7 @@ final class LoginVC: UIViewController {
         button.layer.cornerRadius = 10
         button.setTitle("Disconnect from AWS", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(disconnectButtonAction), for: .touchUpInside)
         return button

@@ -36,6 +36,7 @@ final class WelcomeVC: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.continueString, for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.backgroundColor = .tabBarTintColor
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
