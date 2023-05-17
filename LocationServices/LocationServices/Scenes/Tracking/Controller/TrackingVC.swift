@@ -29,7 +29,7 @@ final class TrackingVC: UIViewController {
     }()
     
     private lazy var historyHeaderView: TrackingHistoryHeaderView = {
-        let view = TrackingHistoryHeaderView()
+        let view = TrackingHistoryHeaderView(titleTopOffset: 27)
         view.backgroundColor = .searchBarBackgroundColor
         view.layer.cornerRadius = 20
         view.isUserInteractionEnabled = true
@@ -223,7 +223,6 @@ final class TrackingVC: UIViewController {
         historyHeaderView.snp.makeConstraints {
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(80)
         }
         
         grabberIcon.snp.makeConstraints {

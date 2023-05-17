@@ -10,7 +10,11 @@ import SnapKit
 
 final class TrackingHistoryVC: UIViewController {
     
-    private(set) var headerView = TrackingHistoryHeaderView()
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
+    private(set) lazy var headerView: TrackingHistoryHeaderView = {
+        let titleTopOffset: CGFloat = isiPad ? 0 : 27
+        return TrackingHistoryHeaderView(titleTopOffset: titleTopOffset)
+    }()
     private let noInternetConnectionView = NoInternetConnectionView()
     
     private let scrollView: UIScrollView = {
@@ -148,7 +152,6 @@ final class TrackingHistoryVC: UIViewController {
         view.addSubview(noInternetConnectionView)
         
         headerView.snp.makeConstraints {
-            $0.height.equalTo(80)
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
         }
