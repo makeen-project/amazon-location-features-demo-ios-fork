@@ -13,8 +13,7 @@ final class VersionVC: UIViewController {
     // MARK: - Views
     private var screenTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .amazonFont(type: .bold,
-                                 size: 20)
+        label.font = .amazonFont(type: .bold, size: 20)
         label.text = StringConstant.version
         return label
     }()
@@ -63,7 +62,7 @@ final class VersionVC: UIViewController {
         if isPad {
             view.addSubview(screenTitleLabel)
             screenTitleLabel.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+                make.top.equalTo(view.safeAreaLayoutGuide)
                 make.leading.equalToSuperview().offset(24)
             }
         }

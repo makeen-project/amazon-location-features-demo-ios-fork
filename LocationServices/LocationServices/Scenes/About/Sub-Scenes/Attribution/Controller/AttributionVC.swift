@@ -141,7 +141,8 @@ final class AttributionVC: UIViewController {
         let learnMoreButtonTopPadding = 24
         let learnMoreButtonHeight = 48
         
-        separatorView.isHidden = UIDevice.current.userInterfaceIdiom == .pad
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+        separatorView.isHidden = isIpad
         separatorView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
@@ -149,7 +150,11 @@ final class AttributionVC: UIViewController {
         }
         
         partnerAttributionTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(separatorView.snp.bottom).offset(24)
+            if isIpad {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+            } else {
+                $0.top.equalTo(separatorView.snp.bottom).offset(24)
+            }
             $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
