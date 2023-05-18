@@ -17,12 +17,9 @@ final class TrackingHistoryHeaderView: UIView {
     
     private var titleTopOffset: CGFloat = 27
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
+    private let titleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.trackingHistory)
         label.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingStartedLabel
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textAlignment = .left
-        label.text = "Tracking History"
         return label
     }()
     

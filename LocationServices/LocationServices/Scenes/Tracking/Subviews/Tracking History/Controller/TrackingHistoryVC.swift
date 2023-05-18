@@ -10,9 +10,14 @@ import SnapKit
 
 final class TrackingHistoryVC: UIViewController {
     
+    enum Constants {
+        static let titleOffsetiPhone: CGFloat = 27
+        static let titleOffsetiPad: CGFloat = 0
+    }
+    
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     private(set) lazy var headerView: TrackingHistoryHeaderView = {
-        let titleTopOffset: CGFloat = isiPad ? 0 : 27
+        let titleTopOffset: CGFloat = isiPad ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
         return TrackingHistoryHeaderView(titleTopOffset: titleTopOffset)
     }()
     private let noInternetConnectionView = NoInternetConnectionView()

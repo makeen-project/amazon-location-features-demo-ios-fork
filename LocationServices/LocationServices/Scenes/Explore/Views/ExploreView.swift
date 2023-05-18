@@ -21,6 +21,19 @@ private enum Constant {
     static let userLocationViewIdentifier = "UserLocationViewIdentifier"
     static let imageAnnotationViewIdentifier = "ImageAnnotationViewIdentifier"
     static let dictinaryKeyIdentityPoolId = "IdentityPoolId"
+    
+    static let searchBarHeight: CGFloat = 76
+    
+    static let amazonLogoBottomOffset: CGFloat = -8
+    static let amazonLogoHeight: CGFloat = 18
+    static let amazonLogoWidth: CGFloat = 121
+    
+    static let defaultHorizontalOffset: CGFloat = 16
+    
+    static let actionButtonWidth: CGFloat = 48
+    
+    static let bottomStackViewOffsetiPad: CGFloat = -8
+    static let bottomStackViewOffsetiPhone: CGFloat = -16
 }
 
 enum MapMode {
@@ -700,20 +713,19 @@ private extension ExploreView {
         }
         
         searchBarView.snp.makeConstraints {
-            $0.height.equalTo(76)
+            $0.height.equalTo(Constant.searchBarHeight)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
         
         amazonMapLogo.snp.makeConstraints {
             if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(-8)
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constant.amazonLogoBottomOffset)
             } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(-8)
+                $0.bottom.equalTo(searchBarView.snp.top).offset(Constant.amazonLogoBottomOffset)
             }
-            $0.bottom.equalTo(searchBarView.snp.top).offset(-8)
-            $0.height.equalTo(18)
-            $0.width.equalTo(121)
+            $0.height.equalTo(Constant.amazonLogoHeight)
+            $0.width.equalTo(Constant.amazonLogoWidth)
         }
         
         infoButton.snp.makeConstraints {
@@ -727,7 +739,7 @@ private extension ExploreView {
         }
         
         geofenceButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         dividerView.snp.makeConstraints {
@@ -735,31 +747,31 @@ private extension ExploreView {
         }
         
         mapStyleButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         topStackView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(48)
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(Constant.defaultHorizontalOffset)
+            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
+            $0.width.equalTo(Constant.actionButtonWidth)
         }
         
         directonButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         locateMeButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         bottomStackView.snp.makeConstraints {
             if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(-8)
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constant.bottomStackViewOffsetiPad)
             } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(-16)
+                $0.bottom.equalTo(searchBarView.snp.top).offset(Constant.bottomStackViewOffsetiPhone)
             }
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(48)
+            $0.trailing.equalToSuperview().offset(Constant.defaultHorizontalOffset)
+            $0.width.equalTo(Constant.actionButtonWidth)
         }
         
         updateMapHelperConstraints()

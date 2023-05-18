@@ -184,6 +184,11 @@ enum StringConstant {
         static let requestCanceledCode = -999
     }
     
+    enum NotificationsInfoField {
+        static let geofenceIsHidden = "geofenceIsHidden"
+        static let directionIsHidden = "directionIsHidden"
+    }
+    
     static let units = "Units"
     static let dataProvider = "Data Provider"
     static let mapStyle = "Map style"
@@ -210,6 +215,7 @@ enum StringConstant {
     static let routeOverview = "Route Overview"
     
     static let loginVcTitle = "AWS CloudFormation"
+    static let trackingHistory = "Tracking History"
 }
 
 protocol ConstantsLoginInfoConfig {

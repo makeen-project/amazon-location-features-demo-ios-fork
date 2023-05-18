@@ -368,10 +368,10 @@ private extension ExploreVC {
     }
     
     @objc private func exploreActionButtonsVisibilityChanged(_ notification: Notification) {
-        if let geofenceIsHidden = notification.userInfo?["geofenceIsHidden"] as? Bool {
+        if let geofenceIsHidden = notification.userInfo?[StringConstant.NotificationsInfoField.geofenceIsHidden] as? Bool {
             exploreView.hideGeoFence(state: geofenceIsHidden)
         }
-        if let directionIsHidden = notification.userInfo?["directionIsHidden"] as? Bool {
+        if let directionIsHidden = notification.userInfo?[StringConstant.NotificationsInfoField.directionIsHidden] as? Bool {
             exploreView.hideDirectionButton(state: directionIsHidden)
         }
     }

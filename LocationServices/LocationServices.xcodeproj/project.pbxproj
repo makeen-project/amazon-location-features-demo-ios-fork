@@ -21,6 +21,7 @@
 		8A1110DA297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D7297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift */; };
 		8A1110DB297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D8297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift */; };
 		8A1110DC297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1110D9297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift */; };
+		8A145A322A161DDD00C106BF /* LargeTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A145A312A161DDD00C106BF /* LargeTitleLabel.swift */; };
 		8A151BD82A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A151BD72A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift */; };
 		8A190C0329DD74A600F8FD7C /* ImageAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A190C0229DD74A600F8FD7C /* ImageAnnotation.swift */; };
 		8A276E2429DFF9C900B74136 /* TermsAndConditionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A276E2329DFF9C900B74136 /* TermsAndConditionsVC.swift */; };
@@ -416,6 +417,7 @@
 		8A1110D7297AB5BA00BC86E1 /* LSUserLocationHeadingBeamLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingBeamLayer.swift; sourceTree = "<group>"; };
 		8A1110D8297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingIndicator.swift; sourceTree = "<group>"; };
 		8A1110D9297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSUserLocationHeadingArrowLayer.swift; sourceTree = "<group>"; };
+		8A145A312A161DDD00C106BF /* LargeTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTitleLabel.swift; sourceTree = "<group>"; };
 		8A151BD72A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISplitViewControllerDisplayMode+Extension.swift"; sourceTree = "<group>"; };
 		8A190C0229DD74A600F8FD7C /* ImageAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnnotation.swift; sourceTree = "<group>"; };
 		8A276E2329DFF9C900B74136 /* TermsAndConditionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsVC.swift; sourceTree = "<group>"; };
@@ -2121,6 +2123,7 @@
 				AD989726298B0A250041E867 /* CommonDashboardView.swift */,
 				8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */,
 				8ACD71CC2A091AFC00EC23F3 /* MapSearchFloatingView.swift */,
+				8A145A312A161DDD00C106BF /* LargeTitleLabel.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -3386,6 +3389,7 @@
 				8A30A7FB29FA88EE0012AE71 /* SideBarBuilder.swift in Sources */,
 				AD16A42229357F38006AEA8E /* UserDefaultsHelper.swift in Sources */,
 				8A1110DC297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift in Sources */,
+				8A145A322A161DDD00C106BF /* LargeTitleLabel.swift in Sources */,
 				8A6C40772A0CE84F00A4C40D /* SplitViewGeofencingMapCoordinator.swift in Sources */,
 				AD989736298B2DF00041E867 /* TrackingDashboardBuilder.swift in Sources */,
 				8AB3F19E29C8AF22008FDF37 /* ViewsIdentifiers.swift in Sources */,

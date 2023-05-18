@@ -86,11 +86,8 @@ final class POICardView: UIView {
         return view
     }()
     
-    private let poiTitle: UILabel = {
-       let label = UILabel()
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .black
+    private let poiTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel()
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label

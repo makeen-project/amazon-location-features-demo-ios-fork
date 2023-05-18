@@ -12,6 +12,8 @@ final class DirectionVC: UIViewController {
     
     enum Constants {
         static let mediumId = UISheetPresentationController.Detent.Identifier("medium")
+        static let titleOffsetiPhone: CGFloat = 20
+        static let titleOffsetiPad: CGFloat = 0
     }
     
     var isInSplitViewController: Bool = false
@@ -47,7 +49,7 @@ final class DirectionVC: UIViewController {
     }
     
     lazy var directionSearchView: DirectionSearchView = {
-        let titleTopOffset: CGFloat = isInSplitViewController ? 0 : 20
+        let titleTopOffset: CGFloat = isInSplitViewController ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
         return DirectionSearchView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
     }()
     
@@ -115,7 +117,10 @@ final class DirectionVC: UIViewController {
     }
     
     private func changeExploreActionButtonsVisibility(geofenceIsHidden: Bool, directionIsHidden: Bool) {
-        let userInfo = ["geofenceIsHidden": geofenceIsHidden, "directionIsHidden": directionIsHidden]
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: geofenceIsHidden,
+            StringConstant.NotificationsInfoField.directionIsHidden: directionIsHidden
+        ]
         NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     

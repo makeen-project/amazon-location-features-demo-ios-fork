@@ -104,12 +104,8 @@ final class DirectionSearchView: UIView {
         return view
     }()
     
-    private var directionSearchTitle: UILabel = {
-        let label = UILabel()
-        label.text = StringConstant.directions
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .black
+    private var directionSearchTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.directions)
         label.numberOfLines = 2
         return label
     }()

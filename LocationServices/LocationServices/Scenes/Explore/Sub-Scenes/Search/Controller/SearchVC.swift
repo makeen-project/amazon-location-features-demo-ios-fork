@@ -10,6 +10,12 @@ import SnapKit
 import CoreLocation
 
 final class SearchVC: UIViewController {
+    
+    enum Constants {
+        static let searchBarHeightiPhone: CGFloat = 76
+        static let searchBarHeightiPad: CGFloat = 40
+    }
+    
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     
@@ -79,7 +85,10 @@ final class SearchVC: UIViewController {
     }
     
     private func changeExploreActionButtonsVisibility() {
-        let userInfo = ["geofenceIsHidden": false, "directionIsHidden": false]
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: false,
+            StringConstant.NotificationsInfoField.directionIsHidden: false
+        ]
         NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
@@ -95,9 +104,9 @@ final class SearchVC: UIViewController {
         searchBarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             if isInSplitViewController {
-                $0.height.equalTo(40)
+                $0.height.equalTo(Constants.searchBarHeightiPad)
             } else {
-                $0.height.equalTo(76)
+                $0.height.equalTo(Constants.searchBarHeightiPhone)
             }
             $0.leading.trailing.equalToSuperview()
         }

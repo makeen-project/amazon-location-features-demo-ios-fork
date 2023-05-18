@@ -74,11 +74,8 @@ final class NavigationHeaderView: UIView {
         return stackView
     }()
     
-    private var durationLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .black
+    private var durationLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel()
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label

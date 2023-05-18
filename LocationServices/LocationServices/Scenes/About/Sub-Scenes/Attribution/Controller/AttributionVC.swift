@@ -11,6 +11,10 @@ import SnapKit
 
 final class AttributionVC: UIViewController {
     
+    enum Constants {
+        static let partnerAttributionTitleTopOffset: CGFloat = 24
+    }
+    
     // MARK: - Views
     private var separatorView: UIView = {
         let view = UIView()
@@ -18,13 +22,9 @@ final class AttributionVC: UIViewController {
         return view
     }()
     
-    private var partnerAttributionTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .lsTetriary
+    private var partnerAttributionTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.partnerAttributionTitle)
         label.numberOfLines = 0
-        label.text = StringConstant.partnerAttributionTitle
-        
         return label
     }()
     
@@ -66,13 +66,9 @@ final class AttributionVC: UIViewController {
         return button
     }()
     
-    private var softwareAttributionTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .lsTetriary
+    private var softwareAttributionTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.softwareAttributionTitle)
         label.numberOfLines = 0
-        label.text = StringConstant.softwareAttributionTitle
-        
         return label
     }()
     
@@ -153,7 +149,7 @@ final class AttributionVC: UIViewController {
             if isIpad {
                 $0.top.equalTo(view.safeAreaLayoutGuide)
             } else {
-                $0.top.equalTo(separatorView.snp.bottom).offset(24)
+                $0.top.equalTo(separatorView.snp.bottom).offset(Constants.partnerAttributionTitleTopOffset)
             }
             $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }

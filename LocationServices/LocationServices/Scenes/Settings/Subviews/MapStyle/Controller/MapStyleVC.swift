@@ -9,6 +9,11 @@ import UIKit
 import SnapKit
 
 final class MapStyleVC: UIViewController {
+    
+    enum Constants {
+        static let horizontalOffset: CGFloat = 16
+    }
+    
     var selectedCell: IndexPath = IndexPath(row: 0, section: 0)
     var viewModel: MapStyleViewModelProtocol! {
         didSet {
@@ -16,11 +21,8 @@ final class MapStyleVC: UIViewController {
         }
     }
     
-    private var screenTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.text = StringConstant.mapStyle
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.mapStyle)
         return label
     }()
     
@@ -116,7 +118,7 @@ final class MapStyleVC: UIViewController {
             view.addSubview(screenTitleLabel)
             screenTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(view.safeAreaLayoutGuide)
-                $0.horizontalEdges.equalToSuperview().inset(16)
+                $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalOffset)
             }
         }
         

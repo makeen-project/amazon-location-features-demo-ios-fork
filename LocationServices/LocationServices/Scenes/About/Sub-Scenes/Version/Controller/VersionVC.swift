@@ -11,10 +11,8 @@ import SnapKit
 final class VersionVC: UIViewController {
     
     // MARK: - Views
-    private var screenTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.text = StringConstant.version
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.version)
         return label
     }()
     

@@ -10,13 +10,15 @@ import SnapKit
 import AWSMobileClientXCF
 
 final class SettingsVC: UIViewController {
+    
+    enum Constants {
+        static let horizontalOffset: CGFloat = 16
+    }
+    
     weak var delegate: SettingsNavigationDelegate?
     
-    private var headerTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Settings"
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textAlignment = .left
+    private var headerTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.settigns)
         return label
     }()
     
@@ -72,7 +74,7 @@ final class SettingsVC: UIViewController {
         
         headerTitle.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(Constants.horizontalOffset)
             $0.trailing.equalToSuperview()
         }
         
@@ -87,7 +89,7 @@ final class SettingsVC: UIViewController {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 $0.leading.trailing.equalToSuperview()
             } else {
-                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
             }
             $0.bottom.equalTo(logoutButton.snp.top)
         }

@@ -9,6 +9,11 @@ import UIKit
 import SafariServices
 
 final class LoginVC: UIViewController {
+    
+    enum Constants {
+        static let horizontalOffset: CGFloat = 16
+    }
+    
     var postLoginHandler: VoidHandler?
     var dismissHandler: VoidHandler?
     var isFromSettingScene: Bool = false
@@ -27,11 +32,8 @@ final class LoginVC: UIViewController {
         }
     }
     
-    private var screenTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.text = StringConstant.dataProvider
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.dataProvider)
         return label
     }()
     
@@ -309,7 +311,7 @@ final class LoginVC: UIViewController {
             view.addSubview(screenTitleLabel)
             screenTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(view.safeAreaLayoutGuide)
-                $0.horizontalEdges.equalToSuperview().inset(16)
+                $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalOffset)
             }
         }
         

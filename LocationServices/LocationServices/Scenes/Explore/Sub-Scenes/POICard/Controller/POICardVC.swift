@@ -24,13 +24,18 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         }
     }
     
+    enum Constants {
+        static let titleOffsetiPhone: CGFloat = 20
+        static let titleOffsetiPad: CGFloat = 0
+    }
+    
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         return locationManager
     }()
     
     private lazy var poiCardView: POICardView = {
-        let titleTopOffset: CGFloat = isInSplitViewController ? 0 : 20
+        let titleTopOffset: CGFloat = isInSplitViewController ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
         return POICardView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
     }()
     weak var delegate: ExploreNavigationDelegate?
@@ -74,7 +79,10 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     }
     
     private func changeExploreActionButtonsVisibility() {
-        let userInfo = ["geofenceIsHidden": false, "directionIsHidden": false]
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: false,
+            StringConstant.NotificationsInfoField.directionIsHidden: false
+        ]
         NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     

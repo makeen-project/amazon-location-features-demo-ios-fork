@@ -8,6 +8,12 @@
 import UIKit
 
 final class NavigationVC: UIViewController {
+    
+    enum Constants {
+        static let navigationHeaderHeight: CGFloat = 80
+        static let titleLeadingOffset: CGFloat = 16
+    }
+    
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     
@@ -32,12 +38,8 @@ final class NavigationVC: UIViewController {
         return view
     }()
     
-    private var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = StringConstant.routeOverview
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .black
+    private var titleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.routeOverview)
         return label
     }()
     
@@ -111,17 +113,20 @@ final class NavigationVC: UIViewController {
         }
         
         navigationHeaderView.snp.makeConstraints {
-            $0.height.equalTo(80)
+            $0.height.equalTo(Constants.navigationHeaderHeight)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
             $0.top.bottom.trailing.equalToSuperview()
         }
     }
     
     private func changeExploreActionButtonsVisibility() {
-        let userInfo = ["geofenceIsHidden": true, "directionIsHidden": true]
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: true,
+            StringConstant.NotificationsInfoField.directionIsHidden: true
+        ]
         NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
 }

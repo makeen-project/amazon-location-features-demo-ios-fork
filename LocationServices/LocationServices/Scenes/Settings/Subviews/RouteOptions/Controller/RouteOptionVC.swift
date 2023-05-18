@@ -10,12 +10,13 @@ import SnapKit
 
 final class RouteOptionVC: UIViewController {
     
-    private var screenTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .left
+    enum Constants {
+        static let horizontalOffset: CGFloat = 16
+    }
+    
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.defaultRouteOptions)
         label.numberOfLines = 0
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.text = StringConstant.defaultRouteOptions
         return label
     }()
     
@@ -46,7 +47,7 @@ final class RouteOptionVC: UIViewController {
     
     private func setupViews() {
         navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-        navigationItem.title = UIDevice.current.isPad ? "" :  StringConstant.defaultRouteOptions
+        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.defaultRouteOptions
         view.backgroundColor = .white
         
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
@@ -54,7 +55,7 @@ final class RouteOptionVC: UIViewController {
             view.addSubview(screenTitleLabel)
             screenTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(view.safeAreaLayoutGuide)
-                $0.horizontalEdges.equalToSuperview().inset(16)
+                $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalOffset)
             }
         }
         
@@ -66,7 +67,7 @@ final class RouteOptionVC: UIViewController {
                 $0.top.equalTo(self.view.safeAreaLayoutGuide)
             }
             $0.leading.trailing.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview().offset(-Constants.horizontalOffset)
         }
     }
     
