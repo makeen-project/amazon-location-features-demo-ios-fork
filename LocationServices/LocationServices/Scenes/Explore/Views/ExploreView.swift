@@ -462,6 +462,21 @@ final class ExploreView: UIView, NavigationMapProtocol {
         mapHelperView.layoutIfNeeded()
     }
     
+    func setupAmazonLogo(leadingOffset: CGFloat?, bottomOffset: CGFloat?) {
+        let leadingOffset = leadingOffset ?? Constant.defaultHorizontalOffset
+        let bottomOffset = bottomOffset ?? Constant.amazonLogoBottomOffset
+        amazonMapLogo.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(leadingOffset)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomOffset)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomOffset)
+            }
+            $0.height.equalTo(Constant.amazonLogoHeight)
+            $0.width.equalTo(Constant.amazonLogoWidth)
+        }
+    }
+    
     private func calculateMapHelperHeight() -> UInt {
         let topSafeArea = UInt(window?.safeAreaInsets.top ?? 0)
         let bottomOccupiedArea: UInt
@@ -718,15 +733,7 @@ private extension ExploreView {
             $0.bottom.equalToSuperview()
         }
         
-        amazonMapLogo.snp.makeConstraints {
-            if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constant.amazonLogoBottomOffset)
-            } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(Constant.amazonLogoBottomOffset)
-            }
-            $0.height.equalTo(Constant.amazonLogoHeight)
-            $0.width.equalTo(Constant.amazonLogoWidth)
-        }
+        setupAmazonLogo(leadingOffset: nil, bottomOffset: nil)
         
         infoButton.snp.makeConstraints {
             $0.height.width.equalTo(13.5)
@@ -770,7 +777,7 @@ private extension ExploreView {
             } else {
                 $0.bottom.equalTo(searchBarView.snp.top).offset(Constant.bottomStackViewOffsetiPhone)
             }
-            $0.trailing.equalToSuperview().offset(Constant.defaultHorizontalOffset)
+            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
             $0.width.equalTo(Constant.actionButtonWidth)
         }
         
