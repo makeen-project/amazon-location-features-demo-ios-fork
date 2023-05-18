@@ -101,6 +101,12 @@ class GeofenceAnnotationView: MGLAnnotationView {
         addSubview(uiImageView)
         
         uiImageView.image = .geofenceDashoard
+        
+        uiImageView.layer.shadowColor = UIColor.black.cgColor
+        uiImageView.layer.shadowOpacity = 0.5
+        uiImageView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        uiImageView.layer.shadowRadius = 2
+        uiImageView.layer.masksToBounds = false
     }
 
     func drawCircle() {

@@ -49,5 +49,11 @@ class ImageAnnotationView: MGLAnnotationView {
         addSubview(imageView)
 
         imageView.image = image
+        
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 0.5
+        imageView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        imageView.layer.shadowRadius = 2
+        imageView.layer.masksToBounds = false
     }
 }
