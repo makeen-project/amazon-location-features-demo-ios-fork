@@ -21,7 +21,7 @@ enum SideBarCellType {
         }
     }
     
-    var icon: UIImage {
+    private var icon: UIImage {
         switch self {
         case .explore: return UIImage.exploreIcon
         case .tracking: return UIImage.trackingIcon
@@ -29,6 +29,11 @@ enum SideBarCellType {
         case .settings: return UIImage.settingsIcon
         case .about: return UIImage.about
         }
+    }
+    
+    var defaultIcon: UIImage {
+        icon.withTintColor(.tabBarUnselectedColor,
+                           renderingMode: .alwaysOriginal)
     }
     
     var selectedIcon: UIImage {
@@ -52,7 +57,7 @@ final class SideBarCell: UITableViewCell {
     var model: SideBarCellModel! {
         didSet {
             titleLabel.text = model.type.title
-            iconImageView.image = model.type.icon
+            iconImageView.image = model.type.defaultIcon
         }
     }
     
@@ -95,7 +100,7 @@ final class SideBarCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         selectionView.isHidden = !selected
-        iconImageView.image = selected ? model?.type.selectedIcon : model?.type.icon
+        iconImageView.image = selected ? model?.type.selectedIcon : model?.type.defaultIcon
     }
     
     private func setupViews() {

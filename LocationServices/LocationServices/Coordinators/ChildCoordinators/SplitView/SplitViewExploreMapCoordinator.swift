@@ -186,7 +186,11 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.supplementaryNavigationController?.popViewController(animated: true)
+        }
         supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitDelegate?.showSupplementary()
     }
     
     func showWelcome() {

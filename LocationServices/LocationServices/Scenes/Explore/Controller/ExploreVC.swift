@@ -60,6 +60,7 @@ final class ExploreVC: UIViewController {
         locationManagerSetup()
         setupView()
         exploreView.setupTapGesture()
+        blurStatusBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {

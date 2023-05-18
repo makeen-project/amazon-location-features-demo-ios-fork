@@ -60,7 +60,6 @@ final class NavigationHeaderView: UIView {
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = NavigationHeaderViewStyle.navigationHeader.backgroundColor
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.cornerRadius = 10
         view.isUserInteractionEnabled = true
         return view
