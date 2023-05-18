@@ -162,6 +162,7 @@ private extension SplitViewGeofencingMapCoordinator {
     func showGeofenceScene() {
         setSupplementary()
         setSecondary()
+        secondaryController.navigationController?.navigationBar.isHidden = true
     }
     
     private func setSupplementary() {

@@ -32,6 +32,7 @@ private extension SplitViewAboutCoordinator {
         splitViewController.setViewController(controller, for: .supplementary)
         splitViewController.show(.supplementary)
         showNextScene(type: .attribution)
+        splitViewController.viewController(for: .secondary)?.navigationController?.navigationBar.isHidden = false
     }
 }
 

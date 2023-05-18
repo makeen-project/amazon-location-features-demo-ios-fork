@@ -6,8 +6,15 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
+import SnapKit
 
 class MapFloatingViewHandler {
+    
+    enum Constants {
+        static let leadingOffset: CGFloat = 16
+        static let trailingOffset: CGFloat = 70
+    }
+    
     weak var delegate: SplitViewVisibilityProtocol?
     
     private weak var viewController: UIViewController?
@@ -20,28 +27,32 @@ class MapFloatingViewHandler {
     }
     
     func setupNavigationSearch(state: MapSearchState, hideSearch: Bool = false) {
-        let item: UIBarButtonItem?
+        mapSearchFloatingView.removeFromSuperview()
+        
         let sideBarButtonState: SideBarState?
         
         switch state {
         case .hidden:
-            item = nil
             sideBarButtonState = nil
         case .primaryVisible:
-            item = UIBarButtonItem(customView: mapSearchFloatingView)
             if hideSearch {
                 sideBarButtonState = .onlyButtonSecondaryScreen
             } else {
                 sideBarButtonState = .fullSecondaryScreen
             }
         case .onlySecondaryVisible:
-            item = UIBarButtonItem(customView: mapSearchFloatingView)
             sideBarButtonState = .fullSideBar
         }
         
-        viewController?.navigationItem.leftBarButtonItem = item
-        if let sideBarButtonState {
+        if let sideBarButtonState, let parentView = viewController?.view {
             mapSearchFloatingView.setSideBarButtonState(sideBarButtonState)
+            parentView.addSubview(mapSearchFloatingView)
+            
+            mapSearchFloatingView.snp.makeConstraints {
+                $0.top.equalTo(parentView.safeAreaLayoutGuide)
+                $0.leading.equalToSuperview().offset(Constants.leadingOffset)
+                $0.trailing.lessThanOrEqualToSuperview().offset(-Constants.trailingOffset)
+            }
         }
     }
 }

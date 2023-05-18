@@ -154,6 +154,7 @@ private extension SplitViewTrackingMapCoordinator {
     func showTrackingScene() {
         setSupplementary()
         setSecondary()
+        secondaryController.navigationController?.navigationBar.isHidden = true
     }
     
     private func setSupplementary() {

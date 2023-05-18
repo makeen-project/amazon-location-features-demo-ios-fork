@@ -62,7 +62,6 @@ final class GeofenceVC: UIViewController {
         setupViews()
         changeHeaderVisibility(isHidden: false)
         geofenceMapView.setupTapGesture()
-        blurStatusBar()
     }
     
     func setupHandlers() {

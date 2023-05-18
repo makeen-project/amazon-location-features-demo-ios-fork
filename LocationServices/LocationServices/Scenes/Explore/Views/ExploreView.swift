@@ -34,6 +34,8 @@ private enum Constant {
     
     static let bottomStackViewOffsetiPad: CGFloat = -8
     static let bottomStackViewOffsetiPhone: CGFloat = -16
+    static let topStackViewOffsetiPhone: CGFloat = 16
+    static let topStackViewOffsetiPad: CGFloat = 0
 }
 
 enum MapMode {
@@ -758,7 +760,9 @@ private extension ExploreView {
         }
         
         topStackView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(Constant.defaultHorizontalOffset)
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(
+                isiPad ? Constant.topStackViewOffsetiPad : Constant.topStackViewOffsetiPhone
+            )
             $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
             $0.width.equalTo(Constant.actionButtonWidth)
         }

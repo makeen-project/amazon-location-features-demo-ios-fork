@@ -231,6 +231,7 @@ private extension SplitViewExploreMapCoordinator {
     func showExploreScene() {
         setSupplementary()
         setSecondary()
+        secondaryController.navigationController?.navigationBar.isHidden = true
     }
     
     func setSupplementary() {

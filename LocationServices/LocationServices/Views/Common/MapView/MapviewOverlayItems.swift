@@ -23,6 +23,11 @@ protocol MapOverlayItemsOutputDelegate: AnyObject {
 
 final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
+    enum Constants {
+        static let topStackViewTopOffsetiPhone: CGFloat = 16
+        static let topStackViewTopOffsetiPad: CGFloat = 0
+    }
+    
     var delegate: MapOverlayItemsOutputDelegate?
     
     
@@ -175,8 +180,11 @@ private extension MapOverlayItems {
             $0.height.width.equalTo(48)
         }
         
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         topStackView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(16)
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(
+                isiPad ? Constants.topStackViewTopOffsetiPad : Constants.topStackViewTopOffsetiPhone
+            )
             $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(48)
             $0.height.equalTo(100)

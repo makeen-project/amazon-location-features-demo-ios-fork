@@ -80,7 +80,6 @@ final class TrackingVC: UIViewController {
             historyHeaderView.isHidden = true
             grabberIcon.isHidden = true
         }
-        blurStatusBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
