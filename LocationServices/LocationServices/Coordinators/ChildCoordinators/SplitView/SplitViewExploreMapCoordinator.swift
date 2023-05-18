@@ -191,7 +191,8 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     
     func showWelcome() {
         let controller = WelcomeVCBuilder.create()
-        controller.modalPresentationStyle = .pageSheet
+        controller.modalPresentationStyle = .formSheet
+        controller.isModalInPresentation = true
         
         controller.continueHandler = { [weak self] in
             self?.splitViewController.dismiss(animated: true)
