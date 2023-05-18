@@ -9,11 +9,12 @@ import UIKit
 
 final class AboutVC: UIViewController {
     
-    private var screenTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .amazonFont(type: .bold,
-                                 size: 20)
-        label.text = StringConstant.about
+    enum Constants {
+        static let titleLabelTopOffset: CGFloat = 40
+    }
+    
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.about)
         return label
     }()
     
@@ -40,9 +41,9 @@ final class AboutVC: UIViewController {
         let isPad = UIDevice.current.isPad
         if isPad {
             view.addSubview(screenTitleLabel)
-            screenTitleLabel.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
-                make.leading.equalToSuperview().offset(24)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.leading.equalToSuperview().offset(Constants.titleLabelTopOffset)
             }
         }
         

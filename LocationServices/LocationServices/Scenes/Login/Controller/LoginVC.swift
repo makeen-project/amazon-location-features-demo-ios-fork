@@ -9,6 +9,11 @@ import UIKit
 import SafariServices
 
 final class LoginVC: UIViewController {
+    
+    enum Constants {
+        static let horizontalOffset: CGFloat = 16
+    }
+    
     var postLoginHandler: VoidHandler?
     var dismissHandler: VoidHandler?
     var isFromSettingScene: Bool = false
@@ -19,11 +24,18 @@ final class LoginVC: UIViewController {
     private var userDomain: String?
     private var webSocketUrl: String?
     
+    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    
     var viewModel: LoginViewModelProtocol! {
         didSet {
             viewModel.delegate = self
         }
     }
+    
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.dataProvider)
+        return label
+    }()
     
     private let scrollView: UIScrollView = {
         let sc = UIScrollView()
@@ -118,7 +130,7 @@ final class LoginVC: UIViewController {
     }
     
     private func updateAccordingToAppState() {
-        let state =  isFromSettingScene && viewModel.hasLocalUser()
+        let state = isFromSettingScene && viewModel.hasLocalUser()
         
         let appState = UserDefaultsHelper.getAppState()
         
@@ -150,7 +162,7 @@ final class LoginVC: UIViewController {
     private func settingsViewsUpdate() {
         loginView.hideCloseButton(state: isFromSettingScene)
         navigationController?.isNavigationBarHidden = !isFromSettingScene
-        if isFromSettingScene {
+        if isFromSettingScene && !isPad {
             navigationController?.navigationBar.tintColor = .mapDarkBlackColor
             navigationItem.title = StringConstant.loginVcTitle
             view.backgroundColor = .white
@@ -295,15 +307,31 @@ final class LoginVC: UIViewController {
         containerView.addSubview(connectButton)
         containerView.addSubview(disconnectButton)
         
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalOffset)
+            }
+        }
+        
         if appState == .initial || appState == .defaultAWSConnected {
             scrollView.snp.makeConstraints {
-                $0.top.equalTo(view.safeAreaLayoutGuide)
+                if isPad {
+                    $0.top.equalTo(screenTitleLabel.snp.bottom)
+                } else {
+                    $0.top.equalTo(self.view.safeAreaLayoutGuide)
+                }
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalToSuperview().offset(-80)
             }
         } else {
             scrollView.snp.makeConstraints {
-                $0.top.equalTo(view.safeAreaLayoutGuide)
+                if isPad {
+                    $0.top.equalTo(screenTitleLabel.snp.bottom)
+                } else {
+                    $0.top.equalTo(self.view.safeAreaLayoutGuide)
+                }
                 $0.leading.trailing.equalToSuperview()
                 $0.bottom.equalToSuperview().offset(-160)
             }

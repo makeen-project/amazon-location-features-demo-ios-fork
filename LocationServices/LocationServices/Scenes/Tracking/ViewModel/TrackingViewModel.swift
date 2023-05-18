@@ -45,6 +45,10 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         unsubscribeFromAWSNotifications()
     }
     
+    func resetHistory() {
+        history = []
+    }
+    
     func trackLocationUpdate(location: CLLocation?) {
         guard let location else { return }
         
@@ -67,6 +71,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         
         // if we are not authorized do not send it
         if UserDefaultsHelper.getAppState() != .loggedIn {
+            delegate?.showGeofences([])
             return
         }
         

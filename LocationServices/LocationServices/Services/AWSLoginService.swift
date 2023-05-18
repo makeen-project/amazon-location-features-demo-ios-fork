@@ -71,6 +71,10 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
                     
                     
                     self.updateAWSServicesCredentials()
+                    
+                    if let result = task.result {
+                        NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+                    }
                 
                     self.attachPolicy()
 
@@ -133,7 +137,8 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
                 UserDefaultsHelper.removeObject(for: .signedInIdentityId)
                 
                 self.updateAWSServicesCredentials()
-    
+                
+                NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
                 self.delegate?.logoutResult(nil)
             }
         }

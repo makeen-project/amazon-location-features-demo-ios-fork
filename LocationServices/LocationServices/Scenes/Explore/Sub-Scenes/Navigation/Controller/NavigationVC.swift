@@ -8,6 +8,12 @@
 import UIKit
 
 final class NavigationVC: UIViewController {
+    
+    enum Constants {
+        static let navigationHeaderHeight: CGFloat = 80
+        static let titleLeadingOffset: CGFloat = 16
+    }
+    
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     
@@ -21,9 +27,20 @@ final class NavigationVC: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 5
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
         stackView.alignment = .fill
         return stackView
+    }()
+    
+    private var titleLabelContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private var titleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.routeOverview)
+        return label
     }()
     
     private var navigationHeaderView: NavigationHeaderView = NavigationHeaderView()
@@ -43,9 +60,9 @@ final class NavigationVC: UIViewController {
         setupTableView()
         setupHandler()
         setupViews()
+        titleLabelContainer.isHidden = !isInSplitViewController
         navigationHeaderView.isHidden = isInSplitViewController
         navigationHeaderView.update(style: .navigationHeader)
-        title = StringConstant.routeOverview
         
         let barButtonItem = UIBarButtonItem(title: nil, image: .arrowUpLeftAndArrowDownRight, target: self, action: #selector(hideScreen))
         barButtonItem.tintColor = .lsPrimary
@@ -54,7 +71,7 @@ final class NavigationVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
+        changeExploreActionButtonsVisibility()
     }
     
     func setupHandler() {
@@ -84,16 +101,33 @@ final class NavigationVC: UIViewController {
     
     private func setupViews() {
         view.addSubview(stackView)
+        stackView.addArrangedSubview(titleLabelContainer)
         stackView.addArrangedSubview(navigationHeaderView)
         stackView.addArrangedSubview(tableView)
         
+        titleLabelContainer.addSubview(titleLabel)
+        
         stackView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.leading.trailing.equalToSuperview()
         }
         
         navigationHeaderView.snp.makeConstraints {
-            $0.height.equalTo(80)
+            $0.height.equalTo(Constants.navigationHeaderHeight)
         }
+        
+        titleLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
+            $0.top.bottom.trailing.equalToSuperview()
+        }
+    }
+    
+    private func changeExploreActionButtonsVisibility() {
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: true,
+            StringConstant.NotificationsInfoField.directionIsHidden: true
+        ]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
 }
 

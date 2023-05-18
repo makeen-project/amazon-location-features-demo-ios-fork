@@ -46,15 +46,8 @@ final class GeofenceDashboardVC: UIViewController {
         setupHandlers()
         setupTableView()
         setupViews()
-        
-        let isGeofenceListEmpty = datas.isEmpty
-        headerView.isHidden = isGeofenceListEmpty
-        tableView.isHidden = isGeofenceListEmpty
-        initialGeofenceView.isHidden = !isGeofenceListEmpty
-        
-        if isGeofenceListEmpty {
-            viewModel.fetchListOfGeofences()
-        }
+        setupNotification()
+        setupViewsVisibility()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,9 +105,34 @@ final class GeofenceDashboardVC: UIViewController {
         }
     }
     
+    private func setupViewsVisibility() {
+        if LoginViewModel.getAuthStatus() != .authorized {
+            datas = []
+        }
+        
+        let isGeofenceListEmpty = datas.isEmpty
+        headerView.isHidden = isGeofenceListEmpty
+        tableView.isHidden = isGeofenceListEmpty
+        initialGeofenceView.isHidden = !isGeofenceListEmpty
+        
+        if isGeofenceListEmpty {
+            viewModel.fetchListOfGeofences()
+        }
+    }
+    
     private func geofenceAppearanceChanged(isVisible: Bool) {
         let userInfo = ["isVisible" : isVisible]
         NotificationCenter.default.post(name: Notification.geofenceAppearanceChanged, object: nil, userInfo: userInfo)
+    }
+    
+    private func setupNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
+    }
+    
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.setupViewsVisibility()
+        }
     }
 }
 

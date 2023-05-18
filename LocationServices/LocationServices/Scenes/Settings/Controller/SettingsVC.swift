@@ -10,13 +10,15 @@ import SnapKit
 import AWSMobileClientXCF
 
 final class SettingsVC: UIViewController {
+    
+    enum Constants {
+        static let horizontalOffset: CGFloat = 16
+    }
+    
     weak var delegate: SettingsNavigationDelegate?
     
-    private var headerTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Settings"
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textAlignment = .left
+    private var headerTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.settigns)
         return label
     }()
     
@@ -47,13 +49,13 @@ final class SettingsVC: UIViewController {
         setupViews()
         setupTableView()
         viewModel.loadData()
+        setupNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadData()
-        // show logout button only if we are not signed in
-        logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        updateLogoutButtonVisibility()
     }
     
     private func setupNavigationItems() {
@@ -71,10 +73,9 @@ final class SettingsVC: UIViewController {
         self.view.addSubview(tableView)
         
         headerTitle.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(16)
-            $0.leading.equalToSuperview().offset(24)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            $0.leading.equalToSuperview().offset(Constants.horizontalOffset)
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(32)
         }
         
         logoutButton.snp.makeConstraints {
@@ -88,10 +89,25 @@ final class SettingsVC: UIViewController {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 $0.leading.trailing.equalToSuperview()
             } else {
-                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
             }
             $0.bottom.equalTo(logoutButton.snp.top)
         }
+    }
+    
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
+    }
+    
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.updateLogoutButtonVisibility()
+        }
+    }
+    
+    private func updateLogoutButtonVisibility() {
+        // show logout button only if we are not signed in
+        logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
     }
 }
 

@@ -12,6 +12,8 @@ final class DirectionVC: UIViewController {
     
     enum Constants {
         static let mediumId = UISheetPresentationController.Detent.Identifier("medium")
+        static let titleOffsetiPhone: CGFloat = 20
+        static let titleOffsetiPad: CGFloat = 0
     }
     
     var isInSplitViewController: Bool = false
@@ -46,7 +48,10 @@ final class DirectionVC: UIViewController {
         }
     }
     
-    var directionSearchView: DirectionSearchView = DirectionSearchView()
+    lazy var directionSearchView: DirectionSearchView = {
+        let titleTopOffset: CGFloat = isInSplitViewController ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
+        return DirectionSearchView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
+    }()
     
     lazy var directionView: DirectionView = DirectionView()
     
@@ -73,8 +78,6 @@ final class DirectionVC: UIViewController {
             directionSearchView.setMyLocationText()
         }
         locationManagerSetup()
-        directionSearchView.changeHeaderVisibility(isHidden: isInSplitViewController)
-        title = StringConstant.directions
         
         let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissView))
         barButtonItem.tintColor = .lsPrimary
@@ -83,7 +86,6 @@ final class DirectionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         if isRoutingOptionsEnabled {
             tableView.isHidden = true
@@ -95,6 +97,7 @@ final class DirectionVC: UIViewController {
             let isDestination = firstDestionation?.placeName != nil
             directionSearchView.becomeFirstResponder(isDestination: isDestination)
         }
+        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,6 +114,14 @@ final class DirectionVC: UIViewController {
         locationManager.performLocationDependentAction {
             self.locationManager.startUpdatingLocation()
         }
+    }
+    
+    private func changeExploreActionButtonsVisibility(geofenceIsHidden: Bool, directionIsHidden: Bool) {
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: geofenceIsHidden,
+            StringConstant.NotificationsInfoField.directionIsHidden: directionIsHidden
+        ]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func setupHandlers() {
@@ -203,9 +214,8 @@ final class DirectionVC: UIViewController {
         
         directionSearchView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().offset(14)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(14)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(140)
         }
         
         directionView.snp.makeConstraints {
@@ -487,6 +497,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
 
 extension DirectionVC: DirectionSearchViewOutputDelegate {
     @objc func dismissView() {
+        changeExploreActionButtonsVisibility(geofenceIsHidden: true, directionIsHidden: true)
         dismissHandler?()
     }
     

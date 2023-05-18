@@ -24,12 +24,20 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         }
     }
     
+    enum Constants {
+        static let titleOffsetiPhone: CGFloat = 20
+        static let titleOffsetiPad: CGFloat = 0
+    }
+    
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         return locationManager
     }()
     
-    private let poiCardView: POICardView = POICardView()
+    private lazy var poiCardView: POICardView = {
+        let titleTopOffset: CGFloat = isInSplitViewController ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
+        return POICardView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
+    }()
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     var userLocation: (lat: Double?, long: Double?)?
@@ -50,7 +58,6 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         poiCardView.delegate = self
         viewModel.fetchDatas()
         setupViews()
-        poiCardView.changeHeaderVisibility(isHidden: isInSplitViewController)
         
         let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissPoiView))
         barButtonItem.tintColor = .lsPrimary
@@ -59,8 +66,8 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
         showCurrentAnnotation()
+        changeExploreActionButtonsVisibility()
     }
         
     private func setupViews() {
@@ -69,6 +76,14 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
             $0.bottom.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    private func changeExploreActionButtonsVisibility() {
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: false,
+            StringConstant.NotificationsInfoField.directionIsHidden: false
+        ]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func updateMapViewBottomIcons() {
@@ -108,7 +123,6 @@ extension POICardVC: POICardViewModelOutputDelegate {
         poiCardView.errorMessage = errorMessage
         poiCardView.errorInfoMessage = errorInfoMessage
         poiCardView.dataModel = cardData
-        title = cardData.placeName
     }
     
     @objc func dismissPoiView() {

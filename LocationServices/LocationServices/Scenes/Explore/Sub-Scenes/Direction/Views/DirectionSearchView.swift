@@ -20,6 +20,7 @@ final class DirectionSearchView: UIView {
     var delegate: DirectionSearchViewOutputDelegate?
     
     private let debounceManager = DebounceManager(debounceDuration: 0.5)
+    private var titleTopOffset: CGFloat = 20
     
     private var containerView: UIView = {
         let view = UIView()
@@ -103,12 +104,8 @@ final class DirectionSearchView: UIView {
         return view
     }()
     
-    private var directionSearchTitle: UILabel = {
-        let label = UILabel()
-        label.text = StringConstant.directions
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .black
+    private var directionSearchTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.directions)
         label.numberOfLines = 2
         return label
     }()
@@ -144,10 +141,16 @@ final class DirectionSearchView: UIView {
         self.firstDestinationTextField.text = "My Location"
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(titleTopOffset: CGFloat, isCloseButtonHidden: Bool) {
+        self.init()
+        self.titleTopOffset = titleTopOffset
         setupDelegates()
         setupViews()
+        closeButton.isHidden = isCloseButtonHidden
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     @objc func closeModal() {
@@ -197,10 +200,11 @@ final class DirectionSearchView: UIView {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview()
         }
         
         directionSearchTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+            $0.top.equalToSuperview().offset(titleTopOffset)
             $0.leading.equalToSuperview()
             $0.height.equalTo(28)
             $0.bottom.equalToSuperview()
@@ -279,10 +283,6 @@ final class DirectionSearchView: UIView {
         } else {
             firstDestinationTextField.becomeFirstResponder()
         }
-    }
-    
-    func changeHeaderVisibility(isHidden: Bool) {
-        headerContainerView.isHidden = isHidden
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {

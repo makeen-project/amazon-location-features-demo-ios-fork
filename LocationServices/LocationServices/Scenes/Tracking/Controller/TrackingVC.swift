@@ -10,6 +10,13 @@ import SnapKit
 import CoreLocation
 
 final class TrackingVC: UIViewController {
+    
+    enum Constants {
+        static let titleTopOffset: CGFloat = 27
+        static let headerCornerRadius: CGFloat = 20
+        static let trackingMapViewBottomOffset: Int = 70
+    }
+    
     var geofenceHandler: VoidHandler?
     var directionHandler: VoidHandler?
     
@@ -29,9 +36,9 @@ final class TrackingVC: UIViewController {
     }()
     
     private lazy var historyHeaderView: TrackingHistoryHeaderView = {
-        let view = TrackingHistoryHeaderView()
+        let view = TrackingHistoryHeaderView(titleTopOffset: Constants.titleTopOffset)
         view.backgroundColor = .searchBarBackgroundColor
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = Constants.headerCornerRadius
         view.isUserInteractionEnabled = true
         view.layer.maskedCorners  = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         let tap = UITapGestureRecognizer(target: self, action: #selector(openHistory))
@@ -126,6 +133,7 @@ final class TrackingVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
     }
     
     @objc private func updateTrackingHistory(_ notification: Notification) {
@@ -140,7 +148,7 @@ final class TrackingVC: UIViewController {
     
     @objc private func resetMapLayerItems(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
+            self.trackingMapView.adjustMapLayerItems(bottomSpace: Constants.trackingMapViewBottomOffset)
         }
     }
     
@@ -186,6 +194,19 @@ final class TrackingVC: UIViewController {
         grabberIcon.isHidden = isVisible
     }
     
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            switch LoginViewModel.getAuthStatus() {
+            case .authorized:
+                self.trackingMapView.adjustMapLayerItems(bottomSpace: Constants.trackingMapViewBottomOffset)
+                self.viewModel.updateHistory()
+            case .customConfig, .defaultConfig:
+                self.delegate?.showDashboardFlow()
+            }
+            self.showGeofenceAnnotations()
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         openLoginFlow(skipDashboard: viewModel.hasHistory)
@@ -223,7 +244,6 @@ final class TrackingVC: UIViewController {
         historyHeaderView.snp.makeConstraints {
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(80)
         }
         
         grabberIcon.snp.makeConstraints {

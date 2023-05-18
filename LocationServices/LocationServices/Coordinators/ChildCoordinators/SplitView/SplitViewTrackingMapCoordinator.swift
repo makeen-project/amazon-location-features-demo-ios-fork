@@ -73,10 +73,17 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         splitViewController.show(.supplementary)
     }
     
+    func showDashboardFlow() {
+        historyIsRootController = false
+        guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
+        showNextTrackingScene()
+    }
+    
     func showTrackingHistory(isTrackingActive: Bool = false) {
         historyIsRootController = true
         let controller = historyController
         controller.viewModel.changeTrackingStatus(isTrackingActive)
+        guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
         supplementaryNavigationController?.setViewControllers([controller],
                                                               animated: true)
     }
