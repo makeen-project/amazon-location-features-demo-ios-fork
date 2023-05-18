@@ -119,13 +119,6 @@ final class NavigationHeaderView: UIView {
         return button
     }()
     
-    private var seperatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
-        return view
-    }()
-    
-    
     @objc func navigationDismiss() {
         dismissHandler?()
     }
@@ -166,7 +159,6 @@ final class NavigationHeaderView: UIView {
         
         containerView.addSubview(routeVisibilityButton)
         containerView.addSubview(exitButton)
-        containerView.addSubview(seperatorView)
         
         containerView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
@@ -198,11 +190,6 @@ final class NavigationHeaderView: UIView {
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
             $0.width.equalTo(83)
-        }
-        
-        seperatorView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(2)
         }
     }
 }

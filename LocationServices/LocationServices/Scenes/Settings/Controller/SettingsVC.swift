@@ -24,7 +24,12 @@ final class SettingsVC: UIViewController {
     
     var tableView: UITableView = {
         var tableView = UITableView()
-        tableView.separatorColor = .searchBarTintColor
+        if !UIDevice.current.isPad {
+            tableView.separatorColor = .searchBarTintColor
+            tableView.separatorInset = .init(top: 0, left: Constants.horizontalOffset, bottom: 0, right: Constants.horizontalOffset)
+        } else {
+            tableView.separatorStyle = .none
+        }
         return tableView
     }()
     
