@@ -15,6 +15,8 @@ final class AttributionVC: UIViewController {
         static let partnerAttributionTitleTopOffset: CGFloat = 24
     }
     
+    var closeCallback: VoidHandler?
+    
     // MARK: - Views
     private var separatorView: UIView = {
         let view = UIView()
@@ -119,8 +121,18 @@ final class AttributionVC: UIViewController {
     
     // MARK: - Functions
     private func setupNavigationItems() {
-        navigationController?.navigationBar.tintColor = .lsTetriary
-        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.attribution
+        if !UIDevice.current.isPad {
+            navigationController?.navigationBar.tintColor = .lsTetriary
+            navigationItem.title = StringConstant.attribution
+        } else if closeCallback != nil {
+            navigationController?.navigationBar.tintColor = .lsPrimary
+            let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScene))
+            navigationItem.leftBarButtonItem = barButtonItem
+        }
+    }
+    
+    @objc private func closeScene() {
+        closeCallback?()
     }
     
     private func setupViews() {
@@ -132,7 +144,7 @@ final class AttributionVC: UIViewController {
         view.addSubview(softwareAttributionDescriptionLabel)
         view.addSubview(softwareAttributionControlStackView)
         
-        let horizontalPadding = 24
+        let horizontalPadding = 16
         let descriptionTopPadding = 10
         let learnMoreButtonTopPadding = 24
         let learnMoreButtonHeight = 48

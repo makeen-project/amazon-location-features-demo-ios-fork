@@ -157,6 +157,9 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
         navigationController.pushViewController(controller, animated: true)
     }
 }

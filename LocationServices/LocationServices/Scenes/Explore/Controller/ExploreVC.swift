@@ -14,6 +14,13 @@ import AWSMobileClientXCF
 import AWSCore
 
 final class ExploreVC: UIViewController {
+    
+    enum Constants {
+        static let navigationViewOptimalWidth: CGFloat = 361
+        static let navigationViewHeight: CGFloat = 80
+        static let defaultSpacing: CGFloat = 16
+    }
+    
     weak var delegate: ExploreNavigationDelegate?
     weak var splitDelegate: SplitViewVisibilityProtocol?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
@@ -36,6 +43,11 @@ final class ExploreVC: UIViewController {
         locationManager.setDelegate(self)
         return locationManager
     }()
+    
+    private var isNavigationViewLeftAlignment: Bool {
+        let countOfNavigationViewsInParentView = view.frame.width / Constants.navigationViewOptimalWidth
+        return countOfNavigationViewsInParentView > 1.5
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,12 +82,11 @@ final class ExploreVC: UIViewController {
     private func setNavigationViewLayout() {
         guard parentViewWidthForNavigationViews != view.frame.width else { return }
         
-        let optimalWidth: CGFloat = 361
-        let topOffset: CGFloat = 53
-        let horizontalOffset: CGFloat = 16
+        let optimalWidth = Constants.navigationViewOptimalWidth
+        let isLeftAlignment = isNavigationViewLeftAlignment
         
-        let countOfNavigationViewsInParentView = view.frame.width / optimalWidth
-        let isLeftAlignment: Bool = countOfNavigationViewsInParentView > 1.5
+        let topOffset: CGFloat = 53
+        let horizontalOffset: CGFloat = Constants.defaultSpacing
         
         if isLeftAlignment {
             mapNavigationView.snp.remakeConstraints {
@@ -87,7 +98,7 @@ final class ExploreVC: UIViewController {
                 $0.bottom.equalTo(view.safeAreaInsets)
                 $0.leading.equalToSuperview().offset(horizontalOffset)
                 $0.width.equalTo(optimalWidth)
-                $0.height.equalTo(80)
+                $0.height.equalTo(Constants.navigationViewHeight)
             }
         } else {
             mapNavigationView.snp.remakeConstraints {
@@ -99,7 +110,7 @@ final class ExploreVC: UIViewController {
                 $0.bottom.equalTo(view.safeAreaInsets)
                 $0.leading.equalToSuperview().offset(horizontalOffset)
                 $0.trailing.equalToSuperview().offset(-horizontalOffset)
-                $0.height.equalTo(80)
+                $0.height.equalTo(Constants.navigationViewHeight)
             }
         }
     }
@@ -233,6 +244,7 @@ private extension ExploreVC {
     func setupView() {
         mapNavigationView.isHidden = true
         mapNavigationActionsView.isHidden = true
+        updateAmazonLogoPositioning(isBottomNavigationShown: false)
         mapNavigationActionsView.update(style: .navigationActions)
         changeSeachBarVisibility(isHidden: false)
         if !isInSplitViewController {
@@ -269,6 +281,26 @@ private extension ExploreVC {
                 self?.splitDelegate?.showSupplementary()
             }
         }
+    }
+    
+    private func updateAmazonLogoPositioning(isBottomNavigationShown: Bool) {
+        let leadingOffset: CGFloat?
+        let bottomOffset: CGFloat?
+        
+        if isBottomNavigationShown {
+            if isNavigationViewLeftAlignment {
+                leadingOffset = Constants.navigationViewOptimalWidth + Constants.defaultSpacing * 2
+                bottomOffset = nil
+            } else {
+                leadingOffset = nil
+                bottomOffset = Constants.navigationViewHeight + Constants.defaultSpacing * 2
+            }
+        } else {
+            leadingOffset = nil
+            bottomOffset = nil
+        }
+        
+        exploreView.setupAmazonLogo(leadingOffset: leadingOffset, bottomOffset: bottomOffset)
     }
     
     private func changeSeachBarVisibility(isHidden: Bool) {
@@ -333,6 +365,7 @@ private extension ExploreVC {
             if !routeModel.isPreview {
                 mapNavigationView.isHidden = false
                 mapNavigationActionsView.isHidden = !self.isInSplitViewController
+                updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
                 exploreView.focusNavigationMode()
             } else {
                 exploreView.focus(on: routeModel.departurePosition)
@@ -351,6 +384,7 @@ private extension ExploreVC {
         viewModel.deactivateRoute()
         mapNavigationView.isHidden = true
         mapNavigationActionsView.isHidden = true
+        updateAmazonLogoPositioning(isBottomNavigationShown: false)
         exploreView.deleteDrawing()
     }
     

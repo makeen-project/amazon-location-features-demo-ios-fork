@@ -186,12 +186,17 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.supplementaryNavigationController?.popViewController(animated: true)
+        }
         supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitDelegate?.showSupplementary()
     }
     
     func showWelcome() {
         let controller = WelcomeVCBuilder.create()
-        controller.modalPresentationStyle = .pageSheet
+        controller.modalPresentationStyle = .formSheet
+        controller.isModalInPresentation = true
         
         controller.continueHandler = { [weak self] in
             self?.splitViewController.dismiss(animated: true)
@@ -226,6 +231,7 @@ private extension SplitViewExploreMapCoordinator {
     func showExploreScene() {
         setSupplementary()
         setSecondary()
+        secondaryController.navigationController?.navigationBar.isHidden = true
     }
     
     func setSupplementary() {

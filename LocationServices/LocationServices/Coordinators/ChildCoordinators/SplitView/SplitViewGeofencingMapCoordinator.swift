@@ -146,7 +146,11 @@ extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.supplementaryNavigationController?.popViewController(animated: true)
+        }
         supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitDelegate?.showSupplementary()
     }
     
     func updateGeofenceScreenLocation() {
@@ -158,6 +162,7 @@ private extension SplitViewGeofencingMapCoordinator {
     func showGeofenceScene() {
         setSupplementary()
         setSecondary()
+        secondaryController.navigationController?.navigationBar.isHidden = true
     }
     
     private func setSupplementary() {
