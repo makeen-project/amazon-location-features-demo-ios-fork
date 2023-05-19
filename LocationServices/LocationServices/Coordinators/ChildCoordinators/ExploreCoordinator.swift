@@ -121,7 +121,6 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.delegate = self
         controller.userLocation = (lat, long)
         controller.modalPresentationStyle = isiPad ? .formSheet : .pageSheet
-        controller.isModalInPresentation = true
         
         if let sheet = controller.sheetPresentationController {
             if isiPad {
