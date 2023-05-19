@@ -10,12 +10,13 @@ import SnapKit
 import CoreLocation
 import Mapbox
 
-final class GeofenceVC: UIViewController, AlertPresentable {
+final class GeofenceVC: UIViewController {
     weak var delegate: GeofenceNavigationDelegate?
     var directioButtonHandler: VoidHandler?
+    private var isInSplitViewController: Bool { delegate is SplitViewGeofencingMapCoordinator }
     
     private lazy var headerView: GeofenceDashboardHeaderView = {
-        let view = GeofenceDashboardHeaderView()
+        let view = GeofenceDashboardHeaderView(containerTopOffset: 25)
         view.backgroundColor = .searchBarBackgroundColor
         view.layer.cornerRadius = 20
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -38,7 +39,7 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     private let authActionsHelper = AuthActionsHelper()
     
     private var geofenceMapView: GeofenceMapView = GeofenceMapView()
-    private var userCoreLocation: CLLocationCoordinate2D?
+    private(set) var userCoreLocation: CLLocationCoordinate2D?
     
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
@@ -48,7 +49,6 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.backButtonTitle = ""
         viewModel.delegate = self
         authActionsHelper.delegate = delegate
         setupNotification()
@@ -60,6 +60,7 @@ final class GeofenceVC: UIViewController, AlertPresentable {
         setupNotifications()
         locationManagerSetup()
         setupViews()
+        changeHeaderVisibility(isHidden: false)
         geofenceMapView.setupTapGesture()
     }
     
@@ -73,12 +74,19 @@ final class GeofenceVC: UIViewController, AlertPresentable {
         }
     }
     
-    func setupNotification() {
+    private func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerPosition(_:)), name: Notification.geofenceMapLayerUpdate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
     }
     
     @objc private func updateMapLayerPosition(_ notification: Notification) {
         self.geofenceMapView.updateMapLayerPosition(value: 20)
+    }
+    
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.viewModel.fetchListOfGeofences()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -178,18 +186,19 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     
     @objc private func geofenceAppearanceChanged(_ notification: Notification) {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
-        headerView.isHidden = isVisible
+        changeHeaderVisibility(isHidden: isVisible)
         grabberIcon.isHidden = isVisible
     }
     
     func setupViews() {
-        navigationController?.navigationBar.isHidden = true
+        if !isInSplitViewController {
+            navigationItem.backButtonTitle = ""
+            navigationController?.navigationBar.isHidden = true
+        }
         
         view.addSubview(geofenceMapView)
         view.addSubview(headerView)
         view.addSubview(grabberIcon)
-        
-        
         
         geofenceMapView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
@@ -212,6 +221,14 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     func locationManagerSetup() {
         locationManager.performLocationDependentAction {
             self.locationManager.startUpdatingLocation()
+        }
+    }
+    
+    private func changeHeaderVisibility(isHidden: Bool) {
+        if isInSplitViewController {
+            headerView.isHidden = true
+        } else {
+            headerView.isHidden = isHidden
         }
     }
 }

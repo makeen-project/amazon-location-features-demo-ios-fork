@@ -21,12 +21,19 @@ protocol TrackingMapViewOutputDelegate: BottomSheetPresentable {
 }
 
 final class TrackingMapView: UIView {
+    
+    enum Constants {
+        static let mapLayerBottomOffsetiPad: CGFloat = -8
+        static let mapLayerBottomOffsetiPhone: CGFloat = -16
+    }
+    
     var delegate: TrackingMapViewOutputDelegate? {
         didSet {
             mapView.delegate = delegate
         }
     }
     
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     private var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
     
@@ -56,7 +63,7 @@ final class TrackingMapView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     private func setupViews() {
@@ -85,12 +92,17 @@ final class TrackingMapView: UIView {
         
         mapLayer.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-16)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constants.mapLayerBottomOffsetiPad)
+            } else {
+                $0.bottom.equalToSuperview().offset(Constants.mapLayerBottomOffsetiPhone)
+            }
             $0.width.equalTo(50)
         }   
     }
     
     func adjustMapLayerItems(bottomSpace: Int) {
+        guard !isiPad else { return }
         mapLayer.snp.removeConstraints()
         
         mapLayer.snp.makeConstraints {
@@ -188,7 +200,7 @@ private extension TrackingMapView {
         let dashedLayer = MGLLineStyleLayer(identifier: identifier, source: source)
         dashedLayer.lineJoin = lineJoinCap
         dashedLayer.lineCap = lineJoinCap
-        dashedLayer.lineColor = NSExpression(forConstantValue: UIColor.tabBarTintColor)
+        dashedLayer.lineColor = NSExpression(forConstantValue: UIColor.lsPrimary)
         dashedLayer.lineWidth = lineWidth
         dashedLayer.lineDashPattern = NSExpression(forConstantValue: [0, 1.5])
         

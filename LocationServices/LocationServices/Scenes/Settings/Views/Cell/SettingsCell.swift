@@ -44,6 +44,11 @@ enum SettingsCellType {
             return .awsCloudFormationIcon
         }
     }
+    
+    var selectedIcon: UIImage {
+        itemIcon.withTintColor(.lsPrimary,
+                               renderingMode: .alwaysOriginal)
+    }
 }
 
 struct SettingsCellModel {
@@ -67,6 +72,15 @@ final class SettingsCell: UITableViewCell {
     
     
     private var containerView: UIView = UIView()
+    
+    private var selectionView: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 10
+        view.backgroundColor = .settingsSelectionColor
+        return view
+    }()
     
     private var itemIcon: UIImageView = {
         let iv = UIImageView()
@@ -111,11 +125,20 @@ final class SettingsCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
+        self.tintColor = .clear
         setupViews()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            selectionView.isHidden = !selected
+        }
+        itemIcon.image = selected ? data?.type.selectedIcon : data?.type.itemIcon
     }
     
     private func setupViews() {
@@ -123,6 +146,11 @@ final class SettingsCell: UITableViewCell {
         textStackView.removeArrangedSubViews()
         textStackView.addArrangedSubview(itemTitle)
         textStackView.addArrangedSubview(itemSubtitle)
+        
+        self.addSubview(selectionView)
+        selectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         self.addSubview(containerView)
         containerView.addSubview(itemIcon)

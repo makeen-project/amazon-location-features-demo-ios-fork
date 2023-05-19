@@ -40,20 +40,14 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         controller.modalPresentationStyle = .pageSheet
         
         controller.trackingHistoryHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: false, completion: {
-                self?.showTrackingHistory()
-            })
+            self?.showTrackingHistory()
         }
         
-        controller.closeHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: nil)
-        }
-
         if let sheet = controller.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .medium
         }
@@ -62,19 +56,21 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
-        let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
-        controller.modalPresentationStyle = .pageSheet
-        
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
-        
-        navigationController.present(controller, animated: true)
+        navigationController.dismiss(animated: false, completion: { [weak self] in
+            let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
+            controller.modalPresentationStyle = .pageSheet
+            
+            if let sheet = controller.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+                sheet.selectedDetentIdentifier = .medium
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
+                sheet.prefersGrabberVisible = true
+                sheet.largestUndimmedDetentIdentifier = .medium
+            }
+            
+            self?.navigationController.present(controller, animated: true)
+        })
     }
     
     func showMapStyleScene() {
@@ -89,7 +85,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -112,7 +108,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.detents = [.large()]
             sheet.selectedDetentIdentifier = .large
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -131,7 +127,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
                 sheet.detents = [.large()]
                 sheet.selectedDetentIdentifier = .large
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.navigationController.present(controller, animated: true)
         }
@@ -139,6 +135,9 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
         navigationController.pushViewController(controller, animated: true)
     }
 }

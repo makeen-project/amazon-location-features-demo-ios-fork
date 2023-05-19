@@ -17,4 +17,18 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    func blurStatusBar() {
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        view.addSubview(blurView)
+        
+        let offset = navigationController?.navigationBar.frame.height ?? 0
+        
+        blurView.snp.makeConstraints {
+            $0.top.trailing.leading.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-offset)
+        }
+    }
 }
+
+extension UIViewController: AlertPresentable {}

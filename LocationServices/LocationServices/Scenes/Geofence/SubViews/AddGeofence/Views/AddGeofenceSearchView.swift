@@ -37,7 +37,7 @@ final class AddGeofenceSearchView: UIView {
     private lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.Geofence.searchGeofenceTextField
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -65,7 +65,7 @@ final class AddGeofenceSearchView: UIView {
     private lazy var radiusSlider: UISlider = {
         let slider = UISlider()
         slider.accessibilityIdentifier = ViewsIdentifiers.Geofence.radiusGeofenceSliderField
-        slider.tintColor = .tabBarTintColor
+        slider.tintColor = .lsPrimary
         slider.minimumValue = 10
         slider.maximumValue = 10000
         slider.addTarget(self, action: #selector(radiusSliderValuChanged), for: .valueChanged)

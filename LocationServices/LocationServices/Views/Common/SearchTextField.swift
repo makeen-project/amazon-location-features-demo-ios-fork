@@ -15,6 +15,7 @@ final class SearchTextField: UIView {
     // when the user tapped to close/clear button
     var textFieldDeactivated: VoidHandler?
     var textFieldActivated: VoidHandler?
+    var cancelSearchCallback: VoidHandler?
     private var searchState: Bool = false
     
     private let debounceManager = DebounceManager(debounceDuration: 0.5)
@@ -37,7 +38,7 @@ final class SearchTextField: UIView {
     private lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.Search.searchTextField
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -51,6 +52,15 @@ final class SearchTextField: UIView {
         return textField
     }()
     
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(StringConstant.cancel, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 13)
+        button.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
+        return button
+    }()
+    
     func currentText() -> String? {
         return self.searchTextField.text
     }
@@ -62,8 +72,8 @@ final class SearchTextField: UIView {
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 5
+        stackView.distribution = .fill
+        stackView.spacing = 16
         return stackView
     }()
     
@@ -104,21 +114,22 @@ private extension SearchTextField {
         stackView.removeArrangedSubViews()
         stackView.addArrangedSubview(searchIcon)
         stackView.addArrangedSubview(searchTextField)
+        stackView.addArrangedSubview(cancelButton)
+        cancelButton.isHidden = true
     }
     
     private func configure() {
         self.addSubview(containerView)
-        containerView.addSubview(stackView)
+        self.addSubview(stackView)
         
         containerView.snp.makeConstraints {
-            $0.top.trailing.leading.bottom.equalToSuperview()
+            $0.top.leading.bottom.equalToSuperview()
+            $0.trailing.equalTo(searchTextField.snp.trailing).offset(8)
         }
         
         searchIcon.snp.makeConstraints {
             $0.height.width.equalTo(20)
         }
-        
-        stackView.setCustomSpacing(16, after: searchIcon)
         
         stackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
@@ -137,6 +148,11 @@ private extension SearchTextField {
             }
         }
     }
+    
+    @objc func cancelAction() {
+        searchTextField.resignFirstResponder()
+        cancelSearchCallback?()
+    }
 }
 
 extension SearchTextField: UITextFieldDelegate {
@@ -154,5 +170,13 @@ extension SearchTextField: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.textFieldDeactivated?()
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        cancelButton.isHidden = false
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        cancelButton.isHidden = true
     }
 }

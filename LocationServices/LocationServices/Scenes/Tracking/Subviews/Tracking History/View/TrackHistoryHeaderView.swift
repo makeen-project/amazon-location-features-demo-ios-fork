@@ -15,12 +15,11 @@ final class TrackingHistoryHeaderView: UIView {
     var showAlertCallback: ((AlertModel)->())?
     var showAlertControllerCallback: ((UIAlertController)->())?
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
+    private var titleTopOffset: CGFloat = 27
+    
+    private let titleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.trackingHistory)
         label.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingStartedLabel
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textAlignment = .left
-        label.text = "Tracking History"
         return label
     }()
     
@@ -106,12 +105,18 @@ final class TrackingHistoryHeaderView: UIView {
             detailLabel.textColor = .navigationRedButton
         } else {
             trackingActionButton.setTitle(StringConstant.startTracking, for: .normal)
-            trackingActionButton.backgroundColor = .tabBarTintColor
+            trackingActionButton.backgroundColor = .lsPrimary
             trackingActionButton.titleLabel?.font = .amazonFont(type: .bold, size: 16)
             
             detailLabel.text = StringConstant.Tracking.noTracking
             detailLabel.textColor = .searchBarTintColor
         }
+    }
+    
+    convenience init(titleTopOffset: CGFloat) {
+        self.init()
+        self.titleTopOffset = titleTopOffset
+        setupViews()
     }
     
     override init(frame: CGRect) {
@@ -120,7 +125,7 @@ final class TrackingHistoryHeaderView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     private func setupViews() {
@@ -129,7 +134,7 @@ final class TrackingHistoryHeaderView: UIView {
         self.addSubview(trackingActionButton)
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(27)
+            $0.top.equalToSuperview().offset(titleTopOffset)
             $0.leading.equalToSuperview().offset(16)
             $0.height.equalTo(28)
         }
@@ -139,10 +144,11 @@ final class TrackingHistoryHeaderView: UIView {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalTo(trackingActionButton.snp.leading).offset(-5)
             $0.height.equalTo(18)
+            $0.bottom.equalToSuperview()
         }
         
         trackingActionButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(31)
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
             $0.width.equalTo(132)

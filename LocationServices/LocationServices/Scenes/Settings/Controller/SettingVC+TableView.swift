@@ -25,10 +25,16 @@ extension SettingsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsCell.settingCellReuseId, for: indexPath) as? SettingsCell else {
-            fatalError("Settings Cell can't be deque")
+            fatalError("\(SettingsCell.settingCellReuseId) \(String.cellCanNotBeDequed)")
         }
         let data = viewModel.getCellItems(indexPath)
         cell.data = data
+        if UIDevice.current.userInterfaceIdiom == .pad,
+           tableView.indexPathForSelectedRow == nil {
+            tableView.selectRow(at: indexPath,
+                                animated: true,
+                                scrollPosition: .none)
+        }
         return cell
     }
     

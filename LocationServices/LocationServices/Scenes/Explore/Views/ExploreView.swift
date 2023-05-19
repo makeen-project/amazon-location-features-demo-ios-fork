@@ -21,6 +21,21 @@ private enum Constant {
     static let userLocationViewIdentifier = "UserLocationViewIdentifier"
     static let imageAnnotationViewIdentifier = "ImageAnnotationViewIdentifier"
     static let dictinaryKeyIdentityPoolId = "IdentityPoolId"
+    
+    static let searchBarHeight: CGFloat = 76
+    
+    static let amazonLogoBottomOffset: CGFloat = -8
+    static let amazonLogoHeight: CGFloat = 18
+    static let amazonLogoWidth: CGFloat = 121
+    
+    static let defaultHorizontalOffset: CGFloat = 16
+    
+    static let actionButtonWidth: CGFloat = 48
+    
+    static let bottomStackViewOffsetiPad: CGFloat = -8
+    static let bottomStackViewOffsetiPhone: CGFloat = -16
+    static let topStackViewOffsetiPhone: CGFloat = 16
+    static let topStackViewOffsetiPad: CGFloat = 0
 }
 
 enum MapMode {
@@ -57,7 +72,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     
     private var mapView: MGLMapView! = {
         let mapView = MGLMapView()
-        mapView.tintColor = .tabBarTintColor
+        mapView.tintColor = .lsPrimary
         mapView.compassView.isHidden = true
         mapView.zoomLevel = 12
         mapView.logoView.isHidden = true
@@ -78,7 +93,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     private lazy var directonButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.General.routingButton
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
         button.layer.cornerRadius = 8
         button.setImage(.directionMapIcon, for: .normal)
@@ -92,7 +107,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     
     private lazy var locateMeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
         button.layer.cornerRadius = 8
         button.setImage(.locateMeMapIcon, for: .normal)
@@ -107,10 +122,8 @@ final class ExploreView: UIView, NavigationMapProtocol {
     
     private lazy var geofenceButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
-        button.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        button.layer.cornerRadius = 8
         button.setImage(.geofenceMapIcon, for: .normal)
         button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
                                                                       leading: 23,
@@ -123,10 +136,8 @@ final class ExploreView: UIView, NavigationMapProtocol {
     private lazy var mapStyleButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.General.mapStyles
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
-        button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        button.layer.cornerRadius = 8
         button.setImage(.mapStyleMapIcon, for: .normal)
         button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
                                                                       leading: 23,
@@ -170,8 +181,10 @@ final class ExploreView: UIView, NavigationMapProtocol {
         let stackView = UIStackView()
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
-        stackView.distribution = .fill
+        stackView.distribution = .equalCentering
         stackView.spacing = 0
+        stackView.layer.cornerRadius = 8
+        stackView.clipsToBounds = true
         return stackView
     }()
     
@@ -187,11 +200,12 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     func hideGeoFence(state: Bool) {
-        topStackView.isHidden = state
+        geofenceButton.isHidden = state
+        dividerView.isHidden = state
     }
     
     func hideDirectionButton(state: Bool) {
@@ -218,8 +232,6 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     func isLocateMeButtonDisabled(state: Bool) {
-        locateMeButton.tintColor = state ? .maplightGrayColor : .mapDarkBlackColor
-        
         guard !state,
               let userCoordinates = mapView.userLocation?.coordinate,
               CLLocationCoordinate2DIsValid(userCoordinates) else {
@@ -333,6 +345,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     func shouldBottomStackViewPositionUpdate(state: Bool = false) {
+        guard !isiPad else { return }
         if state {
             bottomStackView.snp.remakeConstraints {
                 $0.bottom.equalTo(searchBarView.snp.top).offset(-96)
@@ -449,6 +462,21 @@ final class ExploreView: UIView, NavigationMapProtocol {
         
         mapHelperView.setNeedsLayout()
         mapHelperView.layoutIfNeeded()
+    }
+    
+    func setupAmazonLogo(leadingOffset: CGFloat?, bottomOffset: CGFloat?) {
+        let leadingOffset = leadingOffset ?? Constant.defaultHorizontalOffset
+        let bottomOffset = bottomOffset ?? Constant.amazonLogoBottomOffset
+        amazonMapLogo.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(leadingOffset)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomOffset)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomOffset)
+            }
+            $0.height.equalTo(Constant.amazonLogoHeight)
+            $0.width.equalTo(Constant.amazonLogoWidth)
+        }
     }
     
     private func calculateMapHelperHeight() -> UInt {
@@ -702,17 +730,12 @@ private extension ExploreView {
         }
         
         searchBarView.snp.makeConstraints {
-            $0.height.equalTo(76)
+            $0.height.equalTo(Constant.searchBarHeight)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
         
-        amazonMapLogo.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(8)
-            $0.bottom.equalTo(searchBarView.snp.top).offset(-8)
-            $0.height.equalTo(18)
-            $0.width.equalTo(121)
-        }
+        setupAmazonLogo(leadingOffset: nil, bottomOffset: nil)
         
         infoButton.snp.makeConstraints {
             $0.height.width.equalTo(13.5)
@@ -725,7 +748,7 @@ private extension ExploreView {
         }
         
         geofenceButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         dividerView.snp.makeConstraints {
@@ -733,28 +756,33 @@ private extension ExploreView {
         }
         
         mapStyleButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         topStackView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(48)
-            $0.height.equalTo(100)
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(
+                isiPad ? Constant.topStackViewOffsetiPad : Constant.topStackViewOffsetiPhone
+            )
+            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
+            $0.width.equalTo(Constant.actionButtonWidth)
         }
         
         directonButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         locateMeButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
         bottomStackView.snp.makeConstraints {
-            $0.bottom.equalTo(searchBarView.snp.top).offset(-16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(48)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constant.bottomStackViewOffsetiPad)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(Constant.bottomStackViewOffsetiPhone)
+            }
+            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
+            $0.width.equalTo(Constant.actionButtonWidth)
         }
         
         updateMapHelperConstraints()
@@ -823,7 +851,6 @@ extension ExploreView: MGLMapViewDelegate {
         if let zoomData = cardData[safe: 0], let lat = zoomData.placeLat, let long = zoomData.placeLong {
             mapView?.setCenter(CLLocationCoordinate2D(latitude: lat, longitude: long), zoomLevel: Constant.singleAnnotationMapZoomValue, animated: false)
         }
-        
         
         delegate?.showPoiCard(cardData: cardData)
     }

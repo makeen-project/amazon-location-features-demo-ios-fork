@@ -16,11 +16,11 @@ enum TabBarPage {
 
     var title: String {
         switch self {
-        case .explore: return "Explore"
-        case .tracking: return "Trackers"
-        case .geofence: return "Geofences"
-        case .settings: return "Settings"
-        case .about: return "About"
+        case .explore: return StringConstant.TabBar.explore
+        case .tracking: return StringConstant.TabBar.tracking
+        case .geofence: return StringConstant.TabBar.geofence
+        case .settings: return StringConstant.TabBar.settings
+        case .about: return StringConstant.TabBar.about
         }
     }
 

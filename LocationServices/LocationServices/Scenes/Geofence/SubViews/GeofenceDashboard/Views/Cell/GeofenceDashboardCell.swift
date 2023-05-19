@@ -57,7 +57,7 @@ final class GeofenceDashboardCell: UITableViewCell {
         button.accessibilityIdentifier = ViewsIdentifiers.Geofence.deleteGeofenceButton
         button.setImage(.trashIcon, for: .normal)
         button.contentMode = .scaleAspectFill
-        button.tintColor = .searchBarTintColor
+        button.tintColor = .lsGrey
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(deletaAction), for: .touchUpInside)
         return button
@@ -79,7 +79,7 @@ final class GeofenceDashboardCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     

@@ -10,7 +10,6 @@ import SnapKit
 
 protocol MapOverlayItemsProtocol: AnyObject {
     var delegate: MapOverlayItemsOutputDelegate? { get set }
-    func changeLocateMeButtonColor(state: Bool)
 }
 
 protocol MapOverlayItemsOutputDelegate: AnyObject {
@@ -23,10 +22,11 @@ protocol MapOverlayItemsOutputDelegate: AnyObject {
 }
 
 final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
-    func changeLocateMeButtonColor(state: Bool) {
-        locateMeButton.tintColor = state ? .maplightGrayColor : .mapDarkBlackColor
-    }
     
+    enum Constants {
+        static let topStackViewTopOffsetiPhone: CGFloat = 16
+        static let topStackViewTopOffsetiPad: CGFloat = 0
+    }
     
     var delegate: MapOverlayItemsOutputDelegate?
     
@@ -37,7 +37,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
    private lazy var directonButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
         button.layer.cornerRadius = 8
         button.setImage(.directionMapIcon, for: .normal)
@@ -51,7 +51,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
     private lazy var locateMeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
         button.layer.cornerRadius = 8
         button.setImage(.locateMeMapIcon, for: .normal)
@@ -65,7 +65,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
     private lazy var geofenceButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
         button.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         button.layer.cornerRadius = 8
@@ -80,7 +80,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
     private lazy var mapStyleButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .mapDarkBlackColor
+        button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
         button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         button.layer.cornerRadius = 8
@@ -99,8 +99,6 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
         view.backgroundColor = .mapElementDiverColor
         return view
     }()
-    
-   
     
     private let bottomStackView: UIStackView = {
         let stackView = UIStackView()
@@ -182,8 +180,11 @@ private extension MapOverlayItems {
             $0.height.width.equalTo(48)
         }
         
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         topStackView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(16)
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(
+                isiPad ? Constants.topStackViewTopOffsetiPad : Constants.topStackViewTopOffsetiPhone
+            )
             $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(48)
             $0.height.equalTo(100)

@@ -27,7 +27,7 @@ final class RouteOptionView: UIView {
     private lazy var optionSwitch: UISwitch = {
         let switchView = UISwitch()
         switchView.accessibilityIdentifier = ViewsIdentifiers.Routing.routeOptionSwitchButton
-        switchView.onTintColor = .tabBarTintColor
+        switchView.onTintColor = .lsPrimary
         switchView.addTarget(self, action: #selector(changeState), for: .valueChanged)
         return switchView
     }()
@@ -43,7 +43,7 @@ final class RouteOptionView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     @objc func changeState() {

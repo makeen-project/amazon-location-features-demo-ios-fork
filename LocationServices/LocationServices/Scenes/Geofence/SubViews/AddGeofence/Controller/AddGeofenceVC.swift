@@ -14,6 +14,7 @@ final class AddGeofenceVC: UIViewController {
     var isInitalState: Bool = true
     
     weak var delegate: GeofenceNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewGeofencingMapCoordinator }
     
     var userLocation: (lat: Double?, long: Double?)?
     private var cacheSaveModel: GeofenceDataModel = GeofenceDataModel(id: nil,
@@ -30,7 +31,9 @@ final class AddGeofenceVC: UIViewController {
         return tableView
     }()
     
-    private lazy var headerView = AddGeofenceHeaderView(isEditinSceneEnabled: isEditingSceneEnabled)
+    private lazy var headerView: AddGeofenceHeaderView = {
+        return AddGeofenceHeaderView(isEditinSceneEnabled: isEditingSceneEnabled, showCloseButton: !isInSplitViewController)
+    }()
     lazy var searchView = AddGeofenceSearchView()
     private lazy var nameTextField = AddGeofenceNameTextField()
     
@@ -108,6 +111,10 @@ final class AddGeofenceVC: UIViewController {
         setupViews()
         setupFieldsInitDatas()
         setupTableView()
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScreen))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
     }
     
     private func setupHandlers() {
@@ -155,10 +162,14 @@ final class AddGeofenceVC: UIViewController {
         }
         
         headerView.dismissHandler = { [weak self] in
-            self?.sentGeofenceRefreshNotification = true
-            NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
-            self?.delegate?.dismissCurrentScene(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: false)
+            self?.closeScreen()
         }
+    }
+    
+    @objc private func closeScreen() {
+        sentGeofenceRefreshNotification = true
+        NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
+        delegate?.dismissCurrentScene(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: false)
     }
     
     private func setupViews() {
@@ -173,8 +184,7 @@ final class AddGeofenceVC: UIViewController {
         self.view.addSubview(tableView)
         
         headerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(5)
-            $0.height.equalTo(50)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }

@@ -42,6 +42,8 @@ final class GeofenceViewModel: GeofenceViewModelProtocol {
         
         // if we are not authorized do not send it
         if UserDefaultsHelper.getAppState() != .loggedIn {
+            geofences = []
+            delegate?.showGeofences([])
             return
         }
         

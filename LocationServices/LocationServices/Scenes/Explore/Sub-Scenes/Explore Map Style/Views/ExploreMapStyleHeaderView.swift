@@ -12,12 +12,8 @@ final class ExploreMapStyleHeaderView: UIView {
     private var containerView: UIView = UIView()
     var dismissHandler: VoidHandler?
     
-    private var title: UILabel = {
-        var label = UILabel()
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .mapDarkBlackColor
-        label.textAlignment = .left
-        label.text = "Map Style "
+    private var title: LargeTitleLabel = {
+        var label = LargeTitleLabel(labelText: StringConstant.mapStyle)
         return label
     }()
     
@@ -54,7 +50,7 @@ final class ExploreMapStyleHeaderView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     private func setupViews() {

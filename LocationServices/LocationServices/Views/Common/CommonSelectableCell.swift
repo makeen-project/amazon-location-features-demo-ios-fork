@@ -84,9 +84,9 @@ final class CommonSelectableCell: UITableViewCell {
         if state {
             accessibilityTraits = [.selected]
             selectionButton.setImage(CommonSelectableCellConstants.checkMarkImage, for: .normal)
-            selectionButton.tintColor = .tabBarTintColor
+            selectionButton.tintColor = .lsPrimary
             selectionButton.layer.borderWidth = 1
-            selectionButton.layer.borderColor = UIColor.tabBarTintColor.cgColor
+            selectionButton.layer.borderColor = UIColor.lsPrimary.cgColor
         } else {
             accessibilityTraits = []
             selectionButton.setImage(CommonSelectableCellConstants.circleImage, for: .normal)

@@ -11,7 +11,6 @@ protocol GeofenceNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
     func showLoginFlow()
     func showLoginSuccess()
     func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?)
-    func showSearchSceneWith(lat: Double?, long: Double?)
     func dismissCurrentScene(geofences: [GeofenceDataModel], shouldDashboardShow: Bool)
     func showMapStyleScene()
     func showAddGeofenceFlow(activeGeofencesLists: [GeofenceDataModel],

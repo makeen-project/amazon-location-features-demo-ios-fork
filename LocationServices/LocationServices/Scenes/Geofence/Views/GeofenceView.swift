@@ -23,12 +23,26 @@ protocol GeofenceMapViewOutputDelegate: BottomSheetPresentable {
 }
 
 final class GeofenceMapView: UIView {
+    enum Constants {
+        static let barHeight: CGFloat = 76
+        
+        static let amazonLogoLeadingOffset: CGFloat = 8
+        static let amazonLogoBottomOffset: CGFloat = -8
+        static let amazonLogoHeight: CGFloat = 18
+        static let amazonLogoWidth: CGFloat = 121
+        
+        static let mapLayerBottomOffsetiPad: CGFloat = 8
+        static let mapLayerBottomOffsetiPhone: CGFloat = -16
+        static let mapLayerWidth: CGFloat = 50
+    }
+    
     var delegate: GeofenceMapViewOutputDelegate? {
         didSet {
             mapView.delegate = delegate
         }
     }
     
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     private var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
     
@@ -82,16 +96,20 @@ final class GeofenceMapView: UIView {
         }
         
         searchBarView.snp.makeConstraints {
-            $0.height.equalTo(76)
+            $0.height.equalTo(Constants.barHeight)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
         
         amazonMapLogo.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(8)
-            $0.bottom.equalTo(searchBarView.snp.top).offset(-8)
-            $0.height.equalTo(18)
-            $0.width.equalTo(121)
+            $0.leading.equalToSuperview().offset(Constants.amazonLogoLeadingOffset)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constants.amazonLogoBottomOffset)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(Constants.amazonLogoBottomOffset)
+            }
+            $0.height.equalTo(Constants.amazonLogoHeight)
+            $0.width.equalTo(Constants.amazonLogoWidth)
         }
         
         infoButton.snp.makeConstraints {
@@ -102,8 +120,12 @@ final class GeofenceMapView: UIView {
         
         mapLayer.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
-            $0.bottom.equalTo(searchBarView.snp.top).offset(-16)
-            $0.width.equalTo(50)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constants.mapLayerBottomOffsetiPad)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(Constants.mapLayerBottomOffsetiPhone)
+            }
+            $0.width.equalTo(Constants.mapLayerWidth)
         }
         
     }
@@ -159,6 +181,7 @@ final class GeofenceMapView: UIView {
     }
     
     func updateMapLayerPosition(value: Int) {
+        guard !isiPad else { return }
         mapLayer.snp.removeConstraints()
         
         mapLayer.snp.makeConstraints {

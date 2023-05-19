@@ -25,10 +25,6 @@ final class ExploreCoordinator: Coordinator {
 }
 
 extension ExploreCoordinator: ExploreNavigationDelegate {
-    func dismissSearchScene() {
-        self.navigationController.dismiss(animated: true)
-    }
-    
     func showMapStyles() {
         dismissSearchScene()
         let controller = ExploreMapStyleBuilder.create()
@@ -49,7 +45,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         navigationController.present(controller, animated: true)
@@ -63,6 +59,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     ) {
         self.dismissSearchScene()
         let controller = DirectionVCBuilder.create()
+        controller.isInSplitViewController = false
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true, completion: {
                 NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
@@ -113,7 +110,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .large
             sheet.selectedDetentIdentifier = mediumId
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         navigationController.present(controller, animated: true)
@@ -121,6 +118,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
    
     func showSearchSceneWith(lat: Double?, long: Double?) {
         let controller = SearchVCBuilder.create()
+        controller.delegate = self
         controller.userLocation = (lat, long)
         controller.modalPresentationStyle = isiPad ? .formSheet : .pageSheet
         
@@ -134,7 +132,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.selectedDetentIdentifier = .medium
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         
         navigationController.present(controller, animated: true)
@@ -162,7 +160,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
                 sheet.largestUndimmedDetentIdentifier = smallId
                 sheet.selectedDetentIdentifier = smallId
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             
             self.navigationController.present(controller, animated: true)
@@ -185,8 +183,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
                 sheet.detents = [self.getCollapsedDetent(), .medium(), .large()]
                 sheet.selectedDetentIdentifier = self.getCollapsedDetentId()
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.largestUndimmedDetentIdentifier = .large
-                sheet.preferredCornerRadius = 10
+                sheet.largestUndimmedDetentIdentifier = self.getCollapsedDetentId()
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
                 sheet.prefersGrabberVisible = true
             }
             
@@ -212,7 +210,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             sheet.detents = [.large()]
             sheet.selectedDetentIdentifier = .large
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -231,7 +229,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
                 sheet.detents = [.large()]
                 sheet.selectedDetentIdentifier = .large
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.navigationController.present(controller, animated: true)
         }
@@ -239,6 +237,9 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
         navigationController.pushViewController(controller, animated: true)
     }
     
@@ -251,6 +252,23 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         }
         
         navigationController.present(controller, animated: true)
+    }
+    
+    //close
+    func closePOICardScene() {
+        navigationController.dismiss(animated: true)
+    }
+    
+    func dismissSearchScene() {
+        navigationController.dismiss(animated: true)
+    }
+    
+    func closeNavigationScene() {
+        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+    }
+    
+    func hideNavigationScene() {
+        navigationController.dismiss(animated: true)
     }
 }
 

@@ -61,7 +61,7 @@ final class InitialGeofenceView: UIView {
         self.addSubview(geofenceButton)
         
         iconContainerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(48)
+            $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.height.width.equalTo(96)
         }
@@ -73,21 +73,18 @@ final class InitialGeofenceView: UIView {
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(iconContainerView.snp.bottom).offset(16)
-            $0.width.equalTo(96)
-            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
         }
         
         detailLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalToSuperview().offset(-24)
             $0.height.equalTo(36)
+            $0.leading.trailing.equalToSuperview()
         }
         
         geofenceButton.snp.makeConstraints {
             $0.top.equalTo(detailLabel.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(48)
         }
     }
