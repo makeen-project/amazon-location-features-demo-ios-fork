@@ -426,7 +426,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         
         // it is just to force to redraw the mapView
         mapView.zoomLevel = mapView.zoomLevel + 0.01
-        
+        amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo(mapImageType: mapName?.imageType)
         mapView.showsUserLocation = true
         locateMeAction(force: true)
     }

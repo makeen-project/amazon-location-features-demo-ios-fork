@@ -71,6 +71,8 @@ enum StringConstant {
     static let terminate = "Ok"
     static let resetToDefaultConfigTitle = "Reset stack"
     static let resetToDefaultConfigExplanation = "Stack is corrupted, switching back to default stack"
+    static let awsStackInvalidTitle = "Invalid AWS Stack"
+    static let awsStackInvalidExplanation = "Stack is not invalid anymore or deleted, app will disconnect from AWS and restart"
     static let notAllFieldsAreConfigured = "Not all the fields are configured"
     static let incorrectIdentityPoolIdMessage = "Failed to connect AWS account, invalid IdentityPoolId or region"
     static let failedToCalculateRoute = "Failed to calculate route"
