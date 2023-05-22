@@ -39,13 +39,4 @@ jobs:
           touch ConfigTest.xcconfig
 
       - name: Run tests
-        working-directory: ./LocationServices
         run: xcodebuild test -project LocationServices/LocationServices.xcodeproj -scheme LocationServicesUnitTests -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" | xcpretty
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results
-          path: ${{ env.xcresult_path }}
-          retention-days: 1
