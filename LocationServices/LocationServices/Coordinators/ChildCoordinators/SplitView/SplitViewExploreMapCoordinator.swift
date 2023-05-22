@@ -23,9 +23,13 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     private var floatingView: MapFloatingViewHandler?
     private var isSearchHidden = false
     
+    private let searchScreenStyle = SearchScreenStyle(backgroundColor: .white)
+    private let directionScreenStyle = DirectionScreenStyle(backgroundColor: .white)
+    
     private lazy var supplementaryController: SearchVC = {
         let controller = SearchVCBuilder.create()
         controller.delegate = self
+        controller.searchScreenStyle = searchScreenStyle
         return controller
     }()
     
@@ -33,6 +37,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
         let controller = ExploreVCBuilder.create()
         controller.delegate = self
         controller.splitDelegate = self
+        controller.applyStyles(style: searchScreenStyle)
         controller.geofenceHandler = {
             self.geofenceHandler?()
         }
@@ -84,6 +89,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     ) {
         let controller = DirectionVCBuilder.create()
         controller.isInSplitViewController = true
+        controller.directionScreenStyle = directionScreenStyle
         controller.dismissHandler = { [weak self] in
             NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
             self?.supplementaryNavigationController?.popViewController(animated: true)

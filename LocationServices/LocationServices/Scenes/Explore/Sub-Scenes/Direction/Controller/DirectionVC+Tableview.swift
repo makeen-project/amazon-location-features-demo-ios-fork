@@ -46,6 +46,7 @@ extension DirectionVC: UITableViewDataSource {
             fatalError("Search Cell Can't be found")
         }
         
+        cell.applyStyles(style: SearchCellStyle(style: directionScreenStyle))
         let data = viewModel.getSearchCellModel()
         if indexPath.row < data.count {
             let model =  data[indexPath.row]

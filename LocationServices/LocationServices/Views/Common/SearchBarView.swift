@@ -48,7 +48,6 @@ final class SearchBarView: UIView {
     
     private let containerView: UIView =  {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.cornerRadius = 20
         return view
@@ -152,6 +151,10 @@ final class SearchBarView: UIView {
         
     func setupTextWith(text: String) {
         searchView.configureTextFieldWith(text: text)
+    }
+    
+    func applyStyles(style: SearchScreenStyle) {
+        containerView.backgroundColor = style.backgroundColor
     }
     
     private func configure() {
