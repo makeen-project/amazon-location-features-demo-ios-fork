@@ -354,6 +354,7 @@
 		DF8005E12A0A737000758BBE /* WebViewVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */; };
 		DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */; };
 		DF8005E52A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E42A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift */; };
+		F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */; };
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
@@ -749,6 +750,7 @@
 		DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVCBuilder.swift; sourceTree = "<group>"; };
 		DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
 		DF8005E42A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewTrackingMapCoordinator.swift; sourceTree = "<group>"; };
+		F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
@@ -2815,6 +2817,7 @@
 				8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */,
 				DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */,
 				8A151BD72A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift */,
+				F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3232,6 +3235,7 @@
 				ADBD7FC22949CBC2005DB4E4 /* BottomSheetTransitioningDelegate.swift in Sources */,
 				8A276E2629DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift in Sources */,
 				AD989734298B2B2D0041E867 /* TrackingDashboard.swift in Sources */,
+				F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */,
 				ADD139902980A2590003F917 /* RouteOptionContracts.swift in Sources */,
 				AD625E9C293BEFAC00C67B44 /* SearchCell.swift in Sources */,
 				ADA85E752989A22300446788 /* SettingsDefaultValueHelper.swift in Sources */,
