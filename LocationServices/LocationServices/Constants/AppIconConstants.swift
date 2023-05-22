@@ -14,7 +14,7 @@ extension UIImage {
     static let appLogo = UIImage(named: "app-logo")!
     /// TabBar Icons
     static let exploreIcon = UIImage(named: "icon-compass")!
-    static let trackingIcon = UIImage(named: "icon-route")!
+    static let trackingIcon = UIImage(named: "icon-radar-solid")!
     static let geofenceIcon = UIImage(named: "icon-geofence")!
     static let settingsIcon = UIImage(named: "icon-gear")!
     static let about = UIImage(named: "icon-info")!

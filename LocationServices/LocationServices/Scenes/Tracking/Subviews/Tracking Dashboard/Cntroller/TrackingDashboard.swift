@@ -15,7 +15,7 @@ final class TrackingDashboardController: UIViewController {
     
     private var dashboardView: CommonDashboardView = CommonDashboardView(title: "Enable Tracking",
                                                                          detail: "Enabling the feature will allow you to track your device and get notified when the device enters or exits any of your geofences.",
-                                                                         image: .trackingIcon,
+                                                                         image: .locateMeMapIcon,
                                                                          iconBackgroundColor: .white,
                                                                          buttonTitle: "Enable Tracking")
     
