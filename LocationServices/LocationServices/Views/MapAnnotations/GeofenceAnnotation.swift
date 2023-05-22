@@ -106,6 +106,8 @@ class GeofenceAnnotationView: MGLAnnotationView {
         addSubview(uiImageView)
         
         uiImageView.image = .geofenceDashoard
+        
+        uiImageView.setShadow()
     }
 
     func drawCircle() {
