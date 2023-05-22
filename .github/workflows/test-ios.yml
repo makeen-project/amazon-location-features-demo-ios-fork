@@ -15,6 +15,13 @@ jobs:
         with:
           version: "14.3"
 
+      - name: Setup Bundler
+        working-directory: ./LocationServices
+        run: |
+          bundle config --local path ./vendor/bundle
+          bundle config --local deployment true
+          bundle install
+
       - name: Setup Config
         env:
           config: ${{ secrets.CONFIG }}
@@ -32,4 +39,4 @@ jobs:
           touch ConfigTest.xcconfig
 
       - name: Run tests
-        run: set -o pipefail && xcodebuild test -project LocationServices/LocationServices.xcodeproj -scheme LocationServicesUnitTests -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" | xcpretty
+        run: bundle exec fastlane run_unit_tests
