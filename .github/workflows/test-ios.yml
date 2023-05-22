@@ -39,4 +39,4 @@ jobs:
           touch ConfigTest.xcconfig
 
       - name: Run tests
-        run: xcodebuild test -project LocationServices/LocationServices.xcodeproj -scheme LocationServicesUnitTests -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" | xcpretty
+        run: set -o pipefail && xcodebuild test -project LocationServices/LocationServices.xcodeproj -scheme LocationServicesUnitTests -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" | xcpretty
