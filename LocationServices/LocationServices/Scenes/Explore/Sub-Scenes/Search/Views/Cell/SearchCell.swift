@@ -8,6 +8,18 @@
 import UIKit
 import SnapKit
 
+struct SearchCellStyle {
+    var backgroundColor: UIColor
+    
+    init(style: DirectionScreenStyle) {
+        self.backgroundColor = style.backgroundColor
+    }
+    
+    init(style: SearchScreenStyle) {
+        self.backgroundColor = style.backgroundColor
+    }
+}
+
 final class SearchCell: UITableViewCell {
     static let reuseId: String = "SearchCell"
     
@@ -112,6 +124,10 @@ final class SearchCell: UITableViewCell {
         locationTitle.text = nil
         locationAddress.text = nil
         locationDistance.text = nil
+    }
+    
+    func applyStyles(style: SearchCellStyle) {
+        backgroundColor = style.backgroundColor
     }
 }
 

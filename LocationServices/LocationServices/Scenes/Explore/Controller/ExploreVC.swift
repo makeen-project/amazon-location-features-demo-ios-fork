@@ -126,6 +126,10 @@ final class ExploreVC: UIViewController {
             self.geofenceHandler?()
         }
     }
+    
+    func applyStyles(style: SearchScreenStyle) {
+        exploreView.searchBarView.applyStyles(style: style)
+    }
 }
 
 extension ExploreVC: ExploreViewOutputDelegate {

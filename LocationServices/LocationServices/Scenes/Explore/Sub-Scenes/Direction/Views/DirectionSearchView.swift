@@ -26,6 +26,8 @@ final class DirectionSearchView: UIView {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 8
+        view.layer.borderColor = UIColor.lsLight2.cgColor
+        view.layer.borderWidth = 1
         return view
     }()
     
@@ -67,7 +69,7 @@ final class DirectionSearchView: UIView {
     
     private var seperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
+        view.backgroundColor = .lsLight2
         return view
     }()
     

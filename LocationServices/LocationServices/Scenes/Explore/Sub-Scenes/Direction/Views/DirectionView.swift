@@ -39,7 +39,9 @@ final class DirectionView: UIView {
     private var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = 8
+        view.layer.borderColor = UIColor.lsLight2.cgColor
+        view.layer.borderWidth = 1
         return view
     }()
     
