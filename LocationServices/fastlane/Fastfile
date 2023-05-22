@@ -16,8 +16,21 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Run all the tests"
-  lane :test do
+  desc "Run unit tests"
+  lane :run_unit_tests do
+    scan(
+      project: "LocationServices.xcodeproj",
+      scheme: "LocationServicesUnitTests",
+      device: "iPhone 14",
+      result_bundle: true,
+      code_coverage: true,
+      xcargs: "-test-iterations='2' -retry-tests-on-failure",
+      derived_data_path: Dir.pwd + "/test_output",
+    )
+  end
+
+  desc "Run e2e tests"
+  lane :run_e2e_tests do
     begin
       run_tests(
         project: "LocationServices.xcodeproj",

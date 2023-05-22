@@ -1,11 +1,9 @@
-name: Run Unit Tests for iOS
+name: Run E2E Tests for iOS
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [ develop, main ]
 jobs:
   test-iOS:
-    name: Run Unit Tests for iOS
+    name: Test iOS App
     runs-on: macos-13
     steps:
       - uses: actions/checkout@v2
@@ -23,24 +21,14 @@ jobs:
           bundle install
 
       - name: Setup Config
-        env:
-          config: ${{ secrets.CONFIG }}
-          test_config: ${{ secrets.TEST_CONFIG }}
-        working-directory: ./LocationServices
-        if: ${{ env.config != '' && env.test_config != '' }}
-        run: |
-          base64 -d <<< ${{ env.config }} > Config.xcconfig
-          base64 -d <<< ${{ env.test_config }} > ConfigTest.xcconfig
-
-      - name: Ensure config files exist
         working-directory: ./LocationServices
         run: |
-          touch Config.xcconfig
-          touch ConfigTest.xcconfig
+          base64 -d <<< ${{ secrets.CONFIG }} > Config.xcconfig
+          base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
 
       - name: Run tests
         working-directory: ./LocationServices
-        run: bundle exec fastlane run_unit_tests
+        run: bundle exec fastlane run_e2e_tests
 
       - name: Upload test results
         uses: actions/upload-artifact@v3
