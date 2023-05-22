@@ -6,7 +6,7 @@ on:
 jobs:
   test-iOS:
     name: Lint iOS Code
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
