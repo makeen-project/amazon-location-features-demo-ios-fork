@@ -40,7 +40,7 @@ jobs:
 
       - name: Run tests
         working-directory: ./LocationServices
-        run: bundle exec fastlane run_unit_tests
+        run: xcodebuild test -project LocationServices/LocationServices.xcodeproj -scheme LocationServicesUnitTests -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" | xcpretty
 
       - name: Upload test results
         uses: actions/upload-artifact@v3
