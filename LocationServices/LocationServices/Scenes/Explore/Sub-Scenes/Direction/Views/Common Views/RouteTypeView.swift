@@ -74,7 +74,7 @@ final class RouteTypeView: UIView {
         button.backgroundColor = .buttonOrangeColor
         button.layer.cornerRadius = 8
         button.tintColor = .white
-        button.titleLabel?.font = .amazonFont(type: .regular, size: 16)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.addTarget(self, action: #selector(startNavigation), for: .touchUpInside)
         return button
     }()
