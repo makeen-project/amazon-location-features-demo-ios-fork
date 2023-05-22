@@ -1,0 +1,22 @@
+name: Lint iOS Code
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ develop, main ]
+jobs:
+  test-iOS:
+    name: Lint iOS Code
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Select xcode version
+        uses: devbotsxyz/xcode-select@v1
+        with:
+          version: "14.3"
+
+      - name: GitHub Action for SwiftLint (Only files changed in the PR)
+        uses: norio-nomura/action-swiftlint@3.2.1
+        env:
+          args: --strict
+          DIFF_BASE: ${{ github.base_ref }}

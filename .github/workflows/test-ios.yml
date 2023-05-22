@@ -15,13 +15,6 @@ jobs:
         with:
           version: "14.3"
 
-      - name: Setup Bundler
-        working-directory: ./LocationServices
-        run: |
-          bundle config --local path ./vendor/bundle
-          bundle config --local deployment true
-          bundle install
-
       - name: Setup Config
         env:
           config: ${{ secrets.CONFIG }}
