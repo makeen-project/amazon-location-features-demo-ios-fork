@@ -39,4 +39,5 @@ jobs:
           touch ConfigTest.xcconfig
 
       - name: Run tests
+        working-directory: ./LocationServices
         run: bundle exec fastlane run_unit_tests
