@@ -207,6 +207,7 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
         (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
         
+        sideBarButtonItem?.accessibilityIdentifier = ViewsIdentifiers.General.sideBarButton
         sideBarButtonItem?.tintColor = .lsPrimary
         viewControllerForShowSecondaryButton?.navigationItem.leftBarButtonItem = sideBarButtonItem
         viewControllerWithoutShowSecondaryButton?.navigationItem.leftBarButtonItem = nil

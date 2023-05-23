@@ -58,13 +58,14 @@ final class MapSearchFloatingView: UIView {
     
     private lazy var sideBarButton: UIButton = {
         let button = UIButton(type: .system)
+        button.accessibilityIdentifier = ViewsIdentifiers.General.sideBarButton
         button.setImage(sideBarButtonState.image, for: .normal)
         button.tintColor = .lsPrimary
         button.addTarget(self, action: #selector(actionPerformed), for: .touchUpInside)
         return button
     }()
     
-    private let separatorView: UIView =  {
+    private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .lsLight3
         return view
@@ -89,6 +90,13 @@ final class MapSearchFloatingView: UIView {
         sideBarButton.setImage(state.image, for: .normal)
         searchView.isHidden = !state.showSearch
         separatorView.isHidden = !state.showSearch
+        
+        switch state {
+        case .fullSideBar:
+            sideBarButton.accessibilityIdentifier = ViewsIdentifiers.General.sideBarButton
+        case .fullSecondaryScreen, .onlyButtonSecondaryScreen:
+            sideBarButton.accessibilityIdentifier = ViewsIdentifiers.General.fullScreenButton
+        }
     }
     
     private func configure() {

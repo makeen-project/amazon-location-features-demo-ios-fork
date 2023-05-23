@@ -62,6 +62,7 @@ final class DirectionVC: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Routing.tableView
         tableView.keyboardDismissMode = .interactive
         return tableView
     }()
@@ -87,21 +88,19 @@ final class DirectionVC: UIViewController {
         let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissView))
         barButtonItem.tintColor = .lsPrimary
         navigationItem.leftBarButtonItem = barButtonItem
+        
+        tableView.isHidden = isRoutingOptionsEnabled
+        if isRoutingOptionsEnabled {
+            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
+        } else {
+            let isDestination = firstDestionation?.placeName != nil
+            directionSearchView.becomeFirstResponder(isDestination: isDestination)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if isRoutingOptionsEnabled {
-            tableView.isHidden = true
-            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
-            calculateRoute()
-        } else {
-            tableView.isHidden = false
-            
-            let isDestination = firstDestionation?.placeName != nil
-            directionSearchView.becomeFirstResponder(isDestination: isDestination)
-        }
+        calculateRoute()
         changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true)
     }
     

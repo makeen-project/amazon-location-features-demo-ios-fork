@@ -21,6 +21,9 @@ struct UITestSettingsMapStyleScreen: UITestScreen {
     }
     
     func tapBackButton() -> UITestSettingsScreen {
+        guard UIDevice.current.userInterfaceIdiom == .phone else {
+            return  UITestSettingsScreen(app: app)
+        }
         let button = getBackButton()
         button.tap()
         

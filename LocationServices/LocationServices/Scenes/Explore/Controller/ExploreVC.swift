@@ -368,12 +368,12 @@ private extension ExploreVC {
             viewModel.activateRoute(route: routeModel)
             if !routeModel.isPreview {
                 mapNavigationView.isHidden = false
-                mapNavigationActionsView.isHidden = !self.isInSplitViewController
                 updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
                 exploreView.focusNavigationMode()
             } else {
                 exploreView.focus(on: routeModel.departurePosition)
             }
+            mapNavigationActionsView.isHidden = !self.isInSplitViewController
             let firstDestination = MapModel(placeName: routeModel.departurePlaceName, placeAddress: routeModel.departurePlaceAddress, placeLat: routeModel.departurePosition.latitude, placeLong: routeModel.departurePosition.longitude)
             let secondDestination = MapModel(placeName: routeModel.destinationPlaceName, placeAddress: routeModel.destinationPlaceAddress, placeLat: routeModel.destinationPosition.latitude, placeLong: routeModel.destinationPosition.longitude)
             

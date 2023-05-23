@@ -321,12 +321,27 @@ final class ExploreView: UIView, NavigationMapProtocol {
             
             self.createAnnotationsForDirection(departureCoordinates: departureLocation, destinationCoordinates: destinationLocation)
             
-            let coordinateBounds = MGLCoordinateBounds.create(from: [departureLocation, destinationLocation])
+            let routeCoordinates = self.getCoordinates(from: data)
+            let boundsCoordinates = routeCoordinates.isEmpty ? [departureLocation, destinationLocation] : routeCoordinates
+            let coordinateBounds = MGLCoordinateBounds.create(from: boundsCoordinates)
             let edgePadding = self.configureMapEdgePadding()
             
             self.mapView.setDirection(0, animated: false)
             self.mapView.setVisibleCoordinateBounds(coordinateBounds, edgePadding: edgePadding, animated: false, completionHandler: nil)
         }
+    }
+    
+    private func getCoordinates(from geoJson: Data) -> [CLLocationCoordinate2D] {
+        guard let shapeFromGeoJSON = try? MGLShape(data: geoJson,
+                                                   encoding: String.Encoding.utf8.rawValue) else {
+            return []
+        }
+        let coordinatesPointer = ((shapeFromGeoJSON as? MGLShapeCollectionFeature)?.shapes.first as? MGLPolyline)?.coordinates
+        let count = ((shapeFromGeoJSON as? MGLShapeCollectionFeature)?.shapes.first as? MGLPolyline)?.pointCount ?? 0
+        let buffer = UnsafeBufferPointer(start: coordinatesPointer, count: Int(count))
+        let coordinatesArray = Array(buffer)
+        
+        return coordinatesArray
     }
     
     private func configureMapEdgePadding() -> UIEdgeInsets {
