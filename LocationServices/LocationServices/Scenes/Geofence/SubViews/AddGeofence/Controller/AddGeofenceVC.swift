@@ -26,6 +26,7 @@ final class AddGeofenceVC: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Geofence.addGeofenceTableView
         tableView.backgroundColor = .searchBarBackgroundColor
         tableView.keyboardDismissMode = .onDrag
         return tableView

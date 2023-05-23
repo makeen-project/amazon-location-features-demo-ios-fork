@@ -66,11 +66,14 @@ final class MapUITests: LocationServicesUITests {
     }
     
     func testLocateMeButton() throws {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        //one swipe is not enough for moving user location annotation out of the screen on iPad
+        let mapRepeatsCount = isPad ? 5 : 1
         let app = startApp(allowPermissions: true)
         let _ = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .waitForUserLocationAnnotation()
-            .swipeMap(direction: .left)
+            .swipeMap(direction: .left, repeats: mapRepeatsCount)
             .checkAbsenceOfUserLocationAnnotation()
             .tapLocateMeButton()
             .waitForUserLocationAnnotation()

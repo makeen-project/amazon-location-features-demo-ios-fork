@@ -54,10 +54,13 @@ final class SearchTextField: UIView {
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
+        button.accessibilityIdentifier = ViewsIdentifiers.Search.searchCancelButton
         button.setTitle(StringConstant.cancel, for: .normal)
         button.setTitleColor(.lsPrimary, for: .normal)
         button.titleLabel?.font = .amazonFont(type: .bold, size: 13)
         button.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 751), for: .horizontal)
         return button
     }()
     

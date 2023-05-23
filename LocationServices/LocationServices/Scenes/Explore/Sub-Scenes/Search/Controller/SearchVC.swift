@@ -55,6 +55,7 @@ final class SearchVC: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Search.tableView
         tableView.keyboardDismissMode = .onDrag
         return tableView
     }()

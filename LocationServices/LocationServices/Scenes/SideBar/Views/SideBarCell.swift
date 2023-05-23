@@ -40,6 +40,16 @@ enum SideBarCellType {
         icon.withTintColor(.lsPrimary,
                            renderingMode: .alwaysOriginal)
     }
+    
+    var accessbilityIdentifier: String {
+        switch self {
+        case .explore: return ViewsIdentifiers.General.exploreTabBarButton
+        case .tracking: return ViewsIdentifiers.General.trackingTabBarButton
+        case .geofence: return ViewsIdentifiers.General.geofenceTabBarButton
+        case .settings: return ViewsIdentifiers.General.settingsTabBarButton
+        case .about: return ViewsIdentifiers.General.aboutTabBarButton
+        }
+    }
 }
 
 struct SideBarCellModel {
@@ -56,6 +66,7 @@ final class SideBarCell: UITableViewCell {
     
     var model: SideBarCellModel! {
         didSet {
+            accessibilityIdentifier = model.type.accessbilityIdentifier
             titleLabel.text = model.type.title
             iconImageView.image = model.type.defaultIcon
         }

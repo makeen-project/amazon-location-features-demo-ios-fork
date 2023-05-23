@@ -92,6 +92,7 @@ final class NavigationHeaderView: UIView {
     
     private lazy var routeVisibilityButton: UIButton = {
         let button = UIButton(type: .system)
+        button.accessibilityIdentifier = ViewsIdentifiers.Navigation.navigationRoutesButton
         button.setTitle(routeVisibilityButtonState.title, for: .normal)
         
         button.tintColor = .lsTetriary
