@@ -1,0 +1,51 @@
+name: Run E2E Tests for iOS
+on:
+  workflow_dispatch:
+jobs:
+  test-iOS:
+    name: Test iOS App
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Select xcode version
+        uses: devbotsxyz/xcode-select@v1
+        with:
+          version: "14.3"
+
+      - name: Setup Bundler
+        working-directory: ./LocationServices
+        run: |
+          bundle config --local path ./vendor/bundle
+          bundle config --local deployment true
+          bundle install
+
+      - name: Setup Config
+        working-directory: ./LocationServices
+        run: |
+          base64 -d <<< ${{ secrets.CONFIG }} > Config.xcconfig
+          base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
+
+      - name: Run tests on iPad
+        working-directory: ./LocationServices
+        run: bundle exec fastlane run_e2e_tests device:"iPad Pro (12.9-inch) (6th generation)"
+
+      - name: Upload test results for iPad
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results-ipad
+          path: ${{ env.xcresult_path }}
+          retention-days: 1
+
+      - name: Run tests on iPhone
+        working-directory: ./LocationServices
+        run: bundle exec fastlane run_e2e_tests device:"iPhone 14"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results-iphone
+          path: ${{ env.xcresult_path }}
+          retention-days: 1
