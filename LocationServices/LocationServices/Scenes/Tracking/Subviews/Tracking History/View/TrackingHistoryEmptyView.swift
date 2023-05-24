@@ -19,7 +19,7 @@ final class TrackingHistoryEmptyView: UIView {
         let label = UILabel()
         label.text = StringConstant.emptyTrackingHistory
         label.textAlignment = .center
-        label.font = .amazonFont(type: .bold, size: 13)
+        label.font = .amazonFont(type: .regular, size: 15)
         label.textColor = .black
         return label
     }()
@@ -34,13 +34,14 @@ final class TrackingHistoryEmptyView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .searchBarBackgroundColor
         addSubview(trackingLogo)
         addSubview(emptyHistoryLabel)
         setupConstraints()
     }
     
     private func setupConstraints() {
-        let iconSize = CGSize(width: 48, height: 48)
+        let iconSize = CGSize(width: 36, height: 36)
         trackingLogo.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(-iconSize.height / 2)
@@ -48,7 +49,7 @@ final class TrackingHistoryEmptyView: UIView {
             make.height.equalTo(iconSize.height)
         }
         emptyHistoryLabel.snp.makeConstraints { make in
-            make.top.equalTo(trackingLogo.snp.bottom).offset(16)
+            make.top.equalTo(trackingLogo.snp.bottom).offset(32)
             make.centerX.equalToSuperview()
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
