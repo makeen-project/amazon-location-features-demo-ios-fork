@@ -8,6 +8,10 @@
 import UIKit
 import CoreLocation
 
+struct DirectionScreenStyle {
+    var backgroundColor: UIColor
+}
+
 final class DirectionVC: UIViewController {
     
     enum Constants {
@@ -16,6 +20,7 @@ final class DirectionVC: UIViewController {
         static let titleOffsetiPad: CGFloat = 0
     }
     
+    var directionScreenStyle: DirectionScreenStyle = DirectionScreenStyle(backgroundColor: .white)
     var isInSplitViewController: Bool = false
     var dismissHandler: VoidHandler?
     var isRoutingOptionsEnabled: Bool = false
@@ -57,7 +62,7 @@ final class DirectionVC: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .searchBarBackgroundColor
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Routing.tableView
         tableView.keyboardDismissMode = .interactive
         return tableView
     }()
@@ -72,6 +77,7 @@ final class DirectionVC: UIViewController {
         setupHandlers()
         setupTableView()
         setupViews()
+        applyStyles()
         viewModel.loadLocalOptions()
         
         if firstDestionation?.placeName == "My Location" {
@@ -82,21 +88,19 @@ final class DirectionVC: UIViewController {
         let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissView))
         barButtonItem.tintColor = .lsPrimary
         navigationItem.leftBarButtonItem = barButtonItem
+        
+        tableView.isHidden = isRoutingOptionsEnabled
+        if isRoutingOptionsEnabled {
+            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
+        } else {
+            let isDestination = firstDestionation?.placeName != nil
+            directionSearchView.becomeFirstResponder(isDestination: isDestination)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if isRoutingOptionsEnabled {
-            tableView.isHidden = true
-            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
-            calculateRoute()
-        } else {
-            tableView.isHidden = false
-            
-            let isDestination = firstDestionation?.placeName != nil
-            directionSearchView.becomeFirstResponder(isDestination: isDestination)
-        }
+        calculateRoute()
         changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true)
     }
     
@@ -108,6 +112,11 @@ final class DirectionVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         removeNotifications()
+    }
+    
+    private func applyStyles() {
+        tableView.backgroundColor = directionScreenStyle.backgroundColor
+        view.backgroundColor = directionScreenStyle.backgroundColor
     }
     
     private func locationManagerSetup() {

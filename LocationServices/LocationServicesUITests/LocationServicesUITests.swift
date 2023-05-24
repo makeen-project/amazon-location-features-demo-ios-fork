@@ -27,6 +27,7 @@ class LocationServicesUITests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+        UITestTabBarScreen.resetSideBarState()
         continueAfterFailure = false
         XCUIDevice.shared.location = .init(location: Constants.staticLocation)
         uninstall()
@@ -51,6 +52,7 @@ class LocationServicesUITests: XCTestCase {
     }
     
     func restartApp() -> XCUIApplication {
+        UITestTabBarScreen.resetSideBarState()
         let app = XCUIApplication()
         app.terminate()
         app.launch()

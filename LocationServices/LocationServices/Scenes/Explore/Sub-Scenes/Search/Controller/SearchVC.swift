@@ -9,6 +9,10 @@ import UIKit
 import SnapKit
 import CoreLocation
 
+struct SearchScreenStyle {
+    var backgroundColor: UIColor
+}
+
 final class SearchVC: UIViewController {
     
     enum Constants {
@@ -18,6 +22,8 @@ final class SearchVC: UIViewController {
     
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
+    
+    var searchScreenStyle: SearchScreenStyle = SearchScreenStyle(backgroundColor: .white)
     
     var userLocation: (lat: Double?, long: Double?)? {
         didSet {
@@ -49,7 +55,7 @@ final class SearchVC: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .searchBarBackgroundColor
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Search.tableView
         tableView.keyboardDismissMode = .onDrag
         return tableView
     }()
@@ -57,10 +63,10 @@ final class SearchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.accessibilityIdentifier = ViewsIdentifiers.Search.searchRootView
-        view.backgroundColor = .searchBarBackgroundColor
         searchBarView.delegate = self
         setupTableView()
         setupViews()
+        applyStyles()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +83,11 @@ final class SearchVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         searchAppearanceChanged(isVisible: false)
+    }
+    
+    private func applyStyles() {
+        view.backgroundColor = searchScreenStyle.backgroundColor
+        tableView.backgroundColor = searchScreenStyle.backgroundColor
     }
     
     private func searchAppearanceChanged(isVisible: Bool) {

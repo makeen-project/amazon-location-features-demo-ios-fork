@@ -38,7 +38,8 @@ extension SearchVC: UITableViewDataSource {
             fatalError("Search Cell Can't be found")
         }
         let data = viewModel.getSearchCellModel()
-
+        cell.applyStyles(style: SearchCellStyle(style: searchScreenStyle))
+        
         // safe check - data for model can be 0 if we make search queries too quickly
         if indexPath.row < data.count {
             cell.model = data[indexPath.row]

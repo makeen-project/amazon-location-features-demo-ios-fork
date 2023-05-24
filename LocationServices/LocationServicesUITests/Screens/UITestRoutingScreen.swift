@@ -24,6 +24,7 @@ struct UITestRoutingScreen: UITestScreen {
         static var routeEstimatedTime: String { ViewsIdentifiers.Routing.routeEstimatedTime }
         static var routeEstimatedDistance: String { ViewsIdentifiers.Routing.routeEstimatedDistance }
         static var imageAnnotationView: String { ViewsIdentifiers.General.imageAnnotationView }
+        static var tableView: String { ViewsIdentifiers.Routing.tableView }
     }
     
     func selectDepartureTextField() -> Self {
@@ -62,18 +63,18 @@ struct UITestRoutingScreen: UITestScreen {
     }
     
     func waitForResultsInTable(minimumCount: Int? = nil) -> Self {
-        let cell = app.tables.cells.firstMatch
+        let cell = getTable().cells.firstMatch
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.request.time))
         
         if let minimumCount {
-            XCTAssertGreaterThanOrEqual(app.tables.cells.count, minimumCount)
+            XCTAssertGreaterThanOrEqual(getTable().cells.count, minimumCount)
         }
         
         return self
     }
     
     func selectFirstSearchResult() -> Self {
-        let firstCell = app.tables.cells.firstMatch
+        let firstCell = getTable().cells.firstMatch
         XCTAssertTrue(firstCell.waitForExistence(timeout: UITestWaitTime.request.time))
         
         firstCell.tap()
@@ -157,7 +158,7 @@ struct UITestRoutingScreen: UITestScreen {
     }
     
     func getCellsInfo() -> [String] {
-        let cells = app.tables.cells
+        let cells = getTable().cells
         let cellsCount = cells.count
         
         var titles: [String] = []
@@ -271,6 +272,10 @@ struct UITestRoutingScreen: UITestScreen {
         let button = app.buttons[Identifiers.imageAnnotationView]
         XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
         return button
+    }
+    
+    private func getTable() -> XCUIElement {
+        return app.tables[Identifiers.tableView]
     }
 }
 

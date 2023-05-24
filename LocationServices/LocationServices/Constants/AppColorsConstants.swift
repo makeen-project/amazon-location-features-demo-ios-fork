@@ -34,6 +34,7 @@ extension UIColor {
     static let lsLighten = UIColor(named: "lsLighten")!
     static let lsTetriary = UIColor(named: "lsTetriary")!
     static let lsInfo = UIColor(named: "lsInfo")!
+    static let lsLight2 = UIColor(named: "lsLight2")!
     static let lsLight3 = UIColor(named: "lsLight3")!
     
     // Settings & About Colors

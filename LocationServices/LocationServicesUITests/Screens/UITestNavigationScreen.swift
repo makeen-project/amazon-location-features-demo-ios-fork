@@ -13,6 +13,7 @@ struct UITestNavigationScreen: UITestScreen {
     private enum Identifiers {
         static var rootView: String { ViewsIdentifiers.Navigation.navigationRootView }
         static var navigationExitButton: String { ViewsIdentifiers.Navigation.navigationExitButton }
+        static var navigationRoutesButton: String { ViewsIdentifiers.Navigation.navigationRoutesButton }
     }
     
     func waitForRootView() -> Self {
@@ -25,6 +26,13 @@ struct UITestNavigationScreen: UITestScreen {
         button.tap()
         
         return UITestRoutingScreen(app: app)
+    }
+    
+    func tapRoutesButton() -> Self {
+        let button = getRoutesButton()
+        button.tap()
+        
+        return self
     }
     
     func getCellsCount() -> Int {
@@ -40,6 +48,12 @@ struct UITestNavigationScreen: UITestScreen {
     
     private func getExitButton() -> XCUIElement {
         let view = app.buttons[Identifiers.navigationExitButton].firstMatch
+        XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
+        return view
+    }
+    
+    private func getRoutesButton() -> XCUIElement {
+        let view = app.buttons[Identifiers.navigationRoutesButton].firstMatch
         XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
         return view
     }

@@ -44,7 +44,7 @@ final class NavigationUITests: LocationServicesUITests {
     
     func testMapInteractionAndStyleAndNavigation() throws {
         let app = startApp(allowPermissions: false)
-        let _ = UITestExploreScreen(app: app)
+        var screen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .tapMapStyles()
             .select(style: .street)
@@ -60,12 +60,17 @@ final class NavigationUITests: LocationServicesUITests {
             .selectFirstSearchResult()
             .waitForRouteTypesContainer()
             .activate(mode: .car)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            screen = screen.tapRoutesButton()
+        }
+        screen = screen
             .waitForRootView()
     }
     
     func testRouteTypes() throws {
         let app = startApp(allowPermissions: false)
-        let _ = UITestExploreScreen(app: app)
+        var screen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .tapRouting()
             .selectDepartureTextField()
@@ -82,14 +87,29 @@ final class NavigationUITests: LocationServicesUITests {
             .waitForNonEmptyRouteEstimatedTime(for: .truck)
             .waitForNonEmptyRouteEstimatedDistance(for: .truck)
             .activate(mode: .car)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            screen = screen.tapRoutesButton()
+        }
+        screen = screen
             .waitForRootView()
             .tapExitButton()
             .waitForRouteTypesContainer()
             .activate(mode: .walk)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            screen = screen.tapRoutesButton()
+        }
+        screen = screen
             .waitForRootView()
             .tapExitButton()
             .waitForRouteTypesContainer()
             .activate(mode: .truck)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            screen = screen.tapRoutesButton()
+        }
+        let _ = screen
             .waitForRootView()
             .tapExitButton()
             .waitForRouteTypesContainer()
@@ -207,7 +227,7 @@ final class NavigationUITests: LocationServicesUITests {
     func testNavigation() throws {
         XCUIDevice.shared.location = .init(location: Constants.navigationStartLocation)
         let app = startApp()
-        let screen = UITestExploreScreen(app: app)
+        var screen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .tapSearchTextField()
             .type(text: Constants.navigationEndCoordinateSearchString)
@@ -217,7 +237,11 @@ final class NavigationUITests: LocationServicesUITests {
             .tapDirectionButton()
             .waitForRouteTypesContainer()
             .activate(mode: .car)
-            .waitForRootView()
+            
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            screen = screen.tapRoutesButton()
+        }
+        screen = screen.waitForRootView()
         
         let cellsCountBefore = screen.getCellsCount()
         XCUIDevice.shared.location = .init(location: Constants.navigationMoveLocation)

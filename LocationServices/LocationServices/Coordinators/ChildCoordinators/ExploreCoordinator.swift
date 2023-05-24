@@ -15,6 +15,9 @@ final class ExploreCoordinator: Coordinator {
     var geofenceHandler: VoidHandler?
     var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
+    private let searchScreenStyle = SearchScreenStyle(backgroundColor: .searchBarBackgroundColor)
+    private let directionScreenStyle = DirectionScreenStyle(backgroundColor: .searchBarBackgroundColor)
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -60,6 +63,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         self.dismissSearchScene()
         let controller = DirectionVCBuilder.create()
         controller.isInSplitViewController = false
+        controller.directionScreenStyle = directionScreenStyle
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true, completion: {
                 NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
@@ -121,6 +125,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.delegate = self
         controller.userLocation = (lat, long)
         controller.modalPresentationStyle = isiPad ? .formSheet : .pageSheet
+        controller.searchScreenStyle = searchScreenStyle
         
         if let sheet = controller.sheetPresentationController {
             if isiPad {
@@ -276,7 +281,8 @@ private extension ExploreCoordinator {
     func showExploreScene() {
         let controller = ExploreVCBuilder.create()
         controller.delegate = self
-        controller.geofenceHandler =  {
+        controller.applyStyles(style: searchScreenStyle)
+        controller.geofenceHandler = {
             self.geofenceHandler?()
         }
         navigationController.pushViewController(controller, animated: true)
