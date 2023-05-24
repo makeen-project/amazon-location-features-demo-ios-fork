@@ -93,6 +93,7 @@ final class GeofenceVC: UIViewController {
         super.viewWillAppear(animated)
         geofenceMapView.reloadMap()
         viewModel.fetchListOfGeofences()
+        blurStatusBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {

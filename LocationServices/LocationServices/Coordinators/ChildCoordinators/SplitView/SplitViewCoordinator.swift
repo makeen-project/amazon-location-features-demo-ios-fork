@@ -15,7 +15,11 @@ protocol SplitViewVisibilityProtocol: AnyObject {
 }
 
 final class SplitViewCoordinator: Coordinator {
-
+    
+    enum Constants {
+        static let additionalTopSafeArea: CGFloat = 16
+    }
+    
     weak var delegate: CoordinatorCompletionDelegate?
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController = UINavigationController()
@@ -38,6 +42,10 @@ final class SplitViewCoordinator: Coordinator {
     func start() {
         window?.rootViewController = splitViewController
         showMapScene()
+        
+        splitViewController.viewControllers.forEach {
+            ($0 as? UINavigationController)?.additionalSafeAreaInsets.top = Constants.additionalTopSafeArea
+        }
     }
     
     private func setupSplitViewController() {
