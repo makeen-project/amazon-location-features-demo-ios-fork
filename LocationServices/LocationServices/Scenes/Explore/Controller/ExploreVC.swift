@@ -129,7 +129,7 @@ final class ExploreVC: UIViewController {
     }
     
     func applyStyles(style: SearchScreenStyle) {
-        exploreView.searchBarView.applyStyles(style: style)
+        exploreView.searchBarView.applyStyle(style.searchBarStyle)
     }
 }
 

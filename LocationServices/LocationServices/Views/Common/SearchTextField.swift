@@ -71,6 +71,10 @@ final class SearchTextField: UIView {
     func setCurrentText(text: String) {
         self.searchTextField.text = text
     }
+    
+    func applyStyle(backgroundColor: UIColor) {
+        containerView.backgroundColor = backgroundColor
+    }
         
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -93,6 +97,9 @@ final class SearchTextField: UIView {
         searchTextField.delegate = self
         configureStackView()
         configure()
+        
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     func searchViewBecomeFirstResponder(state: Bool) {
