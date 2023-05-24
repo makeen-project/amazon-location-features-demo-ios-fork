@@ -404,7 +404,9 @@ final class ExploreView: UIView, NavigationMapProtocol {
         let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         
         let region = (regionName as NSString).aws_regionTypeValue()
-        signingDelegate = AWSSignatureV4Delegate(region: region, identityPoolId: identityPoolId)
+        if region != .Unknown {
+                signingDelegate = AWSSignatureV4Delegate(region: region, identityPoolId: identityPoolId)
+        }
         // register a delegate that will handle SigV4 signing
         MGLOfflineStorage.shared.delegate = signingDelegate
         
