@@ -14,7 +14,6 @@ extension TrackingHistoryVC {
         self.tableView.sectionHeaderTopPadding = 0
         self.tableView.register(TrackHistoryCell.self, forCellReuseIdentifier: TrackHistoryCell.reuseId)
         self.tableView.register(TrackingHistorySectionHeaderView.self, forHeaderFooterViewReuseIdentifier: TrackingHistorySectionHeaderView.reuseId)
-        self.tableView.backgroundView = TrackingHistoryEmptyView()
     }
 }
 
@@ -24,6 +23,7 @@ extension TrackingHistoryVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        tableView.backgroundView = viewModel.sectionsCount() == 0 ? TrackingHistoryEmptyView() : nil
         return viewModel.sectionsCount()
     }
     
