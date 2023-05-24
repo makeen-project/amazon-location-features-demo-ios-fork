@@ -14,6 +14,7 @@ extension TrackingHistoryVC {
         self.tableView.sectionHeaderTopPadding = 0
         self.tableView.register(TrackHistoryCell.self, forCellReuseIdentifier: TrackHistoryCell.reuseId)
         self.tableView.register(TrackingHistorySectionHeaderView.self, forHeaderFooterViewReuseIdentifier: TrackingHistorySectionHeaderView.reuseId)
+        self.tableView.backgroundView = TrackingHistoryEmptyView()
     }
 }
 

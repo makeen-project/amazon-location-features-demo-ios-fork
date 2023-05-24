@@ -82,6 +82,8 @@ enum StringConstant {
     static let startTracking = "Start Tracking"
     static let stopTracking = "Stop Tracking"
     
+    static let emptyTrackingHistory = "No tracking history available"
+    
     static let tracker = "Tracker"
     static let entered = "entered"
     static let exited = "exited"
