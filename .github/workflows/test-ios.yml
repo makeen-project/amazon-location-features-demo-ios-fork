@@ -40,4 +40,4 @@ jobs:
 
       - name: Run tests
         working-directory: ./LocationServices
-        run: bundle exec fastlane run_unit_tests
+        run: bundle exec fastlane run_unit_tests device:"iPhone 14"
