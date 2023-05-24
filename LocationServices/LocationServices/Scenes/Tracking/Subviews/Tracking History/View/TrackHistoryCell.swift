@@ -167,7 +167,7 @@ final class TrackHistoryCell: UITableViewCell {
         }
         
         stepImage.snp.makeConstraints {
-            $0.top.equalTo(informationStackView.snp.centerY)
+            $0.centerY.equalTo(informationStackView.snp.centerY)
             $0.leading.equalToSuperview()
             $0.height.width.equalTo(16)
         }
