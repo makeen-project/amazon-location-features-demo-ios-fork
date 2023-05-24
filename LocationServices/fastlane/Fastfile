@@ -17,10 +17,10 @@ default_platform(:ios)
 
 platform :ios do
   desc "Run unit tests"
-  lane :run_unit_tests do
+  lane :run_unit_tests do |options|
     scan(
       project: "LocationServices.xcodeproj",
-      device: "iPhone 14",
+      device: options[:device],
       scheme: "LocationServicesUnitTests",
       code_coverage: true,
       xcargs: "-test-iterations='2' -retry-tests-on-failure"
@@ -28,11 +28,11 @@ platform :ios do
   end
 
   desc "Run e2e tests"
-  lane :run_e2e_tests do
+  lane :run_e2e_tests do |options|
     begin
       run_tests(
         project: "LocationServices.xcodeproj",
-        device: "iPhone 14",
+        device: options[:device],
         scheme: "LocationServices",
         result_bundle: true,
         code_coverage: true,
