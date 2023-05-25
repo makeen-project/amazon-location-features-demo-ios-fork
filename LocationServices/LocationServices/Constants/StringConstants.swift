@@ -216,6 +216,8 @@ enum StringConstant {
     
     static let loginVcTitle = "AWS CloudFormation"
     static let trackingHistory = "Tracking History"
+    static let viewRoute = "View Route"
+    static let hideRoute = "Hide Route"
 }
 
 protocol ConstantsLoginInfoConfig {
