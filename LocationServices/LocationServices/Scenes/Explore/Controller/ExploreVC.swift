@@ -65,6 +65,7 @@ final class ExploreVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         exploreView.shouldBottomStackViewPositionUpdate()
+        blurStatusBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -128,7 +129,7 @@ final class ExploreVC: UIViewController {
     }
     
     func applyStyles(style: SearchScreenStyle) {
-        exploreView.searchBarView.applyStyles(style: style)
+        exploreView.searchBarView.applyStyle(style.searchBarStyle)
     }
 }
 

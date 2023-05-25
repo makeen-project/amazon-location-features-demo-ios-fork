@@ -211,6 +211,7 @@ final class TrackingVC: UIViewController {
         super.viewWillAppear(animated)
         openLoginFlow(skipDashboard: viewModel.hasHistory)
         showGeofenceAnnotations()
+        blurStatusBar()
     }
     
     func openLoginFlow(skipDashboard: Bool) {

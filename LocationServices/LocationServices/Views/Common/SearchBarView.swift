@@ -36,7 +36,21 @@ class SearchBarCache: NSObject {
     @objc dynamic var activeSearchText = ""
 }
 
+struct SearchBarStyle {
+    let backgroundColor: UIColor
+    let textFieldBackgroundColor: UIColor
+}
+
 final class SearchBarView: UIView {
+    
+    enum Constants {
+        static let textFieldHeight: CGFloat = 40
+        
+        static let grabberIconTopOffset: CGFloat = 7
+        static let grabberIconWidth: CGFloat = 36
+        static let grabberIconHeight: CGFloat = 5
+    }
+    
     var delegate: SearchBarViewOutputDelegate? {
         didSet {
             if SearchBarCache.shared.activeSearchText.isEmpty == false {
@@ -76,11 +90,12 @@ final class SearchBarView: UIView {
     }()
     
     private let searchView = SearchTextField()
+    private var shouldFillHeight: Bool = false
+    private var horizontalPadding: CGFloat = 16
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.accessibilityIdentifier = ViewsIdentifiers.Search.searchBar
-        configure()
         
         searchView.passChangedText = { [weak self] value in
             SearchBarCache.shared.activeSearchText = value
@@ -133,8 +148,11 @@ final class SearchBarView: UIView {
         }
     }
     
-    convenience init(becomeFirstResponder: Bool, showGrabberIcon: Bool = true) {
+    convenience init(becomeFirstResponder: Bool, showGrabberIcon: Bool = true, shouldFillHeight: Bool = false, horizontalPadding: CGFloat = 16) {
         self.init(frame: .zero)
+        self.shouldFillHeight = shouldFillHeight
+        self.horizontalPadding = horizontalPadding
+        configure()
         searchView.searchViewBecomeFirstResponder(state: becomeFirstResponder)
         grabberIconContainerView.isHidden = !showGrabberIcon
         if becomeFirstResponder {
@@ -153,8 +171,9 @@ final class SearchBarView: UIView {
         searchView.configureTextFieldWith(text: text)
     }
     
-    func applyStyles(style: SearchScreenStyle) {
+    func applyStyle(_ style: SearchBarStyle) {
         containerView.backgroundColor = style.backgroundColor
+        searchView.applyStyle(backgroundColor: style.textFieldBackgroundColor)
     }
     
     private func configure() {
@@ -171,19 +190,24 @@ final class SearchBarView: UIView {
         
         stackView.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview().offset(horizontalPadding)
+            $0.trailing.equalToSuperview().offset(-horizontalPadding)
+            if shouldFillHeight {
+                $0.bottom.equalToSuperview()
+            }
         }
         
         grabberIcon.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(7)
-            $0.width.equalTo(36)
-            $0.height.equalTo(5)
+            $0.top.equalToSuperview().offset(Constants.grabberIconTopOffset)
+            $0.width.equalTo(Constants.grabberIconWidth)
+            $0.height.equalTo(Constants.grabberIconHeight)
             $0.centerX.bottom.equalToSuperview()
         }
         
-        searchView.snp.makeConstraints {
-            $0.height.equalTo(40)
+        if !shouldFillHeight {
+            searchView.snp.makeConstraints {
+                $0.height.equalTo(Constants.textFieldHeight)
+            }
         }
     }
     

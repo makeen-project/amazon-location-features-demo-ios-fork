@@ -11,6 +11,7 @@ import CoreLocation
 
 struct SearchScreenStyle {
     var backgroundColor: UIColor
+    var searchBarStyle: SearchBarStyle
 }
 
 final class SearchVC: UIViewController {
@@ -18,12 +19,17 @@ final class SearchVC: UIViewController {
     enum Constants {
         static let searchBarHeightiPhone: CGFloat = 76
         static let searchBarHeightiPad: CGFloat = 40
+        static let searchBarHorizontalPaddingiPhone: CGFloat = 16
+        static let searchBarHorizontalPaddingiPad: CGFloat = 0
+        
+        static let tableViewHorizontalOffset: CGFloat = 20
+        static let tableViewTopOffsetiPhone: CGFloat = 16
     }
     
     weak var delegate: ExploreNavigationDelegate?
     private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     
-    var searchScreenStyle: SearchScreenStyle = SearchScreenStyle(backgroundColor: .white)
+    var searchScreenStyle: SearchScreenStyle = SearchScreenStyle(backgroundColor: .white, searchBarStyle: SearchBarStyle(backgroundColor: .clear, textFieldBackgroundColor: .lsLight2))
     
     var userLocation: (lat: Double?, long: Double?)? {
         didSet {
@@ -41,11 +47,10 @@ final class SearchVC: UIViewController {
     var isInitalState: Bool = true
     
     private lazy var searchBarView: SearchBarView = {
-        SearchBarView(becomeFirstResponder: false, showGrabberIcon: !isInSplitViewController)
+        let shouldFillHeight = isInSplitViewController
+        let horizontalPadding: CGFloat = isInSplitViewController ? Constants.searchBarHorizontalPaddingiPad : Constants.searchBarHorizontalPaddingiPhone
+        return SearchBarView(becomeFirstResponder: false, showGrabberIcon: !isInSplitViewController, shouldFillHeight: shouldFillHeight, horizontalPadding: horizontalPadding)
     }()
-    
-    // TODO: can be created later, marked with optional
-    //var searchBarView: SearchBarView = SearchBarView(isAccountBarEnabled: false)
     
     var viewModel: SearchViewModel! {
         didSet {
@@ -88,6 +93,7 @@ final class SearchVC: UIViewController {
     private func applyStyles() {
         view.backgroundColor = searchScreenStyle.backgroundColor
         tableView.backgroundColor = searchScreenStyle.backgroundColor
+        searchBarView.applyStyle(searchScreenStyle.searchBarStyle)
     }
     
     private func searchAppearanceChanged(isVisible: Bool) {
@@ -109,23 +115,36 @@ final class SearchVC: UIViewController {
     }
     
     private func setupViews() {
-        view.addSubview(searchBarView)
         view.addSubview(tableView)
         
-        searchBarView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            if isInSplitViewController {
+        if isInSplitViewController {
+            let width = view.window?.screen.bounds.width ?? view.frame.width
+            searchBarView.snp.makeConstraints {
+                $0.width.equalTo(width).priority(.high)
                 $0.height.equalTo(Constants.searchBarHeightiPad)
-            } else {
-                $0.height.equalTo(Constants.searchBarHeightiPhone)
             }
-            $0.leading.trailing.equalToSuperview()
+            navigationItem.titleView = searchBarView
+        } else {
+            view.addSubview(searchBarView)
+            searchBarView.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                if isInSplitViewController {
+                    $0.height.equalTo(Constants.searchBarHeightiPad)
+                } else {
+                    $0.height.equalTo(Constants.searchBarHeightiPhone)
+                }
+                $0.leading.trailing.equalToSuperview()
+            }
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(searchBarView.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            if isInSplitViewController {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+            } else {
+                $0.top.equalTo(searchBarView.snp.bottom).offset(Constants.tableViewTopOffsetiPhone)
+            }
+            $0.leading.equalToSuperview().offset(Constants.tableViewHorizontalOffset)
+            $0.trailing.equalToSuperview().offset(-Constants.tableViewHorizontalOffset)
             $0.bottom.equalToSuperview()
         }
     }

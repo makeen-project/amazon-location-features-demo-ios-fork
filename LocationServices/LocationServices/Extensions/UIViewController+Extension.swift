@@ -8,6 +8,8 @@
 import UIKit
 
 extension UIViewController {
+    private static let statusBarBlurViewTag = 111
+    
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -18,11 +20,21 @@ extension UIViewController {
         view.endEditing(true)
     }
     
-    func blurStatusBar() {
+    func blurStatusBar(includeAdditionalSafeArea: Bool = false) {
+        guard view.viewWithTag(Self.statusBarBlurViewTag) == nil else { return }
+        
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        blurView.tag = Self.statusBarBlurViewTag
         view.addSubview(blurView)
         
-        let offset = navigationController?.navigationBar.frame.height ?? 0
+        var offset: CGFloat = 0
+        
+        if let navigationController, !navigationController.navigationBar.isHidden {
+            offset += navigationController.navigationBar.frame.height
+        }
+        if !includeAdditionalSafeArea {
+            offset += navigationController?.additionalSafeAreaInsets.top ?? 0
+        }
         
         blurView.snp.makeConstraints {
             $0.top.trailing.leading.equalToSuperview()
