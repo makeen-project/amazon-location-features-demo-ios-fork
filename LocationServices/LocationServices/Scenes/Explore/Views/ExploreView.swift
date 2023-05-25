@@ -32,8 +32,7 @@ private enum Constant {
     
     static let actionButtonWidth: CGFloat = 48
     
-    static let bottomStackViewOffsetiPad: CGFloat = -8
-    static let bottomStackViewOffsetiPhone: CGFloat = -16
+    static let bottomStackViewOffset: CGFloat = -16
     static let topStackViewOffsetiPhone: CGFloat = 16
     static let topStackViewOffsetiPad: CGFloat = 0
 }
@@ -480,6 +479,14 @@ final class ExploreView: UIView, NavigationMapProtocol {
         mapHelperView.layoutIfNeeded()
     }
     
+    func updateBottomViewsSpacings(additionalBottomOffset: CGFloat) {
+        let amazonLogoBottomOffset = Constant.amazonLogoBottomOffset - additionalBottomOffset
+        setupAmazonLogo(leadingOffset: nil, bottomOffset: amazonLogoBottomOffset)
+        
+        let bottomStackBottomOffset = Constant.bottomStackViewOffset - additionalBottomOffset
+        setupBottomStack(bottomStackOffset: bottomStackBottomOffset)
+    }
+    
     func setupAmazonLogo(leadingOffset: CGFloat?, bottomOffset: CGFloat?) {
         let leadingOffset = leadingOffset ?? Constant.defaultHorizontalOffset
         let bottomOffset = bottomOffset ?? Constant.amazonLogoBottomOffset
@@ -492,6 +499,20 @@ final class ExploreView: UIView, NavigationMapProtocol {
             }
             $0.height.equalTo(Constant.amazonLogoHeight)
             $0.width.equalTo(Constant.amazonLogoWidth)
+        }
+    }
+    
+    private func setupBottomStack(bottomStackOffset: CGFloat?) {
+        let bottomStackOffset = bottomStackOffset ?? Constant.bottomStackViewOffset
+        
+        bottomStackView.snp.remakeConstraints {
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomStackOffset)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomStackOffset)
+            }
+            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
+            $0.width.equalTo(Constant.actionButtonWidth)
         }
     }
     
@@ -791,15 +812,7 @@ private extension ExploreView {
             $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
-        bottomStackView.snp.makeConstraints {
-            if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constant.bottomStackViewOffsetiPad)
-            } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(Constant.bottomStackViewOffsetiPhone)
-            }
-            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
-            $0.width.equalTo(Constant.actionButtonWidth)
-        }
+        setupBottomStack(bottomStackOffset: nil)
         
         updateMapHelperConstraints()
     }
