@@ -54,7 +54,7 @@ struct UITestGeofenceScreen: UITestScreen {
         searchBar.buttons["Clear text"].tap()
         searchBar.typeText(location)
         sleep(3)
-        var cell = getAddGeofenceTable().firstMatch
+        var cell = getAddGeofenceTable().firstMatch.cells.firstMatch
         if(matchCellText != nil){
             cell = getAddGeofenceTable().cells.containing(.staticText, identifier: matchCellText).element
         }

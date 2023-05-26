@@ -192,7 +192,7 @@ final class NavigationUITests: LocationServicesUITests {
     
     func testMapAdjustedForRoute() throws {
         let app = startApp(allowPermissions: false)
-        let _ = UITestExploreScreen(app: app)
+        let screen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .tapRouting()
             .selectDepartureTextField()
@@ -202,6 +202,12 @@ final class NavigationUITests: LocationServicesUITests {
             .typeInDestinationTextField(text: Constants.destinationAddress)
             .selectFirstSearchResult()
             .waitForRouteTypesContainer()
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            UITestTabBarScreen(app: app).showFullScreen()
+        }
+        
+        let _ = screen
             .waitForMapToBeRendered()
             .validateMapIsAdjustedToTheRoute()
     }

@@ -23,6 +23,7 @@ struct UITestTabBarScreen: UITestScreen {
         static var trackingTabBarButton: String { ViewsIdentifiers.General.trackingTabBarButton }
         static var geofenceTabBarButton: String { ViewsIdentifiers.General.geofenceTabBarButton }
         static var sideBarButton: String { ViewsIdentifiers.General.sideBarButton }
+        static var fullScreenButton: String { ViewsIdentifiers.General.fullScreenButton }
     }
     
     static func resetSideBarState() {
@@ -60,6 +61,11 @@ struct UITestTabBarScreen: UITestScreen {
         settingsButton.tap()
         
         return UITestGeofenceScreen(app: app)
+    }
+    
+    func showFullScreen() {
+        let button = getFullScreenButton()
+        button.tap()
     }
     
     // MARK: - Private functions
@@ -117,6 +123,12 @@ struct UITestTabBarScreen: UITestScreen {
     
     private func getSideBarButton() -> XCUIElement {
         let button = app.buttons[Identifiers.sideBarButton]
+        XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
+        return button
+    }
+    
+    private func getFullScreenButton() -> XCUIElement {
+        let button = app.buttons[Identifiers.fullScreenButton]
         XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
         return button
     }
