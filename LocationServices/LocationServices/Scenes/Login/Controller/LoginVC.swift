@@ -33,7 +33,7 @@ final class LoginVC: UIViewController {
     }
     
     private var screenTitleLabel: LargeTitleLabel = {
-        let label = LargeTitleLabel(labelText: StringConstant.dataProvider)
+        let label = LargeTitleLabel(labelText: StringConstant.loginVcTitle)
         return label
     }()
     
@@ -307,7 +307,8 @@ final class LoginVC: UIViewController {
         containerView.addSubview(connectButton)
         containerView.addSubview(disconnectButton)
         
-        if isPad {
+        let shouldShowScreenTitleLabel = isFromSettingScene && isPad
+        if shouldShowScreenTitleLabel {
             view.addSubview(screenTitleLabel)
             screenTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(view.safeAreaLayoutGuide)
@@ -317,7 +318,7 @@ final class LoginVC: UIViewController {
         
         if appState == .initial || appState == .defaultAWSConnected {
             scrollView.snp.makeConstraints {
-                if isPad {
+                if shouldShowScreenTitleLabel {
                     $0.top.equalTo(screenTitleLabel.snp.bottom)
                 } else {
                     $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -327,7 +328,7 @@ final class LoginVC: UIViewController {
             }
         } else {
             scrollView.snp.makeConstraints {
-                if isPad {
+                if shouldShowScreenTitleLabel {
                     $0.top.equalTo(screenTitleLabel.snp.bottom)
                 } else {
                     $0.top.equalTo(self.view.safeAreaLayoutGuide)
