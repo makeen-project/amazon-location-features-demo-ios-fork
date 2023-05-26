@@ -16,6 +16,8 @@ final class TrackingCoordinator: Coordinator {
     var didSendEventClosure: VoidHandler?
     var didSendDirectionEvent: VoidHandler?
     
+    var trackingController:TrackingVC?
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -38,10 +40,9 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     func showDashboardFlow() {
         let controller = TrackingDashboardBuilder.create()
         controller.modalPresentationStyle = .pageSheet
-        
         controller.trackingHistoryHandler = { [weak self] in
             self?.navigationController.dismiss(animated: false, completion: {
-                self?.showTrackingHistory()
+                self?.showTrackingHistory(isTrackingActive: true)
             })
         }
         
@@ -57,8 +58,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .medium
         }
-        
-        navigationController.present(controller, animated: true)
+        trackingController!.present(controller, animated: true)
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
@@ -68,13 +68,15 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         if let sheet = controller.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             sheet.preferredCornerRadius = 10
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .medium
         }
+        trackingController!.present(controller, animated: true)
         
-        navigationController.present(controller, animated: true)
+        // Starting tracking by default when tapping on Enable tracking button
+        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": isTrackingActive])
     }
     
     func showMapStyleScene() {
@@ -145,15 +147,15 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
 
 private extension TrackingCoordinator {
     func showTrackingScene() {
-        let controller = TrackingVCBuilder.create()
-        controller.geofenceHandler = {
+        trackingController = TrackingVCBuilder.create()
+        trackingController!.geofenceHandler = {
             self.didSendEventClosure?()
         }
         
-        controller.directionHandler = {
+        trackingController!.directionHandler = {
             self.didSendDirectionEvent?()
         }
-        controller.delegate = self
-        navigationController.pushViewController(controller, animated: true)
+        trackingController!.delegate = self
+        navigationController.pushViewController(trackingController!, animated: true)
     }
 }

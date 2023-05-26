@@ -27,7 +27,7 @@ final class TrackingDashboardController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .searchBarBackgroundColor
         setupHandlers()
         setupViews()
     }
