@@ -465,13 +465,14 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     func updateMapHelperConstraints() {
-        let newHeight = calculateMapHelperHeight()
+        let extraSpacing: CGFloat = 70
+        let newHeight = calculateMapHelperHeight(topExtraSpacing: extraSpacing)
         guard newHeight != currentMapHelperViewHeight else { return }
         
         mapHelperView.snp.removeConstraints()
         mapHelperView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(extraSpacing)
+            $0.leading.trailing.equalToSuperview().inset(extraSpacing)
             $0.height.equalTo(newHeight)
         }
         
@@ -494,7 +495,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         }
     }
     
-    private func calculateMapHelperHeight() -> UInt {
+    private func calculateMapHelperHeight(topExtraSpacing: CGFloat) -> UInt {
         let topSafeArea = UInt(window?.safeAreaInsets.top ?? 0)
         let bottomOccupiedArea: UInt
         if let bottomSheetHeight = delegate?.getBottomSheetHeight(),
@@ -507,7 +508,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         }
         
         guard let screenHeight = window?.screen.bounds.height else { return 0 }
-        return UInt(screenHeight) - topSafeArea - bottomOccupiedArea
+        return UInt(screenHeight) - topSafeArea - bottomOccupiedArea - UInt(topExtraSpacing)
     }
 }
 
