@@ -23,8 +23,13 @@ protocol TrackingMapViewOutputDelegate: BottomSheetPresentable {
 final class TrackingMapView: UIView {
     
     enum Constants {
-        static let mapLayerBottomOffsetiPad: CGFloat = -8
-        static let mapLayerBottomOffsetiPhone: CGFloat = -16
+        static let mapLayerBottomOffset: CGFloat = 16
+        static let mapLayerWidth: CGFloat = 50
+        
+        static let amazonLogoHorizontalOffset: CGFloat = 8
+        static let amazonLogoBottomOffset: CGFloat = 8
+        static let amazonLogoHeight: CGFloat = 18
+        static let amazonLogoWidth: CGFloat = 121
     }
     
     var delegate: TrackingMapViewOutputDelegate? {
@@ -77,12 +82,7 @@ final class TrackingMapView: UIView {
             $0.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        amazonMapLogo.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(8)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-8)
-            $0.height.equalTo(18)
-            $0.width.equalTo(121)
-        }
+        setupAmazonLogo(bottomOffset: nil)
         
         infoButton.snp.makeConstraints {
             $0.height.width.equalTo(13.5)
@@ -90,25 +90,42 @@ final class TrackingMapView: UIView {
             $0.centerY.equalTo(amazonMapLogo.snp.centerY)
         }
         
-        mapLayer.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
-            if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constants.mapLayerBottomOffsetiPad)
-            } else {
-                $0.bottom.equalToSuperview().offset(Constants.mapLayerBottomOffsetiPhone)
-            }
-            $0.width.equalTo(50)
-        }   
+        setupMapLayer(bottomOffset: nil)
     }
     
-    func adjustMapLayerItems(bottomSpace: Int) {
-        guard !isiPad else { return }
-        mapLayer.snp.removeConstraints()
+    func updateBottomViewsSpacings(additionalBottomOffset: CGFloat) {
+        let amazonLogoBottomOffset = Constants.amazonLogoBottomOffset + additionalBottomOffset
+        setupAmazonLogo(bottomOffset: amazonLogoBottomOffset)
         
-        mapLayer.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-bottomSpace)
-            $0.width.equalTo(50)
+        let mapLayerBottomOffset = Constants.mapLayerBottomOffset + additionalBottomOffset
+        setupMapLayer(bottomOffset: mapLayerBottomOffset)
+    }
+    
+    private func setupAmazonLogo(bottomOffset: CGFloat?) {
+        let bottomOffset = bottomOffset ?? Constants.amazonLogoBottomOffset
+        
+        amazonMapLogo.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(Constants.amazonLogoHorizontalOffset)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
+            } else {
+                $0.bottom.equalToSuperview().inset(bottomOffset)
+            }
+            $0.height.equalTo(Constants.amazonLogoHeight)
+            $0.width.equalTo(Constants.amazonLogoWidth)
+        }
+    }
+    
+    private func setupMapLayer(bottomOffset: CGFloat?) {
+        let bottomOffset = bottomOffset ?? Constants.mapLayerBottomOffset
+        mapLayer.snp.remakeConstraints {
+            $0.top.trailing.bottom.equalToSuperview()
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
+            } else {
+                $0.bottom.equalToSuperview().inset(bottomOffset)
+            }
+            $0.width.equalTo(Constants.mapLayerWidth)
         }
     }
     

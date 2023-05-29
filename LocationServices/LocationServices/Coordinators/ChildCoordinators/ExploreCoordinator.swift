@@ -15,7 +15,7 @@ final class ExploreCoordinator: Coordinator {
     var geofenceHandler: VoidHandler?
     var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
-    private let searchScreenStyle = SearchScreenStyle(backgroundColor: .searchBarBackgroundColor)
+    private let searchScreenStyle = SearchScreenStyle(backgroundColor: .searchBarBackgroundColor, searchBarStyle: SearchBarStyle(backgroundColor: .searchBarBackgroundColor, textFieldBackgroundColor: .white))
     private let directionScreenStyle = DirectionScreenStyle(backgroundColor: .searchBarBackgroundColor)
     
     init(navigationController: UINavigationController) {

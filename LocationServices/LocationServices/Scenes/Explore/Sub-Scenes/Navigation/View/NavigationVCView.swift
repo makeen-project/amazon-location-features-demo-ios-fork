@@ -29,9 +29,9 @@ enum RouteButtonState {
     var title: String {
         switch self {
         case .showRoute:
-            return "Show Route"
+            return StringConstant.viewRoute
         case .hideRoute:
-            return "Hide Route"
+            return StringConstant.hideRoute
         }
     }
     

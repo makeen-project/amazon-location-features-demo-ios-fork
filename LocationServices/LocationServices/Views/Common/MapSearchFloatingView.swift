@@ -71,7 +71,7 @@ final class MapSearchFloatingView: UIView {
         return view
     }()
     
-    private let searchView = SearchBarView(becomeFirstResponder: true, showGrabberIcon: false)
+    private let searchView = SearchBarView(becomeFirstResponder: true, showGrabberIcon: false, shouldFillHeight: true, horizontalPadding: 0)
     
     weak var delegate: MapSearchFloatingViewDelegate?
     private var sideBarButtonState: SideBarState = .fullSideBar
@@ -79,6 +79,7 @@ final class MapSearchFloatingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
+        searchView.applyStyle(SearchBarStyle(backgroundColor: .clear, textFieldBackgroundColor: .white))
     }
     
     required init?(coder: NSCoder) {
@@ -102,8 +103,8 @@ final class MapSearchFloatingView: UIView {
     private func configure() {
         self.addSubview(containerStackView)
         containerStackView.addArrangedSubview(sideBarButton)
-        containerStackView.addArrangedSubview(searchView)
         containerStackView.addArrangedSubview(separatorView)
+        containerStackView.addArrangedSubview(searchView)
         
         containerStackView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()

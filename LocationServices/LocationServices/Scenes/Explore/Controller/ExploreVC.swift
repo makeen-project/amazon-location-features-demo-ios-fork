@@ -65,6 +65,8 @@ final class ExploreVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         exploreView.shouldBottomStackViewPositionUpdate()
+        blurStatusBar()
+        setupKeyboardNotifications()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -118,6 +120,7 @@ final class ExploreVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.cancelActiveRequests()
+        removeKeyboardNotifications()
     }
     
     func setupHandlers() {
@@ -128,7 +131,7 @@ final class ExploreVC: UIViewController {
     }
     
     func applyStyles(style: SearchScreenStyle) {
-        exploreView.searchBarView.applyStyles(style: style)
+        exploreView.searchBarView.applyStyle(style.searchBarStyle)
     }
 }
 
@@ -243,6 +246,29 @@ private extension ExploreVC {
         NotificationCenter.default.addObserver(self, selector: #selector(showWasResetToDefaultConfigAlert(_:)), name: Notification.wasResetToDefaultConfig, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchAppearanceChanged(_:)), name: Notification.searchAppearanceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(exploreActionButtonsVisibilityChanged(_:)), name: Notification.exploreActionButtonsVisibilityChanged, object: nil)
+    }
+    
+    private func setupKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func removeKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
+        exploreView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        exploreView.updateBottomViewsSpacings(additionalBottomOffset: 0)
     }
     
     func setupView() {

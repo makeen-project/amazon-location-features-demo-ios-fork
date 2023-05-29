@@ -14,7 +14,7 @@ final class TrackingVC: UIViewController {
     enum Constants {
         static let titleTopOffset: CGFloat = 27
         static let headerCornerRadius: CGFloat = 20
-        static let trackingMapViewBottomOffset: Int = 70
+        static let trackingMapViewBottomOffset: CGFloat = 70
     }
     
     var geofenceHandler: VoidHandler?
@@ -87,6 +87,7 @@ final class TrackingVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         historyHeaderView.updateButtonStyle(isTrackingStarted: false)
+        removeKeyboardNotifications()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -137,6 +138,29 @@ final class TrackingVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
     }
     
+    private func setupKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func removeKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
+        trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
+    }
+    
     @objc private func updateTrackingHistory(_ notification: Notification) {
         guard (notification.object as? TrackingViewModelProtocol) !== viewModel else { return }
         guard let history = notification.userInfo?["history"] as? [TrackingHistoryPresentation] else { return }
@@ -148,15 +172,17 @@ final class TrackingVC: UIViewController {
     }
     
     @objc private func resetMapLayerItems(_ notification: Notification) {
+        guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
-            self.trackingMapView.adjustMapLayerItems(bottomSpace: Constants.trackingMapViewBottomOffset)
+            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
         }
     }
     
     @objc private func updateMapLayerItems(_ notification: Notification) {
+        guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
-            let size = Int(self.view.bounds.size.height / 2 - 20)
-            self.trackingMapView.adjustMapLayerItems(bottomSpace: size)
+            let size = self.view.bounds.size.height / 2 - 20
+            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: size)
         }
     }
     
@@ -200,7 +226,9 @@ final class TrackingVC: UIViewController {
         DispatchQueue.main.async {
             switch LoginViewModel.getAuthStatus() {
             case .authorized:
-                self.trackingMapView.adjustMapLayerItems(bottomSpace: Constants.trackingMapViewBottomOffset)
+                if !self.isInSplitViewController {
+                    self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+                }
                 self.viewModel.updateHistory()
             case .customConfig, .defaultConfig:
                 self.delegate?.showDashboardFlow()
@@ -213,12 +241,16 @@ final class TrackingVC: UIViewController {
         super.viewWillAppear(animated)
         openLoginFlow(skipDashboard: viewModel.hasHistory)
         showGeofenceAnnotations()
+        blurStatusBar()
+        setupKeyboardNotifications()
     }
     
     func openLoginFlow(skipDashboard: Bool) {
         switch LoginViewModel.getAuthStatus() {
         case .authorized:
-            trackingMapView.adjustMapLayerItems(bottomSpace: 70)
+            if !isInSplitViewController {
+                self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+            }
             if skipDashboard {
                 delegate?.showTrackingHistory(isTrackingActive: viewModel.isTrackingActive)
             } else {
@@ -233,7 +265,9 @@ final class TrackingVC: UIViewController {
     }
     
     private func setupViews() {
-        self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)        
+        if !isInSplitViewController {
+            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+        }
         navigationController?.navigationBar.isHidden = !isInSplitViewController
         self.view.addSubview(trackingMapView)
         self.view.addSubview(historyHeaderView)
@@ -311,7 +345,9 @@ extension TrackingVC: TrackingViewModelDelegate {
               viewModel.hasHistory else { return }
         
         DispatchQueue.main.async {
-            self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
+            if !self.isInSplitViewController {
+                self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+            }
             self.delegate?.showTrackingHistory(isTrackingActive: self.viewModel.isTrackingActive)
         }
     }

@@ -26,13 +26,12 @@ final class GeofenceMapView: UIView {
     enum Constants {
         static let barHeight: CGFloat = 76
         
-        static let amazonLogoLeadingOffset: CGFloat = 8
-        static let amazonLogoBottomOffset: CGFloat = -8
+        static let amazonLogoHorizontalOffset: CGFloat = 8
+        static let amazonLogoBottomOffset: CGFloat = 8
         static let amazonLogoHeight: CGFloat = 18
         static let amazonLogoWidth: CGFloat = 121
         
-        static let mapLayerBottomOffsetiPad: CGFloat = 8
-        static let mapLayerBottomOffsetiPhone: CGFloat = -16
+        static let mapLayerBottomOffset: CGFloat = 16
         static let mapLayerWidth: CGFloat = 50
     }
     
@@ -101,16 +100,7 @@ final class GeofenceMapView: UIView {
             $0.bottom.equalToSuperview()
         }
         
-        amazonMapLogo.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(Constants.amazonLogoLeadingOffset)
-            if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constants.amazonLogoBottomOffset)
-            } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(Constants.amazonLogoBottomOffset)
-            }
-            $0.height.equalTo(Constants.amazonLogoHeight)
-            $0.width.equalTo(Constants.amazonLogoWidth)
-        }
+        setupAmazonLogo(bottomOffset: nil)
         
         infoButton.snp.makeConstraints {
             $0.height.width.equalTo(13.5)
@@ -118,16 +108,44 @@ final class GeofenceMapView: UIView {
             $0.centerY.equalTo(amazonMapLogo.snp.centerY)
         }
         
-        mapLayer.snp.makeConstraints {
+        setupMapLayer(bottomOffset: nil)
+    }
+    
+    func updateBottomViewsSpacings(additionalBottomOffset: CGFloat) {
+        let amazonLogoBottomOffset = Constants.amazonLogoBottomOffset + additionalBottomOffset
+        setupAmazonLogo(bottomOffset: amazonLogoBottomOffset)
+        
+        let mapLayerBottomOffset = Constants.mapLayerBottomOffset + additionalBottomOffset
+        setupMapLayer(bottomOffset: mapLayerBottomOffset)
+    }
+    
+    private func setupAmazonLogo(bottomOffset: CGFloat?) {
+        let bottomOffset = bottomOffset ?? Constants.amazonLogoBottomOffset
+        
+        amazonMapLogo.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(Constants.amazonLogoHorizontalOffset)
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(-bottomOffset)
+            }
+            $0.height.equalTo(Constants.amazonLogoHeight)
+            $0.width.equalTo(Constants.amazonLogoWidth)
+        }
+    }
+    
+    private func setupMapLayer(bottomOffset: CGFloat?) {
+        let bottomOffset = bottomOffset ?? Constants.mapLayerBottomOffset
+        
+        mapLayer.snp.remakeConstraints {
             $0.top.trailing.equalToSuperview()
             if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constants.mapLayerBottomOffsetiPad)
+                $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
             } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(Constants.mapLayerBottomOffsetiPhone)
+                $0.bottom.equalTo(searchBarView.snp.top).offset(-bottomOffset)
             }
             $0.width.equalTo(Constants.mapLayerWidth)
         }
-        
     }
     
     func getUserLocation() -> (lat: Double?, long: Double?) {
@@ -178,17 +196,6 @@ final class GeofenceMapView: UIView {
     
     func hideSearchView() {
         searchBarView.isHidden = true
-    }
-    
-    func updateMapLayerPosition(value: Int) {
-        guard !isiPad else { return }
-        mapLayer.snp.removeConstraints()
-        
-        mapLayer.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
-            $0.bottom.equalTo(searchBarView.snp.top).offset(-value)
-            $0.width.equalTo(50)
-        }
     }
     
     func removeAllAnnotations() {

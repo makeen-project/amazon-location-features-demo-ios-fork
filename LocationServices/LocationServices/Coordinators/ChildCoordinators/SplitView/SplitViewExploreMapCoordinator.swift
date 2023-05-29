@@ -23,7 +23,7 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     private var floatingView: MapFloatingViewHandler?
     private var isSearchHidden = false
     
-    private let searchScreenStyle = SearchScreenStyle(backgroundColor: .white)
+    private let searchScreenStyle = SearchScreenStyle(backgroundColor: .white, searchBarStyle: SearchBarStyle(backgroundColor: .clear, textFieldBackgroundColor: .lsLight2))
     private let directionScreenStyle = DirectionScreenStyle(backgroundColor: .white)
     
     private lazy var supplementaryController: SearchVC = {

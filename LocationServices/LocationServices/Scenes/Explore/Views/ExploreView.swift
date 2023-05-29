@@ -32,8 +32,7 @@ private enum Constant {
     
     static let actionButtonWidth: CGFloat = 48
     
-    static let bottomStackViewOffsetiPad: CGFloat = -8
-    static let bottomStackViewOffsetiPhone: CGFloat = -16
+    static let bottomStackViewOffset: CGFloat = -16
     static let topStackViewOffsetiPhone: CGFloat = 16
     static let topStackViewOffsetiPad: CGFloat = 0
 }
@@ -467,18 +466,27 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     func updateMapHelperConstraints() {
-        let newHeight = calculateMapHelperHeight()
+        let extraSpacing: CGFloat = 70
+        let newHeight = calculateMapHelperHeight(topExtraSpacing: extraSpacing)
         guard newHeight != currentMapHelperViewHeight else { return }
         
         mapHelperView.snp.removeConstraints()
         mapHelperView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(extraSpacing)
+            $0.leading.trailing.equalToSuperview().inset(extraSpacing)
             $0.height.equalTo(newHeight)
         }
         
         mapHelperView.setNeedsLayout()
         mapHelperView.layoutIfNeeded()
+    }
+    
+    func updateBottomViewsSpacings(additionalBottomOffset: CGFloat) {
+        let amazonLogoBottomOffset = Constant.amazonLogoBottomOffset - additionalBottomOffset
+        setupAmazonLogo(leadingOffset: nil, bottomOffset: amazonLogoBottomOffset)
+        
+        let bottomStackBottomOffset = Constant.bottomStackViewOffset - additionalBottomOffset
+        setupBottomStack(bottomStackOffset: bottomStackBottomOffset)
     }
     
     func setupAmazonLogo(leadingOffset: CGFloat?, bottomOffset: CGFloat?) {
@@ -496,7 +504,21 @@ final class ExploreView: UIView, NavigationMapProtocol {
         }
     }
     
-    private func calculateMapHelperHeight() -> UInt {
+    private func setupBottomStack(bottomStackOffset: CGFloat?) {
+        let bottomStackOffset = bottomStackOffset ?? Constant.bottomStackViewOffset
+        
+        bottomStackView.snp.remakeConstraints {
+            if isiPad {
+                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomStackOffset)
+            } else {
+                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomStackOffset)
+            }
+            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
+            $0.width.equalTo(Constant.actionButtonWidth)
+        }
+    }
+    
+    private func calculateMapHelperHeight(topExtraSpacing: CGFloat) -> UInt {
         let topSafeArea = UInt(window?.safeAreaInsets.top ?? 0)
         let bottomOccupiedArea: UInt
         if let bottomSheetHeight = delegate?.getBottomSheetHeight(),
@@ -508,8 +530,10 @@ final class ExploreView: UIView, NavigationMapProtocol {
             bottomOccupiedArea = 0
         }
         
-        guard let screenHeight = window?.screen.bounds.height else { return 0 }
-        return UInt(screenHeight) - topSafeArea - bottomOccupiedArea
+        let areaToSubtract = topSafeArea + bottomOccupiedArea + UInt(topExtraSpacing)
+        guard let screenHeight = window?.screen.bounds.height,
+              UInt(screenHeight) > areaToSubtract else { return 0 }
+        return UInt(screenHeight) - areaToSubtract
     }
 }
 
@@ -792,15 +816,7 @@ private extension ExploreView {
             $0.height.width.equalTo(Constant.actionButtonWidth)
         }
         
-        bottomStackView.snp.makeConstraints {
-            if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(Constant.bottomStackViewOffsetiPad)
-            } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(Constant.bottomStackViewOffsetiPhone)
-            }
-            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
-            $0.width.equalTo(Constant.actionButtonWidth)
-        }
+        setupBottomStack(bottomStackOffset: nil)
         
         updateMapHelperConstraints()
     }
