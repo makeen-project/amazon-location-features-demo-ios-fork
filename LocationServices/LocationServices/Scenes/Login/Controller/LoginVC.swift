@@ -154,6 +154,16 @@ final class LoginVC: UIViewController {
             self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
             self.navigationItem.title = "AWS CloudFormation"
             self.view.backgroundColor = .white
+            
+            let navigationBarAppearance = UINavigationBarAppearance()
+            navigationBarAppearance.configureWithOpaqueBackground()
+            navigationBarAppearance.backgroundColor = .white
+            navigationBarAppearance.titleTextAttributes = [
+                .font: UIFont.amazonFont(type: .bold, size: 16),
+                .foregroundColor: UIColor.lsTetriary]
+            self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+            self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+            self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
         }
     }
     
