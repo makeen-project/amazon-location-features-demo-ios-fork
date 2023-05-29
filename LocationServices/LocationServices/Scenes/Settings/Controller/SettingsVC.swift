@@ -50,12 +50,12 @@ final class SettingsVC: UIViewController {
         
         // show logout button only if we are not signed in
         self.logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.navigationController?.navigationBar.isHidden = true
         setupNavigationItems()
         setupViews()
         setupTableView()
