@@ -176,10 +176,25 @@ final class LoginVC: UIViewController {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardSize.height
-            }
+        guard let userInfo = notification.userInfo else { return }
+
+        let screen: UIScreen
+        if #available(iOS 16.1, *) {
+            guard let screenUnwrapped = notification.object as? UIScreen else { return }
+            screen = screenUnwrapped
+        } else {
+            guard let screenUnwrapped = view.window?.screen else { return }
+            screen = screenUnwrapped
+        }
+        guard let keyboardFrameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+
+        let fromCoordinateSpace = screen.coordinateSpace
+        let toCoordinateSpace: UICoordinateSpace = view
+        let convertedKeyboardFrameEnd = fromCoordinateSpace.convert(keyboardFrameEnd, to: toCoordinateSpace)
+
+        let viewIntersection = view.bounds.intersection(convertedKeyboardFrameEnd)
+        if !viewIntersection.isEmpty {
+            self.view.frame.origin.y = -(view.bounds.maxY - viewIntersection.minY)
         }
     }
     
