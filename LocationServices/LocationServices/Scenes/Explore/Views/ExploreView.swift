@@ -528,8 +528,10 @@ final class ExploreView: UIView, NavigationMapProtocol {
             bottomOccupiedArea = 0
         }
         
-        guard let screenHeight = window?.screen.bounds.height else { return 0 }
-        return UInt(screenHeight) - topSafeArea - bottomOccupiedArea - UInt(topExtraSpacing)
+        let areaToSubtract = topSafeArea + bottomOccupiedArea + UInt(topExtraSpacing)
+        guard let screenHeight = window?.screen.bounds.height,
+              UInt(screenHeight) > areaToSubtract else { return 0 }
+        return UInt(screenHeight) - areaToSubtract
     }
 }
 
