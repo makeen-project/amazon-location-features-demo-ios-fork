@@ -81,14 +81,20 @@ extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
                              model: GeofenceDataModel?,
                              lat: Double?,
                              long: Double?) {
-        let controller = AddGeofenceBuilder.create(activeGeofencesLists: activeGeofencesLists,
-                                                   isEditingSceneEnabled: isEditingSceneEnabled,
-                                                   model: model,
-                                                   lat: lat,
-                                                   long: long)
-        controller.delegate = self
+        if let controller = supplementaryNavigationController?.viewControllers.first(where: { $0 is AddGeofenceVC }) as? AddGeofenceVC {
+            controller.update(lat: lat, long: long)
+            supplementaryNavigationController?.popToViewController(controller, animated: true)
+        } else {
+            let controller = AddGeofenceBuilder.create(activeGeofencesLists: activeGeofencesLists,
+                                                       isEditingSceneEnabled: isEditingSceneEnabled,
+                                                       model: model,
+                                                       lat: lat,
+                                                       long: long)
+            
+            controller.delegate = self
+            supplementaryNavigationController?.pushViewController(controller, animated: true)
+        }
         
-        supplementaryNavigationController?.pushViewController(controller, animated: true)
         splitDelegate?.showSupplementary()
     }
     
