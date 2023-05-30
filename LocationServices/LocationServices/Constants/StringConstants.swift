@@ -193,6 +193,7 @@ enum StringConstant {
     static let myLocation = "My Location"
     static let appVersion = "App version: "
     static let termsAndConditions = "Terms & Conditions"
+    static let disconnect = "Disconnect"
 }
 
 protocol ConstantsLoginInfoConfig {
