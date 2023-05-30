@@ -143,6 +143,8 @@ enum StringConstant {
             static let defaultConfigSubtitle = "Amazon Location app needs to be closed in order to apply your account configuration. This means that you'll need to manually reopen the app after it closes."
             static let customConfigSubtitle = "Amazon Location app needs to be closed in order to apply default configuration. This means that you'll need to manually reopen the app after it closes."
         }
+        
+        static let continueToExplore = "Continue to Explore"
     }
     
     enum AboutTab {
