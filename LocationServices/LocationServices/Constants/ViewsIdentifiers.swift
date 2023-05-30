@@ -21,6 +21,8 @@ struct ViewsIdentifiers {
         static let trackingTabBarButton = "Tracking"
         static let geofenceTabBarButton = "Geofence"
         static let aboutTabBarButton = "About"
+        static let sideBarButton = "SideBarButton"
+        static let fullScreenButton = "FullScreenButton"
         static let mapStyles = "MapStyles"
         static let routingButton = "RoutingButton"
         static let closeButton = "CloseButton"
@@ -35,8 +37,10 @@ struct ViewsIdentifiers {
         static let searchRootView = "SearchRootView"
         static let searchBar = "SearchBar"
         static let searchTextField = "SearchTextField"
+        static let searchCancelButton = "SearchCancelButton"
         static let noResultsView = "NoResultsView"
         static let cellAddressLabel = "CellAddressLabel"
+        static let tableView = "SearchTableView"
     }
     
     struct Routing {
@@ -60,11 +64,13 @@ struct ViewsIdentifiers {
         static let routeEstimatedDistance = "RouteEstimatedDistance"
         
         static let navigateButton = "NavigateButton"
+        static let tableView = "DirectionsTableView"
     }
     
     struct Navigation {
         static let navigationRootView = "NavigationRootView"
         static let navigationExitButton = "NavigationExitButton"
+        static let navigationRoutesButton = "NavigationRoutesButton"
     }
     
     struct PoiCard {
@@ -104,6 +110,7 @@ struct ViewsIdentifiers {
         static let saveGeofenceButton = "SaveGeofenceButton"
         static let searchGeofenceTextField = "SearchGeofenceTextField"
         static let radiusGeofenceSliderField = "RadiusGeofenceSliderField"
+        static let addGeofenceTableView = "AddGeofenceTableView"
     }
     
     struct Tracking {

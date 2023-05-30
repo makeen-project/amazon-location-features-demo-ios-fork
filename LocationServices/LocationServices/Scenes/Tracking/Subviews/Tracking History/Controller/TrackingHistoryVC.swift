@@ -10,7 +10,16 @@ import SnapKit
 
 final class TrackingHistoryVC: UIViewController {
     
-    private(set) var headerView = TrackingHistoryHeaderView()
+    enum Constants {
+        static let titleOffsetiPhone: CGFloat = 27
+        static let titleOffsetiPad: CGFloat = 0
+    }
+    
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
+    private(set) lazy var headerView: TrackingHistoryHeaderView = {
+        let titleTopOffset: CGFloat = isiPad ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
+        return TrackingHistoryHeaderView(titleTopOffset: titleTopOffset)
+    }()
     private let noInternetConnectionView = NoInternetConnectionView()
     
     private let scrollView: UIScrollView = {
@@ -71,6 +80,7 @@ final class TrackingHistoryVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingEventReceived(_:)), name: Notification.trackingEvent, object: nil)
+        navigationController?.navigationBar.tintColor = .lsTetriary
         
         scrollView.delegate = self
         tableView.delegate = self
@@ -89,10 +99,18 @@ final class TrackingHistoryVC: UIViewController {
     
     @objc private func updateButtonStyle(_ notification: Notification) {
         let state = (notification.userInfo?["state"] as? Bool) ?? false
+        updateButtonStyle(state: state)
+    }
+    
+    func updateButtonStyle(state: Bool) {
+        guard viewModel !== nil else {
+            return
+        }
         viewModel.changeTrackingStatus(state)
         self.headerView.updateButtonStyle(isTrackingStarted: state)
         self.view.setNeedsLayout()
     }
+    
     
     @objc private func updateTrackingHistory(_ notification: Notification) {
         guard (notification.object as? TrackingHistoryViewModelProtocol) !== viewModel else { return }
@@ -147,8 +165,8 @@ final class TrackingHistoryVC: UIViewController {
         view.addSubview(noInternetConnectionView)
         
         headerView.snp.makeConstraints {
-            $0.height.equalTo(80)
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
         }
         
         scrollView.snp.makeConstraints {

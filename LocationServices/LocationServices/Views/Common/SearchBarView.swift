@@ -18,6 +18,7 @@ protocol SearchBarViewOutputDelegate {
     func searchTextDeactivated()
     func searchText(_ text: String?)
     func searchTextWith(_ text: String?)
+    func searchCancel()
 }
 
 extension SearchBarViewOutputDelegate {
@@ -25,6 +26,7 @@ extension SearchBarViewOutputDelegate {
     func searchTextDeactivated() {}
     func searchText(_ text: String?) {}
     func searchTextWith(_ text: String?) {}
+    func searchCancel() {}
 }
 
 // to keep local history of searching between two screens. Explore and search detail
@@ -34,7 +36,21 @@ class SearchBarCache: NSObject {
     @objc dynamic var activeSearchText = ""
 }
 
+struct SearchBarStyle {
+    let backgroundColor: UIColor
+    let textFieldBackgroundColor: UIColor
+}
+
 final class SearchBarView: UIView {
+    
+    enum Constants {
+        static let textFieldHeight: CGFloat = 40
+        
+        static let grabberIconTopOffset: CGFloat = 7
+        static let grabberIconWidth: CGFloat = 36
+        static let grabberIconHeight: CGFloat = 5
+    }
+    
     var delegate: SearchBarViewOutputDelegate? {
         didSet {
             if SearchBarCache.shared.activeSearchText.isEmpty == false {
@@ -46,9 +62,23 @@ final class SearchBarView: UIView {
     
     private let containerView: UIView =  {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    private let stackView: UIStackView =  {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let grabberIconContainerView: UIView =  {
+        let view = UIView()
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -60,11 +90,12 @@ final class SearchBarView: UIView {
     }()
     
     private let searchView = SearchTextField()
+    private var shouldFillHeight: Bool = false
+    private var horizontalPadding: CGFloat = 16
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.accessibilityIdentifier = ViewsIdentifiers.Search.searchBar
-        configure()
         
         searchView.passChangedText = { [weak self] value in
             SearchBarCache.shared.activeSearchText = value
@@ -82,6 +113,10 @@ final class SearchBarView: UIView {
         
         searchView.textFieldDeactivated = { [weak self] in
             self?.delegate?.searchTextDeactivated()
+        }
+        
+        searchView.cancelSearchCallback = { [weak self] in
+            self?.delegate?.searchCancel()
         }
                 
         SearchBarCache.shared.addObserver(self,
@@ -113,9 +148,13 @@ final class SearchBarView: UIView {
         }
     }
     
-    convenience init(becomeFirstResponder: Bool) {
+    convenience init(becomeFirstResponder: Bool, showGrabberIcon: Bool = true, shouldFillHeight: Bool = false, horizontalPadding: CGFloat = 16) {
         self.init(frame: .zero)
+        self.shouldFillHeight = shouldFillHeight
+        self.horizontalPadding = horizontalPadding
+        configure()
         searchView.searchViewBecomeFirstResponder(state: becomeFirstResponder)
+        grabberIconContainerView.isHidden = !showGrabberIcon
         if becomeFirstResponder {
             let tap = UITapGestureRecognizer(target: self, action: #selector(gestureAction))
             addGestureRecognizer(tap)
@@ -132,27 +171,43 @@ final class SearchBarView: UIView {
         searchView.configureTextFieldWith(text: text)
     }
     
+    func applyStyle(_ style: SearchBarStyle) {
+        containerView.backgroundColor = style.backgroundColor
+        searchView.applyStyle(backgroundColor: style.textFieldBackgroundColor)
+    }
+    
     private func configure() {
-        self.addSubview(containerView)
-        containerView.addSubview(grabberIcon)
-        containerView.addSubview(searchView)
+        addSubview(containerView)
+        containerView.addSubview(stackView)
+        stackView.addArrangedSubview(grabberIconContainerView)
+        grabberIconContainerView.addSubview(grabberIcon)
+        
+        stackView.addArrangedSubview(searchView)
         
         containerView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
         
-        grabberIcon.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(7)
-            $0.width.equalTo(36)
-            $0.height.equalTo(5)
-            $0.centerX.equalToSuperview()
+        stackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(horizontalPadding)
+            $0.trailing.equalToSuperview().offset(-horizontalPadding)
+            if shouldFillHeight {
+                $0.bottom.equalToSuperview()
+            }
         }
         
-        searchView.snp.makeConstraints {
-            $0.top.equalTo(grabberIcon.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(40)
+        grabberIcon.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(Constants.grabberIconTopOffset)
+            $0.width.equalTo(Constants.grabberIconWidth)
+            $0.height.equalTo(Constants.grabberIconHeight)
+            $0.centerX.bottom.equalToSuperview()
+        }
+        
+        if !shouldFillHeight {
+            searchView.snp.makeConstraints {
+                $0.height.equalTo(Constants.textFieldHeight)
+            }
         }
     }
     

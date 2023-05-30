@@ -8,12 +8,20 @@
 import UIKit
 import CoreLocation
 
-final class DirectionVC: UIViewController, AlertPresentable {
+struct DirectionScreenStyle {
+    var backgroundColor: UIColor
+}
+
+final class DirectionVC: UIViewController {
     
     enum Constants {
         static let mediumId = UISheetPresentationController.Detent.Identifier("medium")
+        static let titleOffsetiPhone: CGFloat = 20
+        static let titleOffsetiPad: CGFloat = 0
     }
     
+    var directionScreenStyle: DirectionScreenStyle = DirectionScreenStyle(backgroundColor: .white)
+    var isInSplitViewController: Bool = false
     var dismissHandler: VoidHandler?
     var isRoutingOptionsEnabled: Bool = false
     var firstDestionation: DirectionTextFieldModel?
@@ -38,7 +46,6 @@ final class DirectionVC: UIViewController, AlertPresentable {
     }()
     
     var isDestination: Bool = true
-    var deleteScreenDrawing: Bool = true
     
     var viewModel: DirectionViewModel! {
         didSet {
@@ -46,13 +53,16 @@ final class DirectionVC: UIViewController, AlertPresentable {
         }
     }
     
-    var directionSearchView: DirectionSearchView = DirectionSearchView()
+    lazy var directionSearchView: DirectionSearchView = {
+        let titleTopOffset: CGFloat = isInSplitViewController ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
+        return DirectionSearchView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
+    }()
     
     lazy var directionView: DirectionView = DirectionView()
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .searchBarBackgroundColor
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Routing.tableView
         tableView.keyboardDismissMode = .interactive
         return tableView
     }()
@@ -67,12 +77,31 @@ final class DirectionVC: UIViewController, AlertPresentable {
         setupHandlers()
         setupTableView()
         setupViews()
+        applyStyles()
         viewModel.loadLocalOptions()
         
         if firstDestionation?.placeName == "My Location" {
             directionSearchView.setMyLocationText()
         }
         locationManagerSetup()
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissView))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
+        
+        tableView.isHidden = isRoutingOptionsEnabled
+        if isRoutingOptionsEnabled {
+            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
+        } else {
+            let isDestination = firstDestionation?.placeName != nil
+            directionSearchView.becomeFirstResponder(isDestination: isDestination)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        calculateRoute()
+        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,15 +112,25 @@ final class DirectionVC: UIViewController, AlertPresentable {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         removeNotifications()
-        if deleteScreenDrawing {
-            self.dismissHandler?()
-        }
+    }
+    
+    private func applyStyles() {
+        tableView.backgroundColor = directionScreenStyle.backgroundColor
+        view.backgroundColor = directionScreenStyle.backgroundColor
     }
     
     private func locationManagerSetup() {
         locationManager.performLocationDependentAction {
             self.locationManager.startUpdatingLocation()
         }
+    }
+    
+    private func changeExploreActionButtonsVisibility(geofenceIsHidden: Bool, directionIsHidden: Bool) {
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: geofenceIsHidden,
+            StringConstant.NotificationsInfoField.directionIsHidden: directionIsHidden
+        ]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func setupHandlers() {
@@ -183,9 +222,9 @@ final class DirectionVC: UIViewController, AlertPresentable {
         self.view.addSubview(tableView)
         
         directionSearchView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview().offset(14)
+            $0.leading.trailing.equalToSuperview().offset(14)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(140)
         }
         
         directionView.snp.makeConstraints {
@@ -200,16 +239,6 @@ final class DirectionVC: UIViewController, AlertPresentable {
         }
         
         directionView.isHidden = true
-        if isRoutingOptionsEnabled  {
-            tableView.isHidden = true
-            sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
-            calculateRoute()
-        } else {
-            tableView.isHidden = false
-            
-            let isDestination = firstDestionation?.placeName != nil
-            directionSearchView.becomeFirstResponder(isDestination: isDestination)
-        }
     }
     
     private func calculateRoute(routeType: RouteTypes = .car,
@@ -455,7 +484,6 @@ extension DirectionVC: DirectionViewOutputDelegate {
         
         switch navigationLegs {
         case .success(let steps):
-            self.deleteScreenDrawing = false
             let routeModel = self.getRouteModel(for: type)
             let sumData = self.viewModel.getSumData(type)
             
@@ -477,8 +505,8 @@ extension DirectionVC: DirectionViewOutputDelegate {
 }
 
 extension DirectionVC: DirectionSearchViewOutputDelegate {
-    func dismissView() {
-        deleteScreenDrawing = false
+    @objc func dismissView() {
+        changeExploreActionButtonsVisibility(geofenceIsHidden: true, directionIsHidden: true)
         dismissHandler?()
     }
     

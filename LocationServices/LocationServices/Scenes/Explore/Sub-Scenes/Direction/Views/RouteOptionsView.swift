@@ -9,6 +9,12 @@ import UIKit
 import SnapKit
 
 final class RouteOptionsView: UIView {
+    
+    enum Constants {
+        static let collapsedHeight: Int = 32
+        static let expandedHeight: Int = 144
+    }
+    
     var changeRouteOptionHeight: IntHandler?
     var avoidFerries: BoolHandler?
     var avoidTolls: BoolHandler?
@@ -87,7 +93,7 @@ final class RouteOptionsView: UIView {
         
         containerView.isHidden = !routeOptionState
         routeOptionImage.image = UIImage(systemName: routeOptionState ? "chevron.up" : "chevron.down")
-        changeRouteOptionHeight?(routeOptionState ? 203 : 32)
+        changeRouteOptionHeight?(routeOptionState ? Constants.expandedHeight : Constants.collapsedHeight)
         routeOptionState.toggle()
     }
     
@@ -114,7 +120,7 @@ final class RouteOptionsView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     

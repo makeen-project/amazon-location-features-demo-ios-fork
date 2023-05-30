@@ -59,6 +59,8 @@ final class POICardView: UIView {
     var errorMessage: String?
     var errorInfoMessage: String?
     
+    private var titleTopOffset: CGFloat = 20
+    
     private let containerView: UIView =  {
        let view = UIView()
         view.backgroundColor = .searchBarBackgroundColor
@@ -68,11 +70,24 @@ final class POICardView: UIView {
         return view
     }()
     
-    private let poiTitle: UILabel = {
-       let label = UILabel()
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .black
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 2
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        return stackView
+    }()
+    
+    private let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.isUserInteractionEnabled = true
+        return view
+    }()
+    
+    private let poiTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel()
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
@@ -149,7 +164,7 @@ final class POICardView: UIView {
     private lazy var directionButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.PoiCard.directionButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.isUserInteractionEnabled = true
@@ -219,10 +234,16 @@ final class POICardView: UIView {
         return PlaceholderAnimator(dataViews: dataViews, placeholderViews: placeholderViews)
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(titleTopOffset: CGFloat, isCloseButtonHidden: Bool) {
+        self.init()
+        self.titleTopOffset = titleTopOffset
         self.accessibilityIdentifier = ViewsIdentifiers.PoiCard.poiCardView
         setupViews()
+        closeButton.isHidden = isCloseButtonHidden
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {
@@ -236,10 +257,12 @@ final class POICardView: UIView {
     
     func setupViews() {
         self.addSubview(containerView)
-        containerView.addSubview(closeButton)
-        containerView.addSubview(poiTitle)
+        containerView.addSubview(topStackView)
+        topStackView.addArrangedSubview(headerView)
+        headerView.addSubview(closeButton)
+        headerView.addSubview(poiTitle)
         
-        containerView.addSubview(stackView)
+        topStackView.addArrangedSubview(stackView)
         stackView.addArrangedSubview(poiAddress)
 
         stackView.addArrangedSubview(distanceValuesContainer)
@@ -263,23 +286,24 @@ final class POICardView: UIView {
             $0.top.bottom.leading.trailing.equalToSuperview()
         }
         
+        topStackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-5)
+        }
+        
         closeButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(14)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview().offset(-11)
             $0.height.width.equalTo(30)
         }
         
         poiTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
-            $0.leading.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().offset(titleTopOffset)
+            $0.leading.equalToSuperview()
             $0.trailing.equalTo(closeButton.snp.leading).offset(-5)
             $0.height.equalTo(28)
-        }
-        
-        stackView.snp.makeConstraints {
-            $0.top.equalTo(poiTitle.snp.bottom).offset(2)
-            $0.leading.equalTo(poiTitle.snp.leading)
-            $0.trailing.equalToSuperview().offset(-5)
+            $0.bottom.equalToSuperview()
         }
         
         poiAddress.snp.makeConstraints {
@@ -321,7 +345,7 @@ final class POICardView: UIView {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
-            $0.top.equalTo(stackView.snp.bottom).offset(25)
+            $0.top.equalTo(topStackView.snp.bottom).offset(25)
         }
         
         buttonContainerView.snp.makeConstraints {

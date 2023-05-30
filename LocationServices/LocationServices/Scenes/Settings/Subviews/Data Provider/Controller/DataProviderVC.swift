@@ -12,9 +12,14 @@ final class DataProviderVC: UIViewController {
     var selectedCell: Int = 0
     var viewModel: DataProviderViewModelProtocol! {
         didSet {
-         viewModel.delegate = self
+            viewModel.delegate = self
         }
     }
+    
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.dataProvider)
+        return label
+    }()
         
     var tableView: UITableView = {
         let tableView = UITableView()
@@ -29,16 +34,37 @@ final class DataProviderVC: UIViewController {
         viewModel.loadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     private func setupViews() {
-        self.navigationController?.navigationBar.isHidden = false
-        self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-        self.navigationItem.title = "Data Provider"
-        self.view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .mapDarkBlackColor
+        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.dataProvider
+        view.backgroundColor = .white
+        
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.horizontalEdges.equalToSuperview().inset(16)
+            }
+        }
         
         self.view.addSubview(tableView)
-        
         tableView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            if isPad {
+                $0.top.equalTo(screenTitleLabel.snp.bottom)
+            } else {
+                $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            }
             $0.leading.bottom.trailing.equalToSuperview()
         }
     }

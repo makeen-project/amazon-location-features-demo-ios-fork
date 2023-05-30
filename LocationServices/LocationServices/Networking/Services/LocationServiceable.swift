@@ -24,8 +24,12 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
            let result = result ?? []
            Task {
                let model = await result.asyncMap({ model in
-                   guard let userLat, let userLong, let placeId = model.placeId else { return SearchPresentation(model: model) }
-                   let userLocation = CLLocation(latitude: userLat, longitude: userLong)
+                   guard let placeId = model.placeId else { return SearchPresentation(model: model) }
+                   
+                   var userLocation: CLLocation? = nil
+                   if let userLat, let userLong {
+                       userLocation = CLLocation(latitude: userLat, longitude: userLong)
+                   }
                    
                    let place = await getPlace(with: placeId)
                    return SearchPresentation(model: model, placeLat: place?.placeLat, placeLong: place?.placeLong, userLocation: userLocation)

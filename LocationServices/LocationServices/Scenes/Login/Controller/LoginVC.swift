@@ -32,11 +32,18 @@ final class LoginVC: UIViewController {
     private var userDomain: String?
     private var webSocketUrl: String?
     
+    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    
     var viewModel: LoginViewModelProtocol! {
         didSet {
             viewModel.delegate = self
         }
     }
+    
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.loginVcTitle)
+        return label
+    }()
     
     private let scrollView: UIScrollView = {
         let sc = UIScrollView()
@@ -81,7 +88,7 @@ final class LoginVC: UIViewController {
     private lazy var signInButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.signInButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Sign In", for: .normal)
@@ -109,11 +116,12 @@ final class LoginVC: UIViewController {
     private lazy var connectButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.connectButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Connect", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(connectButtonAction), for: .touchUpInside)
         return button
@@ -128,6 +136,7 @@ final class LoginVC: UIViewController {
         button.layer.cornerRadius = 10
         button.setTitle("Disconnect from AWS", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(disconnectButtonAction), for: .touchUpInside)
         return button
@@ -144,7 +153,7 @@ final class LoginVC: UIViewController {
     }
     
     private func updateAccordingToAppState() {
-        let state =  isFromSettingScene && viewModel.hasLocalUser()
+        let state = isFromSettingScene && viewModel.hasLocalUser()
         
         let appState = UserDefaultsHelper.getAppState()
         
@@ -175,10 +184,12 @@ final class LoginVC: UIViewController {
     
     private func settingsViewsUpdate() {
         loginView.hideCloseButton(state: isFromSettingScene)
-        if isFromSettingScene {
+        
+        navigationController?.isNavigationBarHidden = !isFromSettingScene
+        if isFromSettingScene && !isPad {
             self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-            self.navigationItem.title = "AWS CloudFormation"
+            navigationItem.title = StringConstant.loginVcTitle
             self.view.backgroundColor = .white
             
             let navigationBarAppearance = UINavigationBarAppearance()
@@ -332,8 +343,21 @@ final class LoginVC: UIViewController {
         bottomButtonStackView.addArrangedSubview(connectButton)
         bottomButtonStackView.addArrangedSubview(disconnectButton)
         
+        let shouldShowScreenTitleLabel = isFromSettingScene && isPad
+        if shouldShowScreenTitleLabel {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalOffset)
+            }
+        }
+            
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            if shouldShowScreenTitleLabel {
+                $0.top.equalTo(screenTitleLabel.snp.bottom)
+            } else {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+            }
             $0.leading.trailing.equalToSuperview()
         }
         

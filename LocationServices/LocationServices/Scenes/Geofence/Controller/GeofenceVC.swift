@@ -10,12 +10,13 @@ import SnapKit
 import CoreLocation
 import Mapbox
 
-final class GeofenceVC: UIViewController, AlertPresentable {
+final class GeofenceVC: UIViewController {
     weak var delegate: GeofenceNavigationDelegate?
     var directioButtonHandler: VoidHandler?
+    private var isInSplitViewController: Bool { delegate is SplitViewGeofencingMapCoordinator }
     
     private lazy var headerView: GeofenceDashboardHeaderView = {
-        let view = GeofenceDashboardHeaderView()
+        let view = GeofenceDashboardHeaderView(containerTopOffset: 25)
         view.backgroundColor = .searchBarBackgroundColor
         view.layer.cornerRadius = 20
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -38,7 +39,7 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     private let authActionsHelper = AuthActionsHelper()
     
     private var geofenceMapView: GeofenceMapView = GeofenceMapView()
-    private var userCoreLocation: CLLocationCoordinate2D?
+    private(set) var userCoreLocation: CLLocationCoordinate2D?
     
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
@@ -48,7 +49,6 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.backButtonTitle = ""
         viewModel.delegate = self
         authActionsHelper.delegate = delegate
         setupNotification()
@@ -60,6 +60,7 @@ final class GeofenceVC: UIViewController, AlertPresentable {
         setupNotifications()
         locationManagerSetup()
         setupViews()
+        changeHeaderVisibility(isHidden: false)
         geofenceMapView.setupTapGesture()
     }
     
@@ -73,18 +74,52 @@ final class GeofenceVC: UIViewController, AlertPresentable {
         }
     }
     
-    func setupNotification() {
+    private func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerPosition(_:)), name: Notification.geofenceMapLayerUpdate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
     }
     
+    private func setupKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func removeKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
+        geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
+    }
+    
+    
     @objc private func updateMapLayerPosition(_ notification: Notification) {
-        self.geofenceMapView.updateMapLayerPosition(value: 20)
+        guard !isInSplitViewController else { return }
+        geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
+    }
+    
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.viewModel.fetchListOfGeofences()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         geofenceMapView.reloadMap()
         viewModel.fetchListOfGeofences()
+        blurStatusBar()
+        setupKeyboardNotifications()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -94,6 +129,11 @@ final class GeofenceVC: UIViewController, AlertPresentable {
             self?.openGeofenceDashboard()
         })
         NotificationCenter.default.addObserver(self, selector: #selector(tabSelected(_:)), name: Notification.tabSelected, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeKeyboardNotifications()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -128,8 +168,10 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     @objc private func openGeofenceDashboard() {
         authActionsHelper.tryToPerformAuthAction { [weak self] in
             guard let self else { return }
-            let size = Int(self.view.bounds.size.height / 2 - 60)
-            self.geofenceMapView.updateMapLayerPosition(value: size)
+            let size = self.view.bounds.size.height / 2 - 60
+            if !isInSplitViewController {
+                self.geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: size)
+            }
             delegate?.showDashboardFlow(geofences: self.viewModel.geofences, lat: self.userCoreLocation?.latitude, long: self.userCoreLocation?.longitude)
         }
     }
@@ -178,18 +220,19 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     
     @objc private func geofenceAppearanceChanged(_ notification: Notification) {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
-        headerView.isHidden = isVisible
+        changeHeaderVisibility(isHidden: isVisible)
         grabberIcon.isHidden = isVisible
     }
     
     func setupViews() {
-        navigationController?.navigationBar.isHidden = true
+        if !isInSplitViewController {
+            navigationItem.backButtonTitle = ""
+            navigationController?.navigationBar.isHidden = true
+        }
         
         view.addSubview(geofenceMapView)
         view.addSubview(headerView)
         view.addSubview(grabberIcon)
-        
-        
         
         geofenceMapView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
@@ -212,6 +255,14 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     func locationManagerSetup() {
         locationManager.performLocationDependentAction {
             self.locationManager.startUpdatingLocation()
+        }
+    }
+    
+    private func changeHeaderVisibility(isHidden: Bool) {
+        if isInSplitViewController {
+            headerView.isHidden = true
+        } else {
+            headerView.isHidden = isHidden
         }
     }
 }
@@ -274,8 +325,10 @@ extension GeofenceVC: GeofenceMapViewOutputDelegate {
     func showAddGeofence(lat: Double?, long: Double?) {
         authActionsHelper.tryToPerformAuthAction { [weak self] in
             guard let self else { return }
-            let size = Int(self.view.bounds.size.height / 2 - 30)
-            self.geofenceMapView.updateMapLayerPosition(value: size)
+            let size = self.view.bounds.size.height / 2 - 30
+            if !isInSplitViewController {
+                self.geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: size)
+            }
             self.delegate?.showAddGeofenceFlow(activeGeofencesLists: self.viewModel.geofences,
                                                isEditingSceneEnabled: false,
                                                model: nil,

@@ -12,6 +12,11 @@ import SafariServices
 final class TermsAndConditionsVC: UIViewController {
     
     // MARK: - Views
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.termsAndConditions)
+        return label
+    }()
+    
     private var desctiptionTextView: UITextView = {
         let tw = UITextView()
         
@@ -28,7 +33,7 @@ final class TermsAndConditionsVC: UIViewController {
         }
         
         tw.linkTextAttributes = [
-            .foregroundColor: UIColor.tabBarTintColor,
+            .foregroundColor: UIColor.lsPrimary,
             .font: UIFont.amazonFont(type: .regular, size: 13)
         ]
         
@@ -47,32 +52,34 @@ final class TermsAndConditionsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.largeTitleDisplayMode = .never
         setupNavigationItems()
         setupViews()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
     }
     
     // MARK: - Functions
     private func setupNavigationItems() {
         navigationController?.navigationBar.tintColor = .lsTetriary
-        self.title = StringConstant.termsAndConditions
+        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.termsAndConditions
     }
     
     private func setupViews() {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide)
+                make.leading.equalToSuperview().offset(24)
+            }
+        }
+        
         view.addSubview(desctiptionTextView)
         
         desctiptionTextView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            if isPad {
+                $0.top.equalTo(screenTitleLabel.snp.bottom).offset(16)
+            } else {
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            }
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
         }

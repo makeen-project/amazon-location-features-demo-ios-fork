@@ -24,13 +24,22 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         }
     }
     
+    enum Constants {
+        static let titleOffsetiPhone: CGFloat = 20
+        static let titleOffsetiPad: CGFloat = 0
+    }
+    
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         return locationManager
     }()
     
-    private let poiCardView: POICardView = POICardView()
+    private lazy var poiCardView: POICardView = {
+        let titleTopOffset: CGFloat = isInSplitViewController ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
+        return POICardView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
+    }()
     weak var delegate: ExploreNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
     var userLocation: (lat: Double?, long: Double?)?
     
     private var authorizationStatusChanged: Bool = false
@@ -44,24 +53,37 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .searchBarBackgroundColor
         locationManager.setDelegate(self)
         poiCardView.delegate = self
         viewModel.fetchDatas()
-        showCurrentAnnotation()
         setupViews()
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissPoiView))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        clearAnnotations()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        showCurrentAnnotation()
+        changeExploreActionButtonsVisibility()
     }
         
     private func setupViews() {
         self.view.addSubview(poiCardView)
         poiCardView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    private func changeExploreActionButtonsVisibility() {
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: false,
+            StringConstant.NotificationsInfoField.directionIsHidden: false
+        ]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func updateMapViewBottomIcons() {
@@ -103,11 +125,11 @@ extension POICardVC: POICardViewModelOutputDelegate {
         poiCardView.dataModel = cardData
     }
     
-    func dismissPoiView() {
-        self.updateMapViewBottomIcons()
-        self.dismiss(animated: true)
+    @objc func dismissPoiView() {
+        clearAnnotations()
+        updateMapViewBottomIcons()
+        delegate?.closePOICardScene()
     }
-    
     
     func showDirections(secondDestination: MapModel) {
         delegate?.showDirections(isRouteOptionEnabled: true,

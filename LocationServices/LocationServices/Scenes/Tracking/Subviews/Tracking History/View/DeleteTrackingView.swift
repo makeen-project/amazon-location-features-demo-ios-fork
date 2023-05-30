@@ -43,7 +43,7 @@ final class DeleteTrackingView: UIView {
     private lazy var button: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.Tracking.deleteTrackingDataButton
-        button.setTitleColor(.tabBarTintColor, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
         button.setTitle(StringConstant.deleteTrackingData, for: .normal)
         button.titleLabel?.font = UIFont.amazonFont(type: .bold, size: 13)
         button.contentMode = .scaleAspectFit

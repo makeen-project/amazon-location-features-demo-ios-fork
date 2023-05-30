@@ -39,7 +39,7 @@ private extension TabBarCoordinator {
         tabBarController.selectedIndex = TabBarPage.explore.pageOrder
         tabBarController.tabBar.isTranslucent = false
         tabBarController.view.backgroundColor = .tabBarBackgroundColor
-        tabBarController.tabBar.tintColor = .tabBarTintColor
+        tabBarController.tabBar.tintColor = .lsPrimary
         tabBarController.tabBar.unselectedItemTintColor = .tabBarUnselectedColor
         tabBarController.delegate = self
         navigationController.navigationBar.isHidden = true

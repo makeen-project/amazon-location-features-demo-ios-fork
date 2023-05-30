@@ -25,7 +25,7 @@ final class AddGeofenceMessageTextField: UIView {
     private let messageFirstLineTextField: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .white
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -41,7 +41,7 @@ final class AddGeofenceMessageTextField: UIView {
     private let messageSecondLineTextField: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .white
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -66,7 +66,7 @@ final class AddGeofenceMessageTextField: UIView {
         setupViews()
     }
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     private func setupViews() {

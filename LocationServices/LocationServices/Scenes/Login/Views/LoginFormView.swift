@@ -32,7 +32,7 @@ final class LoginFormView: UIView {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.identityPoolTextField
         textField.backgroundColor = .textFieldBackgroundColor
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -61,7 +61,7 @@ final class LoginFormView: UIView {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.userDomainTextField
         textField.backgroundColor = .textFieldBackgroundColor
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -91,7 +91,7 @@ final class LoginFormView: UIView {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.userPoolClientTextField
         textField.backgroundColor = .textFieldBackgroundColor
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -121,7 +121,7 @@ final class LoginFormView: UIView {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.userPoolTextField
         textField.backgroundColor = .textFieldBackgroundColor
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -150,7 +150,7 @@ final class LoginFormView: UIView {
         let textField = UITextField()
         textField.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.webSocketURLTitleTextField
         textField.backgroundColor = .textFieldBackgroundColor
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -172,7 +172,7 @@ final class LoginFormView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     private func setupDelegates() {

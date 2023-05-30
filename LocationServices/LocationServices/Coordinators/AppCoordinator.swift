@@ -17,9 +17,11 @@ final class AppCoordinator: AppCoordinatorProtocol {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
     var type: CoordinatorType { .main }
+    var window: UIWindow?
 
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, window: UIWindow?) {
         self.navigationController = navigationController
+        self.window = window
     }
 
     func start() {
@@ -41,10 +43,25 @@ final class AppCoordinator: AppCoordinatorProtocol {
     }
 
     func startMainFlow() {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            startIPhoneFlow()
+        } else {
+            startIPadFlow()
+        }
+    }
+    
+    private func startIPhoneFlow() {
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
         tabBarCoordinator.delegate = self
         tabBarCoordinator.start()
         childCoordinators.append(tabBarCoordinator)
+    }
+    
+    private func startIPadFlow() {
+        let coordinator = SplitViewCoordinator(window: window)
+        coordinator.delegate = self
+        coordinator.start()
+        childCoordinators.append(coordinator)
     }
 }
 

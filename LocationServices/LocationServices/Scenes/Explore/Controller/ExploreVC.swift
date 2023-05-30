@@ -13,9 +13,19 @@ import AWSLocationXCF
 import AWSMobileClientXCF
 import AWSCore
 
-final class ExploreVC: UIViewController, AlertPresentable {
+final class ExploreVC: UIViewController {
+    
+    enum Constants {
+        static let navigationViewOptimalWidth: CGFloat = 361
+        static let navigationViewHeight: CGFloat = 80
+        static let defaultSpacing: CGFloat = 16
+    }
+    
     weak var delegate: ExploreNavigationDelegate?
-    private var userCoreLocation: CLLocationCoordinate2D?
+    weak var splitDelegate: SplitViewVisibilityProtocol?
+    private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
+    
+    private(set) var userCoreLocation: CLLocationCoordinate2D?
     
     var geofenceHandler: VoidHandler?
     
@@ -27,16 +37,21 @@ final class ExploreVC: UIViewController, AlertPresentable {
     
     private let exploreView: ExploreView = ExploreView()
     private let mapNavigationView = MapNavigationView()
+    let mapNavigationActionsView = NavigationHeaderView()
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         locationManager.setDelegate(self)
         return locationManager
     }()
     
+    private var isNavigationViewLeftAlignment: Bool {
+        let countOfNavigationViewsInParentView = view.frame.width / Constants.navigationViewOptimalWidth
+        return countOfNavigationViewsInParentView > 1.5
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
-        self.navigationItem.backButtonTitle = ""
         setupHandlers()
         setupNotifications()
         
@@ -50,6 +65,8 @@ final class ExploreVC: UIViewController, AlertPresentable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         exploreView.shouldBottomStackViewPositionUpdate()
+        blurStatusBar()
+        setupKeyboardNotifications()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,9 +75,52 @@ final class ExploreVC: UIViewController, AlertPresentable {
         showWelcomeScreenIfNeeded()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setNavigationViewLayout()
+    }
+    
+    private var parentViewWidthForNavigationViews: CGFloat = 0
+    private func setNavigationViewLayout() {
+        guard parentViewWidthForNavigationViews != view.frame.width else { return }
+        
+        let optimalWidth = Constants.navigationViewOptimalWidth
+        let isLeftAlignment = isNavigationViewLeftAlignment
+        
+        let topOffset: CGFloat = 53
+        let horizontalOffset: CGFloat = Constants.defaultSpacing
+        
+        if isLeftAlignment {
+            mapNavigationView.snp.remakeConstraints {
+                $0.top.equalTo(view.safeAreaInsets).offset(topOffset)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.width.equalTo(optimalWidth)
+            }
+            mapNavigationActionsView.snp.remakeConstraints {
+                $0.bottom.equalTo(view.safeAreaInsets)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.width.equalTo(optimalWidth)
+                $0.height.equalTo(Constants.navigationViewHeight)
+            }
+        } else {
+            mapNavigationView.snp.remakeConstraints {
+                $0.top.equalTo(view.safeAreaInsets).offset(topOffset)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.trailing.equalToSuperview().offset(-horizontalOffset)
+            }
+            mapNavigationActionsView.snp.remakeConstraints {
+                $0.bottom.equalTo(view.safeAreaInsets)
+                $0.leading.equalToSuperview().offset(horizontalOffset)
+                $0.trailing.equalToSuperview().offset(-horizontalOffset)
+                $0.height.equalTo(Constants.navigationViewHeight)
+            }
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.cancelActiveRequests()
+        removeKeyboardNotifications()
     }
     
     func setupHandlers() {
@@ -68,6 +128,10 @@ final class ExploreVC: UIViewController, AlertPresentable {
             self.delegate?.dismissSearchScene()
             self.geofenceHandler?()
         }
+    }
+    
+    func applyStyles(style: SearchScreenStyle) {
+        exploreView.searchBarView.applyStyle(style.searchBarStyle)
     }
 }
 
@@ -87,12 +151,10 @@ extension ExploreVC: ExploreViewOutputDelegate {
                                  secondDestionation: nil,
                                  lat: userLocation?.latitude,
                                  long: userLocation?.longitude)
-        exploreView.hideDirectionButton(state: true)
     }
     
     func showPoiCard(cardData: [MapModel]) {
         exploreView.shouldBottomStackViewPositionUpdate(state: true)
-        exploreView.hideDirectionButton(state: true)
         delegate?.showPoiCardScene(cardData: cardData, lat: userCoreLocation?.latitude, long: userCoreLocation?.longitude)
     }
     
@@ -183,29 +245,99 @@ private extension ExploreVC {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showWasResetToDefaultConfigAlert(_:)), name: Notification.wasResetToDefaultConfig, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchAppearanceChanged(_:)), name: Notification.searchAppearanceChanged, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissPOICard(_:)), name: Notification.Name("POICardDismissed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(exploreActionButtonsVisibilityChanged(_:)), name: Notification.exploreActionButtonsVisibilityChanged, object: nil)
     }
     
+    private func setupKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
     
+    private func removeKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
+        exploreView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        exploreView.updateBottomViewsSpacings(additionalBottomOffset: 0)
+    }
     
     func setupView() {
         mapNavigationView.isHidden = true
-        navigationController?.navigationBar.isHidden = true
+        mapNavigationActionsView.isHidden = true
+        updateAmazonLogoPositioning(isBottomNavigationShown: false)
+        mapNavigationActionsView.update(style: .navigationActions)
+        changeSeachBarVisibility(isHidden: false)
+        if !isInSplitViewController {
+            self.navigationItem.backButtonTitle = ""
+            navigationController?.navigationBar.isHidden = true
+        }
         self.view.backgroundColor = .white
     
         self.view.addSubview(exploreView)
         exploreView.addSubview(mapNavigationView)
+        exploreView.addSubview(mapNavigationActionsView)
         
         exploreView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            if isInSplitViewController {
+                $0.bottom.equalToSuperview()
+            } else {
+                $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            }
+            
         }
         
-        mapNavigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaInsets).offset(53)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+        setNavigationViewLayout()
+        
+        mapNavigationActionsView.dismissHandler = { [weak self] in
+            self?.delegate?.closeNavigationScene()
+        }
+        
+        mapNavigationActionsView.switchRouteVisibility = { [weak self] state in
+            switch state {
+            case .hideRoute:
+                self?.splitDelegate?.showOnlySecondary()
+            case .showRoute:
+                self?.splitDelegate?.showSupplementary()
+            }
+        }
+    }
+    
+    private func updateAmazonLogoPositioning(isBottomNavigationShown: Bool) {
+        let leadingOffset: CGFloat?
+        let bottomOffset: CGFloat?
+        
+        if isBottomNavigationShown {
+            if isNavigationViewLeftAlignment {
+                leadingOffset = Constants.navigationViewOptimalWidth + Constants.defaultSpacing * 2
+                bottomOffset = nil
+            } else {
+                leadingOffset = nil
+                bottomOffset = Constants.navigationViewHeight + Constants.defaultSpacing * 2
+            }
+        } else {
+            leadingOffset = nil
+            bottomOffset = nil
+        }
+        
+        exploreView.setupAmazonLogo(leadingOffset: leadingOffset, bottomOffset: bottomOffset)
+    }
+    
+    private func changeSeachBarVisibility(isHidden: Bool) {
+        if isInSplitViewController {
+            exploreView.searchBarView.isHidden = true
+        } else {
+            exploreView.searchBarView.isHidden = isHidden
         }
     }
     
@@ -218,6 +350,9 @@ private extension ExploreVC {
     @objc private func updateMapViewValue(_ notification: Notification) {
         if let data = notification.userInfo?["MapViewValues"] as? (distance: String, street: String) {
             mapNavigationView.updateValues(distance: data.distance, street: data.street)
+        }
+        if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String) {
+            mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
         }
     }
         
@@ -259,12 +394,12 @@ private extension ExploreVC {
             viewModel.activateRoute(route: routeModel)
             if !routeModel.isPreview {
                 mapNavigationView.isHidden = false
+                updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
                 exploreView.focusNavigationMode()
             } else {
                 exploreView.focus(on: routeModel.departurePosition)
             }
-            exploreView.hideGeoFence(state: true)
-            exploreView.hideDirectionButton(state: true)
+            mapNavigationActionsView.isHidden = !self.isInSplitViewController
             let firstDestination = MapModel(placeName: routeModel.departurePlaceName, placeAddress: routeModel.departurePlaceAddress, placeLat: routeModel.departurePosition.latitude, placeLong: routeModel.departurePosition.longitude)
             let secondDestination = MapModel(placeName: routeModel.destinationPlaceName, placeAddress: routeModel.destinationPlaceAddress, placeLat: routeModel.destinationPosition.latitude, placeLong: routeModel.destinationPosition.longitude)
             
@@ -277,14 +412,10 @@ private extension ExploreVC {
     
     @objc private func dismissNavigationScene(_ notification: Notification?) {
         viewModel.deactivateRoute()
-        exploreView.hideGeoFence(state: false)
-        exploreView.hideDirectionButton(state: false)
         mapNavigationView.isHidden = true
+        mapNavigationActionsView.isHidden = true
+        updateAmazonLogoPositioning(isBottomNavigationShown: false)
         exploreView.deleteDrawing()
-    }
-    
-    @objc private func dismissPOICard(_ notification: Notification?) {
-        exploreView.hideDirectionButton(state: false)
     }
     
     @objc private func refreshMapView(_ notification: Notification) {
@@ -297,7 +428,16 @@ private extension ExploreVC {
         
     @objc private func searchAppearanceChanged(_ notification: Notification) {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
-        exploreView.searchBarView.isHidden = isVisible
+        changeSeachBarVisibility(isHidden: isVisible)
+    }
+    
+    @objc private func exploreActionButtonsVisibilityChanged(_ notification: Notification) {
+        if let geofenceIsHidden = notification.userInfo?[StringConstant.NotificationsInfoField.geofenceIsHidden] as? Bool {
+            exploreView.hideGeoFence(state: geofenceIsHidden)
+        }
+        if let directionIsHidden = notification.userInfo?[StringConstant.NotificationsInfoField.directionIsHidden] as? Bool {
+            exploreView.hideDirectionButton(state: directionIsHidden)
+        }
     }
     
     /// Alert view refactored to generic later
