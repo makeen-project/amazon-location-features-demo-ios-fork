@@ -58,7 +58,6 @@ final class LoginVC: UIViewController {
     
     private var bottomButtonStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.backgroundColor = .white
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .equalSpacing
