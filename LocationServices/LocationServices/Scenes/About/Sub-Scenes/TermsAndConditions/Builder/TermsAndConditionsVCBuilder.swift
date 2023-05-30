@@ -10,6 +10,7 @@ import Foundation
 final class TermsAndConditionsVCBuilder {
     static func create() -> TermsAndConditionsVC {
         let controller = TermsAndConditionsVC()
+        controller.hidesBottomBarWhenPushed = true
         return controller
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 final class ExploreMapStyleBuilder {
     static func create() -> ExploreMapStyleVC {
         let controller = ExploreMapStyleVC()
+        controller.hidesBottomBarWhenPushed = true
         let viewModel = ExploreMapStyleViewModel()
         controller.viewModel = viewModel
         return controller

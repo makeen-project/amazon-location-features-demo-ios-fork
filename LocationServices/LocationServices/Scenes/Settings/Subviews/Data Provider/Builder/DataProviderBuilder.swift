@@ -9,9 +9,10 @@ import UIKit
 
 final class DataProviderBuilder {
     static func create() -> DataProviderVC {
-        let contoller = DataProviderVC()
+        let controller = DataProviderVC()
+        controller.hidesBottomBarWhenPushed = true
         let viewModel = DataProviderViewModel()
-        contoller.viewModel = viewModel
-        return contoller
+        controller.viewModel = viewModel
+        return controller
     }
 }
