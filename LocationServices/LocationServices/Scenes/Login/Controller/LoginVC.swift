@@ -18,6 +18,8 @@ final class LoginVC: UIViewController {
         static let horizontalOffset: CGFloat = 16
         static let bottomButtonHeight: CGFloat = 48
         static let bottomButtonStackViewOffset: CGFloat = 5
+        
+        static let bottomGradientViewTopOffset: CGFloat = 38
     }
     
     var postLoginHandler: VoidHandler?
@@ -55,6 +57,15 @@ final class LoginVC: UIViewController {
     private var loginView: LoginDefaultInformationView = LoginDefaultInformationView()
     private var loginForm: LoginFormView = LoginFormView()
     private var footerView: LoginFooterView = LoginFooterView()
+    
+    private var bottomGradientView: GradientView = {
+        let colors: [UIColor] = [.white.withAlphaComponent(0), .white]
+        let startPoint: CGPoint = CGPoint(x: 0, y: 0)
+        let endPoint: CGPoint = CGPoint(x: 0, y: 1)
+        let locations: [NSNumber] = [0, 1]
+        let view = GradientView(colors: colors, startPoint: startPoint, endPoint: endPoint, locations: locations)
+        return view
+    }()
     
     private var bottomButtonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -119,7 +130,6 @@ final class LoginVC: UIViewController {
         button.addTarget(self, action: #selector(disconnectButtonAction), for: .touchUpInside)
         return button
     }()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -303,7 +313,6 @@ final class LoginVC: UIViewController {
     }
     
     private func setup() {
-        
         let appState = UserDefaultsHelper.getAppState()
         scrollView.contentInset = .init(top: 0, left: 0, bottom: -Constants.scrollViewBottomOffset, right: 0)
         
@@ -313,6 +322,7 @@ final class LoginVC: UIViewController {
         stackView.addArrangedSubview(loginForm)
         stackView.addArrangedSubview(footerView)
         
+        view.addSubview(bottomGradientView)
         view.addSubview(bottomButtonStackView)
         bottomButtonStackView.addArrangedSubview(signInButton)
         bottomButtonStackView.addArrangedSubview(signOutButton)
@@ -355,6 +365,11 @@ final class LoginVC: UIViewController {
         
         disconnectButton.snp.makeConstraints {
             $0.height.equalTo(Constants.bottomButtonHeight)
+        }
+        
+        bottomGradientView.snp.makeConstraints {
+            $0.top.equalTo(bottomButtonStackView.snp.top).offset(-Constants.bottomGradientViewTopOffset)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
