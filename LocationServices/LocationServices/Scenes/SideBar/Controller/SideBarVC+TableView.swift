@@ -14,7 +14,7 @@ extension SideBarVC {
         tableView.dataSource = self
         tableView.register(SideBarCell.self, forCellReuseIdentifier: SideBarCell.reuseId)
         tableView.separatorStyle = .none
-        tableView.isScrollEnabled = false
+        tableView.alwaysBounceVertical = false
     }
 }
 

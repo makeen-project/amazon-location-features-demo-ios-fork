@@ -24,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaultsHelper.setAppState(state: .initial)
         }
         
+        //init keyboard observer
+        let _ = KeyboardObserver.shared
         SettingsDefaultValueHelper.shared.createValues()
         
         // debug logger for AWS
