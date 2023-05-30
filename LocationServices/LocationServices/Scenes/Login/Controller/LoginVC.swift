@@ -40,6 +40,7 @@ final class LoginVC: UIViewController {
     
     private let scrollView: UIScrollView = {
         let sc = UIScrollView()
+        sc.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.awsConnectScrollView
         sc.alwaysBounceVertical = true
         sc.isDirectionalLockEnabled = true
         return sc
@@ -64,6 +65,7 @@ final class LoginVC: UIViewController {
         let endPoint: CGPoint = CGPoint(x: 0, y: 1)
         let locations: [NSNumber] = [0, 1]
         let view = GradientView(colors: colors, startPoint: startPoint, endPoint: endPoint, locations: locations)
+        view.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.awsConnectGradientView
         return view
     }()
     

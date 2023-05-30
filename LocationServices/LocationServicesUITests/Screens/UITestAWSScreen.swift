@@ -13,6 +13,8 @@ struct UITestAWSScreen: UITestScreen {
     let app: XCUIApplication
     
     private enum Identifiers {
+        static var awsConnectScrollView: String { ViewsIdentifiers.AWSConnect.awsConnectScrollView }
+        static var awsConnectGradientView: String { ViewsIdentifiers.AWSConnect.awsConnectGradientView }
         static var idpTextField: String { ViewsIdentifiers.AWSConnect.identityPoolTextField }
         static var domainTextField: String { ViewsIdentifiers.AWSConnect.userDomainTextField }
         static var clientIDTextField: String { ViewsIdentifiers.AWSConnect.userPoolClientTextField }
@@ -181,7 +183,36 @@ struct UITestAWSScreen: UITestScreen {
     private func selectTextField(identifier: String) -> XCUIElement {
         let textField = app.textFields[identifier]
         XCTAssertTrue(textField.waitForExistence(timeout: UITestWaitTime.regular.time))
+        swipe(to: textField)
         textField.tap()
         return textField
+    }
+    
+    private func swipe(to element: XCUIElement) {
+        let elementMaxY = element.frame.maxY
+        let gradientMinY = getGradientView().frame.minY
+        
+        var yScrollDistance = elementMaxY - gradientMinY
+        let scrollView = getScrollView()
+        
+        while yScrollDistance > 0 {
+            scrollView.swipeUp()
+            
+            let elementMaxY = element.frame.maxY
+            let gradientMinY = getGradientView().frame.minY
+            yScrollDistance = elementMaxY - gradientMinY
+        }
+    }
+    
+    private func getScrollView() -> XCUIElement {
+        let scrollView = app.scrollViews[Identifiers.awsConnectScrollView]
+        XCTAssertTrue(scrollView.waitForExistence(timeout: UITestWaitTime.regular.time))
+        return scrollView
+    }
+    
+    private func getGradientView() -> XCUIElement {
+        let view = app.otherElements[Identifiers.awsConnectGradientView]
+        XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
+        return view
     }
 }
