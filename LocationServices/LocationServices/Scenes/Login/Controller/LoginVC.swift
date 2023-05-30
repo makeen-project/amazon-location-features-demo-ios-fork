@@ -9,6 +9,17 @@ import UIKit
 import SafariServices
 
 final class LoginVC: UIViewController {
+    
+    enum Constants {
+        static let footerViewHeight: CGFloat = 36
+        static let stackViewBottomOffset: CGFloat = 32
+        static let scrollViewBottomOffset: CGFloat = -24
+        
+        static let horizontalOffset: CGFloat = 16
+        static let bottomButtonHeight: CGFloat = 48
+        static let bottomButtonStackViewOffset: CGFloat = 5
+    }
+    
     var postLoginHandler: VoidHandler?
     var dismissHandler: VoidHandler?
     var isFromSettingScene: Bool = false
@@ -45,10 +56,14 @@ final class LoginVC: UIViewController {
     private var loginForm: LoginFormView = LoginFormView()
     private var footerView: LoginFooterView = LoginFooterView()
     
-    private var containerView: UIView = {
-       let view = UIView()
-        view.backgroundColor = .white
-        return view
+    private var bottomButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.backgroundColor = .white
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 5
+        return stackView
     }()
     
     private lazy var signInButton: UIButton = {
@@ -291,6 +306,7 @@ final class LoginVC: UIViewController {
     private func setup() {
         
         let appState = UserDefaultsHelper.getAppState()
+        scrollView.contentInset = .init(top: 0, left: 0, bottom: -Constants.scrollViewBottomOffset, right: 0)
         
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
@@ -298,87 +314,48 @@ final class LoginVC: UIViewController {
         stackView.addArrangedSubview(loginForm)
         stackView.addArrangedSubview(footerView)
         
-        view.addSubview(containerView)
-        containerView.addSubview(signInButton)
-        containerView.addSubview(signOutButton)
+        view.addSubview(bottomButtonStackView)
+        bottomButtonStackView.addArrangedSubview(signInButton)
+        bottomButtonStackView.addArrangedSubview(signOutButton)
         
-        containerView.addSubview(connectButton)
-        containerView.addSubview(disconnectButton)
+        bottomButtonStackView.addArrangedSubview(connectButton)
+        bottomButtonStackView.addArrangedSubview(disconnectButton)
         
-        if appState == .initial || appState == .defaultAWSConnected {
-            scrollView.snp.makeConstraints {
-                $0.top.equalTo(view.safeAreaLayoutGuide)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview().offset(-80)
-            }
-        } else {
-            scrollView.snp.makeConstraints {
-                $0.top.equalTo(view.safeAreaLayoutGuide)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview().offset(-160)
-            }
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
         }
         
         stackView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.bottom.greaterThanOrEqualToSuperview().offset(-32)
+            $0.bottom.greaterThanOrEqualToSuperview().offset(-Constants.stackViewBottomOffset)
         }
         
         footerView.snp.makeConstraints {
-            $0.height.equalTo(36)
-        }
-                
-        // States here:
-        // we are not custom connected -> 80, show only connect/disconnect button
-        // we are custom connected -> 160, show sign in/sign out and disconnect button
-        var heightContainer = 160
-        
-        if appState == .initial || appState == .defaultAWSConnected {
-            heightContainer = 80
+            $0.height.equalTo(Constants.footerViewHeight)
         }
         
-        containerView.snp.makeConstraints {
-            $0.height.equalTo(heightContainer)
-            $0.bottom.leading.trailing.equalToSuperview()
+        bottomButtonStackView.snp.makeConstraints {
+            $0.top.equalTo(scrollView.snp.bottom).offset(Constants.scrollViewBottomOffset)
+            $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-Constants.bottomButtonStackViewOffset)
         }
         
         signInButton.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.top.equalToSuperview().offset(5)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(Constants.bottomButtonHeight)
         }
         
         signOutButton.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.top.equalToSuperview().offset(5)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(Constants.bottomButtonHeight)
         }
         
         connectButton.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.top.equalToSuperview().offset(5)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(Constants.bottomButtonHeight)
         }
         
-        if appState == .initial || appState == .defaultAWSConnected {
-            disconnectButton.snp.makeConstraints {
-                $0.height.equalTo(48)
-                $0.top.equalToSuperview().offset(5)
-                $0.leading.equalToSuperview().offset(16)
-                $0.trailing.equalToSuperview().offset(-16)
-            }
-        } else {
-            disconnectButton.snp.makeConstraints {
-                $0.height.equalTo(48)
-                $0.top.equalTo(signInButton.snp.bottom).offset(5)
-                
-                $0.leading.equalToSuperview().offset(16)
-                $0.trailing.equalToSuperview().offset(-16)
-            }
+        disconnectButton.snp.makeConstraints {
+            $0.height.equalTo(Constants.bottomButtonHeight)
         }
     }
 }
