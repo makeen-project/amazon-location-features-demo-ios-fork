@@ -9,7 +9,7 @@ import UIKit
 
 final class LoginVCBuilder {
     static func create() -> LoginVC {
-        var controller = LoginVC()
+        let controller = LoginVC()
         let vm = LoginViewModel()
         vm.awsLoginService = AWSLoginService()
         controller.viewModel = vm
@@ -17,7 +17,8 @@ final class LoginVCBuilder {
     }
     
     static func create(from settingScene: Bool) -> LoginVC {
-        var controller = LoginVC()
+        let controller = LoginVC()
+        controller.hidesBottomBarWhenPushed = true
         let vm = LoginViewModel()
         vm.awsLoginService = AWSLoginService()
         controller.isFromSettingScene = settingScene

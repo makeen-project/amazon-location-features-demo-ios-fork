@@ -10,6 +10,7 @@ import Foundation
 final class VersionVCBuilder {
     static func create() -> VersionVC {
         let controller = VersionVC()
+        controller.hidesBottomBarWhenPushed = true
         return controller
     }
 }

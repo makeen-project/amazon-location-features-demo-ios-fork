@@ -68,12 +68,12 @@ final class PostLoginView: UIView {
     
     private lazy var continueButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = UIColor.lsPrimary.withAlphaComponent(0.3)
+        button.backgroundColor = UIColor.lsPrimary.withAlphaComponent(0.08)
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 8
-        button.setTitle("Continue to Explore", for: .normal)
+        button.setTitle(StringConstant.LoginInfo.continueToExplore, for: .normal)
         button.setTitleColor(.lsPrimary, for: .normal)
-        button.titleLabel?.font = .amazonFont(type: .medium, size: 16)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(exploreAction), for: .touchUpInside)
         button.layer.borderWidth = 1
