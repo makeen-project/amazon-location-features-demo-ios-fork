@@ -10,7 +10,7 @@ import SnapKit
 
 final class AddGeofenceHeaderView: UIView {
     var dismissHandler: VoidHandler?
-    private var titleLabel = AmazonLocationLabel(labelText: "Add Geofence",
+    private(set) var titleLabel = AmazonLocationLabel(labelText: StringConstant.addGeofence,
                                                  font: .amazonFont(type: .bold, size: 20),
                                                  textAlignment: .left)
     
