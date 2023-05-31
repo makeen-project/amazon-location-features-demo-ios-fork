@@ -118,6 +118,18 @@ final class AddGeofenceVC: UIViewController {
         navigationItem.leftBarButtonItem = barButtonItem
     }
     
+    func update(lat: Double?, long: Double?) {
+        changeElementVisibility(state: false)
+        let model = GeofenceDataModel(id: cacheSaveModel.id,
+                                      lat: lat,
+                                      long: long,
+                                      radius: 80)
+        searchView.updateFields(model: model)
+        self.cacheSaveModel = model
+        self.enableSaveButton()
+        self.postNotification(model: model)
+    }
+    
     private func setupHandlers() {
         nameTextField.passChangedText = { [weak self] value in
             self?.cacheSaveModel.id = value
@@ -294,16 +306,7 @@ final class AddGeofenceVC: UIViewController {
 
 extension AddGeofenceVC: AddGeofenceViewModelOutputProtocol {
     func selectedPlaceResult(mapModel: MapModel) {
-        
-        changeElementVisibility(state: false)
-        let model = GeofenceDataModel(id: cacheSaveModel.id,
-                                      lat: mapModel.placeLat,
-                                      long: mapModel.placeLong,
-                                      radius: 80)
-        searchView.updateFields(model: model)
-        self.cacheSaveModel = model
-        self.enableSaveButton()
-        self.postNotification(model: model)
+        update(lat: mapModel.placeLat, long: mapModel.placeLong)
     }
     
     func searchResult(mapModel: [MapModel]) {

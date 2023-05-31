@@ -74,6 +74,12 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
                              model: GeofenceDataModel?,
                              lat: Double?,
                              long: Double?) {
+        
+        if let controller = navigationController.presentedViewController as? AddGeofenceVC {
+            controller.update(lat: lat, long: long)
+            return
+        }
+        
         dismissCurrentScene(geofences: [], shouldDashboardShow: false)
         let controller = AddGeofenceBuilder.create(activeGeofencesLists: activeGeofencesLists,
                                                    isEditingSceneEnabled: isEditingSceneEnabled,

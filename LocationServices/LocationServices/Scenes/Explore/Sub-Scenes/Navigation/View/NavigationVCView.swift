@@ -70,6 +70,7 @@ final class NavigationHeaderView: UIView {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .equalSpacing
+        stackView.spacing = 3
         return stackView
     }()
     
@@ -78,6 +79,15 @@ final class NavigationHeaderView: UIView {
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
+    }()
+    
+    private let actionsContainerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 16
+        return stackView
     }()
     
     private let distanceLabel: UILabel = {
@@ -157,8 +167,9 @@ final class NavigationHeaderView: UIView {
         infoContainerStackView.addArrangedSubview(durationLabel)
         infoContainerStackView.addArrangedSubview(distanceLabel)
         
-        containerView.addSubview(routeVisibilityButton)
-        containerView.addSubview(exitButton)
+        containerView.addSubview(actionsContainerStackView)
+        actionsContainerStackView.addArrangedSubview(routeVisibilityButton)
+        actionsContainerStackView.addArrangedSubview(exitButton)
         
         containerView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
@@ -169,26 +180,18 @@ final class NavigationHeaderView: UIView {
             $0.leading.equalToSuperview().offset(16)
         }
         
-        durationLabel.snp.makeConstraints {
-            $0.height.equalTo(28)
-        }
-        
-        distanceLabel.snp.makeConstraints {
-            $0.height.equalTo(18)
+        actionsContainerStackView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.greaterThanOrEqualTo(infoContainerStackView.snp.trailing).offset(-10)
+            $0.height.equalTo(40)
         }
         
         routeVisibilityButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.height.equalTo(exitButton.snp.height)
-            $0.leading.greaterThanOrEqualTo(infoContainerStackView.snp.trailing).offset(-10)
-            $0.trailing.equalTo(exitButton.snp.leading).offset(-16)
             $0.width.equalTo(131).priority(999)
         }
         
         exitButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(40)
             $0.width.equalTo(83)
         }
     }
