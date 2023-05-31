@@ -86,6 +86,7 @@
 		8AD0A6E329DDFC9700B79078 /* XCTWaiter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0A6E129DDFC5700B79078 /* XCTWaiter+Extension.swift */; };
 		8AD0E38F29CCC1ED00C338F5 /* UITestWaitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */; };
 		8AD0E39129CCC72500C338F5 /* UITestSwipeDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0E39029CCC72500C338F5 /* UITestSwipeDirection.swift */; };
+		8AD132752A267FCC00608FCD /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD132742A267FCC00608FCD /* KeyboardObserver.swift */; };
 		8AD6029029D2FF07009E6F9E /* UITestPoiCardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD6028F29D2FF07009E6F9E /* UITestPoiCardScreen.swift */; };
 		8AD67F9529D1A6CD004A5F7D /* UITestMapStyleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD67F9429D1A6CD004A5F7D /* UITestMapStyleScreen.swift */; };
 		8AD67F9729D1A9E4004A5F7D /* MapStyleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD67F9629D1A9E4004A5F7D /* MapStyleTypes.swift */; };
@@ -488,6 +489,7 @@
 		8AD0A6E129DDFC5700B79078 /* XCTWaiter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTWaiter+Extension.swift"; sourceTree = "<group>"; };
 		8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestWaitTime.swift; sourceTree = "<group>"; };
 		8AD0E39029CCC72500C338F5 /* UITestSwipeDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSwipeDirection.swift; sourceTree = "<group>"; };
+		8AD132742A267FCC00608FCD /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		8AD6028F29D2FF07009E6F9E /* UITestPoiCardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestPoiCardScreen.swift; sourceTree = "<group>"; };
 		8AD67F9429D1A6CD004A5F7D /* UITestMapStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestMapStyleScreen.swift; sourceTree = "<group>"; };
 		8AD67F9629D1A9E4004A5F7D /* MapStyleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStyleTypes.swift; sourceTree = "<group>"; };
@@ -1225,6 +1227,7 @@
 				8A6C390529A25E480003666C /* Reachability.swift */,
 				8A3FD14B29A69CE000DFA6F6 /* PlaceholderAnimator.swift */,
 				8ACD71C92A091A8F00EC23F3 /* MapFloatingViewHandler.swift */,
+				8AD132742A267FCC00608FCD /* KeyboardObserver.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -3287,6 +3290,7 @@
 				AD2AF0E1292EAC1C00149904 /* AboutViewModel.swift in Sources */,
 				DF8005E52A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift in Sources */,
 				ADC1249C2978A56E00B08C20 /* GeofenceDashboardContracts.swift in Sources */,
+				8AD132752A267FCC00608FCD /* KeyboardObserver.swift in Sources */,
 				ADD5D7E2296F87FF0022480B /* AddGeofenceContracts.swift in Sources */,
 				AD2AF09F292EA91200149904 /* GeofenceCoordinator.swift in Sources */,
 				AD2AF064292E929C00149904 /* Coordinator.swift in Sources */,
