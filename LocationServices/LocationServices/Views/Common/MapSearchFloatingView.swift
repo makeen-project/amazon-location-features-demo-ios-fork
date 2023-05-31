@@ -80,6 +80,7 @@ final class MapSearchFloatingView: UIView {
         super.init(frame: frame)
         configure()
         searchView.applyStyle(SearchBarStyle(backgroundColor: .clear, textFieldBackgroundColor: .white))
+        setShadow(shadowColor: .black, shadowOpacity: 0.2, shadowBlur: 10)
     }
     
     required init?(coder: NSCoder) {
