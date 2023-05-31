@@ -20,8 +20,10 @@ final class TrackingVC: UIViewController {
     var geofenceHandler: VoidHandler?
     var directionHandler: VoidHandler?
     
+    private var isTrackingActive: Bool = false
     private var trackingMapView: TrackingMapView = TrackingMapView()
     private var userLocation: CLLocation?
+    
     private lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         locationManager.setDelegate(self)
@@ -84,7 +86,6 @@ final class TrackingVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.stopTracking()
         historyHeaderView.updateButtonStyle(isTrackingStarted: false)
         removeKeyboardNotifications()
     }
@@ -218,6 +219,7 @@ final class TrackingVC: UIViewController {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         historyHeaderView.isHidden = isVisible
         grabberIcon.isHidden = isVisible
+        historyHeaderView.updateButtonStyle(isTrackingStarted: viewModel.isTrackingActive)
     }
     
     @objc private func authorizationStatusChanged(_ notification: Notification) {

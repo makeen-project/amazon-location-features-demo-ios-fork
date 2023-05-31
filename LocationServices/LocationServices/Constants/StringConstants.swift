@@ -71,6 +71,8 @@ enum StringConstant {
     static let terminate = "Ok"
     static let resetToDefaultConfigTitle = "Reset stack"
     static let resetToDefaultConfigExplanation = "Stack is corrupted, switching back to default stack"
+    static let awsStackInvalidTitle = "Invalid AWS Stack"
+    static let awsStackInvalidExplanation = "Stack is not invalid anymore or deleted, app will disconnect from AWS and restart"
     static let notAllFieldsAreConfigured = "Not all the fields are configured"
     static let incorrectIdentityPoolIdMessage = "Failed to connect AWS account, invalid IdentityPoolId or region"
     static let failedToCalculateRoute = "Failed to calculate route"
@@ -123,7 +125,7 @@ enum StringConstant {
     static let testExpectationError = "expectation not matched after waiting"
     static let sessionExpiredError = "Session is expired. Please sign out and sign in back to continue access all features. Otherwise you could face unexpected behaviour in the app"
     static let greatDistanceErrorTitle = "Distance is greater than 400 km"
-    static let greatDistanceErrorMessage = "Can`t calculate via Esri, kindly switch to HERE provider"
+    static let greatDistanceErrorMessage = "Can't calculate via Esri, kindly switch to HERE provider"
     static let invalidUrlError = "URL is invalid. Can't open it"
     
     //login
@@ -149,6 +151,8 @@ enum StringConstant {
             static let defaultConfigSubtitle = "Amazon Location app needs to be closed in order to apply your account configuration. This means that you'll need to manually reopen the app after it closes."
             static let customConfigSubtitle = "Amazon Location app needs to be closed in order to apply default configuration. This means that you'll need to manually reopen the app after it closes."
         }
+        
+        static let continueToExplore = "Continue to Explore"
     }
     
     enum AboutTab {
@@ -211,6 +215,7 @@ enum StringConstant {
     static let myLocation = "My Location"
     static let appVersion = "App version: "
     static let termsAndConditions = "Terms & Conditions"
+    static let disconnect = "Disconnect"
     static let demo = "Demo"
     static let routeOverview = "Route Overview"
     

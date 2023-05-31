@@ -10,18 +10,29 @@ import SnapKit
 
 final class SettingsLogoutButtonView: UIButton {
     
+    enum Constants {
+        static let logoutIconSize: CGFloat = 20
+        static let logoutIconLeadingOffset: CGFloat = 24
+        
+        static let arrorIconSize: CGFloat = 14
+        static let arrorIconTrailingOffset: CGFloat = 25
+        
+        static let itemTitleHeight: CGFloat = 28
+        static let itemTitleLeadingOffset = 30
+    }
+    
     private var containerView: UIView = UIView()
     
     private var logoutIcon: UIImageView = {
         let iv = UIImageView(image: .logoutIcon)
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.tintColor = .navigationRedButton
         return iv
     }()
     
     private var itemTitle: UILabel = {
         var label = UILabel()
-        label.text = "Log out"
+        label.text = StringConstant.disconnect
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left
@@ -62,20 +73,20 @@ final class SettingsLogoutButtonView: UIButton {
         }
        
         logoutIcon.snp.makeConstraints {
-            $0.height.width.equalTo(20)
-            $0.leading.equalToSuperview().offset(25)
+            $0.height.width.equalTo(Constants.logoutIconSize)
+            $0.leading.equalToSuperview().offset(Constants.logoutIconLeadingOffset)
             $0.centerY.equalToSuperview()
         }
         
         arrowIcon.snp.makeConstraints {
-            $0.height.width.equalTo(14)
-            $0.trailing.equalToSuperview().offset(-25)
+            $0.height.width.equalTo(Constants.arrorIconSize)
+            $0.trailing.equalToSuperview().offset(-Constants.arrorIconTrailingOffset)
             $0.centerY.equalToSuperview()
         }
         
         itemTitle.snp.makeConstraints {
-            $0.height.equalTo(28)
-            $0.leading.equalTo(logoutIcon.snp.trailing).offset(44)
+            $0.height.equalTo(Constants.itemTitleHeight)
+            $0.leading.equalTo(logoutIcon.snp.trailing).offset(Constants.itemTitleLeadingOffset)
             $0.trailing.equalTo(arrowIcon.snp.leading)
             $0.centerY.equalToSuperview()
         }

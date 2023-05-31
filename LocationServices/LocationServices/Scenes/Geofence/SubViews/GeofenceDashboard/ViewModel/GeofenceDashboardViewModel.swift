@@ -31,8 +31,13 @@ final class GeofenceDashboardViewModel: GeofenceDasboardViewModelProtocol {
                 self?.geofences = geofences
                 self?.delegate?.refreshData(with: geofences)
             case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                self?.delegate?.showAlert(model)
+                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                }
+                else {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+                    self?.delegate?.showAlert(model)
+                }
             }
         }
     }
@@ -53,8 +58,13 @@ final class GeofenceDashboardViewModel: GeofenceDasboardViewModelProtocol {
                     self?.geofences.removeAll(where: { $0.id == id })
                     self?.delegate?.refreshData(with: self?.geofences ?? [])
                 case .failure(let error):
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                    }
+                    else {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                        self?.delegate?.showAlert(model)
+                    }
                 }
             }
         }

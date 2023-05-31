@@ -70,10 +70,11 @@ final class RouteTypeView: UIView {
     private lazy var goButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.Routing.navigateButton
-        button.setTitle("GO", for: .normal)
+        button.setTitle(StringConstant.go, for: .normal)
         button.backgroundColor = .buttonOrangeColor
         button.layer.cornerRadius = 8
         button.tintColor = .white
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.addTarget(self, action: #selector(startNavigation), for: .touchUpInside)
         return button
     }()

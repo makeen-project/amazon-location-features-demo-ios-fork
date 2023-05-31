@@ -39,5 +39,4 @@ extension UIColor {
     
     // Settings & About Colors
     static let settingsSelectionColor = UIColor(named: "settingsSelectionColor")!
-    
 }
