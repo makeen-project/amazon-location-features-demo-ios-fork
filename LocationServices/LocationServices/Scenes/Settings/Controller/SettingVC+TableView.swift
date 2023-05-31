@@ -14,6 +14,7 @@ extension SettingsVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SettingsCell.self, forCellReuseIdentifier: SettingsCell.settingCellReuseId)
+        tableView.alwaysBounceVertical = false
     }
 
 }

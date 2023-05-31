@@ -77,7 +77,7 @@ struct UITestGeofenceScreen: UITestScreen {
         let radiusGeofenceSliderField = app.sliders[Identifiers.radiusGeofenceSliderField]
         XCTAssertTrue(radiusGeofenceSliderField.waitForExistence(timeout: UITestWaitTime.regular.time))
         
-        let radius = Double.random(in: 0..<1)
+        let radius = Double(0.5)
         radiusGeofenceSliderField.adjust(toNormalizedSliderPosition: radius)
 
         return self

@@ -10,6 +10,7 @@ import UIKit
 final class RouteOptionBuilder {
     static func create() -> RouteOptionVC {
         let controller = RouteOptionVC()
+        controller.hidesBottomBarWhenPushed = true
         let viewModel = RouteOptionViewModel()
         controller.viewModel = viewModel
         return controller

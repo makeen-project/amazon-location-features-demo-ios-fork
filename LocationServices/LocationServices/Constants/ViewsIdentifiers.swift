@@ -80,6 +80,8 @@ struct ViewsIdentifiers {
     }
 
     struct AWSConnect {
+        static let awsConnectScrollView = "AWSConnectScrollView"
+        static let awsConnectGradientView = "AWSConnectGradientView"
         static let awsConnectTitleLabel = "AWSConnectTitleLabel"
         static let identityPoolTextField = "IdentityPoolTextField"
         static let userDomainTextField = "UserDomainTextField"

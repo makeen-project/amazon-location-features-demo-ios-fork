@@ -140,6 +140,8 @@ final class TrackingMapView: UIView {
     
     func reloadMap() {
         mapView.setupMapView()
+        let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
+        amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo(mapImageType: mapName?.imageType)
     }
     
     func removeGeofencesFromMap() {

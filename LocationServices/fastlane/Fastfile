@@ -16,15 +16,28 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Run all the tests"
-  lane :test do
+  desc "Run unit tests"
+  lane :run_unit_tests do |options|
+    scan(
+      project: "LocationServices.xcodeproj",
+      device: options[:device],
+      scheme: "LocationServicesUnitTests",
+      code_coverage: true,
+      xcargs: "-test-iterations='2' -retry-tests-on-failure"
+    )
+  end
+
+  desc "Run e2e tests"
+  lane :run_e2e_tests do |options|
     begin
       run_tests(
         project: "LocationServices.xcodeproj",
-        device: "iPhone 14",
+        device: options[:device],
         scheme: "LocationServices",
         result_bundle: true,
-        output_directory: Dir.pwd + "/test_output"
+        code_coverage: true,
+        output_directory: Dir.pwd + "/test_output",
+        xcargs: "-test-iterations='2' -retry-tests-on-failure"
       )
     ensure
       xcresult_path = Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]

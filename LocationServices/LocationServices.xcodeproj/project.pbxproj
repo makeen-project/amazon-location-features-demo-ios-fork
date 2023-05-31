@@ -104,6 +104,7 @@
 		8ADB62A629F2B677002C7971 /* UITestWaitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */; };
 		8ADB62A729F2B67C002C7971 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
 		8AE83A912A274B2F00CF6E7C /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE83A902A274B2F00CF6E7C /* UIView+Extension.swift */; };
+		8AEFDDC72A262F5300090D9E /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEFDDC62A262F5300090D9E /* GradientView.swift */; };
 		8AF7D2AB2976B3F700E1563E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7D2AA2976B3F700E1563E /* LocationManager.swift */; };
 		8AF7D2AD2976C02100E1563E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7D2AC2976C02100E1563E /* AlertPresenter.swift */; };
 		8AFBAFDA296F002A0022A7E3 /* RouteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFBAFD9296F002A0022A7E3 /* RouteModel.swift */; };
@@ -356,6 +357,7 @@
 		DF8005E12A0A737000758BBE /* WebViewVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */; };
 		DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */; };
 		DF8005E52A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E42A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift */; };
+		F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */; };
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
@@ -387,6 +389,8 @@
 		F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */; };
 		F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */; };
 		F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */; };
+		F1F0C5872A0E5401009C7151 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F0C5862A0E5401009C7151 /* ErrorHandler.swift */; };
+		F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */; };
 		F1F8061829D571E9002BDF85 /* GeofenceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */; };
 		F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */; };
 /* End PBXBuildFile section */
@@ -504,6 +508,7 @@
 		8ADB62A129F2A455002C7971 /* AlertPresentableMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresentableMock.swift; sourceTree = "<group>"; };
 		8ADB62A329F2A4B6002C7971 /* AddGeofenceViewModelOutputProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGeofenceViewModelOutputProtocolMock.swift; sourceTree = "<group>"; };
 		8AE83A902A274B2F00CF6E7C /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		8AEFDDC62A262F5300090D9E /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		8AF7D2AA2976B3F700E1563E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		8AF7D2AC2976C02100E1563E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		8AFBAFD9296F002A0022A7E3 /* RouteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteModel.swift; sourceTree = "<group>"; };
@@ -751,6 +756,8 @@
 		DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVCBuilder.swift; sourceTree = "<group>"; };
 		DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
 		DF8005E42A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewTrackingMapCoordinator.swift; sourceTree = "<group>"; };
+		F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		F1021F4A2A1B864400B84312 /* LocationServicesUnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = LocationServicesUnitTests.xctestplan; path = ../LocationServicesUnitTests.xctestplan; sourceTree = "<group>"; };
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
@@ -782,6 +789,8 @@
 		F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLCoordinateBoundsExtensionTests.swift; sourceTree = "<group>"; };
+		F1F0C5862A0E5401009C7151 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
+		F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralHelper.swift; sourceTree = "<group>"; };
 		F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceUITests.swift; sourceTree = "<group>"; };
 		F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingUITests.swift; sourceTree = "<group>"; };
 		F1F8063229D7683E002BDF85 /* TrackingSimulateLocation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackingSimulateLocation.xctestplan; sourceTree = "<group>"; };
@@ -1230,6 +1239,8 @@
 				8A3FD14B29A69CE000DFA6F6 /* PlaceholderAnimator.swift */,
 				8ACD71C92A091A8F00EC23F3 /* MapFloatingViewHandler.swift */,
 				8AD132742A267FCC00608FCD /* KeyboardObserver.swift */,
+				F1F0C5862A0E5401009C7151 /* ErrorHandler.swift */,
+				F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1294,6 +1305,7 @@
 		AD2AF023292E892000149904 = {
 			isa = PBXGroup;
 			children = (
+				F1021F4A2A1B864400B84312 /* LocationServicesUnitTests.xctestplan */,
 				F1F8063229D7683E002BDF85 /* TrackingSimulateLocation.xctestplan */,
 				8A60E81E29D3272100F40DC8 /* LocationServices.xctestplan */,
 				96D4047D29B65B9D0031097B /* Config.xcconfig */,
@@ -2127,6 +2139,7 @@
 				ADBDDEEE29830E8B00696EC6 /* CommonSelectableCell.swift */,
 				AD989726298B0A250041E867 /* CommonDashboardView.swift */,
 				8A6C390729A2664F0003666C /* NoInternetConnectionView.swift */,
+				8AEFDDC62A262F5300090D9E /* GradientView.swift */,
 				8ACD71CC2A091AFC00EC23F3 /* MapSearchFloatingView.swift */,
 				8A145A312A161DDD00C106BF /* LargeTitleLabel.swift */,
 			);
@@ -2815,6 +2828,7 @@
 				DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */,
 				8A151BD72A0ED1C4009B88C3 /* UISplitViewControllerDisplayMode+Extension.swift */,
 				8AE83A902A274B2F00CF6E7C /* UIView+Extension.swift */,
+				F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3181,6 +3195,7 @@
 				8A439EFB29BB968800B59D0B /* AttributionVCBuilder.swift in Sources */,
 				ADD13962298088380003F917 /* AmazonCustomSelectableView.swift in Sources */,
 				ADABECD9293FD65B00E66FC5 /* AppConstants.swift in Sources */,
+				8AEFDDC72A262F5300090D9E /* GradientView.swift in Sources */,
 				ADD5D7CE296F843D0022480B /* GeofenceDashboardCell.swift in Sources */,
 				AD2AF06C292E99B700149904 /* TabBarCoordinator.swift in Sources */,
 				ADBDDF082984394500696EC6 /* ExploreMapStyleCell.swift in Sources */,
@@ -3232,6 +3247,7 @@
 				ADBD7FC22949CBC2005DB4E4 /* BottomSheetTransitioningDelegate.swift in Sources */,
 				8A276E2629DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift in Sources */,
 				AD989734298B2B2D0041E867 /* TrackingDashboard.swift in Sources */,
+				F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */,
 				ADD139902980A2590003F917 /* RouteOptionContracts.swift in Sources */,
 				AD625E9C293BEFAC00C67B44 /* SearchCell.swift in Sources */,
 				ADA85E752989A22300446788 /* SettingsDefaultValueHelper.swift in Sources */,
@@ -3286,6 +3302,7 @@
 				ADD5D7D9296F87710022480B /* AddGeofenceSearchView.swift in Sources */,
 				ADC124A22979EA5F00B08C20 /* GeofenceService.swift in Sources */,
 				ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureDelegate.swift in Sources */,
+				F1F0C5872A0E5401009C7151 /* ErrorHandler.swift in Sources */,
 				8AFDA09629DDBC3800114BB7 /* VersionVCBuilder.swift in Sources */,
 				ADAF3653294A6A0700DC4774 /* POICardViewModel.swift in Sources */,
 				8A10E38129E97959005165CD /* SplashViewModel.swift in Sources */,
@@ -3294,6 +3311,7 @@
 				DF8005E52A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift in Sources */,
 				ADC1249C2978A56E00B08C20 /* GeofenceDashboardContracts.swift in Sources */,
 				8AD132752A267FCC00608FCD /* KeyboardObserver.swift in Sources */,
+				F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */,
 				ADD5D7E2296F87FF0022480B /* AddGeofenceContracts.swift in Sources */,
 				AD2AF09F292EA91200149904 /* GeofenceCoordinator.swift in Sources */,
 				AD2AF064292E929C00149904 /* Coordinator.swift in Sources */,

@@ -80,8 +80,13 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             case .success(let geofences):
                 self?.delegate?.showGeofences(geofences)
             case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                self?.delegate?.showAlert(model)
+                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                }
+                else {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+                    self?.delegate?.showAlert(model)
+                }
             }
         }
     }
@@ -95,9 +100,14 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             case .success:
                 self?.updateHistory()
             case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self?.delegate?.showAlert(model)
+                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                }
+                else {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                    DispatchQueue.main.async {
+                        self?.delegate?.showAlert(model)
+                    }
                 }
             }
         }
@@ -117,9 +127,13 @@ final class TrackingViewModel: TrackingViewModelProtocol {
                 }
             case .failure(let error):
                 self?.history = []
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self?.delegate?.showAlert(model)
+                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                } else {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                    DispatchQueue.main.async {
+                        self?.delegate?.showAlert(model)
+                    }
                 }
             }
         }

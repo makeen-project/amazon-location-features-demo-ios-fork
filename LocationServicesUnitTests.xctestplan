@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "76D74CF0-5E0B-4CF5-BE3B-BDE847D2F39A",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:LocationServices.xcodeproj",
+        "identifier" : "963EBF4E29AF92F5001961F2",
+        "name" : "LocationServicesTests"
+      }
+    }
+  ],
+  "version" : 1
+}
