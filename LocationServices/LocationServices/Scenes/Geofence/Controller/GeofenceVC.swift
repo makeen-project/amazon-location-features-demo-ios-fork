@@ -183,7 +183,7 @@ final class GeofenceVC: UIViewController, AlertPresentable {
     }
     
     func setupViews() {
-        navigationController?.navigationBar.isHidden = trueß
+        navigationController?.navigationBar.isHidden = true
         view.addSubview(geofenceMapView)
 
         geofenceMapView.snp.makeConstraints {
