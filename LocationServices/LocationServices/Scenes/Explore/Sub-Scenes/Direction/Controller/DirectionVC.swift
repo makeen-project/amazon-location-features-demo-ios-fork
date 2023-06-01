@@ -178,25 +178,35 @@ final class DirectionVC: UIViewController, AlertPresentable {
     private func setupViews() {
         directionSearchView.changeSearchRouteName(with: firstDestionation?.placeName, isDestination: false)
         directionSearchView.changeSearchRouteName(with: secondDestionation?.placeName, isDestination: true)
-        self.view.addSubview(directionSearchView)
-        self.view.addSubview(directionView)
-        self.view.addSubview(tableView)
+        let scrollView = UIScrollView()
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(directionSearchView)
+        scrollView.addSubview(directionView)
+        scrollView.addSubview(tableView)
+        
+        scrollView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.leading.bottom.equalToSuperview()
+        }
         
         directionSearchView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().offset(14)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(140)
+            $0.width.equalTo(scrollView)
         }
         
         directionView.snp.makeConstraints {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(560)
+            $0.width.equalTo(scrollView)
         }
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
             $0.leading.trailing.bottom.equalToSuperview()
+            $0.width.equalTo(scrollView)
         }
         
         directionView.isHidden = true

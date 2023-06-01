@@ -13,6 +13,8 @@ final class ExploreCoordinator: Coordinator {
     var navigationController: UINavigationController
     var type: CoordinatorType { .explore }
     var geofenceHandler: VoidHandler?
+    var exploreController: ExploreVC?
+    weak var currentBottomSheet:UIViewController?
     var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     init(navigationController: UINavigationController) {
@@ -26,33 +28,20 @@ final class ExploreCoordinator: Coordinator {
 
 extension ExploreCoordinator: ExploreNavigationDelegate {
     func dismissSearchScene() {
-        self.navigationController.dismiss(animated: true)
+        currentBottomSheet?.view.removeFromSuperview()
     }
     
     func showMapStyles() {
         dismissSearchScene()
         let controller = ExploreMapStyleBuilder.create()
-        
-        controller.modalPresentationStyle = .pageSheet
-        controller.isModalInPresentation = true
+
         controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
+            self?.currentBottomSheet?.view.removeFromSuperview()
         }
-        if let sheet = controller.sheetPresentationController {
-            
-            if isiPad {
-                sheet.detents = [.medium(), .large()]
-            } else {
-                sheet.detents = [getCollapsedDetent(), .medium(), .large()]
-            }
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
-        }
-        
-        navigationController.present(controller, animated: true)
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: exploreController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
     
     func showDirections(isRouteOptionEnabled: Bool?,
@@ -64,13 +53,13 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         self.dismissSearchScene()
         let controller = DirectionVCBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: {
-                NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
-                
-                guard let secondDestionation, firstDestionation == nil else { return }
-                let userInfo = ["place" : secondDestionation]
-                NotificationCenter.default.post(name: Notification.selectedPlace, object: nil, userInfo: userInfo)
-            })
+            self?.currentBottomSheet?.view.removeFromSuperview()
+            
+            NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
+            
+            guard let secondDestionation, firstDestionation == nil else { return }
+            let userInfo = ["place" : secondDestionation]
+            NotificationCenter.default.post(name: Notification.selectedPlace, object: nil, userInfo: userInfo)
         }
         
         if let firstDestionation {
@@ -88,85 +77,40 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         }
         
         controller.userLocation = (lat, long)
-        controller.modalPresentationStyle = .pageSheet
-        controller.isModalInPresentation = true
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
-        
-        if let sheet = controller.sheetPresentationController {
-            let mediumId = DirectionVC.Constants.mediumId
-            let mediumDetent = UISheetPresentationController.Detent.custom(identifier: mediumId) { [weak controller] context in
-                let bottomSafeArea = controller?.view.safeAreaInsets.bottom ?? 0
-                let iPadHeight = UIScreen.main.bounds.height * 0.38 - bottomSafeArea
-                let iPhoneHeight = UIScreen.main.bounds.height * 0.5 - bottomSafeArea
-                
-                return self.isiPad ? iPadHeight : iPhoneHeight
-            }
-            
-            if isiPad {
-                sheet.detents = [mediumDetent, .large()]
-            } else {
-                sheet.detents = [getCollapsedDetent(), mediumDetent, .large()]
-            }
-            sheet.selectedDetentIdentifier = isiPad ? .medium : .large
-            
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .large
-            sheet.selectedDetentIdentifier = mediumId
-            sheet.preferredCornerRadius = 10
-        }
-        
-        navigationController.present(controller, animated: true)
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: exploreController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
-   
+    
     func showSearchSceneWith(lat: Double?, long: Double?) {
         let controller = SearchVCBuilder.create()
         controller.userLocation = (lat, long)
-        controller.modalPresentationStyle = isiPad ? .formSheet : .pageSheet
         
-        if let sheet = controller.sheetPresentationController {
-            if isiPad {
-                sheet.detents = [.medium(), .large()]
-            } else {
-                sheet.detents = [getCollapsedDetent(), .medium(), .large()]
-            }
-            sheet.selectedDetentIdentifier = isiPad ? .medium : .large
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.selectedDetentIdentifier = .medium
-            sheet.preferredCornerRadius = 10
-        }
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: exploreController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
+    }
+    
+    func showSearchScene() {
+        let controller = SearchVCBuilder.create()
         
-        navigationController.present(controller, animated: true)
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: exploreController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
     
     func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?) {
-        navigationController.dismiss(animated: true) { [weak self] in
-            guard let self else { return }
-            let controller = POICardVCBuilder.create(cardData: cardData, lat: lat, long: long)
-            controller.delegate = self
-            controller.userLocation = (lat, long)
-            controller.modalPresentationStyle = .pageSheet
-            controller.isModalInPresentation = true
-            if let sheet = controller.sheetPresentationController {
-                let smallId = UISheetPresentationController.Detent.Identifier("small")
-                let smallDetent = UISheetPresentationController.Detent.custom(identifier: smallId) { context in
-                    return POICardVC.DetentsSizeClass.allInfo.height
-                }
-                
-                if self.isiPad {
-                    sheet.detents = [smallDetent]
-                } else {
-                    sheet.detents = [self.getCollapsedDetent(), smallDetent]
-                }
-                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.largestUndimmedDetentIdentifier = smallId
-                sheet.selectedDetentIdentifier = smallId
-                sheet.preferredCornerRadius = 10
-            }
-            
-            self.navigationController.present(controller, animated: true)
-        }
+        let controller = POICardVCBuilder.create(cardData: cardData, lat: lat, long: long)
+        controller.delegate = self
+        controller.userLocation = (lat, long)
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: exploreController!)
+        controller.setBottomSheetHeight(to: 200)
+        currentBottomSheet = controller
     }
     
     func showDirectionScene() {
@@ -174,24 +118,13 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     }
     
     func showNavigationview(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?) {
-        navigationController.dismiss(animated: true) { [weak self] in
-            guard let self else { return }
             let controller = NavigationBuilder.create(steps: steps, summaryData: summaryData, firstDestionation: firstDestionation, secondDestionation: secondDestionation)
             controller.delegate = self
             
-            controller.modalPresentationStyle = .pageSheet
-            controller.isModalInPresentation = true
-            if let sheet = controller.sheetPresentationController {
-                sheet.detents = [self.getCollapsedDetent(), .medium(), .large()]
-                sheet.selectedDetentIdentifier = self.getCollapsedDetentId()
-                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.largestUndimmedDetentIdentifier = .large
-                sheet.preferredCornerRadius = 10
-                sheet.prefersGrabberVisible = true
-            }
-            
-            self.navigationController.present(controller, animated: true)
-        }
+            currentBottomSheet?.view.removeFromSuperview()
+            controller.presentBottomSheet(parentController: exploreController!)
+            controller.enableBottomSheetGrab()
+            currentBottomSheet = controller
     }
     
     func showLoginFlow() {
@@ -261,6 +194,7 @@ private extension ExploreCoordinator {
         controller.geofenceHandler =  {
             self.geofenceHandler?()
         }
+        exploreController = controller
         navigationController.pushViewController(controller, animated: true)
     }
     

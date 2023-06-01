@@ -180,9 +180,7 @@ final class AddGeofenceVC: UIViewController {
         
         scrollView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
-            $0.trailing.equalToSuperview()
-            $0.leading.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.trailing.leading.bottom.equalToSuperview()
         }
         
         contentView.snp.makeConstraints {

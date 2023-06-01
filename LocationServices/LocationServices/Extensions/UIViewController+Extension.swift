@@ -74,8 +74,14 @@ extension UIViewController {
        grabberView.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    private func updateBottomSheetHeight(to height: CGFloat, current currentHeight: CGFloat) {
+    func updateBottomSheetHeight(to height: CGFloat) {
         self.view.snp.updateConstraints{
+            $0.height.equalTo(height)
+        }
+    }
+    
+    func setBottomSheetHeight(to height: CGFloat) {
+        self.view.snp.makeConstraints {
             $0.height.equalTo(height)
         }
     }
@@ -87,7 +93,7 @@ extension UIViewController {
         let newHeight = max(min(currentHeight, getLargeDetentHeight()), getSmallDetentHeight())
 
         if recognizer.state == .changed {
-            self.updateBottomSheetHeight(to: currentHeight, current: currentHeight)
+            self.updateBottomSheetHeight(to: currentHeight)
             recognizer.setTranslation(.zero, in: view)
         } else if recognizer.state == .ended {
             let velocity = recognizer.velocity(in: view).y
@@ -133,7 +139,7 @@ extension UIViewController {
             }
             
             UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut) {
-                self.updateBottomSheetHeight(to: targetDetentHeight, current: currentHeight)
+                self.updateBottomSheetHeight(to: targetDetentHeight)
                 self.parent?.view.layoutIfNeeded()
             }
         }
@@ -152,7 +158,7 @@ extension UIViewController {
         }
 
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut) {
-            self.updateBottomSheetHeight(to: targetDetentHeight, current: currentHeight)
+            self.updateBottomSheetHeight(to: targetDetentHeight)
             self.view.layoutIfNeeded()
         }
     }
