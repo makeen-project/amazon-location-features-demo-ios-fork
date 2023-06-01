@@ -18,6 +18,8 @@ final class TrackingCoordinator: Coordinator {
     
     var trackingController:TrackingVC?
     
+    weak var currentBottomSheet:UIViewController?
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -39,41 +41,25 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     
     func showDashboardFlow() {
         let controller = TrackingDashboardBuilder.create()
-        controller.modalPresentationStyle = .pageSheet
+
         controller.trackingHistoryHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: false, completion: {
-                self?.showTrackingHistory(isTrackingActive: true)
-            })
+            self?.showTrackingHistory(isTrackingActive: true)
         }
         
         controller.closeHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true, completion: nil)
         }
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
-        trackingController!.present(controller, animated: true)
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: trackingController!)
+        currentBottomSheet = controller
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
         let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
-        controller.modalPresentationStyle = .pageSheet
-        
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.preferredCornerRadius = 10
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
-        trackingController!.present(controller, animated: true)
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: trackingController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
         
         // Starting tracking by default when tapping on Enable tracking button
         NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": isTrackingActive])
@@ -83,17 +69,18 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         dismissCurrentScene()
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
+            self?.currentBottomSheet?.view.removeFromSuperview()
+            if(self?.trackingController?.viewModel.isTrackingActive == true){
+                self?.showTrackingHistory(isTrackingActive: true)
+            }
+            else{
+                self?.showDashboardFlow()
+            }
         }
-        controller.modalPresentationStyle = .pageSheet
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
-        }
-        navigationController.present(controller, animated: true)
+        currentBottomSheet?.view.removeFromSuperview()
+        controller.presentBottomSheet(parentController: trackingController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
     
     func showLoginFlow() {

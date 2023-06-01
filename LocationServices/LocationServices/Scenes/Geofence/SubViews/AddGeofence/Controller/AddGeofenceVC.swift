@@ -157,7 +157,7 @@ final class AddGeofenceVC: UIViewController {
         headerView.dismissHandler = { [weak self] in
             self?.sentGeofenceRefreshNotification = true
             NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
-            self?.delegate?.dismissCurrentScene(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: false)
+            self?.delegate?.dismissCurrentBottomSheet(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
         }
     }
     
@@ -165,13 +165,34 @@ final class AddGeofenceVC: UIViewController {
         self.tableView.isHidden = true
         self.tableView.keyboardDismissMode = .onDrag
         self.deleteButton.isHidden = !isEditingSceneEnabled
-        self.view.addSubview(headerView)
-        self.view.addSubview(searchView)
-        self.view.addSubview(nameTextField)
-        self.view.addSubview(saveButton)
-        self.view.addSubview(deleteButton)
-        self.view.addSubview(tableView)
         
+        let scrollView = UIScrollView()
+        let contentView = UIView()
+
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(headerView)
+        contentView.addSubview(searchView)
+        contentView.addSubview(nameTextField)
+        contentView.addSubview(saveButton)
+        contentView.addSubview(deleteButton)
+        contentView.addSubview(tableView)
+        
+        scrollView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.width.equalTo(scrollView)
+        }
+
         headerView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(5)
             $0.height.equalTo(50)
@@ -181,29 +202,30 @@ final class AddGeofenceVC: UIViewController {
         
         searchView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom).offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(110)
         }
         
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(searchView.snp.bottom).offset(28)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         saveButton.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(20)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
         }
         
         deleteButton.snp.makeConstraints {
             $0.top.equalTo(saveButton.snp.bottom).offset(8)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
+            $0.bottomMargin.equalToSuperview().offset(20)
         }
         
         tableView.snp.makeConstraints {
@@ -248,7 +270,7 @@ final class AddGeofenceVC: UIViewController {
             case .success:
                 self?.sentGeofenceRefreshNotification = true
                 NotificationCenter.default.post(name: Notification.geofenceAdded, object: nil, userInfo: ["model": self?.cacheSaveModel as Any])
-                self?.delegate?.dismissCurrentScene(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
+                self?.delegate?.dismissCurrentBottomSheet(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
                 self?.showAlert(model)
@@ -304,6 +326,6 @@ extension AddGeofenceVC: AddGeofenceViewModelOutputProtocol {
     
     func finishProcess() {
         deleteNotification(model: cacheSaveModel)
-        self.delegate?.dismissCurrentScene(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: true)
+        self.delegate?.dismissCurrentBottomSheet(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: true)
     }
 }

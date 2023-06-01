@@ -13,6 +13,7 @@ protocol GeofenceNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
     func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?)
     func showSearchSceneWith(lat: Double?, long: Double?)
     func dismissCurrentScene(geofences: [GeofenceDataModel], shouldDashboardShow: Bool)
+    func dismissCurrentBottomSheet(geofences: [GeofenceDataModel], shouldDashboardShow: Bool)
     func showMapStyleScene()
     func showAddGeofenceFlow(activeGeofencesLists: [GeofenceDataModel],
                              isEditingSceneEnabled: Bool,
