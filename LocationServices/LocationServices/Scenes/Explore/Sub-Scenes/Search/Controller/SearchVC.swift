@@ -9,8 +9,28 @@ import UIKit
 import SnapKit
 import CoreLocation
 
+struct SearchScreenStyle {
+    var backgroundColor: UIColor
+    var searchBarStyle: SearchBarStyle
+}
+
 final class SearchVC: UIViewController {
+    
+    enum Constants {
+        static let searchBarHeightiPhone: CGFloat = 76
+        static let searchBarHeightiPad: CGFloat = 40
+        static let searchBarHorizontalPaddingiPhone: CGFloat = 16
+        static let searchBarHorizontalPaddingiPad: CGFloat = 0
+        
+        static let tableViewHorizontalOffset: CGFloat = 20
+        static let tableViewTopOffsetiPhone: CGFloat = 16
+    }
+    
     weak var delegate: ExploreNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewExploreMapCoordinator }
+    
+    var searchScreenStyle: SearchScreenStyle = SearchScreenStyle(backgroundColor: .white, searchBarStyle: SearchBarStyle(backgroundColor: .clear, textFieldBackgroundColor: .lsLight2))
+    
     var userLocation: (lat: Double?, long: Double?)? {
         didSet {
             guard let lat = userLocation?.lat,
@@ -25,12 +45,12 @@ final class SearchVC: UIViewController {
     }
     
     var isInitalState: Bool = true
-    private var clearAnnotationsOnDisappear = true
     
-    private let searchBarView: SearchBarView = SearchBarView(becomeFirstResponder: false)
-    
-    // TODO: can be created later, marked with optional
-    //var searchBarView: SearchBarView = SearchBarView(isAccountBarEnabled: false)
+    private lazy var searchBarView: SearchBarView = {
+        let shouldFillHeight = isInSplitViewController
+        let horizontalPadding: CGFloat = isInSplitViewController ? Constants.searchBarHorizontalPaddingiPad : Constants.searchBarHorizontalPaddingiPhone
+        return SearchBarView(becomeFirstResponder: false, showGrabberIcon: !isInSplitViewController, shouldFillHeight: shouldFillHeight, horizontalPadding: horizontalPadding)
+    }()
     
     var viewModel: SearchViewModel! {
         didSet {
@@ -40,7 +60,7 @@ final class SearchVC: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .searchBarBackgroundColor
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Search.tableView
         tableView.keyboardDismissMode = .onDrag
         return tableView
     }()
@@ -48,29 +68,45 @@ final class SearchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.accessibilityIdentifier = ViewsIdentifiers.Search.searchRootView
-        view.backgroundColor = .searchBarBackgroundColor
         searchBarView.delegate = self
         setupTableView()
         setupViews()
+        applyStyles()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchAppearanceChanged(isVisible: true)
+        
+        let mapModels = viewModel.mapModels
+        if !mapModels.isEmpty {
+            searchResult(mapModel: mapModels, shouldDismiss: false, showOnMap: false)
+        }
+        changeExploreActionButtonsVisibility()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if clearAnnotationsOnDisappear {
-            clearAnnotations()
-        }
-        clearAnnotationsOnDisappear = true
         searchAppearanceChanged(isVisible: false)
+    }
+    
+    private func applyStyles() {
+        view.backgroundColor = searchScreenStyle.backgroundColor
+        tableView.backgroundColor = searchScreenStyle.backgroundColor
+        searchBarView.applyStyle(searchScreenStyle.searchBarStyle)
     }
     
     private func searchAppearanceChanged(isVisible: Bool) {
         let userInfo = ["isVisible" : isVisible]
         NotificationCenter.default.post(name: Notification.searchAppearanceChanged, object: nil, userInfo: userInfo)
+    }
+    
+    private func changeExploreActionButtonsVisibility() {
+        let userInfo = [
+            StringConstant.NotificationsInfoField.geofenceIsHidden: false,
+            StringConstant.NotificationsInfoField.directionIsHidden: false
+        ]
+        NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
     
     private func clearAnnotations() {
@@ -79,19 +115,36 @@ final class SearchVC: UIViewController {
     }
     
     private func setupViews() {
-        view.addSubview(searchBarView)
         view.addSubview(tableView)
         
-        searchBarView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.height.equalTo(76)
-            $0.leading.trailing.equalToSuperview()
+        if isInSplitViewController {
+            let width = view.window?.screen.bounds.width ?? view.frame.width
+            searchBarView.snp.makeConstraints {
+                $0.width.equalTo(width).priority(.high)
+                $0.height.equalTo(Constants.searchBarHeightiPad)
+            }
+            navigationItem.titleView = searchBarView
+        } else {
+            view.addSubview(searchBarView)
+            searchBarView.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                if isInSplitViewController {
+                    $0.height.equalTo(Constants.searchBarHeightiPad)
+                } else {
+                    $0.height.equalTo(Constants.searchBarHeightiPhone)
+                }
+                $0.leading.trailing.equalToSuperview()
+            }
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(searchBarView.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            if isInSplitViewController {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+            } else {
+                $0.top.equalTo(searchBarView.snp.bottom).offset(Constants.tableViewTopOffsetiPhone)
+            }
+            $0.leading.equalToSuperview().offset(Constants.tableViewHorizontalOffset)
+            $0.trailing.equalToSuperview().offset(-Constants.tableViewHorizontalOffset)
             $0.bottom.equalToSuperview()
         }
     }
@@ -120,7 +173,6 @@ extension SearchVC: SearchViewModelOutputDelegate {
     }
     
     func selectedPlaceResult(mapModel: MapModel) {
-        clearAnnotationsOnDisappear = false
         let coordinates = ["place" : mapModel]
         NotificationCenter.default.post(name: Notification.selectedPlace, object: nil, userInfo: coordinates)
     }
@@ -133,5 +185,10 @@ extension SearchVC: SearchBarViewOutputDelegate {
     
     func searchTextWith(_ text: String?) {
         viewModel.searchWith(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
+    }
+    
+    func searchCancel() {
+        clearAnnotations()
+        delegate?.dismissSearchScene()
     }
 }

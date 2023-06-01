@@ -20,11 +20,14 @@ final class DirectionSearchView: UIView {
     var delegate: DirectionSearchViewOutputDelegate?
     
     private let debounceManager = DebounceManager(debounceDuration: 0.5)
+    private var titleTopOffset: CGFloat = 20
     
     private var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 8
+        view.layer.borderColor = UIColor.lsLight2.cgColor
+        view.layer.borderWidth = 1
         return view
     }()
     
@@ -55,7 +58,7 @@ final class DirectionSearchView: UIView {
             string: "Search Starting Point",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
-        tf.tintColor = .tabBarTintColor
+        tf.tintColor = .lsPrimary
         tf.textColor = .mapDarkBlackColor
         tf.clearButtonMode = .whileEditing
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -66,7 +69,7 @@ final class DirectionSearchView: UIView {
     
     private var seperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
+        view.backgroundColor = .lsLight2
         return view
     }()
     
@@ -78,7 +81,7 @@ final class DirectionSearchView: UIView {
             string: "Search Destination",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
-        tf.tintColor = .tabBarTintColor
+        tf.tintColor = .lsPrimary
         tf.textColor = .mapDarkBlackColor
         tf.clearButtonMode = .whileEditing
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -86,12 +89,25 @@ final class DirectionSearchView: UIView {
         return tf
     }()
     
-    private var directionSearchTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Direction"
-        label.textAlignment = .left
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .black
+    private let topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.backgroundColor = .clear
+        
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private let headerContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private var directionSearchTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.directions)
         label.numberOfLines = 2
         return label
     }()
@@ -127,10 +143,16 @@ final class DirectionSearchView: UIView {
         self.firstDestinationTextField.text = "My Location"
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(titleTopOffset: CGFloat, isCloseButtonHidden: Bool) {
+        self.init()
+        self.titleTopOffset = titleTopOffset
         setupDelegates()
         setupViews()
+        closeButton.isHidden = isCloseButtonHidden
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     @objc func closeModal() {
@@ -146,7 +168,7 @@ final class DirectionSearchView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     private func setupDelegates() {
@@ -164,31 +186,39 @@ final class DirectionSearchView: UIView {
         iconStackView.addArrangedSubview(dotDestinationImage)
         iconStackView.addArrangedSubview(secondDestinationImage)
         
-        self.addSubview(directionSearchTitle)
-        self.addSubview(closeButton)
-        self.addSubview(containerView)
+        self.addSubview(topStackView)
+        topStackView.addArrangedSubview(headerContainerView)
+        headerContainerView.addSubview(directionSearchTitle)
+        headerContainerView.addSubview(closeButton)
+        
+        topStackView.addArrangedSubview(containerView)
         containerView.addSubview(iconStackView)
         containerView.addSubview(firstDestinationTextField)
         containerView.addSubview(seperatorView)
         containerView.addSubview(secondDestinationTextField)
         containerView.addSubview(swapButton)
         
-        directionSearchTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+        topStackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview()
+        }
+        
+        directionSearchTitle.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(titleTopOffset)
+            $0.leading.equalToSuperview()
             $0.height.equalTo(28)
+            $0.bottom.equalToSuperview()
         }
         
         closeButton.snp.makeConstraints {
             $0.height.width.equalTo(30)
             $0.top.equalToSuperview().offset(14)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview()
         }
         
         containerView.snp.makeConstraints {
-            $0.top.equalTo(directionSearchTitle.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(80)
         }
         
@@ -225,7 +255,6 @@ final class DirectionSearchView: UIView {
             $0.leading.equalTo(firstDestinationTextField.snp.leading)
             $0.trailing.equalToSuperview()
         }
-        
         
         secondDestinationTextField.snp.makeConstraints {
             $0.bottom.equalTo(iconStackView.snp.bottom)

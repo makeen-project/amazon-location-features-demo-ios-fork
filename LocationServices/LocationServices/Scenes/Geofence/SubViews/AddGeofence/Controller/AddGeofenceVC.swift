@@ -14,6 +14,7 @@ final class AddGeofenceVC: UIViewController {
     var isInitalState: Bool = true
     
     weak var delegate: GeofenceNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewGeofencingMapCoordinator }
     
     var userLocation: (lat: Double?, long: Double?)?
     private var cacheSaveModel: GeofenceDataModel = GeofenceDataModel(id: nil,
@@ -25,12 +26,28 @@ final class AddGeofenceVC: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Geofence.addGeofenceTableView
         tableView.backgroundColor = .searchBarBackgroundColor
         tableView.keyboardDismissMode = .onDrag
         return tableView
     }()
     
-    private lazy var headerView = AddGeofenceHeaderView(isEditinSceneEnabled: isEditingSceneEnabled)
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = false
+        scrollView.delegate = self
+        return scrollView
+    }()
+    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private lazy var headerView: AddGeofenceHeaderView = {
+        return AddGeofenceHeaderView(isEditinSceneEnabled: isEditingSceneEnabled, showCloseButton: !isInSplitViewController)
+    }()
     lazy var searchView = AddGeofenceSearchView()
     private lazy var nameTextField = AddGeofenceNameTextField()
     
@@ -68,30 +85,6 @@ final class AddGeofenceVC: UIViewController {
         fatalError(.errorInitWithCoder)
     }
     
-    private func setupFieldsInitDatas() {
-        searchView.updateFields(model: cacheSaveModel)
-        
-        // it means it is already existing geofence
-        if let title = cacheSaveModel.id, title.isEmpty == false {
-            nameTextField.setTitle(title: title)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: Notification.geofenceMapLayerUpdate, object: nil, userInfo: nil)
-        NotificationCenter.default.post(name: Notification.deselectMapAnnotation, object: nil, userInfo: nil)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if !sentGeofenceRefreshNotification {
-            NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
-        }
-        sentGeofenceRefreshNotification = false
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -108,6 +101,55 @@ final class AddGeofenceVC: UIViewController {
         setupViews()
         setupFieldsInitDatas()
         setupTableView()
+        
+        let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScreen))
+        barButtonItem.tintColor = .lsPrimary
+        navigationItem.leftBarButtonItem = barButtonItem
+        
+        title = StringConstant.addGeofence
+        updateTitle(largeTitleVisibility: 1)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeKeyboardNotifications()
+        NotificationCenter.default.post(name: Notification.geofenceMapLayerUpdate, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.deselectMapAnnotation, object: nil, userInfo: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if !sentGeofenceRefreshNotification {
+            NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
+        }
+        sentGeofenceRefreshNotification = false
+    }
+    
+    private func setupFieldsInitDatas() {
+        searchView.updateFields(model: cacheSaveModel)
+        
+        // it means it is already existing geofence
+        if let title = cacheSaveModel.id, title.isEmpty == false {
+            nameTextField.setTitle(title: title)
+        }
+    }
+    
+    func update(lat: Double?, long: Double?) {
+        changeElementVisibility(state: false)
+        let model = GeofenceDataModel(id: cacheSaveModel.id,
+                                      lat: lat,
+                                      long: long,
+                                      radius: 80)
+        searchView.updateFields(model: model)
+        self.cacheSaveModel = model
+        self.enableSaveButton()
+        self.postNotification(model: model)
     }
     
     private func setupHandlers() {
@@ -155,26 +197,44 @@ final class AddGeofenceVC: UIViewController {
         }
         
         headerView.dismissHandler = { [weak self] in
-            self?.sentGeofenceRefreshNotification = true
-            NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
-            self?.delegate?.dismissCurrentScene(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: false)
+            self?.closeScreen()
         }
     }
     
+    @objc private func closeScreen() {
+        sentGeofenceRefreshNotification = true
+        NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
+        delegate?.dismissCurrentScene(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: false)
+    }
+    
     private func setupViews() {
-        self.tableView.isHidden = true
+        changeState(isTableViewHidden: true)
         self.tableView.keyboardDismissMode = .onDrag
         self.deleteButton.isHidden = !isEditingSceneEnabled
-        self.view.addSubview(headerView)
-        self.view.addSubview(searchView)
-        self.view.addSubview(nameTextField)
-        self.view.addSubview(saveButton)
-        self.view.addSubview(deleteButton)
+        
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        
+        containerView.addSubview(headerView)
+        containerView.addSubview(searchView)
+        containerView.addSubview(nameTextField)
+        containerView.addSubview(saveButton)
+        containerView.addSubview(deleteButton)
+        
         self.view.addSubview(tableView)
         
+        scrollView.snp.makeConstraints {
+            $0.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        containerView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
         headerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(5)
-            $0.height.equalTo(50)
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }
@@ -204,6 +264,7 @@ final class AddGeofenceVC: UIViewController {
             $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
             $0.height.equalTo(48)
+            $0.bottom.equalToSuperview()
         }
         
         tableView.snp.makeConstraints {
@@ -214,13 +275,23 @@ final class AddGeofenceVC: UIViewController {
         }
     }
     
+    private func changeState(isTableViewHidden: Bool) {
+        tableView.isHidden = isTableViewHidden
+        nameTextField.isHidden = !isTableViewHidden
+        deleteButton.isHidden = !isEditingSceneEnabled || !isTableViewHidden
+        saveButton.isHidden = !isTableViewHidden
+        
+        tableView.contentOffset.y = 0
+        scrollView.contentOffset.y = 0
+        
+        tableView.isScrollEnabled = !isTableViewHidden
+        scrollView.isScrollEnabled = isTableViewHidden
+    }
+    
     func changeElementVisibility(state: Bool) {
         DispatchQueue.main.async { [weak self] in
             self?.searchView.hideRadiusViews(state: state)
-            self?.tableView.isHidden = !state
-            self?.nameTextField.isHidden = state
-            self?.deleteButton.isHidden = !(self?.isEditingSceneEnabled ?? false)
-            self?.saveButton.isHidden = state
+            self?.changeState(isTableViewHidden: !state)
             self?.searchView.snp.updateConstraints {
                 $0.height.equalTo(state ? 50 : 110)
             }
@@ -279,20 +350,24 @@ final class AddGeofenceVC: UIViewController {
             NotificationCenter.default.post(name: Notification.geofenceEditScene, object: nil, userInfo: geofenceModel)
         }
     }
+    
+    private func updateTitle(largeTitleVisibility: CGFloat) {
+        guard let navigationController else { return }
+        let navigationBar = navigationController.navigationBar
+        
+        let appearances = [navigationBar.scrollEdgeAppearance, navigationBar.standardAppearance, navigationBar.compactAppearance]
+        appearances.forEach {
+            $0?.titleTextAttributes = [
+                .font: UIFont.amazonFont(type: .bold, size: 16),
+                .foregroundColor: UIColor.lsTetriary.withAlphaComponent(1 - largeTitleVisibility)
+            ]
+        }
+    }
 }
 
 extension AddGeofenceVC: AddGeofenceViewModelOutputProtocol {
     func selectedPlaceResult(mapModel: MapModel) {
-        
-        changeElementVisibility(state: false)
-        let model = GeofenceDataModel(id: cacheSaveModel.id,
-                                      lat: mapModel.placeLat,
-                                      long: mapModel.placeLong,
-                                      radius: 80)
-        searchView.updateFields(model: model)
-        self.cacheSaveModel = model
-        self.enableSaveButton()
-        self.postNotification(model: model)
+        update(lat: mapModel.placeLat, long: mapModel.placeLong)
     }
     
     func searchResult(mapModel: [MapModel]) {
@@ -305,5 +380,51 @@ extension AddGeofenceVC: AddGeofenceViewModelOutputProtocol {
     func finishProcess() {
         deleteNotification(model: cacheSaveModel)
         self.delegate?.dismissCurrentScene(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: true)
+    }
+    
+    private func setupKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func removeKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
+        scrollView.contentInset.bottom = additionalOffset
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset.bottom = 0
+    }
+}
+
+extension AddGeofenceVC: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        switch scrollView {
+        case self.scrollView:
+            processScrollViewDidScroll()
+        default:
+            break
+        }
+    }
+    
+    private func processScrollViewDidScroll() {
+        guard let rootView = navigationController?.navigationBar.superview,
+              let navigationBarFrame = navigationController?.navigationBar.frame,
+              !headerView.titleLabel.frame.isEmpty else { return }
+        
+        let largeTitleInRootViewFrame = rootView.convert(headerView.titleLabel.frame, from: headerView)
+        
+        let distance = max(0, navigationBarFrame.maxY - largeTitleInRootViewFrame.minY)
+        let largeTitleVisibility = 1 - min(1, distance / largeTitleInRootViewFrame.height)
+        
+        headerView.titleLabel.alpha = largeTitleVisibility
+        updateTitle(largeTitleVisibility: largeTitleVisibility)
     }
 }

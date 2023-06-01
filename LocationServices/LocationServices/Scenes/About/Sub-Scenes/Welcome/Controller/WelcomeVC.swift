@@ -10,6 +10,13 @@ import SnapKit
 
 final class WelcomeVC: UIViewController {
     
+    enum Constants {
+        static let horizontalOffset: CGFloat = 24
+        static let continueButtonTopOffset: CGFloat = 32
+        static let continueButtonBottomOffset: CGFloat = 40
+        static let continueButtonHeight: CGFloat = 48
+    }
+    
     // MARK: - Views
     private let iconView: UIImageView = {
         let imageView = UIImageView()
@@ -36,7 +43,8 @@ final class WelcomeVC: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.continueString, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .tabBarTintColor
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
+        button.backgroundColor = .lsPrimary
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = ViewsIdentifiers.General.welcomeContinueButton
@@ -94,11 +102,11 @@ final class WelcomeVC: UIViewController {
         }
         
         continueButton.snp.makeConstraints {
-            $0.top.equalTo(bottomView.snp.bottom).offset(32)
-            $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalToSuperview().offset(-24)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
-            $0.height.equalTo(48)
+            $0.top.equalTo(bottomView.snp.bottom).offset(Constants.continueButtonTopOffset)
+            $0.leading.equalToSuperview().offset(Constants.horizontalOffset)
+            $0.trailing.equalToSuperview().offset(-Constants.horizontalOffset)
+            $0.bottom.equalToSuperview().offset(-Constants.continueButtonBottomOffset)
+            $0.height.equalTo(Constants.continueButtonHeight)
         }
     }
     

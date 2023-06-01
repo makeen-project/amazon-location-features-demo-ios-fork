@@ -10,8 +10,6 @@ import UIKit
 final class TrackingDashboardBuilder {
     static func create() -> TrackingDashboardController {
         let vc = TrackingDashboardController()
-        let vm = TrackingDashboarViewModel()
-        vc.viewModel = vm
         return vc
     }
 }

@@ -7,8 +7,15 @@
 
 import UIKit
 import SafariServices
+import SnapKit
 
 final class AttributionVC: UIViewController {
+    
+    enum Constants {
+        static let partnerAttributionTitleTopOffset: CGFloat = 24
+    }
+    
+    var closeCallback: VoidHandler?
     
     // MARK: - Views
     private var separatorView: UIView = {
@@ -17,13 +24,9 @@ final class AttributionVC: UIViewController {
         return view
     }()
     
-    private var partnerAttributionTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .lsTetriary
+    private var partnerAttributionTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.partnerAttributionTitle)
         label.numberOfLines = 0
-        label.text = StringConstant.partnerAttributionTitle
-        
         return label
     }()
     
@@ -44,26 +47,30 @@ final class AttributionVC: UIViewController {
         return label
     }()
     
+    private lazy var partnerAttributionControlStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .fillEqually
+        stackView.addArrangedSubview(partnerAttributionlearnButton)
+        stackView.addArrangedSubview(UIView())
+        return stackView
+    }()
+    
     private lazy var partnerAttributionlearnButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.learnMore, for: .normal)
-        button.setTitleColor(.tabBarTintColor, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
         button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
-        button.backgroundColor = .tabBarTintColor.withAlphaComponent(0.1)
+        button.backgroundColor = .lsPrimary.withAlphaComponent(0.1)
         button.layer.cornerRadius = 8
-        button.layer.borderColor = UIColor.tabBarTintColor.cgColor
+        button.layer.borderColor = UIColor.lsPrimary.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(partnerLearnButtonTapped), for: .touchUpInside)
         return button
     }()
     
-    private var softwareAttributionTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .amazonFont(type: .bold, size: 20)
-        label.textColor = .lsTetriary
+    private var softwareAttributionTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.softwareAttributionTitle)
         label.numberOfLines = 0
-        label.text = StringConstant.softwareAttributionTitle
-        
         return label
     }()
     
@@ -76,14 +83,22 @@ final class AttributionVC: UIViewController {
         return label
     }()
     
+    private lazy var softwareAttributionControlStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .fillEqually
+        stackView.addArrangedSubview(softwareAttributionlearnButton)
+        stackView.addArrangedSubview(UIView())
+        return stackView
+    }()
+    
     private lazy var softwareAttributionlearnButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(StringConstant.learnMore, for: .normal)
-        button.setTitleColor(.tabBarTintColor, for: .normal)
+        button.setTitleColor(.lsPrimary, for: .normal)
         button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
-        button.backgroundColor = .tabBarTintColor.withAlphaComponent(0.1)
+        button.backgroundColor = .lsPrimary.withAlphaComponent(0.1)
         button.layer.cornerRadius = 8
-        button.layer.borderColor = UIColor.tabBarTintColor.cgColor
+        button.layer.borderColor = UIColor.lsPrimary.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(softwareLearnButtonTapped), for: .touchUpInside)
         return button
@@ -93,42 +108,49 @@ final class AttributionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.largeTitleDisplayMode = .never
         setupNavigationItems()
         setupViews()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
+        updateSpacerViews()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(deviceOrientationDidChange(_:)),
+                                                   name: UIDevice.orientationDidChangeNotification,
+                                                   object: nil)
+        }
     }
     
     // MARK: - Functions
     private func setupNavigationItems() {
-        navigationController?.navigationBar.tintColor = .lsTetriary
-        self.title = StringConstant.attribution
+        if !UIDevice.current.isPad {
+            navigationController?.navigationBar.tintColor = .lsTetriary
+            navigationItem.title = StringConstant.attribution
+        } else if closeCallback != nil {
+            navigationController?.navigationBar.tintColor = .lsPrimary
+            let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScene))
+            navigationItem.leftBarButtonItem = barButtonItem
+        }
+    }
+    
+    @objc private func closeScene() {
+        closeCallback?()
     }
     
     private func setupViews() {
         view.addSubview(separatorView)
         view.addSubview(partnerAttributionTitleLabel)
         view.addSubview(partnerAttributionDescriptionLabel)
-        view.addSubview(partnerAttributionlearnButton)
+        view.addSubview(partnerAttributionControlStackView)
         view.addSubview(softwareAttributionTitleLabel)
         view.addSubview(softwareAttributionDescriptionLabel)
-        view.addSubview(softwareAttributionlearnButton)
+        view.addSubview(softwareAttributionControlStackView)
         
-        let leadingPadding = 24
-        let trailingPadding = -24
+        let horizontalPadding = 16
         let descriptionTopPadding = 10
         let learnMoreButtonTopPadding = 24
         let learnMoreButtonHeight = 48
         
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+        separatorView.isHidden = isIpad
         separatorView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
@@ -136,40 +158,38 @@ final class AttributionVC: UIViewController {
         }
         
         partnerAttributionTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(separatorView.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            if isIpad {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+            } else {
+                $0.top.equalTo(separatorView.snp.bottom).offset(Constants.partnerAttributionTitleTopOffset)
+            }
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
         partnerAttributionDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionTitleLabel.snp.bottom).offset(descriptionTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
-        partnerAttributionlearnButton.snp.makeConstraints {
+        partnerAttributionControlStackView.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionDescriptionLabel.snp.bottom).offset(learnMoreButtonTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
             $0.height.equalTo(learnMoreButtonHeight)
         }
         
         softwareAttributionTitleLabel.snp.makeConstraints {
             $0.top.equalTo(partnerAttributionlearnButton.snp.bottom).offset(40)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
         softwareAttributionDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(softwareAttributionTitleLabel.snp.bottom).offset(descriptionTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
         }
         
-        softwareAttributionlearnButton.snp.makeConstraints {
+        softwareAttributionControlStackView.snp.makeConstraints {
             $0.top.equalTo(softwareAttributionDescriptionLabel.snp.bottom).offset(learnMoreButtonTopPadding)
-            $0.leading.equalToSuperview().offset(leadingPadding)
-            $0.trailing.equalToSuperview().offset(trailingPadding)
+            $0.horizontalEdges.equalToSuperview().inset(horizontalPadding)
             $0.height.equalTo(learnMoreButtonHeight)
         }
     }
@@ -179,6 +199,22 @@ final class AttributionVC: UIViewController {
         
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true)
+    }
+    
+    @objc private func deviceOrientationDidChange(_ notification: Notification) {
+        updateSpacerViews()
+    }
+    
+    private func updateSpacerViews() {
+        let orientation = UIDevice.current.getDeviceOrientation()
+        switch orientation {
+        case .landscapeLeft, .landscapeRight:
+            partnerAttributionControlStackView.arrangedSubviews.last?.isHidden = false
+            softwareAttributionControlStackView.arrangedSubviews.last?.isHidden = false
+        default:
+            partnerAttributionControlStackView.arrangedSubviews.last?.isHidden = true
+            softwareAttributionControlStackView.arrangedSubviews.last?.isHidden = true
+        }
     }
     
     // NARK: - Actions

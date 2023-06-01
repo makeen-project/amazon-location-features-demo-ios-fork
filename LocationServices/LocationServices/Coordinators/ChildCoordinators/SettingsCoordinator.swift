@@ -75,6 +75,7 @@ extension SettingsCoordinator: SettingsNavigationDelegate {
     
     private func showAwsCloudFormationscene() {
         let controller = LoginVCBuilder.create(from: true)
+        controller.isFromSettingScene = true
         navigationController.pushViewController(controller, animated: true)
     }
     

@@ -49,5 +49,7 @@ class ImageAnnotationView: MGLAnnotationView {
         addSubview(imageView)
 
         imageView.image = image
+        
+        imageView.setShadow()
     }
 }

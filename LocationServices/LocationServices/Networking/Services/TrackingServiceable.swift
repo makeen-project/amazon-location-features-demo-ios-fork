@@ -30,8 +30,7 @@ struct TrackingAPIService: AWSTrackingServiceProtocol, TrackingServiceable {
         getTrackingHistory { result in
             
             switch result {
-            case .success(let response):
-                let positions = response.devicePositions ?? []
+            case .success(let positions):
                 let sortedPositions = positions.sorted { (position1, position2) -> Bool in
                     let timestamp1 = position1.sampleTime ?? Date()
                     let timestamp2 = position2.sampleTime ?? Date()

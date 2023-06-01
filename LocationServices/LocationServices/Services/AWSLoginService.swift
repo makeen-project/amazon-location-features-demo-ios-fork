@@ -40,7 +40,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         guard let navigationContoller = (UIApplication.shared.delegate as? AppDelegate)?.navigationController else { return }
         
         let hostedUIOptions = HostedUIOptions(scopes: ["openid", "email", "profile"], federationProviderName: "LoginWithAmazon")
-        
         AWSMobileClient.default().showSignIn(navigationController: navigationContoller, hostedUIOptions: hostedUIOptions) { (userState, error) in
             if let error = error as? AWSMobileClientError {
                 print(error.localizedDescription)
@@ -72,6 +71,10 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
                     
                     
                     self.updateAWSServicesCredentials()
+                    
+                    if let result = task.result {
+                        NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+                    }
                 
                     self.attachPolicy()
 
@@ -134,7 +137,8 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
                 UserDefaultsHelper.removeObject(for: .signedInIdentityId)
                 
                 self.updateAWSServicesCredentials()
-    
+                
+                NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
                 self.delegate?.logoutResult(nil)
             }
         }

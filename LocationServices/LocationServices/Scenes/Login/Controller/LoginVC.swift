@@ -9,6 +9,19 @@ import UIKit
 import SafariServices
 
 final class LoginVC: UIViewController {
+    
+    enum Constants {
+        static let footerViewHeight: CGFloat = 36
+        static let stackViewBottomOffset: CGFloat = 32
+        static let scrollViewBottomOffset: CGFloat = -24
+        
+        static let horizontalOffset: CGFloat = 16
+        static let bottomButtonHeight: CGFloat = 48
+        static let bottomButtonStackViewOffset: CGFloat = 5
+        
+        static let bottomGradientViewTopOffset: CGFloat = 38
+    }
+    
     var postLoginHandler: VoidHandler?
     var dismissHandler: VoidHandler?
     var isFromSettingScene: Bool = false
@@ -19,14 +32,22 @@ final class LoginVC: UIViewController {
     private var userDomain: String?
     private var webSocketUrl: String?
     
+    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    
     var viewModel: LoginViewModelProtocol! {
         didSet {
             viewModel.delegate = self
         }
     }
     
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.loginVcTitle)
+        return label
+    }()
+    
     private let scrollView: UIScrollView = {
         let sc = UIScrollView()
+        sc.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.awsConnectScrollView
         sc.alwaysBounceVertical = true
         sc.isDirectionalLockEnabled = true
         return sc
@@ -45,16 +66,29 @@ final class LoginVC: UIViewController {
     private var loginForm: LoginFormView = LoginFormView()
     private var footerView: LoginFooterView = LoginFooterView()
     
-    private var containerView: UIView = {
-       let view = UIView()
-        view.backgroundColor = .white
+    private var bottomGradientView: GradientView = {
+        let colors: [UIColor] = [.white.withAlphaComponent(0), .white]
+        let startPoint: CGPoint = CGPoint(x: 0, y: 0)
+        let endPoint: CGPoint = CGPoint(x: 0, y: 1)
+        let locations: [NSNumber] = [0, 1]
+        let view = GradientView(colors: colors, startPoint: startPoint, endPoint: endPoint, locations: locations)
+        view.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.awsConnectGradientView
         return view
+    }()
+    
+    private var bottomButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 5
+        return stackView
     }()
     
     private lazy var signInButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.signInButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Sign In", for: .normal)
@@ -82,11 +116,12 @@ final class LoginVC: UIViewController {
     private lazy var connectButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.connectButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Connect", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(connectButtonAction), for: .touchUpInside)
         return button
@@ -101,11 +136,11 @@ final class LoginVC: UIViewController {
         button.layer.cornerRadius = 10
         button.setTitle("Disconnect from AWS", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(disconnectButtonAction), for: .touchUpInside)
         return button
     }()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,7 +153,7 @@ final class LoginVC: UIViewController {
     }
     
     private func updateAccordingToAppState() {
-        let state =  isFromSettingScene && viewModel.hasLocalUser()
+        let state = isFromSettingScene && viewModel.hasLocalUser()
         
         let appState = UserDefaultsHelper.getAppState()
         
@@ -149,11 +184,23 @@ final class LoginVC: UIViewController {
     
     private func settingsViewsUpdate() {
         loginView.hideCloseButton(state: isFromSettingScene)
-        if isFromSettingScene {
+        
+        navigationController?.isNavigationBarHidden = !isFromSettingScene
+        if isFromSettingScene && !isPad {
             self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-            self.navigationItem.title = "AWS CloudFormation"
+            navigationItem.title = StringConstant.loginVcTitle
             self.view.backgroundColor = .white
+            
+            let navigationBarAppearance = UINavigationBarAppearance()
+            navigationBarAppearance.configureWithOpaqueBackground()
+            navigationBarAppearance.backgroundColor = .white
+            navigationBarAppearance.titleTextAttributes = [
+                .font: UIFont.amazonFont(type: .bold, size: 16),
+                .foregroundColor: UIColor.lsTetriary]
+            self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+            self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+            self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
         }
     }
     
@@ -164,10 +211,25 @@ final class LoginVC: UIViewController {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardSize.height
-            }
+        guard let userInfo = notification.userInfo else { return }
+
+        let screen: UIScreen
+        if #available(iOS 16.1, *) {
+            guard let screenUnwrapped = notification.object as? UIScreen else { return }
+            screen = screenUnwrapped
+        } else {
+            guard let screenUnwrapped = view.window?.screen else { return }
+            screen = screenUnwrapped
+        }
+        guard let keyboardFrameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+
+        let fromCoordinateSpace = screen.coordinateSpace
+        let toCoordinateSpace: UICoordinateSpace = view
+        let convertedKeyboardFrameEnd = fromCoordinateSpace.convert(keyboardFrameEnd, to: toCoordinateSpace)
+
+        let viewIntersection = view.bounds.intersection(convertedKeyboardFrameEnd)
+        if !viewIntersection.isEmpty {
+            self.view.frame.origin.y = -(view.bounds.maxY - viewIntersection.minY)
         }
     }
     
@@ -279,8 +341,8 @@ final class LoginVC: UIViewController {
     }
     
     private func setup() {
-        
         let appState = UserDefaultsHelper.getAppState()
+        scrollView.contentInset = .init(top: 0, left: 0, bottom: -Constants.scrollViewBottomOffset, right: 0)
         
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
@@ -288,87 +350,67 @@ final class LoginVC: UIViewController {
         stackView.addArrangedSubview(loginForm)
         stackView.addArrangedSubview(footerView)
         
-        view.addSubview(containerView)
-        containerView.addSubview(signInButton)
-        containerView.addSubview(signOutButton)
+        view.addSubview(bottomGradientView)
+        view.addSubview(bottomButtonStackView)
+        bottomButtonStackView.addArrangedSubview(signInButton)
+        bottomButtonStackView.addArrangedSubview(signOutButton)
         
-        containerView.addSubview(connectButton)
-        containerView.addSubview(disconnectButton)
+        bottomButtonStackView.addArrangedSubview(connectButton)
+        bottomButtonStackView.addArrangedSubview(disconnectButton)
         
-        if appState == .initial || appState == .defaultAWSConnected {
-            scrollView.snp.makeConstraints {
+        let shouldShowScreenTitleLabel = isFromSettingScene && isPad
+        if shouldShowScreenTitleLabel {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(view.safeAreaLayoutGuide)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview().offset(-80)
+                $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalOffset)
             }
-        } else {
-            scrollView.snp.makeConstraints {
+        }
+            
+        scrollView.snp.makeConstraints {
+            if shouldShowScreenTitleLabel {
+                $0.top.equalTo(screenTitleLabel.snp.bottom)
+            } else {
                 $0.top.equalTo(view.safeAreaLayoutGuide)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview().offset(-160)
             }
+            $0.leading.trailing.equalToSuperview()
         }
         
         stackView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.bottom.greaterThanOrEqualToSuperview().offset(-32)
+            $0.bottom.greaterThanOrEqualToSuperview().offset(-Constants.stackViewBottomOffset)
         }
         
         footerView.snp.makeConstraints {
-            $0.height.equalTo(36)
-        }
-                
-        // States here:
-        // we are not custom connected -> 80, show only connect/disconnect button
-        // we are custom connected -> 160, show sign in/sign out and disconnect button
-        var heightContainer = 160
-        
-        if appState == .initial || appState == .defaultAWSConnected {
-            heightContainer = 80
+            $0.height.equalTo(Constants.footerViewHeight)
         }
         
-        containerView.snp.makeConstraints {
-            $0.height.equalTo(heightContainer)
-            $0.bottom.leading.trailing.equalToSuperview()
+        bottomButtonStackView.snp.makeConstraints {
+            $0.top.equalTo(scrollView.snp.bottom).offset(Constants.scrollViewBottomOffset)
+            $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-Constants.bottomButtonStackViewOffset)
         }
         
         signInButton.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.top.equalToSuperview().offset(5)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(Constants.bottomButtonHeight)
         }
         
         signOutButton.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.top.equalToSuperview().offset(5)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(Constants.bottomButtonHeight)
         }
         
         connectButton.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.top.equalToSuperview().offset(5)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(Constants.bottomButtonHeight)
         }
         
-        if appState == .initial || appState == .defaultAWSConnected {
-            disconnectButton.snp.makeConstraints {
-                $0.height.equalTo(48)
-                $0.top.equalToSuperview().offset(5)
-                $0.leading.equalToSuperview().offset(16)
-                $0.trailing.equalToSuperview().offset(-16)
-            }
-        } else {
-            disconnectButton.snp.makeConstraints {
-                $0.height.equalTo(48)
-                $0.top.equalTo(signInButton.snp.bottom).offset(5)
-                
-                $0.leading.equalToSuperview().offset(16)
-                $0.trailing.equalToSuperview().offset(-16)
-            }
+        disconnectButton.snp.makeConstraints {
+            $0.height.equalTo(Constants.bottomButtonHeight)
+        }
+        
+        bottomGradientView.snp.makeConstraints {
+            $0.top.equalTo(bottomButtonStackView.snp.top).offset(-Constants.bottomGradientViewTopOffset)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }

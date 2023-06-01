@@ -10,7 +10,7 @@ import UIKit
 /// App Colors
 extension UIColor {
     /// Tabbar Colors
-    static let tabBarTintColor = UIColor(named: "tabBarTintColor")!
+    static let lsPrimary = UIColor(named: "lsPrimary")!
     static let tabBarBackgroundColor = UIColor(named: "tabBarBackgroundColor")!
     static let tabBarUnselectedColor = UIColor(named: "tabBarUnselectedColor")!
     
@@ -34,5 +34,9 @@ extension UIColor {
     static let lsLighten = UIColor(named: "lsLighten")!
     static let lsTetriary = UIColor(named: "lsTetriary")!
     static let lsInfo = UIColor(named: "lsInfo")!
+    static let lsLight2 = UIColor(named: "lsLight2")!
+    static let lsLight3 = UIColor(named: "lsLight3")!
     
+    // Settings & About Colors
+    static let settingsSelectionColor = UIColor(named: "settingsSelectionColor")!
 }

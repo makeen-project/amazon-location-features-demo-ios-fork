@@ -43,23 +43,6 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             }
         }
     }
-
-    func showSearchSceneWith(lat: Double?, long: Double?) {
-      
-        let controller = SearchVCBuilder.create()
-        controller.userLocation = (lat, long)
-        controller.modalPresentationStyle = .pageSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.large(), .medium()]
-            sheet.selectedDetentIdentifier = .large
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.preferredCornerRadius = 10
-        }
-        
-        navigationController.present(controller, animated: true)
-    }
     
     func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?) {
         let controller = GeofenceDashboardBuilder.create(lat: lat, long: long, geofences: geofences)
@@ -78,7 +61,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .medium
         }
@@ -91,6 +74,12 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
                              model: GeofenceDataModel?,
                              lat: Double?,
                              long: Double?) {
+        
+        if let controller = navigationController.presentedViewController as? AddGeofenceVC {
+            controller.update(lat: lat, long: long)
+            return
+        }
+        
         dismissCurrentScene(geofences: [], shouldDashboardShow: false)
         let controller = AddGeofenceBuilder.create(activeGeofencesLists: activeGeofencesLists,
                                                    isEditingSceneEnabled: isEditingSceneEnabled,
@@ -104,7 +93,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             sheet.prefersGrabberVisible = true
             sheet.largestUndimmedDetentIdentifier = .medium
         }
@@ -124,7 +113,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -147,7 +136,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             sheet.detents = [.large()]
             sheet.selectedDetentIdentifier = .large
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -166,7 +155,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
                 sheet.detents = [.large()]
                 sheet.selectedDetentIdentifier = .large
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.navigationController.present(controller, animated: true)
         }
@@ -174,6 +163,9 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
         navigationController.pushViewController(controller, animated: true)
     }
 }

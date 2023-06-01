@@ -15,13 +15,29 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios run_unit_tests
+
+```sh
+[bundle exec] fastlane ios run_unit_tests
+```
+
+Run unit tests
+
+### ios run_e2e_tests
+
+```sh
+[bundle exec] fastlane ios run_e2e_tests
+```
+
+Run e2e tests
+
 ### ios build_distribute
 
 ```sh
 [bundle exec] fastlane ios build_distribute
 ```
 
-Push a new release build to the App Store
+Build and upload to Testflight
 
 ----
 

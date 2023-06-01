@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon-aws-cloudformation</title>
+    <title>icon-aws-cloudformation@1x</title>
     <g id="UI-Kit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Icons" transform="translate(-88.000000, -320.000000)" fill-rule="nonzero">
-            <g id="Row-5" transform="translate(40.000000, 320.000000)">
+        <g id="Icons" transform="translate(-88.000000, -352.000000)" fill-rule="nonzero">
+            <g id="Row-6" transform="translate(40.000000, 352.000000)">
                 <g id="Icon" transform="translate(50.000000, 0.000000)">
                     <polyline id="Path" fill="#B7CA9D" points="1.28835938 16.5983295 1.45835938 16.7885484 10.0454688 19.1880016 10.084375 17.7006748 4.0703125 16.212963 3.77601563 16.1083041 1.28835938 16.5983295"></polyline>
                     <polyline id="Path" fill="#B7CA9D" points="18.7113281 16.5983295 9.94140625 19.4839575 9.9153125 17.7006748 15.9292969 16.212963 16.1914062 15.9221669 18.7113281 16.5983295"></polyline>
