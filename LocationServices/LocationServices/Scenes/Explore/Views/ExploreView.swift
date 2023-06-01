@@ -230,7 +230,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         mapView.setCenter(coordinates, zoomLevel: Constant.mapZoomValue, direction: mapView.direction, animated: true)
     }
     
-    func isLocateMeButtonDisabled(state: Bool) {
+    func isLocateMeButtonDisabled(state: Bool, animatedUserLocation: Bool = true) {
         guard !state,
               let userCoordinates = mapView.userLocation?.coordinate,
               CLLocationCoordinate2DIsValid(userCoordinates) else {
@@ -238,11 +238,11 @@ final class ExploreView: UIView, NavigationMapProtocol {
             return
         }
         
-        setMapCenter(userCoordinates: userCoordinates)
+        setMapCenter(userCoordinates: userCoordinates, animated: animatedUserLocation)
     }
     
-    private func setMapCenter(userCoordinates: CLLocationCoordinate2D) {
-        mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
+    private func setMapCenter(userCoordinates: CLLocationCoordinate2D, animated: Bool) {
+        mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: animated) { [weak self] in
             switch self?.mapMode {
             case .search, .none:
                 self?.mapView.userTrackingMode = .follow
@@ -827,7 +827,7 @@ private extension ExploreView {
         let action = { [weak self] in
             guard let self else { return }
             let state = self.mapView.locationManager.authorizationStatus == .authorizedWhenInUse
-            self.isLocateMeButtonDisabled(state: !state)
+            self.isLocateMeButtonDisabled(state: !state, animatedUserLocation: !force)
         }
         
         guard !force else {
@@ -923,7 +923,7 @@ extension ExploreView: MGLMapViewDelegate {
                   let userCoordinates = userLocation?.coordinate else { return }
             
             wasCenteredByUserLocation = true
-            setMapCenter(userCoordinates: userCoordinates)
+            setMapCenter(userCoordinates: userCoordinates, animated: true)
         case .turnByTurnNavigation:
             guard let userCoordinates = userLocation?.coordinate else { return }
             delegate?.userLocationChanged(userCoordinates)
