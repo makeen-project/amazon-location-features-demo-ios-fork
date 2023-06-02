@@ -30,10 +30,6 @@ extension UIViewController {
         return self.parent!.view.frame.height * 0.95
     }
     
-    func getBottomSheetHeightConstraint() -> [NSLayoutConstraint] {
-        return []
-    }
-    
    func createGrabberView() -> UIView {
         let grabberView = UIView()
         grabberView.backgroundColor = .systemGray4
@@ -47,9 +43,9 @@ extension UIViewController {
         parentController.view.addSubview(self.view)
         self.didMove(toParent: parentController)
         self.view.snp.makeConstraints {
-            $0.leading.equalTo((parent?.view.snp.leading)!)
-            $0.trailing.equalTo((parent?.view.snp.trailing)!)
-            $0.bottom.equalTo((parent?.view.snp.bottom)!)
+            $0.leading.equalTo(parentController.view.snp.leading)
+            $0.trailing.equalTo(parentController.view.snp.trailing)
+            $0.bottom.equalTo(parentController.view.snp.bottom)
         }
     }
     
@@ -89,59 +85,69 @@ extension UIViewController {
     @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: self.view)
         let currentHeight = view.frame.height - translation.y
-        
+
         let newHeight = max(min(currentHeight, getLargeDetentHeight()), getSmallDetentHeight())
 
-        if recognizer.state == .changed {
+        switch recognizer.state {
+        case .changed:
             self.updateBottomSheetHeight(to: currentHeight)
             recognizer.setTranslation(.zero, in: view)
-        } else if recognizer.state == .ended {
+        case .ended:
             let velocity = recognizer.velocity(in: view).y
-            let targetDetentHeight: CGFloat
-            
-            if abs(velocity) < 500 { // If the velocity is low, snap to the nearest detent
-                let smallDiff = abs(newHeight - getSmallDetentHeight())
-                let mediumDiff = abs(newHeight - getMediumDetentHeight())
-                let largeDiff = abs(newHeight - getLargeDetentHeight())
-                
-                let minDiff = min(smallDiff, min(mediumDiff, largeDiff))
-                
-                if minDiff == smallDiff {
-                    targetDetentHeight = getSmallDetentHeight()
-                } else if minDiff == mediumDiff {
-                    targetDetentHeight = getMediumDetentHeight()
-                } else {
-                    targetDetentHeight = getLargeDetentHeight()
-                }
-            } else {
-                let currentDetentHeight: CGFloat
-                if newHeight < getMediumDetentHeight() {
-                    currentDetentHeight = getSmallDetentHeight()
-                } else if newHeight < getLargeDetentHeight() {
-                    currentDetentHeight = getMediumDetentHeight()
-                } else {
-                    currentDetentHeight = getLargeDetentHeight()
-                }
-                
-                if velocity < 0 {
-                    if currentDetentHeight == getSmallDetentHeight() {
-                        targetDetentHeight = getMediumDetentHeight()
-                    } else {
-                        targetDetentHeight = getLargeDetentHeight()
-                    }
-                } else {
-                    if currentDetentHeight == getLargeDetentHeight() {
-                        targetDetentHeight = getMediumDetentHeight()
-                    } else {
-                        targetDetentHeight = getSmallDetentHeight()
-                    }
-                }
-            }
-            
+            let targetDetentHeight = getTargetDetentHeight(newHeight: newHeight, velocity: velocity)
+
             UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut) {
                 self.updateBottomSheetHeight(to: targetDetentHeight)
                 self.parent?.view.layoutIfNeeded()
             }
+        default:
+            break
+        }
+    }
+
+    private func getTargetDetentHeight(newHeight: CGFloat, velocity: CGFloat) -> CGFloat {
+        let targetDetentHeight: CGFloat
+
+        if abs(velocity) < 500 {
+            targetDetentHeight = snapToNearestDetent(newHeight)
+        } else {
+            targetDetentHeight = snapToNextDetent(newHeight, velocity: velocity)
+        }
+
+        return targetDetentHeight
+    }
+
+    private func snapToNearestDetent(_ newHeight: CGFloat) -> CGFloat {
+        let smallDiff = abs(newHeight - getSmallDetentHeight())
+        let mediumDiff = abs(newHeight - getMediumDetentHeight())
+        let largeDiff = abs(newHeight - getLargeDetentHeight())
+
+        let minDiff = min(smallDiff, min(mediumDiff, largeDiff))
+
+        switch minDiff {
+        case smallDiff:
+            return getSmallDetentHeight()
+        case mediumDiff:
+            return getMediumDetentHeight()
+        default:
+            return getLargeDetentHeight()
+        }
+    }
+
+    private func snapToNextDetent(_ newHeight: CGFloat, velocity: CGFloat) -> CGFloat {
+        let currentDetentHeight: CGFloat
+        if newHeight < getMediumDetentHeight() {
+            currentDetentHeight = getSmallDetentHeight()
+        } else if newHeight < getLargeDetentHeight() {
+            currentDetentHeight = getMediumDetentHeight()
+        } else {
+            currentDetentHeight = getLargeDetentHeight()
+        }
+
+        if velocity < 0 {
+            return currentDetentHeight == getSmallDetentHeight() ? getMediumDetentHeight() : getLargeDetentHeight()
+        } else {
+            return currentDetentHeight == getLargeDetentHeight() ? getMediumDetentHeight() : getSmallDetentHeight()
         }
     }
     

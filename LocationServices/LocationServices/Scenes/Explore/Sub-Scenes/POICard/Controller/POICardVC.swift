@@ -105,7 +105,7 @@ extension POICardVC: POICardViewModelOutputDelegate {
     
     func dismissPoiView() {
         self.updateMapViewBottomIcons()
-        self.dismiss(animated: true)
+        self.view.removeFromSuperview()
     }
     
     

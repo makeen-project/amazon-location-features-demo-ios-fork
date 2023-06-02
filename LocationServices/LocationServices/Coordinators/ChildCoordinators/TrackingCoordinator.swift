@@ -73,9 +73,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             if(self?.trackingController?.viewModel.isTrackingActive == true){
                 self?.showTrackingHistory(isTrackingActive: true)
             }
-            else{
-                self?.showDashboardFlow()
-            }
+            else { self?.showDashboardFlow() }
         }
         currentBottomSheet?.view.removeFromSuperview()
         controller.presentBottomSheet(parentController: trackingController!)
@@ -135,14 +133,14 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
 private extension TrackingCoordinator {
     func showTrackingScene() {
         trackingController = TrackingVCBuilder.create()
-        trackingController!.geofenceHandler = {
+        trackingController?.geofenceHandler = {
             self.didSendEventClosure?()
         }
         
-        trackingController!.directionHandler = {
+        trackingController?.directionHandler = {
             self.didSendDirectionEvent?()
         }
-        trackingController!.delegate = self
+        trackingController?.delegate = self
         navigationController.pushViewController(trackingController!, animated: true)
     }
 }
