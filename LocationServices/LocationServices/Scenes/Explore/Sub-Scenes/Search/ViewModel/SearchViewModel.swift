@@ -24,6 +24,7 @@ final class SearchViewModel: SearchViewModelProcotol {
     
     func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) {
         guard !text.isEmpty else {
+            self.presentation = []
             self.delegate?.searchResult(mapModel: [], shouldDismiss: false, showOnMap: false)
             return
         }
@@ -53,6 +54,7 @@ final class SearchViewModel: SearchViewModelProcotol {
     
     func searchWith(text: String, userLat: Double?, userLong: Double?) {
         guard !text.isEmpty else {
+            self.presentation = []
             self.delegate?.searchResult(mapModel: [], shouldDismiss: false, showOnMap: false)
             return
         }
