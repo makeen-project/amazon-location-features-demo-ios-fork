@@ -91,7 +91,7 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     }
     
     private func clearAnnotations() {
-        let coordinates = ["coordinates" : []]
+        let coordinates: [String: [MapModel]] = ["coordinates" : []]
         NotificationCenter.default.post(name: Notification.userLocation, object: nil, userInfo: coordinates)
     }
     

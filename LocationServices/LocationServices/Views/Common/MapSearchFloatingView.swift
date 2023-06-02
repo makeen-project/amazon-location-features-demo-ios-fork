@@ -133,10 +133,25 @@ final class MapSearchFloatingView: UIView {
     @objc private func actionPerformed() {
         delegate?.changeSplitState(to: sideBarButtonState)
     }
+    
+    private func clearAnnotations() {
+        let coordinates: [String: [MapModel]] = ["coordinates" : []]
+        NotificationCenter.default.post(name: Notification.userLocation, object: nil, userInfo: coordinates)
+    }
 }
 
 extension MapSearchFloatingView: SearchBarViewOutputDelegate {
     func searchTextActivated() {
         delegate?.searchActivated()
+    }
+    
+    func searchText(_ text: String?) {
+        guard (text ?? "").isEmpty else { return }
+        clearAnnotations()
+    }
+    
+    func searchTextWith(_ text: String?) {
+        guard (text ?? "").isEmpty else { return }
+        clearAnnotations()
     }
 }

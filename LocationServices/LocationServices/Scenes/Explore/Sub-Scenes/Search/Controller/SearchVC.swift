@@ -76,11 +76,16 @@ final class SearchVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        searchBarView.makeSearchFirstResponder()
         searchAppearanceChanged(isVisible: true)
         
-        let mapModels = viewModel.mapModels
-        if !mapModels.isEmpty {
-            searchResult(mapModel: mapModels, shouldDismiss: false, showOnMap: false)
+        if (searchBarView.searchedText() ?? "").isEmpty {
+            viewModel.searchWith(text: "", userLat: nil, userLong: nil)
+        } else {
+            let mapModels = viewModel.mapModels
+            if !mapModels.isEmpty {
+                searchResult(mapModel: mapModels, shouldDismiss: false, showOnMap: false)
+            }
         }
         changeExploreActionButtonsVisibility()
     }
@@ -160,11 +165,11 @@ final class SearchVC: UIViewController {
 
 extension SearchVC: SearchViewModelOutputDelegate {
     func searchResult(mapModel: [MapModel], shouldDismiss: Bool, showOnMap: Bool) {
-        isInitalState = false
-        let coordinates = ["coordinates" : mapModel]
-        NotificationCenter.default.post(name: Notification.userLocation, object: nil, userInfo: coordinates)
-        
         DispatchQueue.main.async {
+            self.isInitalState = (self.searchBarView.searchedText() ?? "").isEmpty
+            let coordinates = ["coordinates" : mapModel]
+            NotificationCenter.default.post(name: Notification.userLocation, object: nil, userInfo: coordinates)
+            
             self.tableView.reloadData()
             if showOnMap {
                 self.applyMediumSheetPresentation()
