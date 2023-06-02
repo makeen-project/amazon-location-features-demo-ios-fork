@@ -128,7 +128,7 @@ extension POICardVC: POICardViewModelOutputDelegate {
     @objc func dismissPoiView() {
         clearAnnotations()
         updateMapViewBottomIcons()
-        delegate?.closePOICardScene()
+        self.view.removeFromSuperview()
     }
     
     func showDirections(secondDestination: MapModel) {

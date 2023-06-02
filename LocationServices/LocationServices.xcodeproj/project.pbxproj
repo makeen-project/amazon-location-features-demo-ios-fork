@@ -358,6 +358,7 @@
 		DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E22A0AA47500758BBE /* UIDevice+Extensions.swift */; };
 		DF8005E52A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E42A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift */; };
 		F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */; };
+		F1021F4C2A1D079400B84312 /* TrackingHistoryEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F4B2A1D079400B84312 /* TrackingHistoryEmptyView.swift */; };
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
@@ -758,6 +759,7 @@
 		DF8005E42A0B969700758BBE /* SplitViewTrackingMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewTrackingMapCoordinator.swift; sourceTree = "<group>"; };
 		F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		F1021F4A2A1B864400B84312 /* LocationServicesUnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = LocationServicesUnitTests.xctestplan; path = ../LocationServicesUnitTests.xctestplan; sourceTree = "<group>"; };
+		F1021F4B2A1D079400B84312 /* TrackingHistoryEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHistoryEmptyView.swift; sourceTree = "<group>"; };
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
@@ -1940,6 +1942,8 @@
 			isa = PBXGroup;
 			children = (
 				AD989732298B2B210041E867 /* Controller */,
+				AD989730298B2B150041E867 /* View */,
+				AD98972F298B2B0A0041E867 /* ViewModel */,
 				AD98972E298B2B000041E867 /* Builder */,
 			);
 			path = "Tracking Dashboard";
@@ -1951,6 +1955,21 @@
 				AD989735298B2DF00041E867 /* TrackingDashboardBuilder.swift */,
 			);
 			path = Builder;
+			sourceTree = "<group>";
+		};
+		AD98972F298B2B0A0041E867 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				AD989737298B2E4C0041E867 /* TrackingDashboarViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		AD989730298B2B150041E867 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		AD989732298B2B210041E867 /* Controller */ = {
@@ -2012,6 +2031,7 @@
 				AD98974B298C6A5E0041E867 /* TrackHistoryHeaderView.swift */,
 				ADCF3849298FF68D008289BB /* TrackHistoryCell.swift */,
 				8A85A75B29A40A1E0022ABE0 /* TrackingHistorySectionHeaderView.swift */,
+				F1021F4B2A1D079400B84312 /* TrackingHistoryEmptyView.swift */,
 				8AC0806829A90BFC0000D79B /* DeleteTrackingView.swift */,
 			);
 			path = View;
@@ -3297,6 +3317,7 @@
 				ADD139A02981C4610003F917 /* MapStyleContracts.swift in Sources */,
 				8A6C390629A25E480003666C /* Reachability.swift in Sources */,
 				AD2AF0B0292EAA4100149904 /* TrackingVCBuilder.swift in Sources */,
+				F1021F4C2A1D079400B84312 /* TrackingHistoryEmptyView.swift in Sources */,
 				ADD5D7D1296F87290022480B /* AddGeofenceVC.swift in Sources */,
 				ADCF384A298FF68D008289BB /* TrackHistoryCell.swift in Sources */,
 				ADD5D7D9296F87710022480B /* AddGeofenceSearchView.swift in Sources */,

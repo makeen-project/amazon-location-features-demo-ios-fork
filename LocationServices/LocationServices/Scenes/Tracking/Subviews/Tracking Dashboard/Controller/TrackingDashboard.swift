@@ -16,7 +16,7 @@ final class TrackingDashboardController: UIViewController {
     private var dashboardView = CommonDashboardView(
         title: StringConstant.enableTracking,
         detail: StringConstant.enableTrackingDescription,
-        image: .trackingIcon,
+        image: .locateMeMapIcon,
         iconBackgroundColor: .white,
         buttonTitle: StringConstant.enableTracking
     )
@@ -37,10 +37,18 @@ final class TrackingDashboardController: UIViewController {
     
     private func setupViews() {
         self.view.addSubview(dashboardView)
-        dashboardView.snp.makeConstraints {
-            $0.centerY.equalToSuperview().multipliedBy(0.9)
-            $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalToSuperview().offset(-24)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            dashboardView.snp.makeConstraints {
+                $0.centerY.equalToSuperview().multipliedBy(0.9)
+                $0.leading.equalToSuperview().offset(24)
+                $0.trailing.equalToSuperview().offset(-24)
+            }
+        }
+        else {
+            dashboardView.snp.makeConstraints {
+                $0.top.leading.trailing.equalToSuperview()
+                $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            }
         }
     }
     

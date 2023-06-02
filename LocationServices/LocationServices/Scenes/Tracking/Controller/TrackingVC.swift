@@ -150,14 +150,14 @@ final class TrackingVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc override func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
         let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
         trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc override func keyboardWillHide(notification: NSNotification) {
         trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
     }
     
@@ -270,23 +270,9 @@ final class TrackingVC: UIViewController {
         }
         navigationController?.navigationBar.isHidden = !isInSplitViewController
         self.view.addSubview(trackingMapView)
-        self.view.addSubview(historyHeaderView)
-        self.view.addSubview(grabberIcon)
-        
+
         trackingMapView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        historyHeaderView.snp.makeConstraints {
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
-        grabberIcon.snp.makeConstraints {
-            $0.bottom.equalTo(historyHeaderView.snp.top).offset(16)
-            $0.width.equalTo(36)
-            $0.height.equalTo(5)
-            $0.centerX.equalToSuperview()
         }
     }
 }

@@ -17,7 +17,7 @@ final class CommonDashboardView: UIView {
     
     private let iconContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
+        view.backgroundColor = .white
         return view
     }()
     private let iconView: UIImageView = {
@@ -41,6 +41,17 @@ final class CommonDashboardView: UIView {
         let button = AmazonLocationButton(title: StringConstant.addGeofence)
         button.accessibilityIdentifier = ViewsIdentifiers.Tracking.enableTrackingButton
         button.addTarget(self, action: #selector(commonButtonAction), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var maybeLaterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(StringConstant.maybeLater, for: .normal)
+        button.titleLabel?.font = UIFont.amazonFont(type: .regular, size: 13)
+        button.titleLabel?.textAlignment = .center
+        //button.addTarget(self, action: #selector(maybeLaterAction), for: .touchUpInside)
+        button.tintColor = .black
+        button.isHidden = true
         return button
     }()
     
@@ -84,13 +95,19 @@ final class CommonDashboardView: UIView {
                                     buttonTitle: String,
                                     titleFont: UIFont?,
                                     detailLabelFont: UIFont?) {
+        self.backgroundColor = .searchBarBackgroundColor
         self.titleLabel.text = title
         self.titleLabel.font = titleFont
         self.detailLabel.text = detail
         self.detailLabel.font = UIFont.amazonFont(type: .regular, size: 13)
         self.iconView.image = image
         self.iconView.backgroundColor = iconBackgroundColor
+        self.iconView.tintColor = .black
         self.comonButton.setTitle(buttonTitle, for: .normal)
+    }
+    
+    func hideMaybeLaterButton(state: Bool) {
+        self.maybeLaterButton.isHidden = true // state
     }
     
     private func setupViews() {

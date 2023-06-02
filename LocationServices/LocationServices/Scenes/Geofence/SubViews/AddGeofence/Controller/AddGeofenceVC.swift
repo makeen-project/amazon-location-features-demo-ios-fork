@@ -205,6 +205,7 @@ final class AddGeofenceVC: UIViewController {
         sentGeofenceRefreshNotification = true
         NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
         delegate?.dismissCurrentScene(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: false)
+        self.delegate?.dismissCurrentBottomSheet(geofences: self.viewModel.activeGeofencesLists, shouldDashboardShow: true)
     }
     
     private func setupViews() {
@@ -241,30 +242,30 @@ final class AddGeofenceVC: UIViewController {
         
         searchView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom).offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(110)
         }
         
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(searchView.snp.bottom).offset(28)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         saveButton.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(20)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
         }
         
         deleteButton.snp.makeConstraints {
             $0.top.equalTo(saveButton.snp.bottom).offset(8)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
-            $0.bottom.equalToSuperview()
+            $0.bottomMargin.equalToSuperview().offset(20)
         }
         
         tableView.snp.makeConstraints {
@@ -319,7 +320,7 @@ final class AddGeofenceVC: UIViewController {
             case .success:
                 self?.sentGeofenceRefreshNotification = true
                 NotificationCenter.default.post(name: Notification.geofenceAdded, object: nil, userInfo: ["model": self?.cacheSaveModel as Any])
-                self?.delegate?.dismissCurrentScene(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
+                self?.delegate?.dismissCurrentBottomSheet(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
                 self?.showAlert(model)
@@ -379,7 +380,7 @@ extension AddGeofenceVC: AddGeofenceViewModelOutputProtocol {
     
     func finishProcess() {
         deleteNotification(model: cacheSaveModel)
-        self.delegate?.dismissCurrentScene(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: true)
+        self.delegate?.dismissCurrentBottomSheet(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: true)
     }
     
     private func setupKeyboardNotifications() {
@@ -392,14 +393,14 @@ extension AddGeofenceVC: AddGeofenceViewModelOutputProtocol {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc override func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
         let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
         scrollView.contentInset.bottom = additionalOffset
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc override func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset.bottom = 0
     }
 }

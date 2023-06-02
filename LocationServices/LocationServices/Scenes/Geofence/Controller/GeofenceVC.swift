@@ -91,14 +91,14 @@ final class GeofenceVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc override func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
         let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
         geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc override func keyboardWillHide(notification: NSNotification) {
         geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
     }
     
@@ -231,24 +231,9 @@ final class GeofenceVC: UIViewController {
         }
         
         view.addSubview(geofenceMapView)
-        view.addSubview(headerView)
-        view.addSubview(grabberIcon)
         
         geofenceMapView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        headerView.snp.makeConstraints {
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(80)
-        }
-        
-        grabberIcon.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.top).offset(8)
-            $0.width.equalTo(36)
-            $0.height.equalTo(5)
-            $0.centerX.equalToSuperview()
         }
     }
     

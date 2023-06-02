@@ -36,7 +36,7 @@ final class TrackingHistoryHeaderView: UIView {
     }()
     
     private lazy var trackingActionButton: AmazonLocationButton =  {
-        let button = AmazonLocationButton(title: "Start Tracking")
+        let button = AmazonLocationButton(title: StringConstant.startTracking)
         button.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingActionButton
         button.addTarget(self, action: #selector(trackingButtonAction), for: .touchUpInside)
         return button
