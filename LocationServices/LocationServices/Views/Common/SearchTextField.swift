@@ -46,7 +46,7 @@ final class SearchTextField: UIView {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
         textField.isUserInteractionEnabled = true
-        textField.clearButtonMode = .whileEditing
+        textField.clearButtonMode = .always
         textField.addTarget(self, action: #selector(textFieldTapped), for: .touchDown)
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return textField
@@ -108,9 +108,17 @@ final class SearchTextField: UIView {
             searchTextField.becomeFirstResponder()
         }
     }
+    
+    func makeSearchFirstResponder() {
+        searchTextField.becomeFirstResponder()
+    }
         
     func configureTextFieldWith(text: String) {
         searchTextField.text = text
+    }
+    
+    func searchedText() -> String? {
+        return searchTextField.text
     }
         
     required init?(coder: NSCoder) {
@@ -160,6 +168,9 @@ private extension SearchTextField {
     }
     
     @objc func cancelAction() {
+        debounceManager.debounce {}
+        searchTextField.text = nil
+        searchText?("")
         searchTextField.resignFirstResponder()
         cancelSearchCallback?()
     }
@@ -180,6 +191,10 @@ extension SearchTextField: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.textFieldDeactivated?()
         return true
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return searchState
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {

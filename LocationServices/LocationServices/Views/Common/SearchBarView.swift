@@ -176,6 +176,14 @@ final class SearchBarView: UIView {
         searchView.applyStyle(backgroundColor: style.textFieldBackgroundColor)
     }
     
+    func makeSearchFirstResponder() {
+        searchView.makeSearchFirstResponder()
+    }
+    
+    func searchedText() -> String? {
+        searchView.searchedText()
+    }
+    
     private func configure() {
         addSubview(containerView)
         containerView.addSubview(stackView)
