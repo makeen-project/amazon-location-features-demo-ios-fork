@@ -1819,7 +1819,7 @@
 		AD98972B298B291F0041E867 /* Tracking Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				AD989732298B2B210041E867 /* Cntroller */,
+				AD989732298B2B210041E867 /* Controller */,
 				AD989730298B2B150041E867 /* View */,
 				AD98972F298B2B0A0041E867 /* ViewModel */,
 				AD98972E298B2B000041E867 /* Builder */,
@@ -1859,12 +1859,12 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		AD989732298B2B210041E867 /* Cntroller */ = {
+		AD989732298B2B210041E867 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				AD989733298B2B2D0041E867 /* TrackingDashboard.swift */,
 			);
-			path = Cntroller;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		AD98973B298C4F670041E867 /* Tracking History */ = {
