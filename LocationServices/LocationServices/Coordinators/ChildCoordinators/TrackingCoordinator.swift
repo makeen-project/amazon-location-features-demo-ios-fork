@@ -49,14 +49,14 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         controller.closeHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true, completion: nil)
         }
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: trackingController!)
         currentBottomSheet = controller
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
         let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: trackingController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -69,13 +69,13 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         dismissCurrentScene()
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.currentBottomSheet?.view.removeFromSuperview()
+            self?.currentBottomSheet?.dismissBottomSheet()
             if(self?.trackingController?.viewModel.isTrackingActive == true){
                 self?.showTrackingHistory(isTrackingActive: true)
             }
             else { self?.showDashboardFlow() }
         }
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: trackingController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller

@@ -28,7 +28,7 @@ final class ExploreCoordinator: Coordinator {
 
 extension ExploreCoordinator: ExploreNavigationDelegate {
     func dismissSearchScene() {
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
     }
     
     func showMapStyles() {
@@ -36,9 +36,9 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         let controller = ExploreMapStyleBuilder.create()
 
         controller.dismissHandler = { [weak self] in
-            self?.currentBottomSheet?.view.removeFromSuperview()
+            self?.currentBottomSheet?.dismissBottomSheet()
         }
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -53,7 +53,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         self.dismissSearchScene()
         let controller = DirectionVCBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.currentBottomSheet?.view.removeFromSuperview()
+            self?.currentBottomSheet?.dismissBottomSheet()
             
             NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
             
@@ -78,7 +78,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         
         controller.userLocation = (lat, long)
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -88,7 +88,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         let controller = SearchVCBuilder.create()
         controller.userLocation = (lat, long)
         
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -97,7 +97,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     func showSearchScene() {
         let controller = SearchVCBuilder.create()
         
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -107,7 +107,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         let controller = POICardVCBuilder.create(cardData: cardData, lat: lat, long: long)
         controller.delegate = self
         controller.userLocation = (lat, long)
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: exploreController!)
         controller.setBottomSheetHeight(to: 200)
         currentBottomSheet = controller
@@ -121,7 +121,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             let controller = NavigationBuilder.create(steps: steps, summaryData: summaryData, firstDestionation: firstDestionation, secondDestionation: secondDestionation)
             controller.delegate = self
             
-            currentBottomSheet?.view.removeFromSuperview()
+            currentBottomSheet?.dismissBottomSheet()
             controller.presentBottomSheet(parentController: exploreController!)
             controller.enableBottomSheetGrab()
             currentBottomSheet = controller

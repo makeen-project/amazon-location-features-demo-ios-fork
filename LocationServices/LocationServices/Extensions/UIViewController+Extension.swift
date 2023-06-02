@@ -17,6 +17,15 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+        
+    @objc func keyboardWillShow(notification: NSNotification) {
+        // Handle keyboard show event
+        self.updateBottomSheetHeight(to: getLargeDetentHeight())
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        // Handle keyboard hide event
+    }
     
     func getSmallDetentHeight() -> CGFloat {
         return self.parent!.view.frame.height * 0.1
@@ -38,7 +47,24 @@ extension UIViewController {
         return grabberView
     }
     
+    func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func removeKeyboardObservers() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func dismissBottomSheet() {
+        removeKeyboardObservers()
+        self.view.removeFromSuperview()
+    }
+    
     func presentBottomSheet(parentController: UIViewController) {
+        addKeyboardObservers()
+        
         parentController.addChild(self)
         parentController.view.addSubview(self.view)
         self.didMove(toParent: parentController)

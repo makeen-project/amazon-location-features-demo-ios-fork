@@ -47,7 +47,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
     }
     
     func dismissCurrentBottomSheet(geofences: [GeofenceDataModel], shouldDashboardShow: Bool) {
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
             if shouldDashboardShow {
                 self.showDashboardFlow(geofences: geofences, lat: nil, long: nil)
             }
@@ -58,7 +58,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
         let controller = SearchVCBuilder.create()
         controller.userLocation = (lat, long)
 
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: geofenceController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -76,7 +76,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             
         }
 
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: geofenceController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -94,7 +94,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
                                                    long: long)
         controller.delegate = self
         
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: geofenceController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
@@ -104,10 +104,10 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
         dismissCurrentScene(geofences: [], shouldDashboardShow: false)
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.currentBottomSheet?.view.removeFromSuperview()
+            self?.currentBottomSheet?.dismissBottomSheet()
         }
         
-        currentBottomSheet?.view.removeFromSuperview()
+        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: geofenceController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
