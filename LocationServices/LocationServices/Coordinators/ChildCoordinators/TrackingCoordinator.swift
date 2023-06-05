@@ -58,7 +58,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: trackingController!)
-        controller.enableBottomSheetGrab()
+        controller.enableBottomSheetGrab(smallHeight: 0.12)
         currentBottomSheet = controller
         
         // Starting tracking by default when tapping on Enable tracking button

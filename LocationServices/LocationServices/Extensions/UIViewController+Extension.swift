@@ -51,16 +51,22 @@ extension UIViewController {
         // Handle keyboard hide event
     }
     
+    private struct DetentHeights {
+        static var small = 0.1
+        static var medium = 0.5
+        static var large = 0.95
+    }
+    
     func getSmallDetentHeight() -> CGFloat {
-        return self.parent!.view.frame.height * 0.1
+        return self.parent!.view.frame.height * DetentHeights.small
     }
     
     func getMediumDetentHeight() -> CGFloat {
-        return self.parent!.view.frame.height * 0.5
+        return self.parent!.view.frame.height * DetentHeights.medium
     }
     
     func getLargeDetentHeight() -> CGFloat {
-        return self.parent!.view.frame.height * 0.95
+        return self.parent!.view.frame.height * DetentHeights.large
     }
     
    func createGrabberView() -> UIView {
@@ -99,7 +105,12 @@ extension UIViewController {
         }
     }
     
-    func enableBottomSheetGrab() {
+    func enableBottomSheetGrab(smallHeight:CGFloat = 0.1, mediumHeight:CGFloat = 0.5, largeHeight:CGFloat = 0.95) {
+        
+        DetentHeights.small = smallHeight
+        DetentHeights.medium = mediumHeight
+        DetentHeights.large = largeHeight
+        
         let grabberView = createGrabberView()
         view.addSubview(grabberView)
         grabberView.snp.makeConstraints{

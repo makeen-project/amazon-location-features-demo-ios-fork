@@ -225,7 +225,7 @@ extension ExploreVC: ExploreViewModelOutputDelegate {
     }
 }
 
-private extension ExploreVC {
+extension ExploreVC {
     func setupNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateLocation(_:)), name: Notification.userLocation, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(selectPlace(_:)), name: Notification.selectedPlace, object: nil)
@@ -260,14 +260,14 @@ private extension ExploreVC {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc override func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
         let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
         exploreView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc override func keyboardWillHide(notification: NSNotification) {
         exploreView.updateBottomViewsSpacings(additionalBottomOffset: 0)
     }
     

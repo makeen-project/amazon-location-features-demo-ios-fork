@@ -63,6 +63,10 @@ final class SplitViewGeofencingMapCoordinator: Coordinator {
 }
 
 extension SplitViewGeofencingMapCoordinator: GeofenceNavigationDelegate {
+    func dismissCurrentBottomSheet(geofences: [GeofenceDataModel], shouldDashboardShow: Bool) {
+        
+    }
+    
     func dismissCurrentScene(geofences: [GeofenceDataModel], shouldDashboardShow: Bool) {
         showDashboardFlow(geofences: geofences, lat: secondaryController.userCoreLocation?.latitude, long: secondaryController.userCoreLocation?.longitude)
     }

@@ -25,7 +25,7 @@ final class TrackingDashboardController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .searchBarBackgroundColor
         navigationItem.backButtonTitle = ""
         setupHandlers()
         setupViews()
@@ -46,8 +46,8 @@ final class TrackingDashboardController: UIViewController {
         }
         else {
             dashboardView.snp.makeConstraints {
-                $0.top.leading.trailing.equalToSuperview()
-                $0.bottom.equalTo(view.safeAreaLayoutGuide)
+                $0.top.leading.equalTo(view.safeAreaLayoutGuide).offset(16)
+                $0.trailing.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
             }
         }
     }
