@@ -9,7 +9,8 @@ iOS Application for using Location Services of Amazon
 ## Project Setup
 
 ### Prerequistes
-Things you have install before start working with a project
+* Sign in to [Amazon AWS account](https://aws.amazon.com/)
+* Run the [CF template](https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/create?stackName=amazon-location-resources-setup&templateURL=https://amazon-location-demo-resources.s3.amazonaws.com/location-services.yaml) using your own AWS account and get `IdentityPoolId` and `region` from stack output
 
 ### Configuration.
 
