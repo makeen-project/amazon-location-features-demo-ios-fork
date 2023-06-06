@@ -11,7 +11,8 @@ import SnapKit
 final class SearchCell: UITableViewCell {
     static let reuseId: String = "SearchCell"
     
-    private let continerView: UIView = UIView()
+    private let containerView: UIView = UIView()
+    private let contentCellView: UIView = UIView()
     
     var model: SearchCellViewModel! {
         didSet {
@@ -35,20 +36,12 @@ final class SearchCell: UITableViewCell {
             }
             
             if let distance = model.locationDistance {
-                self.dotView.isHidden = false
                 self.locationDistance.isHidden = false
                 self.locationDistance.text = distance.convertToKm()
-                updateConstraitForAddress(shouldAlingLeft: false)
             } else {
-                self.dotView.isHidden = true
                 self.locationDistance.isHidden = true
-                updateConstraitForAddress(shouldAlingLeft: true)
-            }
-    
-            if locationAddress.text == nil  {
-                updateConstraintsForTitle(shouldAlingCenter: true)
-            } else {
-                updateConstraintsForTitle(shouldAlingCenter: false, withAddress: true)
+                self.locationAddress.isHidden = true
+                // updateConstraintsForTitle(shouldAlingCenter: true)
             }
         }
     }
@@ -64,7 +57,9 @@ final class SearchCell: UITableViewCell {
         let label = UILabel()
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 16)
-        label.textColor = .black
+        label.textColor = .tertiaryColor
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 1
         return label
     }()
     
@@ -73,7 +68,7 @@ final class SearchCell: UITableViewCell {
         label.accessibilityIdentifier = ViewsIdentifiers.Search.cellAddressLabel
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textColor = .searchBarTintColor
+        label.textColor = .gray
         label.numberOfLines = 2
         return label
     }()
@@ -81,24 +76,36 @@ final class SearchCell: UITableViewCell {
     private let locationDistance: UILabel = {
         let label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textAlignment = .left
-        label.textColor = .searchBarTintColor
+        label.textAlignment = .right
+        label.textColor = .tertiaryColor
         label.setContentHuggingPriority(UILayoutPriority(251), for: .horizontal)
         label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
         return label
-    }()
-    
-    private let dotView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .searchBarTintColor
-        view.layer.cornerRadius = 3
-        return view
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCellProperties()
         setupViews()
+    }
+    
+    func updateConstraintsForTitle(shouldAlingCenter: Bool) {
+        if shouldAlingCenter {
+            locationTitle.snp.remakeConstraints {
+                $0.leading.equalToSuperview()
+                $0.centerY.equalTo(searchTypeImage.snp.centerY)
+                $0.trailing.lessThanOrEqualToSuperview().offset(-12)
+            }
+            locationAddress.snp.remakeConstraints{
+                $0.width.equalTo(0)
+                $0.height.equalTo(0)
+            }
+        } else {
+            locationTitle.snp.remakeConstraints {
+                $0.top.equalToSuperview()
+                $0.trailing.lessThanOrEqualTo(locationDistance.snp.leading).offset(-8)
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -121,86 +128,45 @@ private extension SearchCell {
         self.selectionStyle = .none
     }
     
-    func updateConstraintsForTitle(shouldAlingCenter: Bool, withAddress: Bool = false) {
-        if shouldAlingCenter {
-            locationTitle.snp.remakeConstraints {
-                $0.leading.equalTo(searchTypeImage.snp.trailing).offset(16)
-                $0.trailing.equalToSuperview().offset(-12)
-                $0.top.equalToSuperview().offset(12)
-                $0.bottom.equalToSuperview().offset( withAddress ? -35 : -12 )
-            }
-        } else {
-            locationTitle.snp.remakeConstraints {
-                $0.leading.equalTo(searchTypeImage.snp.trailing).offset(16)
-                $0.trailing.equalToSuperview().offset(-12)
-                $0.top.equalToSuperview().offset(6)
-                $0.bottom.equalToSuperview().offset( withAddress ? -35 : -12 )
-            }
-            
-        }
-        
-    }
-    
-    func updateConstraitForAddress(shouldAlingLeft: Bool) {
-        if shouldAlingLeft {
-            locationAddress.snp.remakeConstraints {
-                $0.trailing.equalToSuperview().offset(-12)
-                $0.leading.equalTo(locationTitle.snp.leading)
-                $0.width.greaterThanOrEqualTo(200)
-                $0.top.equalTo(locationTitle.snp.bottom)
-            }
-        } else {
-            locationAddress.snp.remakeConstraints {
-                $0.trailing.equalToSuperview().offset(-12)
-                $0.leading.equalTo(dotView.snp.trailing).offset(4)
-                $0.centerY.equalTo(locationDistance.snp.centerY)
-                $0.width.greaterThanOrEqualTo(200)
-            }
-        }
-    }
-    
     func setupViews() {
-        self.addSubview(continerView)
-        continerView.addSubview(searchTypeImage)
-        continerView.addSubview(locationTitle)
-        continerView.addSubview(dotView)
-        continerView.addSubview(locationAddress)
-        continerView.addSubview(locationDistance)
+        self.addSubview(containerView)
+        containerView.addSubview(contentCellView)
+        containerView.addSubview(searchTypeImage)
+        contentCellView.addSubview(locationTitle)
+        contentCellView.addSubview(locationAddress)
+        contentCellView.addSubview(locationDistance)
         
-        continerView.snp.makeConstraints {
+        containerView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
         
+        contentCellView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.leading.equalTo(searchTypeImage.snp.trailing).offset(16)
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.bottom.equalToSuperview().offset(10)
+        }
+        
         searchTypeImage.snp.makeConstraints {
-            $0.width.height.equalTo(20)
+            $0.width.height.equalTo(24)
             $0.leading.equalToSuperview().offset(12)
             $0.centerY.equalToSuperview()
         }
         
-        locationTitle.snp.makeConstraints {
-            $0.leading.equalTo(searchTypeImage.snp.trailing).offset(16)
-            $0.trailing.equalToSuperview().offset(-12)
-            $0.top.equalToSuperview().offset(6)
-        }
-        
-        dotView.snp.makeConstraints {
-            $0.leading.equalTo(locationDistance.snp.trailing).offset(4)
-            $0.height.width.equalTo(3)
-            $0.centerY.equalTo(locationDistance.snp.centerY)
-        }
-        
-        locationAddress.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-12)
-            $0.leading.equalTo(dotView.snp.trailing).offset(4)
-            $0.centerY.equalTo(locationDistance.snp.centerY)
-            $0.width.greaterThanOrEqualTo(200)
-        }
-       
         locationDistance.snp.makeConstraints {
+            $0.centerY.equalTo(locationTitle.snp.centerY)
+            $0.trailing.equalToSuperview()
+        }
+        
+        locationTitle.snp.makeConstraints {
+            $0.top.leading.equalToSuperview()
+            $0.trailing.lessThanOrEqualTo(locationDistance.snp.leading).offset(-12)
+        }
+
+        locationAddress.snp.makeConstraints {
+            $0.top.equalTo(locationTitle.snp.bottom).offset(5)
             $0.leading.equalTo(locationTitle.snp.leading)
-            $0.trailing.equalTo(dotView.snp.leading).offset(-4)
-            $0.top.equalTo(locationTitle.snp.bottom).offset(2)
-            $0.bottom.equalToSuperview().offset(-11)
+            $0.trailing.equalToSuperview().offset(-20)
         }
     }
 }

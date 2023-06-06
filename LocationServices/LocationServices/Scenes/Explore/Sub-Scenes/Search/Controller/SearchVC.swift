@@ -91,7 +91,7 @@ final class SearchVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(searchBarView.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
     }
