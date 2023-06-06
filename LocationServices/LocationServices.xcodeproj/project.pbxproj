@@ -367,6 +367,7 @@
 		F1E5F8FA29E98ABF00639EEC /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */; };
 		F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */; };
 		F1E5F8FE29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */; };
+		F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */; };
 		F1F8061829D571E9002BDF85 /* GeofenceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */; };
 		F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */; };
 /* End PBXBuildFile section */
@@ -743,6 +744,7 @@
 		F1E5F8F929E98ABF00639EEC /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8FB29E98AFB00639EEC /* DoubleExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8FD29E9916800639EEC /* MGLCoordinateBoundsExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLCoordinateBoundsExtensionTests.swift; sourceTree = "<group>"; };
+		F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralHelper.swift; sourceTree = "<group>"; };
 		F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceUITests.swift; sourceTree = "<group>"; };
 		F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingUITests.swift; sourceTree = "<group>"; };
 		F1F8063229D7683E002BDF85 /* TrackingSimulateLocation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackingSimulateLocation.xctestplan; sourceTree = "<group>"; };
@@ -1123,6 +1125,7 @@
 				8A50572229A0329B0047A203 /* AuthActionsHelper.swift */,
 				8A6C390529A25E480003666C /* Reachability.swift */,
 				8A3FD14B29A69CE000DFA6F6 /* PlaceholderAnimator.swift */,
+				F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -3173,6 +3176,7 @@
 				ADC97395295F3F9C005AE918 /* MapNavigationView.swift in Sources */,
 				AD2AF0E1292EAC1C00149904 /* AboutViewModel.swift in Sources */,
 				ADC1249C2978A56E00B08C20 /* GeofenceDashboardContracts.swift in Sources */,
+				F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */,
 				ADD5D7E2296F87FF0022480B /* AddGeofenceContracts.swift in Sources */,
 				AD2AF09F292EA91200149904 /* GeofenceCoordinator.swift in Sources */,
 				AD2AF064292E929C00149904 /* Coordinator.swift in Sources */,

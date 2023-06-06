@@ -16,7 +16,7 @@ private enum TrackingServiceConstant {
 
 protocol AWSTrackingServiceProtocol {
     func sendUserLocation(lat: Double, long: Double, completion: @escaping  (Result<AWSLocationBatchUpdateDevicePositionResponse, Error>) -> Void)
-    func getTrackingHistory(completion: @escaping (Result<AWSLocationGetDevicePositionHistoryResponse, Error>) -> Void)
+    func getTrackingHistory(nextToken: String?, completion: @escaping (Result<[AWSLocationDevicePosition], Error>) -> Void)
 }
 
 extension AWSTrackingServiceProtocol {
@@ -48,8 +48,9 @@ extension AWSTrackingServiceProtocol {
         }
     }
     
-    func getTrackingHistory(completion: @escaping  (Result<AWSLocationGetDevicePositionHistoryResponse, Error>) -> Void) {
+    func getTrackingHistory(nextToken: String? = nil, completion: @escaping (Result<[AWSLocationDevicePosition], Error>) -> Void) {
         let request = AWSLocationGetDevicePositionHistoryRequest()!
+        request.nextToken = nextToken
         request.trackerName = TrackingServiceConstant.collectionName
         request.deviceId = TrackingServiceConstant.deviceId
         
@@ -57,7 +58,21 @@ extension AWSTrackingServiceProtocol {
         
         result.continueWith { response in
             if let taskResult = response.result {
-                completion(.success(taskResult))
+                var devicePositions = taskResult.devicePositions ?? []
+                
+                if let nextToken = taskResult.nextToken {
+                    self.getTrackingHistory(nextToken: nextToken) { result in
+                        switch result {
+                        case .success(let newDevicePositions):
+                            devicePositions.append(contentsOf: newDevicePositions)
+                            completion(.success(devicePositions))
+                        case .failure(let error):
+                            completion(.failure(error))
+                        }
+                    }
+                } else {
+                    completion(.success(devicePositions))
+                }
             } else {
                 let defaultError = NSError(domain: "Tracking", code: -1)
                 let error = response.error ?? defaultError

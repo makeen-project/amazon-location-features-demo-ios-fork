@@ -89,10 +89,18 @@ final class TrackingHistoryVC: UIViewController {
     
     @objc private func updateButtonStyle(_ notification: Notification) {
         let state = (notification.userInfo?["state"] as? Bool) ?? false
+        updateButtonStyle(state: state)
+    }
+    
+    func updateButtonStyle(state: Bool) {
+        guard viewModel !== nil else {
+            return
+        }
         viewModel.changeTrackingStatus(state)
         self.headerView.updateButtonStyle(isTrackingStarted: state)
         self.view.setNeedsLayout()
     }
+    
     
     @objc private func updateTrackingHistory(_ notification: Notification) {
         guard (notification.object as? TrackingHistoryViewModelProtocol) !== viewModel else { return }
