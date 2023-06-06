@@ -50,6 +50,8 @@ class GeofenceAnnotationView: MGLAnnotationView {
     private var oldZoom: Double?
     private var oldRadius: Double?
     
+    var enableGeofenceDrag = false
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +76,7 @@ class GeofenceAnnotationView: MGLAnnotationView {
             titleLabel.text = annotation?.title ?? nil
         }
         
-        if resizeHandleView == nil {
+        if resizeHandleView == nil && enableGeofenceDrag {
             addResizeHandle()
         }
         
