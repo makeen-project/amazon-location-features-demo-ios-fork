@@ -42,6 +42,7 @@ class GeofenceAnnotationView: MGLAnnotationView {
     enum Constants {
         static let iconSize: CGSize = CGSize(width: 30, height: 30)
     }
+    weak private var resizeHandleView: UIView?
     
     weak var mapView: MGLMapView?
     
@@ -71,6 +72,10 @@ class GeofenceAnnotationView: MGLAnnotationView {
         
         if titleLabel.text != annotation?.title {
             titleLabel.text = annotation?.title ?? nil
+        }
+        
+        if resizeHandleView == nil {
+            addResizeHandle()
         }
         
         drawCircle()
@@ -138,9 +143,13 @@ class GeofenceAnnotationView: MGLAnnotationView {
                 accuracyRingLayer?.cornerRadius = accuracyRingSize / 2.0
                 
                 CATransaction.commit()
+                positionResizeHandle()
             } else {
                 accuracyRingLayer?.isHidden = true
+                resizeHandleView?.isHidden = true
             }
+            
+
         }
         
         oldZoom = mapView.zoomLevel
@@ -166,5 +175,62 @@ class GeofenceAnnotationView: MGLAnnotationView {
               let coordinate = annotation?.coordinate else { return 0 }
         
         return round(radius / mapView.metersPerPoint(atLatitude: coordinate.latitude) * 2.0)
+    }
+    
+    func addResizeHandle() {
+            let resizeHandleSize: CGFloat = 20.0
+            let resizeHandleView = UIView(frame: CGRect(x: 0, y: 0, width: resizeHandleSize, height: resizeHandleSize))
+            resizeHandleView.backgroundColor = mapView?.tintColor
+            resizeHandleView.layer.cornerRadius = resizeHandleSize / 2.0
+        resizeHandleView.isUserInteractionEnabled = true
+        addSubview(resizeHandleView)
+        self.bringSubviewToFront(resizeHandleView)
+            let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleResizeHandlePan(_:)))
+            resizeHandleView.addGestureRecognizer(panGestureRecognizer)
+            self.resizeHandleView = resizeHandleView
+        }
+
+        func positionResizeHandle() {
+            guard let resizeHandleView = resizeHandleView else { return }
+            resizeHandleView.center = CGPoint(x: accuracyRingLayer!.cornerRadius+13, y: 10)
+        }
+
+        @objc func handleResizeHandlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
+            guard let geofenceAnnotation = annotation as? GeofenceAnnotation,
+                  let mapView = mapView else { return }
+
+            let center = CGPoint(x: self.bounds.width / 2, y: self.bounds.height / 2)
+            let gestureLocation = gestureRecognizer.location(in: self)
+
+            // Calculate the distance between the center of the circle and the gesture location
+            let xOffset = center.x - gestureLocation.x
+            let yOffset = center.y - gestureLocation.y
+            let distance = sqrt(xOffset * xOffset + yOffset * yOffset)
+
+            // Convert points to meters based on the zoom level
+            let pointsPerMeter = CGFloat(mapView.metersPerPoint(atLatitude: mapView.centerCoordinate.latitude))
+            let updatedRadius = CLLocationDistance(distance * pointsPerMeter)
+            
+            // Update the geofenceAnnotation radius with some minimum radius constraint
+            let minimumRadius: CLLocationDistance = 10
+            let maximumRadius: CLLocationDistance = 10000
+            geofenceAnnotation.radius = round(max(minimumRadius, min(maximumRadius, updatedRadius)))
+            
+            let userInfo = ["radius": geofenceAnnotation.radius]
+            NotificationCenter.default.post(name: Notification.geofenceRadiusDragged, object: nil, userInfo: userInfo)
+            
+            drawCircle()
+            
+            gestureRecognizer.setTranslation(.zero, in: self)
+        }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if let resizeHandleView = resizeHandleView {
+            let pointInResizeHandleView = convert(point, to: resizeHandleView)
+            if let result = resizeHandleView.hitTest(pointInResizeHandleView, with: event) {
+                return result
+            }
+        }
+        return super.hitTest(point, with: event)
     }
 }
