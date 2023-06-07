@@ -72,6 +72,7 @@ final class GeofenceMapView: UIView {
         mapLayer.delegate = self
         searchBarView.delegate = self
         mapView.delegate = delegate
+        mapView.enableGeofenceDrag = true
         setupViews()
         
         mapView.selectedAnnotationCallback = { [weak self] annotation in

@@ -29,6 +29,7 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     weak var delegate: BottomSheetPresentable?
     private var geofenceAnnotation: [MGLAnnotation] = []
     var isDrawCirle = false
+    var enableGeofenceDrag = false
     var geofenceAnnotationRadius: Int64 = 80
     private var signingDelegate: MGLOfflineStorageDelegate?
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
@@ -148,7 +149,9 @@ extension DefaultCommonMapView: MGLMapViewDelegate {
                 annotationView.annotation = annotation
                 return annotationView
             } else {
-                return GeofenceAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                let annotationView = GeofenceAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                annotationView.enableGeofenceDrag = enableGeofenceDrag
+                return annotationView
             }
         case is MGLUserLocation:
             if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constant.userLocationViewIdentifier) {
