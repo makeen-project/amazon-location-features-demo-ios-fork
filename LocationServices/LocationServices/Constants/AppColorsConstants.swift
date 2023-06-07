@@ -37,6 +37,8 @@ extension UIColor {
     static let lsLight2 = UIColor(named: "lsLight2")!
     static let lsLight3 = UIColor(named: "lsLight3")!
     
+    static let tertiaryColor = UIColor(named: "tertiaryColor")!
+    
     // Settings & About Colors
     static let settingsSelectionColor = UIColor(named: "settingsSelectionColor")!
 }
