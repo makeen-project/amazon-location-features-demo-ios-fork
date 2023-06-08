@@ -24,7 +24,7 @@ class ImageAnnotation: MGLPointAnnotation {
 class ImageAnnotationView: MGLAnnotationView {
     
     enum Constants {
-        static let size: CGSize = CGSize(width: 30, height: 30)
+        static let size: CGSize = CGSize(width: 16, height: 16)
     }
     
     private var imageView: UIImageView?

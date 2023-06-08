@@ -31,9 +31,4 @@ extension UIColor {
             alpha: alpha
         )
     }
-    
-    static var tertiaryColor: UIColor {
-        return UIColor(hex: "#232F3E", alpha:1.0)
-    }
-    
 }

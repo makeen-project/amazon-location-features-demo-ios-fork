@@ -79,7 +79,7 @@ final class GeofenceDashboardVC: UIViewController {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom)
+            $0.top.equalTo(headerView.snp.bottom).offset(10)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         

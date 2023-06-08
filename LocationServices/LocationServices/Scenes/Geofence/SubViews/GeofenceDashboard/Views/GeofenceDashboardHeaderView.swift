@@ -78,7 +78,7 @@ final class GeofenceDashboardHeaderView: UIView {
         buttonContainerView.addSubview(addButtonLabel)
         containerView.addSubview(addButton)
         containerView.addSubview(titleLabel)
-       
+
         containerView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(containerTopOffset)
             $0.leading.equalToSuperview().offset(16)
@@ -106,7 +106,7 @@ final class GeofenceDashboardHeaderView: UIView {
         }
         
         addButton.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview()
             $0.height.equalTo(32)
             $0.width.equalTo(82)

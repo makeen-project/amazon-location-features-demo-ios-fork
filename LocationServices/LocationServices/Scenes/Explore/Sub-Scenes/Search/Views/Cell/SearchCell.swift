@@ -81,7 +81,7 @@ final class SearchCell: UITableViewCell {
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .gray
-        label.numberOfLines = 2
+        label.numberOfLines = 4
         return label
     }()
     

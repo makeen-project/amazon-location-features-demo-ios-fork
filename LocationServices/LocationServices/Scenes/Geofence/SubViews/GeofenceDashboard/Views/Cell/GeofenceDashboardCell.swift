@@ -37,6 +37,7 @@ final class GeofenceDashboardCell: UITableViewCell {
     private var annotationImage: UIImageView = {
         let iv = UIImageView(image: .geofenceDashoard)
         iv.contentMode = .scaleAspectFill
+        iv.setShadow()
         return iv
     }()
     
@@ -107,8 +108,8 @@ final class GeofenceDashboardCell: UITableViewCell {
         }
             
         deleteButton.snp.makeConstraints {
-            $0.height.equalTo(20)
-            $0.width.equalTo(18)
+            $0.height.equalTo(24)
+            $0.width.equalTo(24)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-19)
         }
