@@ -105,7 +105,7 @@ extension UIViewController {
         }
     }
     
-    func enableBottomSheetGrab(smallHeight:CGFloat = 0.1, mediumHeight:CGFloat = 0.5, largeHeight:CGFloat = 0.95) {
+    func enableBottomSheetGrab(smallHeight:CGFloat = 0.1, mediumHeight:CGFloat = 0.5, largeHeight:CGFloat = 0.97) {
         
         DetentHeights.small = smallHeight
         DetentHeights.medium = mediumHeight

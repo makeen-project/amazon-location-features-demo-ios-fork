@@ -118,7 +118,7 @@ final class CommonDashboardView: UIView {
         self.addSubview(comonButton)
         
         iconContainerView.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(10)
             $0.centerX.equalToSuperview()
             $0.height.width.equalTo(96)
         }
@@ -135,13 +135,15 @@ final class CommonDashboardView: UIView {
         
         detailLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.width.lessThanOrEqualTo(340)
         }
         
         comonButton.snp.makeConstraints {
             $0.top.greaterThanOrEqualTo(detailLabel.snp.bottom).offset(30)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(48)
+            $0.bottom.equalToSuperview().offset(-10)
         }
     }
     
