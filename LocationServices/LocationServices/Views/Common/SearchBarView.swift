@@ -63,7 +63,7 @@ final class SearchBarView: UIView {
     private let containerView: UIView =  {
         let view = UIView()
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        view.layer.cornerRadius = 20
+        //view.layer.cornerRadius = 10
         return view
     }()
     
@@ -200,9 +200,9 @@ final class SearchBarView: UIView {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(horizontalPadding)
             $0.trailing.equalToSuperview().offset(-horizontalPadding)
-            if shouldFillHeight {
-                $0.bottom.equalToSuperview()
-            }
+//            if shouldFillHeight {
+//                $0.bottom.equalToSuperview()
+//            }
         }
         
         grabberIcon.snp.makeConstraints {

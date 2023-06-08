@@ -70,13 +70,12 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         if let firstDestionation {
             controller.firstDestionation = DirectionTextFieldModel(placeName: firstDestionation.placeName ?? "", placeAddress: firstDestionation.placeAddress, lat: firstDestionation.placeLat, long: firstDestionation.placeLong)
         }
-        
+
+        // first location as my current location
         if controller.firstDestionation == nil, let lat, let long {
             controller.firstDestionation = DirectionTextFieldModel(placeName: "My Location", placeAddress: nil, lat: lat, long: long)
-        }
-        
-        // check if we have secondDestination, it means that we should set
-        // first location as my current location
+        }        
+
         if let secondDestionation {
             controller.secondDestionation = DirectionTextFieldModel(placeName: secondDestionation.placeName ?? "", placeAddress: secondDestionation.placeAddress, lat: secondDestionation.placeLat, long: secondDestionation.placeLong)
         }
@@ -93,7 +92,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         let controller = SearchVCBuilder.create()
         controller.delegate = self
         controller.userLocation = (lat, long)
-        
+        controller.searchScreenStyle = searchScreenStyle
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: exploreController!)
         controller.enableBottomSheetGrab()
