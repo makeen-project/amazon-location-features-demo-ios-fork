@@ -101,6 +101,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
                                                                       bottom: 23,
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(direactionAction), for: .touchUpInside)
+        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         return button
     }()
     
@@ -116,6 +117,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(locateMeAction), for: .touchUpInside)
         button.accessibilityIdentifier = ViewsIdentifiers.General.locateMeButton
+        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         return button
     }()
     
@@ -129,6 +131,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
                                                                       bottom: 23,
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(openGeofence), for: .touchUpInside)
+        button.layer.cornerRadius = 8
         return button
     }()
     
@@ -143,6 +146,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
                                                                       bottom: 23,
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(mapStyleAction), for: .touchUpInside)
+        button.layer.cornerRadius = 8
         return button
     }()
     
@@ -178,12 +182,14 @@ final class ExploreView: UIView, NavigationMapProtocol {
     
     private let topStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.backgroundColor = .clear
+        stackView.backgroundColor = .white
         stackView.axis = .vertical
         stackView.distribution = .equalCentering
         stackView.spacing = 0
+        stackView.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         stackView.layer.cornerRadius = 8
         stackView.clipsToBounds = true
+        stackView.layer.masksToBounds = false
         return stackView
     }()
     

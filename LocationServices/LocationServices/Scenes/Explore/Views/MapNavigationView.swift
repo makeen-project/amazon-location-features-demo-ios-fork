@@ -13,7 +13,8 @@ final class MapNavigationView: UIView {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 8
-        return view
+        view.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
+    return view
     }()
     
     private var distanceLabel: UILabel = {

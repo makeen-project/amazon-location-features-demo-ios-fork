@@ -51,6 +51,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
                                                                       bottom: 23,
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(directionAction), for: .touchUpInside)
+       button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         return button
     }()
     
@@ -65,6 +66,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
                                                                       bottom: 23,
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(locateMeAction), for: .touchUpInside)
+        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         return button
     }()
     
@@ -80,6 +82,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
                                                                       bottom: 23,
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(geofenceButtonAction), for: .touchUpInside)
+        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         return button
     }()
     
@@ -95,7 +98,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
                                                                       bottom: 23,
                                                                       trailing: 23)
         button.addTarget(self, action: #selector(mapStyleButtonAction), for: .touchUpInside)
-        
+        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         return button
     }()
     
