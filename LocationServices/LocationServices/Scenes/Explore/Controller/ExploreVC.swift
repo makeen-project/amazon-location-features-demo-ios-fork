@@ -51,7 +51,7 @@ final class ExploreVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround()
+        //self.hideKeyboardWhenTappedAround()
         setupHandlers()
         setupNotifications()
         
@@ -415,6 +415,7 @@ extension ExploreVC {
         mapNavigationView.isHidden = true
         mapNavigationActionsView.isHidden = true
         updateAmazonLogoPositioning(isBottomNavigationShown: false)
+        exploreView.hideDirectionButton(state: false)
         exploreView.deleteDrawing()
     }
     

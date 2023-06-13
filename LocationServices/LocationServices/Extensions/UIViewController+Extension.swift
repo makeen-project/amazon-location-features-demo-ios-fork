@@ -106,7 +106,7 @@ extension UIViewController {
         }
     }
     
-    func enableBottomSheetGrab(smallHeight:CGFloat = 0.1, mediumHeight:CGFloat = 0.5, largeHeight:CGFloat = 0.95) {
+    func enableBottomSheetGrab(smallHeight:CGFloat = DetentHeights.small, mediumHeight:CGFloat = DetentHeights.medium, largeHeight:CGFloat = DetentHeights.large) {
         
         DetentHeights.small = smallHeight
         DetentHeights.medium = mediumHeight
@@ -135,6 +135,9 @@ extension UIViewController {
     func updateBottomSheetHeight(to height: CGFloat) {
         self.view.snp.updateConstraints{
             $0.height.equalTo(height)
+        }
+        if(height < getLargeDetentHeight()){
+            dismissKeyboard()
         }
     }
     
