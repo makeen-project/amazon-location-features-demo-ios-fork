@@ -124,6 +124,10 @@ final class AttributionVC: UIViewController {
         if !UIDevice.current.isPad {
             navigationController?.navigationBar.tintColor = .lsTetriary
             navigationItem.title = StringConstant.attribution
+            let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScene))
+            navigationItem.leftBarButtonItem = barButtonItem
+            navigationController?.navigationBar.isHidden = false
+            
         } else if closeCallback != nil {
             navigationController?.navigationBar.tintColor = .lsPrimary
             let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(closeScene))

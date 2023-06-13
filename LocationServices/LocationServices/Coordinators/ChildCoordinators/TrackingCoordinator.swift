@@ -129,6 +129,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = AttributionVCBuilder.create()
         controller.closeCallback = { [weak self] in
             self?.navigationController.popViewController(animated: true)
+            self?.navigationController.navigationBar.isHidden = true
         }
         navigationController.pushViewController(controller, animated: true)
     }
