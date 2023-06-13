@@ -313,7 +313,7 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
         guard let lat = userLocation?.coordinate.latitude,
               let long = userLocation?.coordinate.longitude else { return }
         GeofenceAPIService().evaluateGeofence(lat: lat, long: long)
-        //        self.geofenceHandler?()
+        self.geofenceHandler?()
     }
     
     func showMapLayers() {

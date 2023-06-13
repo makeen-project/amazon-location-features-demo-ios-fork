@@ -92,16 +92,17 @@ extension UIViewController {
         self.view.removeFromSuperview()
     }
     
-    func presentBottomSheet(parentController: UIViewController) {
+    func presentBottomSheet(parentController: UIViewController?) {
         addKeyboardObservers()
-        
-        parentController.addChild(self)
-        parentController.view.addSubview(self.view)
-        self.didMove(toParent: parentController)
-        self.view.snp.makeConstraints {
-            $0.leading.equalTo(parentController.view.snp.leading)
-            $0.trailing.equalTo(parentController.view.snp.trailing)
-            $0.bottom.equalTo(parentController.view.snp.bottom)
+        if(parentController != nil){
+            parentController?.addChild(self)
+            parentController?.view.addSubview(self.view)
+            self.didMove(toParent: parentController)
+            self.view.snp.makeConstraints {
+                $0.leading.equalTo(parentController!.view.snp.leading)
+                $0.trailing.equalTo(parentController!.view.snp.trailing)
+                $0.bottom.equalTo(parentController!.view.snp.bottom)
+            }
         }
     }
     

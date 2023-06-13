@@ -13,7 +13,6 @@ final class ExploreCoordinator: Coordinator {
     var navigationController: UINavigationController
     var type: CoordinatorType { .explore }
     var geofenceHandler: VoidHandler?
-    var exploreController: ExploreVC?
     weak var currentBottomSheet:UIViewController?
     var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -42,7 +41,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             self?.currentBottomSheet?.dismissBottomSheet()
         }
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: exploreController!)
+        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
     }
@@ -83,7 +82,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.userLocation = (lat, long)
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: exploreController!)
+        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
     }
@@ -94,7 +93,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.userLocation = (lat, long)
         controller.searchScreenStyle = searchScreenStyle
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: exploreController!)
+        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
     }
@@ -103,7 +102,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         let controller = SearchVCBuilder.create()
         
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: exploreController!)
+        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
     }
@@ -113,7 +112,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.delegate = self
         controller.userLocation = (lat, long)
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: exploreController!)
+        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         controller.setBottomSheetHeight(to: 200)
         currentBottomSheet = controller
     }
@@ -127,7 +126,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             controller.delegate = self
             
             currentBottomSheet?.dismissBottomSheet()
-            controller.presentBottomSheet(parentController: exploreController!)
+        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
             controller.enableBottomSheetGrab()
             currentBottomSheet = controller
     }
@@ -209,6 +208,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
 }
 
 private extension ExploreCoordinator {
+    static var exploreController: ExploreVC?
     func showExploreScene() {
         let controller = ExploreVCBuilder.create()
         controller.delegate = self
@@ -216,7 +216,7 @@ private extension ExploreCoordinator {
         controller.geofenceHandler = {
             self.geofenceHandler?()
         }
-        exploreController = controller
+        ExploreCoordinator.exploreController = controller
         navigationController.pushViewController(controller, animated: true)
     }
     
