@@ -37,7 +37,7 @@ final class AmazonCustomSelectableView: UIView {
         button.imageView?.contentMode = .scaleAspectFill
         button.tintColor = .searchBarBackgroundColor
         button.layer.borderColor = UIColor.searchBarTintColor.cgColor
-        button.layer.borderWidth = 1
+        button.layer.borderWidth = 0
         button.layer.cornerRadius = 10
         return button
     }()
@@ -74,7 +74,7 @@ final class AmazonCustomSelectableView: UIView {
         if isSelected {
             selectionButton.setImage(CustomSelectableConstants.checkMarkImage, for: .normal)
             selectionButton.tintColor = .lsPrimary
-            selectionButton.layer.borderWidth = 1
+            selectionButton.layer.borderWidth = 0
             selectionButton.layer.borderColor = UIColor.lsPrimary.cgColor
         } else {
             selectionButton.setImage(CustomSelectableConstants.circleImage, for: .normal)
@@ -94,7 +94,7 @@ final class AmazonCustomSelectableView: UIView {
         if isSelected {
             selectionButton.setImage(CustomSelectableConstants.checkMarkImage, for: .normal)
             selectionButton.tintColor = .lsPrimary
-            selectionButton.layer.borderWidth = 1
+            selectionButton.layer.borderWidth = 0
             selectionButton.layer.borderColor = UIColor.lsPrimary.cgColor
         } else {
             selectionButton.setImage(CustomSelectableConstants.circleImage, for: .normal)
