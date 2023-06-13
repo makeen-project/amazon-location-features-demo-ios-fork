@@ -14,7 +14,7 @@ final class TrackingVC: UIViewController {
     enum Constants {
         static let titleTopOffset: CGFloat = 27
         static let headerCornerRadius: CGFloat = 20
-        static let trackingMapViewBottomOffset: CGFloat = 70
+        static let trackingMapViewBottomOffset: CGFloat = 130
     }
     
     var geofenceHandler: VoidHandler?
@@ -182,7 +182,8 @@ final class TrackingVC: UIViewController {
         guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
             let size = self.view.bounds.size.height / 2 - 20
-            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: size)
+            let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
+            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
     }
     

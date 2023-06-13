@@ -128,7 +128,7 @@ final class GeofenceMapView: UIView {
             if isiPad {
                 $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
             } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(-bottomOffset)
+                $0.bottom.equalToSuperview().inset(bottomOffset)
             }
             $0.height.equalTo(Constants.amazonLogoHeight)
             $0.width.equalTo(Constants.amazonLogoWidth)
@@ -143,7 +143,7 @@ final class GeofenceMapView: UIView {
             if isiPad {
                 $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
             } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(-bottomOffset)
+                $0.bottom.equalToSuperview().inset(bottomOffset)
             }
             $0.width.equalTo(Constants.mapLayerWidth)
         }

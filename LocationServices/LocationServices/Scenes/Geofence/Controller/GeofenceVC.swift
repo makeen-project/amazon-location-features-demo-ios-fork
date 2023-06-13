@@ -75,6 +75,7 @@ final class GeofenceVC: UIViewController {
     }
     
     private func setupNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerItems(_:)), name: Notification.updateMapLayerItems, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerPosition(_:)), name: Notification.geofenceMapLayerUpdate, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
     }
@@ -89,6 +90,15 @@ final class GeofenceVC: UIViewController {
         guard isInSplitViewController else { return }
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func updateMapLayerItems(_ notification: Notification) {
+        guard !isInSplitViewController else { return }
+        DispatchQueue.main.async {
+            let size = self.view.bounds.size.height / 2 - 20
+            let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
+            self.geofenceMapView.updateBottomViewsSpacings(additionalBottomOffset: offset)
+        }
     }
     
     @objc override func keyboardWillShow(notification: NSNotification) {

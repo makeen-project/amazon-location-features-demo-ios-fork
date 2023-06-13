@@ -121,8 +121,10 @@ extension UIViewController {
             $0.top.equalTo(view.snp.top).offset(8)
         }
         
+        let height = getMediumDetentHeight()
+        
         self.view.snp.makeConstraints{
-            $0.height.equalTo(getMediumDetentHeight())
+            $0.height.equalTo(height)
         }
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
@@ -130,6 +132,8 @@ extension UIViewController {
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
        grabberView.addGestureRecognizer(tapGestureRecognizer)
+        
+        NotificationCenter.default.post(name: Notification.updateMapLayerItems, object:nil, userInfo: ["height": height+8])
     }
     
     func updateBottomSheetHeight(to height: CGFloat) {
@@ -138,6 +142,7 @@ extension UIViewController {
         }
         if(height < getLargeDetentHeight()){
             dismissKeyboard()
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object:nil, userInfo: ["height": height+8])
         }
     }
     
