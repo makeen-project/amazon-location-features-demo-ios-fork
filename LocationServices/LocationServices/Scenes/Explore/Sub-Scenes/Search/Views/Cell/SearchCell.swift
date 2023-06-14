@@ -48,13 +48,18 @@ final class SearchCell: UITableViewCell {
                 self.locationAddress.text = model.label
             }
             
-            if let distance = model.locationDistance {
+            if model.searchType == .location {
                 self.locationDistance.isHidden = false
-                self.locationDistance.text = distance.convertToKm()
+                self.locationAddress.isHidden = false
+                self.locationDistance.text = model.locationDistance?.convertToKm()
             } else {
                 self.locationDistance.isHidden = true
-                self.locationAddress.isHidden = true
                 updateConstraintsForTitle(shouldAlingCenter: true)
+                self.locationAddress.isHidden = true
+                locationAddress.snp.remakeConstraints{
+                    $0.width.equalTo(0)
+                    $0.height.equalTo(0)
+                }
             }
         }
     }
@@ -108,10 +113,6 @@ final class SearchCell: UITableViewCell {
                 $0.leading.equalToSuperview()
                 $0.centerY.equalTo(searchTypeImage.snp.centerY)
                 $0.trailing.lessThanOrEqualToSuperview().offset(-12)
-            }
-            locationAddress.snp.remakeConstraints{
-                $0.width.equalTo(0)
-                $0.height.equalTo(0)
             }
         } else {
             locationTitle.snp.remakeConstraints {

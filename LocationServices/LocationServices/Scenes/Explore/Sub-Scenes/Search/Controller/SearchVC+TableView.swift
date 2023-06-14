@@ -12,6 +12,7 @@ extension SearchVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.reuseId)
+        tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.reuseCompactId)
     }
 }
 
@@ -34,15 +35,20 @@ extension SearchVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchCell.reuseId, for: indexPath) as? SearchCell else {
+        let data = viewModel.getSearchCellModel()
+        var model:SearchCellViewModel?
+        if indexPath.row < data.count {
+            model =  data[indexPath.row]
+        }
+        let reuseId = model?.searchType == .search ? SearchCell.reuseId : SearchCell.reuseCompactId
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as? SearchCell else {
             fatalError("Search Cell Can't be found")
         }
-        let data = viewModel.getSearchCellModel()
         cell.applyStyles(style: SearchCellStyle(style: searchScreenStyle))
         
         // safe check - data for model can be 0 if we make search queries too quickly
-        if indexPath.row < data.count {
-            cell.model = data[indexPath.row]
+        if model != nil {
+            cell.model = model
         }
          
         return cell
