@@ -83,7 +83,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        controller.enableBottomSheetGrab()
+        let minHeight = 0.72
+        controller.enableBottomSheetGrab(smallHeight: minHeight, mediumHeight: minHeight)
         currentBottomSheet = controller
     }
     

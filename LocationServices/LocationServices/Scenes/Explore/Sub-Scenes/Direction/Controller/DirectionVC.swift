@@ -217,38 +217,39 @@ final class DirectionVC: UIViewController {
     private func setupViews() {
         directionSearchView.changeSearchRouteName(with: firstDestionation?.placeName, isDestination: false)
         directionSearchView.changeSearchRouteName(with: secondDestionation?.placeName, isDestination: true)
-        let scrollView = UIScrollView()
-        self.view.addSubview(scrollView)
-        scrollView.addSubview(directionSearchView)
-        scrollView.addSubview(directionView)
-        scrollView.addSubview(tableView)
+        //let scrollView = UIScrollView()
         
-        scrollView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.trailing.leading.bottom.equalToSuperview()
-        }
+        self.view.addSubview(directionSearchView)
+        //self.view.addSubview(scrollView)
+        self.view.addSubview(directionView)
+        self.view.addSubview(tableView)
+        
+//        scrollView.snp.makeConstraints {
+//            $0.top.equalToSuperview().offset(10)
+//            $0.trailing.leading.bottom.equalToSuperview()
+//        }
         
         directionSearchView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().offset(14)
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(140)
-            $0.width.equalTo(scrollView)
+            $0.width.equalToSuperview()
         }
         
         directionView.snp.makeConstraints {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(560)
-            $0.width.equalTo(scrollView)
+            $0.width.equalToSuperview()
         }
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.width.equalTo(scrollView)
+            $0.width.equalToSuperview()
         }
-        
+
         directionView.isHidden = true
     }
     
@@ -365,6 +366,7 @@ final class DirectionVC: UIViewController {
                 
                 self.tableView.isHidden = true
                 self.directionView.isHidden = false
+                
                 DispatchQueue.main.async {
                     self.directionView.showOptionsStackView()
                 }
