@@ -13,6 +13,7 @@ extension DirectionVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.reuseId)
+        tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.reuseCompactId)
     }
 }
 
@@ -42,15 +43,21 @@ extension DirectionVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchCell.reuseId, for: indexPath) as? SearchCell else {
+        let data = viewModel.getSearchCellModel()
+        var model:SearchCellViewModel?
+        if indexPath.row < data.count {
+            model =  data[indexPath.row]
+            tableView.separatorStyle = model?.searchType == .mylocation ? .none : .singleLine
+        }
+        let reuseId = model?.searchType == .search ? SearchCell.reuseId : SearchCell.reuseCompactId
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as? SearchCell else {
             fatalError("Search Cell Can't be found")
         }
         
         cell.applyStyles(style: SearchCellStyle(style: directionScreenStyle))
-        let data = viewModel.getSearchCellModel()
-        if indexPath.row < data.count {
-            let model =  data[indexPath.row]
-            tableView.separatorStyle = model.searchType == .mylocation ? .none : .singleLine
+
+        if model != nil {
             cell.model = model
         }
         

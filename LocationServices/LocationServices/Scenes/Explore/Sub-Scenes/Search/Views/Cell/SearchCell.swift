@@ -22,6 +22,7 @@ struct SearchCellStyle {
 
 final class SearchCell: UITableViewCell {
     static let reuseId: String = "SearchCell"
+    static let reuseCompactId: String = "SearchCompactCell"
     
     private let containerView: UIView = UIView()
     private let contentCellView: UIView = UIView()
@@ -53,7 +54,7 @@ final class SearchCell: UITableViewCell {
             } else {
                 self.locationDistance.isHidden = true
                 self.locationAddress.isHidden = true
-                // updateConstraintsForTitle(shouldAlingCenter: true)
+                updateConstraintsForTitle(shouldAlingCenter: true)
             }
         }
     }
@@ -81,7 +82,7 @@ final class SearchCell: UITableViewCell {
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .gray
-        label.numberOfLines = 4
+        label.numberOfLines = 2
         return label
     }()
     
