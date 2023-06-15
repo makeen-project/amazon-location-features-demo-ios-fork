@@ -246,6 +246,8 @@ extension ExploreVC {
         NotificationCenter.default.addObserver(self, selector: #selector(showWasResetToDefaultConfigAlert(_:)), name: Notification.wasResetToDefaultConfig, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchAppearanceChanged(_:)), name: Notification.searchAppearanceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(exploreActionButtonsVisibilityChanged(_:)), name: Notification.exploreActionButtonsVisibilityChanged, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerItems(_:)), name: Notification.updateMapLayerItems, object: nil)
     }
     
     private func setupKeyboardNotifications() {
@@ -274,7 +276,7 @@ extension ExploreVC {
     func setupView() {
         mapNavigationView.isHidden = true
         mapNavigationActionsView.isHidden = true
-        updateAmazonLogoPositioning(isBottomNavigationShown: false)
+        //updateAmazonLogoPositioning(isBottomNavigationShown: false)
         mapNavigationActionsView.update(style: .navigationActions)
         changeSeachBarVisibility(isHidden: false)
         if !isInSplitViewController {
@@ -330,7 +332,7 @@ extension ExploreVC {
             bottomOffset = nil
         }
         
-        exploreView.setupAmazonLogo(leadingOffset: leadingOffset, bottomOffset: bottomOffset)
+        exploreView.setupAmazonLogo(bottomOffset: bottomOffset)
     }
     
     private func changeSeachBarVisibility(isHidden: Bool) {
@@ -353,6 +355,16 @@ extension ExploreVC {
         }
         if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String) {
             mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
+        }
+    }
+    
+    @objc private func updateMapLayerItems(_ notification: Notification) {
+        guard !isInSplitViewController else { return }
+        DispatchQueue.main.async {
+            let size = self.view.bounds.size.height / 2 - 20
+            let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
+            print("offset \(offset)")
+            self.exploreView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
     }
         

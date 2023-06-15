@@ -11,7 +11,7 @@ import Mapbox
 import CoreLocation
 import AWSMobileClientXCF
 
-private enum Constant {
+private enum Constants {
     static let mapZoomValue: Double = 20
     static let singleAnnotationMapZoomValue: Double = 17
     static let directionMapZoomValue: Double = 14
@@ -24,15 +24,17 @@ private enum Constant {
     
     static let searchBarHeight: CGFloat = 76
     
-    static let amazonLogoBottomOffset: CGFloat = -8
+    static let amazonLogoBottomOffset: CGFloat = 8
     static let amazonLogoHeight: CGFloat = 18
     static let amazonLogoWidth: CGFloat = 121
+    static let amazonLogoHorizontalOffset: CGFloat = 8
     
     static let defaultHorizontalOffset: CGFloat = 16
     
     static let actionButtonWidth: CGFloat = 48
     
-    static let bottomStackViewOffset: CGFloat = -16
+    static let mapLayerBottomOffset: CGFloat = 16
+    static let bottomStackViewOffset: CGFloat = 16
     static let topStackViewOffsetiPhone: CGFloat = 16
     static let topStackViewOffsetiPad: CGFloat = 0
 }
@@ -225,7 +227,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         self.mapMode = .turnByTurnNavigation
         if let userCoordinates = mapView.userLocation?.coordinate,
            CLLocationCoordinate2DIsValid(userCoordinates) {
-            mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
+            mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
                 self?.mapView.userTrackingMode = .followWithCourse
             }
         }
@@ -233,14 +235,14 @@ final class ExploreView: UIView, NavigationMapProtocol {
     
     func focus(on coordinates: CLLocationCoordinate2D) {
         guard CLLocationCoordinate2DIsValid(coordinates) else { return }
-        mapView.setCenter(coordinates, zoomLevel: Constant.mapZoomValue, direction: mapView.direction, animated: true)
+        mapView.setCenter(coordinates, zoomLevel: Constants.mapZoomValue, direction: mapView.direction, animated: true)
     }
     
     func isLocateMeButtonDisabled(state: Bool, animatedUserLocation: Bool = true) {
         guard !state,
               let userCoordinates = mapView.userLocation?.coordinate,
               CLLocationCoordinate2DIsValid(userCoordinates) else {
-            mapView.setCenter(CLLocationCoordinate2D(latitude: Constant.amazonHqMapPosition.latitude, longitude: Constant.amazonHqMapPosition.longitude), zoomLevel: Constant.annotationMapZoomValue, animated: false)
+            mapView.setCenter(CLLocationCoordinate2D(latitude: Constants.amazonHqMapPosition.latitude, longitude: Constants.amazonHqMapPosition.longitude), zoomLevel: Constants.annotationMapZoomValue, animated: false)
             return
         }
         
@@ -248,7 +250,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     private func setMapCenter(userCoordinates: CLLocationCoordinate2D, animated: Bool) {
-        mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: animated) { [weak self] in
+        mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: animated) { [weak self] in
             switch self?.mapMode {
             case .search, .none:
                 self?.mapView.userTrackingMode = .follow
@@ -405,7 +407,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
             if points.count > 1 {
                 self?.mapView.showAnnotations(points, animated: false)
             } else if let point = points.first {
-                self?.mapView?.setCenter(CLLocationCoordinate2D(latitude: point.coordinate.latitude, longitude: point.coordinate.longitude), zoomLevel: Constant.singleAnnotationMapZoomValue, animated: false)
+                self?.mapView?.setCenter(CLLocationCoordinate2D(latitude: point.coordinate.latitude, longitude: point.coordinate.longitude), zoomLevel: Constants.singleAnnotationMapZoomValue, animated: false)
             }
         }
     }
@@ -430,7 +432,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) {
             identityPoolId = customModel.identityPoolId
         } else {
-            identityPoolId = Bundle.main.object(forInfoDictionaryKey: Constant.dictinaryKeyIdentityPoolId) as! String
+            identityPoolId = Bundle.main.object(forInfoDictionaryKey: Constants.dictinaryKeyIdentityPoolId) as! String
         }
         
         let regionName = identityPoolId.toRegionString()
@@ -488,39 +490,54 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     func updateBottomViewsSpacings(additionalBottomOffset: CGFloat) {
-        let amazonLogoBottomOffset = Constant.amazonLogoBottomOffset - additionalBottomOffset
-        setupAmazonLogo(leadingOffset: nil, bottomOffset: amazonLogoBottomOffset)
+        let amazonLogoBottomOffset = Constants.amazonLogoBottomOffset + additionalBottomOffset
+        setupAmazonLogo(bottomOffset: amazonLogoBottomOffset)
         
-        let bottomStackBottomOffset = Constant.bottomStackViewOffset - additionalBottomOffset
-        setupBottomStack(bottomStackOffset: bottomStackBottomOffset)
+        let mapLayerBottomOffset = Constants.mapLayerBottomOffset + additionalBottomOffset
+        setupBottomStack(bottomStackOffset: mapLayerBottomOffset)
     }
     
-    func setupAmazonLogo(leadingOffset: CGFloat?, bottomOffset: CGFloat?) {
-        let leadingOffset = leadingOffset ?? Constant.defaultHorizontalOffset
-        let bottomOffset = bottomOffset ?? Constant.amazonLogoBottomOffset
+//    func setupAmazonLogo(leadingOffset: CGFloat?, bottomOffset: CGFloat?) {
+//        let leadingOffset = leadingOffset ?? Constant.defaultHorizontalOffset
+//        let bottomOffset = bottomOffset ?? Constant.amazonLogoBottomOffset
+//        amazonMapLogo.snp.remakeConstraints {
+//            $0.leading.equalToSuperview().offset(leadingOffset)
+//            if isiPad {
+//                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomOffset)
+//            } else {
+//                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomOffset)
+//            }
+//            $0.height.equalTo(Constant.amazonLogoHeight)
+//            $0.width.equalTo(Constant.amazonLogoWidth)
+//        }
+//    }
+    
+    func setupAmazonLogo(bottomOffset: CGFloat?) {
+        let bottomOffset = bottomOffset ?? Constants.amazonLogoBottomOffset
+        
         amazonMapLogo.snp.remakeConstraints {
-            $0.leading.equalToSuperview().offset(leadingOffset)
+            $0.leading.equalToSuperview().offset(Constants.amazonLogoHorizontalOffset)
             if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomOffset)
+                $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
             } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomOffset)
+                $0.bottom.equalToSuperview().inset(bottomOffset)
             }
-            $0.height.equalTo(Constant.amazonLogoHeight)
-            $0.width.equalTo(Constant.amazonLogoWidth)
+            $0.height.equalTo(Constants.amazonLogoHeight)
+            $0.width.equalTo(Constants.amazonLogoWidth)
         }
     }
     
     private func setupBottomStack(bottomStackOffset: CGFloat?) {
-        let bottomStackOffset = bottomStackOffset ?? Constant.bottomStackViewOffset
+        let bottomStackOffset = bottomStackOffset ?? Constants.bottomStackViewOffset
         
         bottomStackView.snp.remakeConstraints {
             if isiPad {
-                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomStackOffset)
+                $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomStackOffset)
             } else {
-                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomStackOffset)
+                $0.bottom.equalToSuperview().inset(bottomStackOffset)
             }
-            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
-            $0.width.equalTo(Constant.actionButtonWidth)
+            $0.trailing.equalToSuperview().inset(Constants.defaultHorizontalOffset)
+            $0.width.equalTo(Constants.actionButtonWidth)
         }
     }
     
@@ -777,12 +794,12 @@ private extension ExploreView {
         }
         
         searchBarView.snp.makeConstraints {
-            $0.height.equalTo(Constant.searchBarHeight)
+            $0.height.equalTo(Constants.searchBarHeight)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
         
-        setupAmazonLogo(leadingOffset: nil, bottomOffset: nil)
+        setupAmazonLogo(bottomOffset: Constants.searchBarHeight + Constants.bottomStackViewOffset)
         
         infoButton.snp.makeConstraints {
             $0.height.width.equalTo(13.5)
@@ -795,7 +812,7 @@ private extension ExploreView {
         }
         
         geofenceButton.snp.makeConstraints {
-            $0.height.width.equalTo(Constant.actionButtonWidth)
+            $0.height.width.equalTo(Constants.actionButtonWidth)
         }
         
         dividerView.snp.makeConstraints {
@@ -803,23 +820,23 @@ private extension ExploreView {
         }
         
         mapStyleButton.snp.makeConstraints {
-            $0.height.width.equalTo(Constant.actionButtonWidth)
+            $0.height.width.equalTo(Constants.actionButtonWidth)
         }
         
         topStackView.snp.makeConstraints {
             $0.top.equalTo(self.safeAreaLayoutGuide).offset(
-                isiPad ? Constant.topStackViewOffsetiPad : Constant.topStackViewOffsetiPhone
+                isiPad ? Constants.topStackViewOffsetiPad : Constants.topStackViewOffsetiPhone
             )
-            $0.trailing.equalToSuperview().offset(-Constant.defaultHorizontalOffset)
-            $0.width.equalTo(Constant.actionButtonWidth)
+            $0.trailing.equalToSuperview().offset(-Constants.defaultHorizontalOffset)
+            $0.width.equalTo(Constants.actionButtonWidth)
         }
         
         directonButton.snp.makeConstraints {
-            $0.height.width.equalTo(Constant.actionButtonWidth)
+            $0.height.width.equalTo(Constants.actionButtonWidth)
         }
         
         locateMeButton.snp.makeConstraints {
-            $0.height.width.equalTo(Constant.actionButtonWidth)
+            $0.height.width.equalTo(Constants.actionButtonWidth)
         }
         
         setupBottomStack(bottomStackOffset: nil)
@@ -869,7 +886,7 @@ extension ExploreView: MGLMapViewDelegate {
             if mapMode == .turnByTurnNavigation {
                 if let userCoordinates = mapView.userLocation?.coordinate,
                    CLLocationCoordinate2DIsValid(userCoordinates) {
-                    mapView.setCenter(userCoordinates, zoomLevel: Constant.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
+                    mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
                         self?.mapView.userTrackingMode = .followWithCourse
                     }
                 }
@@ -888,7 +905,7 @@ extension ExploreView: MGLMapViewDelegate {
         let cardData = searchDatas.filter {$0.placeLong == annotation.coordinate.longitude && $0.placeLat == annotation.coordinate.latitude}
         
         if let zoomData = cardData[safe: 0], let lat = zoomData.placeLat, let long = zoomData.placeLong {
-            mapView?.setCenter(CLLocationCoordinate2D(latitude: lat, longitude: long), zoomLevel: Constant.singleAnnotationMapZoomValue, animated: false)
+            mapView?.setCenter(CLLocationCoordinate2D(latitude: lat, longitude: long), zoomLevel: Constants.singleAnnotationMapZoomValue, animated: false)
         }
         
         delegate?.showPoiCard(cardData: cardData)
@@ -897,22 +914,22 @@ extension ExploreView: MGLMapViewDelegate {
     func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
         switch annotation {
         case is MGLUserLocation:
-            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constant.userLocationViewIdentifier) {
+            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constants.userLocationViewIdentifier) {
                 annotationView.annotation = annotation
                 return annotationView
             } else {
-                return LSFaux3DUserLocationAnnotationView(annotation: annotation, reuseIdentifier: Constant.userLocationViewIdentifier)
+                return LSFaux3DUserLocationAnnotationView(annotation: annotation, reuseIdentifier: Constants.userLocationViewIdentifier)
             }
         case is ImageAnnotation:
             guard let imageAnnotation = annotation as? ImageAnnotation else { return nil }
             let imageAnnotationView: MGLAnnotationView
-            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constant.imageAnnotationViewIdentifier) as? ImageAnnotationView {
+            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constants.imageAnnotationViewIdentifier) as? ImageAnnotationView {
                 annotationView.annotation = imageAnnotation
                 annotationView.addImage(imageAnnotation.image)
                 
                 imageAnnotationView = annotationView
             } else {
-                imageAnnotationView = ImageAnnotationView(annotation: imageAnnotation, reuseIdentifier: Constant.imageAnnotationViewIdentifier)
+                imageAnnotationView = ImageAnnotationView(annotation: imageAnnotation, reuseIdentifier: Constants.imageAnnotationViewIdentifier)
             }
             
             imageAnnotationView.accessibilityIdentifier = ViewsIdentifiers.General.imageAnnotationView

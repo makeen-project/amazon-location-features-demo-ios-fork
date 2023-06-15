@@ -150,6 +150,10 @@ extension UIViewController {
         self.view.snp.makeConstraints {
             $0.height.equalTo(height)
         }
+        if(height < getLargeDetentHeight()){
+            dismissKeyboard()
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object:nil, userInfo: ["height": height+8])
+        }
     }
 
     @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
