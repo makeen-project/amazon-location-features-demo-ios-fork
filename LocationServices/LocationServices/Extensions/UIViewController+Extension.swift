@@ -52,6 +52,12 @@ extension UIViewController {
     }
     
     private struct DetentHeights {
+        static var small = DefaultDetentHeights.small
+        static var medium = DefaultDetentHeights.medium
+        static var large = DefaultDetentHeights.large
+    }
+    
+    private struct DefaultDetentHeights {
         static var small = 0.1
         static var medium = 0.5
         static var large = 0.95
@@ -106,7 +112,7 @@ extension UIViewController {
         }
     }
     
-    func enableBottomSheetGrab(smallHeight:CGFloat = DetentHeights.small, mediumHeight:CGFloat = DetentHeights.medium, largeHeight:CGFloat = DetentHeights.large) {
+    func enableBottomSheetGrab(smallHeight:CGFloat = DefaultDetentHeights.small, mediumHeight:CGFloat = DefaultDetentHeights.medium, largeHeight:CGFloat = DefaultDetentHeights.large) {
         
         DetentHeights.small = smallHeight
         DetentHeights.medium = mediumHeight

@@ -381,6 +381,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
                 $0.width.equalTo(48)
             }
         }
+       setupAmazonLogo(bottomOffset: nil)
     }
     
     func showPlacesOnMapWith(_ mapModel: [MapModel]) {
@@ -840,7 +841,7 @@ private extension ExploreView {
         }
         
         setupBottomStack(bottomStackOffset: nil)
-        
+        setupAmazonLogo(bottomOffset: nil)
         updateMapHelperConstraints()
     }
 }

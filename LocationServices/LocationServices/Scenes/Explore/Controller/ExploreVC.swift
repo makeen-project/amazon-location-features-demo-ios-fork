@@ -385,7 +385,6 @@ extension ExploreVC {
     
     @objc private func updateButtonConstraits(_ notification: Notification) {
         self.exploreView.shouldBottomStackViewPositionUpdate()
-        self.exploreView.setupAmazonLogo(bottomOffset: nil)
     }
     
     @objc private func updateLocation(_ notification: Notification) {
@@ -428,6 +427,7 @@ extension ExploreVC {
         mapNavigationActionsView.isHidden = true
         //updateAmazonLogoPositioning(isBottomNavigationShown: false)
         exploreView.hideDirectionButton(state: false)
+        exploreView.hideGeoFence(state: false)
         exploreView.deleteDrawing()
     }
     

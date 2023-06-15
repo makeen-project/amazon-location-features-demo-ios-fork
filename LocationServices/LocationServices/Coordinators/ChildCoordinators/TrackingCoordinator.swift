@@ -88,6 +88,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = LoginVCBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true)
+            let height:CGFloat = 8
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
         }
         
         controller.postLoginHandler = { [weak self] in
