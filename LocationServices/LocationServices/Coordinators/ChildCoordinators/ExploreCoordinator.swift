@@ -39,6 +39,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
 
         controller.dismissHandler = { [weak self] in
             self?.currentBottomSheet?.dismissBottomSheet()
+            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
         }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)

@@ -363,7 +363,6 @@ extension ExploreVC {
         DispatchQueue.main.async {
             let size = self.view.bounds.size.height / 2 - 20
             let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
-            print("offset \(offset)")
             self.exploreView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
     }
@@ -386,6 +385,7 @@ extension ExploreVC {
     
     @objc private func updateButtonConstraits(_ notification: Notification) {
         self.exploreView.shouldBottomStackViewPositionUpdate()
+        self.exploreView.setupAmazonLogo(bottomOffset: nil)
     }
     
     @objc private func updateLocation(_ notification: Notification) {
@@ -426,7 +426,7 @@ extension ExploreVC {
         viewModel.deactivateRoute()
         mapNavigationView.isHidden = true
         mapNavigationActionsView.isHidden = true
-        updateAmazonLogoPositioning(isBottomNavigationShown: false)
+        //updateAmazonLogoPositioning(isBottomNavigationShown: false)
         exploreView.hideDirectionButton(state: false)
         exploreView.deleteDrawing()
     }
