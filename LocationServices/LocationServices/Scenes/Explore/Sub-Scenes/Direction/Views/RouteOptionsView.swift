@@ -26,6 +26,9 @@ final class RouteOptionsView: UIView {
         view.backgroundColor = .white
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.layer.borderColor = UIColor.lsLight2.cgColor
+        view.layer.borderWidth = 1
         return view
     }()
     
@@ -58,6 +61,7 @@ final class RouteOptionsView: UIView {
         let view = UIView()
         view.backgroundColor = .clear
         view.isUserInteractionEnabled = false
+
         return view
     }()
     

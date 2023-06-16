@@ -42,6 +42,7 @@ final class DirectionView: UIView {
         view.layer.cornerRadius = 8
         view.layer.borderColor = UIColor.lsLight2.cgColor
         view.layer.borderWidth = 1
+        view.layer.masksToBounds = true
         return view
     }()
     
