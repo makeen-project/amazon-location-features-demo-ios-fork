@@ -165,6 +165,8 @@ final class LoginFormView: UIView {
         return textField
     }()
     
+    private var activeTextField: UITextField?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupDelegates()
@@ -173,6 +175,12 @@ final class LoginFormView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError(.errorInitWithCoder)
+    }
+    
+    deinit {
+        // Remove observer for UIApplication.willEnterForegroundNotification
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
     private func setupDelegates() {
@@ -204,6 +212,26 @@ final class LoginFormView: UIView {
                 self.webSocketHandler?(text)
             }
         }
+        
+        // Add observer for UIApplication.willEnterForegroundNotification
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAppWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAppEnteredBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+    
+    var isBackgroundModeActive = false
+    
+    @objc func handleAppWillEnterForeground() {
+        // Make the active text field the first responder to show the keyboard
+        isBackgroundModeActive = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.activeTextField?.becomeFirstResponder()
+        }
+    }
+    
+    @objc func handleAppEnteredBackground() {
+        isBackgroundModeActive = true
+         self.endEditing(true)
     }
     
     /// Will be enabled in the future, Additional Fields!
@@ -327,6 +355,16 @@ extension LoginFormView: UITextFieldDelegate {
             if let text = userPoolTextField.text {
                 useryPoolIdHandler?(text)
             }
+        }
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        activeTextField = textField
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if(!isBackgroundModeActive) {
+            activeTextField = nil
         }
     }
 }
