@@ -21,6 +21,6 @@ final class RouteOptionViewModel: RouteOptionViewModelProtocol {
     func loadData() {
         let tollOption = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions)
         let ferriesOptions = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions)
-        delegate?.updateViews(tollOption: tollOption ?? false, ferriesOption: ferriesOptions ?? false)
+        delegate?.updateViews(tollOption: tollOption ?? true, ferriesOption: ferriesOptions ?? true)
     }
 }
