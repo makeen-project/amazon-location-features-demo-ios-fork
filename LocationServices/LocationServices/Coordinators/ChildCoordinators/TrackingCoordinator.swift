@@ -114,6 +114,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             let controller = PostLoginBuilder.create()
             controller.dismissHandler = { [weak self] in
                 self?.navigationController.dismiss(animated: true)
+                let height:CGFloat = 8
+                NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
             }
             controller.modalPresentationStyle = .pageSheet
 

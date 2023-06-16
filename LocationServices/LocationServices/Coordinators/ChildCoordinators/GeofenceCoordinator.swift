@@ -120,6 +120,8 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
         let controller = LoginVCBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true)
+            let height:CGFloat = 8
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
         }
         
         controller.postLoginHandler = { [weak self] in
@@ -144,6 +146,8 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             let controller = PostLoginBuilder.create()
             controller.dismissHandler = { [weak self] in
                 self?.navigationController.dismiss(animated: true)
+                let height:CGFloat = 8
+                NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
             }
             controller.modalPresentationStyle = .pageSheet
 

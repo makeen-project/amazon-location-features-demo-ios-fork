@@ -84,7 +84,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        let minHeight = 0.70
+        let minHeight = 0.69
         controller.enableBottomSheetGrab(smallHeight: minHeight, mediumHeight: minHeight)
         currentBottomSheet = controller
     }
@@ -164,6 +164,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             let controller = PostLoginBuilder.create()
             controller.dismissHandler = { [weak self] in
                 self?.navigationController.dismiss(animated: true)
+                NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
             }
             controller.modalPresentationStyle = .pageSheet
 
