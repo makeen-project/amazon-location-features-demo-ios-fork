@@ -251,7 +251,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
         //
         if _puckArrow == nil {
             let _puckArrow = CAShapeLayer()
-            self.layer.opacity = 0.8
+            
             _puckArrow.path = self.puckArrow().cgPath
             _puckArrow.fillColor = arrowColor.cgColor
             _puckArrow.bounds = CGRectMake(0, 0, round(LSUserLocationAnnotationArrowSize), round(LSUserLocationAnnotationArrowSize))
@@ -265,6 +265,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
             _puckArrow.strokeColor = _puckArrow.fillColor
             _puckArrow.opacity = 1
             self.layer.addSublayer(_puckArrow)
+            self.layer.opacity = 0.7
 
             self._puckArrow = _puckArrow
         }
@@ -289,7 +290,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
         bezierPath.move(to: CGPoint(x: max * 0.5, y: arrowTipY))
         bezierPath.addLine(to: CGPoint(x: max * 0.1, y: max))
         bezierPath.addLine(to: CGPoint(x: max * 0.5, y: max * 0.75))
-        bezierPath.addLine(to: CGPoint(x: max * 0.9, y: max))
+        bezierPath.addLine(to: CGPoint(x: max, y: max)) // \
         bezierPath.addLine(to: CGPoint(x: max * 0.5, y: arrowTipY))
         bezierPath.close()
 
