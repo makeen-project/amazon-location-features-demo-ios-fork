@@ -128,6 +128,7 @@ extension POICardVC: POICardViewModelOutputDelegate {
     @objc func dismissPoiView() {
         clearAnnotations()
         updateMapViewBottomIcons()
+        NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
         self.view.removeFromSuperview()
     }
     
