@@ -225,7 +225,8 @@ final class AddGeofenceVC: UIViewController {
         self.view.addSubview(tableView)
         
         scrollView.snp.makeConstraints {
-            $0.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(30)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -265,7 +266,7 @@ final class AddGeofenceVC: UIViewController {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
-            $0.bottomMargin.equalToSuperview().offset(20)
+            $0.bottomMargin.equalToSuperview().offset(-20)
         }
         
         tableView.snp.makeConstraints {

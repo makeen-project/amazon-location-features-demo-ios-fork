@@ -96,8 +96,8 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
         
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: geofenceController!)
-        controller.enableBottomSheetGrab(smallHeight: 0.48)
-        controller.enableBottomSheetGrab()
+        let minHeight = 0.49
+        controller.enableBottomSheetGrab(smallHeight: minHeight)
         currentBottomSheet = controller
     }
     
