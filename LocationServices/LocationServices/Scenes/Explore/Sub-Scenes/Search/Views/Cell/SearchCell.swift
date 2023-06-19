@@ -87,7 +87,8 @@ final class SearchCell: UITableViewCell {
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .gray
-        label.numberOfLines = 2
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         return label
     }()
     
@@ -162,7 +163,7 @@ private extension SearchCell {
             $0.top.equalToSuperview().offset(10)
             $0.leading.equalTo(searchTypeImage.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().offset(-20)
-            $0.bottom.equalToSuperview().offset(10)
+            $0.bottom.equalToSuperview().offset(-10)
         }
         
         searchTypeImage.snp.makeConstraints {
@@ -185,6 +186,7 @@ private extension SearchCell {
             $0.top.equalTo(locationTitle.snp.bottom).offset(5)
             $0.leading.equalTo(locationTitle.snp.leading)
             $0.trailing.equalToSuperview().offset(-20)
+            $0.bottom.equalTo(contentCellView.snp.bottom)
         }
     }
 }
