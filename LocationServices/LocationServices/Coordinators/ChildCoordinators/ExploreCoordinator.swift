@@ -96,7 +96,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.searchScreenStyle = searchScreenStyle
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        controller.enableBottomSheetGrab()
+        controller.enableBottomSheetGrab(largeHeight: 1)
         currentBottomSheet = controller
     }
     
