@@ -31,6 +31,7 @@ final class ExploreCoordinator: Coordinator {
 extension ExploreCoordinator: ExploreNavigationDelegate {
     func dismissSearchScene() {
         currentBottomSheet?.dismissBottomSheet()
+        NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
     }
     
     func showMapStyles() {
