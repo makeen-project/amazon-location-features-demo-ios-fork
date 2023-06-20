@@ -39,7 +39,7 @@ final class DirectionVC: UIViewController {
             self.userLocation = nil
         }
     }
-    private lazy var locationManager: LocationManager = {
+    lazy var locationManager: LocationManager = {
         let locationManager = LocationManager(alertPresenter: self)
         locationManager.setDelegate(self)
         return locationManager

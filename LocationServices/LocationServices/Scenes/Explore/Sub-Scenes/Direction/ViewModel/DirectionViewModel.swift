@@ -40,9 +40,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     }
     
     func addMyLocationItem() {
-        guard !(delegate?.isMyLocationAlreadySelected() ?? false) &&
-                userLocation?.lat != nil &&
-                userLocation?.long != nil  else { return }
+        guard !(delegate?.isMyLocationAlreadySelected() ?? false)  else { return }
         let myLocation = getMyLocationItem()
         presentation.insert(myLocation, at: 0)
         delegate?.reloadView()

@@ -305,7 +305,8 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     @objc func direactionAction() {
-        delegate?.showDirectionView(userLocation: mapView.userLocation?.coordinate)
+        
+        delegate?.showDirectionView(userLocation: (mapView.locationManager.authorizationStatus == .authorizedAlways || mapView.locationManager.authorizationStatus == .authorizedWhenInUse) ? mapView.userLocation?.coordinate : nil)
     }
     
     func drawCalculatedRouteWith(_ data: Data, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, isRecalculation: Bool, routeType: RouteTypes) {

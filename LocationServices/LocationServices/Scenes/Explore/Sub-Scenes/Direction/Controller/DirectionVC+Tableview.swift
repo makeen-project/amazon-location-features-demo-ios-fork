@@ -76,10 +76,18 @@ extension DirectionVC: UITableViewDataSource {
             firstDestionation = searchTextModel
         }
         
-        self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
-        
         if currentModel.searchType == .mylocation {
-            viewModel.myLocationSelected()
+            let locationAuthStatus = locationManager.getAuthorizationStatus()
+            if(locationAuthStatus == .authorizedAlways || locationAuthStatus == .authorizedWhenInUse) {
+                self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
+                viewModel.myLocationSelected()
+            }
+            else {
+                    locationManager.requestPermissions()
+            }
+        }
+        else {
+            self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
         }
         
         let state = viewModel.searchSelectedPlaceWith(currentModel, lat: userLocation?.lat, long: userLocation?.long)
