@@ -99,13 +99,12 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
             controller.firstDestionation = DirectionTextFieldModel(placeName: firstDestionation.placeName ?? "", placeAddress: firstDestionation.placeAddress, lat: firstDestionation.placeLat, long: firstDestionation.placeLong)
         }
         
-        // check if we have secondDestination, it means that we should set
         // first location as my current location
+        if controller.firstDestionation == nil, let lat, let long {
+            controller.firstDestionation = DirectionTextFieldModel(placeName: "My Location", placeAddress: nil, lat: lat, long: long)
+        }
+
         if let secondDestionation {
-            if controller.firstDestionation == nil, let lat, let long {
-                controller.firstDestionation = DirectionTextFieldModel(placeName: "My Location", placeAddress: nil, lat: lat, long: long)
-            }
-            
             controller.secondDestionation = DirectionTextFieldModel(placeName: secondDestionation.placeName ?? "", placeAddress: secondDestionation.placeAddress, lat: secondDestionation.placeLat, long: secondDestionation.placeLong)
         }
         
