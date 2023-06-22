@@ -129,7 +129,12 @@ extension POICardVC: POICardViewModelOutputDelegate {
         clearAnnotations()
         updateMapViewBottomIcons()
         NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
-        self.view.removeFromSuperview()
+        if(isInSplitViewController){
+            self.navigationController?.popViewController(animated: true)
+        }
+        else{
+            self.view.removeFromSuperview()
+        }
     }
     
     func showDirections(secondDestination: MapModel) {
