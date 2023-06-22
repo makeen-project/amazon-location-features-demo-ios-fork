@@ -381,6 +381,7 @@
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
 		F1B2388729F01B88001E2066 /* AboutViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388629F01B88001E2066 /* AboutViewModelTests.swift */; };
 		F1B642692A2F330D00FB40E3 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B642682A2F330D00FB40E3 /* UIColor+Extension.swift */; };
+		F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */; };
 		F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */; };
 		F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */; };
 		F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */; };
@@ -783,6 +784,7 @@
 		F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POICardViewModelTests.swift; sourceTree = "<group>"; };
 		F1B2388629F01B88001E2066 /* AboutViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModelTests.swift; sourceTree = "<group>"; };
 		F1B642682A2F330D00FB40E3 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridBackgroundView.swift; sourceTree = "<group>"; };
 		F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVCViewModelTests.swift; sourceTree = "<group>"; };
 		F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDefaultValueHelperTests.swift; sourceTree = "<group>"; };
@@ -1962,7 +1964,6 @@
 		AD98972F298B2B0A0041E867 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				AD989737298B2E4C0041E867 /* TrackingDashboarViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2257,6 +2258,7 @@
 			children = (
 				ADC1245229774A7700B08C20 /* DefaultCommonMapView.swift */,
 				ADC1245529774B4000B08C20 /* MapviewOverlayItems.swift */,
+				F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */,
 			);
 			path = MapView;
 			sourceTree = "<group>";
@@ -3222,6 +3224,7 @@
 				ADD5D7CE296F843D0022480B /* GeofenceDashboardCell.swift in Sources */,
 				AD2AF06C292E99B700149904 /* TabBarCoordinator.swift in Sources */,
 				ADBDDF082984394500696EC6 /* ExploreMapStyleCell.swift in Sources */,
+				F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */,
 				ADD139952980A34E0003F917 /* RouteOptionRowView.swift in Sources */,
 				ADD5D7B1296E00340022480B /* PostLoginView.swift in Sources */,
 				ADD1396A2980966E0003F917 /* DataProviderVC.swift in Sources */,

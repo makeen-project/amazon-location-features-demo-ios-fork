@@ -83,6 +83,8 @@ final class ExploreView: UIView, NavigationMapProtocol {
         return mapView
     }()
     
+    private var gridBackgroundView: GridBackgroundView?
+    
     private var currentMapHelperViewHeight: UInt = 0
     private let mapHelperView: UIView = {
         let view = UIView()
@@ -791,6 +793,12 @@ private extension ExploreView {
         self.addSubview(searchBarView)
         self.addSubview(amazonMapLogo)
         self.addSubview(infoButton)
+                
+        gridBackgroundView = GridBackgroundView(frame: self.bounds)
+        gridBackgroundView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        containerView.addSubview(gridBackgroundView!)
+        
+    
         
         containerView.addSubview(mapView)
         containerView.addSubview(topStackView)
@@ -966,6 +974,8 @@ extension ExploreView: MGLMapViewDelegate {
     
     func mapViewWillStartRenderingMap(_ mapView: MGLMapView) {
         mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
+        containerView.bringSubviewToFront(gridBackgroundView!)
+        containerView.sendSubviewToBack(mapView)
     }
     
     func mapViewDidFinishRenderingMap(_ mapView: MGLMapView, fullyRendered: Bool) {
@@ -974,6 +984,8 @@ extension ExploreView: MGLMapViewDelegate {
                 self?.updateMapHelperConstraints()
                 self?.mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendered
             }
+            containerView.bringSubviewToFront(mapView)
+            containerView.sendSubviewToBack(gridBackgroundView!)
         } else {
             debounceForMapRendering.debounce {}
             mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
