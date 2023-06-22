@@ -428,6 +428,7 @@ extension ExploreVC {
         //updateAmazonLogoPositioning(isBottomNavigationShown: false)
         exploreView.hideDirectionButton(state: false)
         exploreView.hideGeoFence(state: false)
+        exploreView.hideMapStyleButton(state: false)
         exploreView.deleteDrawing()
     }
     
@@ -450,6 +451,9 @@ extension ExploreVC {
         }
         if let directionIsHidden = notification.userInfo?[StringConstant.NotificationsInfoField.directionIsHidden] as? Bool {
             exploreView.hideDirectionButton(state: directionIsHidden)
+        }
+        if let mapStyleIsHidden = notification.userInfo?[StringConstant.NotificationsInfoField.mapStyleIsHidden] as? Bool {
+            exploreView.hideMapStyleButton(state: mapStyleIsHidden)
         }
     }
     

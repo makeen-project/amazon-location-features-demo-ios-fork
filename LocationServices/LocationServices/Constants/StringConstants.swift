@@ -192,6 +192,7 @@ enum StringConstant {
     
     enum NotificationsInfoField {
         static let geofenceIsHidden = "geofenceIsHidden"
+        static let mapStyleIsHidden = "mapStyleIsHidden"
         static let directionIsHidden = "directionIsHidden"
     }
     

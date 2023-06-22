@@ -125,6 +125,7 @@ final class NavigationVC: UIViewController {
     private func changeExploreActionButtonsVisibility() {
         let userInfo = [
             StringConstant.NotificationsInfoField.geofenceIsHidden: true,
+            StringConstant.NotificationsInfoField.mapStyleIsHidden: true,
             StringConstant.NotificationsInfoField.directionIsHidden: true
         ]
         NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)

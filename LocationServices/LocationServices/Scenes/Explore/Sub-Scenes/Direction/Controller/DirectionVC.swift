@@ -101,7 +101,7 @@ final class DirectionVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         calculateRoute()
-        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true)
+        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true, mapStyleIsHidden: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -125,10 +125,11 @@ final class DirectionVC: UIViewController {
         }
     }
     
-    private func changeExploreActionButtonsVisibility(geofenceIsHidden: Bool, directionIsHidden: Bool) {
+    private func changeExploreActionButtonsVisibility(geofenceIsHidden: Bool, directionIsHidden: Bool, mapStyleIsHidden: Bool) {
         let userInfo = [
             StringConstant.NotificationsInfoField.geofenceIsHidden: geofenceIsHidden,
-            StringConstant.NotificationsInfoField.directionIsHidden: directionIsHidden
+            StringConstant.NotificationsInfoField.directionIsHidden: directionIsHidden,
+            StringConstant.NotificationsInfoField.mapStyleIsHidden: mapStyleIsHidden
         ]
         NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
     }
@@ -519,7 +520,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
 
 extension DirectionVC: DirectionSearchViewOutputDelegate {
     @objc func dismissView() {
-        changeExploreActionButtonsVisibility(geofenceIsHidden: true, directionIsHidden: true)
+        changeExploreActionButtonsVisibility(geofenceIsHidden: true, directionIsHidden: true, mapStyleIsHidden: true)
         dismissHandler?()
     }
     

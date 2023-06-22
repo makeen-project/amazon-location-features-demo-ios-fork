@@ -215,6 +215,11 @@ final class ExploreView: UIView, NavigationMapProtocol {
         dividerView.isHidden = state
     }
     
+    func hideMapStyleButton(state: Bool) {
+        mapStyleButton.isHidden = state
+        dividerView.isHidden = state
+    }
+    
     func hideDirectionButton(state: Bool) {
         directonButton.isHidden = state
     }
