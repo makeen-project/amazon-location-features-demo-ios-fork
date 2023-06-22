@@ -975,7 +975,6 @@ extension ExploreView: MGLMapViewDelegate {
     func mapViewWillStartRenderingMap(_ mapView: MGLMapView) {
         mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
         containerView.bringSubviewToFront(gridBackgroundView!)
-        containerView.sendSubviewToBack(mapView)
     }
     
     func mapViewDidFinishRenderingMap(_ mapView: MGLMapView, fullyRendered: Bool) {
@@ -984,7 +983,6 @@ extension ExploreView: MGLMapViewDelegate {
                 self?.updateMapHelperConstraints()
                 self?.mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendered
             }
-            containerView.bringSubviewToFront(mapView)
             containerView.sendSubviewToBack(gridBackgroundView!)
         } else {
             debounceForMapRendering.debounce {}
