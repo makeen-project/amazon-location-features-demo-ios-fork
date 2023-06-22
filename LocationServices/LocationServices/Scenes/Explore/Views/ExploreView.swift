@@ -883,19 +883,23 @@ extension ExploreView: MGLMapViewDelegate {
     // in the difference of standard approach if we are in live navigation mode we always return to
     // current location and zoom mode.
     func mapView(_ mapView: MGLMapView, regionDidChangeWith reason: MGLCameraChangeReason, animated: Bool) {
-        switch reason {
-        case .gesturePan, .gesturePinch, .gestureRotate, .gestureZoomIn, .gestureZoomOut, .gestureTilt:
-            if mapMode == .turnByTurnNavigation {
-                if let userCoordinates = mapView.userLocation?.coordinate,
-                   CLLocationCoordinate2DIsValid(userCoordinates) {
-                    mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
-                        self?.mapView.userTrackingMode = .followWithCourse
-                    }
-                }
-            }
-        default:
-            break
-        }
+        //disabling auto focus on user location while in navigation mode to allow user to view map freely
+//        switch reason {
+//        case .gesturePan, .gesturePinch, .gestureRotate, .gestureZoomIn, .gestureZoomOut, .gestureTilt:
+//
+//            if mapMode == .turnByTurnNavigation {
+//
+//                return
+//                if let userCoordinates = mapView.userLocation?.coordinate,
+//                   CLLocationCoordinate2DIsValid(userCoordinates) {
+//                    mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
+//                        self?.mapView.userTrackingMode = .followWithCourse
+//                    }
+//                }
+//            }
+//        default:
+//            break
+//        }
     }
     
     func mapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotation) {
