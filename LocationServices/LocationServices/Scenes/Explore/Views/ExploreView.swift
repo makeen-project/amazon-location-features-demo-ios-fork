@@ -978,12 +978,16 @@ extension ExploreView: MGLMapViewDelegate {
     }
     
     func mapViewDidFinishRenderingMap(_ mapView: MGLMapView, fullyRendered: Bool) {
+        if(gridBackgroundView != nil){
+            containerView.sendSubviewToBack(gridBackgroundView!)
+            gridBackgroundView?.isHidden = true
+            gridBackgroundView = nil
+        }
         if fullyRendered {
             debounceForMapRendering.debounce { [weak self] in
                 self?.updateMapHelperConstraints()
                 self?.mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendered
             }
-            containerView.sendSubviewToBack(gridBackgroundView!)
         } else {
             debounceForMapRendering.debounce {}
             mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
