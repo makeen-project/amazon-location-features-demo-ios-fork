@@ -522,7 +522,8 @@ final class ExploreView: UIView, NavigationMapProtocol {
 //    }
     
     func setupAmazonLogo(bottomOffset: CGFloat?) {
-        let bottomOffset = bottomOffset ?? Constants.searchBarHeight + Constants.bottomStackViewOffset
+        
+        let bottomOffset = bottomOffset ?? (isiPad ? 0 : Constants.searchBarHeight) + Constants.bottomStackViewOffset
         
         amazonMapLogo.snp.remakeConstraints {
             $0.leading.equalToSuperview().offset(Constants.amazonLogoHorizontalOffset)
@@ -537,7 +538,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     private func setupBottomStack(bottomStackOffset: CGFloat?) {
-        let bottomStackOffset = bottomStackOffset ?? Constants.searchBarHeight + Constants.bottomStackViewOffset
+        let bottomStackOffset = bottomStackOffset ?? (isiPad ? 0 : Constants.searchBarHeight) + Constants.bottomStackViewOffset
         
         bottomStackView.snp.remakeConstraints {
             if isiPad {
@@ -814,7 +815,7 @@ private extension ExploreView {
             $0.bottom.equalToSuperview()
         }
         
-        setupAmazonLogo(bottomOffset: Constants.searchBarHeight + Constants.bottomStackViewOffset)
+        setupAmazonLogo(bottomOffset: (isiPad ? 0 : Constants.searchBarHeight) + Constants.bottomStackViewOffset)
         
         infoButton.snp.makeConstraints {
             $0.height.width.equalTo(13.5)
