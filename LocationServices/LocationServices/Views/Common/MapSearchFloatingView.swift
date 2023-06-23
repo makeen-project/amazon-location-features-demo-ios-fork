@@ -123,7 +123,8 @@ final class MapSearchFloatingView: UIView {
         }
         
         searchView.snp.makeConstraints {
-            $0.height.equalToSuperview()
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(35)
             $0.width.equalTo(300).priority(999)
         }
         
