@@ -30,6 +30,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     
     func isGeofenceNameValid(_ name: String?) -> Bool {
         guard let name else { return false }
+        if (name == "") { return true }
         let isFirstLetter = name.first?.isLetter ?? false
         let isValidLength = !name.isEmpty && name.count <= 20
         let containOnlyAcceptableCharacters = name.allSatisfy({

@@ -284,7 +284,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
     func puckArrow() -> UIBezierPath! {
         let max: CGFloat = LSUserLocationAnnotationArrowSize
 
-        let arrowTipY: CGFloat = max*0.2
+        let arrowTipY: CGFloat = max*0.05
 
         let bezierPath = UIBezierPath()
         bezierPath.move(to: CGPoint(x: max * 0.5, y: arrowTipY))
