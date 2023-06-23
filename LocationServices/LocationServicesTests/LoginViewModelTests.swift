@@ -23,10 +23,11 @@ final class LoginViewModelTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testIsSignedIn() throws {
-        let loginViewModel = LoginViewModel()
-        XCTAssertEqual(loginViewModel.isSignedIn(), false, "Expected some value in isSignedIn")
-    }
+// Disabling it since it is suppose to not call real api
+//    func testIsSignedIn() throws {
+//        let loginViewModel = LoginViewModel()
+//        XCTAssertEqual(loginViewModel.isSignedIn(), false, "Expected some value in isSignedIn")
+//    }
     
     func testHasLocalUser() throws {
         let customLoginModel = CustomConnectionModel(identityPoolId: "identityPoolId",

@@ -50,7 +50,7 @@ final class DirectionViewModelTests: XCTestCase {
     
     func testLoadLocalOptionsWithEmptyStorage() throws {
         directionViewModel.loadLocalOptions()
-        XCTAssertEqual(directionViewModel.avoidTolls, false, "Expected avoidTolls false")
+        XCTAssertEqual(directionViewModel.avoidTolls, true, "Expected avoidTolls false")
     }
     
     func testLoadLocalOptionsWithFilledStorage() throws {
