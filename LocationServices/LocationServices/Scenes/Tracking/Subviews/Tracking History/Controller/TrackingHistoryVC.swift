@@ -183,7 +183,12 @@ final class TrackingHistoryVC: UIViewController {
         
         tableView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(scrollView.snp.height)
+            if(isiPad){
+                $0.height.equalTo(self.view.snp.height).offset(-350)
+            }
+            else {
+                $0.height.equalTo(scrollView.snp.height)
+            }
         }
         
         deletionView.snp.makeConstraints {
