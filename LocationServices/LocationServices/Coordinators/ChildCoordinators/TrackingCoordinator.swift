@@ -16,6 +16,10 @@ final class TrackingCoordinator: Coordinator {
     var didSendEventClosure: VoidHandler?
     var didSendDirectionEvent: VoidHandler?
     
+    var trackingController:TrackingVC?
+    
+    weak var currentBottomSheet:UIViewController?
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -37,61 +41,45 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     
     func showDashboardFlow() {
         let controller = TrackingDashboardBuilder.create()
-        controller.modalPresentationStyle = .pageSheet
-        
-        controller.trackingHistoryHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: false, completion: {
-                self?.showTrackingHistory()
-            })
-        }
-        
-        controller.closeHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: nil)
-        }
 
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
+        controller.trackingHistoryHandler = { [weak self] in
+            self?.showTrackingHistory(isTrackingActive: true)
         }
         
-        navigationController.present(controller, animated: true)
+//        controller.closeHandler = { [weak self] in
+//            currentBottomSheet?.dismissBottomSheet()
+//        }
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: trackingController!)
+        controller.enableBottomSheetGrab(smallHeight: 0.48)
+        currentBottomSheet = controller
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
         let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
-        controller.modalPresentationStyle = .pageSheet
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: trackingController!)
+        controller.enableBottomSheetGrab(smallHeight: 0.12)
+        currentBottomSheet = controller
         
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
-        
-        navigationController.present(controller, animated: true)
+        // Starting tracking by default when tapping on Enable tracking button
+        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": isTrackingActive])
     }
     
     func showMapStyleScene() {
         dismissCurrentScene()
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
+            self?.currentBottomSheet?.dismissBottomSheet()
+            if(self?.trackingController?.viewModel.isTrackingActive == true){
+                self?.showTrackingHistory(isTrackingActive: true)
+            }
+            else { self?.showDashboardFlow() }
         }
-        controller.modalPresentationStyle = .pageSheet
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
-        }
-        navigationController.present(controller, animated: true)
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: trackingController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
     
     func showLoginFlow() {
@@ -100,6 +88,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = LoginVCBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true)
+            let height:CGFloat = 8
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
         }
         
         controller.postLoginHandler = { [weak self] in
@@ -112,7 +102,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             sheet.detents = [.large()]
             sheet.selectedDetentIdentifier = .large
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -124,6 +114,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
             let controller = PostLoginBuilder.create()
             controller.dismissHandler = { [weak self] in
                 self?.navigationController.dismiss(animated: true)
+                let height:CGFloat = 8
+                NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
             }
             controller.modalPresentationStyle = .pageSheet
 
@@ -131,7 +123,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
                 sheet.detents = [.large()]
                 sheet.selectedDetentIdentifier = .large
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.navigationController.present(controller, animated: true)
         }
@@ -139,21 +131,25 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+            self?.navigationController.navigationBar.isHidden = true
+        }
         navigationController.pushViewController(controller, animated: true)
     }
 }
 
 private extension TrackingCoordinator {
     func showTrackingScene() {
-        let controller = TrackingVCBuilder.create()
-        controller.geofenceHandler = {
+        trackingController = TrackingVCBuilder.create()
+        trackingController?.geofenceHandler = {
             self.didSendEventClosure?()
         }
         
-        controller.directionHandler = {
+        trackingController?.directionHandler = {
             self.didSendDirectionEvent?()
         }
-        controller.delegate = self
-        navigationController.pushViewController(controller, animated: true)
+        trackingController?.delegate = self
+        navigationController.pushViewController(trackingController!, animated: true)
     }
 }

@@ -140,7 +140,7 @@ final class LoginDefaultInformationView: UIView {
         }
         
         tw.linkTextAttributes = [
-            .foregroundColor: UIColor.tabBarTintColor,
+            .foregroundColor: UIColor.lsPrimary,
             .font: UIFont.amazonFont(type: .bold, size: 13)
         ]
         
@@ -199,7 +199,7 @@ final class LoginDefaultInformationView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     @objc private func dismissAction() {

@@ -251,6 +251,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
         //
         if _puckArrow == nil {
             let _puckArrow = CAShapeLayer()
+            
             _puckArrow.path = self.puckArrow().cgPath
             _puckArrow.fillColor = arrowColor.cgColor
             _puckArrow.bounds = CGRectMake(0, 0, round(LSUserLocationAnnotationArrowSize), round(LSUserLocationAnnotationArrowSize))
@@ -262,8 +263,10 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
             _puckArrow.lineJoin = .round
             _puckArrow.lineWidth = 1.0
             _puckArrow.strokeColor = _puckArrow.fillColor
-
+            _puckArrow.opacity = 1
             self.layer.addSublayer(_puckArrow)
+            self.layer.opacity = 0.7
+
             self._puckArrow = _puckArrow
         }
         
@@ -281,12 +284,14 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
     func puckArrow() -> UIBezierPath! {
         let max: CGFloat = LSUserLocationAnnotationArrowSize
 
-        let bezierPath: UIBezierPath = UIBezierPath()
-        bezierPath.move(to: CGPointMake(max * 0.5, 0))
-        bezierPath.addLine(to: CGPointMake(max * 0.1, max))
-        bezierPath.addLine(to: CGPointMake(max * 0.5, max * 0.65))
-        bezierPath.addLine(to: CGPointMake(max * 0.9, max))
-        bezierPath.addLine(to: CGPointMake(max * 0.5, 0))
+        let arrowTipY: CGFloat = max*0.05
+
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: CGPoint(x: max * 0.5, y: arrowTipY))
+        bezierPath.addLine(to: CGPoint(x: max * 0.1, y: max))
+        bezierPath.addLine(to: CGPoint(x: max * 0.5, y: max * 0.75))
+        bezierPath.addLine(to: CGPoint(x: max, y: max)) // \
+        bezierPath.addLine(to: CGPoint(x: max * 0.5, y: arrowTipY))
         bezierPath.close()
 
         return bezierPath

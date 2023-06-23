@@ -14,7 +14,8 @@ final class GeofenceCoordinator: Coordinator {
     var type: CoordinatorType { .explore }
     
     var directionHandler: VoidHandler?
-
+    var geofenceController: GeofenceVC?
+    weak var currentBottomSheet:UIViewController?
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -31,6 +32,7 @@ private extension GeofenceCoordinator {
         controller.directioButtonHandler = {
             self.directionHandler?()
         }
+        geofenceController = controller
         navigationController.pushViewController(controller, animated: true)
     }
 }
@@ -43,27 +45,27 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             }
         }
     }
+    
+    func dismissCurrentBottomSheet(geofences: [GeofenceDataModel], shouldDashboardShow: Bool) {
+        currentBottomSheet?.dismissBottomSheet()
+            if shouldDashboardShow {
+                self.showDashboardFlow(geofences: geofences, lat: nil, long: nil)
+            }
+    }
 
     func showSearchSceneWith(lat: Double?, long: Double?) {
       
         let controller = SearchVCBuilder.create()
         controller.userLocation = (lat, long)
-        controller.modalPresentationStyle = .pageSheet
 
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.large(), .medium()]
-            sheet.selectedDetentIdentifier = .large
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.preferredCornerRadius = 10
-        }
-        
-        navigationController.present(controller, animated: true)
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: geofenceController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
     
     func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?) {
         let controller = GeofenceDashboardBuilder.create(lat: lat, long: long, geofences: geofences)
-        controller.modalPresentationStyle = .pageSheet
         
         controller.addGeofence = { [weak self] parameters in
             self?.showAddGeofenceFlow(activeGeofencesLists: parameters.activeGeofences,
@@ -74,16 +76,10 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             
         }
 
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
-        
-        navigationController.present(controller, animated: true)
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: geofenceController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
     
     func showAddGeofenceFlow(activeGeofencesLists: [GeofenceDataModel],
@@ -91,42 +87,31 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
                              model: GeofenceDataModel?,
                              lat: Double?,
                              long: Double?) {
-        dismissCurrentScene(geofences: [], shouldDashboardShow: false)
         let controller = AddGeofenceBuilder.create(activeGeofencesLists: activeGeofencesLists,
                                                    isEditingSceneEnabled: isEditingSceneEnabled,
                                                    model: model,
                                                    lat: lat,
                                                    long: long)
         controller.delegate = self
-        controller.modalPresentationStyle = .pageSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
-            sheet.prefersGrabberVisible = true
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
-
-        navigationController.present(controller, animated: true)
+        
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: geofenceController!)
+        let minHeight = 0.49
+        controller.enableBottomSheetGrab(smallHeight: minHeight)
+        currentBottomSheet = controller
     }
     
     func showMapStyleScene() {
         dismissCurrentScene(geofences: [], shouldDashboardShow: false)
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
+            self?.currentBottomSheet?.dismissBottomSheet()
         }
-        controller.modalPresentationStyle = .pageSheet
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 10
-        }
-        navigationController.present(controller, animated: true)
+        
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: geofenceController!)
+        controller.enableBottomSheetGrab()
+        currentBottomSheet = controller
     }
     
     func showLoginFlow() {
@@ -135,6 +120,8 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
         let controller = LoginVCBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true)
+            let height:CGFloat = 8
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
         }
         
         controller.postLoginHandler = { [weak self] in
@@ -147,7 +134,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             sheet.detents = [.large()]
             sheet.selectedDetentIdentifier = .large
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 10
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
         navigationController.present(controller, animated: true)
     }
@@ -159,6 +146,8 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             let controller = PostLoginBuilder.create()
             controller.dismissHandler = { [weak self] in
                 self?.navigationController.dismiss(animated: true)
+                let height:CGFloat = 8
+                NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
             }
             controller.modalPresentationStyle = .pageSheet
 
@@ -166,7 +155,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
                 sheet.detents = [.large()]
                 sheet.selectedDetentIdentifier = .large
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = 10
+                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
             }
             self?.navigationController.present(controller, animated: true)
         }
@@ -174,6 +163,10 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
     
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
+        controller.closeCallback = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+            self?.navigationController.navigationBar.isHidden = true
+        }
         navigationController.pushViewController(controller, animated: true)
     }
 }

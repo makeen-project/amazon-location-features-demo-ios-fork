@@ -55,15 +55,15 @@ final class MapStyleCell: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     func isCellSelected(state: Bool) {
         if state {
             accessibilityTraits = [.selected]
             mapImage.layer.borderWidth = 1
-            mapImage.layer.borderColor = UIColor.tabBarTintColor.cgColor
-            titleLabel.textColor = .tabBarTintColor
+            mapImage.layer.borderColor = UIColor.lsPrimary.cgColor
+            titleLabel.textColor = .lsPrimary
         } else {
             accessibilityTraits = []
             mapImage.layer.borderWidth = 0

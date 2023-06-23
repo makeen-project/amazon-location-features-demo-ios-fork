@@ -22,7 +22,7 @@ final class ResetPasswordView: UIView {
     private let currentPasswordTextField: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .textFieldBackgroundColor
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -50,7 +50,7 @@ final class ResetPasswordView: UIView {
     private let newPasswordTextField: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .textFieldBackgroundColor
-        textField.tintColor = .tabBarTintColor
+        textField.tintColor = .lsPrimary
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
@@ -67,10 +67,11 @@ final class ResetPasswordView: UIView {
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
         button.setTitle("Save", for: .normal)
+        button.titleLabel?.font = .amazonFont(type: .bold, size: 16)
         button.setTitleColor(.white, for: .normal)
         button.isUserInteractionEnabled = true
         return button
@@ -90,7 +91,7 @@ final class ResetPasswordView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     

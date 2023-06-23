@@ -22,7 +22,7 @@ final class AmazonLocationButton: UIButton {
     }
     
     private func setupPropertiesWith(title: String) {
-        self.backgroundColor = .tabBarTintColor
+        self.backgroundColor = .lsPrimary
         self.contentMode = .scaleAspectFit
         self.layer.cornerRadius = 10
         self.setTitle(title, for: .normal)

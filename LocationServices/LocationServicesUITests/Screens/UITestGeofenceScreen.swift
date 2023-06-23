@@ -22,6 +22,7 @@ struct UITestGeofenceScreen: UITestScreen {
         static var saveGeofenceButton: String { ViewsIdentifiers.Geofence.saveGeofenceButton }
         static var searchGeofenceTextField: String { ViewsIdentifiers.Geofence.searchGeofenceTextField }
         static var radiusGeofenceSliderField: String { ViewsIdentifiers.Geofence.radiusGeofenceSliderField }
+        static var addGeofenceTableView: String { ViewsIdentifiers.Geofence.addGeofenceTableView }
     }
     
     func waitForAWSConnectionScreen() -> UITestAWSScreen {
@@ -53,9 +54,9 @@ struct UITestGeofenceScreen: UITestScreen {
         searchBar.buttons["Clear text"].tap()
         searchBar.typeText(location)
         sleep(3)
-        var cell = app.tables.cells.firstMatch
+        var cell = getAddGeofenceTable().firstMatch.cells.firstMatch
         if(matchCellText != nil){
-            cell = app.tables.cells.containing(.staticText, identifier: matchCellText).element
+            cell = getAddGeofenceTable().cells.containing(.staticText, identifier: matchCellText).element
         }
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.request.time))
         cell.tap()
@@ -222,5 +223,9 @@ struct UITestGeofenceScreen: UITestScreen {
         let long = Double.random(in: newYorkBounds.minLon...newYorkBounds.maxLon)
 
         return "\(lat), \(long)"
+    }
+    
+    private func getAddGeofenceTable() -> XCUIElement {
+        return app.tables[Identifiers.addGeofenceTableView]
     }
 }

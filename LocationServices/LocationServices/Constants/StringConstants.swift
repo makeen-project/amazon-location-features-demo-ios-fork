@@ -21,6 +21,9 @@ extension String {
     
     static let errorCellCannotBeInititalized = "Cell can't be initilized"
     static let errorJSONDecoder = "JSON Decoder Error"
+    static let cellCanNotBeDequed = "Cell can't be dequed"
+    
+    static let errorToBeImplemented = "to be implemented"
 }
 
 // Strings
@@ -46,6 +49,7 @@ enum StringConstant {
     
     // strings:
     static let direction = "Direction"
+    static let directions = "Directions"
     static let geofence = "Geofence"
     static let login = "Login"
     static let amazonLocationDetail = """
@@ -67,6 +71,8 @@ enum StringConstant {
     static let terminate = "Ok"
     static let resetToDefaultConfigTitle = "Reset stack"
     static let resetToDefaultConfigExplanation = "Stack is corrupted, switching back to default stack"
+    static let awsStackInvalidTitle = "Invalid AWS Stack"
+    static let awsStackInvalidExplanation = "Stack is not invalid anymore or deleted, app will disconnect from AWS and restart"
     static let notAllFieldsAreConfigured = "Not all the fields are configured"
     static let incorrectIdentityPoolIdMessage = "Failed to connect AWS account, invalid IdentityPoolId or region"
     static let failedToCalculateRoute = "Failed to calculate route"
@@ -78,9 +84,12 @@ enum StringConstant {
     static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
     static let viewTermsAndConditions = "View Terms and Conditions"
     static let continueToTracker = "Continue"
+    static let enableTrackingDescription = "Enabling the feature will allow you to track your device and get notified when the device enters or exits any of your geofences."
     
     static let startTracking = "Start Tracking"
     static let stopTracking = "Stop Tracking"
+    
+    static let emptyTrackingHistory = "No tracking history available"
     
     static let tracker = "Tracker"
     static let entered = "entered"
@@ -118,7 +127,8 @@ enum StringConstant {
     static let testExpectationError = "expectation not matched after waiting"
     static let sessionExpiredError = "Session is expired. Please sign out and sign in back to continue access all features. Otherwise you could face unexpected behaviour in the app"
     static let greatDistanceErrorTitle = "Distance is greater than 400 km"
-    static let greatDistanceErrorMessage = "Can`t calculate via Esri, kindly switch to HERE provider"
+    static let greatDistanceErrorMessage = "Can't calculate via Esri, kindly switch to HERE provider"
+    static let invalidUrlError = "URL is invalid. Can't open it"
     
     //login
     enum LoginInfo {
@@ -143,6 +153,8 @@ enum StringConstant {
             static let defaultConfigSubtitle = "Amazon Location app needs to be closed in order to apply your account configuration. This means that you'll need to manually reopen the app after it closes."
             static let customConfigSubtitle = "Amazon Location app needs to be closed in order to apply default configuration. This means that you'll need to manually reopen the app after it closes."
         }
+        
+        static let continueToExplore = "Continue to Explore"
     }
     
     enum AboutTab {
@@ -165,8 +177,23 @@ enum StringConstant {
         static let isTracking = "Tracking your device location"
     }
     
+    enum TabBar {
+        static let explore: String = "Explore"
+        static let tracking: String = "Trackers"
+        static let geofence: String = "Geofences"
+        static let settings: String = "Settings"
+        static let about: String = "About"
+        static let more: String = "More"
+    }
+    
     enum Errors {
         static let requestCanceledCode = -999
+    }
+    
+    enum NotificationsInfoField {
+        static let geofenceIsHidden = "geofenceIsHidden"
+        static let mapStyleIsHidden = "mapStyleIsHidden"
+        static let directionIsHidden = "directionIsHidden"
     }
     
     static let units = "Units"
@@ -191,6 +218,14 @@ enum StringConstant {
     static let myLocation = "My Location"
     static let appVersion = "App version: "
     static let termsAndConditions = "Terms & Conditions"
+    static let disconnect = "Disconnect"
+    static let demo = "Demo"
+    static let routeOverview = "Route Overview"
+    
+    static let loginVcTitle = "AWS CloudFormation"
+    static let trackingHistory = "Tracking History"
+    static let viewRoute = "View Route"
+    static let hideRoute = "Hide Route"
 }
 
 protocol ConstantsLoginInfoConfig {

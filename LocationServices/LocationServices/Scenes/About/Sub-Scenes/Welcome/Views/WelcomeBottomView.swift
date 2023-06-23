@@ -30,7 +30,7 @@ final class WelcomeBottomView: UIView {
         }
         
         tw.linkTextAttributes = [
-            .foregroundColor: UIColor.tabBarTintColor,
+            .foregroundColor: UIColor.lsPrimary,
             .font: UIFont.amazonFont(type: .regular, size: 10)
         ]
         
@@ -61,7 +61,7 @@ final class WelcomeBottomView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     private func setupViews() {

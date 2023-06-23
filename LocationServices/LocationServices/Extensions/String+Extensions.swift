@@ -98,7 +98,7 @@ extension NSMutableAttributedString {
         let foundRange = self.mutableString.range(of: textOccurances)
         guard foundRange.location != NSNotFound else { return false }
         
-        self.addAttribute(.foregroundColor, value: UIColor.tabBarTintColor, range: foundRange)
+        self.addAttribute(.foregroundColor, value: UIColor.lsPrimary, range: foundRange)
         return true
     }
 }

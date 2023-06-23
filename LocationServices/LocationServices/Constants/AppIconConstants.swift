@@ -14,7 +14,7 @@ extension UIImage {
     static let appLogo = UIImage(named: "app-logo")!
     /// TabBar Icons
     static let exploreIcon = UIImage(named: "icon-compass")!
-    static let trackingIcon = UIImage(named: "icon-route")!
+    static let trackingIcon = UIImage(named: "icon-radar-solid")!
     static let geofenceIcon = UIImage(named: "icon-geofence")!
     static let settingsIcon = UIImage(named: "icon-gear")!
     static let about = UIImage(named: "icon-info")!
@@ -73,5 +73,10 @@ extension UIImage {
     static let alertTriangleSolid = UIImage(named: "alert-triangle-solid")!
     static let infoIcon = UIImage(named: "info-icon")
     static let logoPoweredByAWS = UIImage(named: "logo-powered-by-aws")
+    
+    //system
+    static let sidebarLeft = UIImage(systemName: "sidebar.left")
+    static let arrowUpLeftAndArrowDownRight = UIImage(systemName: "arrow.up.left.and.arrow.down.right")
+    static let chevronBackward = UIImage(systemName: "chevron.backward")
 }
 

@@ -8,6 +8,16 @@
 import UIKit
 
 final class AboutVC: UIViewController {
+    
+    enum Constants {
+        static let titleLabelTopOffset: CGFloat = 40
+    }
+    
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.about)
+        return label
+    }()
+    
     let tableView: UITableView = {
         var tableView = UITableView()
         tableView.separatorColor = .searchBarTintColor
@@ -19,21 +29,31 @@ final class AboutVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backButtonTitle = ""
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.largeTitleDisplayMode = .always
-        self.view.backgroundColor = .white
-        self.navigationItem.title = StringConstant.AboutTab.title
+        navigationItem.backButtonTitle = ""
+        view.backgroundColor = .white
+        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.AboutTab.title
         setupViews()
         setupTableView()
     }
     
     private func setupViews() {
         view.addSubview(tableView)
+        let isPad = UIDevice.current.isPad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.leading.equalToSuperview().offset(Constants.titleLabelTopOffset)
+            }
+        }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(
+                isPad ? screenTitleLabel.snp.bottom : view.safeAreaLayoutGuide
+            ).offset(
+                isPad ? 16 : 0
+            )
+            $0.horizontalEdges.equalToSuperview().inset(isPad ? 16 : 0)
             $0.bottom.equalToSuperview().offset(-16)
         }
     }

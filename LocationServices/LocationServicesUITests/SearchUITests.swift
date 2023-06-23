@@ -47,6 +47,8 @@ final class SearchUITests: LocationServicesUITests {
     }
     
     func testSearchBoxPosition() throws {
+        //don't need this test for ipads
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         let app = startApp()
         let _ = UITestExploreScreen(app: app)
             .waitForSeachBarToBeRendered()
@@ -54,6 +56,8 @@ final class SearchUITests: LocationServicesUITests {
     }
     
     func testSearchScreenStates() throws {
+        //don't need this test for ipads
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         let app = startApp()
         let _ = UITestExploreScreen(app: app)
             .tapSearchTextField()

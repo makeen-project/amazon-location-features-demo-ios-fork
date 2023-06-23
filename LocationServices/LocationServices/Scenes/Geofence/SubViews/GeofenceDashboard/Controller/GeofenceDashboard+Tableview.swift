@@ -48,9 +48,7 @@ extension GeofenceDashboardVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
         let data = datas[indexPath.row]
         self.addGeofence?((viewModel.geofences, true, data, self.userlocation))
-        
     }
 }

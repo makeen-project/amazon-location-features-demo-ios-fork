@@ -37,6 +37,7 @@ final class GeofenceDashboardCell: UITableViewCell {
     private var annotationImage: UIImageView = {
         let iv = UIImageView(image: .geofenceDashoard)
         iv.contentMode = .scaleAspectFill
+        iv.setShadow()
         return iv
     }()
     
@@ -57,7 +58,7 @@ final class GeofenceDashboardCell: UITableViewCell {
         button.accessibilityIdentifier = ViewsIdentifiers.Geofence.deleteGeofenceButton
         button.setImage(.trashIcon, for: .normal)
         button.contentMode = .scaleAspectFill
-        button.tintColor = .searchBarTintColor
+        button.tintColor = .lsGrey
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(deletaAction), for: .touchUpInside)
         return button
@@ -79,7 +80,7 @@ final class GeofenceDashboardCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     
@@ -107,8 +108,8 @@ final class GeofenceDashboardCell: UITableViewCell {
         }
             
         deleteButton.snp.makeConstraints {
-            $0.height.equalTo(20)
-            $0.width.equalTo(18)
+            $0.height.equalTo(24)
+            $0.width.equalTo(24)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-19)
         }

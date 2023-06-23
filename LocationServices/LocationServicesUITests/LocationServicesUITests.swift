@@ -27,6 +27,8 @@ class LocationServicesUITests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+        declineLocationPersmissions(shouldAssert: false)
+        UITestTabBarScreen.resetSideBarState()
         continueAfterFailure = false
         XCUIDevice.shared.location = .init(location: Constants.staticLocation)
         uninstall()
@@ -51,6 +53,7 @@ class LocationServicesUITests: XCTestCase {
     }
     
     func restartApp() -> XCUIApplication {
+        UITestTabBarScreen.resetSideBarState()
         let app = XCUIApplication()
         app.terminate()
         app.launch()
@@ -75,12 +78,12 @@ class LocationServicesUITests: XCTestCase {
         }
     }
     
-    func declineLocationPersmissions() {
+    func declineLocationPersmissions(shouldAssert: Bool = true) {
         let springboard = XCUIApplication(bundleIdentifier: Constants.springboardIdentifier)
         let allowBtn = springboard.alerts.buttons.element(boundBy: 2)
         if allowBtn.waitForExistence(timeout: UITestWaitTime.regular.time) {
             allowBtn.tap()
-        } else {
+        } else if shouldAssert {
             XCTAssertTrue(false, "Request location permissions alert should be displayed (decline)")
         }
     }

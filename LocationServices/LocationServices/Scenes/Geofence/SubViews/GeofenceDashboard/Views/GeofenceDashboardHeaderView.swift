@@ -13,6 +13,7 @@ final class GeofenceDashboardHeaderView: UIView {
     var addButtonHandler: VoidHandler?
     
     private var containerView: UIView = UIView()
+    private var containerTopOffset: CGFloat = 25
     
     private var titleLabel = AmazonLocationLabel(labelText: "Geofence",
                                                  font: .amazonFont(type: .bold, size: 20),
@@ -21,7 +22,7 @@ final class GeofenceDashboardHeaderView: UIView {
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.Geofence.addGeofenceButton
-        button.backgroundColor = .tabBarTintColor
+        button.backgroundColor = .lsPrimary
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(addButtonAction), for: .touchUpInside)
         return button
@@ -51,21 +52,24 @@ final class GeofenceDashboardHeaderView: UIView {
         view.isUserInteractionEnabled = false
         return view
     }()
-        
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(containerTopOffset: CGFloat) {
+        self.init(frame: .zero)
+        self.containerTopOffset = containerTopOffset
         setupViews()
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(.errorInitWithCoder)
     }
     
     @objc func addButtonAction() {
         self.addButtonHandler?()
     }
-    
     
     private func setupViews() {
         self.addSubview(containerView)
@@ -74,9 +78,9 @@ final class GeofenceDashboardHeaderView: UIView {
         buttonContainerView.addSubview(addButtonLabel)
         containerView.addSubview(addButton)
         containerView.addSubview(titleLabel)
-       
+
         containerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(25)
+            $0.top.equalToSuperview().offset(containerTopOffset)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.bottom.equalToSuperview()
@@ -102,15 +106,15 @@ final class GeofenceDashboardHeaderView: UIView {
         }
         
         addButton.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.height.equalTo(32)
             $0.width.equalTo(82)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview()
             $0.height.equalTo(28)
             $0.centerY.equalTo(addButton.snp.centerY)
         }

@@ -25,7 +25,7 @@ final class SettingsDefaultValueHelperTests: XCTestCase {
         }
         let settingsDefaultValueHelper: SettingsDefaultValueHelper = SettingsDefaultValueHelper()
         settingsDefaultValueHelper.createValues()
-        XCTAssertEqual(UserDefaultsHelper.get(for: Bool.self, key:  .tollOptions), false, "Create Default Values with empty storage successful")
+        XCTAssertEqual(UserDefaultsHelper.get(for: Bool.self, key:  .tollOptions), true, "Create Default Values with empty storage successful")
     }
     
     func testCreateDefaulValuesWithStorage() throws {
@@ -33,7 +33,7 @@ final class SettingsDefaultValueHelperTests: XCTestCase {
         settingsDefaultValueHelper.createValues()
         settingsDefaultValueHelper.createValues()
         
-        XCTAssertEqual(UserDefaultsHelper.get(for: Bool.self, key:  .tollOptions), false, "Create Default Values with storage successful")
+        XCTAssertEqual(UserDefaultsHelper.get(for: Bool.self, key:  .tollOptions), true, "Create Default Values with storage successful")
     }
 
 }

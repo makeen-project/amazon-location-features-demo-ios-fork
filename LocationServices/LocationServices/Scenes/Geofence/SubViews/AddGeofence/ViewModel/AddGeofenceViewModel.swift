@@ -30,6 +30,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     
     func isGeofenceNameValid(_ name: String?) -> Bool {
         guard let name else { return false }
+        if (name == "") { return true }
         let isFirstLetter = name.first?.isLetter ?? false
         let isValidLength = !name.isEmpty && name.count <= 20
         let containOnlyAcceptableCharacters = name.allSatisfy({
@@ -61,8 +62,13 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
                     self?.activeGeofencesLists.removeAll(where: { $0.id == id })
                     self?.delegate?.finishProcess()
                 case .failure(let error):
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                    }
+                    else {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                        self?.delegate?.showAlert(model)
+                    }
                 }
             }
         }

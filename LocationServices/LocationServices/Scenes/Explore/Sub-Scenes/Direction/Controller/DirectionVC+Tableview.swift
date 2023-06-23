@@ -13,6 +13,7 @@ extension DirectionVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.reuseId)
+        tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.reuseCompactId)
     }
 }
 
@@ -42,14 +43,21 @@ extension DirectionVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchCell.reuseId, for: indexPath) as? SearchCell else {
+        let data = viewModel.getSearchCellModel()
+        var model:SearchCellViewModel?
+        if indexPath.row < data.count {
+            model =  data[indexPath.row]
+            tableView.separatorStyle = model?.searchType == .mylocation ? .none : .singleLine
+        }
+        let reuseId = model?.searchType == .search ? SearchCell.reuseId : SearchCell.reuseCompactId
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as? SearchCell else {
             fatalError("Search Cell Can't be found")
         }
         
-        let data = viewModel.getSearchCellModel()
-        if indexPath.row < data.count {
-            let model =  data[indexPath.row]
-            tableView.separatorStyle = model.searchType == .mylocation ? .none : .singleLine
+        cell.applyStyles(style: SearchCellStyle(style: directionScreenStyle))
+
+        if model != nil {
             cell.model = model
         }
         
@@ -68,10 +76,18 @@ extension DirectionVC: UITableViewDataSource {
             firstDestionation = searchTextModel
         }
         
-        self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
-        
         if currentModel.searchType == .mylocation {
-            viewModel.myLocationSelected()
+            let locationAuthStatus = locationManager.getAuthorizationStatus()
+            if(locationAuthStatus == .authorizedAlways || locationAuthStatus == .authorizedWhenInUse) {
+                self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
+                viewModel.myLocationSelected()
+            }
+            else {
+                    locationManager.requestPermissions()
+            }
+        }
+        else {
+            self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
         }
         
         let state = viewModel.searchSelectedPlaceWith(currentModel, lat: userLocation?.lat, long: userLocation?.long)

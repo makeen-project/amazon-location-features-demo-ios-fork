@@ -125,9 +125,8 @@ struct UITestExploreScreen: UITestScreen {
     }
     
     func swipeMap(direction: UITestSwipeDirection, repeats: Int = 1) -> Self {
-        let map = getRenderedMap()
-        
-        for _ in 0..<1 {
+        for _ in 0..<repeats {
+            let map = getRenderedMap()
             switch direction {
             case .left:
                 map.swipeLeft()

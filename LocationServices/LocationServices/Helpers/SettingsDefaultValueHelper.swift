@@ -21,11 +21,11 @@ final class SettingsDefaultValueHelper {
         }
         
         if UserDefaultsHelper.get(for: Bool.self, key: .tollOptions) == nil {
-            UserDefaultsHelper.save(value: false, key: .tollOptions)
+            UserDefaultsHelper.save(value: true, key: .tollOptions)
         }
         
         if UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions) == nil {
-            UserDefaultsHelper.save(value: false, key: .ferriesOptions)
+            UserDefaultsHelper.save(value: true, key: .ferriesOptions)
         }        
     }
 }

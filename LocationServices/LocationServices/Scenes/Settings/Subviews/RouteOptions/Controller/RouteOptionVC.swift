@@ -10,6 +10,16 @@ import SnapKit
 
 final class RouteOptionVC: UIViewController {
     
+    enum Constants {
+        static let horizontalOffset: CGFloat = 16
+    }
+    
+    private var screenTitleLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.defaultRouteOptions)
+        label.numberOfLines = 0
+        return label
+    }()
+    
     private var routeOptions = RouteOptionRowView()
     
     var viewModel: RouteOptionViewModelProtocol! {
@@ -25,18 +35,39 @@ final class RouteOptionVC: UIViewController {
         viewModel.loadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     private func setupViews() {
-        self.navigationController?.navigationBar.isHidden = false
-        self.navigationController?.navigationBar.tintColor = .mapDarkBlackColor
-        self.navigationItem.title = StringConstant.defaultRouteOptions
-        self.view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .mapDarkBlackColor
+        navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.defaultRouteOptions
+        view.backgroundColor = .white
+        
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        if isPad {
+            view.addSubview(screenTitleLabel)
+            screenTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.horizontalEdges.equalToSuperview().inset(Constants.horizontalOffset)
+            }
+        }
         
         self.view.addSubview(routeOptions)
-        
         routeOptions.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            if isPad {
+                $0.top.equalTo(screenTitleLabel.snp.bottom)
+            } else {
+                $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            }
+            $0.leading.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-Constants.horizontalOffset)
         }
     }
     

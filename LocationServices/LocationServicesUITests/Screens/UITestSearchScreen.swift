@@ -17,6 +17,8 @@ struct UITestSearchScreen: UITestScreen {
         static var noResults: String { ViewsIdentifiers.Search.noResultsView }
         static var cellAddressLabel: String { ViewsIdentifiers.Search.cellAddressLabel }
         static var imageAnnotationView: String { ViewsIdentifiers.General.imageAnnotationView }
+        static var tableView: String { ViewsIdentifiers.Search.tableView }
+        static var cancelButton: String { ViewsIdentifiers.Search.searchCancelButton }
     }
     
     func type(text: String) -> Self {
@@ -35,7 +37,7 @@ struct UITestSearchScreen: UITestScreen {
     }
     
     func tapFirstCell() -> UITestPoiCardScreen {
-        let cell = app.tables.cells.firstMatch
+        let cell = getTable().cells.firstMatch
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.request.time))
         cell.tap()
         
@@ -43,25 +45,25 @@ struct UITestSearchScreen: UITestScreen {
     }
     
     func waitForResultsInTable(minimumCount: Int? = nil) -> Self {
-        let cell = app.tables.cells.firstMatch
+        let cell = getTable().cells.firstMatch
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.request.time))
         
         if let minimumCount {
-            XCTAssertGreaterThanOrEqual(app.tables.cells.count, minimumCount)
+            XCTAssertGreaterThanOrEqual(getTable().cells.count, minimumCount)
         }
         
         return self
     }
     
     func validateResultsOnMap() -> Self {
-        let cellsCount = app.tables.cells.count
+        let cellsCount = getTable().cells.count
         let annotationsCount = getPoiCirclesCount()
         XCTAssertEqual(cellsCount, annotationsCount)
         return self
     }
     
     func hasAddressInFirstCell() -> Self {
-        let cell = app.tables.cells.firstMatch
+        let cell = getTable().cells.firstMatch
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.request.time))
         
         let addressLabel = cell.staticTexts[Identifiers.cellAddressLabel]
@@ -107,17 +109,16 @@ struct UITestSearchScreen: UITestScreen {
     }
     
     func close() -> UITestExploreScreen {
-        let view = getSearchRootView()
-
-        let start = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-        let end = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 1))
-        start.press(forDuration: 0.5, thenDragTo: end)
-        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            closeOniPad()
+        } else {
+            closeOniPhone()
+        }
         return UITestExploreScreen(app: app)
     }
     
     func getCellsInfo() -> [String] {
-        let cells = app.tables.cells
+        let cells = getTable().cells
         let cellsCount = cells.count
         
         var titles: [String] = []
@@ -149,9 +150,32 @@ struct UITestSearchScreen: UITestScreen {
         return button
     }
     
+    private func getCancelButton() -> XCUIElement {
+        let button = app.buttons[Identifiers.cancelButton]
+        XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
+        return button
+    }
+    
     private func getPoiCirclesCount() -> Int {
         //wait for existence
         let _ = getPoiCircle()
         return app.buttons.matching(identifier: Identifiers.imageAnnotationView).count
+    }
+    
+    private func getTable() -> XCUIElement {
+        return app.tables[Identifiers.tableView]
+    }
+    
+    private func closeOniPhone() {
+        let view = getSearchRootView()
+
+        let start = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let end = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 1))
+        start.press(forDuration: 0.5, thenDragTo: end)
+    }
+    
+    private func closeOniPad() {
+        let button = getCancelButton()
+        button.tap()
     }
 }

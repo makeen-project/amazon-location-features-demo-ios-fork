@@ -142,9 +142,14 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
             case .success:
                 break
             case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self.delegate?.showAlert(model)
+                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                }
+                else {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(model)
+                    }
                 }
             }
         })

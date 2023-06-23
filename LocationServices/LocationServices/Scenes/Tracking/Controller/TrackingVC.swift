@@ -9,7 +9,14 @@ import UIKit
 import SnapKit
 import CoreLocation
 
-final class TrackingVC: UIViewController, AlertPresentable {
+final class TrackingVC: UIViewController {
+    
+    enum Constants {
+        static let titleTopOffset: CGFloat = 27
+        static let headerCornerRadius: CGFloat = 20
+        static let trackingMapViewBottomOffset: CGFloat = 130
+    }
+    
     var geofenceHandler: VoidHandler?
     var directionHandler: VoidHandler?
     
@@ -31,9 +38,9 @@ final class TrackingVC: UIViewController, AlertPresentable {
     }()
     
     private lazy var historyHeaderView: TrackingHistoryHeaderView = {
-        let view = TrackingHistoryHeaderView()
+        let view = TrackingHistoryHeaderView(titleTopOffset: Constants.titleTopOffset)
         view.backgroundColor = .searchBarBackgroundColor
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = Constants.headerCornerRadius
         view.isUserInteractionEnabled = true
         view.layer.maskedCorners  = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         let tap = UITapGestureRecognizer(target: self, action: #selector(openHistory))
@@ -45,6 +52,7 @@ final class TrackingVC: UIViewController, AlertPresentable {
     }()
     
     weak var delegate: TrackingNavigationDelegate?
+    private var isInSplitViewController: Bool { delegate is SplitViewTrackingMapCoordinator }
     
     var viewModel: TrackingViewModelProtocol! {
         didSet {
@@ -70,11 +78,16 @@ final class TrackingVC: UIViewController, AlertPresentable {
         setupHandlers()
         setupViews()
         locationManagerSetup()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            historyHeaderView.isHidden = true
+            grabberIcon.isHidden = true
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         historyHeaderView.updateButtonStyle(isTrackingStarted: false)
+        removeKeyboardNotifications()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -122,6 +135,30 @@ final class TrackingVC: UIViewController, AlertPresentable {
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
+    }
+    
+    private func setupKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func removeKeyboardNotifications() {
+        guard isInSplitViewController else { return }
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc override func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let additionalOffset = keyboardSize.height - view.safeAreaInsets.bottom
+        trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: additionalOffset)
+    }
+    
+    @objc override func keyboardWillHide(notification: NSNotification) {
+        trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
     }
     
     @objc private func updateTrackingHistory(_ notification: Notification) {
@@ -135,15 +172,18 @@ final class TrackingVC: UIViewController, AlertPresentable {
     }
     
     @objc private func resetMapLayerItems(_ notification: Notification) {
+        guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
-            self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
+            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
         }
     }
     
     @objc private func updateMapLayerItems(_ notification: Notification) {
+        guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
-            let size = Int(self.view.bounds.size.height / 2 - 20)
-            self.trackingMapView.adjustMapLayerItems(bottomSpace: size)
+            let size = self.view.bounds.size.height / 2 - 20
+            let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
+            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
     }
     
@@ -176,25 +216,46 @@ final class TrackingVC: UIViewController, AlertPresentable {
     }
     
     @objc private func trackingAppearanceChanged(_ notification: Notification) {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         historyHeaderView.isHidden = isVisible
         grabberIcon.isHidden = isVisible
         historyHeaderView.updateButtonStyle(isTrackingStarted: viewModel.isTrackingActive)
     }
     
+    @objc private func authorizationStatusChanged(_ notification: Notification) {
+        DispatchQueue.main.async {
+            switch LoginViewModel.getAuthStatus() {
+            case .authorized:
+                if !self.isInSplitViewController {
+                    self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+                }
+                self.viewModel.updateHistory()
+            case .customConfig, .defaultConfig:
+                self.delegate?.showDashboardFlow()
+            }
+            self.showGeofenceAnnotations()
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        openLoginFlow(skipDashboard: viewModel.isTrackingActive)
+        openLoginFlow(skipDashboard: viewModel.hasHistory)
         showGeofenceAnnotations()
+        blurStatusBar()
+        setupKeyboardNotifications()
     }
     
     func openLoginFlow(skipDashboard: Bool) {
         switch LoginViewModel.getAuthStatus() {
         case .authorized:
-            trackingMapView.adjustMapLayerItems(bottomSpace: 70)
+            if !isInSplitViewController {
+                self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+            }
             if skipDashboard {
                 delegate?.showTrackingHistory(isTrackingActive: viewModel.isTrackingActive)
             } else {
+                viewModel.updateHistory()
                 delegate?.showNextTrackingScene()
             }
         case .customConfig:
@@ -205,28 +266,14 @@ final class TrackingVC: UIViewController, AlertPresentable {
     }
     
     private func setupViews() {
-        self.trackingMapView.adjustMapLayerItems(bottomSpace: 70)
-        
-        navigationController?.navigationBar.isHidden = true
+        if !isInSplitViewController {
+            self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+        }
+        navigationController?.navigationBar.isHidden = !isInSplitViewController
         self.view.addSubview(trackingMapView)
-        self.view.addSubview(historyHeaderView)
-        self.view.addSubview(grabberIcon)
-        
+
         trackingMapView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        historyHeaderView.snp.makeConstraints {
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(80)
-        }
-        
-        grabberIcon.snp.makeConstraints {
-            $0.bottom.equalTo(historyHeaderView.snp.top).offset(16)
-            $0.width.equalTo(36)
-            $0.height.equalTo(5)
-            $0.centerX.equalToSuperview()
         }
     }
 }
@@ -267,7 +314,7 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
         guard let lat = userLocation?.coordinate.latitude,
               let long = userLocation?.coordinate.longitude else { return }
         GeofenceAPIService().evaluateGeofence(lat: lat, long: long)
-        //        self.geofenceHandler?()
+        self.geofenceHandler?()
     }
     
     func showMapLayers() {
@@ -280,6 +327,18 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
 }
 
 extension TrackingVC: TrackingViewModelDelegate {
+    func historyLoaded() {
+        guard LoginViewModel.getAuthStatus() == .authorized,
+              viewModel.hasHistory else { return }
+        
+        DispatchQueue.main.async {
+            if !self.isInSplitViewController {
+                self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
+            }
+            self.delegate?.showTrackingHistory(isTrackingActive: self.viewModel.isTrackingActive)
+        }
+    }
+    
     func removeGeofencesFromMap() {
         trackingMapView.removeGeofencesFromMap()
     }

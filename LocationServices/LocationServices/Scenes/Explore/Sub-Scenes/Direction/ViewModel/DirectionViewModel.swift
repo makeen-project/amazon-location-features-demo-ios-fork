@@ -34,15 +34,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     }
     
     func loadLocalOptions() {
-        self.avoidFerries = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions) ?? false
-        self.avoidTolls = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions) ?? false
+        self.avoidFerries = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions) ?? true
+        self.avoidTolls = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions) ?? true
         delegate?.getLocalRouteOptions(tollOption: avoidTolls, ferriesOption: avoidFerries)
     }
     
     func addMyLocationItem() {
-        guard !(delegate?.isMyLocationAlreadySelected() ?? false) &&
-                userLocation?.lat != nil &&
-                userLocation?.long != nil  else { return }
+        guard !(delegate?.isMyLocationAlreadySelected() ?? false)  else { return }
         let myLocation = getMyLocationItem()
         presentation.insert(myLocation, at: 0)
         delegate?.reloadView()
