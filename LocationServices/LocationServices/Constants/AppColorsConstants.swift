@@ -41,4 +41,6 @@ extension UIColor {
     
     // Settings & About Colors
     static let settingsSelectionColor = UIColor(named: "settingsSelectionColor")!
+    
+    static let bulletNumberBackgroundColor = UIColor(named: "bulletNumberBackgroundColor")!
 }
