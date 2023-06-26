@@ -265,8 +265,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
             _puckArrow.strokeColor = _puckArrow.fillColor
             _puckArrow.opacity = 1
             self.layer.addSublayer(_puckArrow)
-            self.layer.opacity = 0.7
-
+            self.layer.opacity = 0.9
             self._puckArrow = _puckArrow
         }
         
