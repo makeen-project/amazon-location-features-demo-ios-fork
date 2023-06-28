@@ -88,7 +88,7 @@ final class SearchViewModel: SearchViewModelProcotol {
     
     func getSearchCellModel() -> [SearchCellViewModel] {
         searchCellModel = presentation.map({
-            SearchCellViewModel(searchType: $0.placeId != nil ? .location : .search,
+            return SearchCellViewModel(searchType: ($0.placeId != nil || $0.placeLat != nil) ? .location : .search,
                                 placeId: $0.placeId,
                                 locationName: $0.name,
                                 locationDistance: $0.distance,
