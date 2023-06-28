@@ -92,6 +92,7 @@ final class LoginDefaultInformationView: UIView {
         label.textAlignment = .center
         label.backgroundColor = .bulletNumberBackgroundColor
         label.layer.cornerRadius = 3
+        label.layer.masksToBounds = true
         label.font = .amazonFont(type: .bold, size: 13)
         label.textColor = .black
         return label
@@ -134,6 +135,7 @@ final class LoginDefaultInformationView: UIView {
         label.text = getConstantsConfig().secondNumber
         label.backgroundColor = .bulletNumberBackgroundColor
         label.layer.cornerRadius = 3
+        label.layer.masksToBounds = true
         label.font = .amazonFont(type: .bold, size: 13)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -183,6 +185,7 @@ final class LoginDefaultInformationView: UIView {
         label.text = getConstantsConfig().thirdNumber
         label.backgroundColor = .bulletNumberBackgroundColor
         label.layer.cornerRadius = 3
+        label.layer.masksToBounds = true
         label.font = .amazonFont(type: .bold, size: 13)
         label.textColor = .black
         label.textAlignment = .center
