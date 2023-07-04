@@ -22,7 +22,7 @@ final class SearchVC: UIViewController {
         static let searchBarHorizontalPaddingiPhone: CGFloat = 16
         static let searchBarHorizontalPaddingiPad: CGFloat = 0
         
-        static let tableViewHorizontalOffset: CGFloat = 20
+        static let tableViewHorizontalOffset: CGFloat = 0
         static let tableViewTopOffsetiPhone: CGFloat = 16
     }
     
