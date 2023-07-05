@@ -250,23 +250,12 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
         // arrow
         //
         if _puckArrow == nil {
-            let _puckArrow = CAShapeLayer()
-            
-            _puckArrow.path = self.puckArrow().cgPath
-            _puckArrow.fillColor = arrowColor.cgColor
-            _puckArrow.bounds = CGRectMake(0, 0, round(LSUserLocationAnnotationArrowSize), round(LSUserLocationAnnotationArrowSize))
-            _puckArrow.position = CGPointMake(CGRectGetMidX(super.bounds), CGRectGetMidY(super.bounds))
-            _puckArrow.shouldRasterize = true
-            _puckArrow.rasterizationScale = UIScreen.main.scale
-            _puckArrow.drawsAsynchronously = true
-
-            _puckArrow.lineJoin = .round
-            _puckArrow.lineWidth = 1.0
-            _puckArrow.strokeColor = _puckArrow.fillColor
-            _puckArrow.opacity = 1
-            self.layer.addSublayer(_puckArrow)
-            self.layer.opacity = 0.9
-            self._puckArrow = _puckArrow
+            let _puckArrow = UIImage(named: "navigation-icon")?.cgImage
+            let myLayer = CALayer()
+            myLayer.frame = super.bounds.insetBy(dx: 10, dy: 10)
+            myLayer.contents = _puckArrow
+            self.layer.addSublayer(myLayer)
+            self.layer.opacity = 0.8
         }
         
         if let location = getCurrentLocation(),

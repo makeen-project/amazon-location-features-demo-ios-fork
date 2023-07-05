@@ -170,8 +170,10 @@ extension UIViewController {
 
         switch recognizer.state {
         case .changed:
-            self.updateBottomSheetHeight(to: currentHeight)
-            recognizer.setTranslation(.zero, in: view)
+            if(currentHeight < getLargeDetentHeight()){
+                self.updateBottomSheetHeight(to: currentHeight)
+                recognizer.setTranslation(.zero, in: view)
+            }
         case .ended:
             let velocity = recognizer.velocity(in: view).y
             let targetDetentHeight = getTargetDetentHeight(newHeight: newHeight, velocity: velocity)
