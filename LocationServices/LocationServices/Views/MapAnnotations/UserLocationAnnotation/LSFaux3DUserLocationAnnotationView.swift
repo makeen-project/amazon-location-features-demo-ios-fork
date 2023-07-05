@@ -218,7 +218,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
 
         var arrowColor: UIColor = mapView.tintColor
         var puckShadowColor: UIColor = UIColor.black
-        var shadowOpacity: CGFloat = 0.25
+        var shadowOpacity: CGFloat = 0 //0.25
 
         if let style = mapView.delegate?.mapView?(styleForDefaultUserLocationAnnotationView: mapView) {
             arrowColor = style.puckArrowFillColor
