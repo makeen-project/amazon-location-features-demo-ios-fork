@@ -19,6 +19,16 @@ final class LoginDefaultInformationView: UIView {
         return view
     }()
     
+    private var loginVCTitle: UILabel = {
+        let label = UILabel()
+        label.text = StringConstant.loginVcTitle
+        label.font = .amazonFont(type: .bold, size: 13)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+
+    
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(.closeIcon, for: .normal)
@@ -28,6 +38,19 @@ final class LoginDefaultInformationView: UIView {
         button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
         return button
+    }()
+    
+    private let headerStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        return view
+    }()
+    
+    
+    private let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lsLight3
+        return view
     }()
     
     private var mainTitle: UILabel = {
@@ -67,8 +90,9 @@ final class LoginDefaultInformationView: UIView {
         let label = UILabel()
         label.text = getConstantsConfig().firstNumber
         label.textAlignment = .center
-        label.backgroundColor = .searchBarBackgroundColor
+        label.backgroundColor = .bulletNumberBackgroundColor
         label.layer.cornerRadius = 3
+        label.layer.masksToBounds = true
         label.font = .amazonFont(type: .bold, size: 13)
         label.textColor = .black
         return label
@@ -109,8 +133,9 @@ final class LoginDefaultInformationView: UIView {
     private var secondNumber: UILabel = {
         let label = UILabel()
         label.text = getConstantsConfig().secondNumber
-        label.backgroundColor = .searchBarBackgroundColor
+        label.backgroundColor = .bulletNumberBackgroundColor
         label.layer.cornerRadius = 3
+        label.layer.masksToBounds = true
         label.font = .amazonFont(type: .bold, size: 13)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -158,8 +183,9 @@ final class LoginDefaultInformationView: UIView {
     private var thirdNumber: UILabel = {
         let label = UILabel()
         label.text = getConstantsConfig().thirdNumber
-        label.backgroundColor = .searchBarBackgroundColor
+        label.backgroundColor = .bulletNumberBackgroundColor
         label.layer.cornerRadius = 3
+        label.layer.masksToBounds = true
         label.font = .amazonFont(type: .bold, size: 13)
         label.textColor = .black
         label.textAlignment = .center
@@ -190,7 +216,19 @@ final class LoginDefaultInformationView: UIView {
     }()
 
     func hideCloseButton(state: Bool) {
-        self.closeButton.isHidden = state
+        self.headerStackView.isHidden = state
+        self.separatorView.isHidden = state
+        
+        logoView.snp.remakeConstraints {
+            if(state) {
+                $0.top.equalTo(44).offset(10)
+            }
+            else {
+                $0.top.equalTo(separatorView.snp.bottom).offset(10)
+          }
+            $0.centerX.equalToSuperview()
+            $0.height.width.equalTo(56)
+        }
     }
     
     override init(frame: CGRect) {
@@ -207,7 +245,11 @@ final class LoginDefaultInformationView: UIView {
     }
     
     private func setupView() {
-        self.addSubview(closeButton)
+        headerStackView.addSubview(loginVCTitle)
+        headerStackView.addSubview(closeButton)
+        
+        self.addSubview(headerStackView)
+        self.addSubview(separatorView)
         self.addSubview(logoView)
         self.addSubview(mainTitle)
         self.addSubview(mainSubTitle)
@@ -223,14 +265,32 @@ final class LoginDefaultInformationView: UIView {
         self.addSubview(thirdItemTitle)
         self.addSubview(thirdItemText)
         
+        headerStackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(56)
+            $0.top.equalToSuperview()
+        }
+        
+        loginVCTitle.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.leading.equalToSuperview()
+        }
+        
         closeButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-10)
             $0.height.width.equalTo(30)
         }
         
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(headerStackView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
         logoView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(44)
+            $0.top.equalTo(separatorView.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
             $0.height.width.equalTo(56)
         }
@@ -242,7 +302,7 @@ final class LoginDefaultInformationView: UIView {
         }
         
         mainSubTitle.snp.makeConstraints {
-            $0.top.equalTo(mainTitle.snp.bottom).offset(32)
+            $0.top.equalTo(mainTitle.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }

@@ -19,6 +19,24 @@ extension DirectionVC {
 
 extension DirectionVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let data = viewModel.getSearchCellModel()
+        if indexPath.row < data.count {
+            let model =  data[indexPath.row]
+
+            let cellType = model.searchType
+            if(cellType == .location){
+                return UITableView.automaticDimension
+            }
+            else {
+                return 70
+            }
+        }
+        else {
+            return 70
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
 }

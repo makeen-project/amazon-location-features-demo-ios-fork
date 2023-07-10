@@ -632,7 +632,7 @@ private extension ExploreView {
             format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
             [16: 2, 20: 20])
         
-        let lineColor = UIColor(red: 59/255, green: 178/255, blue: 208/255, alpha: 1)
+        let lineColor = UIColor(hex: "#008296")
         
         // create and add layers
         if isDashedLine {
@@ -741,7 +741,7 @@ private extension ExploreView {
         layer.lineJoin = lineJoinCap
         layer.lineCap = lineJoinCap
         // Set the line color to a constant blue color.
-        layer.lineColor = NSExpression(forConstantValue: UIColor(red: 59/255, green: 178/255, blue: 208/255, alpha: 1))
+        layer.lineColor = NSExpression(forConstantValue:UIColor(hex: "#008296"))
         layer.lineWidth = lineWidth
         
         return layer

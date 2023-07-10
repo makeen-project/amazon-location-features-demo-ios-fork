@@ -95,7 +95,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         controller.postLoginHandler = { [weak self] in
             self?.showLoginSuccess()
         }
-        
+        let height:CGFloat = 8
+        NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
         controller.modalPresentationStyle = .pageSheet
 
         if let sheet = controller.sheetPresentationController {
@@ -117,6 +118,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
                 let height:CGFloat = 8
                 NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
             }
+            let height:CGFloat = 8
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
             controller.modalPresentationStyle = .pageSheet
 
             if let sheet = controller.sheetPresentationController {

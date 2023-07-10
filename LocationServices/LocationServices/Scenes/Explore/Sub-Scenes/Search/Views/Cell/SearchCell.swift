@@ -168,7 +168,7 @@ private extension SearchCell {
         
         searchTypeImage.snp.makeConstraints {
             $0.width.height.equalTo(24)
-            $0.leading.equalToSuperview().offset(12)
+            $0.leading.equalToSuperview().offset(32)
             $0.centerY.equalToSuperview()
         }
         
