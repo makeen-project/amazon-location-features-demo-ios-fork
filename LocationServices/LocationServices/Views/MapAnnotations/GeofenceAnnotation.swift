@@ -76,11 +76,12 @@ class GeofenceAnnotationView: MGLAnnotationView {
             titleLabel.text = annotation?.title ?? nil
         }
         
+        drawCircle()
+        
         if resizeHandleView == nil && enableGeofenceDrag {
             addResizeHandle()
+            positionResizeHandle()
         }
-        
-        drawCircle()
     }
     
     func updateFrame() {
@@ -149,8 +150,11 @@ class GeofenceAnnotationView: MGLAnnotationView {
                 CATransaction.commit()
                 positionResizeHandle()
             } else {
-                accuracyRingLayer?.isHidden = true
-                resizeHandleView?.isHidden = true
+                self.accuracyRingLayer?.isHidden = true
+                self.resizeHandleView?.isHidden = true
+                self.accuracyRingLayer = nil
+                self.resizeHandleView = nil
+
             }
             
 
@@ -195,8 +199,8 @@ class GeofenceAnnotationView: MGLAnnotationView {
         }
 
         func positionResizeHandle() {
-            guard let resizeHandleView = resizeHandleView else { return }
-            resizeHandleView.center = CGPoint(x: accuracyRingLayer!.cornerRadius+13, y: 10)
+            guard let resizeHandleView = resizeHandleView, let accuracyRingLayer = accuracyRingLayer else { return }
+            resizeHandleView.center = CGPoint(x: accuracyRingLayer.cornerRadius+13, y: 10)
         }
 
         @objc func handleResizeHandlePan(_ gestureRecognizer: UIPanGestureRecognizer) {

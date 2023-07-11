@@ -23,6 +23,7 @@ extension Notification {
     static let deselectMapAnnotation = Notification.Name("DeselectMapAnnotation")
     static let refreshGeofence = Notification.Name("RefreshGeofence")
     static let geofenceAdded = Notification.Name("GeofenceDeleted")
+    static let enableGeofenceDrag = Notification.Name("EnableGeofenceDrag")
     static let trackingEvent = Notification.Name("TrackingEvent")
     static let userLocation = Notification.Name("UserLocation")
     static let selectedPlace = Notification.Name("SelectedPlace")

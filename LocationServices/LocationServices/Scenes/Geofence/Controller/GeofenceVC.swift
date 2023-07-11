@@ -139,6 +139,12 @@ final class GeofenceVC: UIViewController {
             self?.openGeofenceDashboard()
         })
         NotificationCenter.default.addObserver(self, selector: #selector(tabSelected(_:)), name: Notification.tabSelected, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(enableGeofenceDrag(_:)), name: Notification.enableGeofenceDrag, object: nil)
+        
+    }
+    
+    @objc func enableGeofenceDrag(_ notification: Notification){
+        geofenceMapView.mapView.enableGeofenceDrag = notification.userInfo?["enableGeofenceDrag"] as? Bool ?? false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -149,6 +155,7 @@ final class GeofenceVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: Notification.tabSelected, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.enableGeofenceDrag, object: nil)
     }
     
     func setupNotifications() {
@@ -224,7 +231,7 @@ final class GeofenceVC: UIViewController {
     @objc private func tabSelected(_ notification: Notification) {
         guard let viewController = notification.userInfo?["viewController"] as? UIViewController,
               viewController === self || viewController === self.navigationController else { return }
-        
+         
         authActionsHelper.tryToPerformAuthAction {}
     }
     

@@ -42,7 +42,7 @@ final class GeofenceMapView: UIView {
     }
     
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
-    private var mapView: DefaultCommonMapView = DefaultCommonMapView()
+    var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
     
     private let searchBarView: SearchBarView = SearchBarView()
