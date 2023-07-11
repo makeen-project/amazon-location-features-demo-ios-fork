@@ -155,7 +155,21 @@ final class TrackingHistoryVC: UIViewController {
         }
     }
     
+    func adjustTableViewHeight() {
+        tableView.snp.remakeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            if(isiPad){
+                $0.height.equalTo(self.view.snp.height).offset(-350)
+            }
+            else {
+                let contentHeight = min(tableView.contentSize.height+100, UIScreen.main.bounds.height - 400)
+                $0.height.equalTo(contentHeight)
+            }
+        }
+    }
+    
     private func setupViews() {
+        scrollView.isScrollEnabled = false
         view.backgroundColor = .searchBarBackgroundColor
         view.addSubview(headerView)
         view.addSubview(scrollView)
@@ -214,6 +228,7 @@ final class TrackingHistoryVC: UIViewController {
             self.tableView.isScrollEnabled = isReachedTop
             self.scrollView.isScrollEnabled = !isReachedTop
         }
+        self.scrollView.isScrollEnabled = false
     }
     
     private func trackingAppearanceChanged(isVisible: Bool) {
@@ -231,6 +246,7 @@ extension TrackingHistoryVC: TrackingHistoryViewModelOutputDelegate {
         DispatchQueue.main.async {
             self.deletionView.isHidden = self.viewModel.sectionsCount() == 0
             self.tableView.reloadData()
+            self.adjustTableViewHeight()
         }
     }
 }
