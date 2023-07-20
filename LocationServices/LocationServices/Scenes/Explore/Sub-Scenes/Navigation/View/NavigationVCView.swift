@@ -46,6 +46,7 @@ enum RouteButtonState {
 }
 
 final class NavigationHeaderView: UIView {
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     var dismissHandler: VoidHandler?
     var switchRouteVisibility: ((RouteButtonState)->())?
     var model: NavigationHeaderViewModel! {
@@ -188,7 +189,7 @@ final class NavigationHeaderView: UIView {
         }
         
         routeVisibilityButton.snp.makeConstraints {
-            $0.width.equalTo(131).priority(999)
+            $0.width.equalTo(110).priority(999)
         }
         
         exitButton.snp.makeConstraints {
