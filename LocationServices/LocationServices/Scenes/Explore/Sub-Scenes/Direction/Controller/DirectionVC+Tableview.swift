@@ -110,7 +110,7 @@ extension DirectionVC: UITableViewDataSource {
         
         let state = viewModel.searchSelectedPlaceWith(currentModel, lat: userLocation?.lat, long: userLocation?.long)
         
-        let canSearch = firstDestionation != nil && secondDestionation != nil
+        let canSearch = firstDestionation != nil && firstDestionation?.lat != nil && secondDestionation != nil && secondDestionation?.lat != nil
         
         if state && canSearch {
             self.sheetPresentationController?.selectedDetentIdentifier = .medium

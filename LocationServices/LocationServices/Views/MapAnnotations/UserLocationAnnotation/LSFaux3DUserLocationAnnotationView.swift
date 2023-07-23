@@ -252,10 +252,10 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
         if _puckArrow == nil {
             let _puckArrow = UIImage(named: "navigation-icon")?.cgImage
             let myLayer = CALayer()
-            myLayer.frame = super.bounds.insetBy(dx: 10, dy: 10)
+            myLayer.frame = super.bounds
             myLayer.contents = _puckArrow
+            self.layer.sublayers?.removeAll()
             self.layer.addSublayer(myLayer)
-            self.layer.opacity = 0.8
         }
         
         if let location = getCurrentLocation(),

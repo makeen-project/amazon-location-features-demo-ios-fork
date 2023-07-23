@@ -147,6 +147,7 @@ extension DefaultCommonMapView: MGLMapViewDelegate {
             let identifier = "\(Constant.geofenceViewIdentifier)+\(annotation.coordinate.hashValue)"
             if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) {
                 annotationView.annotation = annotation
+                (annotationView as! GeofenceAnnotationView).enableGeofenceDrag = enableGeofenceDrag
                 return annotationView
             } else {
                 let annotationView = GeofenceAnnotationView(annotation: annotation, reuseIdentifier: identifier)

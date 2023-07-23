@@ -113,6 +113,7 @@ final class AddGeofenceVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupKeyboardNotifications()
+        NotificationCenter.default.post(name: Notification.enableGeofenceDrag, object: nil, userInfo: ["enableGeofenceDrag": true])
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -203,6 +204,7 @@ final class AddGeofenceVC: UIViewController {
     
     @objc private func closeScreen() {
         sentGeofenceRefreshNotification = true
+        NotificationCenter.default.post(name: Notification.enableGeofenceDrag, object: nil, userInfo: ["enableGeofenceDrag": false])
         NotificationCenter.default.post(name: Notification.refreshGeofence, object: nil, userInfo: ["hardRefresh": false])
         delegate?.dismissCurrentScene(geofences: viewModel.activeGeofencesLists, shouldDashboardShow: false)
         self.delegate?.dismissCurrentBottomSheet(geofences: self.viewModel.activeGeofencesLists, shouldDashboardShow: true)

@@ -140,7 +140,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     
     func getSearchCellModel() -> [SearchCellViewModel] {
         searchCellModel = presentation.map({
-            return SearchCellViewModel(searchType: ($0.placeId != nil || $0.placeLat != nil) ? .location : .search,
+            return SearchCellViewModel(searchType: ($0.placeId != nil || $0.placeLat != nil) ? ($0.placeId == "myLocation" ? .mylocation : .location) : .search,
                                 placeId: $0.placeId,
                                 locationName: $0.name,
                                 locationDistance: $0.distance,
