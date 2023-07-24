@@ -189,7 +189,7 @@ final class NavigationHeaderView: UIView {
         }
         
         routeVisibilityButton.snp.makeConstraints {
-            $0.width.equalTo(110).priority(999)
+            $0.width.equalTo(90).priority(999)
         }
         
         exitButton.snp.makeConstraints {
