@@ -127,6 +127,6 @@ extension DirectionVC: UITableViewDataSource {
                                     "DestinationLocation": destinationLocation,
                                     "routeType": routeType]
         NotificationCenter.default.post(name: Notification.Name("DirectionLineString"), object: nil, userInfo: datas)
-        NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
+        //NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
     }
 }

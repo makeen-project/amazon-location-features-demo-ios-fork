@@ -87,6 +87,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         let minHeight = 0.69
         controller.enableBottomSheetGrab(smallHeight: minHeight, mediumHeight: minHeight)
+        
+        NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": controller.getMediumDetentHeight()])
         currentBottomSheet = controller
     }
     

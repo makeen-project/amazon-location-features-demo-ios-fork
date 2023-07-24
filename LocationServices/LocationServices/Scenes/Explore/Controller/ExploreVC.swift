@@ -238,7 +238,7 @@ extension ExploreVC {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapViewValue(_:)), name: Notification.Name("UpdateMapViewValues"), object: nil)
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissNavigationScene(_:)), name: Notification.Name("DirectionViewDismissed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissDirectionScene(_:)), name: Notification.Name("DirectionViewDismissed"), object: nil)
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMapView(_:)), name: Notification.refreshMapView, object: nil)
@@ -426,6 +426,12 @@ extension ExploreVC {
         mapNavigationView.isHidden = true
         mapNavigationActionsView.isHidden = true
         //updateAmazonLogoPositioning(isBottomNavigationShown: false)
+        exploreView.hideGeoFence(state: false)
+        exploreView.deleteDrawing()
+    }
+    
+    @objc private func dismissDirectionScene(_ notification: Notification?) {
+        viewModel.deactivateRoute()
         exploreView.hideDirectionButton(state: false)
         exploreView.hideGeoFence(state: false)
         exploreView.hideMapStyleButton(state: false)
