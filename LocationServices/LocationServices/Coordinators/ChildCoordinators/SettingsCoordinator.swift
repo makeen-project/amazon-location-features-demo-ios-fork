@@ -32,6 +32,7 @@ private extension SettingsCoordinator {
 
 extension SettingsCoordinator: SettingsNavigationDelegate {
     func showNextScene(type: SettingsCellType) {
+        navigationController.navigationBar.isHidden = false
         switch type {
         case .units:
             showUnitScene()
