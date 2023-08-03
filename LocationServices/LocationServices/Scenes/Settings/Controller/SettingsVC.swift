@@ -15,7 +15,7 @@ final class SettingsVC: UIViewController {
         static let horizontalOffset: CGFloat = 16
     }
     
-    weak var delegate: SettingsNavigationDelegate?
+    var delegate: SettingsNavigationDelegate?
     
     private var headerTitle: LargeTitleLabel = {
         let label = LargeTitleLabel(labelText: StringConstant.settigns)
