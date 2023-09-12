@@ -174,7 +174,22 @@ final class DirectionView: UIView {
             self?.avoidFerries?(state)
         }
         
+        NotificationCenter.default.addObserver(self, selector: #selector(updateRouteContainerConstraint(_:)), name: Notification.updateMapLayerItems, object: nil)
+        
     }
+    
+    @objc private func updateRouteContainerConstraint(_ notification: Notification) {
+        let height = (notification.userInfo?["height"] as? CGFloat) ?? 400
+        if(height < 400) {
+            routeOptions.isHidden = true
+            containerView.isHidden = true
+        }
+        else {
+            routeOptions.isHidden = false
+            containerView.isHidden = false
+        }
+    }
+    
     
     private func changeSelectedTextFor(carType: Bool = false,
                                        walkingType: Bool = false,
@@ -220,7 +235,7 @@ final class DirectionView: UIView {
             $0.top.equalTo(routeOptions.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(219)
+            $0.height.lessThanOrEqualToSuperview()
         }
         
         carRouteTypeView.snp.makeConstraints {
