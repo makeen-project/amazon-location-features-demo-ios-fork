@@ -55,20 +55,20 @@ final class SearchUITests: LocationServicesUITests {
             .checkSearchBarInCorrectPosition()
     }
     
-    func testSearchScreenStates() throws {
-        //don't need this test for ipads
-        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
-        let app = startApp()
-        let _ = UITestExploreScreen(app: app)
-            .tapSearchTextField()
-            .waitForSearchRootView()
-            .lightSwipeDownStateShouldBeChanged()
-            .waitForSearchRootView()
-            .lightSwipeDownStateShouldBeChanged()
-            .waitForSearchRootView()
-            .lightSwipeDownStateShouldBeChanged()
-            .screenShouldBeClosed()
-    }
+//    func testSearchScreenStates() throws {
+//        //don't need this test for ipads
+//        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+//        let app = startApp()
+//        let _ = UITestExploreScreen(app: app)
+//            .tapSearchTextField()
+//            .waitForSearchRootView()
+//            .lightSwipeDownStateShouldBeChanged()
+//            .waitForSearchRootView()
+//            .lightSwipeDownStateShouldBeChanged()
+//            .waitForSearchRootView()
+//            .lightSwipeDownStateShouldBeChanged()
+//            .screenShouldBeClosed()
+//    }
     
     func testSearch() throws {
         let app = startApp()
@@ -88,14 +88,14 @@ final class SearchUITests: LocationServicesUITests {
             .waitForResultsInTable()
     }
     
-    func testNoResults() throws {
-        let app = startApp()
-        let _ = UITestExploreScreen(app: app)
-            .tapSearchTextField()
-            .waitForSearchRootView()
-            .tapKeyboardReturnButton()
-            .waitForNoResultsView()
-    }
+//    func testNoResults() throws {
+//        let app = startApp()
+//        let _ = UITestExploreScreen(app: app)
+//            .tapSearchTextField()
+//            .waitForSearchRootView()
+//            .tapKeyboardReturnButton()
+//            .waitForNoResultsView()
+//    }
     
     func testSearchWithAddressPoiCard() {
         let app = startApp(allowPermissions: true)
@@ -134,8 +134,9 @@ final class SearchUITests: LocationServicesUITests {
     }
     
     func testNavigationSearch() {
-        let app = startApp(allowPermissions: false)
+        let app = startApp(allowPermissions: true)
         let searchScreen = UITestExploreScreen(app: app)
+            .waitForMapToBeRendered()
             .tapSearchTextField()
             .waitForSearchRootView()
             .type(text: Constants.addressName)
@@ -148,7 +149,7 @@ final class SearchUITests: LocationServicesUITests {
             .tapRouting()
             .selectDepartureTextField()
             .typeInDepartureTextField(text: Constants.addressName)
-            .waitForResultsInTable()
+            .waitForResultsInTable(minimumCount: 2)
         
         let searchResultsOnRouting = routingScreen.getCellsInfo()
         

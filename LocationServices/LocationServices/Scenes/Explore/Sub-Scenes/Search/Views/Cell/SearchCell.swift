@@ -52,6 +52,12 @@ final class SearchCell: UITableViewCell {
                 self.locationDistance.isHidden = false
                 self.locationAddress.isHidden = false
                 self.locationDistance.text = model.locationDistance?.convertToKm()
+                locationAddress.snp.remakeConstraints {
+                    $0.top.equalTo(locationTitle.snp.bottom).offset(5)
+                    $0.leading.equalTo(locationTitle.snp.leading)
+                    $0.trailing.equalToSuperview().offset(-20)
+                    $0.bottom.equalTo(contentCellView.snp.bottom)
+                }
             } else {
                 self.locationDistance.isHidden = true
                 updateConstraintsForTitle(shouldAlingCenter: true)
