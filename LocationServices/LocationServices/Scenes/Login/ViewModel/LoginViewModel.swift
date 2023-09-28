@@ -18,7 +18,7 @@ enum AuthStatus {
 final class LoginViewModel: LoginViewModelProtocol {
     var delegate: LoginViewModelOutputDelegate?
     
-    var awsLoginService: AWSLoginService! {
+    var awsLoginService: AWSLoginServiceProtocol! {
         didSet {
             awsLoginService.delegate = self
         }
@@ -41,7 +41,7 @@ final class LoginViewModel: LoginViewModelProtocol {
     }
     
     func logout() {
-        awsLoginService.logout()
+        awsLoginService.logout(skipPolicy: false)
     }
     
     func connectAWS(identityPoolId: String?, userPoolId: String?, userPoolClientId: String?, userDomain: String?, websocketUrl: String?) {
@@ -106,7 +106,7 @@ final class LoginViewModel: LoginViewModelProtocol {
         // TODO: here we need to investigate if we can apply default configuration to AWSMobileService without restart of application.
         // if we signed it, make sign out first
         if AWSMobileClient.default().isSignedIn {
-            awsLoginService.logout()
+            awsLoginService.logout(skipPolicy: false)
         }
         
         delegate?.cloudConnectionDisconnected()

@@ -33,8 +33,19 @@ final class AddGeofenceViewModelTests: XCTestCase {
     var geofenceService: GeofenceAPIServiceMock!
     var locationService: LocationAPIServiceMock!
     var viewModelDelegate: AddGeofenceViewModelOutputProtocolMock!
+    var userLocation: (lat: Double, long: Double)!
+    var search: SearchPresentation!
     
     override func setUpWithError() throws {
+        userLocation = (lat: 40.7487776237092, long: -73.98554260340953)
+        search = SearchPresentation(placeId: "myLocation",
+                                       fullLocationAddress: "Times Square, New York",
+                                       distance: nil,
+                                       countryName: nil,
+                                       cityName: nil,
+                                       placeLat: userLocation?.lat,
+                                       placeLong: userLocation?.long,
+                                       name: "Times Square")
         geofenceService = GeofenceAPIServiceMock(delay: Constants.apiRequestDuration)
         locationService = LocationAPIServiceMock(delay: Constants.apiRequestDuration)
         viewModelDelegate = AddGeofenceViewModelOutputProtocolMock()
@@ -53,47 +64,47 @@ final class AddGeofenceViewModelTests: XCTestCase {
         viewModel.delegate = viewModelDelegate
     }
     
-    func test_isGeofenceNameValid_withValidName() throws {
+    func testIsGeofenceNameValidWithValidName() throws {
         let geofenceName = "TestGeofence"
         XCTAssertTrue(viewModel.isGeofenceNameValid(geofenceName), "Expected true for valid geofence name.")
     }
     
-    func test_isGeofenceNameValid_withTooLongName() throws {
+    func testIsGeofenceNameValidWithTooLongName() throws {
         let geofenceName = "TestGeofenceTestGeofence"
         XCTAssertFalse(viewModel.isGeofenceNameValid(geofenceName), "Expected false for too long geofence name.")
     }
     
-    func test_isGeofenceNameValid_withNumberAtStart() throws {
+    func testIsGeofenceNameValidWithNumberAtStart() throws {
         let geofenceName = "1TestGeofence"
         XCTAssertFalse(viewModel.isGeofenceNameValid(geofenceName), "Expected false for geofence name start not with letter.")
     }
     
-    func test_isGeofenceNameValid_WithSpecialCharacter() throws {
+    func testIsGeofenceNameValidWithSpecialCharacter() throws {
         let geofenceName = "Test.Geofence"
         XCTAssertFalse(viewModel.isGeofenceNameValid(geofenceName), "Expected false for geofence name contain special character.")
     }
     
-    func test_isGeofenceModelValid_withValidModel() throws {
+    func testIsGeofenceModelValidWithValidModel() throws {
         let geofenceModel = GeofenceDataModel(id: "TestGeofence", lat: 0, long: 0, radius: 0)
         XCTAssertTrue(viewModel.isGeofenceModelValid(geofenceModel), "Expected true for valid geofence model.")
     }
     
-    func test_isGeofenceModelValid_withInvalidName() throws {
+    func testIsGeofenceModelValidWithInvalidName() throws {
         let geofenceModel = GeofenceDataModel(id: "Test Geofence", lat: 0, long: 0, radius: 0)
         XCTAssertFalse(viewModel.isGeofenceModelValid(geofenceModel), "Expected false for invalid name.")
     }
     
-    func test_isGeofenceModelValid_withInvalidLocation() throws {
+    func testIsGeofenceModelValidWithInvalidLocation() throws {
         let geofenceModel = GeofenceDataModel(id: "TestGeofence", lat: nil, long: nil, radius: 0)
         XCTAssertFalse(viewModel.isGeofenceModelValid(geofenceModel), "Expected false for invalid location.")
     }
     
-    func test_isGeofenceModelValid_withInvalidRadius() throws {
+    func testIsGeofenceModelValidWithInvalidRadius() throws {
         let geofenceModel = GeofenceDataModel(id: "TestGeofence", lat: 0, long: 0, radius: nil)
         XCTAssertFalse(viewModel.isGeofenceModelValid(geofenceModel), "Expected false for invalid radius.")
     }
     
-    func test_deleteData_withoutID() throws {
+    func testDeleteDataWithoutID() throws {
         let geofenceModel = GeofenceDataModel(id: nil, lat: 0, long: 0, radius: 0)
         viewModel.deleteData(with: geofenceModel)
         
@@ -101,7 +112,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         XCTAssertNil(viewModelDelegate.alertMock.alertModel?.okHandler)
     }
     
-    func test_deleteData_declined() throws {
+    func testDeleteDataDeclined() throws {
         let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
@@ -112,7 +123,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.activeGeofencesLists.first?.id, Constants.geofenceId)
     }
     
-    func test_deleteData_accepted_success() throws {
+    func testDeleteDataAcceptedSuccess() throws {
         let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
@@ -129,7 +140,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.activeGeofencesLists.isEmpty)
     }
     
-    func test_deleteData_accepted_failure() throws {
+    func testDeleteDataAcceptedFailure() throws {
         let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
@@ -146,7 +157,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         XCTAssertEqual(viewModelDelegate.alertMock.alertModel?.message, Constants.defaultError.localizedDescription)
     }
     
-    func test_saveData_new_succeed() throws {
+    func testSaveDataNewSucceed() throws {
         geofenceService.putResult = .success(Constants.testGeofenceModel)
         
         let expectation = expectation(description: "Save data completion should be called")
@@ -175,7 +186,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         }
     }
     
-    func test_saveData_new_failure() throws {
+    func testSaveDataNewFailure() throws {
         geofenceService.putResult = .failure(Constants.defaultError)
         
         let expectation = expectation(description: "Save data completion should be called")
@@ -198,7 +209,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         }
     }
     
-    func test_saveData_old_succeed() throws {
+    func testSaveDataOldSucceed() throws {
         let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
@@ -231,7 +242,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         }
     }
     
-    func test_saveData_old_failure() throws {
+    func testSaveDataOldFailure() throws {
         let defaultGeofenceList = [Constants.testGeofenceModel]
         setupViewModel(with: defaultGeofenceList)
         
@@ -255,4 +266,143 @@ final class AddGeofenceViewModelTests: XCTestCase {
             XCTFail("Result is nil")
         }
     }
+    
+    func testSearchWithSuggesstionWithEmptyText() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchTextResult = [search]
+        viewModel.searchWithSuggesstion(text: "", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult false")
+    }
+    
+    func testSearchWithSuggesstion() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchTextResult = [search]
+        viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+    }
+    
+    func testSearchWithSuggesstionWithCoordinates() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchWithPositionResult = .success([search])
+        viewModel.searchWithSuggesstion(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+    }
+    
+    func testSearchWith() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchTextResult = [search]
+        viewModel.searchWith(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(viewModel.numberOfRowsInSection(), 1, "Expecting number of rows in section")
+    }
+    
+    func testSearchWithEmptyText() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchTextResult = [search]
+        viewModel.searchWith(text: "", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+    }
+    
+    func testSearchWithCoordinates() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchWithPositionResult = .success([search])
+        viewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(viewModel.numberOfRowsInSection(), 1, "Expecting number of rows in section")
+    }
+    
+    func testGetSearchCellModelWithResults() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchTextResult = [search]
+        viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(viewModel.getSearchCellModel().isEmpty, false, "Expected false" )
+    }
+    
+    func testNumberOfRowsInSection() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchTextResult = [search]
+        viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(viewModel.numberOfRowsInSection(), 1, "Expecting number of rows in section")
+    }
+    func testSearchSelectedPlaceWith() throws {
+        setupViewModel(with: [Constants.testGeofenceModel])
+        locationService.putSearchTextResult = [search]
+        locationService.getPlaceResult = search
+        viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(viewModel.getSearchCellModel().isEmpty, false, "Expected false" )
+        viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.selectedPlaceResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected selectedPlaceResultCalled true")
+    }
+    
+    func testSearchSelectedPlaceWithEmptyPlaceID() throws {
+        let model = GeofenceDataModel(id: nil, lat: Constants.geofenceLat, long: Constants.geofenceLong, radius: Int64(Constants.geofenceRadius))
+        let search = SearchPresentation(placeId: nil,
+                                        fullLocationAddress: "Times Square, New York",
+                                        distance: nil,
+                                        countryName: nil,
+                                        cityName: nil,
+                                        placeLat: userLocation?.lat,
+                                        placeLong: userLocation?.long,
+                                        name: "Times Square")
+        setupViewModel(with: [model])
+        locationService.putSearchTextResult = [search]
+        locationService.getPlaceResult = search
+        viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(viewModel.getSearchCellModel().isEmpty, false, "Expected false" )
+        viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.selectedPlaceResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected selectedPlaceResultCalled true")
+    }
+    
+    func testSearchSelectedPlaceWithEmptyLat() throws {
+        let model = GeofenceDataModel(id: nil, lat: nil, long: nil, radius: Int64(Constants.geofenceRadius))
+        let search = SearchPresentation(placeId: nil,
+                                        fullLocationAddress: "Times Square, New York",
+                                        distance: nil,
+                                        countryName: nil,
+                                        cityName: nil,
+                                        placeLat: nil,
+                                        placeLong: nil,
+                                        name: "Times Square")
+        setupViewModel(with: [model])
+        locationService.putSearchTextResult = [search]
+        locationService.getPlaceResult = search
+        viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+        XCTAssertEqual(viewModel.getSearchCellModel().isEmpty, false, "Expected false" )
+        viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
+        XCTWaiter().wait(until: {
+            return self.viewModelDelegate.searchResultCalled
+        }, timeout: Constants.waitRequestDuration, message: "Expected searchResultCalled true")
+    }
 }
+

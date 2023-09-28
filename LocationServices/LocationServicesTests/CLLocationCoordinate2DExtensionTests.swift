@@ -68,4 +68,10 @@ final class CLLocationCoordinate2DExtensionTests: XCTestCase {
         let location = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
         XCTAssertNotEqual(location.hashValue, 0, "Expected has value")
     }
+    
+    func testLocationWithRadious() throws {
+        let location = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
+        let locationWithRadius = location.location(radius: 50, radians: 0)
+        XCTAssertNotEqual(locationWithRadius.latitude, location.latitude, "Expected true")
+    }
 }

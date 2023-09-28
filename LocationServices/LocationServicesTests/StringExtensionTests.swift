@@ -48,5 +48,23 @@ final class StringExtensionTests: XCTestCase {
         XCTAssertEqual(coordinate.isCoordinate(), true, "testIsCoordinate successful")
     }
 
+    func testToRegionString() throws {
+        let model =  "US-West:1"
+        XCTAssertEqual(model.toRegionString(), "US-West", "toRegionString successful")
+    }
 
+    func testToId() throws {
+       let model =  "US-West:1"
+        XCTAssertEqual(model.toId(), "1", "testToId successful")
+    }
+    
+    func testHighlightAsLink() throws {
+        let model = NSMutableAttributedString(string:  "google.com")
+        XCTAssertEqual(model.highlightAsLink(textOccurances: "o"), true, "testCreateInitial successful")
+    }
+    
+    func testConvertInitalTextImage() throws {
+        let model = "Image"
+        XCTAssertNotEqual(model.convertInitalTextImage(), nil, "testCreateInitial successful")
+    }
 }
