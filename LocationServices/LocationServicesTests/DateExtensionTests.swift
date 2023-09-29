@@ -33,6 +33,11 @@ final class DateExtensionTests: XCTestCase {
         XCTAssertEqual(date?.convertDateString(), "Mar 17, 2023", "Expected string date")
     }
     
+    func testConvertDateMediumString() throws {
+        let date = Date.convertStringToDate("2023-03-17T10:00:00Z")
+        XCTAssertEqual(date?.convertDateMediumString(), "Mar 17, 2023", "Expected string date")
+    }
+    
     func testConvertToString() throws {
        let date = Date.convertStringToDate("2023-03-17T10:00:00Z")
         XCTAssertEqual(date?.convertToString(format: "dd-MM-yyyy hh:mm:ss"), "17-03-2023 10:00:00", "Expected date to string")

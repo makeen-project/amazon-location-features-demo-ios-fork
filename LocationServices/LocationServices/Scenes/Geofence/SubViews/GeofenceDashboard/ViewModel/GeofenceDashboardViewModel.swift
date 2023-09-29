@@ -10,11 +10,11 @@ import Foundation
 final class GeofenceDashboardViewModel: GeofenceDasboardViewModelProtocol {
     var delegate: GeofenceDasboardViewModelOutputProtocol?
     
-    private let geofenceService: GeofenceAPIService
+    private let geofenceService: GeofenceServiceable
     
     var geofences: [GeofenceDataModel] = []
 
-    init(geofenceService: GeofenceAPIService) {
+    init(geofenceService: GeofenceServiceable) {
         self.geofenceService = geofenceService
     }
     

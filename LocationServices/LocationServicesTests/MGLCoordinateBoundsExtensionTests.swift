@@ -39,4 +39,9 @@ final class MGLCoordinateBoundsExtensionTests: XCTestCase {
         XCTAssertEqual(coordinateBounds.ne.latitude.formatted(), "40.75791", "Coordinate Bounds latitude matched")
     }
 
+    func testCreateWithCenter() throws {
+        let centerLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
+        let coordinateBounds = MGLCoordinateBounds.create(centerLocation: centerLocation, radius: 20)
+        XCTAssertEqual(coordinateBounds.ne.latitude.formatted(), "40.758089", "Coordinate Bounds latitude matched")
+    }
 }
