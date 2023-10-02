@@ -126,21 +126,6 @@ final class TrackingViewModelTests: XCTestCase {
         }, timeout: Constants.waitRequestDuration, message: "Tracking history should`ve shown error alert")
     }
     
-//    func testSubscribeToAWSNotifications() throws {
-//        viewModel.sem
-//    }
-//    
-//    func testCreateIoTManagerIfNeeded() throws {
-//        
-//    }
-//    
-//    func testUnsubscribeFromAWSNotifications() throws {
-//    }
-//    
-//    func testGetAWSConfigurationModel() throws {
-//        
-//    }
-    
     func testResetHistory() throws {
         viewModel.resetHistory()
         XCTAssertEqual(viewModel.hasHistory, false, "Expecting empty history")
