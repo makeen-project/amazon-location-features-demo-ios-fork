@@ -136,11 +136,11 @@ final class TrackingHistoryHeaderView: UIView {
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(titleTopOffset)
             $0.leading.equalToSuperview().offset(16)
-            $0.height.equalTo(28)
+            $0.height.equalTo(30)
         }
         
         detailLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(5)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalTo(trackingActionButton.snp.leading).offset(-5)
             $0.height.equalTo(18)
