@@ -1,5 +1,6 @@
 name: Run E2E Tests for iOS
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
