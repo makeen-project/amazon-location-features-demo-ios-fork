@@ -18,8 +18,8 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     
     weak var delegate: TrackingViewModelDelegate?
     
-    private let trackingService: TrackingAPIService
-    private let geofenceService: GeofenceAPIService
+    private let trackingService: TrackingServiceable
+    private let geofenceService: GeofenceServiceable
     
     private var lastLocation: CLLocation?
     private(set) var isTrackingActive: Bool = false
@@ -30,7 +30,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     private var iotManager: AWSIoTManager?
     private var iot: AWSIoT?
     
-    init(trackingService: TrackingAPIService, geofenceService: GeofenceAPIService) {
+    init(trackingService: TrackingServiceable, geofenceService: GeofenceServiceable) {
         self.trackingService = trackingService
         self.geofenceService = geofenceService
     }
@@ -62,7 +62,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             self.lastLocation = location
             sendLocationUpdate(location)
         } else {
-            lastLocation = location
+             lastLocation = location
             sendLocationUpdate(location)
         }
     }

@@ -33,23 +33,23 @@ final class SettingsUITests: LocationServicesUITests {
     }
     
     func testRouteOptions() throws {
-        let app = startApp(allowPermissions: false)
+        let app = startApp(allowPermissions: true)
         var routeOptionsScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapRouteOptionsRow()
             .waitForAvoidTollsContainer()
             .waitForAvoidFerriesContainer()
         
-        XCTAssertFalse(routeOptionsScreen.isOnAvoidTollsSwitch())
-        XCTAssertFalse(routeOptionsScreen.isOnAvoidFerriesSwitch())
+        XCTAssertTrue(routeOptionsScreen.isOnAvoidTollsSwitch())
+        XCTAssertTrue(routeOptionsScreen.isOnAvoidFerriesSwitch())
         
         routeOptionsScreen = routeOptionsScreen
             .switchAvoidTolls()
-        XCTAssertTrue(routeOptionsScreen.isOnAvoidTollsSwitch())
+        XCTAssertFalse(routeOptionsScreen.isOnAvoidTollsSwitch())
         
         routeOptionsScreen = routeOptionsScreen
             .switchAvoidFerries()
-        XCTAssertTrue(routeOptionsScreen.isOnAvoidFerriesSwitch())
+        XCTAssertFalse(routeOptionsScreen.isOnAvoidFerriesSwitch())
         
         let routingScreen = routeOptionsScreen
             .tapBackButton()
@@ -58,19 +58,19 @@ final class SettingsUITests: LocationServicesUITests {
             .tapRouting()
             .selectDepartureTextField()
             .typeInDepartureTextField(text: Constants.departureAddress)
-            .selectFirstSearchResult()
+            .selectSearchResult(index: 1)
             .selectDestinationTextField()
             .typeInDestinationTextField(text: Constants.destinationAddress)
-            .selectFirstSearchResult()
+            .selectSearchResult(index: 1)
             .waitForRouteTypesContainer()
             .switchRouteOptionsVisibility()
         
-        XCTAssertTrue(routingScreen.isOnAvoidTollsSwitch())
-        XCTAssertTrue(routingScreen.isOnAvoidFerriesSwitch())
+        XCTAssertFalse(routingScreen.isOnAvoidTollsSwitch())
+        XCTAssertFalse(routingScreen.isOnAvoidFerriesSwitch())
     }
     
     func testMapStyleChanges() throws {
-        let app = startApp(allowPermissions: false)
+        let app = startApp(allowPermissions: true)
         var exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
         

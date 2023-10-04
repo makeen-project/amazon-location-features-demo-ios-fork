@@ -21,6 +21,8 @@ class LocationAPIServiceMock: LocationServiceable {
     
     var putSearchTextResult: [LocationServices.SearchPresentation]?
     
+    var getPlaceResult: SearchPresentation?
+    
     func searchText(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void)) {
         perform { [weak self] in
              guard let result = self?.putSearchTextResult else { return }
@@ -51,7 +53,12 @@ class LocationAPIServiceMock: LocationServiceable {
         return AWSLocationSearchPlaceIndexForPositionRequest()
     }
     
-    func getPlace(with placeId: String, completion: @escaping (SearchPresentation?) -> Void) {}
+    func getPlace(with placeId: String, completion: @escaping (SearchPresentation?) -> Void) {
+        perform { [weak self] in
+             guard let result = self?.getPlaceResult else { return }
+             completion(result)
+         }
+    }
     
     private func perform(action: @escaping ()->()) {
         DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
