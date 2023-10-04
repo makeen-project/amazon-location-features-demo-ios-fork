@@ -1,6 +1,11 @@
 name: Run E2E Tests for iOS
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - "**_main"
+  pull_request:
+    branches: [main]
 jobs:
   test-iOS:
     name: Test iOS App
