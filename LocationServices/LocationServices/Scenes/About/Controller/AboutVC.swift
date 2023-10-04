@@ -24,7 +24,7 @@ final class AboutVC: UIViewController {
         return tableView
     }()
     
-    weak var delegate: AboutNavigationDelegate?
+    var delegate: AboutNavigationDelegate?
     var viewModel: AboutViewModelProtocol!
     
     override func viewDidLoad() {
