@@ -29,7 +29,7 @@ platform :ios do
       project: "LocationServices.xcodeproj",
       scheme: "LocationServicesUnitTests",
       minimum_coverage_percentage: 25.0,
-      ignore_file_path: "./.xcovignore", # if you want to ignore some files
+      ignore_file_path: ".xcovignore", # if you want to ignore some files
       output_directory: "xcov_output" # Directory where your coverage report will be stored
     )
   end

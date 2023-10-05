@@ -1,0 +1,260 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites name='LocationServicesTests.xctest' tests='195' failures='0'>
+  <testsuite name='LocationServicesTests.AWSLocationTravelModeTests' tests='3' failures='0'>
+    <testcase classname='LocationServicesTests.AWSLocationTravelModeTests' name='testInitWithCar' time='0.001'/>
+    <testcase classname='LocationServicesTests.AWSLocationTravelModeTests' name='testInitWithTruck' time='0.000'/>
+    <testcase classname='LocationServicesTests.AWSLocationTravelModeTests' name='testInitWithWalking' time='0.000'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.AboutViewModelTests' tests='2' failures='0'>
+    <testcase classname='LocationServicesTests.AboutViewModelTests' name='testGetCellItems' time='0.000'/>
+    <testcase classname='LocationServicesTests.AboutViewModelTests' name='testGetItemCount' time='0.000'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.AddGeofenceViewModelTests' tests='27' failures='0'>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testDeleteDataAcceptedFailure' time='1.710'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testDeleteDataAcceptedSuccess' time='2.136'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testDeleteDataDeclined' time='0.000'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testDeleteDataWithoutID' time='0.000'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testGetSearchCellModelWithResults' time='2.020'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceModelValidWithInvalidLocation' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceModelValidWithInvalidName' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceModelValidWithInvalidRadius' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceModelValidWithValidModel' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceNameValidWithNumberAtStart' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceNameValidWithSpecialCharacter' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceNameValidWithTooLongName' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testIsGeofenceNameValidWithValidName' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testNumberOfRowsInSection' time='2.076'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSaveDataNewFailure' time='1.015'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSaveDataNewSucceed' time='1.016'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSaveDataOldFailure' time='1.015'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSaveDataOldSucceed' time='1.017'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchSelectedPlaceWith' time='4.107'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchSelectedPlaceWithEmptyLat' time='2.011'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchSelectedPlaceWithEmptyPlaceID' time='2.032'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchWith' time='2.031'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchWithCoordinates' time='2.018'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchWithEmptyText' time='0.001'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchWithSuggesstion' time='2.032'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchWithSuggesstionWithCoordinates' time='2.034'/>
+    <testcase classname='LocationServicesTests.AddGeofenceViewModelTests' name='testSearchWithSuggesstionWithEmptyText' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.CLLocationCoordinate2DExtensionTests' tests='9' failures='0'>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testConformanceToHashProtocol' time='0.002'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testDistance' time='0.001'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testDistanceWithZeroDistance' time='0.001'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testIsCurrentLocationWithCurrenLocationValue' time='0.001'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testIsCurrentLocationWithNilValue' time='0.001'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testIsSameLocationWithDotsOutOfAccuracyCircle' time='0.001'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testIsSameLocationWithDotsWithinAccuracyCircle' time='0.001'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testIsSameLocationWithSameDotsAndZeroAccuracy' time='0.001'/>
+    <testcase classname='LocationServicesTests.CLLocationCoordinate2DExtensionTests' name='testLocationWithRadious' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.CLLocationExtensionTests' tests='1' failures='0'>
+    <testcase classname='LocationServicesTests.CLLocationExtensionTests' name='testInit' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.DataProviderViewModelTests' tests='4' failures='0'>
+    <testcase classname='LocationServicesTests.DataProviderViewModelTests' name='testGetItemCount' time='0.002'/>
+    <testcase classname='LocationServicesTests.DataProviderViewModelTests' name='testGetItemFor' time='0.002'/>
+    <testcase classname='LocationServicesTests.DataProviderViewModelTests' name='testLoadData' time='0.008'/>
+    <testcase classname='LocationServicesTests.DataProviderViewModelTests' name='testSaveSelectedState' time='0.004'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.DateExtensionTests' tests='7' failures='0'>
+    <testcase classname='LocationServicesTests.DateExtensionTests' name='testConvertDateMediumString' time='0.002'/>
+    <testcase classname='LocationServicesTests.DateExtensionTests' name='testConvertDateString' time='0.001'/>
+    <testcase classname='LocationServicesTests.DateExtensionTests' name='testConvertStringToDate' time='0.001'/>
+    <testcase classname='LocationServicesTests.DateExtensionTests' name='testConvertTimeString' time='0.001'/>
+    <testcase classname='LocationServicesTests.DateExtensionTests' name='testConvertToRelativeString' time='0.001'/>
+    <testcase classname='LocationServicesTests.DateExtensionTests' name='testConvertToString' time='0.001'/>
+    <testcase classname='LocationServicesTests.DateExtensionTests' name='testTruncateTime' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.DebounceManagerTests' tests='1' failures='0'>
+    <testcase classname='LocationServicesTests.DebounceManagerTests' name='testDebounce' time='0.000'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.DirectionViewModelTests' tests='18' failures='0'>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testAddMyLocationItemLocationSelected' time='0.002'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testAddMyLocationItemNoLocationSelected' time='0.000'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testCalculateRouteWith' time='0.001'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testGetMyLocationItem' time='0.000'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testGetSearchCellModelWithEmptyResults' time='5.002'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testGetSearchCellModelWithResults' time='2.034'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testGetSumData' time='0.001'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testLoadLocalOptionsWithEmptyStorage' time='0.001'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testLoadLocalOptionsWithFilledStorage' time='0.002'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testMyLocationSelected' time='0.001'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testNumberOfRowsInSection' time='2.012'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testSearchSelectedPlaceWith' time='2.029'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testSearchSelectedPlaceWithMyLocation' time='2.029'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testSearchWithSuggesstionWithCoordinates' time='0.000'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testSearchWithSuggesstionWithTextFailure' time='0.000'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testSearchWithSuggesstionWithTextMyLocation' time='2.007'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testSearchWithText' time='2.030'/>
+    <testcase classname='LocationServicesTests.DirectionViewModelTests' name='testSearchWithTextFailure' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.DoubleExtensionTests' tests='3' failures='0'>
+    <testcase classname='LocationServicesTests.DoubleExtensionTests' name='testConvertFormattedKMString' time='0.001'/>
+    <testcase classname='LocationServicesTests.DoubleExtensionTests' name='testConvertKMToM' time='0.001'/>
+    <testcase classname='LocationServicesTests.DoubleExtensionTests' name='testConvertSecondsToMinString' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.ExploreMapStyleViewModelTests' tests='4' failures='0'>
+    <testcase classname='LocationServicesTests.ExploreMapStyleViewModelTests' name='testGetItem' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreMapStyleViewModelTests' name='testGetItemsCount' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreMapStyleViewModelTests' name='testLoadDataWithData' time='0.005'/>
+    <testcase classname='LocationServicesTests.ExploreMapStyleViewModelTests' name='testLoadDataWithEmptyData' time='0.002'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.ExploreViewModelTests' tests='11' failures='0'>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testActivateRoute' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testDeactivateRoute' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testLoadPlaceFailure' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testLoadPlaceSuccess' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testReCalculateRouteReturnFailure' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testReCalculateRouteReturnSuccess' time='2.011'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testShouldShowWelcomeWithCurrentVersion' time='0.002'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testShouldShowWelcomeWithDifferentVersion' time='0.003'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testShouldShowWelcomeWithEmptyStorage' time='0.002'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testUserLocationChangedWithoutSelectedRoute' time='0.001'/>
+    <testcase classname='LocationServicesTests.ExploreViewModelTests' name='testUserLocationChangedWithSelectedRoute' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.GeofenceDashboardViewModelTests' tests='5' failures='0'>
+    <testcase classname='LocationServicesTests.GeofenceDashboardViewModelTests' name='testDeleteGeofenceData' time='0.002'/>
+    <testcase classname='LocationServicesTests.GeofenceDashboardViewModelTests' name='testDeleteGeofenceDataFailure' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceDashboardViewModelTests' name='testDeleteGeofenceDataWithoutID' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceDashboardViewModelTests' name='testFetchListOfGeofences' time='1.019'/>
+    <testcase classname='LocationServicesTests.GeofenceDashboardViewModelTests' name='testFetchListOfGeofencesFailure' time='2.031'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.GeofenceViewModelTests' tests='10' failures='0'>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_addGeofence_withExistedValue' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_addGeofence_withNewValue' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_fetchListOfGeofences_signedIn_failure' time='2.031'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_fetchListOfGeofences_SignedIn_success' time='1.015'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_fetchListOfGeofences_signedOut' time='0.002'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_getGeofence_withEmptyArray' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_getGeofence_withExistsId' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_getGeofence_withoutExistsId' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_hasUserLoggedIn_signedIn' time='0.001'/>
+    <testcase classname='LocationServicesTests.GeofenceViewModelTests' name='test_hasUserLoggedIn_signedOut' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.IntExtensionTests' tests='4' failures='0'>
+    <testcase classname='LocationServicesTests.IntExtensionTests' name='testConvertInt64ToKM' time='0.001'/>
+    <testcase classname='LocationServicesTests.IntExtensionTests' name='testConvertInt64ToM' time='0.001'/>
+    <testcase classname='LocationServicesTests.IntExtensionTests' name='testConvertIntToKM' time='0.001'/>
+    <testcase classname='LocationServicesTests.IntExtensionTests' name='testConvertIntToM' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.LocationManagerTests' tests='10' failures='0'>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_getAuthorizationStatus' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_performLocationDependentAction_withGrantedAccess' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_performLocationDependentAction_withoutGrantedAccess' time='1.005'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_requestPermissions_withDeniedAccess' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_requestPermissions_withGrantedAccess' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_requestPermissions_withNotDeterminedAccess' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_setDelegate' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_startUpdatingLocation_withDeclinedPermissions' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_startUpdatingLocation_withoutPermissions' time='0.001'/>
+    <testcase classname='LocationServicesTests.LocationManagerTests' name='test_startUpdatingLocation_withPermissions' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.LocationServicesTests' tests='1' failures='0'>
+    <testcase classname='LocationServicesTests.LocationServicesTests' name='testUserDefaultsSave' time='0.003'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.LoginViewModelTests' tests='7' failures='0'>
+    <testcase classname='LocationServicesTests.LoginViewModelTests' name='testConnectAWS' time='2.034'/>
+    <testcase classname='LocationServicesTests.LoginViewModelTests' name='testDisconnectAWS' time='0.002'/>
+    <testcase classname='LocationServicesTests.LoginViewModelTests' name='testGetAuthStatus' time='0.002'/>
+    <testcase classname='LocationServicesTests.LoginViewModelTests' name='testHasLocalUser' time='0.002'/>
+    <testcase classname='LocationServicesTests.LoginViewModelTests' name='testHasNoLocalUser' time='0.001'/>
+    <testcase classname='LocationServicesTests.LoginViewModelTests' name='testLogin' time='0.001'/>
+    <testcase classname='LocationServicesTests.LoginViewModelTests' name='testLogout' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.MGLCoordinateBoundsExtensionTests' tests='4' failures='0'>
+    <testcase classname='LocationServicesTests.MGLCoordinateBoundsExtensionTests' name='testCreateWithCenter' time='0.005'/>
+    <testcase classname='LocationServicesTests.MGLCoordinateBoundsExtensionTests' name='testCreateWithCoordinates' time='0.001'/>
+    <testcase classname='LocationServicesTests.MGLCoordinateBoundsExtensionTests' name='testCreateWithEmptyArray' time='0.001'/>
+    <testcase classname='LocationServicesTests.MGLCoordinateBoundsExtensionTests' name='testCreateWithOneValueInArray' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.MapStyleViewModelTests' tests='6' failures='0'>
+    <testcase classname='LocationServicesTests.MapStyleViewModelTests' name='testGetCellItems' time='0.001'/>
+    <testcase classname='LocationServicesTests.MapStyleViewModelTests' name='testGetItemCount' time='0.001'/>
+    <testcase classname='LocationServicesTests.MapStyleViewModelTests' name='testGetSectionsCount' time='0.001'/>
+    <testcase classname='LocationServicesTests.MapStyleViewModelTests' name='testGetSectionTitle' time='0.001'/>
+    <testcase classname='LocationServicesTests.MapStyleViewModelTests' name='testLoadLocalMapData' time='0.007'/>
+    <testcase classname='LocationServicesTests.MapStyleViewModelTests' name='testSaveSelectedState' time='0.005'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.NSMutableAttributedStringExtensionTests' tests='3' failures='0'>
+    <testcase classname='LocationServicesTests.NSMutableAttributedStringExtensionTests' name='testHighlightAsLinkWithNoOccurance' time='0.001'/>
+    <testcase classname='LocationServicesTests.NSMutableAttributedStringExtensionTests' name='testHighlightAsLinkWithWithMultipleOccurances' time='0.001'/>
+    <testcase classname='LocationServicesTests.NSMutableAttributedStringExtensionTests' name='testHighlightAsLinkWithWithOccurances' time='0.000'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.NavigationVCViewModelTests' tests='5' failures='0'>
+    <testcase classname='LocationServicesTests.NavigationVCViewModelTests' name='testGetDataWithZeroSteps' time='0.000'/>
+    <testcase classname='LocationServicesTests.NavigationVCViewModelTests' name='testGetItemCountWithZeroSteps' time='0.001'/>
+    <testcase classname='LocationServicesTests.NavigationVCViewModelTests' name='testGetSummaryData' time='0.001'/>
+    <testcase classname='LocationServicesTests.NavigationVCViewModelTests' name='testInitWithEmptySteps' time='0.000'/>
+    <testcase classname='LocationServicesTests.NavigationVCViewModelTests' name='testInitWithStepsWithoutStreetNames' time='0.000'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.POICardViewModelTests' tests='5' failures='0'>
+    <testcase classname='LocationServicesTests.POICardViewModelTests' name='testFetchDatasWithFailure' time='0.000'/>
+    <testcase classname='LocationServicesTests.POICardViewModelTests' name='testFetchDatasWithMaxDistance' time='0.000'/>
+    <testcase classname='LocationServicesTests.POICardViewModelTests' name='testFetchDatasWithoutUserLocation' time='0.000'/>
+    <testcase classname='LocationServicesTests.POICardViewModelTests' name='testFetchDatasWithSuccess' time='0.000'/>
+    <testcase classname='LocationServicesTests.POICardViewModelTests' name='testGetMapModels' time='0.000'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.PlaceholderAnimatorTests' tests='1' failures='0'>
+    <testcase classname='LocationServicesTests.PlaceholderAnimatorTests' name='testAnimationStatus' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.ReachabilityTests' tests='2' failures='0'>
+    <testcase classname='LocationServicesTests.ReachabilityTests' name='testStartMonitoringReturnInternetIsReachable' time='0.047'/>
+    <testcase classname='LocationServicesTests.ReachabilityTests' name='testStartMonitoringStatusValue' time='0.003'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.RouteOptionViewModelTests' tests='3' failures='0'>
+    <testcase classname='LocationServicesTests.RouteOptionViewModelTests' name='testLoadData' time='0.001'/>
+    <testcase classname='LocationServicesTests.RouteOptionViewModelTests' name='testSaveFerriesOption' time='0.001'/>
+    <testcase classname='LocationServicesTests.RouteOptionViewModelTests' name='testSaveTollOption' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.SearchViewModelTests' tests='13' failures='0'>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testGetSearchCellModelWithEmptyResults' time='0.001'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testGetSearchCellModelWithResults' time='1.016'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testNumberOfRowsInSection' time='1.072'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchSelectedPlaceWithLocation' time='1.116'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchSelectedPlaceWithLocationName' time='1.053'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchSelectedPlaceWithPlaceId' time='1.285'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchWithCoordinates' time='2.129'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchWithEmptyText' time='0.000'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchWithFailure' time='1.010'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchWithSuggesstionWithCoordinatesFailure' time='2.033'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchWithSuggesstionWithCoordinatesSuccess' time='2.033'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchWithSuggesstionWithTextSuccess' time='2.018'/>
+    <testcase classname='LocationServicesTests.SearchViewModelTests' name='testSearchWithText' time='2.015'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.SettingsDefaultValueHelperTests' tests='2' failures='0'>
+    <testcase classname='LocationServicesTests.SettingsDefaultValueHelperTests' name='testCreateDefaulValuesWithEmptyStorage' time='0.005'/>
+    <testcase classname='LocationServicesTests.SettingsDefaultValueHelperTests' name='testCreateDefaulValuesWithStorage' time='0.001'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.StringExtensionTests' tests='10' failures='0'>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testConvertIdentityPoolIdToRegionString' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testConvertIdentityPoolIdToRegionType' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testConvertInitalTextImage' time='0.005'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testConvertTextToCoordinate' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testCreateInitial' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testFormatAddressField' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testHighlightAsLink' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testIsCoordinate' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testToId' time='0.001'/>
+    <testcase classname='LocationServicesTests.StringExtensionTests' name='testToRegionString' time='0.000'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.TrackingViewModelTests' tests='10' failures='0'>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testFetchListOfGeofences' time='1.010'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testFetchListOfGeofencesEmpty' time='0.003'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testFetchListOfGeofencesFailure' time='2.029'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testResetHistory' time='0.001'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testStartTracking' time='0.001'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testStopTracking' time='0.001'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testTrackLocationUpdate' time='3.024'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testTrackLocationUpdateFailure' time='2.035'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testUpdateHistory' time='2.015'/>
+    <testcase classname='LocationServicesTests.TrackingViewModelTests' name='testUpdateHistoryFailure' time='2.016'/>
+  </testsuite>
+  <testsuite name='LocationServicesTests.UserDefaultsHelperTests' tests='4' failures='0'>
+    <testcase classname='LocationServicesTests.UserDefaultsHelperTests' name='testRemoveObject' time='0.005'/>
+    <testcase classname='LocationServicesTests.UserDefaultsHelperTests' name='testSaveAndGetObject' time='0.001'/>
+    <testcase classname='LocationServicesTests.UserDefaultsHelperTests' name='testSaveAndGetPrimitiveValue' time='0.001'/>
+    <testcase classname='LocationServicesTests.UserDefaultsHelperTests' name='testSetAndGetAppState' time='0.001'/>
+  </testsuite>
+</testsuites>

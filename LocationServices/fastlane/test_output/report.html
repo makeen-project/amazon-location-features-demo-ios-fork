@@ -1,0 +1,2643 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Test Results | xcpretty</title>
+    <style type="text/css">
+      body { font-family:Avenir Next, Helvetica Neue, sans-serif; color: #4A4A4A; background-color: #F0F3FB; margin:0;}
+      h1 { font-weight: normal; font-size: 24px; margin: 10px 0 0 0;}
+      h3 { font-weight: normal; margin: 2px; font-size: 1.1em;}
+      header { position: fixed;width: 100%;background: rgba(249, 254, 255, 0.9);margin: 0;padding: 10px;}
+      header:before, header:after { content:""; display:table;}
+      header:after { clear:both;}
+      a:link { color: #A1D761;}
+      footer { clear: both;position: relative;z-index: 10;height: 40px;margin-top: -10px; margin-left:30px; font-size:12px;}
+      table { width:100%; border-collapse: collapse;}
+      tr td:first-child { width:7%}
+      .left { float: left; margin-left:30px;}
+      .right { float: right; margin-right: 40px; margin-top: 0; margin-bottom:0;}
+      .test-suite { margin: 0 0 30px 0;}
+      .test-suite > .heading { font-family:Menlo, Monaco, monospace; font-weight: bold; border-color: #A1D761; background-color: #B8E986; border-width: 1px;}
+      .test-suite.failing > .heading { border-color: #C84F5E; background-color: #E58591;}
+      .test-suite > .heading > .title { margin-top: 4px; margin-left: 10px;}
+      .tests { overflow: scroll;margin: 0 30px 0 60px;}
+      .test, .test-suite > .heading { height: 30px; overflow: hidden; margin: 0 30px;}
+      .test, .test-suite > .heading { border-width: 1px; border-collapse: collapse; border-style: solid; }
+      .test { margin-left: 30px; border-top:none;}
+      .test.failing { border-color: #C84F5E; background-color: #F4DDE0;}
+      .test.passing { border-color: #A1D761;}
+      .test.failing { background-color: #E7A1AA;}
+      .test.passing { background-color: #CAF59F;}
+      .test.failing.odd { background-color: #EEC7CC;}
+      .test.passing.odd { background-color: #E5FBCF;}
+      .details.failing { background-color: #F4DDE0; border: 1px solid #C84F5E;}
+      .details.passing { background-color: #E5F4DC; border: 1px solid #A1D761;}
+      .test .test-detail:last-child { padding-bottom: 8px;}
+      .test .title { float: left; font-size: 0.9em; margin-top: 8px; font-family: Menlo, Monaco, monospace;}
+      .test .time { float: left;margin: 4px 10px 0 20px;}
+      .test-detail { font-family:Menlo, Monaco, monospace; font-size: 0.9em; margin: 5px 0 5px 0px;}
+      .screenshots { height: auto; overflow: hidden; padding: 4px 4px 0 4px; background-color: #B8E986; border: #A1D761; border-width: 0 1px; border-style: solid; }
+      .screenshots.failing { border-color: #C84F5E; background-color: #E58591; }
+      .screenshot { max-height: 60px; float: left; transition: max-height 0.2s; margin: 0 4px 4px 0 }
+      .screenshot.selected { max-height: 568px; }
+      #test-suites { display: inline-block; width: 100%;margin-top:100px;}
+      #segment-bar { margin-top: 10px;margin-left: 14px;float:right;}
+      #segment-bar a:first-child { border-radius: 9px 0 0 9px; border-right: none;}
+      #segment-bar a:last-child { border-radius: 0 9px 9px 0; border-left: none;}
+      #segment-bar > a { color: #565656; border: 2px solid  #7B7B7B; width: 80px; font-weight: bold; display:inline-block;text-align:center; font-weight: normal;}
+      #segment-bar > a.selected { background-color: #979797; color: #F0F3FB;}
+      #counters { float: left;margin: 10px;text-align: right;}
+      #counters h2 { font-size: 16px; font-family: Avenir, sans-serif; font-weight: lighter; display:inline;}
+      #counters .number { font-size: 20px;}
+      #fail-count { color: #D0021B; margin-left:10px;}
+      @media (max-width: 640px) {
+        h1, #counters, #segment-bar { margin: 5px auto; text-align:center;}
+        header, #segment-bar { width: 100%; position: relative; background:none;}
+        .left, .right { float:none; margin:0;}
+        #test-suites { margin-top: 0;}
+        #counters { float:none;}
+      }
+    </style>
+    <script type="text/javascript">
+      var hide = function(element) { element.style.display = 'none';}
+      var show = function(element) { element.style.display = '';}
+      var isHidden = function(element) { return element.style.display == 'none';}
+      var isSelected = function(element) { return element.classList.contains("selected");}
+      var deselect = function(element) { return element.classList.remove("selected");}
+      var select = function(element) { return element.classList.add("selected");}
+      var toggle = function(element) { isHidden(element) ? show(element) : hide(element);};
+      var toggleTests = function(heading) { toggle(heading.parentNode.children[1]);};
+      var toggleDetails = function(detailClass) {
+        var details = document.querySelectorAll('.' + detailClass);
+        for (var i = details.length - 1; i >= 0; i--) { toggle(details[i]);};
+      };
+      var hideAll = function(collection) {
+        for (var i = collection.length - 1; i >= 0; i--) { hide(collection[i]); };
+      }
+      var showAll = function(collection) {
+        for (var i = collection.length - 1; i >= 0; i--) { show(collection[i]); };
+      }
+      var selectSegment = function(segment) {
+        if (isSelected(segment)) return;
+        var segments = document.querySelectorAll('#segment-bar > a');
+        for (var i = segments.length - 1; i >= 0; i--) { deselect(segments[i]);};
+        select(segment);
+        if (segment.id == "all-segment") {
+          showAll(document.querySelectorAll('.test-suite'));
+          showAll(document.querySelectorAll('.test'));
+        } else if (segment.id == "failing-segment") {
+          hideAll(document.querySelectorAll('.test.passing'));
+          showAll(document.querySelectorAll('.test.failing'));
+          hideAll(document.querySelectorAll('.test-suite.passing'));
+          showAll(document.querySelectorAll('.test-suite.failing'));
+        } else if (segment.id == "passing-segment") {
+          hideAll(document.querySelectorAll('.test.failing'));
+          showAll(document.querySelectorAll('.test.passing'));
+          hideAll(document.querySelectorAll('.test-suite.failing'));
+          showAll(document.querySelectorAll('.test-suite.passing'));
+        }
+      }
+      var toggleScreenshot = function(suiteName, index) {
+        var screenshot = document.getElementById("screenshot-" + suiteName + "-" + index);
+        isSelected(screenshot) ? deselect(screenshot) : select(screenshot);
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <section class="left">
+        <h1>Test Results</h1>
+      </section>
+      <section class="right">
+        <section id="counters">
+          <h2 id="test-count"><span class="number">195</span> tests</h2>
+          
+        </section>
+        <section id="segment-bar">
+          <a id="all-segment" onclick="selectSegment(this);" class="selected">All</a><a id="failing-segment" onclick="selectSegment(this);">Failing</a><a id="passing-segment" onclick="selectSegment(this);">Passing</a>
+        </section>
+      </section>
+    </header>
+    <section id="test-suites">
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.AWSLocationTravelModeTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.AWSLocationTravelModeTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testInitWithCar');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testInitWithCar</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testInitWithTruck');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testInitWithTruck</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testInitWithWalking');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testInitWithWalking</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.AboutViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.AboutViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetCellItems');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetCellItems</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetItemCount');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetItemCount</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.AddGeofenceViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.AddGeofenceViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDeleteDataAcceptedFailure');">
+                <td>
+                  
+                    <h3 class="time">1.710s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeleteDataAcceptedFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDeleteDataAcceptedSuccess');">
+                <td>
+                  
+                    <h3 class="time">2.136s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeleteDataAcceptedSuccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDeleteDataDeclined');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeleteDataDeclined</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDeleteDataWithoutID');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeleteDataWithoutID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetSearchCellModelWithResults');">
+                <td>
+                  
+                    <h3 class="time">2.020s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSearchCellModelWithResults</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsGeofenceModelValidWithInvalidLocation');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceModelValidWithInvalidLocation</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testIsGeofenceModelValidWithInvalidName');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceModelValidWithInvalidName</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsGeofenceModelValidWithInvalidRadius');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceModelValidWithInvalidRadius</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testIsGeofenceModelValidWithValidModel');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceModelValidWithValidModel</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsGeofenceNameValidWithNumberAtStart');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceNameValidWithNumberAtStart</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testIsGeofenceNameValidWithSpecialCharacter');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceNameValidWithSpecialCharacter</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsGeofenceNameValidWithTooLongName');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceNameValidWithTooLongName</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testIsGeofenceNameValidWithValidName');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsGeofenceNameValidWithValidName</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testNumberOfRowsInSection');">
+                <td>
+                  
+                    <h3 class="time">2.076s</h3>
+                  
+                </td>
+                <td><h3 class="title">testNumberOfRowsInSection</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSaveDataNewFailure');">
+                <td>
+                  
+                    <h3 class="time">1.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveDataNewFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSaveDataNewSucceed');">
+                <td>
+                  
+                    <h3 class="time">1.016s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveDataNewSucceed</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSaveDataOldFailure');">
+                <td>
+                  
+                    <h3 class="time">1.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveDataOldFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSaveDataOldSucceed');">
+                <td>
+                  
+                    <h3 class="time">1.017s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveDataOldSucceed</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchSelectedPlaceWith');">
+                <td>
+                  
+                    <h3 class="time">4.107s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWith</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchSelectedPlaceWithEmptyLat');">
+                <td>
+                  
+                    <h3 class="time">2.011s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWithEmptyLat</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchSelectedPlaceWithEmptyPlaceID');">
+                <td>
+                  
+                    <h3 class="time">2.032s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWithEmptyPlaceID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWith');">
+                <td>
+                  
+                    <h3 class="time">2.031s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWith</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithCoordinates');">
+                <td>
+                  
+                    <h3 class="time">2.018s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithCoordinates</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithEmptyText');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithEmptyText</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithSuggesstion');">
+                <td>
+                  
+                    <h3 class="time">2.032s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstion</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithSuggesstionWithCoordinates');">
+                <td>
+                  
+                    <h3 class="time">2.034s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithCoordinates</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithSuggesstionWithEmptyText');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithEmptyText</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.CLLocationCoordinate2DExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.CLLocationCoordinate2DExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConformanceToHashProtocol');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConformanceToHashProtocol</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDistance');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDistance</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDistanceWithZeroDistance');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDistanceWithZeroDistance</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsCurrentLocationWithCurrenLocationValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsCurrentLocationWithCurrenLocationValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testIsCurrentLocationWithNilValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsCurrentLocationWithNilValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsSameLocationWithDotsOutOfAccuracyCircle');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsSameLocationWithDotsOutOfAccuracyCircle</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testIsSameLocationWithDotsWithinAccuracyCircle');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsSameLocationWithDotsWithinAccuracyCircle</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsSameLocationWithSameDotsAndZeroAccuracy');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsSameLocationWithSameDotsAndZeroAccuracy</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLocationWithRadious');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLocationWithRadious</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.CLLocationExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.CLLocationExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testInit');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testInit</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.DataProviderViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.DataProviderViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetItemCount');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetItemCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetItemFor');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetItemFor</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLoadData');">
+                <td>
+                  
+                    <h3 class="time">0.008s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadData</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSaveSelectedState');">
+                <td>
+                  
+                    <h3 class="time">0.004s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveSelectedState</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.DateExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.DateExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertDateMediumString');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertDateMediumString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertDateString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertDateString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertStringToDate');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertStringToDate</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertTimeString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertTimeString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertToRelativeString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertToRelativeString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertToString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertToString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testTruncateTime');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTruncateTime</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.DebounceManagerTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.DebounceManagerTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDebounce');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDebounce</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.DirectionViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.DirectionViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAddMyLocationItemLocationSelected');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAddMyLocationItemLocationSelected</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAddMyLocationItemNoLocationSelected');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAddMyLocationItemNoLocationSelected</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCalculateRouteWith');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCalculateRouteWith</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetMyLocationItem');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetMyLocationItem</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetSearchCellModelWithEmptyResults');">
+                <td>
+                  
+                    <h3 class="time">5.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSearchCellModelWithEmptyResults</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetSearchCellModelWithResults');">
+                <td>
+                  
+                    <h3 class="time">2.034s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSearchCellModelWithResults</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetSumData');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSumData</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testLoadLocalOptionsWithEmptyStorage');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadLocalOptionsWithEmptyStorage</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLoadLocalOptionsWithFilledStorage');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadLocalOptionsWithFilledStorage</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testMyLocationSelected');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testMyLocationSelected</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testNumberOfRowsInSection');">
+                <td>
+                  
+                    <h3 class="time">2.012s</h3>
+                  
+                </td>
+                <td><h3 class="title">testNumberOfRowsInSection</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchSelectedPlaceWith');">
+                <td>
+                  
+                    <h3 class="time">2.029s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWith</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchSelectedPlaceWithMyLocation');">
+                <td>
+                  
+                    <h3 class="time">2.029s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWithMyLocation</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithSuggesstionWithCoordinates');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithCoordinates</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithSuggesstionWithTextFailure');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithTextFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithSuggesstionWithTextMyLocation');">
+                <td>
+                  
+                    <h3 class="time">2.007s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithTextMyLocation</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithText');">
+                <td>
+                  
+                    <h3 class="time">2.030s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithText</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithTextFailure');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithTextFailure</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.DoubleExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.DoubleExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertFormattedKMString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertFormattedKMString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertKMToM');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertKMToM</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertSecondsToMinString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertSecondsToMinString</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.ExploreMapStyleViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.ExploreMapStyleViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetItem');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetItem</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetItemsCount');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetItemsCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLoadDataWithData');">
+                <td>
+                  
+                    <h3 class="time">0.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadDataWithData</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testLoadDataWithEmptyData');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadDataWithEmptyData</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.ExploreViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.ExploreViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testActivateRoute');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testActivateRoute</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDeactivateRoute');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeactivateRoute</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLoadPlaceFailure');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadPlaceFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testLoadPlaceSuccess');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadPlaceSuccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testReCalculateRouteReturnFailure');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testReCalculateRouteReturnFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testReCalculateRouteReturnSuccess');">
+                <td>
+                  
+                    <h3 class="time">2.011s</h3>
+                  
+                </td>
+                <td><h3 class="title">testReCalculateRouteReturnSuccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testShouldShowWelcomeWithCurrentVersion');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testShouldShowWelcomeWithCurrentVersion</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testShouldShowWelcomeWithDifferentVersion');">
+                <td>
+                  
+                    <h3 class="time">0.003s</h3>
+                  
+                </td>
+                <td><h3 class="title">testShouldShowWelcomeWithDifferentVersion</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testShouldShowWelcomeWithEmptyStorage');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testShouldShowWelcomeWithEmptyStorage</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testUserLocationChangedWithoutSelectedRoute');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUserLocationChangedWithoutSelectedRoute</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testUserLocationChangedWithSelectedRoute');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUserLocationChangedWithSelectedRoute</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.GeofenceDashboardViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.GeofenceDashboardViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDeleteGeofenceData');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeleteGeofenceData</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDeleteGeofenceDataFailure');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeleteGeofenceDataFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testDeleteGeofenceDataWithoutID');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDeleteGeofenceDataWithoutID</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testFetchListOfGeofences');">
+                <td>
+                  
+                    <h3 class="time">1.019s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchListOfGeofences</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testFetchListOfGeofencesFailure');">
+                <td>
+                  
+                    <h3 class="time">2.031s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchListOfGeofencesFailure</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.GeofenceViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.GeofenceViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_addGeofence_withExistedValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_addGeofence_withExistedValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_addGeofence_withNewValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_addGeofence_withNewValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_fetchListOfGeofences_signedIn_failure');">
+                <td>
+                  
+                    <h3 class="time">2.031s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_fetchListOfGeofences_signedIn_failure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_fetchListOfGeofences_SignedIn_success');">
+                <td>
+                  
+                    <h3 class="time">1.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_fetchListOfGeofences_SignedIn_success</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_fetchListOfGeofences_signedOut');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_fetchListOfGeofences_signedOut</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_getGeofence_withEmptyArray');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_getGeofence_withEmptyArray</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_getGeofence_withExistsId');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_getGeofence_withExistsId</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_getGeofence_withoutExistsId');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_getGeofence_withoutExistsId</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_hasUserLoggedIn_signedIn');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_hasUserLoggedIn_signedIn</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_hasUserLoggedIn_signedOut');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_hasUserLoggedIn_signedOut</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.IntExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.IntExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertInt64ToKM');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertInt64ToKM</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertInt64ToM');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertInt64ToM</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertIntToKM');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertIntToKM</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertIntToM');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertIntToM</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.LocationManagerTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.LocationManagerTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_getAuthorizationStatus');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_getAuthorizationStatus</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_performLocationDependentAction_withGrantedAccess');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_performLocationDependentAction_withGrantedAccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_performLocationDependentAction_withoutGrantedAccess');">
+                <td>
+                  
+                    <h3 class="time">1.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_performLocationDependentAction_withoutGrantedAccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_requestPermissions_withDeniedAccess');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_requestPermissions_withDeniedAccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_requestPermissions_withGrantedAccess');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_requestPermissions_withGrantedAccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_requestPermissions_withNotDeterminedAccess');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_requestPermissions_withNotDeterminedAccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_setDelegate');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_setDelegate</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_startUpdatingLocation_withDeclinedPermissions');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_startUpdatingLocation_withDeclinedPermissions</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('test_startUpdatingLocation_withoutPermissions');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_startUpdatingLocation_withoutPermissions</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('test_startUpdatingLocation_withPermissions');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">test_startUpdatingLocation_withPermissions</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.LocationServicesTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.LocationServicesTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testUserDefaultsSave');">
+                <td>
+                  
+                    <h3 class="time">0.003s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUserDefaultsSave</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.LoginViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.LoginViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConnectAWS');">
+                <td>
+                  
+                    <h3 class="time">2.034s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConnectAWS</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testDisconnectAWS');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testDisconnectAWS</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetAuthStatus');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetAuthStatus</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testHasLocalUser');">
+                <td>
+                  
+                    <h3 class="time">0.002s</h3>
+                  
+                </td>
+                <td><h3 class="title">testHasLocalUser</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testHasNoLocalUser');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testHasNoLocalUser</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testLogin');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLogin</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLogout');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLogout</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.MGLCoordinateBoundsExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.MGLCoordinateBoundsExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCreateWithCenter');">
+                <td>
+                  
+                    <h3 class="time">0.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateWithCenter</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCreateWithCoordinates');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateWithCoordinates</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCreateWithEmptyArray');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateWithEmptyArray</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCreateWithOneValueInArray');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateWithOneValueInArray</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.MapStyleViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.MapStyleViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetCellItems');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetCellItems</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetItemCount');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetItemCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetSectionsCount');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSectionsCount</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetSectionTitle');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSectionTitle</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLoadLocalMapData');">
+                <td>
+                  
+                    <h3 class="time">0.007s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadLocalMapData</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSaveSelectedState');">
+                <td>
+                  
+                    <h3 class="time">0.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveSelectedState</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.NSMutableAttributedStringExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.NSMutableAttributedStringExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testHighlightAsLinkWithNoOccurance');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testHighlightAsLinkWithNoOccurance</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testHighlightAsLinkWithWithMultipleOccurances');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testHighlightAsLinkWithWithMultipleOccurances</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testHighlightAsLinkWithWithOccurances');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testHighlightAsLinkWithWithOccurances</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.NavigationVCViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.NavigationVCViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetDataWithZeroSteps');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetDataWithZeroSteps</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetItemCountWithZeroSteps');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetItemCountWithZeroSteps</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetSummaryData');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSummaryData</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testInitWithEmptySteps');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testInitWithEmptySteps</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testInitWithStepsWithoutStreetNames');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testInitWithStepsWithoutStreetNames</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.POICardViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.POICardViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testFetchDatasWithFailure');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchDatasWithFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testFetchDatasWithMaxDistance');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchDatasWithMaxDistance</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testFetchDatasWithoutUserLocation');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchDatasWithoutUserLocation</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testFetchDatasWithSuccess');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchDatasWithSuccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetMapModels');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetMapModels</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.PlaceholderAnimatorTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.PlaceholderAnimatorTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAnimationStatus');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAnimationStatus</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.ReachabilityTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.ReachabilityTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStartMonitoringReturnInternetIsReachable');">
+                <td>
+                  
+                    <h3 class="time">0.047s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStartMonitoringReturnInternetIsReachable</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testStartMonitoringStatusValue');">
+                <td>
+                  
+                    <h3 class="time">0.003s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStartMonitoringStatusValue</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.RouteOptionViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.RouteOptionViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLoadData');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLoadData</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSaveFerriesOption');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveFerriesOption</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSaveTollOption');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveTollOption</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.SearchViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.SearchViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testGetSearchCellModelWithEmptyResults');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSearchCellModelWithEmptyResults</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testGetSearchCellModelWithResults');">
+                <td>
+                  
+                    <h3 class="time">1.016s</h3>
+                  
+                </td>
+                <td><h3 class="title">testGetSearchCellModelWithResults</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testNumberOfRowsInSection');">
+                <td>
+                  
+                    <h3 class="time">1.072s</h3>
+                  
+                </td>
+                <td><h3 class="title">testNumberOfRowsInSection</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchSelectedPlaceWithLocation');">
+                <td>
+                  
+                    <h3 class="time">1.116s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWithLocation</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchSelectedPlaceWithLocationName');">
+                <td>
+                  
+                    <h3 class="time">1.053s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWithLocationName</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchSelectedPlaceWithPlaceId');">
+                <td>
+                  
+                    <h3 class="time">1.285s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchSelectedPlaceWithPlaceId</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithCoordinates');">
+                <td>
+                  
+                    <h3 class="time">2.129s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithCoordinates</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithEmptyText');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithEmptyText</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithFailure');">
+                <td>
+                  
+                    <h3 class="time">1.010s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithSuggesstionWithCoordinatesFailure');">
+                <td>
+                  
+                    <h3 class="time">2.033s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithCoordinatesFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithSuggesstionWithCoordinatesSuccess');">
+                <td>
+                  
+                    <h3 class="time">2.033s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithCoordinatesSuccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSearchWithSuggesstionWithTextSuccess');">
+                <td>
+                  
+                    <h3 class="time">2.018s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithSuggesstionWithTextSuccess</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSearchWithText');">
+                <td>
+                  
+                    <h3 class="time">2.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSearchWithText</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.SettingsDefaultValueHelperTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.SettingsDefaultValueHelperTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCreateDefaulValuesWithEmptyStorage');">
+                <td>
+                  
+                    <h3 class="time">0.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateDefaulValuesWithEmptyStorage</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testCreateDefaulValuesWithStorage');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateDefaulValuesWithStorage</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.StringExtensionTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.StringExtensionTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertIdentityPoolIdToRegionString');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertIdentityPoolIdToRegionString</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertIdentityPoolIdToRegionType');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertIdentityPoolIdToRegionType</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testConvertInitalTextImage');">
+                <td>
+                  
+                    <h3 class="time">0.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertInitalTextImage</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testConvertTextToCoordinate');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testConvertTextToCoordinate</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCreateInitial');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateInitial</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testFormatAddressField');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFormatAddressField</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testHighlightAsLink');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testHighlightAsLink</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testIsCoordinate');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testIsCoordinate</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testToId');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testToId</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testToRegionString');">
+                <td>
+                  
+                    <h3 class="time">0.000s</h3>
+                  
+                </td>
+                <td><h3 class="title">testToRegionString</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.TrackingViewModelTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.TrackingViewModelTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testFetchListOfGeofences');">
+                <td>
+                  
+                    <h3 class="time">1.010s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchListOfGeofences</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testFetchListOfGeofencesEmpty');">
+                <td>
+                  
+                    <h3 class="time">0.003s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchListOfGeofencesEmpty</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testFetchListOfGeofencesFailure');">
+                <td>
+                  
+                    <h3 class="time">2.029s</h3>
+                  
+                </td>
+                <td><h3 class="title">testFetchListOfGeofencesFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testResetHistory');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testResetHistory</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testStartTracking');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStartTracking</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testStopTracking');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testStopTracking</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testTrackLocationUpdate');">
+                <td>
+                  
+                    <h3 class="time">3.024s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTrackLocationUpdate</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testTrackLocationUpdateFailure');">
+                <td>
+                  
+                    <h3 class="time">2.035s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTrackLocationUpdateFailure</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testUpdateHistory');">
+                <td>
+                  
+                    <h3 class="time">2.015s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateHistory</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testUpdateHistoryFailure');">
+                <td>
+                  
+                    <h3 class="time">2.016s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateHistoryFailure</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="LocationServicesTests.UserDefaultsHelperTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">LocationServicesTests.UserDefaultsHelperTests</h3>
+          </section>
+          <section class="tests">
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testRemoveObject');">
+                <td>
+                  
+                    <h3 class="time">0.005s</h3>
+                  
+                </td>
+                <td><h3 class="title">testRemoveObject</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSaveAndGetObject');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveAndGetObject</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testSaveAndGetPrimitiveValue');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSaveAndGetPrimitiveValue</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSetAndGetAppState');">
+                <td>
+                  
+                    <h3 class="time">0.001s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSetAndGetAppState</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+    </section>
+    <footer>Report generated with <a href="https://github.com/supermarin/xcpretty">xcpretty</a></footer>
+  </body>
+</html>
