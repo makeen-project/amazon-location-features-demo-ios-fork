@@ -25,6 +25,13 @@ platform :ios do
       code_coverage: true,
       xcargs: "-test-iterations='2' -retry-tests-on-failure"
     )
+    xcov(
+      project: "LocationServices.xcodeproj",
+      scheme: "LocationServicesUnitTests",
+      minimum_coverage_percentage: 75,
+      # ignore_file_path: "./.xcovignore", # if you want to ignore some files
+      # output_directory: "xcov_output" # Directory where your coverage report will be stored
+    )
   end
 
   desc "Run e2e tests"
