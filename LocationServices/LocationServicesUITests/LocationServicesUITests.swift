@@ -101,7 +101,7 @@ class LocationServicesUITests: XCTestCase {
             let uiTestRunnerName = Bundle.main.infoDictionary?[Constants.cfBundleName] as! String
             appName = uiTestRunnerName.replacingOccurrences(of: Constants.uiTestsRunner, with: "")
         }
-        
+        springboard.activate()
         /// use `firstMatch` because icon may appear in iPad dock
         let appIcon = springboard.icons[appName].firstMatch
         if appIcon.waitForExistence(timeout: timeout) {

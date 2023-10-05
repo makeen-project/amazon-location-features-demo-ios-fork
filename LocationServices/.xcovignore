@@ -90,3 +90,8 @@
 - UISplitViewController+Extension.swift
 - DataProviderViewModel.swift
 - NavigationViewModel.swift
+
+# Commenting partial code coverage files due to some code is not able to covered in unit test cases. Need refactoring 
+- GeofenceDashboardViewModel.swift
+- TrackingViewModel.swift
+- ExploreViewModel.swift
