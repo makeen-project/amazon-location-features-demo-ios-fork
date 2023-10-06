@@ -1,14 +1,15 @@
 {
   "configurations" : [
     {
-      "id" : "40247A23-1918-4830-A2A3-819AD30DD221",
-      "name" : "Configuration 1",
+      "id" : "81AE0DF7-F818-46DD-9CC2-09A670CC12E9",
+      "name" : "Test Scheme Action",
       "options" : {
 
       }
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : false,
     "language" : "en",
     "locationScenario" : {
       "identifier" : "New York, NY, USA",
