@@ -31,13 +31,6 @@ jobs:
           base64 -d <<< ${{ secrets.CONFIG }} > Config.xcconfig
           base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
 
-      - name: Output content of a ConfigTest.xcconfig
-        working-directory: ./LocationServices
-        run: |
-          echo "Content of file 'ConfigTest.xcconfig':"
-          cat ConfigTest.xcconfig
-
-
       # - name: Run tests on iPad
       #   working-directory: ./LocationServices
       #   run: bundle exec fastlane run_e2e_tests device:"iPad Pro (12.9-inch) (6th generation)"
