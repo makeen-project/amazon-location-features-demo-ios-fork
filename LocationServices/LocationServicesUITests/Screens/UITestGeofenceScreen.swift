@@ -173,6 +173,7 @@ struct UITestGeofenceScreen: UITestScreen {
         return self
             .typeGeofenceName(geofenceName: geofenceNameToAdd)
             .tapSaveButton()
+            .tapSaveButton()
             .verifyGeofenceByName(geofenceName: geofenceNameToAdd)
     }
     
@@ -183,6 +184,10 @@ struct UITestGeofenceScreen: UITestScreen {
         .selectGeofenceLocation(location: newCoordinates)
         .setGeofenceRadius()
         .tapSaveButton()
+    }
+    
+    func getBackButton() -> XCUIElement {
+        return app.navigationBars.buttons.element(boundBy: 0)
     }
     
     static func generateUniqueGeofenceName() -> String {
@@ -228,4 +233,5 @@ struct UITestGeofenceScreen: UITestScreen {
     private func getAddGeofenceTable() -> XCUIElement {
         return app.tables[Identifiers.addGeofenceTableView]
     }
+    
 }

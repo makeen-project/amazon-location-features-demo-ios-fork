@@ -93,4 +93,35 @@ final class GeofenceUITests: LocationServicesUITests {
             .addGeofence(geofenceNameToAdd: geofenceName)
             .editGeofence(geofenceName: geofenceName, newGeofenceName: newGeofenceName)
     }
+    
+    func testEditAndDeleteGeofence() throws {
+        var app = startApp()
+
+        let _ = UITestTabBarScreen(app: app)
+            .tapSettingsButton()
+            .tapConnectAWSRow()
+            .connectAWSConnect()
+
+        app = restartApp()
+        let _ = UITestTabBarScreen(app: app)
+            .tapSettingsButton()
+            .tapConnectAWSRow()
+            .signInAWSAccount()
+            .getBackButton().tap()
+        
+//        let app = XCUIApplication()
+//        app.launch()
+        let _ = UITestGeofenceScreen(app: app)
+            .deleteAllGeofences()
+        
+        let geofenceName = UITestGeofenceScreen.generateUniqueGeofenceName()
+        let newGeofenceName = UITestGeofenceScreen.generateUniqueGeofenceName()
+        
+        let _ = UITestGeofenceScreen(app: app)
+            .addGeofence(geofenceNameToAdd: geofenceName)
+            .editGeofence(geofenceName: geofenceName, newGeofenceName: newGeofenceName)
+            .deleteGeofence(index: 0)
+            .confirmDeleteGeofence()
+            .verifyDeletedGeofence(geofenceName: newGeofenceName)
+    }
 }

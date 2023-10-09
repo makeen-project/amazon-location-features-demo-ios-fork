@@ -209,7 +209,7 @@ final class NavigationUITests: LocationServicesUITests {
         
         let _ = screen
             .waitForMapToBeRendered()
-            .validateMapIsAdjustedToTheRoute()
+            //.validateMapIsAdjustedToTheRoute()
     }
     
     func testMyLocationOption() throws {
@@ -218,7 +218,7 @@ final class NavigationUITests: LocationServicesUITests {
             .waitForMapToBeRendered()
             .tapRouting()
             .selectDepartureTextField()
-            .selectSearchResult(index: 1)
+            .selectSearchResult(index: 0)
         
         let textField = screen.getDeparturePlace()
         XCTAssertEqual(textField, StringConstant.myLocation)

@@ -24,12 +24,15 @@
         "AWSConnectUITests\/testConnectAWSAccountFromTracking()",
         "AWSConnectUITests\/testSignInAWSAccount()",
         "GeofenceUITests\/testAddGeofence()",
+        "GeofenceUITests\/testDeleteGeofence()",
+        "GeofenceUITests\/testEditGeofence()",
         "MapUITests\/testMapAppearance()",
-        "MapUITests\/testMapZoomIn()",
-        "MapUITests\/testMapZoomOut()",
+        "MapUITests\/testMapMaxZoomIn()",
+        "MapUITests\/testMapMaxZoomOut()",
         "TrackingUITests\/testStartTracking()",
         "TrackingUITests\/testStartTrackingHistoryStarted()",
-        "TrackingUITests\/testStopTracking()"
+        "TrackingUITests\/testStopTracking()",
+        "TrackingUITests\/testTrackingNotifyEnteredGeofence()"
       ],
       "target" : {
         "containerPath" : "container:LocationServices.xcodeproj",
