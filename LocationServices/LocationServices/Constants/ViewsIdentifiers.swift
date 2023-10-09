@@ -121,5 +121,6 @@ struct ViewsIdentifiers {
         static let trackingStoppedLabel = "TrackingStoppedLabel"
         static let deleteTrackingDataButton = "DeleteTrackingDataButton"
         static let trackingAnnotationImage = "TrackingAnnotationImage"
+        static let trackingHistoryScrollView  = "TrackingHistoryScrollView"
     }
 }

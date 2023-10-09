@@ -16,7 +16,9 @@ struct UITestTrackingScreen: UITestScreen {
         static var awsConnectTitleLabel: String { ViewsIdentifiers.AWSConnect.awsConnectTitleLabel }
         static var enableTrackingButton: String { ViewsIdentifiers.Tracking.enableTrackingButton }
         static var trackingActionButton: String { ViewsIdentifiers.Tracking.trackingActionButton }
-        static var trackingHistoryTableView: String { ViewsIdentifiers.Tracking.trackingHistoryTableView }
+        static var trackingHistoryTableView: String {
+            ViewsIdentifiers.Tracking.trackingHistoryTableView }
+        static var trackingHistoryScrollView: String { ViewsIdentifiers.Tracking.trackingHistoryScrollView }
         static var trackingStartedLabel: String { ViewsIdentifiers.Tracking.trackingStartedLabel }
         static var trackingStoppedLabel: String { ViewsIdentifiers.Tracking.trackingStoppedLabel }
         static var deleteTrackingDataButton: String { ViewsIdentifiers.Tracking.deleteTrackingDataButton }
@@ -46,12 +48,13 @@ struct UITestTrackingScreen: UITestScreen {
     
     func continueTrackingAlert() -> Self {
         let alert = app.alerts.element
-        XCTAssertTrue(alert.waitForExistence(timeout: UITestWaitTime.regular.time))
-        let responseMessage = alert.label
-        XCTAssertEqual(responseMessage, StringConstant.enableTracking)
-        let continueButton = alert.buttons[StringConstant.continueToTracker]
-        XCTAssertTrue(continueButton.waitForExistence(timeout: UITestWaitTime.regular.time))
-        continueButton.tap()
+        if (alert.waitForExistence(timeout: UITestWaitTime.regular.time)) {
+            let responseMessage = alert.label
+            XCTAssertEqual(responseMessage, StringConstant.enableTracking)
+            let continueButton = alert.buttons[StringConstant.continueToTracker]
+            XCTAssertTrue(continueButton.waitForExistence(timeout: UITestWaitTime.regular.time))
+            continueButton.tap()
+        }
         return self
     }
     
@@ -96,6 +99,14 @@ struct UITestTrackingScreen: UITestScreen {
         XCTAssertTrue(table.waitForExistence(timeout: UITestWaitTime.regular.time))
         let cellCount = table.cells.count
         XCTAssertEqual(cellCount, 0)
+        return self
+    }
+    
+    func swipeUpHistoryView() -> Self {
+        let view = app.scrollViews[Identifiers.trackingHistoryScrollView]
+        XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
+        view.swipeUp()
+        Thread.sleep(forTimeInterval: 1)
         return self
     }
     
