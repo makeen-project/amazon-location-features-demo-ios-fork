@@ -91,7 +91,7 @@ class LocationServicesUITests: XCTestCase {
     private func uninstall(app: XCUIApplication? = nil, name: String? = nil) {
         (app ?? XCUIApplication()).terminate()
 
-        let timeout = UITestWaitTime.regular.time
+        let timeout = UITestWaitTime.long.time
         let springboard = XCUIApplication(bundleIdentifier: Constants.springboardIdentifier)
         
         let appName: String
