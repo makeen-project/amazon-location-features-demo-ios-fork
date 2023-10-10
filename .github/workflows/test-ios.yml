@@ -10,10 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Select xcode version
-        uses: maxim-lobanov/setup-xcode@v1
+      - name: Set Ruby version
+        uses: ruby/setup-ruby@v1
         with:
-          version: "14.3"
+          ruby-version: 3.0
+
+      - name: Install bundler
+        run: gem install bundler
 
       - name: Setup Bundler
         working-directory: ./LocationServices
