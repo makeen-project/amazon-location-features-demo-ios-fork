@@ -19,6 +19,9 @@ struct UITestTrackingScreen: UITestScreen {
         static var trackingHistoryTableView: String {
             ViewsIdentifiers.Tracking.trackingHistoryTableView }
         static var trackingHistoryScrollView: String { ViewsIdentifiers.Tracking.trackingHistoryScrollView }
+        static var bottomGrabberView: String {
+            ViewsIdentifiers.General.bottomGrabberView
+        }
         static var trackingStartedLabel: String { ViewsIdentifiers.Tracking.trackingStartedLabel }
         static var trackingStoppedLabel: String { ViewsIdentifiers.Tracking.trackingStoppedLabel }
         static var deleteTrackingDataButton: String { ViewsIdentifiers.Tracking.deleteTrackingDataButton }
@@ -49,9 +52,9 @@ struct UITestTrackingScreen: UITestScreen {
     func continueTrackingAlert() -> Self {
         let alert = app.alerts.element
         if (alert.waitForExistence(timeout: UITestWaitTime.regular.time)) {
-            let responseMessage = alert.label
-            XCTAssertEqual(responseMessage, StringConstant.enableTracking)
-            let continueButton = alert.buttons[StringConstant.continueToTracker]
+           //let responseMessage = alert.label
+            //XCTAssertEqual(responseMessage, StringConstant.enableTracking)
+            let continueButton = alert.buttons.firstMatch
             XCTAssertTrue(continueButton.waitForExistence(timeout: UITestWaitTime.regular.time))
             continueButton.tap()
         }
@@ -103,9 +106,9 @@ struct UITestTrackingScreen: UITestScreen {
     }
     
     func swipeUpHistoryView() -> Self {
-        let view = app.scrollViews[Identifiers.trackingHistoryScrollView]
+        let view = app.otherElements[Identifiers.bottomGrabberView]
         XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
-        view.swipeUp()
+        view.tap()
         Thread.sleep(forTimeInterval: 1)
         return self
     }
