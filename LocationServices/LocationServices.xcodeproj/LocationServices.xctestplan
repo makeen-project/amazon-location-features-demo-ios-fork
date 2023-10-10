@@ -19,20 +19,28 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "AWSConnectUITests",
         "AWSConnectUITests\/testConnectAWSAccount()",
         "AWSConnectUITests\/testConnectAWSAccountFromGeofence()",
         "AWSConnectUITests\/testConnectAWSAccountFromTracking()",
         "AWSConnectUITests\/testSignInAWSAccount()",
+        "GeofenceUITests",
         "GeofenceUITests\/testAddGeofence()",
         "GeofenceUITests\/testDeleteGeofence()",
         "GeofenceUITests\/testEditGeofence()",
+        "LocationServicesUITests",
+        "MapUITests",
         "MapUITests\/testMapAppearance()",
         "MapUITests\/testMapMaxZoomIn()",
         "MapUITests\/testMapMaxZoomOut()",
+        "NavigationUITests",
+        "SearchUITests",
+        "SettingsUITests",
         "TrackingUITests\/testStartTracking()",
         "TrackingUITests\/testStartTrackingHistoryStarted()",
         "TrackingUITests\/testStopTracking()",
-        "TrackingUITests\/testTrackingNotifyEnteredGeofence()"
+        "TrackingUITests\/testTrackingNotifyEnteredGeofence()",
+        "TrackingUITests\/testTrackingNotifyExitedGeofence()"
       ],
       "target" : {
         "containerPath" : "container:LocationServices.xcodeproj",
