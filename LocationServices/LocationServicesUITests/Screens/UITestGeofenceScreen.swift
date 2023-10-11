@@ -87,6 +87,7 @@ struct UITestGeofenceScreen: UITestScreen {
         let saveGeofenceButton = app.buttons.matching(identifier: Identifiers.saveGeofenceButton).element
           XCTAssertTrue(saveGeofenceButton.waitForExistence(timeout: UITestWaitTime.regular.time))
         saveGeofenceButton.tap()
+        Thread.sleep(forTimeInterval: 3)
           return self
     }
     
@@ -170,10 +171,19 @@ struct UITestGeofenceScreen: UITestScreen {
             _ = self.selectGeofenceLocation(location: location, matchCellText: matchCellText)
         }
         
-        return self
+        var scene = self
             .typeGeofenceName(geofenceName: geofenceNameToAdd)
-            .tapSaveButton()
-            .tapSaveButton()
+            
+        if(UIDevice.current.userInterfaceIdiom == .phone){
+          scene = scene
+                .tapSaveButton()
+                .tapSaveButton()
+        }
+        else {
+            scene = scene
+                  .tapSaveButton()
+        }
+        return scene
             .verifyGeofenceByName(geofenceName: geofenceNameToAdd)
     }
     
