@@ -28,6 +28,7 @@ struct ViewsIdentifiers {
         static let closeButton = "CloseButton"
         static let imageAnnotationView = "ImageAnnotationView"
         static let bottomGrabberView = "BottomGrabberView"
+        static let sideBarTableView = "SideBarTableView"
     }
     
     struct Explore {

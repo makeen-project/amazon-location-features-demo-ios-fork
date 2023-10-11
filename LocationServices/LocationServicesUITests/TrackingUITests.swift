@@ -127,11 +127,14 @@ final class TrackingUITests: LocationServicesUITests {
             .connectAWSConnect()
 
         app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
+        let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
             .signInAWSAccount()
-            .getBackButton().tap()
+        
+        if(UIDevice.current.userInterfaceIdiom == .phone) {
+            menuScreen.getBackButton().tap()
+        }
 
         let _ = UITestGeofenceScreen(app: app)
             .deleteAllGeofences()
@@ -210,11 +213,14 @@ final class TrackingUITests: LocationServicesUITests {
             .connectAWSConnect()
 
         app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
+        let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
             .signInAWSAccount()
-            .getBackButton().tap()
+        
+        if(UIDevice.current.userInterfaceIdiom == .phone) {
+            menuScreen.getBackButton().tap()
+        }
         
         let _ = UITestGeofenceScreen(app: app)
             .deleteAllGeofences()
@@ -258,11 +264,14 @@ final class TrackingUITests: LocationServicesUITests {
             .connectAWSConnect()
 
         app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
+        let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
             .signInAWSAccount()
-            .getBackButton().tap()
+        
+        if(UIDevice.current.userInterfaceIdiom == .phone) {
+            menuScreen.getBackButton().tap()
+        }
         
         let _ = UITestGeofenceScreen(app: app)
             .deleteAllGeofences()

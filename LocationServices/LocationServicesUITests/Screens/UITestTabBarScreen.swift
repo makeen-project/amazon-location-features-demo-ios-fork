@@ -24,6 +24,7 @@ struct UITestTabBarScreen: UITestScreen {
         static var geofenceTabBarButton: String { ViewsIdentifiers.General.geofenceTabBarButton }
         static var sideBarButton: String { ViewsIdentifiers.General.sideBarButton }
         static var fullScreenButton: String { ViewsIdentifiers.General.fullScreenButton }
+        static var sideBarTableView: String { ViewsIdentifiers.General.sideBarTableView }
     }
     
     static func resetSideBarState() {
@@ -95,7 +96,9 @@ struct UITestTabBarScreen: UITestScreen {
     
     private func getBarItem(identifier: String) -> XCUIElement {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            return app.cells[identifier]
+            let table = app.tables[Identifiers.sideBarTableView]
+            XCTAssertTrue(table.waitForExistence(timeout: UITestWaitTime.regular.time))
+            return table.cells[identifier]
         } else {
             return app.tabBars.buttons[identifier]
         }

@@ -106,6 +106,7 @@ struct UITestTrackingScreen: UITestScreen {
     }
     
     func swipeUpHistoryView() -> Self {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return self }
         let view = app.otherElements[Identifiers.bottomGrabberView]
         XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
         view.tap()

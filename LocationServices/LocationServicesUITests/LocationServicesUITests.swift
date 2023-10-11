@@ -71,7 +71,7 @@ class LocationServicesUITests: XCTestCase {
         let springboard = XCUIApplication(bundleIdentifier: Constants.springboardIdentifier)
         let allowBtn = springboard.alerts.buttons.element(boundBy: 1)
         
-        if allowBtn.waitForExistence(timeout: UITestWaitTime.regular.time) {
+        if allowBtn.waitForExistence(timeout: UITestWaitTime.long.time) {
             allowBtn.tap()
         } else {
             XCTAssertTrue(false, "Request location permissions alert should be displayed (allow)")
