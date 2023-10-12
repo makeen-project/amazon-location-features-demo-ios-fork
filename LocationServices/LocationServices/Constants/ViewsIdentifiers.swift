@@ -27,6 +27,8 @@ struct ViewsIdentifiers {
         static let routingButton = "RoutingButton"
         static let closeButton = "CloseButton"
         static let imageAnnotationView = "ImageAnnotationView"
+        static let bottomGrabberView = "BottomGrabberView"
+        static let sideBarTableView = "SideBarTableView"
     }
     
     struct Explore {
@@ -121,5 +123,6 @@ struct ViewsIdentifiers {
         static let trackingStoppedLabel = "TrackingStoppedLabel"
         static let deleteTrackingDataButton = "DeleteTrackingDataButton"
         static let trackingAnnotationImage = "TrackingAnnotationImage"
+        static let trackingHistoryScrollView  = "TrackingHistoryScrollView"
     }
 }

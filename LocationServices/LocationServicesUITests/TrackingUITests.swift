@@ -127,10 +127,14 @@ final class TrackingUITests: LocationServicesUITests {
             .connectAWSConnect()
 
         app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
+        let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
             .signInAWSAccount()
+        
+        if(UIDevice.current.userInterfaceIdiom == .phone) {
+            menuScreen.getBackButton().tap()
+        }
 
         let _ = UITestGeofenceScreen(app: app)
             .deleteAllGeofences()
@@ -140,7 +144,6 @@ final class TrackingUITests: LocationServicesUITests {
         let uiTrackingScreen = UITestTabBarScreen(app: app)
             .tapTrackingButton()
             .tapEnableTrackingButton()
-            .tapStartTrackingButton()
             .continueTrackingAlert()
         
             XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
@@ -210,10 +213,14 @@ final class TrackingUITests: LocationServicesUITests {
             .connectAWSConnect()
 
         app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
+        let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
             .signInAWSAccount()
+        
+        if(UIDevice.current.userInterfaceIdiom == .phone) {
+            menuScreen.getBackButton().tap()
+        }
         
         let _ = UITestGeofenceScreen(app: app)
             .deleteAllGeofences()
@@ -233,7 +240,6 @@ final class TrackingUITests: LocationServicesUITests {
         let trackingUIScreen = UITestTabBarScreen(app: app)
             .tapTrackingButton()
             .tapEnableTrackingButton()
-            .tapStartTrackingButton()
             .continueTrackingAlert()
         
         Thread.sleep(forTimeInterval: 2)
@@ -258,10 +264,14 @@ final class TrackingUITests: LocationServicesUITests {
             .connectAWSConnect()
 
         app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
+        let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
             .signInAWSAccount()
+        
+        if(UIDevice.current.userInterfaceIdiom == .phone) {
+            menuScreen.getBackButton().tap()
+        }
         
         let _ = UITestGeofenceScreen(app: app)
             .deleteAllGeofences()
@@ -272,7 +282,6 @@ final class TrackingUITests: LocationServicesUITests {
         let trackingUIScreen = UITestTabBarScreen(app: app)
             .tapTrackingButton()
             .tapEnableTrackingButton()
-            .tapStartTrackingButton()
             .continueTrackingAlert()
         
         Thread.sleep(forTimeInterval: 1)
@@ -281,6 +290,7 @@ final class TrackingUITests: LocationServicesUITests {
         let _ = trackingUIScreen
             .tapStopTrackingButton()
             .verifyTrackingStoppedLabel()
+            .swipeUpHistoryView()
             .tapDeleteTrackingDataButton()
             .verifyTrackingHistoryDeleted()
     }

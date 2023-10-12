@@ -1,22 +1,17 @@
 name: Run E2E Tests for iOS
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-      - "**_main"
   pull_request:
     branches: [main]
 jobs:
   test-iOS:
     name: Test iOS App
-    runs-on: macos-13
+    runs-on: macos-13-xl
     steps:
       - uses: actions/checkout@v2
-
-      - name: Select xcode version
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "14.3"
 
       - name: Setup Bundler
         working-directory: ./LocationServices
@@ -45,7 +40,7 @@ jobs:
 
       - name: Run tests on iPhone
         working-directory: ./LocationServices
-        run: bundle exec fastlane run_e2e_tests device:"iPhone 14"
+        run: bundle exec fastlane run_e2e_tests device:"iPhone 12,OS=16.4"
 
       - name: Upload test results
         uses: actions/upload-artifact@v3

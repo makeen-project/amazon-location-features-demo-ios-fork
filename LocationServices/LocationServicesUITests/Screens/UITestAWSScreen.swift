@@ -114,6 +114,10 @@ struct UITestAWSScreen: UITestScreen {
         .waitForSignoutButton()
     }
     
+    func getBackButton() -> XCUIElement {
+       return app.navigationBars.buttons.element(boundBy: 0)
+   }
+    
     func tapSignInButton(timeout: Double = UITestWaitTime.regular.time) -> Self {
         let signInButton = app.buttons.matching(identifier: Identifiers.signInButton).element
         XCTAssertTrue(signInButton.waitForExistence(timeout: timeout))
