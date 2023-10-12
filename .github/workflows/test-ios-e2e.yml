@@ -13,14 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Set Ruby version
-      #   uses: ruby/setup-ruby@v1
-      #   with:
-      #     ruby-version: 3.0
-
-      # - name: Install bundler
-      #   run: gem install bundler
-
       - name: Setup Bundler
         working-directory: ./LocationServices
         run: |
