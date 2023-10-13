@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "81AE0DF7-F818-46DD-9CC2-09A670CC12E9",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "language" : "en",
+    "locationScenario" : {
+      "identifier" : "New York, NY, USA",
+      "referenceType" : "built-in"
+    },
+    "region" : "US"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:LocationServices.xcodeproj",
+        "identifier" : "8AB3F18F29C8A1C3008FDF37",
+        "name" : "Amazon Location Demo UITests"
+      }
+    }
+  ],
+  "version" : 1
+}

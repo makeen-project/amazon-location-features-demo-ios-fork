@@ -87,6 +87,7 @@ struct UITestGeofenceScreen: UITestScreen {
         let saveGeofenceButton = app.buttons.matching(identifier: Identifiers.saveGeofenceButton).element
           XCTAssertTrue(saveGeofenceButton.waitForExistence(timeout: UITestWaitTime.regular.time))
         saveGeofenceButton.tap()
+        Thread.sleep(forTimeInterval: 3)
           return self
     }
     
@@ -170,9 +171,19 @@ struct UITestGeofenceScreen: UITestScreen {
             _ = self.selectGeofenceLocation(location: location, matchCellText: matchCellText)
         }
         
-        return self
+        var scene = self
             .typeGeofenceName(geofenceName: geofenceNameToAdd)
-            .tapSaveButton()
+            
+        if(UIDevice.current.userInterfaceIdiom == .phone){
+          scene = scene
+                .tapSaveButton()
+                .tapSaveButton()
+        }
+        else {
+            scene = scene
+                  .tapSaveButton()
+        }
+        return scene
             .verifyGeofenceByName(geofenceName: geofenceNameToAdd)
     }
     
@@ -183,6 +194,10 @@ struct UITestGeofenceScreen: UITestScreen {
         .selectGeofenceLocation(location: newCoordinates)
         .setGeofenceRadius()
         .tapSaveButton()
+    }
+    
+    func getBackButton() -> XCUIElement {
+        return app.navigationBars.buttons.element(boundBy: 0)
     }
     
     static func generateUniqueGeofenceName() -> String {
@@ -228,4 +243,5 @@ struct UITestGeofenceScreen: UITestScreen {
     private func getAddGeofenceTable() -> XCUIElement {
         return app.tables[Identifiers.addGeofenceTableView]
     }
+    
 }

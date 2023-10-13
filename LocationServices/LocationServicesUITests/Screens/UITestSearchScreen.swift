@@ -167,11 +167,13 @@ struct UITestSearchScreen: UITestScreen {
     }
     
     private func closeOniPhone() {
-        let view = getSearchRootView()
-
-        let start = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-        let end = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 1))
-        start.press(forDuration: 0.5, thenDragTo: end)
+        let button = getCancelButton()
+        button.tap()
+//        let view = getSearchRootView()
+//
+//        let start = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+//        let end = view.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 1))
+//        start.press(forDuration: 0.5, thenDragTo: end)
     }
     
     private func closeOniPad() {

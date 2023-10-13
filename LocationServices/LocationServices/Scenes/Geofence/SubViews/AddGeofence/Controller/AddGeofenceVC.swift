@@ -323,7 +323,13 @@ final class AddGeofenceVC: UIViewController {
             case .success:
                 self?.sentGeofenceRefreshNotification = true
                 NotificationCenter.default.post(name: Notification.geofenceAdded, object: nil, userInfo: ["model": self?.cacheSaveModel as Any])
-                self?.delegate?.dismissCurrentBottomSheet(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
+                if(UIDevice.current.userInterfaceIdiom == .phone){
+                    self?.delegate?.dismissCurrentBottomSheet(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
+                }
+                else {
+                    self?.closeScreen()
+                }
+               
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
                 self?.showAlert(model)

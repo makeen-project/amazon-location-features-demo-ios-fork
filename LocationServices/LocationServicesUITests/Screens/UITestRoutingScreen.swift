@@ -94,6 +94,7 @@ struct UITestRoutingScreen: UITestScreen {
     }
     
     func waitForRouteTypesContainer() -> Self {
+        Thread.sleep(forTimeInterval: 2)
         let _ = getRouteTypesContainer()
         return self
     }

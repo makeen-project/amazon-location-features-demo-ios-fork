@@ -18,9 +18,23 @@ final class IntExtensionTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testConvertToKM() throws {
+    func testConvertIntToM() throws {
         let km: Int = 1000
        XCTAssertEqual(km.convertToKm(), "1000.0 m", "Expected string km")
     }
 
+    func testConvertInt64ToM() throws {
+        let km: Int64 = 1000
+       XCTAssertEqual(km.convertToKm(), "1000.0 m", "Expected string km")
+    }
+    
+    func testConvertIntToKM() throws {
+        let km: Int = 1001
+       XCTAssertEqual(km.convertToKm(), "1.00 km", "Expected string km")
+    }
+
+    func testConvertInt64ToKM() throws {
+        let km: Int64 = 1001
+       XCTAssertEqual(km.convertToKm(), "1.00 km", "Expected string km")
+    }
 }
