@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - main
-      - "**_main"
   pull_request:
-    branches: ["**_main",main]
+    branches: [main]
 jobs:
   test-iOS:
     name: Test iOS App
