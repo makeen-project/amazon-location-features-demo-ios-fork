@@ -249,7 +249,10 @@ final class TrackingUITests: LocationServicesUITests {
             .waitForGeofenceEnteredAlert(geofenceName: geofenceName)
 
         XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
-
+        Thread.sleep(forTimeInterval: 2)
+        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[1])
+        Thread.sleep(forTimeInterval: 2)
+        
         let _ = trackingUIScreen
             .waitForGeofenceExitedAlert(geofenceName: geofenceName)
     }
