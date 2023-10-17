@@ -23,7 +23,14 @@ platform :ios do
       device: options[:device],
       scheme: "LocationServicesUnitTests",
       code_coverage: true,
-      xcargs: "-test-iterations='2' -retry-tests-on-failure"
+      xcargs: "-test-iterations '3' -retry-tests-on-failure"
+    )
+    xcov(
+      project: "LocationServices.xcodeproj",
+      scheme: "LocationServicesUnitTests",
+      minimum_coverage_percentage: 25.0,
+      ignore_file_path: ".xcovignore", # if you want to ignore some files
+      output_directory: "xcov_output" # Directory where your coverage report will be stored
     )
   end
 
@@ -37,7 +44,7 @@ platform :ios do
         result_bundle: true,
         code_coverage: true,
         output_directory: Dir.pwd + "/test_output",
-        xcargs: "-test-iterations='2' -retry-tests-on-failure"
+        xcargs: "-test-iterations '5' -retry-tests-on-failure"
       )
     ensure
       xcresult_path = Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]

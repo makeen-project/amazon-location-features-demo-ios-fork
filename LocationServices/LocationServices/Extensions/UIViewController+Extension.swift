@@ -77,6 +77,7 @@ extension UIViewController {
     
    func createGrabberView() -> UIView {
         let grabberView = UIView()
+       grabberView.accessibilityIdentifier = ViewsIdentifiers.General.bottomGrabberView
         grabberView.backgroundColor = .systemGray4
         grabberView.layer.cornerRadius = 2.5
         grabberView.translatesAutoresizingMaskIntoConstraints = false

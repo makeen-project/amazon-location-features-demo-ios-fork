@@ -10,11 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Select xcode version
-        uses: devbotsxyz/xcode-select@v1
-        with:
-          version: "14.3"
-
       - name: Setup Bundler
         working-directory: ./LocationServices
         run: |

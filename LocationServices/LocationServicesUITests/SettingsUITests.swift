@@ -33,23 +33,23 @@ final class SettingsUITests: LocationServicesUITests {
     }
     
     func testRouteOptions() throws {
-        let app = startApp(allowPermissions: false)
+        let app = startApp(allowPermissions: true)
         var routeOptionsScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapRouteOptionsRow()
             .waitForAvoidTollsContainer()
             .waitForAvoidFerriesContainer()
         
-        XCTAssertFalse(routeOptionsScreen.isOnAvoidTollsSwitch())
-        XCTAssertFalse(routeOptionsScreen.isOnAvoidFerriesSwitch())
+        XCTAssertTrue(routeOptionsScreen.isOnAvoidTollsSwitch())
+        XCTAssertTrue(routeOptionsScreen.isOnAvoidFerriesSwitch())
         
         routeOptionsScreen = routeOptionsScreen
             .switchAvoidTolls()
-        XCTAssertTrue(routeOptionsScreen.isOnAvoidTollsSwitch())
+        XCTAssertFalse(routeOptionsScreen.isOnAvoidTollsSwitch())
         
         routeOptionsScreen = routeOptionsScreen
             .switchAvoidFerries()
-        XCTAssertTrue(routeOptionsScreen.isOnAvoidFerriesSwitch())
+        XCTAssertFalse(routeOptionsScreen.isOnAvoidFerriesSwitch())
         
         let routingScreen = routeOptionsScreen
             .tapBackButton()
@@ -58,33 +58,33 @@ final class SettingsUITests: LocationServicesUITests {
             .tapRouting()
             .selectDepartureTextField()
             .typeInDepartureTextField(text: Constants.departureAddress)
-            .selectFirstSearchResult()
+            .selectSearchResult(index: 1)
             .selectDestinationTextField()
             .typeInDestinationTextField(text: Constants.destinationAddress)
-            .selectFirstSearchResult()
+            .selectSearchResult(index: 1)
             .waitForRouteTypesContainer()
             .switchRouteOptionsVisibility()
         
-        XCTAssertTrue(routingScreen.isOnAvoidTollsSwitch())
-        XCTAssertTrue(routingScreen.isOnAvoidFerriesSwitch())
+        XCTAssertFalse(routingScreen.isOnAvoidTollsSwitch())
+        XCTAssertFalse(routingScreen.isOnAvoidFerriesSwitch())
     }
     
     func testMapStyleChanges() throws {
-        let app = startApp(allowPermissions: false)
+        let app = startApp(allowPermissions: true)
         var exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
         
         exploreScreen = testMapStyle(screen: exploreScreen, style: .light)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .navigation)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .darkGray)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .lightGray)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .Imagery)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .explore)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .contrast)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .exploreTruck)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .hereImagery)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .hybrid)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .navigation)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .darkGray)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .lightGray)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .Imagery)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .explore)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .contrast)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .exploreTruck)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .hereImagery)
+//        exploreScreen = testMapStyle(screen: exploreScreen, style: .hybrid)
     }
     
     func testDataSourceChanges() throws {

@@ -43,4 +43,11 @@ final class UserDefaultsHelperTests: XCTestCase {
         UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
         XCTAssertEqual(UserDefaultsHelper.getAppState(), .prepareDefaultAWSConnect, "Expected \(AppState.prepareDefaultAWSConnect) value for this key.")
     }
+    
+    func testRemoveObject() throws {
+        
+        UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
+        UserDefaultsHelper.removeObject(for: .appState)
+        XCTAssertEqual(UserDefaultsHelper.getAppState(), .initial, "Expected initial app state.")
+    }
 }

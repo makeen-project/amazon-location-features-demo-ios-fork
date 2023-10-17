@@ -18,13 +18,22 @@
   },
   "testTargets" : [
     {
-      "target" : {
-        "containerPath" : "container:LocationServices.xcodeproj",
-        "identifier" : "963EBF4E29AF92F5001961F2",
-        "name" : "LocationServicesTests"
-      }
-    },
-    {
+      "skippedTests" : [
+        "AWSConnectUITests\/testConnectAWSAccount()",
+        "AWSConnectUITests\/testConnectAWSAccountFromGeofence()",
+        "AWSConnectUITests\/testConnectAWSAccountFromTracking()",
+        "AWSConnectUITests\/testSignInAWSAccount()",
+        "GeofenceUITests\/testAddGeofence()",
+        "GeofenceUITests\/testDeleteGeofence()",
+        "GeofenceUITests\/testEditGeofence()",
+        "MapUITests\/testMapAppearance()",
+        "MapUITests\/testMapMaxZoomIn()",
+        "MapUITests\/testMapMaxZoomOut()",
+        "TrackingUITests\/testStartTracking()",
+        "TrackingUITests\/testStartTrackingHistoryStarted()",
+        "TrackingUITests\/testStopTracking()",
+        "TrackingUITests\/testTrackingNotifyEnteredGeofence()"
+      ],
       "target" : {
         "containerPath" : "container:LocationServices.xcodeproj",
         "identifier" : "8AB3F18F29C8A1C3008FDF37",

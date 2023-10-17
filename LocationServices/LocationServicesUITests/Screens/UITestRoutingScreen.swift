@@ -30,7 +30,7 @@ struct UITestRoutingScreen: UITestScreen {
     func selectDepartureTextField() -> Self {
         let textField = getDepartureTextField()
         textField.tap()
-
+        clearText(textField: textField)
         return self
     }
 
@@ -43,13 +43,23 @@ struct UITestRoutingScreen: UITestScreen {
     
     func typeInDepartureTextField(text: String) -> Self {
         let textField = getDepartureTextField()
+        textField.tap()
+        clearText(textField: textField)
         textField.typeText(text)
         
         return self
     }
     
+    func clearText(textField: XCUIElement){
+        if(textField.buttons["Clear text"].exists) {
+            textField.buttons["Clear text"].tap()
+        }
+    }
+    
     func typeInDestinationTextField(text: String) -> Self {
         let textField = getDestinationTextField()
+        textField.tap()
+        clearText(textField: textField)
         textField.typeText(text)
         
         return self
@@ -63,26 +73,28 @@ struct UITestRoutingScreen: UITestScreen {
     }
     
     func waitForResultsInTable(minimumCount: Int? = nil) -> Self {
+        Thread.sleep(forTimeInterval: 10)
         let cell = getTable().cells.firstMatch
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.request.time))
-        
+
         if let minimumCount {
             XCTAssertGreaterThanOrEqual(getTable().cells.count, minimumCount)
         }
-        
+
         return self
     }
     
-    func selectFirstSearchResult() -> Self {
-        let firstCell = getTable().cells.firstMatch
-        XCTAssertTrue(firstCell.waitForExistence(timeout: UITestWaitTime.request.time))
-        
-        firstCell.tap()
-        
+    func selectSearchResult(index :Int) -> Self {
+        Thread.sleep(forTimeInterval: 10)
+        //let predicate = NSPredicate(format: "label != %@ && label != ''", "My Location")
+        let cell = getTable().cells.element(boundBy: index)
+        XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.request.time))
+        cell.tap()
         return self
     }
     
     func waitForRouteTypesContainer() -> Self {
+        Thread.sleep(forTimeInterval: 2)
         let _ = getRouteTypesContainer()
         return self
     }
@@ -165,7 +177,9 @@ struct UITestRoutingScreen: UITestScreen {
         for index in 0..<cellsCount {
             let cell = cells.element(boundBy: index)
             let addressLabel = cell.staticTexts[Identifiers.cellAddressLabel]
-            titles.append(addressLabel.label)
+            if(addressLabel.exists){
+                titles.append(addressLabel.label)
+            }
         }
         
         return titles

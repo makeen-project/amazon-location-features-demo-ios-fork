@@ -80,6 +80,33 @@ final class SearchViewModelTests: XCTestCase {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
+    
+    func testSearchWithCoordinates() throws {
+        locationService.putSearchWithPositionResult = .success([search])
+        searchViewModel.searchWith(text: "40.75790965683081, -73.98559624758715", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+    }
+    
+    func testSearchWithEmptyText() throws {
+        locationService.putSearchTextResult = [search]
+        searchViewModel.searchWith(text: "", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+    }
+    
+    func testSearchWithFailure() throws {
+        locationService.putSearchTextResult = []
+        searchViewModel.searchWith(text: "AS", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        
+        XCTWaiter().wait(until: {
+            return self.delegate.hasSearchResult
+        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
+    }
 
     func testNumberOfRowsInSection() throws {
         locationService.putSearchTextResult = [search]

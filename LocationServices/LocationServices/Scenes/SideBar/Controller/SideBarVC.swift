@@ -21,6 +21,7 @@ final class SideBarVC: UIViewController {
     
     let tableView: UITableView = {
         var tableView = UITableView()
+        tableView.accessibilityIdentifier = ViewsIdentifiers.General.sideBarTableView
         return tableView
     }()
     

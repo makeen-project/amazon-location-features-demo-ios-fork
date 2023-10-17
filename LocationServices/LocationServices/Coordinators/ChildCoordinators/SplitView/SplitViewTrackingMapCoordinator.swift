@@ -34,7 +34,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         let controller = TrackingDashboardBuilder.create()
         controller.delegate = self
         controller.trackingHistoryHandler = { [weak self] in
-            self?.showTrackingHistory()
+            self?.showTrackingHistory(isTrackingActive: true)
         }
         return controller
     }()
@@ -86,6 +86,9 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
         supplementaryNavigationController?.setViewControllers([controller],
                                                               animated: true)
+        
+        // Starting tracking by default when tapping on Enable tracking button
+        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": isTrackingActive])
     }
     
     func showMapStyleScene() {

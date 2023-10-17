@@ -13,6 +13,7 @@ final class GeofenceCoordinator: Coordinator {
     var navigationController: UINavigationController
     var type: CoordinatorType { .explore }
     
+    var userLocation: (lat: Double?, long: Double?)
     var directionHandler: VoidHandler?
     var geofenceController: GeofenceVC?
     weak var currentBottomSheet:UIViewController?
@@ -65,7 +66,10 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
     }
     
     func showDashboardFlow(geofences: [GeofenceDataModel], lat: Double?, long: Double?) {
-        let controller = GeofenceDashboardBuilder.create(lat: lat, long: long, geofences: geofences)
+        if(self.userLocation.lat == nil && lat != nil && long != nil){
+            self.userLocation = (lat: lat, long: long)
+        }
+        let controller = GeofenceDashboardBuilder.create(lat: lat ?? self.userLocation.lat, long: long ?? self.userLocation.long, geofences: geofences)
         
         controller.addGeofence = { [weak self] parameters in
             self?.showAddGeofenceFlow(activeGeofencesLists: parameters.activeGeofences,
