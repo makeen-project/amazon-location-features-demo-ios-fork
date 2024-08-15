@@ -7,8 +7,9 @@
 
 import UIKit
 import SnapKit
-import Mapbox
-import AWSMobileClientXCF
+import MapLibre
+import AmazonLocationiOSAuthSDK
+
 
 private enum Constant {
     static let mapZoomValue: Double = 20
@@ -27,11 +28,11 @@ private enum Constant {
 final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     
     weak var delegate: BottomSheetPresentable?
-    private var geofenceAnnotation: [MGLAnnotation] = []
+    private var geofenceAnnotation: [MLNAnnotation] = []
     var isDrawCirle = false
     var enableGeofenceDrag = false
     var geofenceAnnotationRadius: Int64 = 80
-    private var signingDelegate: MGLOfflineStorageDelegate?
+    private var signingDelegate: MLNOfflineStorageDelegate?
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     private(set) var mapMode: MapMode = .search
@@ -42,10 +43,10 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     
     private var isGeofenceAnnotation: Bool = false
     
-    var selectedAnnotationCallback: ((MGLAnnotation)->())?
+    var selectedAnnotationCallback: ((MLNAnnotation)->())?
     
-    var mapView: MGLMapView = {
-        let mapView = MGLMapView()
+    var mapView: MLNMapView = {
+        let mapView = MLNMapView()
         mapView.tintColor = .lsPrimary
         mapView.compassView.isHidden = true
         mapView.zoomLevel = 12
@@ -86,14 +87,25 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
         let regionName = identityPoolId.toRegionString()
         let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         
-        let region = (regionName as NSString).aws_regionTypeValue()
-        if region != .Unknown {
-                signingDelegate = AWSSignatureV4Delegate(region: region, identityPoolId: identityPoolId)
-        }
+
+//        Task {
+//            if let cognitoCredentials = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider()?.getCognitoCredentials(){
+//                let amazonStaticCredentials = AmazonStaticCredentials(accessKeyId: cognitoCredentials.accessKeyId, secretKey: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken, expiration: cognitoCredentials.expiration)
+//                signingDelegate = AWSSignatureV4Delegate(amazonStaticCredentials: amazonStaticCredentials, region: regionName)
+//            }
+//        }
         // register a delegate that will handle SigV4 signing
-        MGLOfflineStorage.shared.delegate = signingDelegate
+        //MLNOfflineStorage.shared.delegate = signingDelegate
         
-        mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
+        //mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
+        
+        if let apiKey = ApiAuthHelper.default().locationCredentialsProvider?.getAPIKey() {
+            DispatchQueue.main.async { [self] in
+                signingDelegate = AWSSignatureV4Delegate(apiKey: apiKey, region: regionName)
+                MLNOfflineStorage.shared.delegate = signingDelegate
+                mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/v2/styles/\(mapName?.imageType.mapName ?? "StandardLight")/descriptor?key=\(apiKey)")
+            }
+        }
         
         // it is just to force to redraw the mapView
         mapView.zoomLevel = mapView.zoomLevel + 0.01
@@ -136,12 +148,12 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     }
 }
 
-extension DefaultCommonMapView: MGLMapViewDelegate {
-    func mapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotation) {
+extension DefaultCommonMapView: MLNMapViewDelegate {
+    func mapView(_ mapView: MLNMapView, didSelect annotation: MLNAnnotation) {
         selectedAnnotationCallback?(annotation)
     }
     
-    func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
+    func mapView(_ mapView: MLNMapView, viewFor annotation: MLNAnnotation) -> MLNAnnotationView? {
         switch annotation {
         case is GeofenceAnnotation:
             let identifier = "\(Constant.geofenceViewIdentifier)+\(annotation.coordinate.hashValue)"
@@ -154,7 +166,7 @@ extension DefaultCommonMapView: MGLMapViewDelegate {
                 annotationView.enableGeofenceDrag = enableGeofenceDrag
                 return annotationView
             }
-        case is MGLUserLocation:
+        case is MLNUserLocation:
             if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constant.userLocationViewIdentifier) {
                 annotationView.annotation = annotation
                 return annotationView
@@ -163,7 +175,7 @@ extension DefaultCommonMapView: MGLMapViewDelegate {
             }
         case is ImageAnnotation:
             guard let imageAnnotation = annotation as? ImageAnnotation else { return nil }
-            let imageAnnotationView: MGLAnnotationView
+            let imageAnnotationView: MLNAnnotationView
             if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constant.imageAnnotationViewIdentifier) as? ImageAnnotationView {
                 annotationView.annotation = imageAnnotation
                 annotationView.addImage(imageAnnotation.image)
@@ -180,7 +192,7 @@ extension DefaultCommonMapView: MGLMapViewDelegate {
         }
     }
     
-    func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
+    func mapView(_ mapView: MLNMapView, didUpdate userLocation: MLNUserLocation?) {
         switch mapMode {
         case .search:
             guard !wasCenteredByUserLocation,
@@ -193,23 +205,23 @@ extension DefaultCommonMapView: MGLMapViewDelegate {
         }
     }
     
-    func mapView(_ mapView: MGLMapView, didAdd annotationViews: [MGLAnnotationView]) {
+    func mapView(_ mapView: MLNMapView, didAdd annotationViews: [MLNAnnotationView]) {
         annotationViews.forEach({
             ($0 as? GeofenceAnnotationView)?.update(mapView: mapView)
         })
     }
     
-    func mapViewRegionIsChanging(_ mapView: MGLMapView) {
+    func mapViewRegionIsChanging(_ mapView: MLNMapView) {
         updateVisibleGeofenceAnnotations(on: mapView)
     }
     
-    func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
+    func mapView(_ mapView: MLNMapView, regionDidChangeAnimated animated: Bool) {
         updateVisibleGeofenceAnnotations(on: mapView)
     }
     
-    func updateVisibleGeofenceAnnotations(on mapView: MGLMapView) {
-        //visibleAnnotations return incorrect values in current (v5.12.1) MGLLibre version
-        //fixed and can be used in MGLLibre v5.13.0
+    func updateVisibleGeofenceAnnotations(on mapView: MLNMapView) {
+        //visibleAnnotations return incorrect values in current (v5.12.1) MLNLibre version
+        //fixed and can be used in MLNLibre v5.13.0
         //for 5.12.1: mapView.annotations?.forEach({
         mapView.visibleAnnotations?.forEach({
             guard let geofenceAnnotationView = mapView.view(for: $0) as? GeofenceAnnotationView else { return }
@@ -278,7 +290,7 @@ extension DefaultCommonMapView {
 // Geofence Circle Methods
 
 extension DefaultCommonMapView  {
-    func drawGeofenceCircle(id: String?, latitude: Double?, longitude: Double?, radius: Int64, title: String?) {
+    func drawGeofenceCircle(id: String?, latitude: Double?, longitude: Double?, radius: Double, title: String?) {
         guard let latitude,
               let longitude else { return }
         self.mapView.annotations?.forEach({ data in
@@ -287,7 +299,7 @@ extension DefaultCommonMapView  {
         
         let coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         
-        let coordinateBounds = MGLCoordinateBounds.create(centerLocation: coordinates, radius: Double(radius))
+        let coordinateBounds = MLNCoordinateBounds.create(centerLocation: coordinates, radius: Double(radius))
         let edgePadding = configureMapEdgePadding()
         self.mapView.setVisibleCoordinateBounds(coordinateBounds, edgePadding: edgePadding, animated: false, completionHandler: nil)
         
@@ -320,7 +332,7 @@ extension DefaultCommonMapView  {
 }
 
 extension DefaultCommonMapView {
-    func draw(layer: MGLStyleLayer, source: MGLSource) {
+    func draw(layer: MLNStyleLayer, source: MLNSource) {
         guard let style = mapView.style else { return }
         if let oldLayer = style.layer(withIdentifier: layer.identifier) {
             style.removeLayer(oldLayer)
@@ -344,11 +356,11 @@ extension DefaultCommonMapView {
         style.removeLayer(layer)
     }
     
-    func remove(annotations: [MGLAnnotation]) {
+    func remove(annotations: [MLNAnnotation]) {
         mapView.removeAnnotations(annotations)
     }
     
-    func addAnnotations(annotations: [MGLAnnotation]) {
+    func addAnnotations(annotations: [MLNAnnotation]) {
         mapView.addAnnotations(annotations)
     }
     

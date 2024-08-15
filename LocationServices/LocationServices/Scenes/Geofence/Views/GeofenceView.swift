@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-import Mapbox
+import MapLibre
 
 protocol GeofenceMapViewDelegate {
     var delegate: GeofenceMapViewOutputDelegate { get set }
@@ -17,7 +17,7 @@ protocol GeofenceMapViewOutputDelegate: BottomSheetPresentable {
     func geofenceButtonAction()
     func showMapLayers()
     func directionHandlers()
-    func selectedAnnotation(_ annotation: MGLAnnotation)
+    func selectedAnnotation(_ annotation: MLNAnnotation)
     func showAttribution()
     func showAddGeofence(lat: Double?, long: Double?)
 }
@@ -169,7 +169,7 @@ final class GeofenceMapView: UIView {
         mapView.deselectAnnotation()
     }
     
-    func drawGeofenceCirle(id: String?, lat: Double?, long: Double?, radius: Int64, title: String?) {
+    func drawGeofenceCirle(id: String?, lat: Double?, long: Double?, radius: Double, title: String?) {
         mapView.drawGeofenceCircle(id: id, latitude: lat, longitude: long, radius: radius, title: title)
     }
     

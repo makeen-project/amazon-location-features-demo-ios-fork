@@ -17,18 +17,18 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
         static let cityName = "New York"
         static let geofenceLatitude: Double = 12
         static let geofenceLongitude: Double = 13
-        static let geofenceRadius: Int = 50
+        static let geofenceRadius: Double = 50
         
         static let updateGeofenceLatitude: Double = 15
         static let updateGeofenceLongitude: Double = 20
-        static let updateGeofenceRadius: Int = 30
+        static let updateGeofenceRadius: Double = 30
         
         static var geofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: Int64(geofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: geofenceRadius)
         }
         
         static var updatedGeofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: Int64(updateGeofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: updateGeofenceRadius)
         }
         
         static let defaultError = NSError(domain: "Geofence error", code: -1)
@@ -65,7 +65,7 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testDeleteGeofenceDataWithoutID() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        let geofenceModel = GeofenceDataModel(id: nil, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Int64(Constants.geofenceRadius))
+        let geofenceModel = GeofenceDataModel(id: nil, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Constants.geofenceRadius)
         apiService.getResult = .success([geofenceModel])
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in

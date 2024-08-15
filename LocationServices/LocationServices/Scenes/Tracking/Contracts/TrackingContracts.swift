@@ -26,8 +26,8 @@ protocol TrackingViewModelProtocol: AnyObject {
     func startTracking()
     func stopTracking()
     func trackLocationUpdate(location: CLLocation?)
-    func fetchListOfGeofences()
-    func updateHistory()
+    func fetchListOfGeofences() async
+    func updateHistory() async
     func resetHistory()
 }
 

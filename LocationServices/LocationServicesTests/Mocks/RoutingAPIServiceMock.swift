@@ -8,11 +8,16 @@
 
 import Foundation
 @testable import LocationServices
-import AWSLocationXCF
+import AWSLocation
 import CoreLocation
 
 class RoutingAPIServiceMock: RoutingServiceable {
-    var putResult: [AWSLocationTravelMode: Result<LocationServices.DirectionPresentation, Error>]?
+    func calculateRouteWith(depaturePosition: CLLocationCoordinate2D, destinationPosition: CLLocationCoordinate2D, travelModes: [AWSLocation.LocationClientTypes.TravelMode], avoidFerries: Bool, avoidTolls: Bool) async throws -> [AWSLocation.LocationClientTypes.TravelMode : Result<LocationServices.DirectionPresentation, any Error>] {
+            let result = self.putResult
+            return result!
+    }
+    
+    var putResult: [LocationClientTypes.TravelMode: Result<LocationServices.DirectionPresentation, Error>]?
     
     let delay: TimeInterval
     
@@ -20,7 +25,7 @@ class RoutingAPIServiceMock: RoutingServiceable {
         self.delay = delay
     }
     
-    func calculateRouteWith(depaturePosition: CLLocationCoordinate2D, destinationPosition: CLLocationCoordinate2D, travelModes: [AWSLocationTravelMode], avoidFerries: Bool, avoidTolls: Bool, completion: @escaping (([AWSLocationTravelMode : Result<LocationServices.DirectionPresentation, Error>]) -> Void)) {
+    func calculateRouteWith(depaturePosition: CLLocationCoordinate2D, destinationPosition: CLLocationCoordinate2D, travelModes: [LocationClientTypes.TravelMode], avoidFerries: Bool, avoidTolls: Bool, completion: @escaping (([LocationClientTypes.TravelMode : Result<LocationServices.DirectionPresentation, Error>]) -> Void)) {
         perform { [weak self] in
             guard let result = self?.putResult else { return }
             completion(result)

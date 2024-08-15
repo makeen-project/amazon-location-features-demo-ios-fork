@@ -6,51 +6,34 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
+import AmazonLocationiOSAuthSDK
 import CoreLocation
 
 protocol AWSRoutingServiceProtocol {
     func calculateRoute(depaturePosition: CLLocationCoordinate2D,
                         destinationPosition: CLLocationCoordinate2D,
-                        travelMode: AWSLocationTravelMode,
+                        travelMode: LocationClientTypes.TravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool,
-                        completion: @escaping ((Result<AWSLocationCalculateRouteResponse, Error>) -> Void))
+                        avoidTolls: Bool) async throws -> CalculateRouteOutput?
 }
 
 extension AWSRoutingServiceProtocol {
     func calculateRoute(depaturePosition: CLLocationCoordinate2D,
                         destinationPosition: CLLocationCoordinate2D,
-                        travelMode: AWSLocationTravelMode,
+                        travelMode: LocationClientTypes.TravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool,
-                        completion: @escaping ((Result<AWSLocationCalculateRouteResponse, Error>) -> Void)) {
+                        avoidTolls: Bool) async throws -> CalculateRouteOutput? {
         
-        let request = AWSLocationCalculateRouteRequest()!
-        request.departNow = true
-        request.travelMode = travelMode
-        request.calculatorName = getCalculatorName()
-        request.includeLegGeometry = true
         if travelMode == .car {
-            let carModeOptions = AWSLocationCalculateRouteCarModeOptions()
-            carModeOptions?.avoidTolls = NSNumber(booleanLiteral: avoidTolls)
-            carModeOptions?.avoidFerries = NSNumber(booleanLiteral: avoidFerries)
-            request.carModeOptions = carModeOptions
+            let carModeOptions = LocationClientTypes.CalculateRouteCarModeOptions(avoidFerries: avoidFerries, avoidTolls: avoidTolls)
         }
-        request.departurePosition = [NSNumber(value: depaturePosition.longitude), NSNumber(value: depaturePosition.latitude)]
-        request.destinationPosition = [NSNumber(value: destinationPosition.longitude), NSNumber(value: destinationPosition.latitude)]
-        
-        let result = AWSLocation(forKey: "default").calculateRoute(request)
-
-        result.continueWith { response in
-            if let taskResult = response.result {
-                completion(.success(taskResult))
-            } else {
-                let defaultError = NSError(domain: "Routing", code: -1)
-                let error = response.error ?? defaultError
-                print("error \(error)")
-                completion(.failure(error))
-            }
+        let input = CalculateRouteInput(calculatorName: getCalculatorName(), departNow: true, departurePosition: [depaturePosition.longitude, depaturePosition.latitude], destinationPosition: [destinationPosition.longitude, destinationPosition.latitude], includeLegGeometry: true, travelMode: travelMode)
+        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            let result = try await client.calculateRoute(input: input)
+            
+            return result
+        } else {
             return nil
         }
     }

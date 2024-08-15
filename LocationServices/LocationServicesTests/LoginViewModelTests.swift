@@ -40,7 +40,7 @@ final class LoginViewModelTests: XCTestCase {
                                                userPoolClientId: "userPoolClientId",
                                                userPoolId: "userPoolId",
                                                userDomain: "userDomain",
-                                               webSocketUrl: "webSocketURL"
+                                                     webSocketUrl: "webSocketURL", apiKey: "apiKey"
         )
         
         UserDefaultsHelper.saveObject(value: customLoginModel, key: .awsConnect)

@@ -56,7 +56,9 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         view.backgroundColor = .searchBarBackgroundColor
         locationManager.setDelegate(self)
         poiCardView.delegate = self
-        viewModel.fetchDatas()
+        Task {
+            try await viewModel.fetchDatas()
+        }
         setupViews()
         
         let barButtonItem = UIBarButtonItem(title: nil, image: .chevronBackward, target: self, action: #selector(dismissPoiView))
@@ -177,7 +179,9 @@ extension POICardVC: CLLocationManagerDelegate {
                 showDirections(secondDestination: mapModel)
             }
         } else {
-            viewModel.fetchDatas()
+            Task {
+                try await viewModel.fetchDatas()
+            }
         }
         shouldOpenDirections = false
     }
@@ -191,7 +195,9 @@ extension POICardVC: CLLocationManagerDelegate {
         default:
             userLocation = nil
             viewModel.setUserLocation(lat: nil, long: nil)
-            viewModel.fetchDatas()
+            Task {
+                try await viewModel.fetchDatas()
+            }
             break
         }
     }

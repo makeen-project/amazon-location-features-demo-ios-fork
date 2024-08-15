@@ -10,7 +10,7 @@ import Foundation
 
 protocol LoginViewModelProtocol: AnyObject {
     var delegate: LoginViewModelOutputDelegate? { get set }
-    func connectAWS(identityPoolId: String?, userPoolId: String?, userPoolClientId: String?, userDomain: String?, websocketUrl: String?)
+    func connectAWS(identityPoolId: String?, userPoolId: String?, userPoolClientId: String?, userDomain: String?, websocketUrl: String?, region: String?, apiKey: String?)
     func hasLocalUser() -> Bool
     func isSignedIn() -> Bool
     func disconnectAWS()

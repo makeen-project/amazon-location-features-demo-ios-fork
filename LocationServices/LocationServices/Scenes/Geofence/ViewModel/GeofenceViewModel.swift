@@ -38,7 +38,7 @@ final class GeofenceViewModel: GeofenceViewModelProtocol {
         geofences.insert(model, at: 0)
     }
     
-    func fetchListOfGeofences() {
+    func fetchListOfGeofences() async {
         
         // if we are not authorized do not send it
         if UserDefaultsHelper.getAppState() != .loggedIn {
@@ -47,20 +47,19 @@ final class GeofenceViewModel: GeofenceViewModelProtocol {
             return
         }
         
-        geofenceService.getGeofenceList { [weak self] result in
+        let result = await geofenceService.getGeofenceList()
             switch result {
             case .success(let geofences):
-                self?.geofences = geofences
-                self?.delegate?.showGeofences(geofences)
+                self.geofences = geofences
+                self.delegate?.showGeofences(geofences)
             case .failure(let error):
                 if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                    ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
                 }
                 else {
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
             }
-        }
     }
 }

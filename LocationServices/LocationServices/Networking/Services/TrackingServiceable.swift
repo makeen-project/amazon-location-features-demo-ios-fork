@@ -6,43 +6,33 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
 
 protocol TrackingServiceable {
-    func updateTrackerLocation(lat: Double, long: Double, completion: @escaping (Result<Void, Error>)->())
-    func getAllTrackingHistory(completion: @escaping (Result<[TrackingHistoryPresentation], Error>) -> Void)
+    func updateTrackerLocation(lat: Double, long: Double) async throws -> BatchUpdateDevicePositionOutput
+    func getAllTrackingHistory() async throws -> [TrackingHistoryPresentation]
 }
 
 struct TrackingAPIService: AWSTrackingServiceProtocol, TrackingServiceable {
     
-    func updateTrackerLocation(lat: Double, long: Double, completion: @escaping (Result<Void, Error>)->()) {
-        sendUserLocation(lat: lat, long: long) { result in
-            switch result {
-            case .success:
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func updateTrackerLocation(lat: Double, long: Double) async throws -> BatchUpdateDevicePositionOutput {
+        let result = try await sendUserLocation(lat: lat, long: long)
+        return result!
     }
     
-    func getAllTrackingHistory(completion: @escaping (Result<[TrackingHistoryPresentation], Error>) -> Void) {
-        getTrackingHistory { result in
-            
-            switch result {
-            case .success(let positions):
-                let sortedPositions = positions.sorted { (position1, position2) -> Bool in
-                    let timestamp1 = position1.sampleTime ?? Date()
-                    let timestamp2 = position2.sampleTime ?? Date()
-                    
-                    return timestamp1 > timestamp2
-                }
-                let presentation = sortedPositions.map { TrackingHistoryPresentation(model: $0,
-                                                                               stepType: sortedPositions.last == $0 ? .last : .first) }
-                completion(.success(presentation))
-            case .failure(let error):
-                completion(.failure(error))
+    func getAllTrackingHistory() async throws -> [TrackingHistoryPresentation]  {
+        let result = try await getTrackingHistory()
+        if let positions = result {
+            let sortedPositions = positions.sorted { (position1, position2) -> Bool in
+                let timestamp1 = position1.sampleTime ?? Date()
+                let timestamp2 = position2.sampleTime ?? Date()
+                
+                return timestamp1 > timestamp2
             }
+            let presentation = sortedPositions.map { TrackingHistoryPresentation(model: $0,
+                                stepType: sortedPositions.last?.sampleTime == $0.sampleTime ? .last : .first) }
+            return presentation
         }
+        return []
     }
 }

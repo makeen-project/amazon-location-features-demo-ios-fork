@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import AWSMobileClientXCF
 
 final class SettingsVC: UIViewController {
     
@@ -113,7 +112,7 @@ final class SettingsVC: UIViewController {
     
     private func updateLogoutButtonVisibility() {
         // show logout button only if we are not signed in
-        logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
     }
 }
 
@@ -126,6 +125,6 @@ extension SettingsVC: SettingsViewModelOutputDelegate {
     
     func logoutCompleted() {
         // show logout button only if we are not signed in
-        self.logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
     }
 }

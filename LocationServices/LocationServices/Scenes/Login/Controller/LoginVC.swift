@@ -31,6 +31,8 @@ final class LoginVC: UIViewController {
     private var userPoolClientId: String?
     private var userDomain: String?
     private var webSocketUrl: String?
+    private var region: String?
+    private var apiKey: String?
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -261,7 +263,8 @@ final class LoginVC: UIViewController {
               let userPoolIdText = userPoolId, userPoolIdText.count > 0,
               let userPoolClientIdText = userPoolClientId, userPoolClientIdText.count > 0,
               let userDomainText = userDomain, userDomainText.count > 0,
-              let webSocketUrlText = webSocketUrl, webSocketUrlText.count > 0 else {
+              let webSocketUrlText = webSocketUrl, webSocketUrlText.count > 0,
+              let region = region, region.count > 0 else {
             
             let alert = UIAlertController(title: "Cannot connect",
                                           message: "Check if all fields are filled", preferredStyle: UIAlertController.Style.alert)
@@ -281,7 +284,9 @@ final class LoginVC: UIViewController {
                                        userPoolId: self?.userPoolId,
                                        userPoolClientId: self?.userPoolClientId,
                                        userDomain: self?.userDomain,
-                                       websocketUrl: self?.webSocketUrl)
+                                       websocketUrl: self?.webSocketUrl,
+                                       region: self?.region,
+                                       apiKey: self?.apiKey)
         }
     }
     

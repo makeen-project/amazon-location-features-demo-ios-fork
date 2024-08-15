@@ -6,8 +6,10 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
 import CoreLocation
+import AmazonLocationiOSAuthSDK
+import UIKit
 
 private enum TrackingServiceConstant {
     static let collectionName = "location.aws.com.demo.trackers.Tracker"
@@ -15,90 +17,47 @@ private enum TrackingServiceConstant {
 }
 
 protocol AWSTrackingServiceProtocol {
-    func sendUserLocation(lat: Double, long: Double, completion: @escaping  (Result<AWSLocationBatchUpdateDevicePositionResponse, Error>) -> Void)
-    func getTrackingHistory(nextToken: String?, completion: @escaping (Result<[AWSLocationDevicePosition], Error>) -> Void)
+    func sendUserLocation(lat: Double, long: Double) async throws -> BatchUpdateDevicePositionOutput?
+    func getTrackingHistory(nextToken: String?) async throws -> [LocationClientTypes.DevicePosition]?
+    func removeAllHistory() async throws -> BatchDeleteDevicePositionHistoryOutput?
 }
 
 extension AWSTrackingServiceProtocol {
-    func sendUserLocation(lat: Double, long: Double, completion: @escaping  (Result<AWSLocationBatchUpdateDevicePositionResponse, Error>) -> Void) {
+    func sendUserLocation(lat: Double, long: Double) async throws -> BatchUpdateDevicePositionOutput? {
+
+        let devicePositionUpdate = LocationClientTypes.DevicePositionUpdate(deviceId: TrackingServiceConstant.deviceId, position: [long, lat], sampleTime: Date())
+        let devicePositionUpdates: [LocationClientTypes.DevicePositionUpdate]? = [devicePositionUpdate]
         
-        let request = AWSLocationBatchUpdateDevicePositionRequest()!
-        request.trackerName = TrackingServiceConstant.collectionName
-        let devicePositionUpdate = AWSLocationDevicePositionUpdate()
-        
-        devicePositionUpdate?.deviceId = TrackingServiceConstant.deviceId
-        devicePositionUpdate?.position = [NSNumber(value: long), NSNumber(value: lat)]
-        devicePositionUpdate?.sampleTime = Date()
-       
-        request.updates = Array(arrayLiteral: devicePositionUpdate!)
-        
-        let result = AWSLocation(forKey: "default").batchUpdateDevicePosition(request)
-        
-        result.continueWith { response in
-            if let taskResult = response.result {
-                completion(.success(taskResult))
-            } else {
-                let defaultError = NSError(domain: "Tracking", code: -1)
-                let error = response.error ?? defaultError
-                print("error \(error)")
-                completion(.failure(error))
-            }
+        let input = BatchUpdateDevicePositionInput(trackerName: TrackingServiceConstant.collectionName, updates: devicePositionUpdates)
+        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            let result = try await client.batchUpdateDevicePosition(input: input)
+            return result
+        } else {
+            return nil
+        }
+    }
+    
+    func getTrackingHistory(nextToken: String? = nil) async throws -> [LocationClientTypes.DevicePosition]? {
+        let input = GetDevicePositionHistoryInput(deviceId: TrackingServiceConstant.deviceId, nextToken: nextToken, trackerName: TrackingServiceConstant.collectionName)
+        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            let result = try await client.getDevicePositionHistory(input: input)
+            var devicePositions = result.devicePositions ?? []
             
+            if let nextToken = result.nextToken {
+                devicePositions += try await self.getTrackingHistory(nextToken: nextToken) ?? []
+            }
+            return devicePositions
+        } else {
             return nil
         }
     }
     
-    func getTrackingHistory(nextToken: String? = nil, completion: @escaping (Result<[AWSLocationDevicePosition], Error>) -> Void) {
-        let request = AWSLocationGetDevicePositionHistoryRequest()!
-        request.nextToken = nextToken
-        request.trackerName = TrackingServiceConstant.collectionName
-        request.deviceId = TrackingServiceConstant.deviceId
-        
-        let result = AWSLocation(forKey: "default").getDevicePositionHistory(request)
-        
-        result.continueWith { response in
-            if let taskResult = response.result {
-                var devicePositions = taskResult.devicePositions ?? []
-                
-                if let nextToken = taskResult.nextToken {
-                    self.getTrackingHistory(nextToken: nextToken) { result in
-                        switch result {
-                        case .success(let newDevicePositions):
-                            devicePositions.append(contentsOf: newDevicePositions)
-                            completion(.success(devicePositions))
-                        case .failure(let error):
-                            completion(.failure(error))
-                        }
-                    }
-                } else {
-                    completion(.success(devicePositions))
-                }
-            } else {
-                let defaultError = NSError(domain: "Tracking", code: -1)
-                let error = response.error ?? defaultError
-                print("error \(error)")
-                completion(.failure(error))
-            }
-            return nil
-        }
-    }
-    
-    func removeAllHistory(completion: @escaping  (Result<Void, Error>) -> Void) {
-        let request = AWSLocationBatchDeleteDevicePositionHistoryRequest()!
-        request.deviceIds = [TrackingServiceConstant.deviceId]
-        request.trackerName = TrackingServiceConstant.collectionName
-        
-        let result = AWSLocation(forKey: "default").batchDeleteDevicePositionHistory(request)
-        
-        result.continueWith { response in
-            if response.result != nil {
-                completion(.success(()))
-            } else {
-                let defaultError = NSError(domain: "Tracking", code: -1)
-                let error = response.error ?? defaultError
-                print("error \(error)")
-                completion(.failure(error))
-            }
+    func removeAllHistory() async throws -> BatchDeleteDevicePositionHistoryOutput? {
+        let input = BatchDeleteDevicePositionHistoryInput(deviceIds: [TrackingServiceConstant.deviceId], trackerName: TrackingServiceConstant.collectionName)
+        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            let result = try await client.batchDeleteDevicePositionHistory(input: input)
+            return result
+        } else {
             return nil
         }
     }

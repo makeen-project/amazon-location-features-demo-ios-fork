@@ -6,9 +6,9 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
 
-extension AWSLocationTravelMode {
+extension LocationClientTypes.TravelMode {
     init?(routeType: RouteTypes) {
         switch routeType {
         case .walking:

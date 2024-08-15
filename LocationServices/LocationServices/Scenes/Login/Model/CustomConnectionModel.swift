@@ -14,9 +14,10 @@ struct CustomConnectionModel: Codable {
     var userPoolId: String
     var userDomain: String
     var webSocketUrl: String
+    var apiKey: String
     
-    var region: String {
-        let regionDivider: Character = ":"
-        return String(identityPoolId.prefix(while: { $0 != regionDivider }))
-    }
+    var region: String //{
+//        let regionDivider: Character = ":"
+//        return String(identityPoolId.prefix(while: { $0 != regionDivider }))
+//    }
 }

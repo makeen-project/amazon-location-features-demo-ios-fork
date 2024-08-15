@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
 
 struct TrackingHistoryPresentation {
     let time: String
@@ -15,7 +15,7 @@ struct TrackingHistoryPresentation {
     let stepType: StepType
     let receivedTime: Date
     
-    init(model: AWSLocationDevicePosition, stepType: StepType) {
+    init(model: LocationClientTypes.DevicePosition, stepType: StepType) {
         if let time = model.receivedTime {
             self.receivedTime = time
             self.time = time.convertTimeString()
@@ -27,7 +27,7 @@ struct TrackingHistoryPresentation {
         }
         
         if let positions = model.position {
-            self.cooordinates = positions.map { $0.stringValue }.joined(separator: ",")
+            self.cooordinates = positions.map { $0.description }.joined(separator: ",")
         } else {
             cooordinates = ""
         }
@@ -36,6 +36,7 @@ struct TrackingHistoryPresentation {
 }
 
 final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
+    
     var delegate: TrackingHistoryViewModelOutputDelegate?
     
     private var history: [Date: [TrackingHistoryPresentation]] = [:]
@@ -49,17 +50,16 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
         self.isTrackingActive = isTrackingActive
     }
     
-    func loadData() {
-        trackingService.getAllTrackingHistory { result in
-            switch result {
-            case .success(let response):
-                self.setHistory(response)
-                self.delegate?.reloadTableView()
-            case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self.delegate?.showAlert(model)
-                }
+    func loadData() async {
+        do {
+            let result = try await trackingService.getAllTrackingHistory()
+            self.setHistory(result)
+            self.delegate?.reloadTableView()
+        }
+        catch {
+            let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+            DispatchQueue.main.async {
+                self.delegate?.showAlert(model)
             }
         }
     }
@@ -76,21 +76,21 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
         sortedKeys = Array(self.history.keys).sorted(by: >)
     }
     
-    func deleteHistory() {
-        trackingService.removeAllHistory { [weak self] result in
-            switch result {
-            case .success:
-                let history: [TrackingHistoryPresentation] = []
-                NotificationCenter.default.post(name: Notification.updateTrackingHistory, object: self, userInfo: ["history": history])
-                self?.setHistory(history)
-                self?.delegate?.reloadTableView()
-            case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+    func deleteHistory() async throws {
+       let result = try await trackingService.removeAllHistory()
+        
+        if result!.errors == nil {
+            let history: [TrackingHistoryPresentation] = []
+            NotificationCenter.default.post(name: Notification.updateTrackingHistory, object: self, userInfo: ["history": history])
+            setHistory(history)
+            delegate?.reloadTableView()
+        }
+        else if let error = result!.errors?.first {
+            let model = AlertModel(title: StringConstant.error, message: error.error?.message ?? "", cancelButton: nil)
                 DispatchQueue.main.async {
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
             }
-        }
     }
     
     func getTitle(for section: Int) -> String {
@@ -125,7 +125,9 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
     }
     
     func startTracking(lat: Double, long: Double)  {
-        self.updateTrackingData(lat: lat, long: long)
+        Task {
+            await self.updateTrackingData(lat: lat, long: long)
+        }
     }
     
     func getTrackingStatus() -> Bool {
@@ -136,22 +138,20 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
         self.isTrackingActive = isTrackingActive
     }
     
-    private func updateTrackingData(lat: Double, long: Double) {
-        trackingService.updateTrackerLocation(lat: lat, long: long, completion: { result in
-            switch result {
-            case .success:
-                break
-            case .failure(let error):
-                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
-                }
-                else {
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    DispatchQueue.main.async {
-                        self.delegate?.showAlert(model)
-                    }
+    private func updateTrackingData(lat: Double, long: Double) async {
+        do {
+            let result = try await trackingService.updateTrackerLocation(lat: lat, long: long)
+        }
+        catch {
+            if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+            }
+            else {
+                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(model)
                 }
             }
-        })
+        }
     }
 }

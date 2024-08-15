@@ -80,7 +80,9 @@ final class SearchVC: UIViewController {
         searchAppearanceChanged(isVisible: true)
         
         if (searchBarView.searchedText() ?? "").isEmpty {
-            viewModel.searchWith(text: "", userLat: nil, userLong: nil)
+            Task {
+                try await viewModel.searchWith(text: "", userLat: nil, userLong: nil)
+            }
         } else {
             let mapModels = viewModel.mapModels
             if !mapModels.isEmpty {
@@ -185,11 +187,15 @@ extension SearchVC: SearchViewModelOutputDelegate {
 
 extension SearchVC: SearchBarViewOutputDelegate {    
     func searchText(_ text: String?) {
-        viewModel.searchWithSuggesstion(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
+        Task {
+            try await viewModel.searchWithSuggesstion(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
+        }
     }
     
     func searchTextWith(_ text: String?) {
-        viewModel.searchWith(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
+        Task {
+            try await viewModel.searchWith(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
+        }
     }
     
     func searchCancel() {

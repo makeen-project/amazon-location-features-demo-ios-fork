@@ -24,18 +24,20 @@ final class NavigationVCViewModel {
         self.summaryData = summaryData
         self.firstDestionation = firstDestionation
         self.secondDestionation = secondDestionation
-        fetchStreetNames()
+        Task {
+            await fetchStreetNames()
+        }
     }
     
-    private func fetchStreetNames() {
+    private func fetchStreetNames() async {
         let dispatchQueue = DispatchQueue(label: "Serial", attributes: .concurrent)
         
         var presentation: [NavigationPresentation] = []
         for (id, step) in steps.enumerated() {
             dispatchGroup.enter()
-            let position = step.startPosition as [NSNumber]
-            dispatchQueue.sync { [weak self] in
-                service.searchWithPosition(text: position, userLat: nil, userLong: nil) { response in
+            let position = step.startPosition
+            //dispatchQueue.sync { [weak self] in
+               let response = await service.searchWithPosition(position: position, userLat: nil, userLong: nil)
                     switch response {
                     case .success(let results):
                         guard let result = results.first else { break }
@@ -45,10 +47,9 @@ final class NavigationVCViewModel {
                     case .failure:
                         break
                     }
-                    self?.dispatchGroup.leave()
+                    //self?.dispatchGroup.leave()
                 }
-            }
-        }
+        //}
         
         dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
             presentation.sort(by: { $0.id < $1.id })
@@ -60,7 +61,9 @@ final class NavigationVCViewModel {
     func update(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double)) {
         self.steps = steps
         self.summaryData = summaryData
-        fetchStreetNames()
+        Task {
+            await fetchStreetNames()
+        }
     }
     
     func getSummaryData() -> (totalDistance: String, totalDuration: String) {

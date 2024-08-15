@@ -6,15 +6,17 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSMobileClientXCF
-import AWSLocationXCF
+import AWSLocation
 import AWSIoT
+import UIKit
+import AmazonLocationiOSAuthSDK
+import AWSCognitoIdentity
 
 protocol AWSLoginServiceProtocol {
     var delegate: AWSLoginServiceOutputProtocol? { get set }
     func login()
     func logout(skipPolicy: Bool)
-    func validate(identityPoolId: String, completion: @escaping (Result<Void, Error>)->())
+    func validate(identityPoolId: String, region: String) async throws -> Bool
 }
 
 protocol AWSLoginServiceOutputProtocol {
@@ -28,6 +30,7 @@ extension AWSLoginServiceOutputProtocol {
 }
 
 final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
+    
     enum Constants {
         static let awsCognitoIdentityKey = "AWSCognitoIdentityValidationKey"
     }
@@ -35,74 +38,76 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
     var delegate: AWSLoginServiceOutputProtocol?
     private var error: Error?
     weak var viewController: UIViewController?
+    
+    var authHelper: AuthHelper?
      
     func login() {
         guard let navigationContoller = (UIApplication.shared.delegate as? AppDelegate)?.navigationController else { return }
         
-        let hostedUIOptions = HostedUIOptions(scopes: ["openid", "email", "profile"], federationProviderName: "LoginWithAmazon")
-        AWSMobileClient.default().showSignIn(navigationController: navigationContoller, hostedUIOptions: hostedUIOptions) { (userState, error) in
-            if let error = error as? AWSMobileClientError {
-                print(error.localizedDescription)
-            }
-            if let userState = userState {
-                print("Status: \(userState.rawValue)")
-                
-                AWSMobileClient.default().getUserAttributes { (attributes, error) in
-                    if let error = error {
-                        print("Error getting user attributes: \(error.localizedDescription)")
-                        return
-                    }
-
-                    print(attributes)
-                }
-
-                self.getIdentityId(oldIdentityId: AWSMobileClient.default().identityId) { task in
-                    if let error = task.error {
-                        self.delegate?.loginResult(.failure(error))
-                        print("Error: \(error.localizedDescription) \((error as NSError).userInfo)")
-                    }
-                    if let result = task.result {
-                        UserDefaultsHelper.save(value: AWSMobileClient.default().identityId, key: .signedInIdentityId)
-                        UserDefaultsHelper.setAppState(state: .loggedIn)
-                        
-                        self.delegate?.loginResult(.success(()))
-                        print("Cognito Identity Id: \(result)")
-                    }
-                    
-                    
-                    self.updateAWSServicesCredentials()
-                    
-                    if let result = task.result {
-                        NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
-                    }
-                
-                    self.attachPolicy()
-
-                }
-            }
-        }
+//        let hostedUIOptions = HostedUIOptions(scopes: ["openid", "email", "profile"], federationProviderName: "LoginWithAmazon")
+//        AWSMobileClient.default().showSignIn(navigationController: navigationContoller, hostedUIOptions: hostedUIOptions) { (userState, error) in
+//            if let error = error as? AWSMobileClientError {
+//                print(error.localizedDescription)
+//            }
+//            if let userState = userState {
+//                print("Status: \(userState.rawValue)")
+//                
+//                AWSMobileClient.default().getUserAttributes { (attributes, error) in
+//                    if let error = error {
+//                        print("Error getting user attributes: \(error.localizedDescription)")
+//                        return
+//                    }
+//
+//                    print(attributes)
+//                }
+//
+//                self.getIdentityId(oldIdentityId: AWSMobileClient.default().identityId) { task in
+//                    if let error = task.error {
+//                        self.delegate?.loginResult(.failure(error))
+//                        print("Error: \(error.localizedDescription) \((error as NSError).userInfo)")
+//                    }
+//                    if let result = task.result {
+//                        UserDefaultsHelper.save(value: AWSMobileClient.default().identityId, key: .signedInIdentityId)
+//                        UserDefaultsHelper.setAppState(state: .loggedIn)
+//                        
+//                        self.delegate?.loginResult(.success(()))
+//                        print("Cognito Identity Id: \(result)")
+//                    }
+//                    
+//                    
+//                    self.updateAWSServicesCredentials()
+//                    
+//                    if let result = task.result {
+//                        NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+//                    }
+//                
+//                    self.attachPolicy()
+//
+//                }
+//            }
+//        }
     }
     
-    private func getIdentityId(oldIdentityId: String? = nil, retriesCount: Int = 1, completion: @escaping (AWSTask<NSString>)->()) {
-        let maxRetries = 3
-        
-        AWSMobileClient.default().getIdentityId().continueWith { [weak self] task in
-            let taskResult: String?
-            if let result = task.result {
-                taskResult = String(result)
-            } else {
-                taskResult = nil
-            }
-            
-            if (taskResult == nil || taskResult == oldIdentityId) && retriesCount < maxRetries {
-                self?.getIdentityId(oldIdentityId: oldIdentityId, retriesCount: retriesCount, completion: completion)
-            } else {
-                completion(task)
-            }
-            
-            return nil
-        }
-    }
+//    private func getIdentityId(oldIdentityId: String? = nil, retriesCount: Int = 1, completion: @escaping (AWSTask<NSString>)->()) {
+//        let maxRetries = 3
+//        
+//        AWSMobileClient.default().getIdentityId().continueWith { [weak self] task in
+//            let taskResult: String?
+//            if let result = task.result {
+//                taskResult = String(result)
+//            } else {
+//                taskResult = nil
+//            }
+//            
+//            if (taskResult == nil || taskResult == oldIdentityId) && retriesCount < maxRetries {
+//                self?.getIdentityId(oldIdentityId: oldIdentityId, retriesCount: retriesCount, completion: completion)
+//            } else {
+//                completion(task)
+//            }
+//            
+//            return nil
+//        }
+//    }
     
     func logout(skipPolicy: Bool = false) {
         let isPolicyAttached = UserDefaultsHelper.get(for: Bool.self, key: .attachedPolicy) ?? false
@@ -117,31 +122,31 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
     }
     
     private func awsLogout() {
-        AWSMobileClient.default().signOut { error in
-            if let error = error {
-                print ("Error during signOut: \(error.localizedDescription)")
-                
-                self.error = error
-                self.delegate?.logoutResult(error)
-                
-            } else {
-                print ("Successful log out.")
-                
-                // clear the cached credentials
-                AWSMobileClient.default().clearCredentials()
-                AWSMobileClient.default().clearKeychain()
-                print("properly cleared credentials and keychain")
-
-                // set initial state
-                UserDefaultsHelper.setAppState(state: .customAWSConnected)
-                UserDefaultsHelper.removeObject(for: .signedInIdentityId)
-                
-                self.updateAWSServicesCredentials()
-                
-                NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
-                self.delegate?.logoutResult(nil)
-            }
-        }
+//        AWSMobileClient.default().signOut { error in
+//            if let error = error {
+//                print ("Error during signOut: \(error.localizedDescription)")
+//                
+//                self.error = error
+//                self.delegate?.logoutResult(error)
+//                
+//            } else {
+//                print ("Successful log out.")
+//                
+//                // clear the cached credentials
+//                AWSMobileClient.default().clearCredentials()
+//                AWSMobileClient.default().clearKeychain()
+//                print("properly cleared credentials and keychain")
+//
+//                // set initial state
+//                UserDefaultsHelper.setAppState(state: .customAWSConnected)
+//                UserDefaultsHelper.removeObject(for: .signedInIdentityId)
+//                
+//                self.updateAWSServicesCredentials()
+//                
+//                NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+//                self.delegate?.logoutResult(nil)
+//            }
+//        }
     }
     
     func createAWSConfiguration(with configurationModel: CustomConnectionModel) -> [String: Any] {
@@ -189,8 +194,10 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
     func getAWSConfigurationModel() -> CustomConnectionModel? {
         var defaultConfiguration: CustomConnectionModel? = nil
         // default configuration
-        if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String {
-            defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, userPoolClientId: "", userPoolId: "", userDomain: "", webSocketUrl: "")
+        if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String,
+           let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") as? String,
+           let region = Bundle.main.object(forInfoDictionaryKey: "AWSRegion") as? String{
+            defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, userPoolClientId: "", userPoolId: "", userDomain: "", webSocketUrl: "", apiKey: apiKey, region: region)
         }
 
         // custom configuration
@@ -206,68 +213,60 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
             return
         }
             
-        let attachPolicyRequest = AWSIoTAttachPolicyRequest()!
-        attachPolicyRequest.target = AWSMobileClient.default().identityId
-        attachPolicyRequest.policyName = "AmazonLocationIotPolicy"
-        AWSIoT(forKey: "default").attachPolicy(attachPolicyRequest).continueWith(block: { task in
-            if let error = task.error {
-                print("Failed: [\(error)]")
-                completion?(.failure(error))
-            } else  {
-                UserDefaultsHelper.save(value: true, key: .attachedPolicy)
-                print("result: [\(String(describing: task.result))]")
-                completion?(.success(()))
-            }
-            return nil
-        })
+//        let attachPolicyRequest = AWSIoTAttachPolicyRequest()!
+//        attachPolicyRequest.target = AWSMobileClient.default().identityId
+//        attachPolicyRequest.policyName = "AmazonLocationIotPolicy"
+//        AWSIoT(forKey: "default").attachPolicy(attachPolicyRequest).continueWith(block: { task in
+//            if let error = task.error {
+//                print("Failed: [\(error)]")
+//                completion?(.failure(error))
+//            } else  {
+//                UserDefaultsHelper.save(value: true, key: .attachedPolicy)
+//                print("result: [\(String(describing: task.result))]")
+//                completion?(.success(()))
+//            }
+//            return nil
+//        })
     }
     
     private func detachPolicy(completion: @escaping (Result<Any, Error>)->()) {
-        let attachPolicyRequest = AWSIoTDetachPolicyRequest()!
-        attachPolicyRequest.target = AWSMobileClient.default().identityId
-        attachPolicyRequest.policyName = "AmazonLocationIotPolicy"
-        
-        AWSIoT(forKey: "default").detachPolicy(attachPolicyRequest).continueWith(block: { task in
-            if let error = task.error {
-                print("Failed: [\(error)]")
-                completion(.failure(error))
-            } else  {
-                UserDefaultsHelper.save(value: false, key: .attachedPolicy)
-                print("result: [\(String(describing: task.result))]")
-                completion(.success(task.result as Any))
-            }
-            return nil
-        })
+//        let attachPolicyRequest = AWSIoTDetachPolicyRequest()!
+//        attachPolicyRequest.target = AWSMobileClient.default().identityId
+//        attachPolicyRequest.policyName = "AmazonLocationIotPolicy"
+//        
+//        AWSIoT(forKey: "default").detachPolicy(attachPolicyRequest).continueWith(block: { task in
+//            if let error = task.error {
+//                print("Failed: [\(error)]")
+//                completion(.failure(error))
+//            } else  {
+//                UserDefaultsHelper.save(value: false, key: .attachedPolicy)
+//                print("result: [\(String(describing: task.result))]")
+//                completion(.success(task.result as Any))
+//            }
+//            return nil
+//        })
     }
+   
     
-    func validate(identityPoolId: String, completion: @escaping (Result<Void, Error>)->()) {
-        createValidationIdentity(identityPoolId: identityPoolId)
-        let identity = getValidationIdentity()
-        
-        let request = AWSCognitoIdentityGetIdInput()!
-        request.identityPoolId = identityPoolId
-        
-        identity.getId(request) { response, error in
-            if response != nil {
-                completion(.success(()))
-            } else {
-                let defaultError = NSError(domain: StringConstant.login, code: -1)
-                completion(.failure(error ?? defaultError))
-            }
+    func validate(identityPoolId: String, region: String) async throws -> Bool {
+        let id = try await getAWSIdentityId(identityPoolId: identityPoolId, region: region)
+        if id.identityId != nil  {
+            return true
         }
+        return false
     }
     
     private func createValidationIdentity(identityPoolId: String) {
-        let credentialProvider = AWSCognitoCredentialsProvider(regionType: identityPoolId.toRegionType(), identityPoolId: identityPoolId)
-        
-        guard let configuration = AWSServiceConfiguration(region: identityPoolId.toRegionType(), credentialsProvider: credentialProvider) else { return }
-        
-        AWSCognitoIdentity.register(with: configuration, forKey: Constants.awsCognitoIdentityKey)
+//        let credentialProvider = AWSCognitoCredentialsProvider(regionType: identityPoolId.toRegionType(), identityPoolId: identityPoolId)
+//        
+//        guard let configuration = AWSServiceConfiguration(region: identityPoolId.toRegionType(), credentialsProvider: credentialProvider) else { return }
+//        
+//        AWSCognitoIdentity.register(with: configuration, forKey: Constants.awsCognitoIdentityKey)
     }
     
-    private func getValidationIdentity() -> AWSCognitoIdentity {
-        return AWSCognitoIdentity(forKey: Constants.awsCognitoIdentityKey)
-    }
+//    private func getValidationIdentity() -> AWSCognitoIdentity {
+//        return AWSCognitoIdentity(forKey: Constants.awsCognitoIdentityKey)
+//    }
     
     func updateAWSServicesCredentials() {
         guard let configurationModel = self.getAWSConfigurationModel() else {
@@ -277,17 +276,29 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         
         // Now that we have refreshed to the latest itendityId qw need to make sure
         // that AWSServiceManager promotes the latest credentials to services such as AWSLocation
-        let credentialsProvider = AWSCognitoCredentialsProvider(
-            regionType: configurationModel.identityPoolId.toRegionType(),
-            identityPoolId: configurationModel.identityPoolId,
-            identityProviderManager: AWSMobileClient.default()
-        )
-        
-        let locationConfig = AWSServiceConfiguration(region: configurationModel.identityPoolId.toRegionType(), credentialsProvider: credentialsProvider)
-        
-        AWSLocation.register(with: locationConfig!, forKey: "default")
-        AWSIoT.register(with: locationConfig!, forKey: "default")
-        
-        AWSServiceManager.default().defaultServiceConfiguration = locationConfig
+//        let credentialsProvider = AWSCognitoCredentialsProvider(
+//            regionType: configurationModel.identityPoolId.toRegionType(),
+//            identityPoolId: configurationModel.identityPoolId,
+//            identityProviderManager: AWSMobileClient.default()
+//        )
+//        
+//        let locationConfig = AWSServiceConfiguration(region: configurationModel.identityPoolId.toRegionType(), credentialsProvider: credentialsProvider)
+//        
+//        AWSLocation.register(with: locationConfig!, forKey: "default")
+//        AWSIoT.register(with: locationConfig!, forKey: "default")
+//        
+//        AWSServiceManager.default().defaultServiceConfiguration = locationConfig
+    }
+    
+    public func getAWSIdentityId(identityPoolId: String, region: String) async throws -> GetIdOutput {
+        do {
+            let cognitoIdentityClient = try AWSCognitoIdentity.CognitoIdentityClient(region: region)
+            let idInput = GetIdInput(identityPoolId: identityPoolId)
+            let identity = try await cognitoIdentityClient.getId(input: idInput)
+            return identity
+        } catch {
+            throw error
+        }
     }
 }
+

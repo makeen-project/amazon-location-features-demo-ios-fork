@@ -100,7 +100,9 @@ final class DirectionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        calculateRoute()
+        Task {
+            try await calculateRoute()
+        }
         changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true, mapStyleIsHidden: true)
     }
     
@@ -158,34 +160,42 @@ final class DirectionVC: UIViewController {
             self?.isDestination = model.isDestination
             self?.directionView.isHidden = true
             self?.tableView.isHidden = false
-            self?.viewModel.searchWithSuggesstion(text: model.searchText,
-                                                  userLat: self?.userLocation?.lat,
-                                                  userLong: self?.userLocation?.long)
+            Task {
+                await self?.viewModel.searchWithSuggesstion(text: model.searchText,
+                                                            userLat: self?.userLocation?.lat,
+                                                            userLong: self?.userLocation?.long)
+            }
         }
         
         directionSearchView.searchReturnHandler = { [weak self] model in
             self?.isDestination = model.isDestination
             self?.directionView.isHidden = true
             self?.tableView.isHidden = false
-            self?.viewModel.searchWith(text: model.searchText,
-                                       userLat: self?.userLocation?.lat,
-                                       userLong: self?.userLocation?.long)
+            Task {
+               try await self?.viewModel.searchWith(text: model.searchText,
+                                           userLat: self?.userLocation?.lat,
+                                           userLong: self?.userLocation?.long)
+            }
         }
         
         directionView.avoidTolls = { [weak self] state in
             let travelModel = self?.viewModel.selectedTravelMode
             let avoidFerries = self?.viewModel.avoidFerries
-            self?.calculateRoute(routeType: travelModel ?? .car,
-                                 avoidTolls: state,
-                                 avoidFerries: avoidFerries ?? false)
+            Task {
+                try await self?.calculateRoute(routeType: travelModel ?? .car,
+                                               avoidTolls: state,
+                                               avoidFerries: avoidFerries ?? false)
+            }
         }
         
         directionView.avoidFerries = { [weak self] state in
             let travelModel = self?.viewModel.selectedTravelMode
             let avoidToll = self?.viewModel.avoidTolls
-            self?.calculateRoute(routeType: travelModel ?? .car,
-                                 avoidTolls: avoidToll ?? false,
-                                 avoidFerries: state)
+            Task {
+               try await self?.calculateRoute(routeType: travelModel ?? .car,
+                                     avoidTolls: avoidToll ?? false,
+                                     avoidFerries: state)
+            }
         }
     }
     
@@ -211,8 +221,9 @@ final class DirectionVC: UIViewController {
         } else if secondDestionation?.placeName == "My Location" {
             secondDestionation = currentLocation
         }
-        
-        calculateRoute()
+        Task {
+            try await calculateRoute()
+        }
     }
     
     private func setupViews() {
@@ -256,7 +267,7 @@ final class DirectionVC: UIViewController {
     
     private func calculateRoute(routeType: RouteTypes = .car,
                                 avoidTolls: Bool = false,
-                                avoidFerries: Bool = false) {
+                                avoidFerries: Bool = false) async throws {
         directionSearchView.closeKeyboard()
         self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
         
@@ -271,7 +282,7 @@ final class DirectionVC: UIViewController {
                                                label: nil,
                                                long: secondDestionation?.long,
                                                lat: secondDestionation?.lat)
-        calculateGenericRoute(currentModel: currentModel,
+        try await calculateGenericRoute(currentModel: currentModel,
                               routeType: routeType,
                               avoidFerries: avoidFerries,
                               avoidTolls: avoidTolls)
@@ -282,21 +293,22 @@ final class DirectionVC: UIViewController {
         self.directionSearchView.changeSearchRouteName(with: secondDestionation?.placeName ?? "", isDestination: true)
     }
     
-    func calculateGenericRoute(currentModel: SearchCellViewModel, routeType: RouteTypes = .car, avoidFerries: Bool = false, avoidTolls: Bool = false) {
+    func calculateGenericRoute(currentModel: SearchCellViewModel, routeType: RouteTypes = .car, avoidFerries: Bool = false, avoidTolls: Bool = false) async throws {
         
         guard let (departureLocation, destinationLocation) = getRouteLocations(currentModel: currentModel) else { return }
         
         guard isDistanceValid(departureLoc: departureLocation, destinationLoc: destinationLocation) else { return }
-        viewModel.calculateRouteWith(destinationPosition: destinationLocation,
+        if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLocation,
                                      departurePosition: departureLocation,
                                      travelMode: routeType,
                                      avoidFerries: avoidFerries,
-                                     avoidTolls: avoidTolls) { data,model  in
+                                     avoidTolls: avoidTolls) {
+            
             self.tableView.isHidden = true
             self.directionView.isHidden = false
             
             let isPreview = self.firstDestionation?.placeName != "My Location"
-            self.directionView.setup(model: model, isPreview: isPreview)
+            self.directionView.setup(model: directionVM, isPreview: isPreview)
             DispatchQueue.main.async {
                 self.directionView.showOptionsStackView()
             }
@@ -308,6 +320,7 @@ final class DirectionVC: UIViewController {
                                            destinationLocation: destinationLocation,
                                            routeType: routeType)
         }
+        
     }
     
     private func updateMyLocationDestination() {
@@ -354,7 +367,7 @@ final class DirectionVC: UIViewController {
         }
     }
     
-    func calculateRoute()  {
+    func calculateRoute() async throws  {
         updateMyLocationDestination()
         
         if let departureLat = firstDestionation?.lat, let departureLong = firstDestionation?.long, let destionationLat = secondDestionation?.lat, let destinationLong = secondDestionation?.long {
@@ -363,7 +376,7 @@ final class DirectionVC: UIViewController {
             let destionationLoc = CLLocationCoordinate2D(latitude: destionationLat, longitude: destinationLong)
             
             guard isDistanceValid(departureLoc: departureLoc, destinationLoc: destionationLoc) else { return }
-            viewModel.calculateRouteWith(destinationPosition: destionationLoc, departurePosition: departureLoc, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls) { data,model  in
+            if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destionationLoc, departurePosition: departureLoc, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls) {
                 
                 self.tableView.isHidden = true
                 self.directionView.isHidden = false
@@ -373,7 +386,7 @@ final class DirectionVC: UIViewController {
                 }
                 
                 let isPreview = self.firstDestionation?.placeName != "My Location"
-                self.directionView.setup(model: model, isPreview: isPreview)
+                self.directionView.setup(model: directionVM, isPreview: isPreview)
                 
                 self.sendDirectionsToExploreVC(data: data,
                                                departureLocation: departureLoc,
@@ -443,7 +456,7 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
         directionView.setLocalValues(toll: tollOption, ferries: ferriesOption)
     }
     
-    func selectedPlaceResult(mapModel: [MapModel]) {
+    func selectedPlaceResult(mapModel: [MapModel]) async throws {
         
         if let model = mapModel[safe: 0] {
             let currentModel = SearchCellViewModel(searchType: .location,
@@ -463,7 +476,7 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
             } else {
                 firstDestionation = searchTextModel
             }
-            calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls)
+            try await calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls)
             DispatchQueue.main.async {
                 self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
             }
@@ -502,7 +515,9 @@ extension DirectionVC: DirectionViewOutputDelegate {
             let sumData = self.viewModel.getSumData(type)
             
             if self.viewModel.selectedTravelMode != type {
-                self.changeRoute(type: type)
+                Task {
+                    try await self.changeRoute(type: type)
+                }
             }
             
             let userInfo = ["steps" : (steps: steps, sumData: sumData), "routeModel": routeModel as Any] as [String : Any]
@@ -513,8 +528,8 @@ extension DirectionVC: DirectionViewOutputDelegate {
         }
     }
     
-    func changeRoute(type: RouteTypes) {
-        calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries)
+    func changeRoute(type: RouteTypes) async throws {
+        try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries)
     }
 }
 
@@ -524,9 +539,9 @@ extension DirectionVC: DirectionSearchViewOutputDelegate {
         dismissHandler?()
     }
     
-    func swapLocations() {
+    func swapLocations() async throws {
         (firstDestionation, secondDestionation) = (secondDestionation, firstDestionation)
-        calculateRoute()
+        try await calculateRoute()
     }
 }
 

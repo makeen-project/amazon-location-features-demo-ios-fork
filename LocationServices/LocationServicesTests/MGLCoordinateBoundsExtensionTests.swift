@@ -1,5 +1,5 @@
 //
-//  MGLCoordinateBoundsExtensionTests.swift
+//  MLNCoordinateBoundsExtensionTests.swift
 //  LocationServicesTests
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -8,9 +8,9 @@
 import XCTest
 @testable import LocationServices
 import CoreLocation
-import Mapbox
+import MapLibre
 
-final class MGLCoordinateBoundsExtensionTests: XCTestCase {
+final class MLNCoordinateBoundsExtensionTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -21,13 +21,13 @@ final class MGLCoordinateBoundsExtensionTests: XCTestCase {
     }
     
     func testCreateWithEmptyArray() throws {
-        let coordinateBounds = MGLCoordinateBounds.create(from: [])
+        let coordinateBounds = MLNCoordinateBounds.create(from: [])
         XCTAssertEqual(coordinateBounds.ne.latitude.formatted(), "0", "Coordinate Bounds latitude matched")
     }
     
     func testCreateWithOneValueInArray() throws {
         let departureLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
-        let coordinateBounds = MGLCoordinateBounds.create(from: [departureLocation])
+        let coordinateBounds = MLNCoordinateBounds.create(from: [departureLocation])
         XCTAssertEqual(coordinateBounds.ne.longitude.formatted(), "-73.985596", "Coordinate Bounds longitude matched")
     }
     
@@ -35,13 +35,13 @@ final class MGLCoordinateBoundsExtensionTests: XCTestCase {
     func testCreateWithCoordinates() throws {
         let departureLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
         let destinationLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude:40.75474012009525, longitude: -73.98387963388527)
-        let coordinateBounds = MGLCoordinateBounds.create(from: [departureLocation, destinationLocation])
+        let coordinateBounds = MLNCoordinateBounds.create(from: [departureLocation, destinationLocation])
         XCTAssertEqual(coordinateBounds.ne.latitude.formatted(), "40.75791", "Coordinate Bounds latitude matched")
     }
 
     func testCreateWithCenter() throws {
         let centerLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
-        let coordinateBounds = MGLCoordinateBounds.create(centerLocation: centerLocation, radius: 20)
+        let coordinateBounds = MLNCoordinateBounds.create(centerLocation: centerLocation, radius: 20)
         XCTAssertEqual(coordinateBounds.ne.latitude.formatted(), "40.758089", "Coordinate Bounds latitude matched")
     }
 }

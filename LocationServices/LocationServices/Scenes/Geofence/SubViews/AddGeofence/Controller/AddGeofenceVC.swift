@@ -162,7 +162,7 @@ final class AddGeofenceVC: UIViewController {
         nameTextField.validationCallback = viewModel.isGeofenceNameValid(_:)
         
         searchView.radiusValueHander = { [weak self] value in
-            self?.cacheSaveModel.radius = Int64(value)
+            self?.cacheSaveModel.radius = value
             self?.enableSaveButton()
             
             guard self?.cacheSaveModel.lat != nil, self?.cacheSaveModel.long != nil else {
@@ -185,16 +185,20 @@ final class AddGeofenceVC: UIViewController {
         
         searchView.searchTextValue = { [weak self] value in
             self?.changeElementVisibility(state: true)
-            self?.viewModel.searchWithSuggesstion(text: value,
-                                                  userLat: self?.userLocation?.lat,
-                                                  userLong: self?.userLocation?.long)
+            Task {
+                try await self?.viewModel.searchWithSuggesstion(text: value,
+                                                      userLat: self?.userLocation?.lat,
+                                                      userLong: self?.userLocation?.long)
+            }
         }
         
         searchView.searchTextClose = {[weak self] in
-            self?.viewModel.searchWithSuggesstion(text: "",
-                                                  userLat: nil,
-                                                  userLong: nil)
-            self?.changeElementVisibility(state: false)
+            Task {
+                try await self?.viewModel.searchWithSuggesstion(text: "",
+                                                      userLat: nil,
+                                                      userLong: nil)
+                self?.changeElementVisibility(state: false)
+            }
         }
         
         headerView.dismissHandler = { [weak self] in
@@ -317,22 +321,22 @@ final class AddGeofenceVC: UIViewController {
               let long = cacheSaveModel.long else {
             return
         }
-  
-        viewModel.saveData(with: id, lat: lat, long: long, radius: Int(radius)) { [weak self] result in
+        Task {
+            let result = try await viewModel.saveData(with: id, lat: lat, long: long, radius: radius)
             switch result {
             case .success:
-                self?.sentGeofenceRefreshNotification = true
-                NotificationCenter.default.post(name: Notification.geofenceAdded, object: nil, userInfo: ["model": self?.cacheSaveModel as Any])
+                self.sentGeofenceRefreshNotification = true
+                NotificationCenter.default.post(name: Notification.geofenceAdded, object: nil, userInfo: ["model": self.cacheSaveModel as Any])
                 if(UIDevice.current.userInterfaceIdiom == .phone){
-                    self?.delegate?.dismissCurrentBottomSheet(geofences: self?.viewModel.activeGeofencesLists ?? [], shouldDashboardShow: true)
+                    self.delegate?.dismissCurrentBottomSheet(geofences: self.viewModel.activeGeofencesLists, shouldDashboardShow: true)
                 }
                 else {
-                    self?.closeScreen()
+                    self.closeScreen()
                 }
-               
+                
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                self?.showAlert(model)
+                self.showAlert(model)
             }
         }
     }

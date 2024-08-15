@@ -8,7 +8,7 @@
 import XCTest
 @testable import LocationServices
 import CoreLocation
-import AWSLocationXCF
+import AWSLocation
 
 final class DirectionViewModelTests: XCTestCase {
     
@@ -179,8 +179,8 @@ final class DirectionViewModelTests: XCTestCase {
     }
     
     func testCalculateRouteWith() throws {
-        let direction = DirectionPresentation(model:AWSLocationCalculateRouteResponse(), travelMode: .car)
-        routingService.putResult = [AWSLocationTravelMode.car: .success(direction)]
+        let direction = DirectionPresentation(model:CalculateRouteOutput(), travelMode: .car)
+        routingService.putResult = [LocationClientTypes.TravelMode.car: .success(direction)]
         directionViewModel.calculateRouteWith(destinationPosition: CLLocationCoordinate2D(latitude: 40.75803155895524, longitude: -73.9855533309874) , departurePosition: CLLocationCoordinate2D(latitude: 40.75803155895524, longitude: -73.9855533309874)) { data,model  in
             XCTAssertGreaterThan(data.count, 0, "Expected atleast 1 count")
         }

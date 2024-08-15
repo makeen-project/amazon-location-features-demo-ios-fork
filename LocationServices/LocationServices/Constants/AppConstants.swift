@@ -12,58 +12,52 @@ final class DefaultUserSettings {
                                     imageType: .light ,
                                     type: .esri,
                                     isSelected: true)
-    static let mapHereStyle = MapStyleModel(title: "Explore" ,
-                                        imageType: .explore ,
+    static let mapHereStyle = MapStyleModel(title: "Standard Light" ,
+                                        imageType: .light ,
                                         type: .here,
                                         isSelected: true)
     static let unitValue = "Metric"
 }
 
+final class BaseAPIEndpoint {
+    static func baseUrl(apiKey: String, region: String, apiName: String) -> String {
+        return "https://\(apiName).geo.\(region).amazonaws.com/v2?key=\(apiKey)"
+    }
+}
+
 final class DefaultMapStyles {
    static let mapStyles: [MapStyleModel] =  [
-        MapStyleModel(title: "Light" ,
+        MapStyleModel(title: "Standard Light" ,
                       imageType: .light ,
                       type: .esri,
                       isSelected: true),
-        MapStyleModel(title: "Streets" ,
-                      imageType: .street ,
+        MapStyleModel(title: "Standard Dark" ,
+                      imageType: .dark ,
                       type: .esri,
                       isSelected: false),
-        MapStyleModel(title: "Navigation" ,
-                      imageType: .navigation ,
+        MapStyleModel(title: "Visualization Light" ,
+                      imageType: .vlight,
                       type: .esri,
                       isSelected: false),
-        MapStyleModel(title: "Dark Gray" ,
-                      imageType: .darkGray ,
+        MapStyleModel(title: "Visualization Dark" ,
+                      imageType: .vdark,
                       type: .esri,
                       isSelected: false),
-        MapStyleModel(title: "Light Gray" ,
-                      imageType: .lightGray ,
+        MapStyleModel(title: "Logistics Light" ,
+                      imageType: .llight ,
                       type: .esri,
                       isSelected: false),
-        MapStyleModel(title: "Imagery" ,
-                      imageType: .Imagery ,
+        MapStyleModel(title: "Logistics Dark" ,
+                      imageType: .ldark ,
                       type: .esri,
-                      isSelected: false),
-        MapStyleModel(title: "Explore" ,
-                      imageType: .explore ,
-                      type: .here,
-                      isSelected: false),
-        MapStyleModel(title: "Contrast" ,
-                      imageType: .contrast ,
-                      type: .here,
-                      isSelected: false),
-        MapStyleModel(title: "ExploreTruck" ,
-                      imageType: .exploreTruck ,
-                      type: .here,
-                      isSelected: false),
-        MapStyleModel(title: "Imagery" ,
-                      imageType: .hereImagery ,
-                      type: .here,
                       isSelected: false),
         MapStyleModel(title: "Hybrid" ,
                       imageType: .hybrid ,
-                      type: .here,
+                      type: .esri,
+                      isSelected: false),
+        MapStyleModel(title: "Satellite" ,
+                      imageType: .satellite,
+                      type: .esri,
                       isSelected: false),
     ]
 }

@@ -164,7 +164,9 @@ final class DirectionSearchView: UIView {
         let depatureText = secondDestinationTextField.text
         firstDestinationTextField.text = depatureText
         secondDestinationTextField.text = destinationText
-        delegate?.swapLocations()
+        Task {
+            try await delegate?.swapLocations()
+        }
     }
     
     required init?(coder: NSCoder) {

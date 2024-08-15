@@ -12,10 +12,10 @@ struct MapModel {
     let placeAddress: String?
     let placeLat: Double?
     let placeLong: Double?
-    var distance: Int?
+    var distance: Double?
     var duration: String?
     
-    init(placeName: String? = nil, placeAddress: String? = nil, placeLat: Double? = nil, placeLong: Double? = nil, distance: Int? = nil, duration: String? = nil) {
+    init(placeName: String? = nil, placeAddress: String? = nil, placeLat: Double? = nil, placeLong: Double? = nil, distance: Double? = nil, duration: String? = nil) {
         self.placeName = placeName
         self.placeAddress = placeAddress
         self.placeLat = placeLat

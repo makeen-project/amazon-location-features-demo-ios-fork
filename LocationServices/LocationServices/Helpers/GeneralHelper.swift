@@ -11,18 +11,9 @@ import UIKit
 class GeneralHelper {
     static func getAmazonMapLogo(mapImageType: MapStyleImages?) -> UIColor {
         switch mapImageType {
-        case .darkGray,
-             .Imagery,
-             .hereImagery,
-             .hybrid:
+        case .dark, .vdark, .ldark, .satellite, .hybrid:
             return UIColor.white
-        case .light,
-             .street,
-             .navigation,
-             .explore,
-             .contrast,
-             .exploreTruck,
-             .lightGray:
+        case .light, .llight, .vlight:
             return UIColor.black
         default:
             return UIColor.black

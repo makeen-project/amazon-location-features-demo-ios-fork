@@ -7,7 +7,7 @@
 
 import Foundation
 @testable import LocationServices
-import AWSLocationXCF
+import AWSLocation
 
 class LocationAPIServiceMock: LocationServiceable {
     
@@ -44,13 +44,9 @@ class LocationAPIServiceMock: LocationServiceable {
          }
     }
     
-    @discardableResult
-    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[LocationServices.SearchPresentation], Error>) -> Void)) -> AWSLocationSearchPlaceIndexForPositionRequest {
-       perform { [weak self] in
-            guard let result = self?.putSearchWithPositionResult else { return }
-            completion(result)
-        }
-        return AWSLocationSearchPlaceIndexForPositionRequest()
+    func searchWithPosition(position: [Double], userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
+        let result = self.putSearchWithPositionResult
+        return result!
     }
     
     func getPlace(with placeId: String, completion: @escaping (SearchPresentation?) -> Void) {

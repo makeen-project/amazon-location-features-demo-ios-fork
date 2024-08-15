@@ -8,41 +8,33 @@
 import Foundation
 
 enum MapStyleImages: Codable  {
-    case light, street, navigation, explore,contrast,exploreTruck, darkGray, lightGray, Imagery, hereImagery, hybrid
+    case light, dark, vlight, vdark, llight, ldark, hybrid, satellite
     
     var mapName: String {
         switch self {
         case .light:
-            return "location.aws.com.demo.maps.Esri.Light"
-        case .street:
-            return "location.aws.com.demo.maps.Esri.Streets"
-        case .navigation:
-            return "location.aws.com.demo.maps.Esri.Navigation"
-        case .explore:
-            return "location.aws.com.demo.maps.HERE.Explore"
-        case .contrast:
-            return"location.aws.com.demo.maps.HERE.Contrast"
-        case .exploreTruck:
-            return "location.aws.com.demo.maps.HERE.ExploreTruck"
-        case .darkGray:
-            return "location.aws.com.demo.maps.Esri.DarkGrayCanvas"
-        case .lightGray:
-            return "location.aws.com.demo.maps.Esri.LightGrayCanvas"
-        case .Imagery:
-            return "location.aws.com.demo.maps.Esri.Imagery"
-        case .hereImagery:
-            return "location.aws.com.demo.maps.HERE.Imagery"
+            return "StandardLight"
+        case .dark:
+            return "StandardDark"
+        case .vlight:
+            return "VisualizationLight"
+        case .vdark:
+            return "VisualizationDark"
+        case .llight:
+            return"LogisticsLight"
+        case .ldark:
+            return "LogisticsDark"
         case .hybrid:
-            return "location.aws.com.demo.maps.HERE.Hybrid"
+            return "Hybrid"
+        case .satellite:
+            return "Satellite"
         }
     }
     
     var sourceType: MapStyleSourceType {
         switch self {
-        case .light, .street, .navigation, .darkGray, .lightGray, .Imagery:
+        case .light, .dark, .vlight, .vdark, .llight, .ldark, .hybrid, .satellite:
             return .esri
-        case .explore, .contrast, .exploreTruck, .hereImagery, .hybrid:
-            return .here
         }
     }
 }
