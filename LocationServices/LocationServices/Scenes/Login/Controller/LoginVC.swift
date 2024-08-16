@@ -263,8 +263,7 @@ final class LoginVC: UIViewController {
               let userPoolIdText = userPoolId, userPoolIdText.count > 0,
               let userPoolClientIdText = userPoolClientId, userPoolClientIdText.count > 0,
               let userDomainText = userDomain, userDomainText.count > 0,
-              let webSocketUrlText = webSocketUrl, webSocketUrlText.count > 0,
-              let region = region, region.count > 0 else {
+              let webSocketUrlText = webSocketUrl, webSocketUrlText.count > 0 else {
             
             let alert = UIAlertController(title: "Cannot connect",
                                           message: "Check if all fields are filled", preferredStyle: UIAlertController.Style.alert)
@@ -284,9 +283,7 @@ final class LoginVC: UIViewController {
                                        userPoolId: self?.userPoolId,
                                        userPoolClientId: self?.userPoolClientId,
                                        userDomain: self?.userDomain,
-                                       websocketUrl: self?.webSocketUrl,
-                                       region: self?.region,
-                                       apiKey: self?.apiKey)
+                                       websocketUrl: self?.webSocketUrl)
         }
     }
     
@@ -450,8 +447,8 @@ extension LoginVC: LoginViewModelOutputDelegate {
     
     func identityPoolIdValidationSucceed() {
         UserDefaultsHelper.save(value: isFromSettingScene, key: .awsCustomConnectFromSettings)
-        UserDefaultsHelper.setAppState(state: .prepareCustomAWSConnect)
-        
+        //UserDefaultsHelper.setAppState(state: .prepareCustomAWSConnect)
+        UserDefaultsHelper.setAppState(state: .customAWSConnected)
         updateAccordingToAppState()
     }
 }

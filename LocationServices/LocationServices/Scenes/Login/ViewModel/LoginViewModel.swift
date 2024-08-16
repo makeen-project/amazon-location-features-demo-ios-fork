@@ -42,19 +42,16 @@ final class LoginViewModel: LoginViewModelProtocol {
         awsLoginService.logout(skipPolicy: false)
     }
     
-    func connectAWS(identityPoolId: String?, userPoolId: String?, userPoolClientId: String?, userDomain: String?, websocketUrl: String?, region: String?, apiKey: String?) {
+    func connectAWS(identityPoolId: String?, userPoolId: String?, userPoolClientId: String?, userDomain: String?, websocketUrl: String?) {
         
         guard let identityPoolId = identityPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
               let userPoolId = userPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
               let userPoolClientId = userPoolClientId?.trimmingCharacters(in: .whitespacesAndNewlines),
               var userDomain = userDomain?.trimmingCharacters(in: .whitespacesAndNewlines),
-              var webSocketUrl = websocketUrl?.trimmingCharacters(in: .whitespacesAndNewlines),
-              let region = region?.trimmingCharacters(in: .whitespacesAndNewlines),
-              let apiKey = apiKey?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+              var webSocketUrl = websocketUrl?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             
             let model = AlertModel(title: StringConstant.error, message: StringConstant.notAllFieldsAreConfigured, okButton: StringConstant.ok)
             delegate?.showAlert(model)
-            
             return
         }
         
@@ -66,10 +63,10 @@ final class LoginViewModel: LoginViewModelProtocol {
             webSocketUrl = webSocketUrl.replacingOccurrences(of: $0, with: "")
         }
         Task {
-            let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId, region: "")
+            let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId)
             if isValid {
                 DispatchQueue.main.async {
-                    self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomain, webSocketUrl: webSocketUrl, region: region, apiKey: apiKey)
+                    self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomain, webSocketUrl: webSocketUrl, region: "", apiKey: "")
                 }
             }
             else {
@@ -93,16 +90,16 @@ final class LoginViewModel: LoginViewModelProtocol {
                            apiKey: apiKey)
         
         delegate?.identityPoolIdValidationSucceed()
-        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
-
-        // repeat until the user is kill the app itself and restart it.
-        model.okHandler = {
-            // for now we are just kill the app
-            exit(0)
-            // for Apple release seems like we need to constantly show an alert.
-            //self.delegate?.showAlert(model)
-        }
-        delegate?.showAlert(model)
+//        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
+//
+//        // repeat until the user is kill the app itself and restart it.
+//        model.okHandler = {
+//            // for now we are just kill the app
+//            exit(0)
+//            // for Apple release seems like we need to constantly show an alert.
+//            //self.delegate?.showAlert(model)
+//        }
+//        delegate?.showAlert(model)
     }
     
     func disconnectAWS() {
@@ -119,17 +116,17 @@ final class LoginViewModel: LoginViewModelProtocol {
         // remove custom configuration
         UserDefaultsHelper.removeObject(for: .awsConnect)
         
-        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
-        
-        // repeat until the user is kill the app itself and restart it.
-        model.okHandler = {
-            // for now we are just kill the app
-            exit(0)
-            // for Apple release seems like we need to constantly show an alert.
-            //self.delegate?.showAlert(model)
-            
-        }
-        delegate?.showAlert(model)
+//        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
+//        
+//        // repeat until the user is kill the app itself and restart it.
+//        model.okHandler = {
+//            // for now we are just kill the app
+//            exit(0)
+//            // for Apple release seems like we need to constantly show an alert.
+//            //self.delegate?.showAlert(model)
+//            
+//        }
+//        delegate?.showAlert(model)
     }
     
     private func saveDatatoDefaults(identityPoolId: String,

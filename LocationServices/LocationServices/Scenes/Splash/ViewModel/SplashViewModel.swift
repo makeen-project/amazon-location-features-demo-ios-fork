@@ -34,7 +34,7 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
             return
         }
         
-        let isValid = try await loginService.validate(identityPoolId: customConfiguration.identityPoolId, region: customConfiguration.region)
+        let isValid = try await loginService.validate(identityPoolId: customConfiguration.identityPoolId)
         
         if !isValid {
                 UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)

@@ -11,12 +11,14 @@ import AWSIoT
 import UIKit
 import AmazonLocationiOSAuthSDK
 import AWSCognitoIdentity
+import SafariServices
+import AuthenticationServices
 
 protocol AWSLoginServiceProtocol {
     var delegate: AWSLoginServiceOutputProtocol? { get set }
     func login()
     func logout(skipPolicy: Bool)
-    func validate(identityPoolId: String, region: String) async throws -> Bool
+    func validate(identityPoolId: String) async throws -> Bool
 }
 
 protocol AWSLoginServiceOutputProtocol {
@@ -29,20 +31,65 @@ extension AWSLoginServiceOutputProtocol {
     func logoutResult(_ error: Error?) {}
 }
 
-final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
+final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticationPresentationContextProviding {
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return (UIApplication.shared.delegate as? AppDelegate)!.navigationController!.view.window!
+    }
+    
     
     enum Constants {
         static let awsCognitoIdentityKey = "AWSCognitoIdentityValidationKey"
     }
     
+    private static var awsLoginService = AWSLoginService()
     var delegate: AWSLoginServiceOutputProtocol?
     private var error: Error?
     weak var viewController: UIViewController?
     
-    var authHelper: AuthHelper?
+    private override init() {
+        
+    }
+
+    public static func `default`() -> AWSLoginService {
+        return awsLoginService
+    }
      
     func login() {
-        guard let navigationContoller = (UIApplication.shared.delegate as? AppDelegate)?.navigationController else { return }
+        guard let navigationContoller = (UIApplication.shared.delegate as? AppDelegate)?.navigationController,
+        let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
+        
+        let redirectUri = "amazonlocationdemo://signin/"
+        let urlString = "https://\(customModel.userDomain)/login?client_id=\(customModel.userPoolClientId)&response_type=code&identity_provider=COGNITO&redirect_uri=\(redirectUri)"
+        
+//        if let url = URL(string: urlString) {
+//            let config = SFSafariViewController.Configuration()
+//            let safariVC = SFSafariViewController(url: url, configuration: config)
+//            //safariVC.delegate = self // Optional: Set delegate if needed
+//            navigationContoller.present(safariVC, animated: true) {
+//                print("completed")
+//            }
+//        }
+        
+        if let url = URL(string: urlString) {
+            let session = ASWebAuthenticationSession(url: url, callbackURLScheme: "amazonlocationdemo") { callbackURL, error in
+                if let callbackURL = callbackURL {
+                    // Handle the redirect, process the code
+                    if let code = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?
+                        .queryItems?
+                        .first(where: { $0.name == "code" })?.value {
+                        print("Authorization code: \(code)")
+                        self.fetchTokens(code: code)
+                        // Now you can use the authorization code to fetch tokens
+                    }
+                } else if let error = error {
+                    print("Error during authentication: \(error.localizedDescription)")
+                    self.delegate?.loginResult(.failure(error))
+                }
+                
+            }
+            session.presentationContextProvider = self
+            session.start()
+        }
         
 //        let hostedUIOptions = HostedUIOptions(scopes: ["openid", "email", "profile"], federationProviderName: "LoginWithAmazon")
 //        AWSMobileClient.default().showSignIn(navigationController: navigationContoller, hostedUIOptions: hostedUIOptions) { (userState, error) in
@@ -88,6 +135,79 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
 //        }
     }
     
+    func fetchTokens(code: String) {
+        guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
+        
+        let tokenUrl = URL(string: "https://\(customModel.userDomain)/oauth2/token")!
+        var request = URLRequest(url: tokenUrl)
+        request.httpMethod = "POST"
+
+        var body = URLComponents(string: "")!
+        body.queryItems = [
+            URLQueryItem(name: "grant_type", value: "authorization_code"),
+            URLQueryItem(name: "client_id", value: customModel.userPoolClientId),
+            URLQueryItem(name: "redirect_uri", value: "amazonlocationdemo://signin/"),
+            URLQueryItem(name: "code", value: code)
+        ]
+        
+        request.httpBody = body.query?.data(using: .utf8)
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching tokens: \(error?.localizedDescription ?? "No data")")
+                return
+            }
+            
+            // Handle the received tokens
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                print("Received tokens: \(json)")
+                self.delegate?.loginResult(.success(()))
+            } catch {
+                print("Error parsing JSON: \(error.localizedDescription)")
+                self.delegate?.loginResult(.failure(error))
+            }
+            
+            self.updateAWSServicesCredentials()
+            NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+            self.attachPolicy()
+        }.resume()
+    }
+    
+    func refreshTokens(userDomain: String, userPoolClientId: String, refreshToken: String) {
+        let tokenUrl = URL(string: "https://\(userDomain)/oauth2/token")!
+        var request = URLRequest(url: tokenUrl)
+        request.httpMethod = "POST"
+        
+        var body = URLComponents(string: "")!
+        body.queryItems = [
+            URLQueryItem(name: "grant_type", value: "refresh_token"),
+            URLQueryItem(name: "client_id", value: userPoolClientId),
+            URLQueryItem(name: "refresh_token", value: refreshToken)
+        ]
+        
+        request.httpBody = body.query?.data(using: .utf8)
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error refreshing tokens: \(error?.localizedDescription ?? "No data")")
+                return
+            }
+            
+            // Handle the received tokens
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                print("Received refreshed tokens: \(json)")
+            } catch {
+                print("Error parsing JSON: \(error.localizedDescription)")
+            }
+        }.resume()
+    }
+
+
+    
 //    private func getIdentityId(oldIdentityId: String? = nil, retriesCount: Int = 1, completion: @escaping (AWSTask<NSString>)->()) {
 //        let maxRetries = 3
 //        
@@ -119,6 +239,14 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
         } else {
             self.awsLogout()
         }
+        //set initial state
+        UserDefaultsHelper.setAppState(state: .customAWSConnected)
+        UserDefaultsHelper.removeObject(for: .signedInIdentityId)
+
+        self.updateAWSServicesCredentials()
+
+        NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+        self.delegate?.logoutResult(nil)
     }
     
     private func awsLogout() {
@@ -149,47 +277,47 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
 //        }
     }
     
-    func createAWSConfiguration(with configurationModel: CustomConnectionModel) -> [String: Any] {
-        let config: [String: Any] = [
-            "UserAgent": "aws-amplify-cli/0.1.0",
-            "Version": "0.1.0",
-            "IdentityManager": [
-                "Default": [:]
-            ],
-            "CredentialsProvider": [
-                "CognitoIdentity": [
-                    "Default": [
-                        "PoolId": "\(configurationModel.identityPoolId)",
-                        "Region": "\(configurationModel.region)"
-                    ]
-                ]
-            ],
-            "CognitoUserPool": [
-                "Default": [
-                    "PoolId": "\(configurationModel.userPoolId)",
-                    "AppClientId": "\(configurationModel.userPoolClientId)",
-                    "Region": "\(configurationModel.region)"
-                ]
-            ],
-            "Auth": [
-                "Default": [
-                    "OAuth": [
-                      "WebDomain": "\(configurationModel.userDomain)",
-                      "AppClientId": "\(configurationModel.userPoolClientId)",
-                      "SignInRedirectURI": "amazonlocationdemo://signin/",
-                      "SignOutRedirectURI": "amazonlocationdemo://signout/",
-                      "Scopes": [
-                        "email",
-                        "openid",
-                        "profile"
-                      ]
-                    ]
-                  ]
-            ]
-        ]
-        
-        return config
-    }
+//    func createAWSConfiguration(with configurationModel: CustomConnectionModel) -> [String: Any] {
+//        let config: [String: Any] = [
+//            "UserAgent": "aws-amplify-cli/0.1.0",
+//            "Version": "0.1.0",
+//            "IdentityManager": [
+//                "Default": [:]
+//            ],
+//            "CredentialsProvider": [
+//                "CognitoIdentity": [
+//                    "Default": [
+//                        "PoolId": "\(configurationModel.identityPoolId)",
+//                        "Region": "\(configurationModel.region)"
+//                    ]
+//                ]
+//            ],
+//            "CognitoUserPool": [
+//                "Default": [
+//                    "PoolId": "\(configurationModel.userPoolId)",
+//                    "AppClientId": "\(configurationModel.userPoolClientId)",
+//                    "Region": "\(configurationModel.region)"
+//                ]
+//            ],
+//            "Auth": [
+//                "Default": [
+//                    "OAuth": [
+//                      "WebDomain": "\(configurationModel.userDomain)",
+//                      "AppClientId": "\(configurationModel.userPoolClientId)",
+//                      "SignInRedirectURI": "amazonlocationdemo://signin/",
+//                      "SignOutRedirectURI": "amazonlocationdemo://signout/",
+//                      "Scopes": [
+//                        "email",
+//                        "openid",
+//                        "profile"
+//                      ]
+//                    ]
+//                  ]
+//            ]
+//        ]
+//        
+//        return config
+//    }
     
     func getAWSConfigurationModel() -> CustomConnectionModel? {
         var defaultConfiguration: CustomConnectionModel? = nil
@@ -248,8 +376,8 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
     }
    
     
-    func validate(identityPoolId: String, region: String) async throws -> Bool {
-        let id = try await getAWSIdentityId(identityPoolId: identityPoolId, region: region)
+    func validate(identityPoolId: String) async throws -> Bool {
+        let id = try await getAWSIdentityId(identityPoolId: identityPoolId)
         if id.identityId != nil  {
             return true
         }
@@ -290,9 +418,9 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol {
 //        AWSServiceManager.default().defaultServiceConfiguration = locationConfig
     }
     
-    public func getAWSIdentityId(identityPoolId: String, region: String) async throws -> GetIdOutput {
+    public func getAWSIdentityId(identityPoolId: String) async throws -> GetIdOutput {
         do {
-            let cognitoIdentityClient = try AWSCognitoIdentity.CognitoIdentityClient(region: region)
+            let cognitoIdentityClient = try AWSCognitoIdentity.CognitoIdentityClient(region: identityPoolId.toRegionString())
             let idInput = GetIdInput(identityPoolId: identityPoolId)
             let identity = try await cognitoIdentityClient.getId(input: idInput)
             return identity
