@@ -1,5 +1,4 @@
 import Foundation
-import AmazonLocationiOSAuthSDK
 import AWSLocation
 
 public class ApiAuthHelper {

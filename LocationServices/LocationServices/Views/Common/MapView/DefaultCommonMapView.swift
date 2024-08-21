@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import MapLibre
-import AmazonLocationiOSAuthSDK
 
 
 private enum Constant {
@@ -87,23 +86,11 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
         let regionName = identityPoolId.toRegionString()
         let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         
-
-//        Task {
-//            if let cognitoCredentials = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider()?.getCognitoCredentials(){
-//                let amazonStaticCredentials = AmazonStaticCredentials(accessKeyId: cognitoCredentials.accessKeyId, secretKey: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken, expiration: cognitoCredentials.expiration)
-//                signingDelegate = AWSSignatureV4Delegate(amazonStaticCredentials: amazonStaticCredentials, region: regionName)
-//            }
-//        }
-        // register a delegate that will handle SigV4 signing
-        //MLNOfflineStorage.shared.delegate = signingDelegate
-        
-        //mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
-        
-        if let apiKey = ApiAuthHelper.default().locationCredentialsProvider?.getAPIKey() {
+        if let credentials = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider()?.getCognitoCredentials() {
             DispatchQueue.main.async { [self] in
-                signingDelegate = AWSSignatureV4Delegate(apiKey: apiKey, region: regionName)
+                signingDelegate = AWSSignatureV4Delegate(cognitoCredentials: credentials, region: regionName)
                 MLNOfflineStorage.shared.delegate = signingDelegate
-                mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/v2/styles/\(mapName?.imageType.mapName ?? "StandardLight")/descriptor?key=\(apiKey)")
+                mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
             }
         }
         

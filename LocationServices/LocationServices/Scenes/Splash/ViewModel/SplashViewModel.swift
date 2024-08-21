@@ -78,7 +78,7 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
                             print("Logged Out")
                             self.validateIdentityId()
         ApiAuthHelper.initialize(apiKey: configurationModel.apiKey, region:  configurationModel.region)
-        try await CognitoAuthHelper.initialize(identityPoolId: configurationModel.identityPoolId)
+        try await CognitoAuthHelper.initialise(identityPoolId: configurationModel.identityPoolId)
 
 //        AWSMobileClient.default().initialize { [weak self] (userState, error) in
 //            // Calling getIdentityId in order to force refresh the AWSMobileClient identityId to the latest one

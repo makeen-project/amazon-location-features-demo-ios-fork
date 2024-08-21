@@ -5,7 +5,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import AmazonLocationiOSAuthSDK
 import MapLibre
 
 class AWSSignatureV4Delegate : NSObject, MLNOfflineStorageDelegate {
@@ -13,8 +12,8 @@ class AWSSignatureV4Delegate : NSObject, MLNOfflineStorageDelegate {
     private var region: String? = nil
     private var apiKey: String? = nil
     
-    init(amazonStaticCredentials: AmazonStaticCredentials, region: String) {
-        self.awsSigner = AWSSignerV4(credentials: amazonStaticCredentials, serviceName: "geo", region: region)
+    init(cognitoCredentials: CognitoCredentials, region: String) {
+        self.awsSigner = AWSSignerV4(credentials: cognitoCredentials, serviceName: "geo", region: region)
         super.init()
     }
     

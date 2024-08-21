@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import MapLibre
 import CoreLocation
-import AmazonLocationiOSAuthSDK
 
 private enum Constants {
     static let mapZoomValue: Double = 20
@@ -444,29 +443,16 @@ final class ExploreView: UIView, NavigationMapProtocol {
             identityPoolId = Bundle.main.object(forInfoDictionaryKey: Constants.dictinaryKeyIdentityPoolId) as! String
         }
         
-        //let regionName = identityPoolId.toRegionString()
+        let regionName = identityPoolId.toRegionString()
         let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
 
-        if let apiKey = ApiAuthHelper.default().locationCredentialsProvider?.getAPIKey(),
-           let region = ApiAuthHelper.default().locationCredentialsProvider?.getRegion() {
+        if let credentials = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider()?.getCognitoCredentials() {
             DispatchQueue.main.async { [self] in
-                signingDelegate = AWSSignatureV4Delegate(apiKey: apiKey, region: region)
+                signingDelegate = AWSSignatureV4Delegate(cognitoCredentials: credentials, region: regionName)
                 MLNOfflineStorage.shared.delegate = signingDelegate
-                mapView.styleURL = URL(string: "https://maps.geo.\(region).amazonaws.com/v2/styles/\(mapName?.imageType.mapName ?? "StandardLight")/descriptor?key=\(apiKey)")
+                mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
             }
         }
-//        Task {
-//            if let cognitoCredentials = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider()?.getCognitoCredentials() {
-//                let amazonStaticCredentials = AmazonStaticCredentials(accessKeyId: cognitoCredentials.accessKeyId, secretKey: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken, expiration: cognitoCredentials.expiration)
-//                DispatchQueue.main.async { [self] in
-//                    //signingDelegate = AWSSignatureV4Delegate(amazonStaticCredentials: amazonStaticCredentials, region: regionName)
-//                    // register a delegate that will handle SigV4 signing
-//                    //MLNOfflineStorage.shared.delegate = signingDelegate
-////                    mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
-//                }
-//            }
-//        }
-
         
         mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
 

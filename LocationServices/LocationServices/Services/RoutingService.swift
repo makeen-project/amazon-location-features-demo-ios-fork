@@ -7,7 +7,6 @@
 
 import Foundation
 import AWSLocation
-import AmazonLocationiOSAuthSDK
 import CoreLocation
 
 protocol AWSRoutingServiceProtocol {

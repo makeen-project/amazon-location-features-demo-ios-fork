@@ -9,10 +9,10 @@ import Foundation
 import AWSLocation
 import AWSIoT
 import UIKit
-import AmazonLocationiOSAuthSDK
 import AWSCognitoIdentity
 import SafariServices
 import AuthenticationServices
+import AwsCommonRuntimeKit
 
 protocol AWSLoginServiceProtocol {
     var delegate: AWSLoginServiceOutputProtocol? { get set }
@@ -29,6 +29,53 @@ protocol AWSLoginServiceOutputProtocol {
 extension AWSLoginServiceOutputProtocol {
     func loginResult(_ result: Result<Void, Error>) {}
     func logoutResult(_ error: Error?) {}
+}
+
+public struct CognitoToken: Codable {
+    public let accessToken: String
+    public let expiresIn: Int
+    public let idToken: String
+    public let refreshToken: String
+    public let tokenType: String
+    
+    public init(accessToken: String, expiresIn: Int, idToken: String, refreshToken: String, tokenType: String) {
+        self.accessToken = accessToken
+        self.expiresIn = expiresIn
+        self.idToken = idToken
+        self.refreshToken = refreshToken
+        self.tokenType = tokenType
+    }
+    
+    public static func encodeCognitoToken(cognitoToken: CognitoToken) -> String? {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        do {
+            let jsonData = try encoder.encode(cognitoToken)
+            let jsonString = String(data: jsonData, encoding: .utf8)
+            return jsonString
+        } catch {
+            print("Error encoding CognitoToken to JSON: \(error)")
+            return nil
+        }
+    }
+    
+    public static func decodeCognitoToken(jsonString: String) -> CognitoToken? {
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            print("Invalid JSON string")
+            return nil
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .iso8601
+        do {
+            let credential = try decoder.decode(CognitoToken.self, from: jsonData)
+            return credential
+        } catch {
+            print("Error decoding JSON to CognitoToken: \(error)")
+            return nil
+        }
+    }
 }
 
 final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticationPresentationContextProviding {
@@ -61,15 +108,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         let redirectUri = "amazonlocationdemo://signin/"
         let urlString = "https://\(customModel.userDomain)/login?client_id=\(customModel.userPoolClientId)&response_type=code&identity_provider=COGNITO&redirect_uri=\(redirectUri)"
         
-//        if let url = URL(string: urlString) {
-//            let config = SFSafariViewController.Configuration()
-//            let safariVC = SFSafariViewController(url: url, configuration: config)
-//            //safariVC.delegate = self // Optional: Set delegate if needed
-//            navigationContoller.present(safariVC, animated: true) {
-//                print("completed")
-//            }
-//        }
-        
         if let url = URL(string: urlString) {
             let session = ASWebAuthenticationSession(url: url, callbackURLScheme: "amazonlocationdemo") { callbackURL, error in
                 if let callbackURL = callbackURL {
@@ -79,7 +117,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                         .first(where: { $0.name == "code" })?.value {
                         print("Authorization code: \(code)")
                         self.fetchTokens(code: code)
-                        // Now you can use the authorization code to fetch tokens
                     }
                 } else if let error = error {
                     print("Error during authentication: \(error.localizedDescription)")
@@ -158,20 +195,19 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                 print("Error fetching tokens: \(error?.localizedDescription ?? "No data")")
                 return
             }
-            
-            // Handle the received tokens
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: [])
-                print("Received tokens: \(json)")
-                self.delegate?.loginResult(.success(()))
-            } catch {
-                print("Error parsing JSON: \(error.localizedDescription)")
-                self.delegate?.loginResult(.failure(error))
+
+            if let jsonString = String(data: data, encoding: .utf8),  let cognitoToken = CognitoToken.decodeCognitoToken(jsonString: jsonString) {
+                print("Received tokens: \(jsonString)")
+                Task {
+                    do {
+                    try await self.updateAWSServicesToken(cognitoToken: cognitoToken)
+                    } catch {
+                        print("Error parsing JSON: \(error.localizedDescription)")
+                        self.delegate?.loginResult(.failure(error))
+                    }
+                }
             }
-            
-            self.updateAWSServicesCredentials()
-            NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
-            self.attachPolicy()
+
         }.resume()
     }
     
@@ -197,11 +233,19 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
             }
             
             // Handle the received tokens
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: [])
-                print("Received refreshed tokens: \(json)")
-            } catch {
-                print("Error parsing JSON: \(error.localizedDescription)")
+            if let jsonString = String(data: data, encoding: .utf8),  let cognitoToken = CognitoToken.decodeCognitoToken(jsonString: jsonString) {
+                print("Received tokens: \(jsonString)")
+                Task {
+                    do {
+                    try await self.updateAWSServicesToken(cognitoToken: cognitoToken)
+                    self.attachPolicy()
+                    self.delegate?.loginResult(.success(()))
+                    NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+                    } catch {
+                        print("Error parsing JSON: \(error.localizedDescription)")
+                        self.delegate?.loginResult(.failure(error))
+                    }
+                }
             }
         }.resume()
     }
@@ -242,9 +286,9 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         //set initial state
         UserDefaultsHelper.setAppState(state: .customAWSConnected)
         UserDefaultsHelper.removeObject(for: .signedInIdentityId)
-
-        self.updateAWSServicesCredentials()
-
+        Task {
+            try await self.updateAWSServicesToken()
+        }
         NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
         self.delegate?.logoutResult(nil)
     }
@@ -396,12 +440,40 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
 //        return AWSCognitoIdentity(forKey: Constants.awsCognitoIdentityKey)
 //    }
     
-    func updateAWSServicesCredentials() {
-        guard let configurationModel = self.getAWSConfigurationModel() else {
-            print("Can't read default configuration from awsconfiguration.json")
-            return
+    func updateAWSServicesToken(cognitoToken: CognitoToken? = nil) async throws {
+        guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
+        do {
+            if cognitoToken != nil {
+                KeyChainHelper.save(value: CognitoToken.encodeCognitoToken(cognitoToken: cognitoToken!)!, key: .cognitoToken)
+                let identityPoolId = customModel.identityPoolId
+                let id = try await getAWSIdentityId(identityPoolId: identityPoolId)
+                let region = identityPoolId.toRegionString()
+                let client = try AWSCognitoIdentity.CognitoIdentityClient(region: region)
+                let logins = ["cognito-idp.\(region).amazonaws.com/\(customModel.userPoolId)": cognitoToken!.idToken]
+                let input = GetCredentialsForIdentityInput(identityId: id.identityId, logins: logins)
+                let credentialsOutput = try await client.getCredentialsForIdentity(input: input)
+                if let credentials = credentialsOutput.credentials {
+                    let cognitoCredentials = CognitoCredentials(identityPoolId: credentialsOutput.identityId!, accessKeyId: credentials.accessKeyId!, secretKey: credentials.secretKey!, sessionToken: credentials.sessionToken!, expiration: credentials.expiration!)
+                    try await updateAWSServicesCredentials(cognitoCredentials: cognitoCredentials)
+                    self.attachPolicy()
+                    UserDefaultsHelper.save(value: id.identityId, key: .signedInIdentityId)
+                    UserDefaultsHelper.setAppState(state: .loggedIn)
+                    self.delegate?.loginResult(.success(()))
+                    NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
+                }
+            }
+            else {
+                KeyChainHelper.delete(key: .cognitoToken)
+                try await updateAWSServicesCredentials(cognitoCredentials: nil)
+            }
         }
-        
+        catch {
+            throw error
+        }
+//        guard let configurationModel = self.getAWSConfigurationModel() else {
+//            print("Can't read default configuration from awsconfiguration.json")
+//            return
+//        }
         // Now that we have refreshed to the latest itendityId qw need to make sure
         // that AWSServiceManager promotes the latest credentials to services such as AWSLocation
 //        let credentialsProvider = AWSCognitoCredentialsProvider(
@@ -416,6 +488,23 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
 //        AWSIoT.register(with: locationConfig!, forKey: "default")
 //        
 //        AWSServiceManager.default().defaultServiceConfiguration = locationConfig
+    }
+    
+    func updateAWSServicesCredentials(cognitoCredentials: CognitoCredentials? = nil) async throws {
+        guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
+        if cognitoCredentials != nil {
+            do {
+                let credentialsProvider = try CredentialsProvider(source: .cached(source: CredentialsProvider(source: .static(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, sessionToken: cognitoCredentials!.sessionToken))))
+                try await CognitoAuthHelper.initialise(credentialsProvider: credentialsProvider, region: customModel.region)
+                KeyChainHelper.save(value: CognitoCredentials.encodeCognitoCredentials(credential: cognitoCredentials!)!, key: .cognitoCredentials)
+            }
+            catch {
+                throw error
+            }
+        }
+        else {
+            KeyChainHelper.delete(key: .cognitoCredentials)
+        }
     }
     
     public func getAWSIdentityId(identityPoolId: String) async throws -> GetIdOutput {

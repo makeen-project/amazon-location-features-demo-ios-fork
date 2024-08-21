@@ -372,13 +372,23 @@
 		F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */; };
 		F17BE2B029F819C2001A4ADF /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */; };
 		F18BD50A2AC481DA008FD008 /* AWSLoginServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */; };
+		F18DEEDC2C75908200335F3E /* AWSLocation in Frameworks */ = {isa = PBXBuildFile; productRef = F18DEEDB2C75908200335F3E /* AWSLocation */; };
+		F18DEEDE2C75929C00335F3E /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEDD2C75929C00335F3E /* AuthHelper.swift */; };
+		F18DEEE02C7592BB00335F3E /* LocationCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEDF2C7592BB00335F3E /* LocationCredentialsProvider.swift */; };
+		F18DEEE22C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE12C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift */; };
+		F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */; };
+		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
+		F18DEEEA2C75EC3400335F3E /* AWSSignerV4.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE92C75EC3300335F3E /* AWSSignerV4.swift */; };
+		F18DEEEC2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEEB2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift */; };
+		F18DEEEE2C75F2D300335F3E /* CognitoCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */; };
+		F18DEEF02C76178A00335F3E /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */; };
+		F18DEEF32C76189300335F3E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F18DEEF22C76189300335F3E /* KeychainSwift */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
 		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
 		F1B2388729F01B88001E2066 /* AboutViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388629F01B88001E2066 /* AboutViewModelTests.swift */; };
 		F1B642692A2F330D00FB40E3 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B642682A2F330D00FB40E3 /* UIColor+Extension.swift */; };
 		F1BA942B2C510CAC002FEB51 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = F1BA942A2C510CAC002FEB51 /* MapLibre */; };
-		F1BA94392C5169BD002FEB51 /* AmazonLocationiOSTrackingSDK in Frameworks */ = {isa = PBXBuildFile; productRef = F1BA94382C5169BD002FEB51 /* AmazonLocationiOSTrackingSDK */; };
 		F1BA943B2C526646002FEB51 /* AmazonLocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */; };
 		F1BA943E2C53BAB7002FEB51 /* AWSIoT in Frameworks */ = {isa = PBXBuildFile; productRef = F1BA943D2C53BAB7002FEB51 /* AWSIoT */; };
 		F1BA94402C57A1DB002FEB51 /* AWSIoTEvents in Frameworks */ = {isa = PBXBuildFile; productRef = F1BA943F2C57A1DB002FEB51 /* AWSIoTEvents */; };
@@ -787,6 +797,15 @@
 		F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingAPIServiceMock.swift; sourceTree = "<group>"; };
 		F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
 		F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSLoginServiceMock.swift; sourceTree = "<group>"; };
+		F18DEEDD2C75929C00335F3E /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
+		F18DEEDF2C7592BB00335F3E /* LocationCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCredentialsProvider.swift; sourceTree = "<group>"; };
+		F18DEEE12C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationCognitoCredentialsProvider.swift; sourceTree = "<group>"; };
+		F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentials.swift; sourceTree = "<group>"; };
+		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		F18DEEE92C75EC3300335F3E /* AWSSignerV4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSSignerV4.swift; sourceTree = "<group>"; };
+		F18DEEEB2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationApiCredentialsProvider.swift; sourceTree = "<group>"; };
+		F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentialsProvider.swift; sourceTree = "<group>"; };
+		F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainHelper.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
 		F1B060962AD0209C0020CD8C /* LocationServicesUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocationServicesUITests.xctestplan; sourceTree = "<group>"; };
 		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -833,14 +852,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F18DEEF32C76189300335F3E /* KeychainSwift in Frameworks */,
 				96F6B00A299C2B6A009DD9C4 /* SnapKit in Frameworks */,
 				ADF26F6529300E59000147A0 /* SafariServices.framework in Frameworks */,
 				F1BA94422C57B111002FEB51 /* AWSCognitoIdentity in Frameworks */,
-				F1BA94392C5169BD002FEB51 /* AmazonLocationiOSTrackingSDK in Frameworks */,
 				F1BA943E2C53BAB7002FEB51 /* AWSIoT in Frameworks */,
 				ADF26F6329300E53000147A0 /* Security.framework in Frameworks */,
 				F1BA942B2C510CAC002FEB51 /* MapLibre in Frameworks */,
 				F1BA94402C57A1DB002FEB51 /* AWSIoTEvents in Frameworks */,
+				F18DEEDC2C75908200335F3E /* AWSLocation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1248,6 +1268,14 @@
 		AD16A42029357F2B006AEA8E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				F18DEEDD2C75929C00335F3E /* AuthHelper.swift */,
+				F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */,
+				F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */,
+				F18DEEDF2C7592BB00335F3E /* LocationCredentialsProvider.swift */,
+				F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */,
+				F18DEEE12C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift */,
+				F18DEEEB2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift */,
+				F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */,
 				AD16A42129357F38006AEA8E /* UserDefaultsHelper.swift */,
 				8A3CC5EB2968510600A542DC /* DebounceManager.swift */,
 				8AF7D2AA2976B3F700E1563E /* LocationManager.swift */,
@@ -1260,6 +1288,10 @@
 				8AD132742A267FCC00608FCD /* KeyboardObserver.swift */,
 				F1F0C5862A0E5401009C7151 /* ErrorHandler.swift */,
 				F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */,
+				F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */,
+				F18DEEE52C75947000335F3E /* Logger.swift */,
+				F18DEEE92C75EC3300335F3E /* AWSSignerV4.swift */,
+				F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1901,8 +1933,8 @@
 		AD625EA0293CDC2500C67B44 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				ADABECDF293FEBE900E66FC5 /* Model */,
 				AD625EAC293CDF6B00C67B44 /* Core */,
+				ADABECDF293FEBE900E66FC5 /* Model */,
 				AD625EA3293CDC4100C67B44 /* Services */,
 				AD625EA2293CDC3C00C67B44 /* Endpoints */,
 				AD625EA1293CDC3400C67B44 /* Base */,
@@ -2890,9 +2922,6 @@
 				ADB0B99A295AF23C00C219EC /* RoutingService.swift */,
 				ADC124A12979EA5F00B08C20 /* GeofenceService.swift */,
 				ADCF384B29902815008289BB /* TrackingService.swift */,
-				F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */,
-				F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */,
-				F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2989,10 +3018,11 @@
 			packageProductDependencies = (
 				96F6B009299C2B6A009DD9C4 /* SnapKit */,
 				F1BA942A2C510CAC002FEB51 /* MapLibre */,
-				F1BA94382C5169BD002FEB51 /* AmazonLocationiOSTrackingSDK */,
 				F1BA943D2C53BAB7002FEB51 /* AWSIoT */,
 				F1BA943F2C57A1DB002FEB51 /* AWSIoTEvents */,
 				F1BA94412C57B111002FEB51 /* AWSCognitoIdentity */,
+				F18DEEDB2C75908200335F3E /* AWSLocation */,
+				F18DEEF22C76189300335F3E /* KeychainSwift */,
 			);
 			productName = LocationServices;
 			productReference = ADAE4FFA2935611C0000F7FC /* LocationServices.app */;
@@ -3033,8 +3063,8 @@
 			packageReferences = (
 				96F6B008299C2B6A009DD9C4 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				96F6B00B299C2BC0009DD9C4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
-				F1BA94372C5169BD002FEB51 /* XCRemoteSwiftPackageReference "amazon-location-mobile-tracking-sdk-ios" */,
 				F1BA943C2C53BAB7002FEB51 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
+				F18DEEF12C76189300335F3E /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = AD2AF023292E892000149904;
 			projectDirPath = "";
@@ -3214,6 +3244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F18DEEEE2C75F2D300335F3E /* CognitoCredentialsProvider.swift in Sources */,
 				ADC475002971E9E900AAE7A3 /* AmazonLocationButton.swift in Sources */,
 				DF8005E32A0AA47500758BBE /* UIDevice+Extensions.swift in Sources */,
 				AD2061772968A871005F8BBB /* LoginDefaultInformationView.swift in Sources */,
@@ -3255,6 +3286,7 @@
 				AD3E370C2986DDD00041D952 /* ExploreMapStyleVC+TableView.swift in Sources */,
 				ADBDDEF12983176300696EC6 /* DataProviderVC+TableView.swift in Sources */,
 				ADABECDB293FD9CC00E66FC5 /* SearchPresentation.swift in Sources */,
+				F18DEEF02C76178A00335F3E /* KeyChainHelper.swift in Sources */,
 				8A85A75C29A40A1E0022ABE0 /* TrackingHistorySectionHeaderView.swift in Sources */,
 				8A10E37F29E97950005165CD /* SplashContracts.swift in Sources */,
 				ADD139AB2981D72C0003F917 /* MapStyleModel.swift in Sources */,
@@ -3316,8 +3348,10 @@
 				AD20617F296CB23C005F8BBB /* LoginFooterView.swift in Sources */,
 				AD2AF0CD292EAB7500149904 /* SettingsVCBuilder.swift in Sources */,
 				8A30A7F529FA88740012AE71 /* SideBarCell.swift in Sources */,
+				F18DEEE62C75947000335F3E /* Logger.swift in Sources */,
 				AD989748298C56EE0041E867 /* TrackingHistoryBuilder.swift in Sources */,
 				8A76327C297EAE270064D60F /* MGLMapViewDelegate+Extension.swift in Sources */,
+				F18DEEEA2C75EC3400335F3E /* AWSSignerV4.swift in Sources */,
 				8A85A75A29A3A9C80022ABE0 /* TrackingEventModel.swift in Sources */,
 				AD625E94293BCEE200C67B44 /* SearchVCBuilder.swift in Sources */,
 				AD989742298C521E0041E867 /* TrackingHistoryVC.swift in Sources */,
@@ -3366,6 +3400,7 @@
 				ADABECD7293FD56B00E66FC5 /* SearchModel.swift in Sources */,
 				ADC124A02979E3C200B08C20 /* AddGeofenceVC+TableView.swift in Sources */,
 				ADAF3657294A841000DC4774 /* Array+Extension.swift in Sources */,
+				F18DEEEC2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift in Sources */,
 				8ACAAD7629F14B9D00523256 /* CLLocationManager+Extension.swift in Sources */,
 				AD2AF0EB292EAEDF00149904 /* AppColorsConstants.swift in Sources */,
 				AD2AF030292E892000149904 /* AppDelegate.swift in Sources */,
@@ -3379,6 +3414,7 @@
 				AD625EAE293CDFA900C67B44 /* NetworkCore.swift in Sources */,
 				ADD1394A298069F50003F917 /* SettingVC+TableView.swift in Sources */,
 				8AFBAFE0296F19BC0022A7E3 /* AWSLocationTravelMode+Extension.swift in Sources */,
+				F18DEEE22C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift in Sources */,
 				8A439F0429C0A7D900B59D0B /* WelcomeVC.swift in Sources */,
 				8A1110D6297AB20300BC86E1 /* LSFaux3DUserLocationAnnotationView.swift in Sources */,
 				ADC97383295EDA17005AE918 /* NavigationVC.swift in Sources */,
@@ -3391,6 +3427,7 @@
 				8A439F0829C0BA1B00B59D0B /* UIApplication+Extension.swift in Sources */,
 				ADF26F59292FECA9000147A0 /* SearchTextField.swift in Sources */,
 				AD20616F2968A841005F8BBB /* LoginVCBuilder.swift in Sources */,
+				F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */,
 				ADBD7FBD2949C699005DB4E4 /* POICardVCBuilder.swift in Sources */,
 				8A30A7F729FA88C00012AE71 /* SideBarVC.swift in Sources */,
 				AD2AF07B292EA57400149904 /* ExploreViewModel.swift in Sources */,
@@ -3490,11 +3527,13 @@
 				ADD1397B298098CF0003F917 /* ResetPasswordView.swift in Sources */,
 				ADD1396C298097020003F917 /* DataProviderBuilder.swift in Sources */,
 				ADD139A22981C5050003F917 /* MapStyleVC.swift in Sources */,
+				F18DEEDE2C75929C00335F3E /* AuthHelper.swift in Sources */,
 				8A439EF929BB965100B59D0B /* AttributionVC.swift in Sources */,
 				AD2AF0AA292EAA2700149904 /* TrackingViewModel.swift in Sources */,
 				ADF26F7829303E16000147A0 /* AWSUserModel.swift in Sources */,
 				8A0AF02A2A03CBE9003E503D /* UISplitViewController+Extension.swift in Sources */,
 				8A3FD14C29A69CE000DFA6F6 /* PlaceholderAnimator.swift in Sources */,
+				F18DEEE02C7592BB00335F3E /* LocationCredentialsProvider.swift in Sources */,
 				ADD139582980867D0003F917 /* UnitSceneContracts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3994,12 +4033,12 @@
 				minimumVersion = 6.3.3;
 			};
 		};
-		F1BA94372C5169BD002FEB51 /* XCRemoteSwiftPackageReference "amazon-location-mobile-tracking-sdk-ios" */ = {
+		F18DEEF12C76189300335F3E /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/makeen-project/amazon-location-mobile-tracking-sdk-ios.git";
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.0.0;
 			};
 		};
 		F1BA943C2C53BAB7002FEB51 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
@@ -4018,15 +4057,20 @@
 			package = 96F6B008299C2B6A009DD9C4 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
+		F18DEEDB2C75908200335F3E /* AWSLocation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1BA943C2C53BAB7002FEB51 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSLocation;
+		};
+		F18DEEF22C76189300335F3E /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F18DEEF12C76189300335F3E /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
 		F1BA942A2C510CAC002FEB51 /* MapLibre */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 96F6B00B299C2BC0009DD9C4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
 			productName = MapLibre;
-		};
-		F1BA94382C5169BD002FEB51 /* AmazonLocationiOSTrackingSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F1BA94372C5169BD002FEB51 /* XCRemoteSwiftPackageReference "amazon-location-mobile-tracking-sdk-ios" */;
-			productName = AmazonLocationiOSTrackingSDK;
 		};
 		F1BA943D2C53BAB7002FEB51 /* AWSIoT */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -8,7 +8,6 @@
 import Foundation
 import AWSLocation
 import CoreLocation
-import AmazonLocationiOSAuthSDK
 import UIKit
 
 
