@@ -19,12 +19,6 @@ final class DefaultUserSettings {
     static let unitValue = "Metric"
 }
 
-final class BaseAPIEndpoint {
-    static func baseUrl(apiKey: String, region: String, apiName: String) -> String {
-        return "https://\(apiName).geo.\(region).amazonaws.com/v2?key=\(apiKey)"
-    }
-}
-
 final class DefaultMapStyles {
    static let mapStyles: [MapStyleModel] =  [
         MapStyleModel(title: "Light" ,

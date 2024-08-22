@@ -383,6 +383,7 @@
 		F18DEEEE2C75F2D300335F3E /* CognitoCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */; };
 		F18DEEF02C76178A00335F3E /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */; };
 		F18DEEF32C76189300335F3E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F18DEEF22C76189300335F3E /* KeychainSwift */; };
+		F18DEEF52C764A8B00335F3E /* packages in Resources */ = {isa = PBXBuildFile; fileRef = F18DEEF42C764A8B00335F3E /* packages */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
 		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
@@ -806,6 +807,7 @@
 		F18DEEEB2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationApiCredentialsProvider.swift; sourceTree = "<group>"; };
 		F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentialsProvider.swift; sourceTree = "<group>"; };
 		F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainHelper.swift; sourceTree = "<group>"; };
+		F18DEEF42C764A8B00335F3E /* packages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = packages; sourceTree = SOURCE_ROOT; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
 		F1B060962AD0209C0020CD8C /* LocationServicesUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocationServicesUITests.xctestplan; sourceTree = "<group>"; };
 		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -1377,6 +1379,7 @@
 		AD2AF02E292E892000149904 /* LocationServices */ = {
 			isa = PBXGroup;
 			children = (
+				F18DEEF42C764A8B00335F3E /* packages */,
 				AD300A14294BDD8E00355423 /* Resources */,
 				ADBD7FB32949B553005DB4E4 /* Views */,
 				AD625EA0293CDC2500C67B44 /* Networking */,
@@ -3123,6 +3126,7 @@
 				AD300A49294BE23900355423 /* AmazonEmberDisplay_Rg.ttf in Resources */,
 				AD2AF03F292E892200149904 /* LaunchScreen.storyboard in Resources */,
 				AD2AF03C292E892200149904 /* Assets.xcassets in Resources */,
+				F18DEEF52C764A8B00335F3E /* packages in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
