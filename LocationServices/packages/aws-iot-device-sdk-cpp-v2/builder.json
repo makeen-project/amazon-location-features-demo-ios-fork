@@ -1,0 +1,39 @@
+{
+  "name": "aws-iot-device-sdk-cpp-v2",
+  "!cmake_args": [
+    "-DPERFORM_HEADER_CHECK=OFF",
+    "-DS2N_NO_PQ_ASM=ON"
+  ],
+  "search_dirs": [
+    "crt"
+  ],
+  "env": {
+  },
+  "hosts": {
+    "manylinux": {
+      "architectures": {
+        "x86": {
+          "!yum_compiler_packages": []
+        }
+      }
+    }
+  },
+  "_comment": "See .builder/actions/build_samples.py for definition of 'build-samples'",
+  "build_steps": [
+    "build",
+    "build-samples"
+  ],
+  "variants" : {
+    "skip_sample": {
+        "!build_steps": [
+          "build"
+        ]
+    },
+    "build_gg_samples_only": {
+        "!build_steps": [
+          "build",
+          "build-gg-samples"
+        ]
+    }
+  }
+}
