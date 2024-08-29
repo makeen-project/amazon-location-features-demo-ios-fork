@@ -383,7 +383,8 @@
 		F18DEEEE2C75F2D300335F3E /* CognitoCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */; };
 		F18DEEF02C76178A00335F3E /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */; };
 		F18DEEF32C76189300335F3E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F18DEEF22C76189300335F3E /* KeychainSwift */; };
-		F18DEEF52C764A8B00335F3E /* packages in Resources */ = {isa = PBXBuildFile; fileRef = F18DEEF42C764A8B00335F3E /* packages */; };
+		F18DEEFA2C77568900335F3E /* AwsCommonRuntimeKit in Frameworks */ = {isa = PBXBuildFile; productRef = F18DEEF92C77568900335F3E /* AwsCommonRuntimeKit */; };
+		F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
 		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
@@ -807,7 +808,7 @@
 		F18DEEEB2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationApiCredentialsProvider.swift; sourceTree = "<group>"; };
 		F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentialsProvider.swift; sourceTree = "<group>"; };
 		F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainHelper.swift; sourceTree = "<group>"; };
-		F18DEEF42C764A8B00335F3E /* packages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = packages; sourceTree = SOURCE_ROOT; };
+		F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttIoTContext.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
 		F1B060962AD0209C0020CD8C /* LocationServicesUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocationServicesUITests.xctestplan; sourceTree = "<group>"; };
 		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -859,6 +860,7 @@
 				ADF26F6529300E59000147A0 /* SafariServices.framework in Frameworks */,
 				F1BA94422C57B111002FEB51 /* AWSCognitoIdentity in Frameworks */,
 				F1BA943E2C53BAB7002FEB51 /* AWSIoT in Frameworks */,
+				F18DEEFA2C77568900335F3E /* AwsCommonRuntimeKit in Frameworks */,
 				ADF26F6329300E53000147A0 /* Security.framework in Frameworks */,
 				F1BA942B2C510CAC002FEB51 /* MapLibre in Frameworks */,
 				F1BA94402C57A1DB002FEB51 /* AWSIoTEvents in Frameworks */,
@@ -1379,7 +1381,7 @@
 		AD2AF02E292E892000149904 /* LocationServices */ = {
 			isa = PBXGroup;
 			children = (
-				F18DEEF42C764A8B00335F3E /* packages */,
+				F18DEEF72C77504900335F3E /* iot */,
 				AD300A14294BDD8E00355423 /* Resources */,
 				ADBD7FB32949B553005DB4E4 /* Views */,
 				AD625EA0293CDC2500C67B44 /* Networking */,
@@ -2965,6 +2967,14 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		F18DEEF72C77504900335F3E /* iot */ = {
+			isa = PBXGroup;
+			children = (
+				F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */,
+			);
+			path = iot;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3026,6 +3036,7 @@
 				F1BA94412C57B111002FEB51 /* AWSCognitoIdentity */,
 				F18DEEDB2C75908200335F3E /* AWSLocation */,
 				F18DEEF22C76189300335F3E /* KeychainSwift */,
+				F18DEEF92C77568900335F3E /* AwsCommonRuntimeKit */,
 			);
 			productName = LocationServices;
 			productReference = ADAE4FFA2935611C0000F7FC /* LocationServices.app */;
@@ -3068,6 +3079,7 @@
 				96F6B00B299C2BC0009DD9C4 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
 				F1BA943C2C53BAB7002FEB51 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
 				F18DEEF12C76189300335F3E /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				F18DEEF82C77568900335F3E /* XCRemoteSwiftPackageReference "aws-crt-swift" */,
 			);
 			productRefGroup = AD2AF023292E892000149904;
 			projectDirPath = "";
@@ -3126,7 +3138,6 @@
 				AD300A49294BE23900355423 /* AmazonEmberDisplay_Rg.ttf in Resources */,
 				AD2AF03F292E892200149904 /* LaunchScreen.storyboard in Resources */,
 				AD2AF03C292E892200149904 /* Assets.xcassets in Resources */,
-				F18DEEF52C764A8B00335F3E /* packages in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3342,6 +3353,7 @@
 				ADC9738E295EEA4D005AE918 /* NavigationVCView.swift in Sources */,
 				AD2AF092292EA85900149904 /* GeofenceVCBuilder.swift in Sources */,
 				ADD139A62981C7360003F917 /* MapStyleVC+CollectionView.swift in Sources */,
+				F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */,
 				AD38BA06294BE6A60087C2FC /* UITableView+Extension.swift in Sources */,
 				AD2AF0E3292EAC2300149904 /* WelcomeBottomView.swift in Sources */,
 				8AD67F9A29D1B243004A5F7D /* MapStyleTypes+Image.swift in Sources */,
@@ -4045,6 +4057,14 @@
 				minimumVersion = 24.0.0;
 			};
 		};
+		F18DEEF82C77568900335F3E /* XCRemoteSwiftPackageReference "aws-crt-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/awslabs/aws-crt-swift";
+			requirement = {
+				branch = mqtt_test_app;
+				kind = branch;
+			};
+		};
 		F1BA943C2C53BAB7002FEB51 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
@@ -4070,6 +4090,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F18DEEF12C76189300335F3E /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		F18DEEF92C77568900335F3E /* AwsCommonRuntimeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F18DEEF82C77568900335F3E /* XCRemoteSwiftPackageReference "aws-crt-swift" */;
+			productName = AwsCommonRuntimeKit;
 		};
 		F1BA942A2C510CAC002FEB51 /* MapLibre */ = {
 			isa = XCSwiftPackageProductDependency;

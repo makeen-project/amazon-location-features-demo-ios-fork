@@ -41,7 +41,7 @@ public struct HTTPHeaders {
     }
 }
 
-public class AmazonLocationClient: NSObject {
+public class AmazonLocationClient {
     public let locationProvider: LocationCredentialsProvider
     public var locationClient: LocationClient?
     
@@ -64,9 +64,9 @@ public class AmazonLocationClient: NSObject {
         }
     }
     
-    private func setLocationClient(accessKey: String, secret: String, expiration: Date?, sessionToken: String?) async throws {
+    public func setLocationClient(accessKey: String, secret: String, expiration: Date?, sessionToken: String?) async throws {
         
-        let resolver: StaticAWSCredentialIdentityResolver? =  try StaticAWSCredentialIdentityResolver(AWSCredentialIdentity(accessKey: accessKey, secret: secret, expiration: expiration, sessionToken: sessionToken))
+        let resolver: StaticAWSCredentialIdentityResolver? =  try  StaticAWSCredentialIdentityResolver(AWSCredentialIdentity(accessKey: accessKey, secret: secret, expiration: expiration, sessionToken: sessionToken))
         
         let clientConfig = try await LocationClient.LocationClientConfiguration(awsCredentialIdentityResolver: resolver, region: locationProvider.getRegion(), signingRegion: locationProvider.getRegion())
         

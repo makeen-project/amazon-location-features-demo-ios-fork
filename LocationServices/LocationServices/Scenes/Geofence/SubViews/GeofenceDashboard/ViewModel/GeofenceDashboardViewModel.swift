@@ -28,15 +28,19 @@ final class GeofenceDashboardViewModel: GeofenceDasboardViewModelProtocol {
         let result = await geofenceService.getGeofenceList()
             switch result {
             case .success(let geofences):
-                self.geofences = geofences
-                self.delegate?.refreshData(with: geofences)
-            case .failure(let error):
-                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                DispatchQueue.main.async {
+                    self.geofences = geofences
+                    self.delegate?.refreshData(with: geofences)
                 }
-                else {
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                    self.delegate?.showAlert(model)
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                    }
+                    else {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+                        self.delegate?.showAlert(model)
+                    }
                 }
             }
     }

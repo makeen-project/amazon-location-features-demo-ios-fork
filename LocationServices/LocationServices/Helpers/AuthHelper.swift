@@ -11,6 +11,7 @@ import AwsCommonRuntimeKit
 public class AuthHelper {
 
     private var locationCredentialsProvider: LocationCredentialsProvider?
+    private var amazonLocationClient: AmazonLocationClient?
     
     public init() {
     }
@@ -30,6 +31,7 @@ public class AuthHelper {
         let credentialProvider = LocationCredentialsProvider(region: region, identityPoolId: identityPoolId)
         credentialProvider.setRegion(region: region)
         try await credentialProvider.getCognitoProvider()?.refreshCognitoCredentialsIfExpired()
+        amazonLocationClient = AmazonLocationClient(locationCredentialsProvider: credentialProvider)
         return credentialProvider
     }
 
@@ -38,6 +40,7 @@ public class AuthHelper {
         credentialProvider.setAPIKey(apiKey: apiKey)
         credentialProvider.setRegion(region: region)
         locationCredentialsProvider = credentialProvider
+        amazonLocationClient = AmazonLocationClient(locationCredentialsProvider: credentialProvider)
         return credentialProvider
     }
     
@@ -45,14 +48,12 @@ public class AuthHelper {
         let credentialProvider = LocationCredentialsProvider(credentialsProvider: credentialsProvider)
         credentialProvider.setRegion(region: region)
         locationCredentialsProvider = credentialProvider
+        amazonLocationClient = AmazonLocationClient(locationCredentialsProvider: credentialProvider)
         return credentialProvider
     }
     
     public func getLocationClient() -> AmazonLocationClient?
     {
-        guard let locationCredentialsProvider = self.locationCredentialsProvider else {
-            return nil
-        }
-        return AmazonLocationClient(locationCredentialsProvider: locationCredentialsProvider)
+        return amazonLocationClient
     }
 }

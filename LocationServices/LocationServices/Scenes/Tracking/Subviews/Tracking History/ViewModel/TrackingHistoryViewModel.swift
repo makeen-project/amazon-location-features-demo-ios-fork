@@ -79,7 +79,7 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
     func deleteHistory() async throws {
        let result = try await trackingService.removeAllHistory()
         
-        if result!.errors == nil {
+        if result!.errors == nil || result!.errors!.isEmpty {
             let history: [TrackingHistoryPresentation] = []
             NotificationCenter.default.post(name: Notification.updateTrackingHistory, object: self, userInfo: ["history": history])
             setHistory(history)
@@ -117,11 +117,14 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
     }
     
     func getCellModel(indexPath: IndexPath) -> TrackHistoryCellModel? {
-        let sectionArray = history[sortedKeys[indexPath.section]] ?? []
-        guard indexPath.row < sectionArray.count else { return nil }
-        
-        let item = sectionArray[indexPath.row]
-        return TrackHistoryCellModel(model: item)
+        if indexPath.section < sortedKeys.count {
+            let sectionArray = history[sortedKeys[indexPath.section]] ?? []
+            guard indexPath.row < sectionArray.count else { return nil }
+            
+            let item = sectionArray[indexPath.row]
+            return TrackHistoryCellModel(model: item)
+        }
+        return nil
     }
     
     func startTracking(lat: Double, long: Double)  {

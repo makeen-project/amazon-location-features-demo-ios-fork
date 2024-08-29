@@ -10,6 +10,7 @@ import CoreLocation
 import AWSIoT
 import AWSIoTEvents
 import AWSCognitoIdentity
+import AwsCommonRuntimeKit
 
 final class TrackingViewModel: TrackingViewModelProtocol {
     
@@ -80,14 +81,18 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         let result = await geofenceService.getGeofenceList()
             switch result {
             case .success(let geofences):
-                self.delegate?.showGeofences(geofences)
-            case .failure(let error):
-                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                DispatchQueue.main.async {
+                    self.delegate?.showGeofences(geofences)
                 }
-                else {
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                    self.delegate?.showAlert(model)
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                    }
+                    else {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+                        self.delegate?.showAlert(model)
+                    }
                 }
             }
     }
@@ -101,17 +106,18 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             await updateHistory()
             try await geofenceService.evaluateGeofence(lat: lat, long: long)
         }
-    catch {
-        self.history = []
-        if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-            ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
-        } else {
-            let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+        catch {
             DispatchQueue.main.async {
-                self.delegate?.showAlert(model)
+                self.history = []
+                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                } else {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                    
+                    self.delegate?.showAlert(model)
+                }
             }
         }
-    }
     }
     
     func updateHistory() async {
@@ -138,9 +144,53 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         }
     }
     
+    var mqttClient: Mqtt5Client?
+    
+    func createClient(clientOptions: MqttClientOptions, iotContext: MqttIoTContext) throws -> Mqtt5Client {
+
+        let clientOptionsWithCallbacks: MqttClientOptions
+
+        clientOptionsWithCallbacks = MqttClientOptions(
+            hostName: clientOptions.hostName,
+            port: clientOptions.port,
+            bootstrap: clientOptions.bootstrap,
+            socketOptions: clientOptions.socketOptions,
+            tlsCtx: clientOptions.tlsCtx,
+            onWebsocketTransform: iotContext.onWebSocketHandshake,
+            httpProxyOptions: clientOptions.httpProxyOptions,
+            connectOptions: clientOptions.connectOptions,
+            sessionBehavior: clientOptions.sessionBehavior,
+            extendedValidationAndFlowControlOptions: clientOptions.extendedValidationAndFlowControlOptions,
+            offlineQueueBehavior: clientOptions.offlineQueueBehavior,
+            retryJitterMode: clientOptions.retryJitterMode,
+            minReconnectDelay: clientOptions.minReconnectDelay,
+            maxReconnectDelay: clientOptions.maxReconnectDelay,
+            minConnectedTimeToResetReconnectDelay: clientOptions.minConnectedTimeToResetReconnectDelay,
+            pingTimeout: clientOptions.pingTimeout,
+            connackTimeout: clientOptions.connackTimeout,
+            ackTimeout: clientOptions.ackTimeout,
+            topicAliasingOptions: clientOptions.topicAliasingOptions,
+            onPublishReceivedFn: iotContext.onPublishReceived,
+            onLifecycleEventStoppedFn: iotContext.onLifecycleEventStopped,
+            onLifecycleEventAttemptingConnectFn: iotContext.onLifecycleEventAttemptingConnect,
+            onLifecycleEventConnectionSuccessFn: iotContext.onLifecycleEventConnectionSuccess,
+            onLifecycleEventConnectionFailureFn: iotContext.onLifecycleEventConnectionFailure,
+            onLifecycleEventDisconnectionFn: iotContext.onLifecycleEventDisconnection)
+
+        let mqtt5Client = try Mqtt5Client(clientOptions: clientOptionsWithCallbacks)
+        return mqtt5Client
+    }
 
     
     private func subscribeToAWSNotifications() {
+        do {
+            createIoTClientIfNeeded()
+            try connectClient(client: mqttClient!, iotContext: mqttIoTContext!)
+        }
+        catch {
+            print(error)
+        }
+        
 //        createIoTManagerIfNeeded {
 //            
 //            guard let identityId = getAWSIdentityId(identityPoolId: "", region: "").identityId else {
@@ -184,6 +234,58 @@ final class TrackingViewModel: TrackingViewModelProtocol {
 //        }
     }
     
+    func createClientId() -> String {
+        return "iotconsole-93889251-b366-4f31-9bac-0435c862763a" //"geonotification-" + UUID().uuidString
+    }
+    var mqttIoTContext: MqttIoTContext?
+    
+    private func createIoTClientIfNeeded() {
+        guard let configuration = getAWSConfigurationModel(),
+              let identityId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId),
+              !configuration.webSocketUrl.isEmpty, mqttClient == nil else {
+            return
+        }
+        do {
+            let url = "wss://\(configuration.webSocketUrl)/mqtt"
+            
+            mqttIoTContext = MqttIoTContext(client: mqttClient, topicName: "\(identityId)\tracker")
+            let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60, clientId: createClientId())
+
+            let clientOptions = MqttClientOptions(
+                hostName: url,
+                port: 443,
+                connectOptions: ConnectPacket,
+                connackTimeout: TimeInterval(10))
+            
+            mqttClient = try createClient(clientOptions: clientOptions, iotContext: mqttIoTContext!)
+        }
+        catch {
+            mqttIoTContext?.printView("Failed to setup client.")
+        }
+    }
+    
+    func connectClient(client: Mqtt5Client, iotContext: MqttIoTContext) throws {
+        try client.start()
+        if iotContext.semaphoreConnectionSuccess.wait(timeout: .now() + 5) == .timedOut {
+            print("Connection Success Timed out after 5 seconds")
+        }
+    }
+
+    /// stop client and check for stopped lifecycle event
+    func stopClient(client: Mqtt5Client, iotContext: MqttIoTContext) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                try client.stop()
+                if iotContext.semaphoreStopped.wait(timeout: .now() + 5) == .timedOut {
+                    print("Stop timed out after 5 seconds")
+                }
+            }
+            catch {
+                print("Failed to stop client: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     private func createIoTManagerIfNeeded(completion: @escaping ()->()) {
 //        guard iotDataManager == nil,
 //              let configuration = getAWSConfigurationModel(),
@@ -222,6 +324,10 @@ final class TrackingViewModel: TrackingViewModelProtocol {
 //        
 //        iotDataManager?.unsubscribeTopic("\(identityId)/tracker")
 //        iotDataManager?.disconnect()
+        guard mqttClient != nil else {
+            return
+        }
+        stopClient(client: mqttClient!, iotContext: mqttIoTContext!)
     }
     
     private func getAWSConfigurationModel() -> CustomConnectionModel? {

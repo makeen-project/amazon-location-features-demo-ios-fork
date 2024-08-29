@@ -35,7 +35,9 @@ final class LoginViewModel: LoginViewModelProtocol {
     }
 
     func login() {
-        awsLoginService.login()
+        Task {
+            try await awsLoginService.login()
+        }
     }
     
     func logout() {

@@ -23,41 +23,58 @@ protocol AWSTrackingServiceProtocol {
 
 extension AWSTrackingServiceProtocol {
     func sendUserLocation(lat: Double, long: Double) async throws -> BatchUpdateDevicePositionOutput? {
-
-        let devicePositionUpdate = LocationClientTypes.DevicePositionUpdate(deviceId: TrackingServiceConstant.deviceId, position: [long, lat], sampleTime: Date())
-        let devicePositionUpdates: [LocationClientTypes.DevicePositionUpdate]? = [devicePositionUpdate]
-        
-        let input = BatchUpdateDevicePositionInput(trackerName: TrackingServiceConstant.collectionName, updates: devicePositionUpdates)
-        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
-            let result = try await client.batchUpdateDevicePosition(input: input)
-            return result
-        } else {
-            return nil
+        do {
+            try await AWSLoginService.default().refreshLoginIfExpired()
+            let devicePositionUpdate = LocationClientTypes.DevicePositionUpdate(deviceId: TrackingServiceConstant.deviceId, position: [long, lat], sampleTime: Date())
+            let devicePositionUpdates: [LocationClientTypes.DevicePositionUpdate]? = [devicePositionUpdate]
+            
+            let input = BatchUpdateDevicePositionInput(trackerName: TrackingServiceConstant.collectionName, updates: devicePositionUpdates)
+            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+                let result = try await client.batchUpdateDevicePosition(input: input)
+                return result
+            } else {
+                return nil
+            }
+        }
+        catch {
+            throw error
         }
     }
     
     func getTrackingHistory(nextToken: String? = nil) async throws -> [LocationClientTypes.DevicePosition]? {
-        let input = GetDevicePositionHistoryInput(deviceId: TrackingServiceConstant.deviceId, nextToken: nextToken, trackerName: TrackingServiceConstant.collectionName)
-        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
-            let result = try await client.getDevicePositionHistory(input: input)
-            var devicePositions = result.devicePositions ?? []
-            
-            if let nextToken = result.nextToken {
-                devicePositions += try await self.getTrackingHistory(nextToken: nextToken) ?? []
+        do {
+            try await AWSLoginService.default().refreshLoginIfExpired()
+            let input = GetDevicePositionHistoryInput(deviceId: TrackingServiceConstant.deviceId, nextToken: nextToken, trackerName: TrackingServiceConstant.collectionName)
+            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+                let result = try await client.getDevicePositionHistory(input: input)
+                var devicePositions = result.devicePositions ?? []
+                
+                if let nextToken = result.nextToken {
+                    devicePositions += try await self.getTrackingHistory(nextToken: nextToken) ?? []
+                }
+                return devicePositions
+            } else {
+                return nil
             }
-            return devicePositions
-        } else {
-            return nil
+        }
+        catch {
+            throw error
         }
     }
     
     func removeAllHistory() async throws -> BatchDeleteDevicePositionHistoryOutput? {
-        let input = BatchDeleteDevicePositionHistoryInput(deviceIds: [TrackingServiceConstant.deviceId], trackerName: TrackingServiceConstant.collectionName)
-        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
-            let result = try await client.batchDeleteDevicePositionHistory(input: input)
-            return result
-        } else {
-            return nil
+        do {
+            try await AWSLoginService.default().refreshLoginIfExpired()
+            let input = BatchDeleteDevicePositionHistoryInput(deviceIds: [TrackingServiceConstant.deviceId], trackerName: TrackingServiceConstant.collectionName)
+            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+                let result = try await client.batchDeleteDevicePositionHistory(input: input)
+                return result
+            } else {
+                return nil
+            }
+        }
+        catch {
+            throw error
         }
     }
 }

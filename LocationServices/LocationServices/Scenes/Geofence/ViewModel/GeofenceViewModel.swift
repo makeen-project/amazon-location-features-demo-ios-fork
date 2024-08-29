@@ -42,23 +42,29 @@ final class GeofenceViewModel: GeofenceViewModelProtocol {
         
         // if we are not authorized do not send it
         if UserDefaultsHelper.getAppState() != .loggedIn {
-            geofences = []
-            delegate?.showGeofences([])
+            DispatchQueue.main.async {
+                self.geofences = []
+                self.delegate?.showGeofences([])
+            }
             return
         }
         
         let result = await geofenceService.getGeofenceList()
             switch result {
             case .success(let geofences):
-                self.geofences = geofences
-                self.delegate?.showGeofences(geofences)
-            case .failure(let error):
-                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                DispatchQueue.main.async {
+                    self.geofences = geofences
+                    self.delegate?.showGeofences(geofences)
                 }
-                else {
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                    self.delegate?.showAlert(model)
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                    }
+                    else {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+                        self.delegate?.showAlert(model)
+                    }
                 }
             }
     }

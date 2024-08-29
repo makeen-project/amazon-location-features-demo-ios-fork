@@ -74,10 +74,8 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
     }
     
     private func initializeMobileClient(configurationModel: CustomConnectionModel) async throws {
-        UserDefaultsHelper.save(value: "", key: .userInitial)
-                            print("Logged Out")
-                            self.validateIdentityId()
-        ApiAuthHelper.initialize(apiKey: configurationModel.apiKey, region:  configurationModel.region)
+        //UserDefaultsHelper.save(value: "", key: .userInitial)
+        self.validateIdentityId()
         try await CognitoAuthHelper.initialise(identityPoolId: configurationModel.identityPoolId)
 
 //        AWSMobileClient.default().initialize { [weak self] (userState, error) in

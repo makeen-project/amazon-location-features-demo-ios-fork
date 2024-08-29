@@ -35,13 +35,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         // Check if the URL contains the authorization code
-        if let code = URLComponents(url: url, resolvingAgainstBaseURL: false)?
-            .queryItems?
-            .first(where: { $0.name == "code" })?
-            .value {
-            // Process the authorization code (e.g., exchange it for tokens)
-            AWSLoginService.default().fetchTokens(code: code)
-        }
+//        if let code = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+//            .queryItems?
+//            .first(where: { $0.name == "code" })?
+//            .value {
+//            // Process the authorization code (e.g., exchange it for tokens)
+//            AWSLoginService.default().fetchTokens(code: code)
+//        }
         return true
     }
     

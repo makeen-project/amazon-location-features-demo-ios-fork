@@ -1,13 +1,13 @@
 {
-  "originHash" : "73569c01a508915ea08c16f9418fa9dfde69edf0e8889b1ce135fad27df147b7",
+  "originHash" : "9e3c207589c0fe342638461d8aa346ef679abfe7f8c5b0e44db439b4344e57cf",
   "pins" : [
     {
       "identity" : "aws-crt-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-crt-swift",
       "state" : {
-        "revision" : "26be7379c9d74ccf0a32d4429181ef06d72683f6",
-        "version" : "0.33.0"
+        "branch" : "mqtt_test_app",
+        "revision" : "c0e4aa6bddb7b54c6d07545fe55655f29ce1bc0d"
       }
     },
     {

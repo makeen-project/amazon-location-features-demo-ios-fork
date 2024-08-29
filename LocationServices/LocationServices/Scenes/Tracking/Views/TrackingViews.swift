@@ -210,9 +210,8 @@ private extension TrackingMapView {
     
     func createDashedLayer(source: MLNSource, identifier: String = "dashed-layer") -> MLNStyleLayer {
         let lineJoinCap = NSExpression(forConstantValue: "round")
-        let lineWidth = NSExpression(
-            format: "MLN_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-            [16: 2, 20: 20])
+        let lineWidth = NSExpression(forConstantValue: 5) 
+        //NSExpression(format: "MGL_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",[16: 2, 20: 20])
         
         let dashedLayer = MLNLineStyleLayer(identifier: identifier, source: source)
         dashedLayer.lineJoin = lineJoinCap
