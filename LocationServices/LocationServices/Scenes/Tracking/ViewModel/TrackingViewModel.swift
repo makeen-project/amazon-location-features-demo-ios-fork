@@ -181,14 +181,18 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         return mqtt5Client
     }
 
+    let backgroundQueue = DispatchQueue(label: "background_queue",
+                                        qos: .background)
     
     private func subscribeToAWSNotifications() {
-        do {
-            createIoTClientIfNeeded()
-            try connectClient(client: mqttClient!, iotContext: mqttIoTContext!)
-        }
-        catch {
-            print(error)
+        backgroundQueue.async {
+            do {
+                self.createIoTClientIfNeeded()
+                try self.connectClient(client: self.mqttClient!, iotContext: self.mqttIoTContext!)
+            }
+            catch {
+                print(error)
+            }
         }
         
 //        createIoTManagerIfNeeded {
@@ -249,14 +253,22 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             let url = "wss://\(configuration.webSocketUrl)/mqtt"
             
             mqttIoTContext = MqttIoTContext(client: mqttClient, topicName: "\(identityId)\tracker")
-            let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60, clientId: createClientId())
+            //let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60000, clientId: identityId)// createClientId())
 
-            let clientOptions = MqttClientOptions(
-                hostName: url,
-                port: 443,
-                connectOptions: ConnectPacket,
-                connackTimeout: TimeInterval(10))
+            let tlsOptions = TLSContextOptions.makeDefault()
+            let tlsContext = try TLSContext(options: tlsOptions, mode: .client)
+
+            let elg = try EventLoopGroup()
+            let resolver = try HostResolver.makeDefault(eventLoopGroup: elg,
+                                            maxHosts: 8,
+                                            maxTTL: 30)
+            let bootstrap = try ClientBootstrap(eventLoopGroup: elg, hostResolver: resolver)
             
+            let clientOptions = MqttClientOptions(
+                hostName: configuration.webSocketUrl,
+                port: UInt32(443),
+                bootstrap: bootstrap,
+                tlsCtx: tlsContext)
             mqttClient = try createClient(clientOptions: clientOptions, iotContext: mqttIoTContext!)
         }
         catch {
@@ -273,7 +285,8 @@ final class TrackingViewModel: TrackingViewModelProtocol {
 
     /// stop client and check for stopped lifecycle event
     func stopClient(client: Mqtt5Client, iotContext: MqttIoTContext) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        //DispatchQueue.global(qos: .userInitiated).async {
+        backgroundQueue.async {
             do {
                 try client.stop()
                 if iotContext.semaphoreStopped.wait(timeout: .now() + 5) == .timedOut {

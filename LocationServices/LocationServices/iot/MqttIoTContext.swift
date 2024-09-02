@@ -1,5 +1,6 @@
 import SwiftUI
 import AwsCommonRuntimeKit
+import AwsCMqtt
 
 struct Message: Identifiable {
     let id: Int
@@ -28,7 +29,7 @@ class MqttIoTContext: ObservableObject {
     public var lifecycleConnectionFailureData: LifecycleConnectionFailureData?
     public var lifecycleDisconnectionData: LifecycleDisconnectData?
     public var publishCount = 0
-
+    
     /// Print the text and pending new message to message list
     func printView(_ txt: String) {
         let newMessage = Message(id: messages.count, text: txt)
@@ -42,10 +43,11 @@ class MqttIoTContext: ObservableObject {
          onLifecycleEventAttemptingConnect: OnLifecycleEventAttemptingConnect? = nil,
          onLifecycleEventConnectionSuccess: OnLifecycleEventConnectionSuccess? = nil,
          onLifecycleEventConnectionFailure: OnLifecycleEventConnectionFailure? = nil,
-         onLifecycleEventDisconnection: OnLifecycleEventDisconnection? = nil, client: Mqtt5Client?, topicName: String ) {
+         onLifecycleEventDisconnection: OnLifecycleEventDisconnection? = nil, 
+         onWebSocketHandshake: OnWebSocketHandshakeIntercept? = nil,
+         client: Mqtt5Client?, topicName: String) {
 
         self.contextName = contextName
-
         self.publishCount = 0
 
         self.semaphorePublishReceived = DispatchSemaphore(value: 0)
@@ -98,6 +100,44 @@ class MqttIoTContext: ObservableObject {
             self.printView(contextName + " Mqtt5ClientTests: onLifecycleEventDisconnection")
             self.lifecycleDisconnectionData = disconnectionData
             self.semaphoreDisconnection.signal()
+        }
+        var signingConfig: SigningConfig? = nil
+        do {
+            if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect),
+              let credentialsString = KeyChainHelper.get(key: .cognitoCredentials),
+            let cognitoCredentials = CognitoCredentials.decodeCognitoCredentials(jsonString: credentialsString)
+            {
+                let credentials = try Credentials(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken, expiration: cognitoCredentials.expiration)
+                let region = customModel.identityPoolId.toRegionString()
+                signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4Asymmetric,
+                                              signatureType: SignatureType.requestHeaders,
+                                              service: "iotdevicegateway",
+                                              region: region,
+                                              credentials: credentials,
+                                              credentialsProvider: AWSLoginService.default().credentialsProvider!,
+                                              omitSessionToken: true)
+            }
+        }
+        catch {
+            print(error)
+        }
+        
+        self.onWebSocketHandshake = onWebSocketHandshake ?? { request, complete in
+            do {
+                self.printView(contextName + " Mqtt5ClientTests: onWebSocketHandshake")
+                if let signingConfig = signingConfig {
+                    let returnedRequest = try await Signer.signRequest(request: request, config:signingConfig)
+                    complete(returnedRequest, AWS_OP_SUCCESS)
+                }
+                else {
+                    complete(request, AWS_OP_SUCCESS)
+                }
+                
+            }
+            catch
+            {
+                complete(request, Int32(AWS_ERROR_UNSUPPORTED_OPERATION.rawValue))
+            }
         }
     }
 }

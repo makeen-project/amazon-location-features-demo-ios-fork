@@ -629,7 +629,7 @@ private extension ExploreView {
         // Use `NSExpression` to smoothly adjust the line width from 2pt to 20pt between zoom levels 14 and 18.
         // The `interpolationBase` parameter allows the values to interpolate along an exponential curve.
         let lineWidth = NSExpression(
-            format: "MLN_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
+            format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
             [16: 2, 20: 20])
         
         let lineColor = UIColor(hex: "#008296")
@@ -685,7 +685,7 @@ private extension ExploreView {
         // Use `NSExpression` to smoothly adjust the line width from 2pt to 20pt between zoom levels 14 and 18.
         // The `interpolationBase` parameter allows the values to interpolate along an exponential curve.
         let lineWidth = NSExpression(
-            format: "MLN_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
+            format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
             [16: 2, 20: 20])
         
         let dashedLayer = createDashLayer(source, withLineJoinCap: lineJoinCap, withLineWidth: lineWidth, color: .gray, identifier: layerName)
@@ -758,7 +758,7 @@ private extension ExploreView {
         // Stroke color slightly darker than the line color.
         casingLayer.lineColor = NSExpression(forConstantValue: UIColor(red: 41/255, green: 145/255, blue: 171/255, alpha: 1))
         // Use `NSExpression` to gradually increase the stroke width between zoom levels 14 and 18.
-        casingLayer.lineWidth = NSExpression(format: "MLN_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", [14: 1, 18: 4])
+        casingLayer.lineWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", [14: 1, 18: 4])
         
         return casingLayer
     }

@@ -18,7 +18,7 @@ final class SearchTextField: UIView {
     var cancelSearchCallback: VoidHandler?
     private var searchState: Bool = false
     
-    private let debounceManager = DebounceManager(debounceDuration: 0.5)
+    private let debounceManager = DebounceManager(debounceDuration: 1)
     
     private let containerView: UIView = {
         let view = UIView()

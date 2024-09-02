@@ -48,8 +48,8 @@ extension AWSLocationSearchService {
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
+     
         let input = SearchPlaceIndexForSuggestionsInput(biasPosition: biasPosition, indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), maxResults: LocationServiceConstant.maxResult as? Int, text: text)
-        let client1 = AmazonLocationClient.defaultCognito()?.locationClient
         if let client = AmazonLocationClient.defaultCognito()?.locationClient {
             let result = try await client.searchPlaceIndexForSuggestions(input: input)
             return result

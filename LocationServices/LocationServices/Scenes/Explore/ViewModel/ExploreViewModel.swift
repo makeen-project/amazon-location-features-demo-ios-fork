@@ -102,17 +102,17 @@ final class ExploreViewModel: ExploreViewModelProtocol {
     }
     
     func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) async {
-        do {
-            let result = try await locationService.searchWithPosition(position: [coordinates.longitude, coordinates.latitude], userLat: userLocation?.latitude, userLong: userLocation?.longitude)
-            //DispatchQueue.main.async {
+        let result = await locationService.searchWithPosition(position: [coordinates.longitude, coordinates.latitude], userLat: userLocation?.latitude, userLong: userLocation?.longitude)
+        DispatchQueue.main.async {
+            do {
                 let model = try result.get().first!
                 self.delegate?.showAnnotation(model: model, force: false)
-            //}
-        }
-        catch {
-            let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-            DispatchQueue.main.async {
-                self.delegate?.showAlert(model)
+            }
+            catch {
+                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(model)
+                }
             }
         }
     }

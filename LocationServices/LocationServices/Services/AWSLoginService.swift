@@ -341,13 +341,13 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
             throw error
         }
     }
-    
+    public var credentialsProvider: CredentialsProvider?
     func updateAWSServicesCredentials(cognitoCredentials: CognitoCredentials? = nil) async throws {
         guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
         if cognitoCredentials != nil {
             do {
-                let credentialsProvider = try CredentialsProvider(source: .cached(source: CredentialsProvider(source: .static(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, sessionToken: cognitoCredentials!.sessionToken))))
-                try await CognitoAuthHelper.initialise(credentialsProvider: credentialsProvider, region: customModel.region)
+                credentialsProvider = try CredentialsProvider(source: .cached(source: CredentialsProvider(source: .static(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, sessionToken: cognitoCredentials!.sessionToken))))
+                try await CognitoAuthHelper.initialise(credentialsProvider: credentialsProvider!, region: customModel.region)
                 KeyChainHelper.save(value: CognitoCredentials.encodeCognitoCredentials(credential: cognitoCredentials!)!, key: .cognitoCredentials)
                 print("Saved cognito credentials...")
                 try await CognitoAuthHelper.default().amazonLocationClient?.setLocationClient(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, expiration: cognitoCredentials!.expiration, sessionToken: cognitoCredentials!.sessionToken)
@@ -399,6 +399,9 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                let cognitoToken = CognitoToken.decodeCognitoToken(jsonString: tokenString),
                let cognitoCredentials = CognitoCredentials.decodeCognitoCredentials(jsonString: credentialsString) {
                 try await refreshLoginIfExpired()
+                if credentialsProvider == nil {
+                    credentialsProvider = try CredentialsProvider(source: .cached(source: CredentialsProvider(source: .static(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken))))
+                }
                 if let identityId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId) {
                 print("Returning saved aws identity...")
                 return identityId
