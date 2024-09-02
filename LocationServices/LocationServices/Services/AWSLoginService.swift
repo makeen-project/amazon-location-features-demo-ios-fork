@@ -116,7 +116,9 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         guard let url = URL(string: urlString) else {
             throw NSError(domain: "URLError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid login URL"])
         }
+        
         DispatchQueue.main.async {
+            var isHandled = false
             let session = ASWebAuthenticationSession(url: url, callbackURLScheme: "amazonlocationdemo") { callbackURL, error in
                 if let error = error {
                     Task {
@@ -130,9 +132,13 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                     .queryItems?
                     .first(where: { $0.name == "code" })?.value {
                     print("Authorization code: \(code)")
+                                                                    
                     Task {
                         do {
+                            if isHandled { return } // Prevent double handling
+                            isHandled = true
                             try await self.fetchTokens(code: code)
+                            
                         } catch {
                             print("Error fetching tokens: \(error.localizedDescription)")
                             self.delegate?.loginResult(.failure(error))
@@ -326,7 +332,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                     let cognitoCredentials = CognitoCredentials(identityPoolId: credentialsOutput.identityId!, accessKeyId: credentials.accessKeyId!, secretKey: credentials.secretKey!, sessionToken: credentials.sessionToken!, expiration: credentials.expiration!)
                     try await updateAWSServicesCredentials(cognitoCredentials: cognitoCredentials)
                     try await self.attachPolicy(cognitoCredentials: cognitoCredentials)
-                    UserDefaultsHelper.save(value: id, key: .signedInIdentityId)
                     UserDefaultsHelper.setAppState(state: .loggedIn)
                     self.delegate?.loginResult(.success(()))
                     NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
@@ -342,15 +347,14 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         }
     }
     public var credentialsProvider: CredentialsProvider?
-    func updateAWSServicesCredentials(cognitoCredentials: CognitoCredentials? = nil) async throws {
-        guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
+    func updateAWSServicesCredentials(cognitoCredentials: CognitoCredentials? = nil) async throws { 
         if cognitoCredentials != nil {
             do {
-                credentialsProvider = try CredentialsProvider(source: .cached(source: CredentialsProvider(source: .static(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, sessionToken: cognitoCredentials!.sessionToken))))
-                try await CognitoAuthHelper.initialise(credentialsProvider: credentialsProvider!, region: customModel.region)
+                credentialsProvider = try CredentialsProvider(source: .static(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, sessionToken: cognitoCredentials!.sessionToken))
                 KeyChainHelper.save(value: CognitoCredentials.encodeCognitoCredentials(credential: cognitoCredentials!)!, key: .cognitoCredentials)
+                UserDefaultsHelper.removeObject(for: .signedInIdentityId)
                 print("Saved cognito credentials...")
-                try await CognitoAuthHelper.default().amazonLocationClient?.setLocationClient(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, expiration: cognitoCredentials!.expiration, sessionToken: cognitoCredentials!.sessionToken)
+                try await CognitoAuthHelper.default().amazonLocationClient?.initialiseLocationClient()
             }
             catch {
                 throw error
@@ -399,11 +403,9 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                let cognitoToken = CognitoToken.decodeCognitoToken(jsonString: tokenString),
                let cognitoCredentials = CognitoCredentials.decodeCognitoCredentials(jsonString: credentialsString) {
                 try await refreshLoginIfExpired()
-                if credentialsProvider == nil {
-                    credentialsProvider = try CredentialsProvider(source: .cached(source: CredentialsProvider(source: .static(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken))))
-                }
+                credentialsProvider = try CredentialsProvider(source: .static(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken))
                 if let identityId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId) {
-                print("Returning saved aws identity...")
+                print("Returning saved aws identity \(identityId)...")
                 return identityId
                 }
                 let resolver: StaticAWSCredentialIdentityResolver? = try StaticAWSCredentialIdentityResolver(AWSCredentialIdentity(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, expiration: cognitoCredentials.expiration, sessionToken: cognitoCredentials.sessionToken))
@@ -413,10 +415,12 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                 cognitoIdentityClient = AWSCognitoIdentity.CognitoIdentityClient(config: config)
                 let logins = ["cognito-idp.\(region).amazonaws.com/\(customModel.userPoolId)": cognitoToken.idToken]
                 idInput = GetIdInput(identityPoolId: identityPoolId, logins: logins)
+                print("Will generate authenticated new aws identity...")
             }
             
             let identity = try await cognitoIdentityClient.getId(input: idInput)
-            print("Generated new aws identity...")
+            print("Generated new aws identity \(identity.identityId!)...")
+            UserDefaultsHelper.save(value: identity.identityId!, key: .signedInIdentityId)
             return identity.identityId!
         } catch {
             print("Error generating aws identity: \(error)")
