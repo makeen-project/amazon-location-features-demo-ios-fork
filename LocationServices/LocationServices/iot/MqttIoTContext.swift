@@ -8,7 +8,7 @@ struct Message: Identifiable {
 }
 
 class MqttIoTContext: ObservableObject {
-    @Published var messages: [Message] = [Message(id: 0, text: "Click the \"Setup Client and Start\" to start the client.")]
+    @Published var messages: [Message] = [Message(id: 0, text: "")]
 
     public var contextName: String
 
@@ -101,31 +101,20 @@ class MqttIoTContext: ObservableObject {
             self.lifecycleDisconnectionData = disconnectionData
             self.semaphoreDisconnection.signal()
         }
-        var signingConfig: SigningConfig? = nil
-        do {
-            if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect),
-              let credentialsString = KeyChainHelper.get(key: .cognitoCredentials),
-            let cognitoCredentials = CognitoCredentials.decodeCognitoCredentials(jsonString: credentialsString)
-            {
-                let credentials = try Credentials(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken, expiration: cognitoCredentials.expiration)
-                let region = customModel.identityPoolId.toRegionString()
-                signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4,
-                                              signatureType: SignatureType.requestQueryParams,
-                                              service: "iotdevicegateway",
-                                              region: region,
-                                              credentials: credentials,
-                                              //credentialsProvider: AWSLoginService.default().credentialsProvider!,
-                                              omitSessionToken: true)
-            }
-        }
-        catch {
-            print(error)
-        }
-        
         self.onWebSocketHandshake = onWebSocketHandshake ?? { request, complete in
             do {
                 self.printView(contextName + " Mqtt5ClientTests: onWebSocketHandshake")
-                if let signingConfig = signingConfig {
+                
+                if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect),
+                let credentialsProvider = AWSLoginService.default().credentialsProvider {
+                    
+                    let region = customModel.identityPoolId.toRegionString()
+                    let signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4,
+                                                  signatureType: SignatureType.requestQueryParams,
+                                                  service: "iotdevicegateway",
+                                                  region: region,
+                                                  credentialsProvider: credentialsProvider,
+                                                  omitSessionToken: true)
                     let returnedRequest = try await Signer.signRequest(request: request, config:signingConfig)
                     complete(returnedRequest, AWS_OP_SUCCESS)
                 }

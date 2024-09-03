@@ -27,10 +27,10 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     private(set) var isTrackingActive: Bool = false
     private var history: [TrackingHistoryPresentation] = []
     var hasHistory: Bool { !history.isEmpty }
-    
-    //private var iotDataManager: AWSIoTDataManager?
-    //private var iotManager: AWSIoTManager?
-    //private var iot: AWSIoT?
+    var mqttClient: Mqtt5Client?
+    var mqttIoTContext: MqttIoTContext?
+    let backgroundQueue = DispatchQueue(label: "background_queue",
+                                        qos: .background)
     
     init(trackingService: TrackingServiceable, geofenceService: GeofenceServiceable) {
         self.trackingService = trackingService
@@ -102,7 +102,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             let lat = location.coordinate.latitude
             let long = location.coordinate.longitude
             
-            let result = try await trackingService.updateTrackerLocation(lat: lat, long: long)
+            let _ = try await trackingService.updateTrackerLocation(lat: lat, long: long)
             await updateHistory()
             try await geofenceService.evaluateGeofence(lat: lat, long: long)
         }
@@ -144,8 +144,6 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         }
     }
     
-    var mqttClient: Mqtt5Client?
-    
     func createClient(clientOptions: MqttClientOptions, iotContext: MqttIoTContext) throws -> Mqtt5Client {
 
         let clientOptionsWithCallbacks: MqttClientOptions
@@ -180,9 +178,6 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         let mqtt5Client = try Mqtt5Client(clientOptions: clientOptionsWithCallbacks)
         return mqtt5Client
     }
-
-    let backgroundQueue = DispatchQueue(label: "background_queue",
-                                        qos: .background)
     
     private func subscribeToAWSNotifications() {
         backgroundQueue.async {
@@ -194,54 +189,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
                 print(error)
             }
         }
-        
-//        createIoTManagerIfNeeded {
-//            
-//            guard let identityId = getAWSIdentityId(identityPoolId: "", region: "").identityId else {
-//                return
-//            }
-//            
-//            self.iotDataManager?.connectUsingWebSocket(withClientId: identityId, cleanSession: true) { status in
-//                print("Websocket connection status \(status.rawValue)")
-//                
-//                switch status {
-//                case .connected:
-//                    let status = self.iotDataManager?.subscribe(
-//                        toTopic: "\(identityId)/tracker",
-//                        qoS: .messageDeliveryAttemptedAtMostOnce,
-//                        messageCallback: { [weak self] payload in
-//                            let stringValue = NSString(data: payload, encoding: String.Encoding.utf8.rawValue)!
-//                            print("Message received: \(stringValue)")
-//                            
-//                            guard let model = try? JSONDecoder().decode(TrackingEventModel.self, from: payload) else { return }
-//                            
-//                            let eventText: String
-//                            switch model.trackerEventType {
-//                            case .enter:
-//                                eventText = StringConstant.entered
-//                            case .exit:
-//                                eventText = StringConstant.exited
-//                            }
-//                            
-//                            let alertModel = AlertModel(title: model.geofenceId, message: "\(StringConstant.tracker) \(eventText) \(model.geofenceId)", cancelButton: nil)
-//                            DispatchQueue.main.async {
-//                                NotificationCenter.default.post(name: Notification.trackingEvent, object: nil, userInfo: ["trackingEvent": model])
-//                                self?.delegate?.showAlert(alertModel)
-//                            }
-//                        }
-//                    )
-//                    print("subscribe status \(String(describing: status))")
-//                default:
-//                    break
-//                }
-//            }
-//        }
     }
-    
-    func createClientId() -> String {
-        return "iotconsole-93889251-b366-4f31-9bac-0435c862763a" //"geonotification-" + UUID().uuidString
-    }
-    var mqttIoTContext: MqttIoTContext?
     
     private func createIoTClientIfNeeded() {
         guard let configuration = getAWSConfigurationModel(),
@@ -250,27 +198,40 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             return
         }
         do {
-            let url = "wss://\(configuration.webSocketUrl)/mqtt"
-            
-            mqttIoTContext = MqttIoTContext(topicName: "\(identityId)\tracker")
-            let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60000, clientId: identityId)// createClientId())
-
+            mqttIoTContext = MqttIoTContext(onPublishReceived: {payloadData in
+                if let payload = payloadData.publishPacket.payload {
+                    guard let model = try? JSONDecoder().decode(TrackingEventModel.self, from: payload) else { return }
+                    
+                    let eventText: String
+                    switch model.trackerEventType {
+                    case .enter:
+                        eventText = StringConstant.entered
+                    case .exit:
+                        eventText = StringConstant.exited
+                    }
+                    
+                    let alertModel = AlertModel(title: model.geofenceId, message: "\(StringConstant.tracker) \(eventText) \(model.geofenceId)", cancelButton: nil)
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: Notification.trackingEvent, object: nil, userInfo: ["trackingEvent": model])
+                        self.delegate?.showAlert(alertModel)
+                    }
+                }
+            }, topicName: "\(identityId)/tracker")
+            let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60000, clientId: identityId)
             let tlsOptions = TLSContextOptions.makeDefault()
             let tlsContext = try TLSContext(options: tlsOptions, mode: .client)
- 
             let elg = try EventLoopGroup()
             let resolver = try HostResolver.makeDefault(eventLoopGroup: elg,
                                             maxHosts: 8,
                                             maxTTL: 30)
             let bootstrap = try ClientBootstrap(eventLoopGroup: elg, hostResolver: resolver)
-            
             let clientOptions = MqttClientOptions(
                 hostName: configuration.webSocketUrl,
                 port: UInt32(443),
                 bootstrap: bootstrap,
                 tlsCtx: tlsContext,
                 connectOptions: ConnectPacket,
-                connackTimeout: TimeInterval(10))//, connectOptions: ConnectPacket)
+                connackTimeout: TimeInterval(10))
             mqttClient = try createClient(clientOptions: clientOptions, iotContext: mqttIoTContext!)
             mqttIoTContext?.client = mqttClient
         }
@@ -286,9 +247,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         }
     }
 
-    /// stop client and check for stopped lifecycle event
     func stopClient(client: Mqtt5Client, iotContext: MqttIoTContext) {
-        //DispatchQueue.global(qos: .userInitiated).async {
         backgroundQueue.async {
             do {
                 try client.stop()
@@ -302,44 +261,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         }
     }
     
-    private func createIoTManagerIfNeeded(completion: @escaping ()->()) {
-//        guard iotDataManager == nil,
-//              let configuration = getAWSConfigurationModel(),
-//              !configuration.webSocketUrl.isEmpty else {
-//            completion()
-//            return
-//        }
-//                
-//        iotManager = AWSIoTManager.default()
-//        iot = AWSIoT(forKey: "default")
-//        
-//        let iotEndPoint = AWSEndpoint(
-//            urlString: "wss://\(configuration.webSocketUrl)/mqtt")
-//
-//        var region = AWSMobileClient.default().identityId?.toRegionType() ?? AWSRegionType.USEast1
-//        if let regionFromURL = iotEndPoint?.regionType, regionFromURL != .Unknown {
-//            region = regionFromURL
-//        }
-//                
-//        let iotDataConfiguration = AWSServiceConfiguration(
-//            region: region,
-//            endpoint: iotEndPoint,
-//            credentialsProvider: AWSMobileClient.default()
-//        )
-//        
-//        AWSIoTDataManager.register(with: iotDataConfiguration!, forKey: "MyAWSIoTDataManager")
-//        iotDataManager = AWSIoTDataManager(forKey: "MyAWSIoTDataManager")
-//        
-//        completion()
-    }
-    
     private func unsubscribeFromAWSNotifications() {
-//        guard let identityId = AWSMobileClient.default().identityId else {
-//            return
-//        }
-//        
-//        iotDataManager?.unsubscribeTopic("\(identityId)/tracker")
-//        iotDataManager?.disconnect()
         guard mqttClient != nil else {
             return
         }
