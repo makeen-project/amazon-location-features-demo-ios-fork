@@ -30,6 +30,7 @@ class MqttIoTContext: ObservableObject {
     public var lifecycleDisconnectionData: LifecycleDisconnectData?
     public var publishCount = 0
     
+    public var client: Mqtt5Client?
     /// Print the text and pending new message to message list
     func printView(_ txt: String) {
         let newMessage = Message(id: messages.count, text: txt)
@@ -45,7 +46,7 @@ class MqttIoTContext: ObservableObject {
          onLifecycleEventConnectionFailure: OnLifecycleEventConnectionFailure? = nil,
          onLifecycleEventDisconnection: OnLifecycleEventDisconnection? = nil, 
          onWebSocketHandshake: OnWebSocketHandshakeIntercept? = nil,
-         client: Mqtt5Client?, topicName: String) {
+         topicName: String) {
 
         self.contextName = contextName
         self.publishCount = 0
@@ -86,13 +87,13 @@ class MqttIoTContext: ObservableObject {
             self.printView(contextName + " Mqtt5ClientTests: onLifecycleEventConnectionSuccess")
             // Subscribe to test/topic on connection success
             Task {
-                async let _ = try await client!.subscribe(subscribePacket: SubscribePacket(
+                async let _ = try await self.client?.subscribe(subscribePacket: SubscribePacket(
                     subscription: Subscription(topicFilter: topicName, qos: QoS.atLeastOnce)))
             }
             self.semaphoreConnectionSuccess.signal()
         }
         self.onLifecycleEventConnectionFailure = onLifecycleEventConnectionFailure ?? { failureData in
-            self.printView(contextName + " Mqtt5ClientTests: onLifecycleEventConnectionFailure")
+            self.printView(contextName + " Mqtt5ClientTests: onLifecycleEventConnectionFailure:w \(failureData.crtError)")
             self.lifecycleConnectionFailureData = failureData
             self.semaphoreConnectionFailure.signal()
         }
@@ -109,13 +110,13 @@ class MqttIoTContext: ObservableObject {
             {
                 let credentials = try Credentials(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken, expiration: cognitoCredentials.expiration)
                 let region = customModel.identityPoolId.toRegionString()
-                signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4Asymmetric,
-                                              signatureType: SignatureType.requestHeaders,
+                signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4,
+                                              signatureType: SignatureType.requestQueryParams,
                                               service: "iotdevicegateway",
                                               region: region,
-                                              credentials: credentials,
+                                              //credentials: credentials,
                                               credentialsProvider: AWSLoginService.default().credentialsProvider!,
-                                              omitSessionToken: true)
+                                              omitSessionToken: false)
             }
         }
         catch {
