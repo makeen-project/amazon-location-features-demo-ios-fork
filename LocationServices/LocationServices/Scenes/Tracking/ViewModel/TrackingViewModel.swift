@@ -239,7 +239,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     }
     
     func createClientId() -> String {
-        return "geonotification-" + UUID().uuidString
+        return "iotconsole-93889251-b366-4f31-9bac-0435c862763a" //"geonotification-" + UUID().uuidString
     }
     var mqttIoTContext: MqttIoTContext?
     
@@ -250,26 +250,10 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             return
         }
         do {
-            mqttIoTContext = MqttIoTContext(onPublishReceived: {payloadData in
-                if let payload = payloadData.publishPacket.payload {
-                    guard let model = try? JSONDecoder().decode(TrackingEventModel.self, from: payload) else { return }
-                    
-                    let eventText: String
-                    switch model.trackerEventType {
-                    case .enter:
-                        eventText = StringConstant.entered
-                    case .exit:
-                        eventText = StringConstant.exited
-                    }
-                    
-                    let alertModel = AlertModel(title: model.geofenceId, message: "\(StringConstant.tracker) \(eventText) \(model.geofenceId)", cancelButton: nil)
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: Notification.trackingEvent, object: nil, userInfo: ["trackingEvent": model])
-                        self.delegate?.showAlert(alertModel)
-                    }
-                }
-            }, topicName: "\(identityId)\tracker")
-            let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60000, clientId: createClientId())
+            let url = "wss://\(configuration.webSocketUrl)/mqtt"
+            
+            mqttIoTContext = MqttIoTContext(topicName: "\(identityId)\tracker")
+            let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60000, clientId: identityId)// createClientId())
 
             let tlsOptions = TLSContextOptions.makeDefault()
             let tlsContext = try TLSContext(options: tlsOptions, mode: .client)
@@ -286,12 +270,12 @@ final class TrackingViewModel: TrackingViewModelProtocol {
                 bootstrap: bootstrap,
                 tlsCtx: tlsContext,
                 connectOptions: ConnectPacket,
-                connackTimeout: TimeInterval(10))
+                connackTimeout: TimeInterval(10))//, connectOptions: ConnectPacket)
             mqttClient = try createClient(clientOptions: clientOptions, iotContext: mqttIoTContext!)
             mqttIoTContext?.client = mqttClient
         }
         catch {
-            mqttIoTContext?.printView("Failed to setup client. \(error)")
+            mqttIoTContext?.printView("Failed to setup client.")
         }
     }
     

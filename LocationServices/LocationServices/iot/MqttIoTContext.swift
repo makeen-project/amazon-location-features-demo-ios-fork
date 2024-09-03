@@ -29,7 +29,6 @@ class MqttIoTContext: ObservableObject {
     public var lifecycleConnectionFailureData: LifecycleConnectionFailureData?
     public var lifecycleDisconnectionData: LifecycleDisconnectData?
     public var publishCount = 0
-    
     public var client: Mqtt5Client?
     /// Print the text and pending new message to message list
     func printView(_ txt: String) {
@@ -87,7 +86,7 @@ class MqttIoTContext: ObservableObject {
             self.printView(contextName + " Mqtt5ClientTests: onLifecycleEventConnectionSuccess")
             // Subscribe to test/topic on connection success
             Task {
-                async let _ = try await self.client?.subscribe(subscribePacket: SubscribePacket(
+                async let _ = try await self.client!.subscribe(subscribePacket: SubscribePacket(
                     subscription: Subscription(topicFilter: topicName, qos: QoS.atLeastOnce)))
             }
             self.semaphoreConnectionSuccess.signal()
@@ -114,9 +113,9 @@ class MqttIoTContext: ObservableObject {
                                               signatureType: SignatureType.requestQueryParams,
                                               service: "iotdevicegateway",
                                               region: region,
-                                              //credentials: credentials,
-                                              credentialsProvider: AWSLoginService.default().credentialsProvider!,
-                                              omitSessionToken: false)
+                                              credentials: credentials,
+                                              //credentialsProvider: AWSLoginService.default().credentialsProvider!,
+                                              omitSessionToken: true)
             }
         }
         catch {
