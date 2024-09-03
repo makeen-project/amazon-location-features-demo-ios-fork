@@ -347,14 +347,15 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         }
     }
     public var credentialsProvider: CredentialsProvider?
-    func updateAWSServicesCredentials(cognitoCredentials: CognitoCredentials? = nil) async throws { 
+    func updateAWSServicesCredentials(cognitoCredentials: CognitoCredentials? = nil) async throws {
         if cognitoCredentials != nil {
             do {
+                guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
                 credentialsProvider = try CredentialsProvider(source: .static(accessKey: cognitoCredentials!.accessKeyId, secret: cognitoCredentials!.secretKey, sessionToken: cognitoCredentials!.sessionToken))
                 KeyChainHelper.save(value: CognitoCredentials.encodeCognitoCredentials(credential: cognitoCredentials!)!, key: .cognitoCredentials)
                 UserDefaultsHelper.removeObject(for: .signedInIdentityId)
                 print("Saved cognito credentials...")
-                try await CognitoAuthHelper.default().amazonLocationClient?.initialiseLocationClient()
+                try await CognitoAuthHelper.initialise(credentialsProvider: credentialsProvider!, region: customModel.identityPoolId.toRegionString())
             }
             catch {
                 throw error
