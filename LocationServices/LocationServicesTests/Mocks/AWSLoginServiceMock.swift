@@ -2,8 +2,8 @@
 //  LoginServiceMock.swift
 //  LocationServicesTests
 //
-//  Created by Zeeshan Sheikh on 27/09/2023.
-//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 
 import Foundation
 @testable import LocationServices
@@ -21,7 +21,6 @@ class AWSLoginSericeMock : AWSLoginServiceProtocol {
         self.delay = delay
     }
     
-    
     func login() {
         delegate?.loginResult(.success(()))
     }
@@ -30,17 +29,8 @@ class AWSLoginSericeMock : AWSLoginServiceProtocol {
         delegate?.logoutResult(nil)
     }
     
-    func validate(identityPoolId: String, completion: @escaping (Result<Void, Error>) -> ()) {
-        perform { [weak self] in
-            guard let result = self?.validateResult else { return }
-            completion(result)
-        }
-    }
-    
-    private func perform(action: @escaping ()->()) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
-            action()
-        }
+    func validate(identityPoolId: String) async throws -> Bool {
+        return true
     }
 }
 

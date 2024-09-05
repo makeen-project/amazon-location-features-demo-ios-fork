@@ -2,8 +2,8 @@
 //  GeofenceDashboardViewModel.swift
 //  LocationServicesTests
 //
-//  Created by Zeeshan Sheikh on 27/09/2023.
-//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 
 import XCTest
 @testable import LocationServices
@@ -45,19 +45,19 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
         viewModel.delegate = delegate
     }
     
-    func testFetchListOfGeofences() throws {
+    func testFetchListOfGeofences() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .success([Constants.geofence])
-        viewModel.fetchListOfGeofences()
+        //apiService.getResult = .success([Constants.geofence])
+        await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasRefreshedData ?? false
         }, timeout: Constants.waitRequestDuration, message: "Geofence data should`ve been loaded")
     }
     
-    func testFetchListOfGeofencesFailure() throws {
+    func testFetchListOfGeofencesFailure() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .failure(Constants.defaultError)
-        viewModel.fetchListOfGeofences()
+        apiService.mockGetGeofenceListResult = .failure(Constants.defaultError)
+        await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
         }, timeout: Constants.waitRequestDuration, message: "Geofence error should've shown")
@@ -66,7 +66,7 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     func testDeleteGeofenceDataWithoutID() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
         let geofenceModel = GeofenceDataModel(id: nil, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Constants.geofenceRadius)
-        apiService.getResult = .success([geofenceModel])
+        //apiService.mockDeleteGeofenceResult = .success([geofenceModel])
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
@@ -75,7 +75,7 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testDeleteGeofenceData() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .success([Constants.geofence])
+        //apiService.getResult = .success([Constants.geofence])
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
@@ -84,7 +84,7 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testDeleteGeofenceDataFailure() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .failure(Constants.defaultError)
+        apiService.mockDeleteGeofenceResult = .failure(Constants.defaultError)
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false

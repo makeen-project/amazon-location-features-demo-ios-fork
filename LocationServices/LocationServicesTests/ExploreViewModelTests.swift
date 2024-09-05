@@ -19,6 +19,8 @@ final class ExploreViewModelTests: XCTestCase {
     var destinationLocation: CLLocationCoordinate2D!
     var routeModel: RouteModel!
     var delegate: MockExploreViewModelOutputDelegate!
+    var userLocation: (lat: Double, long: Double)!
+    var search: SearchPresentation!
     enum Constants {
         static let waitRequestDuration: TimeInterval = 10
         static let apiRequestDuration: TimeInterval = 1
@@ -36,7 +38,15 @@ final class ExploreViewModelTests: XCTestCase {
         exploreViewModel = ExploreViewModel(routingService: routingService, locationService: locationService)
         delegate = MockExploreViewModelOutputDelegate()
         exploreViewModel.delegate = delegate
-        
+        userLocation = (lat: 40.7487776237092, long: -73.98554260340953)
+        search = SearchPresentation(placeId: "myLocation",
+                                       fullLocationAddress: "Times Square, New York",
+                                       distance: nil,
+                                       countryName: nil,
+                                       cityName: nil,
+                                       placeLat: userLocation?.lat,
+                                       placeLong: userLocation?.long,
+                                       name: "Times Square")
         departureLocation  = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
         destinationLocation = CLLocationCoordinate2D(latitude:40.75474012009525, longitude: -73.98387963388527)
         routeModel = RouteModel(departurePosition: departureLocation, destinationPosition: destinationLocation, travelMode: RouteTypes.car, avoidFerries: false, avoidTolls: false, isPreview: true, departurePlaceName: "Time Square", departurePlaceAddress: "Manhattan, NY 10036, United States", destinationPlaceName: "CUNY Graduate Center", destinationPlaceAddress: "365 5th Ave, New York, NY 10016, United States")
@@ -77,6 +87,8 @@ final class ExploreViewModelTests: XCTestCase {
 
     func testReCalculateRouteReturnSuccess() async throws {
         let direction = DirectionPresentation(model:CalculateRouteOutput(), travelMode: .car)
+        locationService.mockGetPlaceResult = .success(search)
+        locationService.mockSearchWithPositionResult = .success([search])
         routingService.putResult = [LocationClientTypes.TravelMode.car: .success(direction)]
         exploreViewModel.activateRoute(route: routeModel)
         try await exploreViewModel.reCalculateRoute(with: destinationLocation)
@@ -103,7 +115,7 @@ final class ExploreViewModelTests: XCTestCase {
                                        placeLat: departureLocation?.latitude,
                                        placeLong: departureLocation?.longitude,
                                        name: "My Location")
-        locationService.putSearchWithPositionResult = .success([search])
+        locationService.mockSearchWithPositionResult = .success([search])
         await exploreViewModel.loadPlace(for: destinationLocation, userLocation: departureLocation)
         
         XCTWaiter().wait(until: {

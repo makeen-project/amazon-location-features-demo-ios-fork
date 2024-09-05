@@ -2,8 +2,8 @@
 //  AuthHelper.swift
 //  LocationServices
 //
-//  Created by Zeeshan Sheikh on 21/08/2024.
-//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 
 import Foundation
 import AwsCommonRuntimeKit

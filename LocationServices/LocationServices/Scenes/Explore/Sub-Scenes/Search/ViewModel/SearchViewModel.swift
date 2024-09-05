@@ -44,9 +44,9 @@ final class SearchViewModel: SearchViewModelProcotol {
         } else {
             let result = await service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
             let resultValue = try result.get()
-                self.presentation = resultValue
-                let model = resultValue.map(MapModel.init)
-                self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
+            self.presentation = resultValue
+            let model = resultValue.map(MapModel.init)
+            self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
         }
     }
     

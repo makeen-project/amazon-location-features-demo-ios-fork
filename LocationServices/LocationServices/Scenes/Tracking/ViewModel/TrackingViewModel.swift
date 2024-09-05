@@ -183,7 +183,9 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         backgroundQueue.async {
             do {
                 self.createIoTClientIfNeeded()
-                try self.connectClient(client: self.mqttClient!, iotContext: self.mqttIoTContext!)
+                if self.mqttClient != nil {
+                    try self.connectClient(client: self.mqttClient!, iotContext: self.mqttIoTContext!)
+                }
             }
             catch {
                 print(error)

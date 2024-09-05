@@ -67,7 +67,8 @@ final class LoginViewModelTests: XCTestCase {
     func testDisconnectAWS() throws {
         viewModel.disconnectAWS()
         XCTWaiter().wait(until: { [weak self] in
-            return self?.delegate.hasShownAlert ?? false
+            let result = self?.delegate.hasIdentityPoolIdValidationSucceed ?? false
+            return !result
  
         }, timeout: Constants.waitRequestDuration, message: "Expected shownAlert on disconnectAWS true")
     }

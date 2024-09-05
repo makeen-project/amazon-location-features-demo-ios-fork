@@ -52,7 +52,6 @@ struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
     func getGeofenceList() async -> Result<[GeofenceDataModel], Error> {
         do {
             let result = try await fetchGeofenceList()
-            //.map({ GeofenceDataModel(model: $0.first ) })
             let models = result!.entries!.map( { GeofenceDataModel(model: $0) })
             return .success(models)
         }
@@ -62,6 +61,6 @@ struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
     }
     
     func evaluateGeofence(lat: Double, long: Double) async throws {
-        let result = try await batchEvaluateGeofences(lat: lat, long: long)
+        let _ = try await batchEvaluateGeofences(lat: lat, long: long)
     }
 }

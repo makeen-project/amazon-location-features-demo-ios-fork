@@ -10,55 +10,36 @@ import Foundation
 import AWSLocation
 
 class LocationAPIServiceMock: LocationServiceable {
+    var mockSearchTextResult: Result<[SearchPresentation], Error> = .success([])
+    var mockSearchTextWithSuggestionResult: Result<[SearchPresentation], Error> = .success([])
+    var mockSearchWithPositionResult: Result<[SearchPresentation], Error> = .success([])
+    var mockGetPlaceResult: Result<SearchPresentation?, Error> = .success(nil)
     
     let delay: TimeInterval
-    
+        
     init(delay: TimeInterval) {
         self.delay = delay
     }
     
-    var putSearchWithPositionResult: Result<[LocationServices.SearchPresentation], Error>?
-    
-    var putSearchTextResult: [LocationServices.SearchPresentation]?
-    
-    var getPlaceResult: SearchPresentation?
-    
-    func searchText(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void)) {
-        perform { [weak self] in
-             guard let result = self?.putSearchTextResult else { return }
-             completion(result)
-         }
+    func searchText(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
+        return mockSearchTextResult
     }
     
-    func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?, completion: @escaping (([SearchPresentation]) -> Void)) {
-        perform { [weak self] in
-             guard let result = self?.putSearchTextResult else { return }
-             completion(result)
-         }
-    }
-    
-    func searchWithPosition(text: [NSNumber], userLat: Double?, userLong: Double?, completion: @escaping ((Result<[SearchPresentation], Error>) -> Void)) {
-        perform { [weak self] in
-             guard let result = self?.putSearchWithPositionResult else { return }
-             completion(result)
-         }
+    func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
+        return mockSearchTextWithSuggestionResult
     }
     
     func searchWithPosition(position: [Double], userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
-        let result = self.putSearchWithPositionResult
-        return result!
+        return mockSearchWithPositionResult
     }
     
-    func getPlace(with placeId: String, completion: @escaping (SearchPresentation?) -> Void) {
-        perform { [weak self] in
-             guard let result = self?.getPlaceResult else { return }
-             completion(result)
-         }
-    }
-    
-    private func perform(action: @escaping ()->()) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
-            action()
+    func getPlace(with placeId: String) async throws -> SearchPresentation? {
+        switch mockGetPlaceResult {
+        case .success(let model):
+            return model
+        case .failure(let error):
+            throw error
         }
     }
 }
+

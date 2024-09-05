@@ -99,12 +99,4 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
         let model = SearchPresentation(model: response!)
         return model
     }
-    
-//    func getPlace(with placeId: String) async throws -> SearchPresentation? {
-//        return await withCheckedContinuation({ continuation in
-//            getPlace(with: placeId) { presentation in
-//                continuation.resume(returning: presentation)
-//            }
-//        })
-//    }
 }

@@ -105,8 +105,9 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         let result = await locationService.searchWithPosition(position: [coordinates.longitude, coordinates.latitude], userLat: userLocation?.latitude, userLong: userLocation?.longitude)
         DispatchQueue.main.async {
             do {
-                let model = try result.get().first!
-                self.delegate?.showAnnotation(model: model, force: false)
+                if let model = try result.get().first {
+                    self.delegate?.showAnnotation(model: model, force: false)
+                }
             }
             catch {
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
