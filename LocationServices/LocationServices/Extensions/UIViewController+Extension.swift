@@ -64,15 +64,15 @@ extension UIViewController {
     }
     
     func getSmallDetentHeight() -> CGFloat {
-        return self.parent!.view.frame.height * DetentHeights.small
+        return ceil(self.parent!.view.frame.height * DetentHeights.small)
     }
     
     func getMediumDetentHeight() -> CGFloat {
-        return self.parent!.view.frame.height * DetentHeights.medium
+        return ceil(self.parent!.view.frame.height * DetentHeights.medium)
     }
     
     func getLargeDetentHeight() -> CGFloat {
-        return self.parent!.view.frame.height * DetentHeights.large
+        return ceil(self.parent!.view.frame.height * DetentHeights.large)
     }
     
    func createGrabberView() -> UIView {
@@ -235,7 +235,7 @@ extension UIViewController {
     }
     
     @objc private func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
-        let currentHeight = view.frame.height
+        let currentHeight = ceil(view.frame.height)
         let targetDetentHeight: CGFloat
 
         if currentHeight >= getSmallDetentHeight() && currentHeight < getMediumDetentHeight() {

@@ -75,7 +75,7 @@ final class SettingsUITests: LocationServicesUITests {
             .waitForMapToBeRendered()
         
         exploreScreen = testMapStyle(screen: exploreScreen, style: .light)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
+        exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
 //        exploreScreen = testMapStyle(screen: exploreScreen, style: .navigation)
 //        exploreScreen = testMapStyle(screen: exploreScreen, style: .darkGray)
 //        exploreScreen = testMapStyle(screen: exploreScreen, style: .lightGray)

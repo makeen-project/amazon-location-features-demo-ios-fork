@@ -12,6 +12,7 @@ import AWSLocation
 
 enum GeofenceError: Error {
     case deleteGeofence(String)
+    case listGeofence(String)
 }
 
 protocol GeofenceServiceable {
@@ -52,8 +53,13 @@ struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
     func getGeofenceList() async -> Result<[GeofenceDataModel], Error> {
         do {
             let result = try await fetchGeofenceList()
-            let models = result!.entries!.map( { GeofenceDataModel(model: $0) })
-            return .success(models)
+            if result != nil {
+                let models = result!.entries!.map( { GeofenceDataModel(model: $0) })
+                return .success(models)
+            }
+            else {
+                return .failure(GeofenceError.listGeofence("No geofence founc"))
+            }
         }
         catch {
             return .failure(error)

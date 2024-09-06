@@ -25,7 +25,7 @@ public class CognitoAuthHelper {
         _sharedInstance?.authHelper = AuthHelper()
         _sharedInstance?.locationCredentialsProvider = try await _sharedInstance?.authHelper?.authenticateWithCredentialsProvider(credentialsProvider: credentialsProvider, region: region)
         _sharedInstance?.amazonLocationClient = _sharedInstance?.authHelper?.getLocationClient()
-        //try await _sharedInstance?.amazonLocationClient?.initialiseLocationClient()
+        try await _sharedInstance?.amazonLocationClient?.initialiseLocationClient()
     }
     
     static func `default`() -> CognitoAuthHelper {

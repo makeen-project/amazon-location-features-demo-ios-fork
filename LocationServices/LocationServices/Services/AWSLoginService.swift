@@ -355,7 +355,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                 KeyChainHelper.save(value: CognitoCredentials.encodeCognitoCredentials(credential: cognitoCredentials!)!, key: .cognitoCredentials)
                 UserDefaultsHelper.removeObject(for: .signedInIdentityId)
                 print("Saved cognito credentials...")
-                try await CognitoAuthHelper.initialise(credentialsProvider: credentialsProvider!, region: customModel.identityPoolId.toRegionString())
+                try await CognitoAuthHelper.initialise(identityPoolId: customModel.identityPoolId)
             }
             catch {
                 throw error
