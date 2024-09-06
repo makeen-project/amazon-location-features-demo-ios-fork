@@ -209,7 +209,6 @@ final class NavigationUITests: LocationServicesUITests {
         
         let _ = screen
             .waitForMapToBeRendered()
-            //.validateMapIsAdjustedToTheRoute()
     }
     
     func testMyLocationOption() throws {

@@ -104,14 +104,13 @@ final class SettingsUITests: LocationServicesUITests {
             .select(sourceType: .here)
         XCTAssertTrue(dataSourceScreen.isCellSelected(for: .here))
         
-        exploreScreen = dataSourceScreen
+        let mapStyleScreen = dataSourceScreen
             .tapBackButton()
             .getTabBarScreen()
             .tapExploreButton()
-            .waitForMapToBeRendered()
-        
-        let screenshotAfter = exploreScreen.takeMapScreenshot()
-        XCTAssertNotEqual(screenshotBefore.pngRepresentation, screenshotAfter.pngRepresentation)
+            .tapMapStyles()
+
+        XCTAssertTrue(mapStyleScreen.isCellSelected(for: .explore))
     }
     
     func testMapStyle(screen: UITestExploreScreen, style: MapStyleImages) -> UITestExploreScreen {

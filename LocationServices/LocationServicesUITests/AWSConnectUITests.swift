@@ -25,48 +25,4 @@ final class AWSConnectUITests: LocationServicesUITests {
             .connectAWSConnect()
         return app
     }
-    
-//    func atestConnectAWSAccountFromTracking() throws {
-//        let app = startApp()
-//        let _ = UITestTabBarScreen(app: app)
-//            .tapTrackingButton()
-//            .waitForAWSConnectionScreen()
-//            .connectAWSConnect()
-//    }
-//    
-//    func atestConnectAWSAccountFromGeofence() throws {
-//        let app = startApp()
-//        let _ = UITestTabBarScreen(app: app)
-//            .tapGeofenceButton()
-//            .waitForAWSConnectionScreen()
-//            .connectAWSConnect()
-//    }
-//    
-//    func atestDisconnectAWSAccount() throws {
-//        _ = try connectAWSAccount()
-//
-//        let app = restartApp()
-//        let _ = UITestTabBarScreen(app: app)
-//            .tapSettingsButton()
-//            .tapConnectAWSRow()
-//            .tapDisconnectButton()
-//            .waitForAWSConnectResponse()
-//        
-//    }
-    
-    func disabledtestSignInAWSAccount() throws {
-        let app = try connectAWSAccount()
-        
-        //let app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .signInAWSAccount()
-        
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .tapDisconnectButton()
-            .waitForAWSConnectResponse()
-    }
 }

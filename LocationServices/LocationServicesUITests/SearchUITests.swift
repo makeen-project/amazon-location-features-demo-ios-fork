@@ -88,15 +88,6 @@ final class SearchUITests: LocationServicesUITests {
             .waitForResultsInTable()
     }
     
-//    func testNoResults() throws {
-//        let app = startApp()
-//        let _ = UITestExploreScreen(app: app)
-//            .tapSearchTextField()
-//            .waitForSearchRootView()
-//            .tapKeyboardReturnButton()
-//            .waitForNoResultsView()
-//    }
-    
     func testSearchWithAddressPoiCard() {
         let app = startApp(allowPermissions: true)
         

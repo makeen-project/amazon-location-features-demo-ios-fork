@@ -23,7 +23,6 @@ class AWSSignatureV4Delegate : NSObject, MLNOfflineStorageDelegate {
         self.region = region
     }
 
-
     func offlineStorage(_ storage: MLNOfflineStorage, urlForResourceOf kind: MLNResourceKind, with url: URL) -> URL {
         if url.host?.contains("amazonaws.com") != true || url.absoluteString.contains("?key=") {
             return url

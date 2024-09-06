@@ -17,11 +17,6 @@ final class MapUITests: LocationServicesUITests {
         super.tearDown()
     }
     
-    func disabledtestMapAppearance() throws {
-        let app = startApp()
-        let _ = UITestExploreScreen(app: app).waitForMapToBeRendered()
-    }
-    
     func testMapZoomIn() throws {
         let app = startApp(allowPermissions: false)
         let _ = UITestExploreScreen(app: app)
@@ -41,28 +36,6 @@ final class MapUITests: LocationServicesUITests {
         let _ = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .zoomOut()
-    }
-    
-    func disabledtestMapMaxZoomIn() throws {
-        let app = startApp(allowPermissions: false)
-        let _ = UITestExploreScreen(app: app)
-            .waitForMapToBeRendered()
-            .zoomInToMax()
-            .zoomInWithPinchFails()
-    }
-    
-    func disabledtestMapMaxZoomOut() throws {
-        let app = startApp(allowPermissions: false)
-        let _ = UITestExploreScreen(app: app)
-            .waitForMapToBeRendered()
-            .zoomOutToMax()
-            .zoomOutFails()
-    }
-    
-    func disabledtestUserLocationAnnotation() throws {
-        let app = startApp(allowPermissions: true)
-        let _ = UITestExploreScreen(app: app)
-            .waitForUserLocationAnnotation()
     }
     
     func testLocateMeButton() throws {
