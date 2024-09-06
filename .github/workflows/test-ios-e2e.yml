@@ -9,7 +9,7 @@ on:
 jobs:
   test-iOS:
     name: Test iOS App
-    runs-on: macos-13-xl
+    runs-on: macos-14-xl
     steps:
       - uses: actions/checkout@v2
 
