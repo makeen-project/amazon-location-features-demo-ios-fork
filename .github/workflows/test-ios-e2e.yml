@@ -25,6 +25,10 @@ jobs:
         run: |
           base64 -d <<< ${{ secrets.CONFIG }} > Config.xcconfig
           base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
+          echo "Contents of Config.xcconfig:"
+          cat Config.xcconfig
+          echo "Contents of ConfigTest.xcconfig:"
+          cat ConfigTest.xcconfig
 
       # - name: Run tests on iPad
       #   working-directory: ./LocationServices
