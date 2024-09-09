@@ -150,7 +150,7 @@ final class DirectionViewModelTests: XCTestCase {
     
     func testGetSearchCellModelWithResults() async throws {
         locationService.mockSearchWithPositionResult = .success([search])
-        let result = try await directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: nil, userLong: nil)
+        _ = try await directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: nil, userLong: nil)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -159,7 +159,7 @@ final class DirectionViewModelTests: XCTestCase {
     
     func testSearchSelectedPlaceWithMyLocation() async throws {
         locationService.mockSearchWithPositionResult = .success([search])
-        let result = try await directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await directionViewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
         
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult

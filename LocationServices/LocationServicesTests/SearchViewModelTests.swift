@@ -187,7 +187,7 @@ final class SearchViewModelTests: XCTestCase {
         locationService.mockGetPlaceResult = .success(search)
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockSearchTextResult = .success([search])
-        let result = try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        _ = try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")

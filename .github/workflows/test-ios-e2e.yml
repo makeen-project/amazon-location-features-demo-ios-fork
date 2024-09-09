@@ -30,17 +30,17 @@ jobs:
           echo "Contents of ConfigTest.xcconfig:"
           cat ConfigTest.xcconfig
 
-      # - name: Run tests on iPad
-      #   working-directory: ./LocationServices
-      #   run: bundle exec fastlane run_e2e_tests device:"iPad Pro (12.9-inch) (6th generation)"
+      - name: Run tests on iPad
+        working-directory: ./LocationServices
+        run: bundle exec fastlane run_e2e_tests device:"iPad Pro (12.9-inch) (6th generation)"
 
-      # - name: Upload test results for iPad
-      #   uses: actions/upload-artifact@v4
-      #   if: always()
-      #   with:
-      #     name: test-results-ipad
-      #     path: ${{ env.xcresult_path }}
-      #     retention-days: 1
+      - name: Upload test results for iPad
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-ipad
+          path: ${{ env.xcresult_path }}
+          retention-days: 1
 
       - name: Run tests on iPhone
         working-directory: ./LocationServices

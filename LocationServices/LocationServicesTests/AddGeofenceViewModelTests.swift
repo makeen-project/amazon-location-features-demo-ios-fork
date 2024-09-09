@@ -200,7 +200,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         switch result {
         case .success(let geofenceModel):
             XCTAssertEqual(viewModel.activeGeofencesLists.count, 1)
-            let firstModel = try XCTUnwrap(viewModel.activeGeofencesLists.first)
+            _ = try XCTUnwrap(viewModel.activeGeofencesLists.first)
             XCTAssertEqual(geofenceModel.id, Constants.testGeofenceModel.id)
             XCTAssertEqual(geofenceModel.lat, Constants.updatedGeofenceLat)
             XCTAssertEqual(geofenceModel.long, Constants.updatedGeofenceLong)
@@ -228,7 +228,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testSearchWithSuggesstionWithEmptyText() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        let result = try await viewModel.searchWithSuggesstion(text: "", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult false")
@@ -237,7 +237,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testSearchWithSuggesstion() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        let result = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -246,7 +246,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testSearchWithSuggesstionWithCoordinates() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        let result = try await viewModel.searchWithSuggesstion(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -255,7 +255,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testSearchWith() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextResult = .success([search])
-        let result = try await viewModel.searchWith(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWith(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -265,7 +265,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testSearchWithEmptyText() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextResult = .success([search])
-        let result = try await viewModel.searchWith(text: "", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWith(text: "", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -274,7 +274,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testSearchWithCoordinates() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchWithPositionResult = .success([search])
-        let result = try await viewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWith(text: "40.7487776237092, -73.98554260340953", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -284,7 +284,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testGetSearchCellModelWithResults() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        let result = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -294,7 +294,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     func testNumberOfRowsInSection() async throws {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        let result = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -306,12 +306,12 @@ final class AddGeofenceViewModelTests: XCTestCase {
         locationService.mockSearchTextResult = .success([search])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockGetPlaceResult = .success(search)
-        let result = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
         XCTAssertEqual(viewModel.getSearchCellModel().isEmpty, false, "Expected false" )
-        let result1 = try await viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
+        _ = try await viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.selectedPlaceResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected selectedPlaceResultCalled true")
@@ -330,12 +330,12 @@ final class AddGeofenceViewModelTests: XCTestCase {
         setupViewModel(with: [model])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockGetPlaceResult = .success(search)
-        let result = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
         XCTAssertEqual(viewModel.getSearchCellModel().isEmpty, false, "Expected false" )
-        let result1 = try await viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
+        _ = try await viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.selectedPlaceResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected selectedPlaceResultCalled true")
@@ -354,15 +354,11 @@ final class AddGeofenceViewModelTests: XCTestCase {
         setupViewModel(with: [model])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockGetPlaceResult = .success(search)
-        let result = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = try await viewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
         XCTAssertEqual(viewModel.getSearchCellModel().isEmpty, false, "Expected false" )
-//        let result1 = try await viewModel.searchSelectedPlaceWith(IndexPath.init(row: 0, section: 0), lat: userLocation.lat, long: userLocation.long)
-//        XCTWaiter().wait(until: {
-//            return self.viewModelDelegate.searchResultCalled
-//        }, timeout: Constants.waitRequestDuration, message: "Expected searchResultCalled true")
     }
 }
 

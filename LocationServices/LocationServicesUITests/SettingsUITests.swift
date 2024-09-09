@@ -89,11 +89,9 @@ final class SettingsUITests: LocationServicesUITests {
     
     func testDataSourceChanges() throws {
         let app = startApp(allowPermissions: false)
-        var exploreScreen = UITestExploreScreen(app: app)
+        let exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
-        
-        let screenshotBefore = exploreScreen.takeMapScreenshot()
-        
+
         var dataSourceScreen = exploreScreen.getTabBarScreen()
             .tapSettingsButton()
             .tapDataProviderRow()
