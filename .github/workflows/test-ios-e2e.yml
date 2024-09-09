@@ -40,7 +40,7 @@ jobs:
 
       - name: Run tests on iPhone
         working-directory: ./LocationServices
-        run: bundle exec fastlane run_e2e_tests device:"iPhone 14 pro,OS=17.5"
+        run: bundle exec fastlane run_e2e_tests device:"iPhone 14 Pro Max (17.5)"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
