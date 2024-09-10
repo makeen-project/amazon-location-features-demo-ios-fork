@@ -56,9 +56,8 @@ final class MapUITests: LocationServicesUITests {
         let app = startApp(allowPermissions: false)
         var exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
-        
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .light)
         exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
+        exploreScreen = testMapStyle(screen: exploreScreen, style: .Imagery)
     }
     
     func testMapStyle(screen: UITestExploreScreen, style: MapStyleImages) -> UITestExploreScreen {
