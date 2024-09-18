@@ -1,5 +1,5 @@
 //
-//  SettingsLogoutButonView.swift
+//  SettingsDisconnectButtonView.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class SettingsLogoutButtonView: UIButton {
+final class SettingsDisconnectButtonView: UIButton {
     
     enum Constants {
         static let logoutIconSize: CGFloat = 20
@@ -23,8 +23,8 @@ final class SettingsLogoutButtonView: UIButton {
     
     private var containerView: UIView = UIView()
     
-    private var logoutIcon: UIImageView = {
-        let iv = UIImageView(image: .logoutIcon)
+    private var disconnectIcon: UIImageView = {
+        let iv = UIImageView(image: .disconnectIcon)
         iv.contentMode = .scaleAspectFit
         iv.tintColor = .navigationRedButton
         return iv
@@ -32,7 +32,7 @@ final class SettingsLogoutButtonView: UIButton {
     
     private var itemTitle: UILabel = {
         var label = UILabel()
-        label.text = StringConstant.logout
+        label.text = StringConstant.disconnect
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left
@@ -64,7 +64,7 @@ final class SettingsLogoutButtonView: UIButton {
     
     private func setupViews() {
         self.addSubview(containerView)
-        containerView.addSubview(logoutIcon)
+        containerView.addSubview(disconnectIcon)
         containerView.addSubview(arrowIcon)
         containerView.addSubview(itemTitle)
         
@@ -72,7 +72,7 @@ final class SettingsLogoutButtonView: UIButton {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
        
-        logoutIcon.snp.makeConstraints {
+        disconnectIcon.snp.makeConstraints {
             $0.height.width.equalTo(Constants.logoutIconSize)
             $0.leading.equalToSuperview().offset(Constants.logoutIconLeadingOffset)
             $0.centerY.equalToSuperview()
@@ -86,7 +86,7 @@ final class SettingsLogoutButtonView: UIButton {
         
         itemTitle.snp.makeConstraints {
             $0.height.equalTo(Constants.itemTitleHeight)
-            $0.leading.equalTo(logoutIcon.snp.trailing).offset(Constants.itemTitleLeadingOffset)
+            $0.leading.equalTo(disconnectIcon.snp.trailing).offset(Constants.itemTitleLeadingOffset)
             $0.trailing.equalTo(arrowIcon.snp.leading)
             $0.centerY.equalToSuperview()
         }

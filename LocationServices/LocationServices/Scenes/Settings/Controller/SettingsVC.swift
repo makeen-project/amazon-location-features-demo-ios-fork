@@ -40,6 +40,14 @@ final class SettingsVC: UIViewController {
         return view
     }()
     
+    private lazy var disconnectButton: SettingsDisconnectButtonView = {
+        let view = SettingsDisconnectButtonView()
+        view.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(disconnectAction))
+        view.addGestureRecognizer(tap)
+        return view
+    }()
+    
     var viewModel: SettingsViewModelProtocol! {
         didSet {
             viewModel.delegate = self
@@ -69,11 +77,16 @@ final class SettingsVC: UIViewController {
     }
     
     @objc func logoutAction() {
-        viewModel.logOut()
+        self.viewModel.logOut()
+    }
+    
+    @objc func disconnectAction() {
+        self.viewModel.disconnectAWS()
     }
    
     private func setupViews() {
         self.view.addSubview(headerTitle)
+        self.view.addSubview(disconnectButton)
         self.view.addSubview(logoutButton)
         self.view.addSubview(tableView)
         
@@ -81,6 +94,12 @@ final class SettingsVC: UIViewController {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.equalToSuperview().offset(Constants.horizontalOffset)
             $0.trailing.equalToSuperview()
+        }
+        
+        disconnectButton.snp.makeConstraints {
+            $0.height.equalTo(72)
+            $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
+            $0.leading.trailing.equalToSuperview()
         }
         
         logoutButton.snp.makeConstraints {
@@ -112,7 +131,8 @@ final class SettingsVC: UIViewController {
     
     private func updateLogoutButtonVisibility() {
         // show logout button only if we are not signed in
-        logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+        self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+        self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
     }
 }
 
@@ -126,5 +146,6 @@ extension SettingsVC: SettingsViewModelOutputDelegate {
     func logoutCompleted() {
         // show logout button only if we are not signed in
         self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+        self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
     }
 }

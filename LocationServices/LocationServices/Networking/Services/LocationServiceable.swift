@@ -34,29 +34,9 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
         }
     }
     
-    func searchTextWithSuggestion1(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>  {
-        do {
-            let result = try await searchTextWithSuggesstionRequest(text: text, userLat: userLat, userLong: userLong)
-            let model = try await result!.results!.asyncMap({ model in
-                guard let placeId = model.placeId else { return SearchPresentation(model: model) }
-                
-                var userLocation: CLLocation? = nil
-                if let userLat, let userLong {
-                    userLocation = CLLocation(latitude: userLat, longitude: userLong)
-                }
-                
-                let place = try await getPlace(with: placeId)
-                return SearchPresentation(model: model, placeLat: place?.placeLat, placeLong: place?.placeLong, userLocation: userLocation)
-            })
-            return .success(model)
-        }
-        catch {
-            return .failure(error)
-        }
-    }
-    
     func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>  {
         do {
+            print("===searchTextWithSuggestion===")
             let result = try await searchTextWithSuggesstionRequest(text: text, userLat: userLat, userLong: userLong)
             let model = try await result!.results!.asyncMap({ model in
                 guard let placeId = model.placeId else { return SearchPresentation(model: model) }
@@ -65,7 +45,6 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
                 if let userLat, let userLong {
                     userLocation = CLLocation(latitude: userLat, longitude: userLong)
                 }
-                
                 let place = try await getPlace(with: placeId)
                 return SearchPresentation(model: model, placeLat: place?.placeLat, placeLong: place?.placeLong, userLocation: userLocation)
             })

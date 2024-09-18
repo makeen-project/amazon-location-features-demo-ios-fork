@@ -23,11 +23,11 @@ extension AWSRoutingServiceProtocol {
                         travelMode: LocationClientTypes.TravelMode,
                         avoidFerries: Bool,
                         avoidTolls: Bool) async throws -> CalculateRouteOutput? {
-        
+        var carModeOptions: LocationClientTypes.CalculateRouteCarModeOptions? = nil
         if travelMode == .car {
-            let carModeOptions = LocationClientTypes.CalculateRouteCarModeOptions(avoidFerries: avoidFerries, avoidTolls: avoidTolls)
+            carModeOptions = LocationClientTypes.CalculateRouteCarModeOptions(avoidFerries: avoidFerries, avoidTolls: avoidTolls)
         }
-        let input = CalculateRouteInput(calculatorName: getCalculatorName(), departNow: true, departurePosition: [depaturePosition.longitude, depaturePosition.latitude], destinationPosition: [destinationPosition.longitude, destinationPosition.latitude], includeLegGeometry: true, travelMode: travelMode)
+        let input = CalculateRouteInput(calculatorName: getCalculatorName(), carModeOptions: carModeOptions, departNow: true, departurePosition: [depaturePosition.longitude, depaturePosition.latitude], destinationPosition: [destinationPosition.longitude, destinationPosition.latitude], includeLegGeometry: true, travelMode: travelMode)
         if let client = AmazonLocationClient.defaultCognito()?.locationClient {
             let result = try await client.calculateRoute(input: input)
             

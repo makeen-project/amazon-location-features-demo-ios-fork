@@ -21,6 +21,7 @@ protocol AWSLoginServiceProtocol {
     func login() async throws
     func logout(skipPolicy: Bool)
     func validate(identityPoolId: String) async throws -> Bool
+    func disconnectAWS()
 }
 
 protocol AWSLoginServiceOutputProtocol {
@@ -235,9 +236,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
             Task {
                 try await detachPolicy()
             }
-            self.awsLogout()
-        } else {
-            self.awsLogout()
         }
         //set initial state
         UserDefaultsHelper.setAppState(state: .customAWSConnected)
@@ -249,7 +247,19 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         self.delegate?.logoutResult(nil)
     }
     
-    private func awsLogout() {
+    func isSignedIn() -> Bool {
+        return UserDefaultsHelper.getAppState() == .loggedIn
+    }
+    
+    func disconnectAWS() {
+        // if we signed it, make sign out first
+        if isSignedIn() {
+            logout(skipPolicy: false)
+        }
+        
+        // remove custom configuration
+        UserDefaultsHelper.removeObject(for: .awsConnect)
+        UserDefaultsHelper.setAppState(state: .defaultAWSConnected)
     }
     
     
@@ -271,10 +281,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
     func attachPolicy(cognitoCredentials: CognitoCredentials) async throws {
         do {
             guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
-//            let isPolicyAttached = UserDefaultsHelper.get(for: Bool.self, key: .attachedPolicy) ?? false
-//            guard !isPolicyAttached else {
-//                return
-//            }
             let identityPoolId = customModel.identityPoolId
             let id = try await getAWSIdentityId(identityPoolId: identityPoolId)
             let resolver: StaticAWSCredentialIdentityResolver? = try StaticAWSCredentialIdentityResolver(AWSCredentialIdentity(accessKey: cognitoCredentials.accessKeyId, secret: cognitoCredentials.secretKey, expiration: cognitoCredentials.expiration, sessionToken: cognitoCredentials.sessionToken))
@@ -304,11 +310,16 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
    
     
     func validate(identityPoolId: String) async throws -> Bool {
-        let id = try await getAWSIdentityId(identityPoolId: identityPoolId)
-        if id != nil  {
-            return true
+        do {
+            let id = try await getAWSIdentityId(identityPoolId: identityPoolId)
+            if id != nil  {
+                return true
+            }
+            return false
         }
-        return false
+        catch {
+            throw error
+        }
     }
     
     private func createValidationIdentity(identityPoolId: String) {

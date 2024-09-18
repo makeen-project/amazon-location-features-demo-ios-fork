@@ -64,17 +64,24 @@ final class LoginViewModel: LoginViewModelProtocol {
         ["https://", "http://"].forEach {
             webSocketUrl = webSocketUrl.replacingOccurrences(of: $0, with: "")
         }
-        Task {
-            let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId)
-            if isValid {
-                DispatchQueue.main.async {
-                    self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomain, webSocketUrl: webSocketUrl, region: "", apiKey: "")
+        Task {   
+            do {
+                let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId)
+                if isValid {
+                    DispatchQueue.main.async {
+                        self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomain, webSocketUrl: webSocketUrl, region: "", apiKey: "")
+                    }
+                }
+                else {
+                    
+                    let model = AlertModel(title: StringConstant.error, message: StringConstant.incorrectIdentityPoolIdMessage, cancelButton: nil, okButton: StringConstant.ok)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(model)
+                    }
                 }
             }
-            else {
-                
-                let model = AlertModel(title: StringConstant.error, message: StringConstant.incorrectIdentityPoolIdMessage, cancelButton: nil, okButton: StringConstant.ok)
-                
+            catch {
+                let model = AlertModel(title: StringConstant.error, message: "\(StringConstant.incorrectIdentityPoolIdMessage). \(error.localizedDescription)", cancelButton: nil, okButton: StringConstant.ok)
                 DispatchQueue.main.async {
                     self.delegate?.showAlert(model)
                 }
@@ -92,43 +99,11 @@ final class LoginViewModel: LoginViewModelProtocol {
                            apiKey: apiKey)
         
         delegate?.identityPoolIdValidationSucceed()
-//        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
-//
-//        // repeat until the user is kill the app itself and restart it.
-//        model.okHandler = {
-//            // for now we are just kill the app
-//            exit(0)
-//            // for Apple release seems like we need to constantly show an alert.
-//            //self.delegate?.showAlert(model)
-//        }
-//        delegate?.showAlert(model)
     }
     
     func disconnectAWS() {
-        // TODO: here we need to investigate if we can apply default configuration to AWSMobileService without restart of application.
-        // if we signed it, make sign out first
-        if isSignedIn() {
-            awsLoginService.logout(skipPolicy: false)
-        }
-        
+        awsLoginService.disconnectAWS()
         delegate?.cloudConnectionDisconnected()
-                
-        UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
-        
-        // remove custom configuration
-        UserDefaultsHelper.removeObject(for: .awsConnect)
-        
-//        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
-//        
-//        // repeat until the user is kill the app itself and restart it.
-//        model.okHandler = {
-//            // for now we are just kill the app
-//            exit(0)
-//            // for Apple release seems like we need to constantly show an alert.
-//            //self.delegate?.showAlert(model)
-//            
-//        }
-//        delegate?.showAlert(model)
     }
     
     private func saveDatatoDefaults(identityPoolId: String,
@@ -156,8 +131,7 @@ final class LoginViewModel: LoginViewModelProtocol {
     }
     
     func isSignedIn() -> Bool {
-        return false
-        //return AWSMobileClient.default().isSignedIn
+        return UserDefaultsHelper.getAppState() == .loggedIn
     }
 }
 

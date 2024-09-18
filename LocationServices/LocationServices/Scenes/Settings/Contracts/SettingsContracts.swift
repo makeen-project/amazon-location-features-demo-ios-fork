@@ -13,9 +13,10 @@ protocol SettingsViewModelProtocol: AnyObject {
     func getItemCount() -> Int
     func getCellItems(_ indexPath: IndexPath) -> SettingsCellModel
     func logOut()
+    func disconnectAWS()
 }
 
-protocol SettingsViewModelOutputDelegate: AnyObject {
+protocol SettingsViewModelOutputDelegate: AnyObject, AlertPresentable {
     func refreshViews()
     func logoutCompleted()
 }

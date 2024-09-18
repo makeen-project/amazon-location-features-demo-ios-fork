@@ -451,7 +451,6 @@ final class ExploreView: UIView, NavigationMapProtocol {
                 signingDelegate = AWSSignatureV4Delegate(cognitoCredentials: credentials, region: regionName)
                 MLNOfflineStorage.shared.delegate = signingDelegate
                 mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
-                mapView.reloadStyle(nil)
             }
         }
         
