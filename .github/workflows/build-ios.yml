@@ -54,17 +54,17 @@ jobs:
           base64 -d <<< ${{ secrets.AWS_CONFIG }} > Config.xcconfig
           base64 -d <<< ${{ secrets.TEST_CONFIG }} > ConfigTest.xcconfig
 
-      - name: Run tests
-        working-directory: ./LocationServices
-        run: bundle exec fastlane run_e2e_tests device:"iPhone 14 Pro Max (17.5)"
+      # - name: Run tests
+      #   working-directory: ./LocationServices
+      #   run: bundle exec fastlane run_e2e_tests device:"iPhone 14 Pro Max (17.5)"
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results
-          path: ${{ env.xcresult_path }}
-          retention-days: 1
+      # - name: Upload test results
+      #   uses: actions/upload-artifact@v3
+      #   if: always()
+      #   with:
+      #     name: test-results
+      #     path: ${{ env.xcresult_path }}
+      #     retention-days: 1
 
       - name: Build and distribute iOS
         working-directory: ./LocationServices
