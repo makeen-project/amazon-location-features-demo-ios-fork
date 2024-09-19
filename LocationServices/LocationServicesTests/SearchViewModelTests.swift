@@ -117,6 +117,7 @@ final class SearchViewModelTests: XCTestCase {
 
     func testNumberOfRowsInSection() async throws {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
+        locationService.mockSearchTextResult = .success([search])
         try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
@@ -131,6 +132,7 @@ final class SearchViewModelTests: XCTestCase {
     func testGetSearchCellModelWithResults() async throws {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockGetPlaceResult = .success(search)
+        locationService.mockSearchTextResult = .success([search])
         try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
@@ -142,6 +144,7 @@ final class SearchViewModelTests: XCTestCase {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockGetPlaceResult = .success(search)
         locationService.mockSearchWithPositionResult = .success([search])
+        locationService.mockSearchTextResult = .success([search])
         try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
@@ -164,6 +167,7 @@ final class SearchViewModelTests: XCTestCase {
                                        placeLong: userLocation?.longitude,
                                        name: nil)
         locationService.mockSearchTextWithSuggestionResult = .success([search])
+        locationService.mockSearchTextResult = .success([search])
         try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult

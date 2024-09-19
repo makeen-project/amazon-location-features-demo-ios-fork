@@ -446,12 +446,10 @@ final class ExploreView: UIView, NavigationMapProtocol {
         let regionName = identityPoolId.toRegionString()
         let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
 
-        if let credentials = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider()?.getCognitoCredentials() {
-            DispatchQueue.main.async { [self] in
-                signingDelegate = AWSSignatureV4Delegate(cognitoCredentials: credentials, region: regionName)
-                MLNOfflineStorage.shared.delegate = signingDelegate
-                mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
-            }
+        DispatchQueue.main.async { [self] in
+            signingDelegate = AWSSignatureV4Delegate(region: regionName)
+            MLNOfflineStorage.shared.delegate = signingDelegate
+            mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
         }
         
         mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering

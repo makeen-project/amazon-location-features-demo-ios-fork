@@ -8,7 +8,10 @@
 import Foundation
 @testable import LocationServices
 
-class AWSLoginSericeMock : AWSLoginServiceProtocol {
+class AWSLoginServiceMock : AWSLoginServiceProtocol {
+    func disconnectAWS() {
+    }
+    
     var delegate: LocationServices.AWSLoginServiceOutputProtocol?
     
     var validateResult: Result<Void, Error>?

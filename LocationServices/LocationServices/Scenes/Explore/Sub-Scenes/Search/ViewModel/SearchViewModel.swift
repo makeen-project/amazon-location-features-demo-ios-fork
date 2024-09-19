@@ -38,15 +38,24 @@ final class SearchViewModel: SearchViewModelProcotol {
                     let model = results.map(MapModel.init)
                     self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
                 case .failure(let error):
+                    DispatchQueue.main.async {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                        self.delegate?.showAlert(model)
+                    }
+                }
+        } else {
+            let response = await service.searchText(text: text, userLat: userLat, userLong: userLong) //.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            switch response {
+            case .success(let results):
+                self.presentation = results
+                let model = results.map(MapModel.init)
+                self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
+            case .failure(let error):
+                DispatchQueue.main.async {
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
                     self.delegate?.showAlert(model)
                 }
-        } else {
-            let result = await service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
-            let resultValue = try result.get()
-            self.presentation = resultValue
-            let model = resultValue.map(MapModel.init)
-            self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
+            }
         }
     }
     

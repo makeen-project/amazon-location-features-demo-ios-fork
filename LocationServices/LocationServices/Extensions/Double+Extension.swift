@@ -43,7 +43,7 @@ extension Double {
             let result = Double(num * 1000 / 1000 / 1000)
             return String(format: "%.2f", result) + " km"
         } else {
-            return "\(num) m"
+            return "\(String(format: "%.0f", num)) m"
         }
     }
 }

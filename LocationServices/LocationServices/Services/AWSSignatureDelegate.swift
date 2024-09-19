@@ -6,15 +6,15 @@
 // SPDX-License-Identifier: MIT-0
 
 import MapLibre
+import AwsCommonRuntimeKit
 
 class AWSSignatureV4Delegate : NSObject, MLNOfflineStorageDelegate {
-    private var awsSigner: AWSSignerV4? = nil
     private var region: String? = nil
     private var apiKey: String? = nil
     
-    init(cognitoCredentials: CognitoCredentials, region: String) {
-        self.awsSigner = AWSSignerV4(credentials: cognitoCredentials, serviceName: "geo", region: region)
+    init(region: String) {
         super.init()
+        self.region = region
     }
     
     init(apiKey: String, region: String) {
@@ -28,13 +28,22 @@ class AWSSignatureV4Delegate : NSObject, MLNOfflineStorageDelegate {
             return url
         }
         
-        if awsSigner != nil {
-            let signedURL = awsSigner!.signURL(url: url, expires: .hours(1))
-            return signedURL
-        }
-        else if apiKey != nil && region != nil {
-            return URL(string: "\(url)?key=\(apiKey!)") ?? url
-        }
+        if apiKey != nil && region != nil {
+             return URL(string: "\(url)?key=\(apiKey!)") ?? url
+         }
+        else if let cognitoProvider = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider(), region != nil {
+             var signedURL: URL = url
+             let semaphore = DispatchSemaphore(value: 0)
+             Task {
+                 try await cognitoProvider.refreshCognitoCredentialsIfExpired()
+                 let cognitoCredentials: CognitoCredentials? = cognitoProvider.getCognitoCredentials()
+                 let awsSigner = AWSSignerV4(credentials: cognitoCredentials!, serviceName: "geo", region: self.region!)
+                 signedURL = awsSigner.signURL(url: url, expires: .hours(1))
+                 semaphore.signal()
+             }
+             semaphore.wait()
+             return signedURL
+         }
         return url
     }
 }

@@ -11,7 +11,7 @@ import XCTest
 
 final class LoginViewModelTests: XCTestCase {
     var viewModel: LoginViewModel!
-    var loginService: AWSLoginSericeMock!
+    var loginService: AWSLoginServiceMock!
     var delegate: LoginViewModelOutputDelegateMock!
     enum Constants {
         static let waitRequestDuration: TimeInterval = 10
@@ -22,7 +22,7 @@ final class LoginViewModelTests: XCTestCase {
         viewModel = LoginViewModel()
         delegate = LoginViewModelOutputDelegateMock()
         viewModel.delegate = delegate
-        loginService = AWSLoginSericeMock(delay: Constants.apiRequestDuration)
+        loginService = AWSLoginServiceMock(delay: Constants.apiRequestDuration)
         viewModel.awsLoginService = loginService
         if let domain = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: domain)

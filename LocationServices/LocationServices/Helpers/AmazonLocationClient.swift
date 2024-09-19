@@ -9,6 +9,7 @@ import Foundation
 import AWSLocation
 import SmithyIdentity
 import SmithyIdentityAPI
+import AWSSDKIdentity
 
 public enum HTTPMethod: String {
     case GET
@@ -65,10 +66,10 @@ public class AmazonLocationClient {
     }
     
     public func setLocationClient(accessKey: String, secret: String, expiration: Date?, sessionToken: String?) async throws {
-        
-        let resolver: StaticAWSCredentialIdentityResolver? =  try  StaticAWSCredentialIdentityResolver(AWSCredentialIdentity(accessKey: accessKey, secret: secret, expiration: expiration, sessionToken: sessionToken))
-        
-        let clientConfig = try await LocationClient.LocationClientConfiguration(awsCredentialIdentityResolver: resolver, region: locationProvider.getRegion(), signingRegion: locationProvider.getRegion())
+        let identity = AWSCredentialIdentity(accessKey: accessKey, secret: secret, expiration: expiration, sessionToken: sessionToken)
+        let resolver =  try StaticAWSCredentialIdentityResolver(identity)
+        let cachedResolver: CachedAWSCredentialIdentityResolver? = try CachedAWSCredentialIdentityResolver(source: resolver, refreshTime: 3540)
+        let clientConfig = try await LocationClient.LocationClientConfiguration(awsCredentialIdentityResolver: cachedResolver, region: locationProvider.getRegion(), signingRegion: locationProvider.getRegion())
         
         self.locationClient = LocationClient(config: clientConfig)
     }
