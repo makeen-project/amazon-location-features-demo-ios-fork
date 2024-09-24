@@ -76,6 +76,7 @@ final class SearchVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
         searchBarView.makeSearchFirstResponder()
         searchAppearanceChanged(isVisible: true)
         
@@ -187,9 +188,7 @@ extension SearchVC: SearchViewModelOutputDelegate {
 
 extension SearchVC: SearchBarViewOutputDelegate {    
     func searchText(_ text: String?) {
-        print("|||searchText|||")
         Task {
-            print("+++searchText Task+++")
             try await viewModel.searchWithSuggesstion(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
         }
     }
