@@ -46,6 +46,8 @@ jobs:
         run: |
           bundle config --local path ./vendor/bundle
           bundle config --local deployment true
+          rbenv install -s 3.3.5
+          rbenv local 3.3.5
           bundle install
 
       - name: Setup Config Files
