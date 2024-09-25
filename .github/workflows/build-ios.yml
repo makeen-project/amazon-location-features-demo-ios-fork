@@ -67,7 +67,7 @@ jobs:
             issuer_id:${{ secrets.ISSUER_ID }} \
             key_content:${{ secrets.KEY_CONTENT }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ios-${{ github.run_number }}
           path: ./LocationServices/LocationServices.ipa
