@@ -44,7 +44,7 @@ final class SearchViewModel: SearchViewModelProcotol {
                     }
                 }
         } else {
-            let response = await service.searchText(text: text, userLat: userLat, userLong: userLong) //.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            let response = await service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
             switch response {
             case .success(let results):
                 self.presentation = results
