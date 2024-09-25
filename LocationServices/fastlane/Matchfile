@@ -1,1 +1,1 @@
-git_url("<url of the repo with your signing assets>")
+git_url("git@github.com:makeen-project/amazon-location-signing.git>")
