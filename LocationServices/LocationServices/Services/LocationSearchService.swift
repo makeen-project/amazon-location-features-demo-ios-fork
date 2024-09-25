@@ -33,7 +33,7 @@ extension AWSLocationSearchService {
         }
         let input = SearchPlaceIndexForTextInput(biasPosition: biasPosition, indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), text: text)
 
-        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
             let result = try await client.searchPlaceIndexForText(input: input)
             return result
         } else {
@@ -50,7 +50,7 @@ extension AWSLocationSearchService {
         }
      
         let input = SearchPlaceIndexForSuggestionsInput(biasPosition: biasPosition, indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), maxResults: LocationServiceConstant.maxResult as? Int, text: text)
-        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
             let result = try await client.searchPlaceIndexForSuggestions(input: input)
             return result
         } else {
@@ -60,7 +60,7 @@ extension AWSLocationSearchService {
     
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput? {
         let input = GetPlaceInput(indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), placeId: placeId)
-        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
             let result = try await client.getPlace(input: input)
             return result
         } else {
@@ -70,7 +70,7 @@ extension AWSLocationSearchService {
     
     func searchWithPositionRequest(position: [Double]) async throws -> SearchPlaceIndexForPositionOutput? {
         let input = SearchPlaceIndexForPositionInput(indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), position: position)
-        if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
             let result = try await client.searchPlaceIndexForPosition(input: input)
             return result
         } else {

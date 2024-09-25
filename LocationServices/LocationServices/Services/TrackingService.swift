@@ -29,7 +29,7 @@ extension AWSTrackingServiceProtocol {
             let devicePositionUpdates: [LocationClientTypes.DevicePositionUpdate]? = [devicePositionUpdate]
             
             let input = BatchUpdateDevicePositionInput(trackerName: TrackingServiceConstant.collectionName, updates: devicePositionUpdates)
-            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
                 let result = try await client.batchUpdateDevicePosition(input: input)
                 return result
             } else {
@@ -45,7 +45,7 @@ extension AWSTrackingServiceProtocol {
         do {
             try await AWSLoginService.default().refreshLoginIfExpired()
             let input = GetDevicePositionHistoryInput(deviceId: TrackingServiceConstant.deviceId, nextToken: nextToken, trackerName: TrackingServiceConstant.collectionName)
-            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
                 let result = try await client.getDevicePositionHistory(input: input)
                 var devicePositions = result.devicePositions ?? []
                 
@@ -66,7 +66,7 @@ extension AWSTrackingServiceProtocol {
         do {
             try await AWSLoginService.default().refreshLoginIfExpired()
             let input = BatchDeleteDevicePositionHistoryInput(deviceIds: [TrackingServiceConstant.deviceId], trackerName: TrackingServiceConstant.collectionName)
-            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
                 let result = try await client.batchDeleteDevicePositionHistory(input: input)
                 return result
             } else {

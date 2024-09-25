@@ -31,7 +31,7 @@ extension AWSGeofenceServiceProtocol {
             let circle = LocationClientTypes.Circle(center: center, radius: radius)
             let geometry = LocationClientTypes.GeofenceGeometry(circle: circle)
             let input = PutGeofenceInput(collectionName: GeofenceServiceConstant.collectionName, geofenceId: id, geometry: geometry)
-            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
                 let result = try await client.putGeofence(input: input)
                 return result
             } else {
@@ -47,7 +47,7 @@ extension AWSGeofenceServiceProtocol {
         do {
             try await AWSLoginService.default().refreshLoginIfExpired()
             let input = BatchDeleteGeofenceInput(collectionName: GeofenceServiceConstant.collectionName, geofenceIds: ids)
-            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
                 let result = try await client.batchDeleteGeofence(input: input)
                 return result
             } else {
@@ -63,7 +63,7 @@ extension AWSGeofenceServiceProtocol {
         do {
             try await AWSLoginService.default().refreshLoginIfExpired()
             let input = ListGeofencesInput(collectionName: GeofenceServiceConstant.collectionName)
-            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            if let client = try await  AmazonLocationClient.defaultCognito()?.locationClient {
                 let result = try await client.listGeofences(input: input)
                 return result
             } else {
@@ -85,7 +85,7 @@ extension AWSGeofenceServiceProtocol {
                 devicePositionUpdate.positionProperties = ["region": identityId.toRegionString(), "id": identityId.toId()]
             }
             let input = BatchEvaluateGeofencesInput(collectionName: GeofenceServiceConstant.collectionName, devicePositionUpdates: [devicePositionUpdate])
-            if let client = AmazonLocationClient.defaultCognito()?.locationClient {
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
                 let result = try await client.batchEvaluateGeofences(input: input)
                 return result
             } else {

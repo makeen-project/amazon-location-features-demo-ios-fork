@@ -45,23 +45,15 @@ public struct HTTPHeaders {
 public class AmazonLocationClient {
     public let locationProvider: LocationCredentialsProvider
     public var locationClient: LocationClient?
-    
+    private var credentials: CognitoCredentials?
     public init(locationCredentialsProvider: LocationCredentialsProvider) {
         self.locationProvider = locationCredentialsProvider
     }
     
     public func initialiseLocationClient() async throws {
         if let credentials = locationProvider.getCognitoProvider()?.getCognitoCredentials() {
-            
+            self.credentials = credentials
             try await setLocationClient(accessKey: credentials.accessKeyId, secret: credentials.secretKey, expiration: credentials.expiration, sessionToken: credentials.sessionToken)
-        }
-        else if let credentialsProvider = locationProvider.getCustomCredentialsProvider() {
-            
-            let credentials = try await credentialsProvider.getCredentials()
-            
-            if let accessKey = credentials.getAccessKey(), let secret = credentials.getSecret() {
-                try await setLocationClient(accessKey: accessKey, secret: secret, expiration: credentials.getExpiration(), sessionToken: credentials.getSessionToken())
-            }
         }
     }
     
@@ -72,11 +64,15 @@ public class AmazonLocationClient {
         let clientConfig = try await LocationClient.LocationClientConfiguration(awsCredentialIdentityResolver: cachedResolver, region: locationProvider.getRegion(), signingRegion: locationProvider.getRegion())
         
         self.locationClient = LocationClient(config: clientConfig)
+        
     }
 }
 
 public extension AmazonLocationClient {
-    static func defaultCognito() -> AmazonLocationClient? {
+    static func defaultCognito() async throws -> AmazonLocationClient? {
+        if let credentialsExpiration = CognitoAuthHelper.default().amazonLocationClient?.credentials?.expiration, credentialsExpiration < Date() {
+            try await CognitoAuthHelper.default().amazonLocationClient?.initialiseLocationClient()
+        }
         return CognitoAuthHelper.default().amazonLocationClient
     }
     
