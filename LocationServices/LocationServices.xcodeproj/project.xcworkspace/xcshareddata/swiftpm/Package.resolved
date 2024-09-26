@@ -1,12 +1,31 @@
 {
+  "originHash" : "33fa476c44ec13ba9dfb107bc55a239c88b17c3ebefc9a581f9498da82ded5fd",
   "pins" : [
     {
-      "identity" : "aws-sdk-ios-spm",
+      "identity" : "aws-crt-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/aws-amplify/aws-sdk-ios-spm",
+      "location" : "https://github.com/awslabs/aws-crt-swift",
       "state" : {
-        "revision" : "477ba09977beda6f259f225f2e4eca37f0a9de05",
-        "version" : "2.30.1"
+        "branch" : "mqtt_test_app",
+        "revision" : "c0e4aa6bddb7b54c6d07545fe55655f29ce1bc0d"
+      }
+    },
+    {
+      "identity" : "aws-sdk-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/awslabs/aws-sdk-swift",
+      "state" : {
+        "revision" : "6b4d5f7447dd8a76c6935fa3484491cd3203c888",
+        "version" : "0.62.0"
+      }
+    },
+    {
+      "identity" : "keychain-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/evgenyneu/keychain-swift.git",
+      "state" : {
+        "revision" : "5e1b02b6a9dac2a759a1d5dbc175c86bd192a608",
+        "version" : "24.0.0"
       }
     },
     {
@@ -14,8 +33,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "ffda61e298c1490d4860d5184e80d618aaadc089",
-        "version" : "5.13.0"
+        "revision" : "039ef525064a685c291db5118f6b5f6e8b090bb0",
+        "version" : "6.5.2"
+      }
+    },
+    {
+      "identity" : "smithy-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/smithy-lang/smithy-swift",
+      "state" : {
+        "revision" : "e7e71e9c128b6dfeb0349537d6fd4a7cbc358ae1",
+        "version" : "0.59.0"
       }
     },
     {
@@ -26,7 +54,16 @@
         "revision" : "f222cbdf325885926566172f6f5f06af95473158",
         "version" : "5.6.0"
       }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log.git",
+      "state" : {
+        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
+        "version" : "1.6.1"
+      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

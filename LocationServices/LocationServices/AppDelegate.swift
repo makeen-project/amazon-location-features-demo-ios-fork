@@ -8,10 +8,6 @@
 import UIKit
 import CoreData
 
-
-import AWSCore
-import AWSMobileClientXCF
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -29,17 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SettingsDefaultValueHelper.shared.createValues()
         
         // debug logger for AWS
-        AWSDDLog.sharedInstance.logLevel = .debug
-        AWSDDLog.add(AWSDDTTYLogger.sharedInstance)
+        //AWSDDLog.sharedInstance.logLevel = .debug
+        //AWSDDLog.add(AWSDDTTYLogger.sharedInstance)
         
         Reachability.shared.startMonitoring()
         
         return true
-    }
-    
-    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        AWSMobileClient.default().handleAuthResponse(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
-        return AWSMobileClient.default().interceptApplication(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 
     // MARK: UISceneSession Lifecycle

@@ -7,36 +7,33 @@
 
 import Foundation
 @testable import LocationServices
+import AWSLocation
+import AWSLocation
 
 class TrackingAPIServiceMock: TrackingServiceable {
-    var putResult: Result<Void, Error>?
-    var deleteResult: Result<String, Error>?
-    var getResult: Result<[TrackingHistoryPresentation], Error>?
-    
+    var mockUpdateTrackerLocationResult: Result<BatchUpdateDevicePositionOutput, Error> = .success(BatchUpdateDevicePositionOutput())
+    var mockGetAllTrackingHistoryResult: Result<[TrackingHistoryPresentation], Error> = .success([])
+        
     let delay: TimeInterval
-    
+        
     init(delay: TimeInterval) {
         self.delay = delay
     }
-    
-    func updateTrackerLocation(lat: Double, long: Double, completion: @escaping (Result<Void, Error>) -> ()) {
-        perform { [weak self] in
-            guard let result = self?.putResult else { return }
-            completion(result)
+    func updateTrackerLocation(lat: Double, long: Double) async throws -> BatchUpdateDevicePositionOutput {
+        switch mockUpdateTrackerLocationResult {
+        case .success(let output):
+            return output
+        case .failure(let error):
+            throw error
         }
     }
     
-    func getAllTrackingHistory(completion: @escaping (Result<[LocationServices.TrackingHistoryPresentation], Error>) -> Void) {
-        perform { [weak self] in
-            guard let result = self?.getResult else { return }
-            completion(result)
-        }
-    }
-    
-    
-    private func perform(action: @escaping ()->()) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
-            action()
+    func getAllTrackingHistory() async throws -> [TrackingHistoryPresentation] {
+        switch mockGetAllTrackingHistoryResult {
+        case .success(let history):
+            return history
+        case .failure(let error):
+            throw error
         }
     }
 }

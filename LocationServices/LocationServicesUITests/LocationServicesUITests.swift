@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT-0
 
 import XCTest
-import AWSMobileClientXCF
 import CoreLocation
 
 class LocationServicesUITests: XCTestCase {

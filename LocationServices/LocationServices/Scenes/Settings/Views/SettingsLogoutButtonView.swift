@@ -32,7 +32,7 @@ final class SettingsLogoutButtonView: UIButton {
     
     private var itemTitle: UILabel = {
         var label = UILabel()
-        label.text = StringConstant.disconnect
+        label.text = StringConstant.logout
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left

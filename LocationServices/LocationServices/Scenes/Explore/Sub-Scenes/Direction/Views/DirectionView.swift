@@ -139,7 +139,9 @@ final class DirectionView: UIView {
     private func setupHandlers() {
         carRouteTypeView.isSelectedHandle = { [weak self] state in
             self?.changeSelectedTextFor(carType: state)
-            self?.delegate?.changeRoute(type: .car)
+            Task {
+                try await self?.delegate?.changeRoute(type: .car)
+            }
         }
         
         carRouteTypeView.goButtonHandler =  { [weak self] in
@@ -149,7 +151,9 @@ final class DirectionView: UIView {
         
         walkRouteTypeView.isSelectedHandle = { [weak self] state in
             self?.changeSelectedTextFor(walkingType: state)
-            self?.delegate?.changeRoute(type: .walking)
+            Task {
+                try await self?.delegate?.changeRoute(type: .walking)
+            }
         }
         
         walkRouteTypeView.goButtonHandler =  { [weak self]  in
@@ -159,7 +163,9 @@ final class DirectionView: UIView {
         
         truckRouteTypeView.isSelectedHandle = { [weak self] state in
             self?.changeSelectedTextFor(truckType: state)
-            self?.delegate?.changeRoute(type: .truck)
+            Task {
+                try await self?.delegate?.changeRoute(type: .truck)
+            }
         }
         
         truckRouteTypeView.goButtonHandler =  { [weak self]  in
@@ -174,7 +180,22 @@ final class DirectionView: UIView {
             self?.avoidFerries?(state)
         }
         
+        NotificationCenter.default.addObserver(self, selector: #selector(updateRouteContainerConstraint(_:)), name: Notification.updateMapLayerItems, object: nil)
+        
     }
+    
+    @objc private func updateRouteContainerConstraint(_ notification: Notification) {
+        let height = (notification.userInfo?["height"] as? CGFloat) ?? 400
+        if(height < 400) {
+            routeOptions.isHidden = true
+            containerView.isHidden = true
+        }
+        else {
+            routeOptions.isHidden = false
+            containerView.isHidden = false
+        }
+    }
+    
     
     private func changeSelectedTextFor(carType: Bool = false,
                                        walkingType: Bool = false,
@@ -220,7 +241,7 @@ final class DirectionView: UIView {
             $0.top.equalTo(routeOptions.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(219)
+            $0.height.lessThanOrEqualToSuperview()
         }
         
         carRouteTypeView.snp.makeConstraints {

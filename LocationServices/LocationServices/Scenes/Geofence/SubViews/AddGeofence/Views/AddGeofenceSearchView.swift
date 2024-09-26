@@ -14,7 +14,7 @@ enum AddGeofenceConstant {
 
 final class AddGeofenceSearchView: UIView {
     
-    var radiusValueHander: IntHandler?
+    var radiusValueHander: DoubleHandler?
     var coordinateValueHandler: Handler<(Double, Double)>?
     var searchTextValue: StringHandler?
     var searchTextClose: VoidHandler?
@@ -86,7 +86,7 @@ final class AddGeofenceSearchView: UIView {
         let radius = notification.userInfo?["radius"] as! Double
         radiusSlider.value = Float(radius)
         radiusSliderValue.text = Int(radius).convertToKm()
-        radiusValueHander?(Int(radius))
+        radiusValueHander?(radius)
     }
     
     func hideRadiusViews(state: Bool) {
@@ -182,7 +182,7 @@ final class AddGeofenceSearchView: UIView {
 
 extension AddGeofenceSearchView {
     @objc func radiusSliderValuChanged(sender: UISlider) {
-        let value = Int(radiusSlider.value)
+        let value = Double(radiusSlider.value)
         self.radiusSliderValue.text = value.convertToKm()
         radiusValueHander?(value)
     }

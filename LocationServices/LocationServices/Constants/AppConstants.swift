@@ -9,11 +9,11 @@ import Foundation
 
 final class DefaultUserSettings {
     static let mapStyle = MapStyleModel(title: "Light" ,
-                                    imageType: .light ,
-                                    type: .esri,
-                                    isSelected: true)
-    static let mapHereStyle = MapStyleModel(title: "Explore" ,
-                                        imageType: .explore ,
+                                        imageType: .light,
+                                        type: .esri,
+                                        isSelected: true)
+    static let mapHereStyle = MapStyleModel(title: "Explore",
+                                        imageType: .explore,
                                         type: .here,
                                         isSelected: true)
     static let unitValue = "Metric"
@@ -64,6 +64,10 @@ final class DefaultMapStyles {
         MapStyleModel(title: "Hybrid" ,
                       imageType: .hybrid ,
                       type: .here,
+
+
+
+
                       isSelected: false),
     ]
 }

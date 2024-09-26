@@ -6,20 +6,20 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
-import Mapbox
+import MapLibre
 
 //How to use:
 //1. Add GeofenceAnnotation to the map
 //2. In delegate method
-//  func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
+//  func mapView(_ mapView: MLNMapView, viewFor annotation: MLNAnnotation) -> MLNAnnotationView? {
 //  create GeofenceAnnotationView for GeofenceAnnotation annotation
 //3. In delegate methods
-//  func mapView(_ mapView: MGLMapView, didAdd annotationViews: [MGLAnnotationView])
-//  func mapViewRegionIsChanging(_ mapView: MGLMapView)
-//  func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool)
-//  call func update(mapView: MGLMapView?) for all geofence annotations.
+//  func mapView(_ mapView: MLNMapView, didAdd annotationViews: [MLNAnnotationView])
+//  func mapViewRegionIsChanging(_ mapView: MLNMapView)
+//  func mapView(_ mapView: MLNMapView, regionDidChangeAnimated animated: Bool)
+//  call func update(mapView: MLNMapView?) for all geofence annotations.
 
-class GeofenceAnnotation: MGLPointAnnotation {
+class GeofenceAnnotation: MLNPointAnnotation {
     var radius: Double = 0
     var id: String?
     
@@ -37,14 +37,14 @@ class GeofenceAnnotation: MGLPointAnnotation {
     }
 }
 
-class GeofenceAnnotationView: MGLAnnotationView {
+class GeofenceAnnotationView: MLNAnnotationView {
     
     enum Constants {
         static let iconSize: CGSize = CGSize(width: 30, height: 30)
     }
     weak private var resizeHandleView: UIView?
     
-    weak var mapView: MGLMapView?
+    weak var mapView: MLNMapView?
     
     private var accuracyRingLayer: CALayer?
     private var oldZoom: Double?
@@ -60,7 +60,7 @@ class GeofenceAnnotationView: MGLAnnotationView {
         return label
     }()
     
-    func update(mapView: MGLMapView?) {
+    func update(mapView: MLNMapView?) {
         if let mapView = mapView,
            self.mapView != mapView {
             self.mapView = mapView

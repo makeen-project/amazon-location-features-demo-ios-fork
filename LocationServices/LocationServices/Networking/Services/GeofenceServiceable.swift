@@ -7,73 +7,66 @@
 
 import Foundation
 import CoreLocation
-import AWSLocationXCF
+import AWSLocation
 
+
+enum GeofenceError: Error {
+    case deleteGeofence(String)
+    case listGeofence(String)
+}
 
 protocol GeofenceServiceable {
-    func putGeofence(with id: String, lat: Double, long: Double, radius: Int, completion: @escaping(Result<GeofenceDataModel, Error>) -> Void)
-    func deleteGeofence(with id: String, completion: @escaping(Result<String, Error>) -> Void)
-    func getGeofenceList(completion: @escaping (Result<[GeofenceDataModel], Error>)->())
-    func evaluateGeofence(lat: Double, long: Double)
+    func putGeofence(with id: String, lat: Double, long: Double, radius: Double) async -> Result<GeofenceDataModel,  Error>
+    func deleteGeofence(with id: String) async -> Result<String, Error>
+    func getGeofenceList() async -> Result<[GeofenceDataModel], Error>
+    func evaluateGeofence(lat: Double, long: Double) async throws
 }
 
 struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
     
-    func putGeofence(with id: String, lat: Double, long: Double, radius: Int, completion: @escaping(Result<GeofenceDataModel, Error>) -> Void) {
-        putGeofence(with: id, center: [long, lat], radius: radius) { result in
-            switch result {
-            case .success(let response):
-                let model = GeofenceDataModel(id: response.geofenceId, lat: lat, long: long, radius: Int64(radius))
-                completion(.success(model))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+    func putGeofence(with id: String, lat: Double, long: Double, radius: Double) async -> Result<GeofenceDataModel,  Error> {
+        do {
+            let result = try await putGeofence(with: id, center: [long, lat], radius: radius)
+            let model = GeofenceDataModel(id: result!.geofenceId, lat: lat, long: long, radius: radius)
+             return .success(model)
+        }
+        catch {
+            return .failure(error)
         }
     }
     
-    func deleteGeofence(with id: String, completion: @escaping(Result<String, Error>) -> Void) {
-        deleteGeofences(with: [id]) { result in
-            switch result {
-            case .success(let response):
-                if let errors = response.errors,
-                   let error = errors.first(where: { $0.geofenceId == id }) {
-                    print(.errorDelegeGeofence + " \(error)")
-                    let defaultError = NSError(domain: StringConstant.geofence, code: -1)
-                    DispatchQueue.main.async {
-                        completion(.failure(defaultError))
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        completion(.success(id))
-                    }
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
+    func deleteGeofence(with id: String) async -> Result<String, Error> {
+        do {
+            let result = try await deleteGeofences(with: [id])
+            if let error = result!.errors?.first {
+                return .failure(GeofenceError.deleteGeofence(error.error!.message!))
             }
+            else {
+                return .success("")
+            }
+        }
+        catch {
+            return .failure(error)
         }
     }
     
-    func getGeofenceList(completion: @escaping (Result<[GeofenceDataModel], Error>)->()) {
-        fetchGeofenceList { result in
-            switch result {
-            case .success(let entries):
-                let models = entries.map({ GeofenceDataModel(model: $0) })
-                DispatchQueue.main.async {
-                    completion(.success(models))
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
+    func getGeofenceList() async -> Result<[GeofenceDataModel], Error> {
+        do {
+            let result = try await fetchGeofenceList()
+            if result != nil {
+                let models = result!.entries!.map( { GeofenceDataModel(model: $0) })
+                return .success(models)
             }
+            else {
+                return .failure(GeofenceError.listGeofence("No geofence founc"))
+            }
+        }
+        catch {
+            return .failure(error)
         }
     }
     
-    func evaluateGeofence(lat: Double, long: Double) {
-        batchEvaluateGeofences(lat: lat, long: long, completion: {_ in
-            //TODO: do nothing for now, probably will be used for notifications
-        })
+    func evaluateGeofence(lat: Double, long: Double) async throws {
+        let _ = try await batchEvaluateGeofences(lat: lat, long: long)
     }
 }

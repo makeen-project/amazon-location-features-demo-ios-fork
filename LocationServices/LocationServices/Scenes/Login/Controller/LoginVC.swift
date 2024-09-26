@@ -31,6 +31,8 @@ final class LoginVC: UIViewController {
     private var userPoolClientId: String?
     private var userDomain: String?
     private var webSocketUrl: String?
+    private var region: String?
+    private var apiKey: String?
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -445,8 +447,8 @@ extension LoginVC: LoginViewModelOutputDelegate {
     
     func identityPoolIdValidationSucceed() {
         UserDefaultsHelper.save(value: isFromSettingScene, key: .awsCustomConnectFromSettings)
-        UserDefaultsHelper.setAppState(state: .prepareCustomAWSConnect)
-        
+        //UserDefaultsHelper.setAppState(state: .prepareCustomAWSConnect)
+        UserDefaultsHelper.setAppState(state: .customAWSConnected)
         updateAccordingToAppState()
     }
 }

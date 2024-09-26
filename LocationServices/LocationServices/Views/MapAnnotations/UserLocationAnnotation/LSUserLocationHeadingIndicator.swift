@@ -7,10 +7,10 @@
 
 import Foundation
 import CoreLocation
-import Mapbox
+import MapLibre
 
 protocol LSUserLocationHeadingIndicator: CALayer {
-    init(userLocationView: MGLUserLocationAnnotationView)
+    init(userLocationView: MLNUserLocationAnnotationView)
     
     func updateHeadingAccuracy(_ accuracy: CLLocationDirection)
     func updateTintColor(_ color: CGColor)

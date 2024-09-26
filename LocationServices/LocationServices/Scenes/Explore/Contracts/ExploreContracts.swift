@@ -7,8 +7,8 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
-import AWSMobileClientXCF
 
 protocol ExploreViewModelProtocol: AnyObject {
     var delegate: ExploreViewModelOutputDelegate? { get set }
@@ -18,7 +18,7 @@ protocol ExploreViewModelProtocol: AnyObject {
     func activateRoute(route: RouteModel)
     func deactivateRoute()
     func userLocationChanged(_ userLocation: CLLocationCoordinate2D)
-    func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?)
+    func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) async
     func shouldShowWelcome() -> Bool
     func cancelActiveRequests()
 }

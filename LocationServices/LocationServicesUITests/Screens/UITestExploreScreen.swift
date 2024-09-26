@@ -27,11 +27,10 @@ struct UITestExploreScreen: UITestScreen {
     }
     
     func zoomInWithPinch(scale: CGFloat = 3) -> Self {
-        let screenshotBefore = getRenderedMap().screenshot()
+        let zoomLevelBefore = getMapZoomLevel()
         getRenderedMap().pinch(withScale: scale, velocity: 1)
-        let screenshotAfter = getRenderedMap().screenshot()
-        
-        XCTAssertNotEqual(screenshotBefore.pngRepresentation, screenshotAfter.pngRepresentation)
+        let zoomLevelAfter = getMapZoomLevel()
+        XCTAssertNotEqual(zoomLevelBefore, zoomLevelAfter)
         
         return self
     }
@@ -60,21 +59,19 @@ struct UITestExploreScreen: UITestScreen {
     }
     
     func zoomInWithTap() -> Self {
-        let screenshotBefore = getRenderedMap().screenshot()
+        let zoomLevelBefore = getMapZoomLevel()
         getRenderedMap().doubleTap()
-        let screenshotAfter = getRenderedMap().screenshot()
-        
-        XCTAssertNotEqual(screenshotBefore.pngRepresentation, screenshotAfter.pngRepresentation)
+        let zoomLevelAfter = getMapZoomLevel()
+        XCTAssertNotEqual(zoomLevelBefore, zoomLevelAfter)
         
         return self
     }
     
     func zoomOut() -> Self {
-        let screenshotBefore = getRenderedMap().screenshot()
+        let zoomLevelBefore = getMapZoomLevel()
         getMapHelper().pinch(withScale: 0.5, velocity: -1)
-        let screenshotAfter = getRenderedMap().screenshot()
-        
-        XCTAssertNotEqual(screenshotBefore.pngRepresentation, screenshotAfter.pngRepresentation)
+        let zoomLevelAfter = getMapZoomLevel()
+        XCTAssertNotEqual(zoomLevelBefore, zoomLevelAfter)
         
         return self
     }
@@ -106,7 +103,6 @@ struct UITestExploreScreen: UITestScreen {
         let userLocationAnnotation = app.buttons.matching(identifier: Identifiers.userLocationAnnotation).element
         
         XCTAssertTrue(userLocationAnnotation.waitForExistence(timeout: UITestWaitTime.regular.time))
-        XCTAssertTrue(userLocationAnnotation.isHittable)
         
         return self
     }

@@ -46,7 +46,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
-    }
+    } 
     
     func showDirections(isRouteOptionEnabled: Bool?,
                         firstDestionation: MapModel?,
@@ -85,8 +85,9 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        let minHeight = 0.69
-        controller.enableBottomSheetGrab(smallHeight: minHeight, mediumHeight: minHeight)
+        let minHeight = 0.2
+        let mediumHeight = 0.69
+        controller.enableBottomSheetGrab(smallHeight: minHeight, mediumHeight: mediumHeight)
         
         NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": controller.getMediumDetentHeight()])
         currentBottomSheet = controller

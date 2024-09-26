@@ -22,37 +22,44 @@ final class SearchViewModel: SearchViewModelProcotol {
         self.service = service
     }
     
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) {
+    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) async throws {
         guard !text.isEmpty else {
             self.presentation = []
             self.delegate?.searchResult(mapModel: [], shouldDismiss: false, showOnMap: false)
             return
         }
-    
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            service.searchWithPosition(text: requestValue, userLat: userLat, userLong: userLong) { [weak self] response in
+            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
-                    self?.presentation = results
+                    self.presentation = results
                     let model = results.map(MapModel.init)
-                    self?.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
+                    self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
                 case .failure(let error):
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    DispatchQueue.main.async {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                        self.delegate?.showAlert(model)
+                    }
                 }
-            }
         } else {
-            service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong) { result in
-                self.presentation = result
-                let model = result.map(MapModel.init)
+            let response = await service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            switch response {
+            case .success(let results):
+                self.presentation = results
+                let model = results.map(MapModel.init)
                 self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                    self.delegate?.showAlert(model)
+                }
             }
         }
     }
     
-    func searchWith(text: String, userLat: Double?, userLong: Double?) {
+    func searchWith(text: String, userLat: Double?, userLong: Double?) async throws {
         guard !text.isEmpty else {
             self.presentation = []
             self.delegate?.searchResult(mapModel: [], shouldDismiss: false, showOnMap: false)
@@ -61,24 +68,22 @@ final class SearchViewModel: SearchViewModelProcotol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            service.searchWithPosition(text: requestValue, userLat: userLat, userLong: userLong) { [weak self] response in
+            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
-                    self?.presentation = results
+                    self.presentation = results
                     let model = results.map(MapModel.init)
-                    self?.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: true)
+                    self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: true)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
-            }
         } else {
-            service.searchText(text: text, userLat: userLat, userLong: userLong) { result in
-                
-                self.presentation = result
-                let model = result.map(MapModel.init)
+            let result = await service.searchText(text: text, userLat: userLat, userLong: userLong)
+                let resultValue = try result.get()
+                self.presentation = resultValue
+                let model = resultValue.map(MapModel.init)
                 self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: true)
-            }
         }
     }
     
@@ -104,29 +109,34 @@ final class SearchViewModel: SearchViewModelProcotol {
     func searchSelectedPlaceWith(_ indexPath: IndexPath, lat: Double?, long: Double?) -> Bool {
         let selectedItem = searchCellModel[indexPath.row]
         if let id = selectedItem.placeId  {
-            service.getPlace(with: id) { [weak self] result in
-                guard let result else { return }
-                let mapModel = MapModel(model: result)
-                self?.delegate?.selectedPlaceResult(mapModel: mapModel)
+            Task {
+                let result = try await service.getPlace(with: id)
+                if let result = result {
+                    let mapModel = MapModel(model: result)
+                    self.delegate?.selectedPlaceResult(mapModel: mapModel)
+                }
+                return true
             }
-            return true
         } else if selectedItem.lat != nil {
             let currentModel = presentation[indexPath.row]
             let model = MapModel(model: currentModel)
             self.delegate?.selectedPlaceResult(mapModel: model)
             return true
         } else {
-            service.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long) { result in
+            Task {
+                let result = await service.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long)
+                let resultValue = try result.get()
                 self.presentation = []
-                self.presentation = result
-                let model = result.map(MapModel.init)
+                self.presentation = resultValue
+                let model = resultValue.map(MapModel.init)
                 if model.count == 1, let data = model[safe: 0] {
                     self.delegate?.searchResult(mapModel: [data], shouldDismiss: false, showOnMap: false)
                 } else {
                     self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: false)
                 }
+                return false
             }
-            return false
         }
+        return false
     }
 }

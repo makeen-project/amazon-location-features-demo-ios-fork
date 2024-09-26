@@ -7,7 +7,7 @@
 
 import Foundation
 import CoreLocation
-import AWSLocationXCF
+import AWSLocation
 
 final class DirectionViewModel: DirectionViewModelProtocol {
     
@@ -17,7 +17,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     // to use in case of second call for routing
     private var cachedMapModel: MapModel?
     
-    var defaultTravelMode: [AWSLocationTravelMode: Result<DirectionPresentation, Error>]  = [:]
+    var defaultTravelMode: [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>]  = [:]
     
     var userLocation: (lat: Double?, long: Double?)?
     
@@ -51,7 +51,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         delegate?.reloadView()
     }
     
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) {
+    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) async {
         
         guard !text.isEmpty && text != "My Location" else {
             presentation = []
@@ -67,29 +67,33 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            service.searchWithPosition(text: requestValue, userLat: userLat, userLong: userLong) { [weak self] response in
+            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
-                    self?.presentation = results
+                    self.presentation = results
                     let model = results.map(MapModel.init)
-                    self?.delegate?.searchResult(mapModel: model)
+                    self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
-            }
         } else {
-            service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong) { result in
-                self.presentation = result
+            let response = await service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            switch response {
+            case .success(let results):
+                self.presentation = results
                 self.addMyLocationItem()
-                let model = result.map(MapModel.init)
+                let model = results.map(MapModel.init)
                 self.delegate?.searchResult(mapModel: model)
+            case .failure(let error):
+                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                self.delegate?.showAlert(model)
             }
         }
         
     }
     
-    func searchWith(text: String, userLat: Double?, userLong: Double?) {
+    func searchWith(text: String, userLat: Double?, userLong: Double?) async throws {
         guard !text.isEmpty && text != "My Location" else {
             presentation = []
             if text != "My Location" {
@@ -101,24 +105,23 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            service.searchWithPosition(text: requestValue, userLat: userLat, userLong: userLong) { [weak self] response in
+            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
-                    self?.presentation = results
+                    self.presentation = results
                     let model = results.map(MapModel.init)
-                    self?.delegate?.searchResult(mapModel: model)
+                    self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
-            }
         } else {
-            service.searchText(text: text, userLat: userLat, userLong: userLong) { result in
-                self.presentation = result
-                self.addMyLocationItem()
-                let model = result.map(MapModel.init)
-                self.delegate?.searchResult(mapModel: model)
-            }
+            let result = await service.searchText(text: text, userLat: userLat, userLong: userLong)
+            let resultValue = try result.get()
+            self.presentation = resultValue
+            self.addMyLocationItem()
+            let model = resultValue.map(MapModel.init)
+            self.delegate?.searchResult(mapModel: model)
         }
     }
     
@@ -155,34 +158,33 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     
     
     
-    func searchSelectedPlaceWith(_ selectedItem: SearchCellViewModel, lat: Double?, long: Double?) -> Bool {
+    func searchSelectedPlaceWith(_ selectedItem: SearchCellViewModel, lat: Double?, long: Double?) async throws -> Bool {
         if selectedItem.searchType == .mylocation {
             return true
         }
         
         if let id = selectedItem.placeId  {
-            service.getPlace(with: id) { [weak self] result in
-                guard let result else { return }
+            let result = try await service.getPlace(with: id)
+                guard let result else { return false }
                 let mapModel = MapModel(model: result)
                 // cache the latest result for future usage
-                self?.cachedMapModel = mapModel
-                self?.delegate?.selectedPlaceResult(mapModel: [mapModel])
-            }
+                self.cachedMapModel = mapModel
+                try await self.delegate?.selectedPlaceResult(mapModel: [mapModel])
             return false
         } else if selectedItem.lat != nil {
             return true
         } else {
-            service.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long) { result in
+            let result = await service.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long)
+            let resultValue = try result.get()
                 self.presentation = []
-                self.presentation = result
+                self.presentation = resultValue
                 self.addMyLocationItem()
-                let model = result.map(MapModel.init)
+                let model = resultValue.map(MapModel.init)
                 if model.count == 1, let data = model[safe: 0] {
                     self.delegate?.searchResult(mapModel: [data])
                 } else {
                     self.delegate?.searchResult(mapModel: model)
                 }
-            }
             return false
         }
     }
@@ -213,17 +215,16 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                             departurePosition: CLLocationCoordinate2D,
                             travelMode: RouteTypes = .car,
                             avoidFerries: Bool = false,
-                            avoidTolls: Bool = false,
-                            completion: @escaping ((_ data: Data , _ model: DirectionVM) -> Void)) {
+                            avoidTolls: Bool = false) async throws -> (Data, DirectionVM)? {
         defaultTravelMode = [:]
         selectedTravelMode = travelMode
         self.avoidFerries = avoidFerries
         self.avoidTolls = avoidTolls
-        routingService.calculateRouteWith(depaturePosition: departurePosition,
+        let result = try await routingService.calculateRouteWith(depaturePosition: departurePosition,
                                           destinationPosition: destinationPosition,
-                                          travelModes: [.car, .walking, .truck],
+                                          travelModes: [LocationClientTypes.TravelMode.car, LocationClientTypes.TravelMode.walking, LocationClientTypes.TravelMode.truck],
                                           avoidFerries: avoidFerries,
-                                          avoidTolls: avoidTolls) { result in
+                                          avoidTolls: avoidTolls)
             self.defaultTravelMode = result
             var directionVM: DirectionVM = DirectionVM(carTypeDistane: "", carTypeDuration: "", walkingTypeDuration: "", walkingTypeDistance: "", truckTypeDistance: "", truckTypeDuration: "")
             
@@ -253,7 +254,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 let encoder = JSONEncoder()
                 do {
                     let jsonData = try encoder.encode(travelMode.lineString)
-                    completion(jsonData, directionVM)
+                    return (jsonData, directionVM)
                 } catch {
                     print(String.errorJSONDecoder)
                 }
@@ -264,7 +265,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 let alertModel = AlertModel(title: StringConstant.error, message: StringConstant.failedToCalculateRoute, cancelButton: nil)
                 self.delegate?.showAlert(alertModel)
             }
-        }
+        return nil
     }
     
     private func getModel(for type: RouteTypes) -> Result<DirectionPresentation, Error>? {
@@ -273,7 +274,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         return model
     }
     
-    private func convertToLocationTravelMode(type: RouteTypes) -> AWSLocationTravelMode {
-        return AWSLocationTravelMode(routeType: type) ?? .walking
+    private func convertToLocationTravelMode(type: RouteTypes) -> LocationClientTypes.TravelMode {
+        return LocationClientTypes.TravelMode(rawValue: type.title) ?? .walking
     }
 }

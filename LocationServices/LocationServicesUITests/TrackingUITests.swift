@@ -30,192 +30,14 @@ final class TrackingUITests: LocationServicesUITests {
         super.tearDown()
     }
     
-    func testStartTracking() throws {
+    func testTrackingGeofenceE2E() throws {
+        
         var app = startApp()
         
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .connectAWSConnect()
-
-        app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .signInAWSAccount()
-        
-        let _ = UITestGeofenceScreen(app: app)
-            .deleteAllGeofences()
-        
-        app = restartApp()
-        
-        _ = UITestTabBarScreen(app: app)
-            .tapTrackingButton()
-            .tapEnableTrackingButton()
-            .tapStartTrackingButton()
-            .continueTrackingAlert()
-            .verifyTrackingStartedLabel()
-    }
-    
-    func testStopTracking() throws {
-        var app = startApp()
-        
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .connectAWSConnect()
-
-        app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .signInAWSAccount()
-        
-        let _ = UITestGeofenceScreen(app: app)
-            .deleteAllGeofences()
-        
-        app = restartApp()
-        
-        _ = UITestTabBarScreen(app: app)
-            .tapTrackingButton()
-            .tapEnableTrackingButton()
-            .tapStartTrackingButton()
-            .continueTrackingAlert()
-            .verifyTrackingStartedLabel()
-            .tapStopTrackingButton()
-            .verifyTrackingStoppedLabel()
-    }
-    
-    func testStartTrackingHistoryStarted() throws {
-        var app = startApp()
-        
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .connectAWSConnect()
-
-        app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .signInAWSAccount()
-        
-        let _ = UITestGeofenceScreen(app: app)
-            .deleteAllGeofences()
-        
-        app = restartApp()
-        
-        let uiTrackingScreen = UITestTabBarScreen(app: app)
-            .tapTrackingButton()
-            .tapEnableTrackingButton()
-            .tapStartTrackingButton()
-            .continueTrackingAlert()
-        
-        Thread.sleep(forTimeInterval: 1)
-        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[1])
-        
-        _ = uiTrackingScreen
-            .verifyTrackingHistoryStarted()
-    }
-    
-    func testTrackingPointsOnMap() throws {
-        var app = startApp()
-        
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .connectAWSConnect()
-
-        app = restartApp()
         let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
-            .signInAWSAccount()
-        
-        if(UIDevice.current.userInterfaceIdiom == .phone) {
-            menuScreen.getBackButton().tap()
-        }
-
-        let _ = UITestGeofenceScreen(app: app)
-            .deleteAllGeofences()
-
-        app = restartApp()
-        
-        let uiTrackingScreen = UITestTabBarScreen(app: app)
-            .tapTrackingButton()
-            .tapEnableTrackingButton()
-            .continueTrackingAlert()
-        
-            XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
-            Thread.sleep(forTimeInterval: 1) // Delay between updates
-            XCUIDevice.shared.location = .init(location: Constants.trackingPoints[1])
-            Thread.sleep(forTimeInterval: 1)
-            XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
-            Thread.sleep(forTimeInterval: 1)
-        XCUIDevice.shared.location = .init(location: Constants.geofenceCoordinates)
-        Thread.sleep(forTimeInterval: 2)
-
-        
-        _ = uiTrackingScreen
-            .verifyTrackingAnnotations()
-        
-    }
-    
-    func testTrackingNotifyEnteredGeofence() throws {
-        var app = startApp()
-        
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
             .connectAWSConnect()
-
-        app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .signInAWSAccount()
-        
-        let _ = UITestGeofenceScreen(app: app)
-            .deleteAllGeofences()
-        
-        app = restartApp()
-        
-        let geofenceName = UITestGeofenceScreen.generateUniqueGeofenceName()
-        
-        _ = UITestTabBarScreen(app: app)
-            .tapGeofenceButton()
-            .addGeofence(geofenceNameToAdd: geofenceName, location: Constants.geofenceLocationAddress, selectDefault: true)
-        
-        app = restartApp()
-        
-        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
-        
-        let trackingUIScreen = UITestTabBarScreen(app: app)
-            .tapTrackingButton()
-            .tapEnableTrackingButton()
-            .tapStartTrackingButton()
-            .continueTrackingAlert()
-        
-        Thread.sleep(forTimeInterval: 2)
-        XCUIDevice.shared.location = .init(location: Constants.geofenceCoordinates)
-        
-        let _ = trackingUIScreen
-            .waitForGeofenceEnteredAlert(geofenceName: geofenceName)
-    }
-    
-    func testTrackingNotifyExitedGeofence() throws {
-        
-        var app = startApp()
-        
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .connectAWSConnect()
-
-        app = restartApp()
-        let menuScreen = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
             .signInAWSAccount()
         
         if(UIDevice.current.userInterfaceIdiom == .phone) {
@@ -253,39 +75,21 @@ final class TrackingUITests: LocationServicesUITests {
         XCUIDevice.shared.location = .init(location: Constants.trackingPoints[1])
         Thread.sleep(forTimeInterval: 2)
         
+        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
+        Thread.sleep(forTimeInterval: 1)
+        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[1])
+        Thread.sleep(forTimeInterval: 1)
+        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
+        Thread.sleep(forTimeInterval: 1)
+        XCUIDevice.shared.location = .init(location: Constants.geofenceCoordinates)
+        Thread.sleep(forTimeInterval: 2)
+
+    
+    _ = trackingUIScreen
+        .verifyTrackingAnnotations()
+        
         let _ = trackingUIScreen
             .waitForGeofenceExitedAlert(geofenceName: geofenceName)
-    }
-    
-    func testTrackingDeleteHistoryLog() throws {
-        
-        var app = startApp()
-        
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .connectAWSConnect()
-
-        app = restartApp()
-        let menuScreen = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .signInAWSAccount()
-        
-        if(UIDevice.current.userInterfaceIdiom == .phone) {
-            menuScreen.getBackButton().tap()
-        }
-        
-        let _ = UITestGeofenceScreen(app: app)
-            .deleteAllGeofences()
-        
-        app = restartApp()
-        
-        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[0])
-        let trackingUIScreen = UITestTabBarScreen(app: app)
-            .tapTrackingButton()
-            .tapEnableTrackingButton()
-            .continueTrackingAlert()
         
         Thread.sleep(forTimeInterval: 1)
         XCUIDevice.shared.location = .init(location: Constants.trackingPoints[1])
@@ -296,6 +100,15 @@ final class TrackingUITests: LocationServicesUITests {
             .swipeUpHistoryView()
             .tapDeleteTrackingDataButton()
             .verifyTrackingHistoryDeleted()
+        
+        let newGeofenceName = UITestGeofenceScreen.generateUniqueGeofenceName()
+        
+        _ = UITestTabBarScreen(app: app)
+            .tapGeofenceButton()
+            .editGeofence(geofenceName: geofenceName, newGeofenceName: newGeofenceName)
+            .deleteGeofence(index: 0)
+            .confirmDeleteGeofence()
+            .verifyDeletedGeofence(geofenceName: newGeofenceName)
     }
 }
 

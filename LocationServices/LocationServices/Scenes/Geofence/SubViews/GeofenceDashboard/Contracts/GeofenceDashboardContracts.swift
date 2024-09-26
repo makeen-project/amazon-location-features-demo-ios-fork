@@ -11,7 +11,7 @@ protocol GeofenceDasboardViewModelProtocol: AnyObject {
     var delegate: GeofenceDasboardViewModelOutputProtocol? { get set }
     var geofences: [GeofenceDataModel] { get set }
     
-    func fetchListOfGeofences()
+    func fetchListOfGeofences() async
     func deleteGeofenceData(model: GeofenceDataModel)
 }
 

@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import Mapbox
+import MapLibre
 import CoreLocation
 
 let LSUserLocationAnnotationDotSize: CGFloat = 22.0
@@ -18,7 +18,7 @@ let LSUserLocationAnnotationArrowSize: CGFloat = LSUserLocationAnnotationPuckSiz
 let LSUserLocationHeadingUpdateThreshold:CGFloat = 0.01
 let LSUserLocationApproximateZoomThreshold:CGFloat = 7.0
 
-class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
+class LSFaux3DUserLocationAnnotationView: MLNUserLocationAnnotationView {
     
     // constants
     static let keyFrameTransformScaleXy = "transform.scale.xy"
@@ -40,7 +40,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
     private var _oldZoom: Double = 0
     private var _oldPitch: CGFloat = 0
     
-    override init(annotation: MGLAnnotation?, reuseIdentifier: String?) {
+    override init(annotation: MLNAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         commonInit()
     }
@@ -93,7 +93,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
             _approximateModeActivated = false
         }
         
-        if let mode = (self.mapView?.delegate as? (NavigationMapProtocol & MGLMapViewDelegate))?.mapViewMode(self.mapView) {
+        if let mode = (self.mapView?.delegate as? (NavigationMapProtocol & MLNMapViewDelegate))?.mapViewMode(self.mapView) {
             switch mode {
             case .search:
                 drawDot()
@@ -156,7 +156,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         
-        let t: CATransform3D = CATransform3DRotate(CATransform3DIdentity, MGLRadiansFromDegrees(mapView.camera.pitch), 1.0, 0, 0)
+        let t: CATransform3D = CATransform3DRotate(CATransform3DIdentity, MLNRadiansFromDegrees(mapView.camera.pitch), 1.0, 0, 0)
         self.layer.sublayerTransform = t
         
         self.updateFaux3DEffect()
@@ -167,7 +167,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
     }
 
     func updateFaux3DEffect() {
-        let pitch: CGFloat = MGLRadiansFromDegrees(Double(self.mapView?.camera.pitch ?? 0))
+        let pitch: CGFloat = MLNRadiansFromDegrees(Double(self.mapView?.camera.pitch ?? 0))
 
         if (_puckDot != nil)
         {
@@ -260,7 +260,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
         
         if let location = getCurrentLocation(),
            location.course >= 0 {
-            _puckArrow?.setAffineTransform(CGAffineTransformRotate(CGAffineTransformIdentity, -MGLRadiansFromDegrees(mapView.direction - location.course)))
+            _puckArrow?.setAffineTransform(CGAffineTransformRotate(CGAffineTransformIdentity, -MLNRadiansFromDegrees(mapView.direction - location.course)))
         }
 
         if !_puckModeActivated {
@@ -355,7 +355,7 @@ class LSFaux3DUserLocationAnnotationView: MGLUserLocationAnnotationView {
             
             if let headingDirection,
                headingDirection >= 0 {
-                let rotation: CGFloat = -MGLRadiansFromDegrees(mapView.direction - headingDirection)
+                let rotation: CGFloat = -MLNRadiansFromDegrees(mapView.direction - headingDirection)
 
                 // Don't rotate if the change is imperceptible.
                 if abs(rotation) > LSUserLocationHeadingUpdateThreshold {

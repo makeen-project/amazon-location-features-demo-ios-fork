@@ -6,13 +6,13 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
-import Mapbox
+import MapLibre
 
 let LSUserLocationHeadingArrowSize: CGFloat = 8
 
 class LSUserLocationHeadingArrowLayer: CAShapeLayer, LSUserLocationHeadingIndicator {
 
-    required init(userLocationView: MGLUserLocationAnnotationView) {
+    required init(userLocationView: MLNUserLocationAnnotationView) {
         super.init()
         
         let size: CGFloat = userLocationView.bounds.size.width + LSUserLocationHeadingArrowSize

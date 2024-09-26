@@ -6,14 +6,14 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
 import CoreLocation
 
 
 struct SearchPresentation {
     let placeId: String?
     let fullLocationAddress: String?
-    let distance: Int?
+    let distance: Double?
     let countryName: String?
     let cityName: String?
     let placeLat: Double?
@@ -23,7 +23,7 @@ struct SearchPresentation {
     
     init( placeId: String?,
           fullLocationAddress: String?,
-          distance: Int?,
+          distance: Double?,
           countryName: String?,
           cityName: String?,
           placeLat: Double?,
@@ -41,8 +41,8 @@ struct SearchPresentation {
         self.placeLabel = fullLocationAddress
     }
     
-    init(model: AWSLocationSearchForTextResult) {
-        self.placeId = model.placeId
+    init(placeId: String, model: GetPlaceOutput) {
+        self.placeId = placeId
         self.countryName = model.place?.country
         if let fullAddress = model.place?.label?.formatAddressField() {
             self.name = fullAddress[safe: 0] ?? ""
@@ -51,10 +51,10 @@ struct SearchPresentation {
             self.name = nil
             self.fullLocationAddress = nil
         }
-        self.distance = model.distance?.intValue
+        self.distance = 0  //model.place.distance?.intValue
         if let point = model.place?.geometry?.point {
-            self.placeLong = point[0].doubleValue
-            self.placeLat = point[1].doubleValue
+            self.placeLong = point[0]
+            self.placeLat = point[1]
         } else {
             self.placeLong = nil
             self.placeLat = nil
@@ -63,7 +63,7 @@ struct SearchPresentation {
         self.placeLabel = model.place?.label
     }
     
-    init(model: AWSLocationSearchForSuggestionsResult, placeLat: Double? = nil, placeLong: Double? = nil, userLocation: CLLocation? = nil) {
+    init(model: LocationClientTypes.SearchForSuggestionsResult, placeLat: Double? = nil, placeLong: Double? = nil, userLocation: CLLocation? = nil) {
         self.placeId = model.placeId
         self.countryName = nil
         self.placeLong = placeLong
@@ -81,14 +81,14 @@ struct SearchPresentation {
         
         if let placeLat, let placeLong, let userLocation {
             let placeLocation = CLLocation(latitude: placeLat, longitude: placeLong)
-            self.distance = Int(placeLocation.distance(from: userLocation))
+            self.distance = placeLocation.distance(from: userLocation)
         } else {
             self.distance = nil
         }
         self.placeLabel = model.text
     }
     
-    init(model: AWSLocationGetPlaceResponse) {
+    init(model: GetPlaceOutput) {
         self.placeId = nil
         if let fullAddress = model.place?.label?.formatAddressField() {
             self.name = fullAddress[safe: 0] ?? ""
@@ -99,8 +99,8 @@ struct SearchPresentation {
         }
         self.countryName = model.place?.country
         if let point = model.place?.geometry?.point {
-            self.placeLong = point[0].doubleValue
-            self.placeLat = point[1].doubleValue
+            self.placeLong = point[0]
+            self.placeLat = point[1]
         } else {
             self.placeLong = nil
             self.placeLat = nil
@@ -110,7 +110,7 @@ struct SearchPresentation {
         self.placeLabel = model.place?.label
     }
     
-    init(model: AWSLocationSearchForPositionResult, userLocation: CLLocation?) {
+    init(model: LocationClientTypes.SearchForTextResult, userLocation: CLLocation?) {
      
         self.placeId = model.placeId
         self.countryName = model.place?.country
@@ -126,8 +126,8 @@ struct SearchPresentation {
         if let point = model.place?.geometry?.point {
             //class LocationService -> func searchWithPosition -> func searchWithPositionRequest -> AWSLocationSearchPlaceIndexForPositionRequest
             // AWSLocationSearchPlaceIndexForPositionRequest - geometry contains [longitude, latitude]
-            self.placeLong = point[0].doubleValue
-            self.placeLat = point[1].doubleValue
+            self.placeLong = point[0]
+            self.placeLat = point[1]
         } else {
             self.placeLong = nil
             self.placeLat = nil
@@ -138,9 +138,46 @@ struct SearchPresentation {
         //and needed to be recalculated
         if let placeLat, let placeLong, let userLocation {
             let placeLocation = CLLocation(latitude: placeLat, longitude: placeLong)
-            self.distance = Int(placeLocation.distance(from: userLocation))
+            self.distance = placeLocation.distance(from: userLocation)
         } else {
-            self.distance = model.distance?.intValue
+            self.distance = model.distance
+        }
+        
+        self.cityName = model.place?.municipality
+        self.placeLabel = model.place?.label
+    }
+    
+    init(model: LocationClientTypes.SearchForPositionResult, userLocation: CLLocation?) {
+     
+        self.placeId = model.placeId
+        self.countryName = model.place?.country
+        
+        if let fullAddress = model.place?.label?.formatAddressField() {
+            self.name = fullAddress[safe: 0] ?? ""
+            self.fullLocationAddress = fullAddress[safe: 1] ?? ""
+        } else {
+            self.name = nil
+            self.fullLocationAddress = nil
+        }
+        
+        if let point = model.place?.geometry?.point {
+            //class LocationService -> func searchWithPosition -> func searchWithPositionRequest -> AWSLocationSearchPlaceIndexForPositionRequest
+            // AWSLocationSearchPlaceIndexForPositionRequest - geometry contains [longitude, latitude]
+            self.placeLong = point[0]
+            self.placeLat = point[1]
+        } else {
+            self.placeLong = nil
+            self.placeLat = nil
+        }
+        
+        //there is no ability to send user location in request,
+        //so destination is incorrect in response
+        //and needed to be recalculated
+        if let placeLat, let placeLong, let userLocation {
+            let placeLocation = CLLocation(latitude: placeLat, longitude: placeLong)
+            self.distance = placeLocation.distance(from: userLocation)
+        } else {
+            self.distance = model.distance
         }
         
         self.cityName = model.place?.municipality

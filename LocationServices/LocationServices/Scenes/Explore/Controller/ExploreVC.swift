@@ -9,10 +9,6 @@ import UIKit
 import SnapKit
 import CoreLocation
 
-import AWSLocationXCF
-import AWSMobileClientXCF
-import AWSCore
-
 final class ExploreVC: UIViewController {
     
     enum Constants {
@@ -209,7 +205,9 @@ extension ExploreVC: ExploreViewOutputDelegate {
     }
     
     func showPoiCard(for location: CLLocationCoordinate2D) {
-        viewModel.loadPlace(for: location, userLocation: userCoreLocation)
+        Task {
+            await viewModel.loadPlace(for: location, userLocation: userCoreLocation)
+        }
     }
     
     func showAttribution() {

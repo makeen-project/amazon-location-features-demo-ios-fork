@@ -110,6 +110,8 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.currentBottomSheet?.dismissBottomSheet()
+            let height:CGFloat = 8
+            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
         }
         
         currentBottomSheet?.dismissBottomSheet()

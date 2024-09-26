@@ -17,49 +17,12 @@ final class AWSConnectUITests: LocationServicesUITests {
         super.tearDown()
     }
 
-    func testConnectAWSAccount() throws {
+    func connectAWSAccount() throws -> XCUIApplication {
         let app = startApp()
         let _ = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .tapConnectAWSRow()
             .connectAWSConnect()
-    }
-    
-    func testConnectAWSAccountFromTracking() throws {
-        let app = startApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapTrackingButton()
-            .waitForAWSConnectionScreen()
-            .connectAWSConnect()
-    }
-    
-    func testConnectAWSAccountFromGeofence() throws {
-        let app = startApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapGeofenceButton()
-            .waitForAWSConnectionScreen()
-            .connectAWSConnect()
-    }
-    
-    func testDisconnectAWSAccount() throws {
-        try testConnectAWSAccount()
-        
-        let app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .tapDisconnectButton()
-            .waitForAWSConnectResponse()
-        
-    }
-    
-    func testSignInAWSAccount() throws {
-        try testConnectAWSAccount()
-        
-        let app = restartApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .signInAWSAccount()
+        return app
     }
 }
