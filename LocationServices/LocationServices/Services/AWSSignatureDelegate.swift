@@ -27,23 +27,44 @@ class AWSSignatureV4Delegate : NSObject, MLNOfflineStorageDelegate {
         if url.host?.contains("amazonaws.com") != true || url.absoluteString.contains("?key=") {
             return url
         }
-        
+
+        // If API Key exists, return the signed URL with the key
         if apiKey != nil && region != nil {
-             return URL(string: "\(url)?key=\(apiKey!)") ?? url
-         }
-        else if let cognitoProvider = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider(), region != nil {
-             var signedURL: URL = url
-             let semaphore = DispatchSemaphore(value: 0)
-             Task {
-                 try await cognitoProvider.refreshCognitoCredentialsIfExpired()
-                 let cognitoCredentials: CognitoCredentials? = cognitoProvider.getCognitoCredentials()
-                 let awsSigner = AWSSignerV4(credentials: cognitoCredentials!, serviceName: "geo", region: self.region!)
-                 signedURL = awsSigner.signURL(url: url, expires: .hours(1))
-                 semaphore.signal()
-             }
-             semaphore.wait()
-             return signedURL
-         }
+            return URL(string: "\(url)?key=\(apiKey!)") ?? url
+        }
+
+        // Handle Cognito credentials and sign the URL
+        if let cognitoProvider = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider(), region != nil {
+            let signedURL = signURLWithCognito(url: url, cognitoProvider: cognitoProvider)
+            return signedURL ?? url
+        }
+
         return url
+    }
+    
+    private func signURLWithCognito(url: URL, cognitoProvider: AmazonLocationCognitoCredentialsProvider) -> URL? {
+        var signedURL: URL?
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        // Perform the signing asynchronously
+        Task {
+            do {
+                try await cognitoProvider.refreshCognitoCredentialsIfExpired()
+                if let cognitoCredentials = cognitoProvider.getCognitoCredentials() {
+                    let awsSigner = AWSSignerV4(credentials: cognitoCredentials, serviceName: "geo", region: self.region!)
+                    signedURL = awsSigner.signURL(url: url, expires: .hours(1))
+                }
+            } catch {
+                print("Error signing the URL: \(error)")
+            }
+            
+            semaphore.signal()
+        }
+        
+        // Wait for the task to complete
+        semaphore.wait()
+        
+        return signedURL
     }
 }
