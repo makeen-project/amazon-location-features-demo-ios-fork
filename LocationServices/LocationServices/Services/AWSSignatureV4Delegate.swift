@@ -33,15 +33,9 @@ class AWSSignatureV4Delegate : NSObject, MLNOfflineStorageDelegate {
          }
         else if let cognitoProvider = CognitoAuthHelper.default().locationCredentialsProvider?.getCognitoProvider(), region != nil {
              var signedURL: URL = url
-             let semaphore = DispatchSemaphore(value: 0)
-             Task {
-                 try await cognitoProvider.refreshCognitoCredentialsIfExpired()
-                 let cognitoCredentials: CognitoCredentials? = cognitoProvider.getCognitoCredentials()
-                 let awsSigner = AWSSignerV4(credentials: cognitoCredentials!, serviceName: "geo", region: self.region!)
-                 signedURL = awsSigner.signURL(url: url, expires: .hours(1))
-                 semaphore.signal()
-             }
-             semaphore.wait()
+             let cognitoCredentials: CognitoCredentials? = cognitoProvider.getCognitoCredentials()
+             let awsSigner = AWSSignerV4(credentials: cognitoCredentials!, serviceName: "geo", region: self.region!)
+             signedURL = awsSigner.signURL(url: url, expires: .hours(1))
              return signedURL
          }
         return url
