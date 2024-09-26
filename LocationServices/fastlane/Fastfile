@@ -65,7 +65,7 @@ platform :ios do
       key_content: options[:key_content],
       is_key_content_base64: true
     )
-    match(type: "appstore")
+    match(type: "adhoc")
     build_app(
       scheme: "LocationServices",
     )
