@@ -45,37 +45,38 @@ final class LoginViewModel: LoginViewModelProtocol {
     }
     
     func connectAWS(identityPoolId: String?, userPoolId: String?, userPoolClientId: String?, userDomain: String?, websocketUrl: String?) {
-        
-        guard let identityPoolId = identityPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
-              let userPoolId = userPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
-              let userPoolClientId = userPoolClientId?.trimmingCharacters(in: .whitespacesAndNewlines),
-              var userDomain = userDomain?.trimmingCharacters(in: .whitespacesAndNewlines),
-              var webSocketUrl = websocketUrl?.trimmingCharacters(in: .whitespacesAndNewlines) else {
-            
-            let model = AlertModel(title: StringConstant.error, message: StringConstant.notAllFieldsAreConfigured, okButton: StringConstant.ok)
-            delegate?.showAlert(model)
-            return
-        }
-        
-        // check if we have https:// or http:// - just eliminate it
-        ["https://", "http://"].forEach {
-            userDomain = userDomain.replacingOccurrences(of: $0, with: "")
-        }
-        ["https://", "http://"].forEach {
-            webSocketUrl = webSocketUrl.replacingOccurrences(of: $0, with: "")
-        }
         Task {   
             do {
+                guard let identityPoolId = identityPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let userPoolId = userPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let userPoolClientId = userPoolClientId?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let userDomain = userDomain?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let webSocketUrl = websocketUrl?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                    DispatchQueue.main.async {
+                        let model = AlertModel(title: StringConstant.error, message: StringConstant.notAllFieldsAreConfigured, okButton: StringConstant.ok)
+                        self.delegate?.showAlert(model)
+                    }
+                    return
+                }
+
                 let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId)
                 if isValid {
                     DispatchQueue.main.async {
-                        self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomain, webSocketUrl: webSocketUrl, region: "", apiKey: "")
+                        var userDomainValid = userDomain
+                        var webSocketUrlValid = webSocketUrl
+                        // check if we have https:// or http:// - just eliminate it
+                        ["https://", "http://"].forEach {
+                            userDomainValid = userDomainValid.replacingOccurrences(of: $0, with: "")
+                        }
+                        ["https://", "http://"].forEach {
+                            webSocketUrlValid = webSocketUrlValid.replacingOccurrences(of: $0, with: "")
+                        }
+                        self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomainValid, webSocketUrl: webSocketUrlValid, region: "", apiKey: "")
                     }
                 }
                 else {
-                    
-                    let model = AlertModel(title: StringConstant.error, message: StringConstant.incorrectIdentityPoolIdMessage, cancelButton: nil, okButton: StringConstant.ok)
                     DispatchQueue.main.async {
+                        let model = AlertModel(title: StringConstant.error, message: StringConstant.incorrectIdentityPoolIdMessage, cancelButton: nil, okButton: StringConstant.ok)
                         self.delegate?.showAlert(model)
                     }
                 }
