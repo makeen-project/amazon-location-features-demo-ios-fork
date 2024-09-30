@@ -177,7 +177,6 @@ struct UITestGeofenceScreen: UITestScreen {
         if(UIDevice.current.userInterfaceIdiom == .phone){
           scene = scene
                 .tapSaveButton()
-                .tapSaveButton()
         }
         else {
             scene = scene

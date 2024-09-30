@@ -247,7 +247,7 @@
 		ADB0B9A0295AF59600C219EC /* DirectionPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB0B99F295AF59600C219EC /* DirectionPresentation.swift */; };
 		ADB0B9A5295BAE2B00C219EC /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB0B9A4295BAE2B00C219EC /* Double+Extension.swift */; };
 		ADB46519295D57A6004088AE /* DirectionTextFieldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB46518295D57A6004088AE /* DirectionTextFieldModel.swift */; };
-		ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FA92947BFF6005DB4E4 /* AWSSignatureDelegate.swift */; };
+		ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FA92947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift */; };
 		ADBD7FB229493A9B005DB4E4 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FB129493A9B005DB4E4 /* Int+Extension.swift */; };
 		ADBD7FB62949B579005DB4E4 /* POICardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FB52949B579005DB4E4 /* POICardView.swift */; };
 		ADBD7FBB2949C687005DB4E4 /* POICardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FBA2949C687005DB4E4 /* POICardVC.swift */; };
@@ -675,7 +675,7 @@
 		ADB0B99F295AF59600C219EC /* DirectionPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionPresentation.swift; sourceTree = "<group>"; };
 		ADB0B9A4295BAE2B00C219EC /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		ADB46518295D57A6004088AE /* DirectionTextFieldModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionTextFieldModel.swift; sourceTree = "<group>"; };
-		ADBD7FA92947BFF6005DB4E4 /* AWSSignatureDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSSignatureDelegate.swift; sourceTree = "<group>"; };
+		ADBD7FA92947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSSignatureV4Delegate.swift; sourceTree = "<group>"; };
 		ADBD7FB129493A9B005DB4E4 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		ADBD7FB52949B579005DB4E4 /* POICardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POICardView.swift; sourceTree = "<group>"; };
 		ADBD7FBA2949C687005DB4E4 /* POICardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POICardVC.swift; sourceTree = "<group>"; };
@@ -2926,7 +2926,7 @@
 			children = (
 				ADF26F71293028BD000147A0 /* AWSLoginService.swift */,
 				ADABECD4293FD44200E66FC5 /* LocationSearchService.swift */,
-				ADBD7FA92947BFF6005DB4E4 /* AWSSignatureDelegate.swift */,
+				ADBD7FA92947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift */,
 				ADB0B99A295AF23C00C219EC /* RoutingService.swift */,
 				ADC124A12979EA5F00B08C20 /* GeofenceService.swift */,
 				ADCF384B29902815008289BB /* TrackingService.swift */,
@@ -3402,7 +3402,7 @@
 				ADCF384A298FF68D008289BB /* TrackHistoryCell.swift in Sources */,
 				ADD5D7D9296F87710022480B /* AddGeofenceSearchView.swift in Sources */,
 				ADC124A22979EA5F00B08C20 /* GeofenceService.swift in Sources */,
-				ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureDelegate.swift in Sources */,
+				ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift in Sources */,
 				F1F0C5872A0E5401009C7151 /* ErrorHandler.swift in Sources */,
 				8AFDA09629DDBC3800114BB7 /* VersionVCBuilder.swift in Sources */,
 				ADAF3653294A6A0700DC4774 /* POICardViewModel.swift in Sources */,
