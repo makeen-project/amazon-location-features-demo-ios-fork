@@ -23,11 +23,11 @@ final class SettingsUITests: LocationServicesUITests {
     }
     
     func testSettingsOptions() throws {
-        let app = startApp()
+        let app = startApp(allowPermissions: true)
         let _ = UITestTabBarScreen(app: app)
             .tapSettingsButton()
-            .waitMapStyleRow()
             .waitAWSCloudRow()
+            .waitMapStyleRow()
             .waitRouteOptionsRow()
             .waittDataProviderRow()
     }

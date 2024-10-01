@@ -32,7 +32,7 @@ final class TrackingUITests: LocationServicesUITests {
     
     func testTrackingGeofenceE2E() throws {
         
-        var app = startApp()
+        var app = startApp(allowPermissions: true)
         
         let menuScreen = UITestTabBarScreen(app: app)
             .tapSettingsButton()

@@ -173,7 +173,7 @@ enum StringConstant {
         static let descriptionTitle = "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's Terms & Conditions for use."
         static let appTermsOfUse = "Terms & Conditions"
         static let appTermsOfUseURL = termsAndConditionsURL
-        static let copyright = "© 2023, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+        static let copyright = "© 2024, Amazon Web Services, Inc. or its affiliates. All rights reserved."
     }
     
     enum Tracking {
