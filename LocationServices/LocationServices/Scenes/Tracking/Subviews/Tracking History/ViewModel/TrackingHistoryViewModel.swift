@@ -143,7 +143,7 @@ final class TrackingHistoryViewModel: TrackingHistoryViewModelProtocol {
     
     private func updateTrackingData(lat: Double, long: Double) async {
         do {
-            let result = try await trackingService.updateTrackerLocation(lat: lat, long: long)
+            _ = try await trackingService.updateTrackerLocation(lat: lat, long: long)
         }
         catch {
             if(ErrorHandler.isAWSStackDeletedError(error: error)) {
