@@ -11,7 +11,7 @@ jobs:
     name: Test iOS App
     runs-on: macos-14-xlarge
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Bundler
         working-directory: ./LocationServices

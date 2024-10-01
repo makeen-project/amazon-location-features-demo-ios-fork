@@ -77,10 +77,7 @@ struct UITestSettingsScreen: UITestScreen {
     }
     
     private func getAWSCloudCell() -> XCUIElement {
-        print(app.cells.count)
-        let cell = app.cells.element(boundBy: 3)
-        print(cell.identifier)
-        //let cell = app.cells[Identifiers.awsCloudCell]
+        let cell = app.cells[Identifiers.awsCloudCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
     }
