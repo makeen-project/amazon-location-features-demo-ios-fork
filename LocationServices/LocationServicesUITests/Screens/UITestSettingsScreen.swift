@@ -77,6 +77,7 @@ struct UITestSettingsScreen: UITestScreen {
     }
     
     private func getAWSCloudCell() -> XCUIElement {
+        XCTAssertGreaterThan(app.cells.count, 3, "app has more than 3 cells")
         let cell = app.cells[Identifiers.awsCloudCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
