@@ -89,7 +89,7 @@ final class SettingsVC: UIViewController {
         self.view.addSubview(disconnectButton)
         self.view.addSubview(logoutButton)
         self.view.addSubview(tableView)
-        
+        tableView.accessibilityIdentifier = "settingsTableView"
         headerTitle.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.equalToSuperview().offset(Constants.horizontalOffset)

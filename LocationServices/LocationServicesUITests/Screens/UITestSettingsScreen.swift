@@ -72,28 +72,28 @@ struct UITestSettingsScreen: UITestScreen {
     // MARK: - Private functions
     private func getRouteOptionCell() -> XCUIElement {
         app.activate()
-        let cell = app.cells[Identifiers.routeOptionCell]
+        let cell = app.tables["settingsTableView"].cells[Identifiers.routeOptionCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.long.time))
         return cell
     }
     
     private func getAWSCloudCell() -> XCUIElement {
         app.activate()
-        let cell = app.cells[Identifiers.awsCloudCell]
+        let cell = app.tables["settingsTableView"].cells[Identifiers.awsCloudCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.long.time))
         return cell
     }
     
     private func getDataProviderCell() -> XCUIElement {
         app.activate()
-        let cell = app.cells[Identifiers.dataProviderCell]
+        let cell = app.tables["settingsTableView"].cells[Identifiers.dataProviderCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.long.time))
         return cell
     }
     
     private func getMapStyleCell() -> XCUIElement {
         app.activate()
-        let cell = app.cells[Identifiers.mapStyleCell]
+        let cell = app.tables["settingsTableView"].cells[Identifiers.mapStyleCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.long.time))
         return cell
     }
