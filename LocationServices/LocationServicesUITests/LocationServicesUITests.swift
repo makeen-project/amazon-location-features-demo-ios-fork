@@ -41,6 +41,7 @@ class LocationServicesUITests: XCTestCase {
     func startApp(allowPermissions: Bool = true) -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()
+        app.activate()
         
         if allowPermissions {
             allowLocationPersmissions()
