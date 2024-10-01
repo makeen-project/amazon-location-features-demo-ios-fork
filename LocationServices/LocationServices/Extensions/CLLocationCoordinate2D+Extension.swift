@@ -8,7 +8,9 @@
 import Foundation
 import CoreLocation
 
-extension CLLocationCoordinate2D: Hashable {
+extension CLLocationCoordinate2D: @retroactive Equatable {}
+
+extension CLLocationCoordinate2D: @retroactive Hashable {
     func distance(from location: CLLocationCoordinate2D) -> CLLocationDistance {
         let currentLocation = CLLocation(location: self)
         let fromLocation = CLLocation(location: location)

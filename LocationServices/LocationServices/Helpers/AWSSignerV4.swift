@@ -121,13 +121,6 @@ public struct AWSSignerV4 {
         self.serviceName = serviceName
         self.region = region
     }
-    
-//    public init(amazonLocationCognitoCredentialsProvider: AmazonLocationCognitoCredentialsProvider, serviceName: String) {
-//        let cognitoCredentials = amazonLocationCognitoCredentialsProvider.getCognitoCredentials()!
-//        self.credentials = AmazonStaticCredentials(accessKeyId: cognitoCredentials.accessKeyId, secretKey: cognitoCredentials.secretKey, sessionToken: cognitoCredentials.sessionToken, expiration: cognitoCredentials.expiration)
-//        self.serviceName = serviceName
-//        self.region = amazonLocationCognitoCredentialsProvider.region!
-//    }
 
     /// Enum for holding request payload
     public enum BodyData {
