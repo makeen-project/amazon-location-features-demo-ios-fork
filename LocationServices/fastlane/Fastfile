@@ -45,6 +45,7 @@ platform :ios do
         result_bundle: true,
         code_coverage: true,
         output_directory: Dir.pwd + "/test_output",
+        system_log_path: Dir.pwd + "/test_output/system_logs.log",
         # xcargs: "-test-iterations '1' -retry-tests-on-failure"
       )
     ensure
