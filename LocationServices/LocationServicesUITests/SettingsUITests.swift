@@ -32,6 +32,13 @@ final class SettingsUITests: LocationServicesUITests {
             .waittDataProviderRow()
     }
     
+    func testTrackerOptions() throws {
+        let app = startApp(allowPermissions: true)
+        let _ = UITestTabBarScreen(app: app)
+            .tapGeofenceButton()
+            .waitForAWSConnectionScreen()
+    }
+    
     func testRouteOptions() throws {
         let app = startApp(allowPermissions: true)
         var routeOptionsScreen = UITestTabBarScreen(app: app)

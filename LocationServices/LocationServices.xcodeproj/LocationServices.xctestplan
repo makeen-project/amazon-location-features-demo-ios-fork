@@ -53,10 +53,12 @@
         "SearchUITests\/testSearchByCategory()",
         "SearchUITests\/testSearchByGeocodeLocation()",
         "SettingsUITests\/testDataSourceChanges()",
+        "SettingsUITests\/testMapStyleChanges()",
         "SettingsUITests\/testRouteOptions()",
         "TrackingUITests\/testStartTracking()",
         "TrackingUITests\/testStartTrackingHistoryStarted()",
         "TrackingUITests\/testStopTracking()",
+        "TrackingUITests\/testTrackingGeofenceE2E()",
         "TrackingUITests\/testTrackingNotifyEnteredGeofence()"
       ],
       "target" : {

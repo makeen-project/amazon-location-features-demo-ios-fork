@@ -44,7 +44,6 @@ struct UITestTabBarScreen: UITestScreen {
         showSideBar()
         let settingsButton = getSettingsTabBarButton()
         settingsButton.tap()
-        
         return UITestSettingsScreen(app: app)
     }
     
