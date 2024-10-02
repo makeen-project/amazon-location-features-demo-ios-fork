@@ -18,12 +18,14 @@ final class SettingsCoordinator: Coordinator {
     }
     
     func start() {
+        print("starting settings scene")
         showSettingsScene()
     }
 }
 
 private extension SettingsCoordinator {
     func showSettingsScene() {
+        print("showing settings scene")
         let controller = SettingsVCBuilder.create()
         controller.delegate = self
         navigationController.pushViewController(controller, animated: true)
