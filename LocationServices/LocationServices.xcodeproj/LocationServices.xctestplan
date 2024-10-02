@@ -55,6 +55,7 @@
         "SettingsUITests\/testDataSourceChanges()",
         "SettingsUITests\/testMapStyleChanges()",
         "SettingsUITests\/testRouteOptions()",
+        "SettingsUITests\/testTrackerOptions()",
         "TrackingUITests\/testStartTracking()",
         "TrackingUITests\/testStartTrackingHistoryStarted()",
         "TrackingUITests\/testStopTracking()",

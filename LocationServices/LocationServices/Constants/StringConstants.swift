@@ -208,7 +208,7 @@ enum StringConstant {
     static let defaultRouteOptions = "Default route options"
     static let partnerAttributionTitle = "Partner Attribution"
     static let partnerAttributionESRIDescription = "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community"
-    static let partnerAttributionHEREDescription = "© 2022 HERE"
+    static let partnerAttributionHEREDescription = "© 2024 HERE"
     static let softwareAttributionTitle = "Software Attribution"
     static let softwareAttributionDescription = "Click learn more for software attribution"
     static let learnMore = "Learn More"
