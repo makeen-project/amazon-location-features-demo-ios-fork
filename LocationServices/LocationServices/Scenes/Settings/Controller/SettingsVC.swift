@@ -40,13 +40,13 @@ final class SettingsVC: UIViewController {
         return view
     }()
     
-//    private lazy var disconnectButton: SettingsDisconnectButtonView = {
-//        let view = SettingsDisconnectButtonView()
-//        view.isUserInteractionEnabled = true
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(disconnectAction))
-//        view.addGestureRecognizer(tap)
-//        return view
-//    }()
+    private lazy var disconnectButton: SettingsDisconnectButtonView = {
+        let view = SettingsDisconnectButtonView()
+        view.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(disconnectAction))
+        view.addGestureRecognizer(tap)
+        return view
+    }()
     
     var viewModel: SettingsViewModelProtocol! {
         didSet {
@@ -86,9 +86,10 @@ final class SettingsVC: UIViewController {
    
     private func setupViews() {
         self.view.addSubview(headerTitle)
-        //self.view.addSubview(disconnectButton)
-        self.view.addSubview(logoutButton)
         self.view.addSubview(tableView)
+        self.view.addSubview(disconnectButton)
+        self.view.addSubview(logoutButton)
+        
         tableView.accessibilityIdentifier = "settingsTableView"
         headerTitle.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -96,16 +97,16 @@ final class SettingsVC: UIViewController {
             $0.trailing.equalToSuperview()
         }
         
-//        disconnectButton.snp.makeConstraints {
-//            $0.height.equalTo(72)
-//            $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
-//            $0.leading.trailing.equalToSuperview()
-//        }
-        
         logoutButton.snp.makeConstraints {
             $0.height.equalTo(72)
-            $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
+        }
+        
+        disconnectButton.snp.makeConstraints {
+            $0.height.equalTo(72)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(logoutButton.snp.top)
         }
         
         tableView.snp.makeConstraints {
@@ -115,7 +116,7 @@ final class SettingsVC: UIViewController {
             } else {
                 $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
             }
-            $0.bottom.equalTo(logoutButton.snp.top)
+            $0.bottom.equalTo(disconnectButton.snp.top)
         }
     }
     
@@ -124,15 +125,15 @@ final class SettingsVC: UIViewController {
     }
     
     @objc private func authorizationStatusChanged(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.updateLogoutButtonVisibility()
-        }
+        self.updateLogoutButtonVisibility()
     }
     
     private func updateLogoutButtonVisibility() {
         // show logout button only if we are not signed in
-       self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
-       //self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
+        DispatchQueue.main.async {
+            self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+            self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
+        }
     }
 }
 
