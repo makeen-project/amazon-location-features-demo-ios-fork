@@ -86,8 +86,9 @@ final class SettingsVC: UIViewController {
    
     private func setupViews() {
         let stackView = UIStackView()
-        stackView.addSubview(disconnectButton)
-        stackView.addSubview(logoutButton)
+        stackView.axis = .vertical
+        stackView.addArrangedSubview(disconnectButton)
+        stackView.addArrangedSubview(logoutButton)
         
         self.view.addSubview(headerTitle)
         self.view.addSubview(tableView)
@@ -100,7 +101,6 @@ final class SettingsVC: UIViewController {
         }
         
         stackView.snp.makeConstraints {
-            $0.height.equalTo(72)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
         }
@@ -137,8 +137,8 @@ final class SettingsVC: UIViewController {
     private func updateLogoutButtonVisibility() {
         // show logout button only if we are not signed in
         DispatchQueue.main.async {
-            self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
-            self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
+            //self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+            //self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
         }
     }
 }
