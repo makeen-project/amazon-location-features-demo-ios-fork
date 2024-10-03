@@ -85,10 +85,13 @@ final class SettingsVC: UIViewController {
     }
    
     private func setupViews() {
+        let stackView = UIStackView()
+        stackView.addSubview(disconnectButton)
+        stackView.addSubview(logoutButton)
+        
         self.view.addSubview(headerTitle)
         self.view.addSubview(tableView)
-        self.view.addSubview(disconnectButton)
-        self.view.addSubview(logoutButton)
+        self.view.addSubview(stackView)
     
         headerTitle.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -96,16 +99,20 @@ final class SettingsVC: UIViewController {
             $0.trailing.equalToSuperview()
         }
         
-        logoutButton.snp.makeConstraints {
+        stackView.snp.makeConstraints {
             $0.height.equalTo(72)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
         }
         
+        logoutButton.snp.makeConstraints {
+            $0.height.equalTo(72)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
         disconnectButton.snp.makeConstraints {
             $0.height.equalTo(72)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(logoutButton.snp.top)
         }
         
         tableView.snp.makeConstraints {
@@ -115,7 +122,7 @@ final class SettingsVC: UIViewController {
             } else {
                 $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
             }
-            $0.bottom.equalTo(disconnectButton.snp.top)
+            $0.bottom.equalTo(stackView.snp.top)
         }
     }
     
@@ -130,8 +137,8 @@ final class SettingsVC: UIViewController {
     private func updateLogoutButtonVisibility() {
         // show logout button only if we are not signed in
         DispatchQueue.main.async {
-            //self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
-            //self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
+            self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+            self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
         }
     }
 }
