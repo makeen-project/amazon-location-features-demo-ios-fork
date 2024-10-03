@@ -23,11 +23,9 @@ final class SettingsUITests: LocationServicesUITests {
     }
     
     func testSettingsOptions() throws {
-        let app = startApp(allowPermissions: true)
-
-        let _ = UITestTabBarScreen(app: app)
-            .tapAboutButton()
+        let app = startApp(allowPermissions: false)
         Thread.sleep(forTimeInterval: 10)
+
         let _ = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .waitAWSCloudRow()
