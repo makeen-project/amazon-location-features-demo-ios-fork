@@ -89,8 +89,7 @@ final class SettingsVC: UIViewController {
         self.view.addSubview(tableView)
         self.view.addSubview(disconnectButton)
         self.view.addSubview(logoutButton)
-        
-        tableView.accessibilityIdentifier = "settingsTableView"
+    
         headerTitle.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.equalToSuperview().offset(Constants.horizontalOffset)
@@ -131,8 +130,8 @@ final class SettingsVC: UIViewController {
     private func updateLogoutButtonVisibility() {
         // show logout button only if we are not signed in
         DispatchQueue.main.async {
-            self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
-            self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
+            //self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+            //self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
         }
     }
 }
