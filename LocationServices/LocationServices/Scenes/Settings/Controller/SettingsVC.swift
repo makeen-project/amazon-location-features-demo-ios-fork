@@ -125,14 +125,14 @@ final class SettingsVC: UIViewController {
     
     @objc private func authorizationStatusChanged(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.updateLogoutButtonVisibility()
+           // self.updateLogoutButtonVisibility()
         }
     }
     
     private func updateLogoutButtonVisibility() {
         // show logout button only if we are not signed in
-        self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
-        self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
+       // self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
+       // self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
     }
 }
 
