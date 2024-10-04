@@ -158,7 +158,7 @@ struct UITestGeofenceScreen: UITestScreen {
     }
     
     func addGeofence(geofenceNameToAdd: String) -> Self {
-        let coordinates = generateRandomCoordinatesInNewYork()
+        let coordinates = getCoordinatesInNewYork()
         
         return addGeofence(geofenceNameToAdd: geofenceNameToAdd, location: coordinates)
     }
@@ -187,7 +187,7 @@ struct UITestGeofenceScreen: UITestScreen {
     }
     
     func editGeofence(geofenceName: String, newGeofenceName: String) -> Self {
-        let newCoordinates = generateRandomCoordinatesInNewYork()
+        let newCoordinates = getCoordinatesInNewYork()
         
         return tapGeofence(geofenceName: geofenceName)
         .selectGeofenceLocation(location: newCoordinates)
@@ -221,22 +221,9 @@ struct UITestGeofenceScreen: UITestScreen {
         let cell = table.cells.element(boundBy: index)
         return cell
     }
-
-    private func generateRandomCoordinatesInUSA() -> String {
-        let lat = Double.random(in: 24.7433195...49.3457868)
-        let long = Double.random(in: -124.7844079 ... -66.9513812)
-        return "\(lat), \(long)"
-    }
     
-    private func generateRandomCoordinatesInNewYork() -> String {
-        // Define the bounding box of New York City
-        let newYorkBounds = (minLat: 40.477399, minLon: -74.25909, maxLat: 40.917576, maxLon: -73.700181)
-
-        // Generate a random coordinate within the bounds
-        let lat = Double.random(in: newYorkBounds.minLat...newYorkBounds.maxLat)
-        let long = Double.random(in: newYorkBounds.minLon...newYorkBounds.maxLon)
-
-        return "\(lat), \(long)"
+    private func getCoordinatesInNewYork() -> String {
+        return "40.477399, -74.25909"
     }
     
     private func getAddGeofenceTable() -> XCUIElement {

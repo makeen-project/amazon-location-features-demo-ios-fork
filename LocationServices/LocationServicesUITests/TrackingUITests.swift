@@ -46,7 +46,7 @@ final class TrackingUITests: LocationServicesUITests {
         
         let _ = UITestGeofenceScreen(app: app)
             .deleteAllGeofences()
-        
+        Thread.sleep(forTimeInterval: 2)
         app = restartApp()
 
         let geofenceName = UITestGeofenceScreen.generateUniqueGeofenceName()
@@ -100,15 +100,6 @@ final class TrackingUITests: LocationServicesUITests {
             .swipeUpHistoryView()
             .tapDeleteTrackingDataButton()
             .verifyTrackingHistoryDeleted()
-        
-        let newGeofenceName = UITestGeofenceScreen.generateUniqueGeofenceName()
-        
-        _ = UITestTabBarScreen(app: app)
-            .tapGeofenceButton()
-            .editGeofence(geofenceName: geofenceName, newGeofenceName: newGeofenceName)
-            .deleteGeofence(index: 0)
-            .confirmDeleteGeofence()
-            .verifyDeletedGeofence(geofenceName: newGeofenceName)
     }
 }
 

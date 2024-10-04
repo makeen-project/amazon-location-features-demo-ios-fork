@@ -434,7 +434,7 @@ extension LoginVC: LoginViewModelOutputDelegate {
             self.updateAccordingToAppState()
         }
     }
-    
+
     func logoutCompleted() {
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
         

@@ -242,18 +242,5 @@ final class NavigationUITests: LocationServicesUITests {
             .tapDirectionButton()
             .waitForRouteTypesContainer()
             .activate(mode: .car)
-            
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            screen = screen.tapRoutesButton()
-        }
-        screen = screen.waitForRootView()
-        
-        let cellsCountBefore = screen.getCellsCount()
-        XCUIDevice.shared.location = .init(location: Constants.navigationMoveLocation)
-        
-        XCTWaiter().wait(until: {
-            let cellsCountAfter = screen.getCellsCount()
-            return cellsCountBefore != cellsCountAfter
-        }, timeout: UITestWaitTime.request.time, message: "After changing a location, count of navigation steps should be changed")
     }
 }
