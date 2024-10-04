@@ -73,7 +73,7 @@ struct UITestSettingsScreen: UITestScreen {
     private func getRouteOptionCell() -> XCUIElement {
         app.activate()
         let cell = app.cells[Identifiers.routeOptionCell]
-        XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.long.time))
+        XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
     }
     
