@@ -32,18 +32,10 @@ final class SettingsVC: UIViewController {
         return tableView
     }()
     
-    private lazy var logoutButton: SettingsLogoutButtonView = {
-        let view = SettingsLogoutButtonView()
+    private lazy var settingsButton: SettingsButtonView = {
+        let view = SettingsButtonView()
         view.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(logoutAction))
-        view.addGestureRecognizer(tap)
-        return view
-    }()
-    
-    private lazy var disconnectButton: SettingsDisconnectButtonView = {
-        let view = SettingsDisconnectButtonView()
-        view.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(disconnectAction))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(buttonAction))
         view.addGestureRecognizer(tap)
         return view
     }()
@@ -76,23 +68,21 @@ final class SettingsVC: UIViewController {
         navigationItem.backButtonTitle = ""
     }
     
-    @objc func logoutAction() {
-        self.viewModel.logOut()
-    }
-    
-    @objc func disconnectAction() {
-        self.viewModel.disconnectAWS()
+    @objc func buttonAction() {
+        switch UserDefaultsHelper.getAppState() {
+        case .loggedIn:
+            self.viewModel.logOut()
+        case .customAWSConnected:
+            self.viewModel.disconnectAWS()
+        default:
+            print("no action required")
+        }
     }
    
     private func setupViews() {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.addArrangedSubview(disconnectButton)
-        stackView.addArrangedSubview(logoutButton)
-        
         self.view.addSubview(headerTitle)
         self.view.addSubview(tableView)
-        self.view.addSubview(stackView)
+        self.view.addSubview(settingsButton)
     
         headerTitle.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -100,19 +90,10 @@ final class SettingsVC: UIViewController {
             $0.trailing.equalToSuperview()
         }
         
-        stackView.snp.makeConstraints {
+        settingsButton.snp.makeConstraints {
+            $0.height.equalTo(72)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
-        }
-        
-        logoutButton.snp.makeConstraints {
-            $0.height.equalTo(72)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
-        disconnectButton.snp.makeConstraints {
-            $0.height.equalTo(72)
-            $0.leading.trailing.equalToSuperview()
         }
         
         tableView.snp.makeConstraints {
@@ -122,7 +103,7 @@ final class SettingsVC: UIViewController {
             } else {
                 $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
             }
-            $0.bottom.equalTo(stackView.snp.top)
+            $0.bottom.equalTo(settingsButton.snp.top)
         }
     }
     
@@ -135,10 +116,18 @@ final class SettingsVC: UIViewController {
     }
     
     private func updateLogoutButtonVisibility() {
-        // show logout button only if we are not signed in
+        // show logout & disconnect button
         DispatchQueue.main.async {
-            //self.logoutButton.isHidden = UserDefaultsHelper.getAppState() != .loggedIn
-            //self.disconnectButton.isHidden = UserDefaultsHelper.getAppState() != .customAWSConnected
+            switch UserDefaultsHelper.getAppState() {
+            case .loggedIn:
+                self.settingsButton.setButtonState(settingsButtonState: .logout)
+                self.settingsButton.isHidden = false
+            case .customAWSConnected:
+                self.settingsButton.setButtonState(settingsButtonState: .disconnect)
+                self.settingsButton.isHidden = false
+            default:
+                self.settingsButton.isHidden = true
+            }
         }
     }
 }
@@ -151,7 +140,6 @@ extension SettingsVC: SettingsViewModelOutputDelegate {
     }
     
     func logoutCompleted() {
-        // show logout button only if we are not signed in
         updateLogoutButtonVisibility()
     }
 }
