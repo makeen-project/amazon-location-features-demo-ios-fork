@@ -288,7 +288,7 @@
 		ADCF384E299166FB008289BB /* TrackingServiceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF384D299166FB008289BB /* TrackingServiceable.swift */; };
 		ADD1394A298069F50003F917 /* SettingVC+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD13949298069F50003F917 /* SettingVC+TableView.swift */; };
 		ADD1394D29806A1B0003F917 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1394C29806A1B0003F917 /* SettingsCell.swift */; };
-		ADD1394F298073040003F917 /* SettingsLogoutButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1394E298073040003F917 /* SettingsLogoutButtonView.swift */; };
+		ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1394E298073040003F917 /* SettingsButtonView.swift */; };
 		ADD139582980867D0003F917 /* UnitSceneContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD139572980867D0003F917 /* UnitSceneContracts.swift */; };
 		ADD1395A2980874A0003F917 /* UnitSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD139592980874A0003F917 /* UnitSceneViewModel.swift */; };
 		ADD1395C298087840003F917 /* UnitSceneBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1395B298087840003F917 /* UnitSceneBuilder.swift */; };
@@ -371,7 +371,6 @@
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
 		F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */; };
 		F17BE2B029F819C2001A4ADF /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */; };
-		F1826C952C99CA7B00EB2901 /* SettingsDisconnectButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1826C942C99CA7B00EB2901 /* SettingsDisconnectButtonView.swift */; };
 		F18BD50A2AC481DA008FD008 /* AWSLoginServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */; };
 		F18DEEDC2C75908200335F3E /* AWSLocation in Frameworks */ = {isa = PBXBuildFile; productRef = F18DEEDB2C75908200335F3E /* AWSLocation */; };
 		F18DEEDE2C75929C00335F3E /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEDD2C75929C00335F3E /* AuthHelper.swift */; };
@@ -716,7 +715,7 @@
 		ADCF384D299166FB008289BB /* TrackingServiceable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingServiceable.swift; sourceTree = "<group>"; };
 		ADD13949298069F50003F917 /* SettingVC+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingVC+TableView.swift"; sourceTree = "<group>"; };
 		ADD1394C29806A1B0003F917 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
-		ADD1394E298073040003F917 /* SettingsLogoutButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLogoutButtonView.swift; sourceTree = "<group>"; };
+		ADD1394E298073040003F917 /* SettingsButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsButtonView.swift; sourceTree = "<group>"; };
 		ADD139572980867D0003F917 /* UnitSceneContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSceneContracts.swift; sourceTree = "<group>"; };
 		ADD139592980874A0003F917 /* UnitSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSceneViewModel.swift; sourceTree = "<group>"; };
 		ADD1395B298087840003F917 /* UnitSceneBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSceneBuilder.swift; sourceTree = "<group>"; };
@@ -799,7 +798,6 @@
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
 		F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingAPIServiceMock.swift; sourceTree = "<group>"; };
 		F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
-		F1826C942C99CA7B00EB2901 /* SettingsDisconnectButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDisconnectButtonView.swift; sourceTree = "<group>"; };
 		F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSLoginServiceMock.swift; sourceTree = "<group>"; };
 		F18DEEDD2C75929C00335F3E /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
 		F18DEEDF2C7592BB00335F3E /* LocationCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCredentialsProvider.swift; sourceTree = "<group>"; };
@@ -1768,8 +1766,7 @@
 			children = (
 				ADD1394B29806A0E0003F917 /* Cell */,
 				AD2AF0D6292EABD800149904 /* SettingsView.swift */,
-				ADD1394E298073040003F917 /* SettingsLogoutButtonView.swift */,
-				F1826C942C99CA7B00EB2901 /* SettingsDisconnectButtonView.swift */,
+				ADD1394E298073040003F917 /* SettingsButtonView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3369,7 +3366,6 @@
 				8A30A7F529FA88740012AE71 /* SideBarCell.swift in Sources */,
 				F18DEEE62C75947000335F3E /* Logger.swift in Sources */,
 				AD989748298C56EE0041E867 /* TrackingHistoryBuilder.swift in Sources */,
-				F1826C952C99CA7B00EB2901 /* SettingsDisconnectButtonView.swift in Sources */,
 				8A76327C297EAE270064D60F /* MGLMapViewDelegate+Extension.swift in Sources */,
 				F18DEEEA2C75EC3400335F3E /* AWSSignerV4.swift in Sources */,
 				8A85A75A29A3A9C80022ABE0 /* TrackingEventModel.swift in Sources */,
@@ -3477,7 +3473,7 @@
 				AD2AF0DB292EABFE00149904 /* AboutContracts.swift in Sources */,
 				8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */,
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
-				ADD1394F298073040003F917 /* SettingsLogoutButtonView.swift in Sources */,
+				ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
 				ADC474FE2971E7A300AAE7A3 /* AmazonLocationLabel.swift in Sources */,
 				8ABDF63A29A52AE300122966 /* ExploreMapStyleCellViewModel.swift in Sources */,
@@ -3654,10 +3650,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocationServices/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -3924,10 +3917,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocationServices/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -3962,10 +3952,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7UPKXTT366;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LocationServices/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

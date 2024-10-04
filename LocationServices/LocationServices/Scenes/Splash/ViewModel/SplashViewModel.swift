@@ -50,16 +50,12 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
     }
     
     private func setupValidAWSConfiguration() async throws {
-        guard let configurationModel = loginService.getAWSConfigurationModel() else {
+        guard let configurationModel = await loginService.getAWSConfigurationModel() else {
             print("Can't read default configuration from awsconfiguration.json")
             setupCompleted()
             return
         }
-        
-        //let config = loginService.createAWSConfiguration(with: configurationModel)
-        
-        //AWSInfo.configureDefaultAWSInfo(config)
-        
+
         // Here we connected and should set appropriate flags for it
         // possible connection states:
         // awsConnected - we are connected to default AWS configuration.
@@ -74,107 +70,8 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
     }
     
     private func initializeMobileClient(configurationModel: CustomConnectionModel) async throws {
-        //UserDefaultsHelper.save(value: "", key: .userInitial)
-        self.validateIdentityId()
         try await CognitoAuthHelper.initialise(identityPoolId: configurationModel.identityPoolId)
-
-//        AWSMobileClient.default().initialize { [weak self] (userState, error) in
-//            // Calling getIdentityId in order to force refresh the AWSMobileClient identityId to the latest one
-//            self?.addListener()
-//            print("AWS login?: \(AWSMobileClient.default().isSignedIn)")
-//            
-//            if let userState = userState {
-//                switch userState {
-//                case .signedIn:
-//                    print("Logged In")
-//                    AWSMobileClient.default().getTokens { [weak self] tokens, error in
-//                        self?.observeLogoutResult = true
-//                        self?.validateIdentityId()
-//                    }
-//                default:
-//                    UserDefaultsHelper.save(value: "", key: .userInitial)
-//                    print("Logged Out")
-//                    self?.validateIdentityId()
-//                }
-//            } else if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            }
-//        }
-    }
-    
-    private func addListener() {
-//        AWSMobileClient.default().addUserStateListener(self) { [weak self] (userState, info) in
-//            switch (userState) {
-//            case .guest:
-//                print("user is in guest mode.")
-//            case .signedOut:
-//                print("user signed out")
-//            case .signedIn:
-//                print("user is signed in.")
-//            case .signedOutUserPoolsTokenInvalid:
-//                print("need to login again.")
-//                self?.observeLogoutResult = false
-//                self?.validateIdentityId()
-//            case .signedOutFederatedTokensInvalid:
-//                print("user logged in via federation, but currently needs new tokens")
-//                self?.observeLogoutResult = false
-//                self?.validateIdentityId()
-//            default:
-//                print("unsupported")
-//            }
-//        }
-    }
-    
-    private func validateIdentityId() {
-//        AWSMobileClient.default().getIdentityId().continueWith { [weak self] task in
-//            
-//            self?.loginService.updateAWSServicesCredentials()
-//            
-//            // here we are actually connect to Amazon location
-//            // it can be either custom or default
-//            let state = UserDefaultsHelper.getAppState()
-//            
-//            if state != .loggedIn {
-//                if UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) != nil {
-//                    UserDefaultsHelper.setAppState(state: .customAWSConnected)
-//                } else {
-//                    UserDefaultsHelper.setAppState(state: .defaultAWSConnected)
-//                }
-//            }
-//            
-//            if state == .loggedIn {
-//                self?.loginService.attachPolicy { [weak self] _ in
-//                    self?.validateStoredIdentityId()
-//                }
-//            } else {
-//                self?.validateStoredIdentityId()
-//            }
-//            
-//            return nil
-//        }
-        
         self.setupCompleted()
-    }
-    
-    private func validateStoredIdentityId() {
-//        guard AWSMobileClient.default().isSignedIn,
-//              let currentIdentityId = AWSMobileClient.default().identityId,
-//              let actualId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId),
-//              currentIdentityId != actualId else {
-//
-//            self.setupCompleted()
-//            return
-//        }
-//        
-//        //the identityId is different from the one that is represent the current signed in user
-//        //in this case we make a sign out as new identityId doesn't have permissions for geofence and tracking
-//        let alertModel = AlertModel(title: StringConstant.warning, message: StringConstant.sessionExpiredError, cancelButton: nil) { [weak self] in
-//            self?.loginService.logout(skipPolicy: true)
-//        }
-//        DispatchQueue.main.async {
-//            self.delegate?.showAlert(alertModel)
-//        }
     }
     
     private func setupCompleted() {

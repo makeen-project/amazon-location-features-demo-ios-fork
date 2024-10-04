@@ -24,6 +24,7 @@ final class SettingsUITests: LocationServicesUITests {
     
     func testSettingsOptions() throws {
         let app = startApp()
+
         let _ = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .waitAWSCloudRow()
@@ -31,7 +32,7 @@ final class SettingsUITests: LocationServicesUITests {
             .waitRouteOptionsRow()
             .waittDataProviderRow()
     }
-    
+
     func testRouteOptions() throws {
         let app = startApp(allowPermissions: true)
         var routeOptionsScreen = UITestTabBarScreen(app: app)

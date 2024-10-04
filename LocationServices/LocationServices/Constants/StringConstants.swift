@@ -173,7 +173,7 @@ enum StringConstant {
         static let descriptionTitle = "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's Terms & Conditions for use."
         static let appTermsOfUse = "Terms & Conditions"
         static let appTermsOfUseURL = termsAndConditionsURL
-        static let copyright = "© 2023, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+        static let copyright = "© 2024, Amazon Web Services, Inc. or its affiliates. All rights reserved."
     }
     
     enum Tracking {
@@ -208,7 +208,7 @@ enum StringConstant {
     static let defaultRouteOptions = "Default route options"
     static let partnerAttributionTitle = "Partner Attribution"
     static let partnerAttributionESRIDescription = "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community"
-    static let partnerAttributionHEREDescription = "© 2022 HERE"
+    static let partnerAttributionHEREDescription = "© 2024 HERE"
     static let softwareAttributionTitle = "Software Attribution"
     static let softwareAttributionDescription = "Click learn more for software attribution"
     static let learnMore = "Learn More"

@@ -106,7 +106,7 @@ class MqttIoTContext: ObservableObject {
                 self.printView(contextName + " Mqtt5ClientTests: onWebSocketHandshake")
                 
                 if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect),
-                let credentialsProvider = AWSLoginService.default().credentialsProvider {
+                let credentialsProvider = await AWSLoginService.default().credentialsProvider {
                     
                     let region = customModel.identityPoolId.toRegionString()
                     let signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4,

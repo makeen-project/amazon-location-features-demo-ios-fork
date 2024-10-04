@@ -22,7 +22,6 @@ class ErrorHandler {
                 
                 // remove custom configuration
                 UserDefaultsHelper.removeObject(for: .awsConnect)
-                exit(0)
             }
             delegate?.showAlert(model)
         }

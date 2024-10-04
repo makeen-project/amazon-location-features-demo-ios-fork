@@ -343,7 +343,6 @@ final class LoginVC: UIViewController {
     }
     
     private func setup() {
-        let appState = UserDefaultsHelper.getAppState()
         scrollView.contentInset = .init(top: 0, left: 0, bottom: -Constants.scrollViewBottomOffset, right: 0)
         
         view.addSubview(scrollView)
@@ -435,7 +434,7 @@ extension LoginVC: LoginViewModelOutputDelegate {
             self.updateAccordingToAppState()
         }
     }
-    
+
     func logoutCompleted() {
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
         

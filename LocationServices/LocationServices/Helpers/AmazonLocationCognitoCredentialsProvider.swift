@@ -4,10 +4,19 @@ public class AmazonLocationCognitoCredentialsProvider: LocationCredentialsProtoc
     internal var identityPoolId: String?
     internal var region: String?
     private var cognitoCredentials: CognitoCredentials?
-    
+    private var refreshTimer: Timer?
+
     public init(identityPoolId: String, region: String?) {
         self.identityPoolId = identityPoolId
         self.region = region
+        
+        // Start a background timer to refresh credentials every 59 minutes
+        startCredentialRefreshTimer()
+    }
+    
+    deinit {
+        // Invalidate the timer when the instance is deallocated
+        refreshTimer?.invalidate()
     }
     
     public func getCognitoCredentials() -> CognitoCredentials? {
@@ -39,4 +48,20 @@ public class AmazonLocationCognitoCredentialsProvider: LocationCredentialsProtoc
         self.cognitoCredentials = cognitoCredentials
         KeyChainHelper.save(value: CognitoCredentials.encodeCognitoCredentials(credential: cognitoCredentials)!, key: .cognitoCredentials)
     }
+    
+    // Start a repeating timer that calls refreshCognitoCredentialsIfExpired every 59 minutes
+    private func startCredentialRefreshTimer() {
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 59 * 60, repeats: true) { [weak self] _ in
+            Task {
+                do {
+                    try await self?.refreshCognitoCredentialsIfExpired()
+                    try await AWSLoginService.default().refreshLoginIfExpired()
+                    
+                } catch {
+                    print("Error refreshing Cognito credentials: \(error)")
+                }
+            }
+        }
+    }
+
 }

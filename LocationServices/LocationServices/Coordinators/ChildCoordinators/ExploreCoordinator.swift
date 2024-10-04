@@ -46,7 +46,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
         controller.enableBottomSheetGrab()
         currentBottomSheet = controller
-    } 
+    }
     
     func showDirections(isRouteOptionEnabled: Bool?,
                         firstDestionation: MapModel?,
