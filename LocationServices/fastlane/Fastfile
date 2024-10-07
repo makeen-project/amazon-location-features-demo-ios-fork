@@ -48,6 +48,24 @@ platform :ios do
         include_simulator_logs: true,
         xcargs: "-test-iterations '5' -retry-tests-on-failure"
       )
+    
+    # Fetch xcresult path
+    xcresult_path = Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]
+    
+    # Use a helper or some logic to inspect the xcresult file for final test status
+    sh("xcrun xcresulttool get --path #{xcresult_path} --format json > result.json")
+    
+    # Parse result.json and check if tests were passed on the last attempt
+    result = JSON.parse(File.read("result.json"))
+    failed_tests = result["issues"]["testFailures"]
+    
+    # If all tests have eventually passed, don't fail the lane
+    if failed_tests.nil? || failed_tests.empty?
+      UI.success("All tests passed eventually after retries.")
+    else
+      UI.user_error!("Some tests still failed after retries.")
+    end
+
     ensure
       xcresult_path = Actions.lane_context[SharedValues::SCAN_GENERATED_XCRESULT_PATH]
       sh("echo xcresult_path=" + xcresult_path + " >> $GITHUB_ENV")
