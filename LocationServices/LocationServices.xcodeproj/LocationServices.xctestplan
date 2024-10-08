@@ -37,7 +37,6 @@
         "NavigationUITests\/testRouteFerriesOption()",
         "NavigationUITests\/testRouteTollsOption()",
         "SettingsUITests\/testTrackerOptions()",
-        "TrackingUITests\/testGeofenceE2E()",
         "TrackingUITests\/testStartTracking()",
         "TrackingUITests\/testStartTrackingHistoryStarted()",
         "TrackingUITests\/testStopTracking()",
