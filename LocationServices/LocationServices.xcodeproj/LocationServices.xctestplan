@@ -33,12 +33,14 @@
         "MapUITests\/testMapMaxZoomIn()",
         "MapUITests\/testMapMaxZoomOut()",
         "MapUITests\/testMapZoomInByTap()",
+        "MapUITests\/testMapZoomOut()",
         "NavigationUITests\/testRouteFerriesOption()",
         "NavigationUITests\/testRouteTollsOption()",
         "SettingsUITests\/testTrackerOptions()",
         "TrackingUITests\/testStartTracking()",
         "TrackingUITests\/testStartTrackingHistoryStarted()",
         "TrackingUITests\/testStopTracking()",
+        "TrackingUITests\/testTrackingGeofenceE2E()",
         "TrackingUITests\/testTrackingNotifyEnteredGeofence()"
       ],
       "target" : {

@@ -30,6 +30,32 @@ final class TrackingUITests: LocationServicesUITests {
         super.tearDown()
     }
     
+    func testGeofenceE2E() throws {
+        
+        var app = startApp(allowPermissions: true)
+        
+        let menuScreen = UITestTabBarScreen(app: app)
+            .tapSettingsButton()
+            .tapConnectAWSRow()
+            .connectAWSConnect()
+            .signInAWSAccount()
+        
+        if(UIDevice.current.userInterfaceIdiom == .phone) {
+            menuScreen.getBackButton().tap()
+        }
+        
+        let _ = UITestGeofenceScreen(app: app)
+            .deleteAllGeofences()
+        Thread.sleep(forTimeInterval: 2)
+        app = restartApp()
+
+        let geofenceName = UITestGeofenceScreen.generateUniqueGeofenceName()
+        
+        _ = UITestTabBarScreen(app: app)
+            .tapGeofenceButton()
+            .addGeofence(geofenceNameToAdd: geofenceName,location: Constants.geofenceLocationAddress, selectDefault: true)
+    }
+    
     func testTrackingGeofenceE2E() throws {
         
         var app = startApp(allowPermissions: true)
@@ -90,9 +116,6 @@ final class TrackingUITests: LocationServicesUITests {
         
         let _ = trackingUIScreen
             .waitForGeofenceExitedAlert(geofenceName: geofenceName)
-        
-        Thread.sleep(forTimeInterval: 1)
-        XCUIDevice.shared.location = .init(location: Constants.trackingPoints[1])
 
         let _ = trackingUIScreen
             .tapStopTrackingButton()

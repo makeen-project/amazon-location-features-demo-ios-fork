@@ -6,7 +6,7 @@ on:
 jobs:
   test-iOS:
     name: Run Unit Tests for iOS
-    runs-on: macos-14-xlarge
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 

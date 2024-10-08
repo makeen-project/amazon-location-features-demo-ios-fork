@@ -32,8 +32,6 @@ class MqttIoTContext: ObservableObject {
     public var client: Mqtt5Client?
     /// Print the text and pending new message to message list
     func printView(_ txt: String) {
-        let newMessage = Message(id: messages.count, text: txt)
-        self.messages.append(newMessage)
         print(txt)
     }
 
