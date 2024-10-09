@@ -6,13 +6,17 @@ public class ApiAuthHelper {
     private static var _sharedInstance: ApiAuthHelper?
     var locationCredentialsProvider: LocationCredentialsProvider?
     var amazonLocationClient: AmazonLocationClient?
+    var geoPlacesClient: GeoPlacesClient?
     var authHelper: AuthHelper?
     
-    static func initialize(apiKey: String, region: String) {
+    
+    static func initialize(apiKey: String, region: String) throws {
         if _sharedInstance == nil {
             _sharedInstance = ApiAuthHelper()
             _sharedInstance?.authHelper = AuthHelper()
-            _sharedInstance?.locationCredentialsProvider = _sharedInstance?.authHelper?.authenticateWithApiKey(apiKey: apiKey, region: region)
+            _sharedInstance?.locationCredentialsProvider = try _sharedInstance?.authHelper?.authenticateWithApiKey(apiKey: apiKey, region: region)
+            _sharedInstance?.amazonLocationClient = _sharedInstance?.authHelper?.getLocationClient()
+            _sharedInstance?.geoPlacesClient = _sharedInstance?.authHelper?.getGeoPlacesClient()
         }
     }
     

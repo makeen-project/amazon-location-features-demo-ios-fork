@@ -102,7 +102,7 @@ final class ExploreViewModel: ExploreViewModelProtocol {
     }
     
     func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) async {
-        let result = await locationService.searchWithPosition(position: [coordinates.longitude, coordinates.latitude], userLat: userLocation?.latitude, userLong: userLocation?.longitude)
+        let result = await locationService.searchNearby(position: [coordinates.longitude, coordinates.latitude], userLat: userLocation?.latitude, userLong: userLocation?.longitude)
         DispatchQueue.main.async {
             do {
                 if let model = try result.get().first {

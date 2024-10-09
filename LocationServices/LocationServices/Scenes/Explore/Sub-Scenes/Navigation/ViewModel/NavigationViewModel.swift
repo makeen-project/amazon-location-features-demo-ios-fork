@@ -83,7 +83,7 @@ final class NavigationVCViewModel {
             for (id, step) in steps.enumerated() {
                 group.addTask {
                     let position = step.startPosition
-                    let response = await self.service.searchWithPosition(position: position, userLat: nil, userLong: nil)
+                    let response = await self.service.searchNearby(position: position, userLat: nil, userLong: nil)
 
                     switch response {
                     case .success(let results):

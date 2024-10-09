@@ -79,4 +79,12 @@ public extension AmazonLocationClient {
     static func defaultApi() -> AmazonLocationClient? {
         return ApiAuthHelper.default().amazonLocationClient
     }
+    
+    static func defaultApiPlacesClient() -> GeoPlacesClient? {
+        return ApiAuthHelper.default().geoPlacesClient
+    }
+    
+    static func defaultApiKey() -> String? {
+        return ApiAuthHelper.default().locationCredentialsProvider?.getAPIKey()
+    }
 }

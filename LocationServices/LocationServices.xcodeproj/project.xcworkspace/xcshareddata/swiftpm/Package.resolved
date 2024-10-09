@@ -1,5 +1,5 @@
 {
-  "originHash" : "33fa476c44ec13ba9dfb107bc55a239c88b17c3ebefc9a581f9498da82ded5fd",
+  "originHash" : "9e3c207589c0fe342638461d8aa346ef679abfe7f8c5b0e44db439b4344e57cf",
   "pins" : [
     {
       "identity" : "aws-crt-swift",
@@ -7,7 +7,7 @@
       "location" : "https://github.com/awslabs/aws-crt-swift",
       "state" : {
         "branch" : "mqtt_test_app",
-        "revision" : "c0e4aa6bddb7b54c6d07545fe55655f29ce1bc0d"
+        "revision" : "e7e603d3aadd1749b3e5cc554832ab337fdfd8f3"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-sdk-swift",
       "state" : {
-        "revision" : "6b4d5f7447dd8a76c6935fa3484491cd3203c888",
-        "version" : "0.62.0"
+        "revision" : "d9f6be99e150068113b12c94545221e83bb964ae",
+        "version" : "1.0.15"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smithy-lang/smithy-swift",
       "state" : {
-        "revision" : "e7e71e9c128b6dfeb0349537d6fd4a7cbc358ae1",
-        "version" : "0.59.0"
+        "revision" : "c5242d4e06e721293ee91c7affd1d527912f596d",
+        "version" : "0.76.0"
       }
     },
     {

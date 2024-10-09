@@ -12,6 +12,7 @@ public class AuthHelper {
 
     private var locationCredentialsProvider: LocationCredentialsProvider?
     private var amazonLocationClient: AmazonLocationClient?
+    private var geoPlacesClient: GeoPlacesClient?
     
     public init() {
     }
@@ -35,12 +36,13 @@ public class AuthHelper {
         return credentialProvider
     }
 
-    public func authenticateWithApiKey(apiKey: String, region: String) -> LocationCredentialsProvider {
+    public func authenticateWithApiKey(apiKey: String, region: String) throws -> LocationCredentialsProvider {
         let credentialProvider = LocationCredentialsProvider(region: region, apiKey: apiKey)
         credentialProvider.setAPIKey(apiKey: apiKey)
         credentialProvider.setRegion(region: region)
         locationCredentialsProvider = credentialProvider
         amazonLocationClient = AmazonLocationClient(locationCredentialsProvider: credentialProvider)
+        geoPlacesClient = try GeoPlacesClient(region: region)
         return credentialProvider
     }
     
@@ -55,5 +57,10 @@ public class AuthHelper {
     public func getLocationClient() -> AmazonLocationClient?
     {
         return amazonLocationClient
+    }
+    
+    public func getGeoPlacesClient() -> GeoPlacesClient?
+    {
+        return geoPlacesClient
     }
 }
