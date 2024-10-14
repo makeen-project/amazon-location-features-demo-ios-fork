@@ -9,7 +9,7 @@ import Foundation
 
 protocol DirectionViewModelProtocol: AnyObject {
     var delegate: DirectionViewModelOutputDelegate? { get set }
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) async
+    func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async
     func searchWith(text: String, userLat: Double?, userLong: Double?) async throws
     func numberOfRowsInSection() -> Int
     func getSearchCellModel() -> [SearchCellViewModel]

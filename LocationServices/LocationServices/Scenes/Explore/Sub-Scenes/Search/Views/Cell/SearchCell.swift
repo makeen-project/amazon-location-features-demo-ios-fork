@@ -51,7 +51,7 @@ final class SearchCell: UITableViewCell {
             if model.searchType == .location {
                 self.locationDistance.isHidden = false
                 self.locationAddress.isHidden = false
-                self.locationDistance.text = model.locationDistance?.convertToKm()
+                self.locationDistance.text = model.locationDistance?.fromatToKmString()
                 locationAddress.snp.remakeConstraints {
                     $0.top.equalTo(locationTitle.snp.bottom).offset(5)
                     $0.leading.equalTo(locationTitle.snp.leading)

@@ -83,28 +83,28 @@ final class DirectionViewModelTests: XCTestCase {
         XCTAssertEqual(directionViewModel.getSearchCellModel().first?.placeId, nil, "Expected location nil ")
     }
     
-    func testSearchWithSuggesstionWithTextMyLocation() async throws {
+    func testSearchWithSuggestionWithTextMyLocation() async throws {
         locationService.mockSearchTextResult = .success([search])
-        await directionViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        await directionViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
 
-    func testSearchWithSuggesstionWithTextFailure() async throws {
+    func testSearchWithSuggestionWithTextFailure() async throws {
         locationService.mockSearchTextWithSuggestionResult = .failure(Constants.defaultError)
-        await directionViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        await directionViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         
         XCTWaiter().wait(until: {
             return !self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult false")
     }
     
-    func testSearchWithSuggesstionWithCoordinates() async throws {
+    func testSearchWithSuggestionWithCoordinates() async throws {
         locationService.mockSearchWithPositionResult = .failure(Constants.defaultError)
         locationService.mockSearchWithPositionResult = .failure(Constants.defaultError)
-        await directionViewModel.searchWithSuggesstion(text: "40.759211, -73.984638", userLat: userLocation.lat, userLong: userLocation.long)
+        await directionViewModel.searchWithSuggestion(text: "40.759211, -73.984638", userLat: userLocation.lat, userLong: userLocation.long)
         
         XCTWaiter().wait(until: {
             return !self.delegate.hasSearchResult
@@ -120,18 +120,9 @@ final class DirectionViewModelTests: XCTestCase {
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
 
-//    func testSearchWithTextFailure() async throws {
-//        locationService.mockSearchTextResult = .failure(Constants.defaultError)
-//        try await directionViewModel.searchWith(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
-//        
-//        XCTWaiter().wait(until: {
-//            return !self.delegate.hasSearchResult
-//        }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult false")
-//    }
-    
     func testNumberOfRowsInSection() async throws {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        _ = await directionViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
+        _ = await directionViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")

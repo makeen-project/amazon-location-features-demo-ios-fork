@@ -14,7 +14,7 @@ enum LocationServiceConstant {
 
 protocol AWSLocationSearchService {
     func searchTextRequest(text: String, userLat: Double?, userLong: Double?) async throws -> SearchPlaceIndexForTextOutput?
-    func searchTextWithSuggesstionRequest(text: String,
+    func searchTextWithSuggestionRequest(text: String,
                                           userLat: Double?,
                                           userLong: Double?) async throws -> SearchPlaceIndexForSuggestionsOutput?
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput?
@@ -41,7 +41,7 @@ extension AWSLocationSearchService {
         }
     }
     
-    func searchTextWithSuggesstionRequest(text: String,
+    func searchTextWithSuggestionRequest(text: String,
                                           userLat: Double?,
                                           userLong: Double?) async throws -> SearchPlaceIndexForSuggestionsOutput? {
         var biasPosition: [Double]? = nil

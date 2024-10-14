@@ -36,7 +36,7 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
     
     func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>  {
         do {
-            let result = try await searchTextWithSuggesstionRequest(text: text, userLat: userLat, userLong: userLong)
+            let result = try await searchTextWithSuggestionRequest(text: text, userLat: userLat, userLong: userLong)
             let model = try await result!.results!.asyncMap({ model in
                 guard let placeId = model.placeId else { return SearchPresentation(model: model) }
                 

@@ -113,7 +113,6 @@
 		8AFBAFE0296F19BC0022A7E3 /* AWSLocationTravelMode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFBAFDF296F19BC0022A7E3 /* AWSLocationTravelMode+Extension.swift */; };
 		8AFDA09429DDBB3600114BB7 /* VersionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFDA09329DDBB3600114BB7 /* VersionVC.swift */; };
 		8AFDA09629DDBC3800114BB7 /* VersionVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFDA09529DDBC3800114BB7 /* VersionVCBuilder.swift */; };
-		960968A529A2C83D0026C05A /* AWSEndpoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960968A429A2C83D0026C05A /* AWSEndpoint+Extension.swift */; };
 		963EBF5229AF92F7001961F2 /* LocationServicesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */; };
 		9660600129A4F20100FB88D0 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
 		96E742AA2967381900D5C0BC /* Sequence+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E742A92967381800D5C0BC /* Sequence+Extension.swift */; };
@@ -536,7 +535,6 @@
 		8AFBAFDF296F19BC0022A7E3 /* AWSLocationTravelMode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AWSLocationTravelMode+Extension.swift"; sourceTree = "<group>"; };
 		8AFDA09329DDBB3600114BB7 /* VersionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionVC.swift; sourceTree = "<group>"; };
 		8AFDA09529DDBC3800114BB7 /* VersionVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionVCBuilder.swift; sourceTree = "<group>"; };
-		960968A429A2C83D0026C05A /* AWSEndpoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AWSEndpoint+Extension.swift"; sourceTree = "<group>"; };
 		963EBF4F29AF92F5001961F2 /* LocationServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocationServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		963EBF5129AF92F7001961F2 /* LocationServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServicesTests.swift; sourceTree = "<group>"; };
 		9660600029A4F20100FB88D0 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
@@ -2895,7 +2893,6 @@
 				8A3471CB2975D30B00BAF374 /* Locale+Extension.swift */,
 				8A76327B297EAE270064D60F /* MGLMapViewDelegate+Extension.swift */,
 				ADB0B187299221A800282814 /* Date+Extension.swift */,
-				960968A429A2C83D0026C05A /* AWSEndpoint+Extension.swift */,
 				8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */,
 				8A6B834929DAD4960047AA17 /* UITapGestureRecognizer+Extensions.swift */,
 				8ACAAD7529F14B9D00523256 /* CLLocationManager+Extension.swift */,
@@ -3344,7 +3341,6 @@
 				ADD139902980A2590003F917 /* RouteOptionContracts.swift in Sources */,
 				AD625E9C293BEFAC00C67B44 /* SearchCell.swift in Sources */,
 				ADA85E752989A22300446788 /* SettingsDefaultValueHelper.swift in Sources */,
-				960968A529A2C83D0026C05A /* AWSEndpoint+Extension.swift in Sources */,
 				AD2AF099292EA8D600149904 /* GeofenceView.swift in Sources */,
 				AD2AF09B292EA8E000149904 /* GeofenceContracts.swift in Sources */,
 				ADC1249E2979BB8300B08C20 /* Notificaton+Extension.swift in Sources */,
@@ -4061,7 +4057,7 @@
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.47.0;
+				minimumVersion = 1.0.18;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

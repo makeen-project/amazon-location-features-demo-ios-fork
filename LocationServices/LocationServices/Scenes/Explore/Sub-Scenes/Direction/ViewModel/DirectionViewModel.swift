@@ -51,7 +51,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         delegate?.reloadView()
     }
     
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) async {
+    func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async {
         
         guard !text.isEmpty && text != "My Location" else {
             presentation = []

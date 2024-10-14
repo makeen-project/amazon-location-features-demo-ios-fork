@@ -22,7 +22,7 @@ final class SearchViewModel: SearchViewModelProcotol {
         self.service = service
     }
     
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) async throws {
+    func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async throws {
         guard !text.isEmpty else {
             self.presentation = []
             self.delegate?.searchResult(mapModel: [], shouldDismiss: false, showOnMap: false)

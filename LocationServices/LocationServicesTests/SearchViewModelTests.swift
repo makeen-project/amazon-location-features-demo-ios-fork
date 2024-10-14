@@ -44,10 +44,10 @@ final class SearchViewModelTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testSearchWithSuggesstionWithCoordinatesFailure() async throws {
+    func testSearchWithSuggestionWithCoordinatesFailure() async throws {
         locationService.mockSearchWithPositionResult = .failure(Constants.defaultError)
         do {
-            try await searchViewModel.searchWithSuggesstion(text: "40.75790965683081, -73.98559624758715", userLat: userLocation.latitude, userLong: userLocation.longitude)
+            try await searchViewModel.searchWithSuggestion(text: "40.75790965683081, -73.98559624758715", userLat: userLocation.latitude, userLong: userLocation.longitude)
         }
         catch {
             XCTAssertEqual(self.delegate.hasSearchResult, false, "Expected hasSearchResult false")
@@ -57,18 +57,18 @@ final class SearchViewModelTests: XCTestCase {
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult false")
     }
     
-    func testSearchWithSuggesstionWithCoordinatesSuccess() async throws {
+    func testSearchWithSuggestionWithCoordinatesSuccess() async throws {
         locationService.mockSearchWithPositionResult = .success([search])
-        try await searchViewModel.searchWithSuggesstion(text: "40.75790965683081, -73.98559624758715", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        try await searchViewModel.searchWithSuggestion(text: "40.75790965683081, -73.98559624758715", userLat: userLocation.latitude, userLong: userLocation.longitude)
         
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
     }
     
-    func testSearchWithSuggesstionWithTextSuccess() async throws {
+    func testSearchWithSuggestionWithTextSuccess() async throws {
         locationService.mockSearchTextResult = .success([search])
-        try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
@@ -118,7 +118,7 @@ final class SearchViewModelTests: XCTestCase {
     func testNumberOfRowsInSection() async throws {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockSearchTextResult = .success([search])
-        try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -133,7 +133,7 @@ final class SearchViewModelTests: XCTestCase {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockGetPlaceResult = .success(search)
         locationService.mockSearchTextResult = .success([search])
-        try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -145,7 +145,7 @@ final class SearchViewModelTests: XCTestCase {
         locationService.mockGetPlaceResult = .success(search)
         locationService.mockSearchWithPositionResult = .success([search])
         locationService.mockSearchTextResult = .success([search])
-        try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -168,7 +168,7 @@ final class SearchViewModelTests: XCTestCase {
                                        name: nil)
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockSearchTextResult = .success([search])
-        try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")
@@ -191,7 +191,7 @@ final class SearchViewModelTests: XCTestCase {
         locationService.mockGetPlaceResult = .success(search)
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockSearchTextResult = .success([search])
-        _ = try await searchViewModel.searchWithSuggesstion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
+        _ = try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
             return self.delegate.hasSearchResult
         }, timeout: Constants.waitRequestDuration, message: "Expected hasSearchResult true")

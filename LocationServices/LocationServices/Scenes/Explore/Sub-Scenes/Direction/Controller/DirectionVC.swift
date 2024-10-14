@@ -161,7 +161,7 @@ final class DirectionVC: UIViewController {
             self?.directionView.isHidden = true
             self?.tableView.isHidden = false
             Task {
-                await self?.viewModel.searchWithSuggesstion(text: model.searchText,
+                await self?.viewModel.searchWithSuggestion(text: model.searchText,
                                                             userLat: self?.userLocation?.lat,
                                                             userLong: self?.userLocation?.long)
             }

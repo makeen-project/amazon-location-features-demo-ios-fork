@@ -186,7 +186,7 @@ final class AddGeofenceVC: UIViewController {
         searchView.searchTextValue = { [weak self] value in
             self?.changeElementVisibility(state: true)
             Task {
-                try await self?.viewModel.searchWithSuggesstion(text: value,
+                try await self?.viewModel.searchWithSuggestion(text: value,
                                                       userLat: self?.userLocation?.lat,
                                                       userLong: self?.userLocation?.long)
             }
@@ -194,7 +194,7 @@ final class AddGeofenceVC: UIViewController {
         
         searchView.searchTextClose = {[weak self] in
             Task {
-                try await self?.viewModel.searchWithSuggesstion(text: "",
+                try await self?.viewModel.searchWithSuggestion(text: "",
                                                       userLat: nil,
                                                       userLong: nil)
                 self?.changeElementVisibility(state: false)

@@ -31,7 +31,7 @@ final class POICardView: UIView {
             if let distance = dataModel.distance, distance != 0 {
                 self.distanceLabel.isHidden = false
                 self.dotView.isHidden = false
-                self.distanceLabel.text = distance.convertToKm()
+                self.distanceLabel.text = distance.fromatToKmString()
             } else {
                 self.dotView.isHidden = true
                 self.distanceLabel.isHidden = true
