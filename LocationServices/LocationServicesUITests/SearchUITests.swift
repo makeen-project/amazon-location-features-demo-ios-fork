@@ -55,21 +55,6 @@ final class SearchUITests: LocationServicesUITests {
             .checkSearchBarInCorrectPosition()
     }
     
-//    func testSearchScreenStates() throws {
-//        //don't need this test for ipads
-//        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
-//        let app = startApp()
-//        let _ = UITestExploreScreen(app: app)
-//            .tapSearchTextField()
-//            .waitForSearchRootView()
-//            .lightSwipeDownStateShouldBeChanged()
-//            .waitForSearchRootView()
-//            .lightSwipeDownStateShouldBeChanged()
-//            .waitForSearchRootView()
-//            .lightSwipeDownStateShouldBeChanged()
-//            .screenShouldBeClosed()
-//    }
-    
     func testSearch() throws {
         let app = startApp()
         let _ = UITestExploreScreen(app: app)
@@ -87,85 +72,4 @@ final class SearchUITests: LocationServicesUITests {
             .type(text: Constants.category)
             .waitForResultsInTable()
     }
-    
-//    func testSearchWithAddressPoiCard() {
-//        var app = startApp(allowPermissions: true)
-//        
-//        let searchScreen = UITestExploreScreen(app: app)
-//            .tapSearchTextField()
-//            .waitForSearchRootView()
-//            .type(text: Constants.timesSquareAddress)
-//            .waitForResultsInTable()
-//
-//        let searchResultsOnSearch = searchScreen.getCellsInfo()
-//        
-//        _ = searchScreen
-//            .validateResultsOnMap()
-//            .tapFirstCell()
-//            .waitForPoiCardView()
-//            .waitForPoiCicle()
-//            .waitForTravelTimeLabel()
-//            .waitForDirectionButton()
-//            .tapDirectionButton()
-//            .waitForRouteTypesContainer()
-//        
-//        app = restartApp()
-//        
-//        let routingScreen = UITestExploreScreen(app: app)
-//            .tapRouting()
-//            .selectDepartureTextField()
-//            .typeInDepartureTextField(text: Constants.addressName)
-//            .waitForResultsInTable(minimumCount: 2)
-//        
-//        let searchResultsOnRouting = routingScreen.getCellsInfo()
-//        
-//        XCTAssertEqual(searchResultsOnSearch, searchResultsOnRouting)
-//    }
-    
-//    func testSearchResultsOnMap() {
-//        let app = startApp(allowPermissions: true)
-//        
-//        let _ = UITestExploreScreen(app: app)
-//            .tapSearchTextField()
-//            .waitForSearchRootView()
-//            .type(text: Constants.timesSquareAddress)
-//            .waitForResultsInTable()
-//            .validateResultsOnMap()
-//    }
-    
-//    func testNavigationSearch() {
-//        let app = startApp(allowPermissions: true)
-//        let searchScreen = UITestExploreScreen(app: app)
-//            .waitForMapToBeRendered()
-//            .tapSearchTextField()
-//            .waitForSearchRootView()
-//            .type(text: Constants.addressName)
-//            .waitForResultsInTable()
-//        
-//        let searchResultsOnSearch = searchScreen.getCellsInfo()
-//        
-//        let routingScreen = searchScreen
-//            .close()
-//            .tapRouting()
-//            .selectDepartureTextField()
-//            .typeInDepartureTextField(text: Constants.addressName)
-//            .waitForResultsInTable(minimumCount: 2)
-//        
-//        let searchResultsOnRouting = routingScreen.getCellsInfo()
-//        
-//        XCTAssertEqual(searchResultsOnSearch, searchResultsOnRouting)
-//    }
-    
-//    func testPoiCardDirectionButton() {
-//        let app = startApp(allowPermissions: true)
-//        
-//        let _ = UITestExploreScreen(app: app)
-//            .tapSearchTextField()
-//            .waitForSearchRootView()
-//            .type(text: Constants.timesSquareAddress)
-//            .tapFirstCell()
-//            .waitForPoiCardView()
-//            .tapDirectionButton()
-//            .waitForRouteTypesContainer()
-//    }
 }
