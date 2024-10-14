@@ -135,20 +135,25 @@ struct SearchPresentation {
         self.placeLabel = model.title
     }
     
-    init(model: GeoPlacesClientTypes.AutocompleteResultItem) {
-        self.placeId = model.placeId
-        if let fullAddress = model.title?.formatAddressField() {
+    init(model: GeoPlacesClientTypes.SuggestResultItem) {
+        self.placeId = model.place?.placeId
+        if let fullAddress = model.place?.address?.label?.formatAddressField() {
             self.name = fullAddress[safe: 0] ?? ""
             self.fullLocationAddress = fullAddress[safe: 1] ?? ""
         } else {
-            self.name = nil
+            self.name = model.title
             self.fullLocationAddress = nil
         }
-        self.countryName = model.address?.country?.name
+        self.countryName = model.place?.address?.country?.name
         self.placeLong = nil
         self.placeLat = nil
-        self.distance = Double(model.distance)
-        self.cityName = model.address?.district
+        if let distance = model.place?.distance {
+            self.distance = Double(distance)
+        }
+        else {
+            self.distance = 0
+        }
+        self.cityName = model.place?.address?.district
         self.placeLabel = model.title
     }
     

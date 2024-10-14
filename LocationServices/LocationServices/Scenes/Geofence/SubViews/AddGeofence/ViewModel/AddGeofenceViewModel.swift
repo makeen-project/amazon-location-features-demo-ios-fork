@@ -97,7 +97,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
                     self.delegate?.showAlert(model)
                 }
         } else {
-            let result = await searchService.searchTextWithAutocomplete(text: text, userLat: userLat, userLong: userLong)
+            let result = await searchService.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
             let resultValue = try result.get()
                 self.presentation = resultValue
                 let model = resultValue.map(MapModel.init)

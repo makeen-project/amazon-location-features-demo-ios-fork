@@ -78,7 +78,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     self.delegate?.showAlert(model)
                 }
         } else {
-            let response = await service.searchTextWithAutocomplete(text: text, userLat: userLat, userLong: userLong)
+            let response = await service.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
             switch response {
             case .success(let results):
                 self.presentation = results

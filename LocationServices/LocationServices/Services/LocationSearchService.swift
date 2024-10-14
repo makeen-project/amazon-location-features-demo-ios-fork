@@ -14,9 +14,9 @@ enum LocationServiceConstant {
 
 protocol AWSLocationSearchService {
     func searchTextRequest(text: String, userLat: Double?, userLong: Double?) async throws -> SearchTextOutput?
-    func searchTextWithAutocompleteRequest(text: String,
+    func searchWithSuggestRequest(text: String,
                                           userLat: Double?,
-                                          userLong: Double?) async throws -> AutocompleteOutput?
+                                          userLong: Double?) async throws -> SuggestOutput?
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput?
     func searchNearbyRequest(position: [Double]) async throws -> SearchNearbyOutput?
 }
@@ -41,17 +41,17 @@ extension AWSLocationSearchService {
         }
     }
     
-    func searchTextWithAutocompleteRequest(text: String,
+    func searchWithSuggestRequest(text: String,
                                           userLat: Double?,
-                                           userLong: Double?) async throws -> AutocompleteOutput? {
+                                           userLong: Double?) async throws -> SuggestOutput? {
         var biasPosition: [Double]? = nil
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
      
-        let input = AutocompleteInput(biasPosition: biasPosition, intendedUse: .storage, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
+        let input = SuggestInput(biasPosition: biasPosition, intendedUse: .storage, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
-            let result = try await client.autocomplete(input: input)
+            let result = try await client.suggest(input: input)
             return result
         } else {
             return nil
