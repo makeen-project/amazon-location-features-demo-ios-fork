@@ -10,6 +10,7 @@ import AWSLocation
 import SmithyIdentity
 import SmithyIdentityAPI
 import AWSSDKIdentity
+import AWSGeoPlaces
 
 public enum HTTPMethod: String {
     case GET

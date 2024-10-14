@@ -7,6 +7,8 @@
 
 import Foundation
 import AwsCommonRuntimeKit
+import AWSGeoPlaces
+import SmithyHTTPAuthAPI
 
 public class AuthHelper {
 
@@ -42,7 +44,15 @@ public class AuthHelper {
         credentialProvider.setRegion(region: region)
         locationCredentialsProvider = credentialProvider
         amazonLocationClient = AmazonLocationClient(locationCredentialsProvider: credentialProvider)
-        geoPlacesClient = try GeoPlacesClient(region: region)
+        
+        let resolver: AuthSchemeResolver = ApiKeyAuthSchemeResolver()
+        let signer = ApiKeySigner()
+        let authScheme: AuthScheme = ApiKeyAuthScheme(signer: signer)
+        let authSchemes: [AuthScheme] = [authScheme]
+
+        let config = try GeoPlacesClient.Config(region: region, authSchemes: authSchemes, authSchemeResolver: resolver)
+        geoPlacesClient = GeoPlacesClient(config: config)
+        
         return credentialProvider
     }
     

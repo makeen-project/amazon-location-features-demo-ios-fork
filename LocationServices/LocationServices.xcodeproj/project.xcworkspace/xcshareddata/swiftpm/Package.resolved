@@ -1,5 +1,5 @@
 {
-  "originHash" : "9e3c207589c0fe342638461d8aa346ef679abfe7f8c5b0e44db439b4344e57cf",
+  "originHash" : "37fb2a509cde5391caadac77f7f764b4ced74d08ad967985cd13e5497359813b",
   "pins" : [
     {
       "identity" : "aws-crt-swift",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-sdk-swift",
       "state" : {
-        "revision" : "d9f6be99e150068113b12c94545221e83bb964ae",
-        "version" : "1.0.15"
+        "revision" : "4c084c0e616a660014479ea2e60e7a9533a52a05",
+        "version" : "1.0.17"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "039ef525064a685c291db5118f6b5f6e8b090bb0",
-        "version" : "6.5.2"
+        "revision" : "f23db791d7b6f0329e3c6788d8e4152c24c52b6b",
+        "version" : "6.7.1"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smithy-lang/smithy-swift",
       "state" : {
-        "revision" : "c5242d4e06e721293ee91c7affd1d527912f596d",
-        "version" : "0.76.0"
+        "revision" : "274b526e1b329469043a950888ecbd44ed25dfc5",
+        "version" : "0.78.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit.git",
       "state" : {
-        "revision" : "f222cbdf325885926566172f6f5f06af95473158",
-        "version" : "5.6.0"
+        "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
+        "version" : "5.7.1"
       }
     },
     {

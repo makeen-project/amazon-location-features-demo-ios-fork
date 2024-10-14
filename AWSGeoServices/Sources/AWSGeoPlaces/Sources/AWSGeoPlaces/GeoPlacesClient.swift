@@ -234,7 +234,7 @@ extension GeoPlacesClient {
             builder.interceptors.add(provider.create())
         }
         builder.interceptors.add(ClientRuntime.URLPathMiddleware<AutocompleteInput, AutocompleteOutput>(AutocompleteInput.urlPathProvider(_:)))
-        builder.interceptors.add(ClientRuntime.URLHostMiddleware<AutocompleteInput, AutocompleteOutput>(hostPrefix: "places."))
+        builder.interceptors.add(ClientRuntime.URLHostMiddleware<AutocompleteInput, AutocompleteOutput>())
         builder.serialize(ClientRuntime.QueryItemMiddleware<AutocompleteInput, AutocompleteOutput>(AutocompleteInput.queryItemProvider(_:)))
         builder.interceptors.add(ClientRuntime.ContentTypeMiddleware<AutocompleteInput, AutocompleteOutput>(contentType: "application/json"))
         builder.serialize(ClientRuntime.BodyMiddleware<AutocompleteInput, AutocompleteOutput, SmithyJSON.Writer>(rootNodeInfo: "", inputWritingClosure: AutocompleteInput.write(value:to:)))
@@ -306,7 +306,7 @@ extension GeoPlacesClient {
             builder.interceptors.add(provider.create())
         }
         builder.interceptors.add(ClientRuntime.URLPathMiddleware<GeocodeInput, GeocodeOutput>(GeocodeInput.urlPathProvider(_:)))
-        builder.interceptors.add(ClientRuntime.URLHostMiddleware<GeocodeInput, GeocodeOutput>(hostPrefix: "places."))
+        builder.interceptors.add(ClientRuntime.URLHostMiddleware<GeocodeInput, GeocodeOutput>())
         builder.serialize(ClientRuntime.QueryItemMiddleware<GeocodeInput, GeocodeOutput>(GeocodeInput.queryItemProvider(_:)))
         builder.interceptors.add(ClientRuntime.ContentTypeMiddleware<GeocodeInput, GeocodeOutput>(contentType: "application/json"))
         builder.serialize(ClientRuntime.BodyMiddleware<GeocodeInput, GeocodeOutput, SmithyJSON.Writer>(rootNodeInfo: "", inputWritingClosure: GeocodeInput.write(value:to:)))
@@ -378,7 +378,7 @@ extension GeoPlacesClient {
             builder.interceptors.add(provider.create())
         }
         builder.interceptors.add(ClientRuntime.URLPathMiddleware<GetPlaceInput, GetPlaceOutput>(GetPlaceInput.urlPathProvider(_:)))
-        builder.interceptors.add(ClientRuntime.URLHostMiddleware<GetPlaceInput, GetPlaceOutput>(hostPrefix: "places."))
+        builder.interceptors.add(ClientRuntime.URLHostMiddleware<GetPlaceInput, GetPlaceOutput>())
         builder.serialize(ClientRuntime.QueryItemMiddleware<GetPlaceInput, GetPlaceOutput>(GetPlaceInput.queryItemProvider(_:)))
         builder.deserialize(ClientRuntime.DeserializeMiddleware<GetPlaceOutput>(GetPlaceOutput.httpOutput(from:), GetPlaceOutputError.httpError(from:)))
         builder.interceptors.add(ClientRuntime.LoggerMiddleware<GetPlaceInput, GetPlaceOutput>(clientLogMode: config.clientLogMode))
@@ -447,7 +447,7 @@ extension GeoPlacesClient {
             builder.interceptors.add(provider.create())
         }
         builder.interceptors.add(ClientRuntime.URLPathMiddleware<ReverseGeocodeInput, ReverseGeocodeOutput>(ReverseGeocodeInput.urlPathProvider(_:)))
-        builder.interceptors.add(ClientRuntime.URLHostMiddleware<ReverseGeocodeInput, ReverseGeocodeOutput>(hostPrefix: "places."))
+        builder.interceptors.add(ClientRuntime.URLHostMiddleware<ReverseGeocodeInput, ReverseGeocodeOutput>())
         builder.serialize(ClientRuntime.QueryItemMiddleware<ReverseGeocodeInput, ReverseGeocodeOutput>(ReverseGeocodeInput.queryItemProvider(_:)))
         builder.interceptors.add(ClientRuntime.ContentTypeMiddleware<ReverseGeocodeInput, ReverseGeocodeOutput>(contentType: "application/json"))
         builder.serialize(ClientRuntime.BodyMiddleware<ReverseGeocodeInput, ReverseGeocodeOutput, SmithyJSON.Writer>(rootNodeInfo: "", inputWritingClosure: ReverseGeocodeInput.write(value:to:)))
@@ -519,7 +519,7 @@ extension GeoPlacesClient {
             builder.interceptors.add(provider.create())
         }
         builder.interceptors.add(ClientRuntime.URLPathMiddleware<SearchNearbyInput, SearchNearbyOutput>(SearchNearbyInput.urlPathProvider(_:)))
-        builder.interceptors.add(ClientRuntime.URLHostMiddleware<SearchNearbyInput, SearchNearbyOutput>(hostPrefix: "places."))
+        builder.interceptors.add(ClientRuntime.URLHostMiddleware<SearchNearbyInput, SearchNearbyOutput>())
         builder.serialize(ClientRuntime.QueryItemMiddleware<SearchNearbyInput, SearchNearbyOutput>(SearchNearbyInput.queryItemProvider(_:)))
         builder.interceptors.add(ClientRuntime.ContentTypeMiddleware<SearchNearbyInput, SearchNearbyOutput>(contentType: "application/json"))
         builder.serialize(ClientRuntime.BodyMiddleware<SearchNearbyInput, SearchNearbyOutput, SmithyJSON.Writer>(rootNodeInfo: "", inputWritingClosure: SearchNearbyInput.write(value:to:)))
@@ -591,7 +591,7 @@ extension GeoPlacesClient {
             builder.interceptors.add(provider.create())
         }
         builder.interceptors.add(ClientRuntime.URLPathMiddleware<SearchTextInput, SearchTextOutput>(SearchTextInput.urlPathProvider(_:)))
-        builder.interceptors.add(ClientRuntime.URLHostMiddleware<SearchTextInput, SearchTextOutput>(hostPrefix: "places."))
+        builder.interceptors.add(ClientRuntime.URLHostMiddleware<SearchTextInput, SearchTextOutput>())
         builder.serialize(ClientRuntime.QueryItemMiddleware<SearchTextInput, SearchTextOutput>(SearchTextInput.queryItemProvider(_:)))
         builder.interceptors.add(ClientRuntime.ContentTypeMiddleware<SearchTextInput, SearchTextOutput>(contentType: "application/json"))
         builder.serialize(ClientRuntime.BodyMiddleware<SearchTextInput, SearchTextOutput, SmithyJSON.Writer>(rootNodeInfo: "", inputWritingClosure: SearchTextInput.write(value:to:)))
@@ -663,7 +663,7 @@ extension GeoPlacesClient {
             builder.interceptors.add(provider.create())
         }
         builder.interceptors.add(ClientRuntime.URLPathMiddleware<SuggestInput, SuggestOutput>(SuggestInput.urlPathProvider(_:)))
-        builder.interceptors.add(ClientRuntime.URLHostMiddleware<SuggestInput, SuggestOutput>(hostPrefix: "places."))
+        builder.interceptors.add(ClientRuntime.URLHostMiddleware<SuggestInput, SuggestOutput>())
         builder.serialize(ClientRuntime.QueryItemMiddleware<SuggestInput, SuggestOutput>(SuggestInput.queryItemProvider(_:)))
         builder.interceptors.add(ClientRuntime.ContentTypeMiddleware<SuggestInput, SuggestOutput>(contentType: "application/json"))
         builder.serialize(ClientRuntime.BodyMiddleware<SuggestInput, SuggestOutput, SmithyJSON.Writer>(rootNodeInfo: "", inputWritingClosure: SuggestInput.write(value:to:)))

@@ -37,19 +37,22 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
     func searchTextWithAutocomplete(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>  {
         do {
             let result = try await searchTextWithAutocompleteRequest(text: text, userLat: userLat, userLong: userLong)
-            let model = try await result!.resultItems!.asyncMap({ model in
-                guard let placeId = model.placeId else { return SearchPresentation(model: model) }
+            let model = await result!.resultItems!.asyncMap({ model in
+//                guard let placeId = model.placeId else {
+//                    return SearchPresentation(model: model)
+//                }
                 
-                var userLocation: CLLocation? = nil
-                if let userLat, let userLong {
-                    userLocation = CLLocation(latitude: userLat, longitude: userLong)
-                }
-                let place = try await getPlace(with: placeId)
-                return SearchPresentation(model: model, placeLat: place?.placeLat, placeLong: place?.placeLong, userLocation: userLocation)
+//                var userLocation: CLLocation? = nil
+//                if let userLat, let userLong {
+//                    userLocation = CLLocation(latitude: userLat, longitude: userLong)
+//                }
+//                let place = try await getPlace(with: placeId)
+                return SearchPresentation(model: model)
             })
             return .success(model)
         }
         catch {
+            print(error)
             return .failure(error)
         }
     }

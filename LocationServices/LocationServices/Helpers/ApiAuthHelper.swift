@@ -1,4 +1,5 @@
 import Foundation
+import AWSGeoPlaces
 import AWSLocation
 
 public class ApiAuthHelper {
@@ -10,7 +11,7 @@ public class ApiAuthHelper {
     var authHelper: AuthHelper?
     
     
-    static func initialize(apiKey: String, region: String) throws {
+    static func initialise(apiKey: String, region: String) throws {
         if _sharedInstance == nil {
             _sharedInstance = ApiAuthHelper()
             _sharedInstance?.authHelper = AuthHelper()

@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
+import AWSGeoPlaces
 
 enum LocationServiceConstant {
     static let maxResult: NSNumber = 5
@@ -48,7 +49,7 @@ extension AWSLocationSearchService {
             biasPosition = [long, lat]
         }
      
-        let input = AutocompleteInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
+        let input = AutocompleteInput(biasPosition: biasPosition, intendedUse: .storage, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.autocomplete(input: input)
             return result

@@ -71,6 +71,7 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
     
     private func initializeMobileClient(configurationModel: CustomConnectionModel) async throws {
         try await CognitoAuthHelper.initialise(identityPoolId: configurationModel.identityPoolId)
+        try ApiAuthHelper.initialise(apiKey: configurationModel.apiKey, region: configurationModel.region)
         self.setupCompleted()
     }
     
