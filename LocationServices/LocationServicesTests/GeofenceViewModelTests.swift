@@ -100,6 +100,7 @@ final class GeofenceViewModelTests: XCTestCase {
     }
     
     func test_fetchListOfGeofences_signedOut() async throws {
+        delegate.models = nil
         UserDefaultsHelper.setAppState(state: .initial)
         await viewModel.fetchListOfGeofences()
         XCTAssertNil(delegate?.models)

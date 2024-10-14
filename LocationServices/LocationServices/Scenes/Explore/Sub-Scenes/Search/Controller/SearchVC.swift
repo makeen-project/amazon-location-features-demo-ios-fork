@@ -189,7 +189,7 @@ extension SearchVC: SearchViewModelOutputDelegate {
 extension SearchVC: SearchBarViewOutputDelegate {    
     func searchText(_ text: String?) {
         Task {
-            try await viewModel.searchWithSuggesstion(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
+            try await viewModel.searchWithSuggestion(text: text ?? "", userLat: userLocation?.lat, userLong: userLocation?.long)
         }
     }
     

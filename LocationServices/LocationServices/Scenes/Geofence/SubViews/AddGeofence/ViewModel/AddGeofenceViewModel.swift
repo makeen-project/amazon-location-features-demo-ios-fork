@@ -78,7 +78,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     }
     
     
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) async throws {
+    func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async throws {
         guard !text.isEmpty else {
             self.delegate?.searchResult(mapModel: [])
             return

@@ -71,7 +71,7 @@ final class POICardViewModel: POICardViewModelProcotol {
             case .success(let direction):
                 guard !(self.datas.isEmpty) else { break }
                 
-                self.datas[0].distance = direction.distance.convertKMToM()
+                self.datas[0].distance = direction.distance.convertKMToMeters()
                 self.datas[0].duration = direction.duration.convertSecondsToMinString()
             case .failure(let error):
                 responseError = error

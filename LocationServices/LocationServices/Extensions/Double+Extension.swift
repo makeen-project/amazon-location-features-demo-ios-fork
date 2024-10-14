@@ -29,21 +29,19 @@ extension Double {
     }
     
     func convertFormattedKMString() -> String {
-        let distanceInMeters = Int(convertKMToM())
-        return distanceInMeters.convertToKm()
+        let distanceInMeters = convertKMToMeters()
+        return distanceInMeters.fromatToKmString()
     }
     
-    func convertKMToM() -> Double {
+    func convertKMToMeters() -> Double {
         return self * 1000
     }
 
-    func convertToKm() -> String {
-        let num: Double = Double(self)
-        if num > 1000 {
-            let result = Double(num * 1000 / 1000 / 1000)
-            return String(format: "%.2f", result) + " km"
+    func fromatToKmString() -> String {
+        if self >= 1000 {
+            return String(format: "%.2f km", self / 1000)
         } else {
-            return "\(String(format: "%.0f", num)) m"
+            return String(format: "%.0f m", self)
         }
     }
 }

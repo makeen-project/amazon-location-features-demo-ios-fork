@@ -22,19 +22,15 @@ final class TrackingViewModelTests: XCTestCase {
         
         static let updateGeofenceLatitude: Double = 15
         static let updateGeofenceLongitude: Double = 20
-        static let updateGeofenceRadius: Int = 30
+        static let updateGeofenceRadius: Double = 30
         
         
         static var geofence: GeofenceDataModel {
             return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: Double(geofenceRadius))
         }
         
-//        static var trackingHistory: TrackingHistoryPresentation {
-//            return TrackingHistoryPresentation(model: AWSLocationDevicePosition , stepType: .first)
-//        }
-        
         static var updatedGeofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: Double(updateGeofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: updateGeofenceRadius)
         }
         
         static let defaultError = NSError(domain: "Tracking error", code: -1)
@@ -65,8 +61,6 @@ final class TrackingViewModelTests: XCTestCase {
     }
     
     func testTrackLocationUpdate() throws {
-        //apiTrackingService.mockUpdateTrackerLocationResult = .success(())
-        //apiTrackingService.mockGetAllTrackingHistoryResult = .success([])
         viewModel.startTracking()
         viewModel.trackLocationUpdate(location: CLLocation(latitude: userLocation.lat, longitude: userLocation.long))
         XCTWaiter().wait(until: { [weak self] in
@@ -86,7 +80,6 @@ final class TrackingViewModelTests: XCTestCase {
     
     func testFetchListOfGeofencesEmpty() async throws {
         UserDefaultsHelper.setAppState(state: .initial)
-        //apiGeofenceService.mockGetGeofenceListResult = .success([Constants.geofence])
         await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownGeofences ?? false
@@ -95,7 +88,6 @@ final class TrackingViewModelTests: XCTestCase {
 
     func testFetchListOfGeofences() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        //apiGeofenceService.mockGetGeofenceListResult = .success([Constants.geofence])
         await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownGeofences ?? false
@@ -112,7 +104,6 @@ final class TrackingViewModelTests: XCTestCase {
     }
     
     func testUpdateHistory() async throws {
-        //apiTrackingService.getResult = .success([])
         await viewModel.updateHistory()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasHistoryLoaded ?? false
