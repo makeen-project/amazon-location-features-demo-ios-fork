@@ -205,9 +205,6 @@ extension DefaultCommonMapView: MLNMapViewDelegate {
     }
     
     func updateVisibleGeofenceAnnotations(on mapView: MLNMapView) {
-        //visibleAnnotations return incorrect values in current (v5.12.1) MLNLibre version
-        //fixed and can be used in MLNLibre v5.13.0
-        //for 5.12.1: mapView.annotations?.forEach({
         mapView.visibleAnnotations?.forEach({
             guard let geofenceAnnotationView = mapView.view(for: $0) as? GeofenceAnnotationView else { return }
 

@@ -28,41 +28,7 @@ final class NavigationVCViewModel {
             await fetchStreetNames()
         }
     }
-    
-//    private func fetchStreetNames1() async {
-//        let dispatchQueue = DispatchQueue(label: "Serial", attributes: .concurrent)
-//        
-//        var presentation: [NavigationPresentation] = []
-//        for (id, step) in steps.enumerated() {
-//            dispatchGroup.enter()
-//            let position = step.startPosition
-//            //dispatchQueue.sync { [weak self] in
-//            Task {
-//               let response = await service.searchWithPosition(position: position, userLat: nil, userLong: nil)
-//                    switch response {
-//                    case .success(let results):
-//                        guard let result = results.first else { break }
-//                            
-//                        let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: result.placeLabel ?? "")
-//                        dispatchQueue.async {
-//                            presentation.append(model)
-//                            self.dispatchGroup.leave()
-//                        }
-//                        //presentation.append(model)
-//                    case .failure:
-//                        break
-//                    }
-//                    self.dispatchGroup.leave()
-//                }
-//        }
-//        
-//        dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
-//            presentation.sort(by: { $0.id < $1.id })
-//            self?.presentation = presentation
-//            self?.delegate?.updateResults()
-//        }
-//    }
-    
+
     actor PresentationManager {
         var presentation: [NavigationPresentation] = []
 

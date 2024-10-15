@@ -203,8 +203,5 @@ extension AddGeofenceViewModel {
                 break
             }
             return result
-//            DispatchQueue.main.async {
-//                completion(result)
-//            }
     }
 }

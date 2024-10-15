@@ -12,4 +12,6 @@ enum NumberConstants {
     static let formSheetDefaultCornerRadius: CGFloat = 10
     static let sideBarCellHeight: CGFloat = 50
     static let selectionViewCornerRadius: CGFloat = 10
+    static let routeOptionHeight: Int = 32
+    static let routeContainerHeightConstraint: CGFloat = 400
 }

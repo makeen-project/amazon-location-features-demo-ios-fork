@@ -51,7 +51,7 @@ struct SearchPresentation {
             self.name = nil
             self.fullLocationAddress = nil
         }
-        self.distance = 0  //model.place.distance?.intValue
+        self.distance = 0  //No user location is determined by the app this constructor will be called
         if let point = model.place?.geometry?.point {
             self.placeLong = point[0]
             self.placeLat = point[1]
@@ -124,8 +124,6 @@ struct SearchPresentation {
         }
         
         if let point = model.place?.geometry?.point {
-            //class LocationService -> func searchWithPosition -> func searchWithPositionRequest -> AWSLocationSearchPlaceIndexForPositionRequest
-            // AWSLocationSearchPlaceIndexForPositionRequest - geometry contains [longitude, latitude]
             self.placeLong = point[0]
             self.placeLat = point[1]
         } else {
@@ -133,9 +131,9 @@ struct SearchPresentation {
             self.placeLat = nil
         }
         
-        //there is no ability to send user location in request,
-        //so destination is incorrect in response
-        //and needed to be recalculated
+        //In getPlace API there is no ability to send user location in request,
+        //so no destination is provided in response and needed to be recalculated
+        // with user location and place location
         if let placeLat, let placeLong, let userLocation {
             let placeLocation = CLLocation(latitude: placeLat, longitude: placeLong)
             self.distance = placeLocation.distance(from: userLocation)

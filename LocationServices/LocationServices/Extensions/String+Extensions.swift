@@ -8,25 +8,6 @@
 import UIKit
 
 extension String {
-    
-//    func toRegionType() -> AWSRegionType {
-//        // by default
-//        var region: AWSRegionType = .USEast1
-//        // extract region from identity pool
-//        
-//        if let stringRegion = self.components(separatedBy: ":").first {
-//            
-//            if let extractedRegion = AWSEndpoint.regionTypeByString(regionString: stringRegion) {
-//                region = extractedRegion
-//            } else {
-//                // regionString is not a valid region
-//                print("Invalid region: \(stringRegion)")
-//            }
-//        }
-//        
-//        return region
-//    }
-    
     func toRegionString() -> String {
         return components(separatedBy: ":").first ?? self
     }

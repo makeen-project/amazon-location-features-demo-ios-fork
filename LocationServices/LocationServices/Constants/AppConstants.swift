@@ -64,10 +64,6 @@ final class DefaultMapStyles {
         MapStyleModel(title: "Hybrid" ,
                       imageType: .hybrid ,
                       type: .here,
-
-
-
-
                       isSelected: false),
     ]
 }

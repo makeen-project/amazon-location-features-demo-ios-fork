@@ -24,7 +24,7 @@ final class GeofenceViewModelTests: XCTestCase {
         static let updateGeofenceRadius: Double = 30
         
         static var geofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: Double(geofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: geofenceRadius)
         }
         
         static var updatedGeofence: GeofenceDataModel {

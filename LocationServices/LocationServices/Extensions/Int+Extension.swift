@@ -8,7 +8,7 @@
 import UIKit
 
 extension Int {
-    func fromatToKmString() -> String {
+    func formatToKmString() -> String {
         let num: Double = Double(self)
         if num > 1000 {
             let result = Double(round(num * 1000 / 1000) / 1000)
@@ -20,7 +20,7 @@ extension Int {
 }
 
 extension Int64 {
-    func fromatToKmString() -> String {
+    func formatToKmString() -> String {
         let num: Double = Double(self)
         if num > 1000 {
             let result = Double(round(num * 1000 / 1000) / 1000)
