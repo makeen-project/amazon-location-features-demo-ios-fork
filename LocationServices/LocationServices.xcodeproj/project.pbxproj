@@ -368,7 +368,7 @@
 		F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */; };
 		F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */; };
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
-		F16C68A32CB959980008515E /* ApiKeyAutheScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16C68A22CB959980008515E /* ApiKeyAutheScheme.swift */; };
+		F16C68A32CB959980008515E /* ApiKeyAuthScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16C68A22CB959980008515E /* ApiKeyAuthScheme.swift */; };
 		F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */; };
 		F17BE2B029F819C2001A4ADF /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */; };
 		F18322592CB9363B0012CAF2 /* AWSGeoPlaces in Frameworks */ = {isa = PBXBuildFile; productRef = F18322582CB9363B0012CAF2 /* AWSGeoPlaces */; };
@@ -801,7 +801,7 @@
 		F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTabBarScreen.swift; sourceTree = "<group>"; };
 		F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTrackingScreen.swift; sourceTree = "<group>"; };
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
-		F16C68A22CB959980008515E /* ApiKeyAutheScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeyAutheScheme.swift; sourceTree = "<group>"; };
+		F16C68A22CB959980008515E /* ApiKeyAuthScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeyAuthScheme.swift; sourceTree = "<group>"; };
 		F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingAPIServiceMock.swift; sourceTree = "<group>"; };
 		F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
 		F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSLoginServiceMock.swift; sourceTree = "<group>"; };
@@ -1308,7 +1308,7 @@
 				F18DEEE52C75947000335F3E /* Logger.swift */,
 				F18DEEE92C75EC3300335F3E /* AWSSignerV4.swift */,
 				F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */,
-				F16C68A22CB959980008515E /* ApiKeyAutheScheme.swift */,
+				F16C68A22CB959980008515E /* ApiKeyAuthScheme.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -3300,7 +3300,7 @@
 				ADBDDEF829842CBD00696EC6 /* ExploreMapStyleContract.swift in Sources */,
 				AD146487293D00B900C29D82 /* PlacesEndpoint.swift in Sources */,
 				ADC97393295F3399005AE918 /* NavigationVCCell.swift in Sources */,
-				F16C68A32CB959980008515E /* ApiKeyAutheScheme.swift in Sources */,
+				F16C68A32CB959980008515E /* ApiKeyAuthScheme.swift in Sources */,
 				ADD13960298087C80003F917 /* UnitVC.swift in Sources */,
 				ADD1394D29806A1B0003F917 /* SettingsCell.swift in Sources */,
 				8A439EFB29BB968800B59D0B /* AttributionVCBuilder.swift in Sources */,

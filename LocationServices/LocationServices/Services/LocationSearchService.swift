@@ -31,7 +31,7 @@ extension AWSLocationSearchService {
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
-        let input = SearchTextInput(biasPosition: biasPosition, language: Locale.currentLanguageIdentifier(), queryText: text)
+        let input = SearchTextInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
 
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.searchText(input: input)
@@ -49,7 +49,7 @@ extension AWSLocationSearchService {
             biasPosition = [long, lat]
         }
      
-        let input = SuggestInput(biasPosition: biasPosition, intendedUse: .storage, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
+        let input = SuggestInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.suggest(input: input)
             return result
@@ -59,7 +59,7 @@ extension AWSLocationSearchService {
     }
     
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput? {
-        let input = GetPlaceInput(language: Locale.currentLanguageIdentifier(), placeId: placeId)
+        let input = GetPlaceInput(key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), placeId: placeId)
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.getPlace(input: input)
             return result

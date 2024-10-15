@@ -115,7 +115,7 @@ struct SearchPresentation {
     
     init(model: GetPlaceOutput) {
         self.placeId = nil
-        if let fullAddress = model.title?.formatAddressField() {
+        if let fullAddress = model.address?.label?.formatAddressField() {
             self.name = fullAddress[safe: 0] ?? ""
             self.fullLocationAddress = fullAddress[safe: 1] ?? ""
         } else {
@@ -145,8 +145,8 @@ struct SearchPresentation {
             self.fullLocationAddress = nil
         }
         self.countryName = model.place?.address?.country?.name
-        self.placeLong = nil
-        self.placeLat = nil
+        self.placeLong = model.place?.position?.first
+        self.placeLat = model.place?.position?.last
         if let distance = model.place?.distance {
             self.distance = Double(distance)
         }
@@ -157,7 +157,7 @@ struct SearchPresentation {
         self.placeLabel = model.title
     }
     
-//    init(model: GeoPlacesClientTypes.AutocompleteResultItem, userLat: Double?, userLong: Double?, userLocation: CLLocation? = nil ) {
+//    init(model: GeoPlacesClientTypes.SuggestResultItem, userLat: Double?, userLong: Double?, userLocation: CLLocation? = nil ) {
 //        self.placeId = model.placeId
 //        if let fullAddress = model.title?.formatAddressField() {
 //            self.name = fullAddress[safe: 0] ?? ""
@@ -174,7 +174,7 @@ struct SearchPresentation {
 //        self.placeLabel = model.title
 //    }
     
-//    init(model: GeoPlacesClientTypes.AutocompleteResultItem, placeLat: Double?, placeLong: Double?, userLocation: CLLocation? = nil ) {
+//    init(model: GeoPlacesClientTypes.SuggestResultItem, placeLat: Double?, placeLong: Double?, userLocation: CLLocation? = nil ) {
 //        self.placeId = nil
 //        if let fullAddress = model.title?.formatAddressField() {
 //            self.name = fullAddress[safe: 0] ?? ""
@@ -191,77 +191,45 @@ struct SearchPresentation {
 //        self.placeLabel = model.title
 //    }
     
-//    init(model: LocationClientTypes.SearchForTextResult, userLocation: CLLocation?) {
-//     
-//        self.placeId = model.placeId
-//        self.countryName = model.place?.country
-//        
-//        if let fullAddress = model.place?.label?.formatAddressField() {
-//            self.name = fullAddress[safe: 0] ?? ""
-//            self.fullLocationAddress = fullAddress[safe: 1] ?? ""
-//        } else {
-//            self.name = nil
-//            self.fullLocationAddress = nil
-//        }
-//        
-//        if let point = model.place?.geometry?.point {
-//            //class LocationService -> func searchWithPosition -> func searchWithPositionRequest -> AWSLocationSearchPlaceIndexForPositionRequest
-//            // AWSLocationSearchPlaceIndexForPositionRequest - geometry contains [longitude, latitude]
-//            self.placeLong = point[0]
-//            self.placeLat = point[1]
-//        } else {
-//            self.placeLong = nil
-//            self.placeLat = nil
-//        }
-//        
-//        //there is no ability to send user location in request,
-//        //so destination is incorrect in response
-//        //and needed to be recalculated
-//        if let placeLat, let placeLong, let userLocation {
-//            let placeLocation = CLLocation(latitude: placeLat, longitude: placeLong)
-//            self.distance = placeLocation.distance(from: userLocation)
-//        } else {
-//            self.distance = model.distance
-//        }
-//        
-//        self.cityName = model.place?.municipality
-//        self.placeLabel = model.place?.label
-//    }
-//    
-//    init(model: LocationClientTypes.SearchForPositionResult, userLocation: CLLocation?) {
-//     
-//        self.placeId = model.placeId
-//        self.countryName = model.place?.country
-//        
-//        if let fullAddress = model.place?.label?.formatAddressField() {
-//            self.name = fullAddress[safe: 0] ?? ""
-//            self.fullLocationAddress = fullAddress[safe: 1] ?? ""
-//        } else {
-//            self.name = nil
-//            self.fullLocationAddress = nil
-//        }
-//        
-//        if let point = model.place?.geometry?.point {
-//            //class LocationService -> func searchWithPosition -> func searchWithPositionRequest -> AWSLocationSearchPlaceIndexForPositionRequest
-//            // AWSLocationSearchPlaceIndexForPositionRequest - geometry contains [longitude, latitude]
-//            self.placeLong = point[0]
-//            self.placeLat = point[1]
-//        } else {
-//            self.placeLong = nil
-//            self.placeLat = nil
-//        }
-//        
-//        //there is no ability to send user location in request,
-//        //so destination is incorrect in response
-//        //and needed to be recalculated
-//        if let placeLat, let placeLong, let userLocation {
-//            let placeLocation = CLLocation(latitude: placeLat, longitude: placeLong)
-//            self.distance = placeLocation.distance(from: userLocation)
-//        } else {
-//            self.distance = model.distance
-//        }
-//        
-//        self.cityName = model.place?.municipality
-//        self.placeLabel = model.place?.label
-//    }
+    init(model: GeoPlacesClientTypes.SearchTextResultItem, userLocation: CLLocation?) {
+    
+        self.placeId = model.placeId
+        self.countryName = model.address?.country?.name
+       
+        if let fullAddress = model.address?.label?.formatAddressField() {
+           self.name = fullAddress[safe: 0] ?? ""
+           self.fullLocationAddress = fullAddress[safe: 1] ?? ""
+       } else {
+           self.name = nil
+           self.fullLocationAddress = nil
+       }
+        self.placeLong = model.position?.first
+        self.placeLat = model.position?.last
+        self.distance = Double(model.distance)
+       
+        self.cityName = model.address?.district
+        self.placeLabel = model.title//.address?.label
+   }
+   
+
+    init(model: GeoPlacesClientTypes.SearchNearbyResultItem, userLocation: CLLocation?) {
+    
+       self.placeId = model.placeId
+       self.countryName = model.address?.country?.name
+       
+       if let fullAddress = model.address?.label?.formatAddressField() {
+           self.name = fullAddress[safe: 0] ?? ""
+           self.fullLocationAddress = fullAddress[safe: 1] ?? ""
+       } else {
+           self.name = nil
+           self.fullLocationAddress = nil
+       }
+       
+        self.placeLong = model.position?.first
+        self.placeLat = model.position?.last
+        self.distance = Double(model.distance)
+       
+        self.cityName = model.address?.district
+        self.placeLabel = model.title//.address?.label
+   }
 }
