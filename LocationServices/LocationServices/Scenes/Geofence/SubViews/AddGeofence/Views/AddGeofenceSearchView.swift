@@ -85,7 +85,7 @@ final class AddGeofenceSearchView: UIView {
     @objc private func geofenceRadiusDragged(_ notification: Notification){
         let radius = notification.userInfo?["radius"] as! Double
         radiusSlider.value = Float(radius)
-        radiusSliderValue.text = Int(radius).fromatToKmString()
+        radiusSliderValue.text = Int(radius).formatToKmString()
         radiusValueHander?(radius)
     }
     
@@ -119,7 +119,7 @@ final class AddGeofenceSearchView: UIView {
             
             if let radius = model.radius {
                 self?.radiusSlider.value = Float(radius)
-                self?.radiusSliderValue.text = radius.fromatToKmString()
+                self?.radiusSliderValue.text = radius.formatToKmString()
             }
         }
     }
@@ -183,7 +183,7 @@ final class AddGeofenceSearchView: UIView {
 extension AddGeofenceSearchView {
     @objc func radiusSliderValuChanged(sender: UISlider) {
         let value = Double(radiusSlider.value)
-        self.radiusSliderValue.text = value.fromatToKmString()
+        self.radiusSliderValue.text = value.formatToKmString()
         radiusValueHander?(value)
     }
     
