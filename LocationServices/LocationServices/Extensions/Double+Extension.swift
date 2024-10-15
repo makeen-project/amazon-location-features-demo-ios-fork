@@ -30,14 +30,14 @@ extension Double {
     
     func convertFormattedKMString() -> String {
         let distanceInMeters = convertKMToMeters()
-        return distanceInMeters.fromatToKmString()
+        return distanceInMeters.formatToKmString()
     }
     
     func convertKMToMeters() -> Double {
         return self * 1000
     }
 
-    func fromatToKmString() -> String {
+    func formatToKmString() -> String {
         if self >= 1000 {
             return String(format: "%.2f km", self / 1000)
         } else {

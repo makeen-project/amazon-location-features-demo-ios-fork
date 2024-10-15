@@ -51,7 +51,7 @@ struct SearchPresentation {
             self.name = nil
             self.fullLocationAddress = nil
         }
-        self.distance = 0  //model.place.distance?.intValue
+        self.distance = 0  //No user location is determined by the app this constructor will be called
         if let point = model.position {
             self.placeLong = point[0]
             self.placeLat = point[1]

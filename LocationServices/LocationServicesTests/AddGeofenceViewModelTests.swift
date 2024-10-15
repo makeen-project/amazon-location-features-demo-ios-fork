@@ -24,7 +24,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         static let updatedGeofenceRadius: Double = 25
         
         static var testGeofenceModel: GeofenceDataModel {
-            return GeofenceDataModel(id: geofenceId, lat: geofenceLat, long: geofenceLong, radius: Double(geofenceRadius))
+            return GeofenceDataModel(id: geofenceId, lat: geofenceLat, long: geofenceLong, radius: geofenceRadius)
         }
         static let defaultError = NSError(domain: "Geofence error", code: -1)
     }

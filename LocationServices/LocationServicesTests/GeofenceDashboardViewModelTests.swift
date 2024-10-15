@@ -47,7 +47,6 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testFetchListOfGeofences() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        //apiService.getResult = .success([Constants.geofence])
         await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasRefreshedData ?? false
@@ -66,7 +65,6 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     func testDeleteGeofenceDataWithoutID() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
         let geofenceModel = GeofenceDataModel(id: nil, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Constants.geofenceRadius)
-        //apiService.mockDeleteGeofenceResult = .success([geofenceModel])
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
@@ -75,7 +73,6 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testDeleteGeofenceData() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        //apiService.getResult = .success([Constants.geofence])
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false

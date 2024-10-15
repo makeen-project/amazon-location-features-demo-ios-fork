@@ -20,7 +20,6 @@ protocol ExploreViewModelProtocol: AnyObject {
     func userLocationChanged(_ userLocation: CLLocationCoordinate2D)
     func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) async
     func shouldShowWelcome() -> Bool
-    func cancelActiveRequests()
 }
 
 protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {

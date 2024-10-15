@@ -29,7 +29,7 @@ final class DirectionView: UIView {
         }
     }
     
-    private var routeOptionHeight = 32
+    private var routeOptionHeight = NumberConstants.routeOptionHeight
 
     private var routeOptions: RouteOptionsView = RouteOptionsView()
     
@@ -185,8 +185,8 @@ final class DirectionView: UIView {
     }
     
     @objc private func updateRouteContainerConstraint(_ notification: Notification) {
-        let height = (notification.userInfo?["height"] as? CGFloat) ?? 400
-        if(height < 400) {
+        let height = (notification.userInfo?["height"] as? CGFloat) ?? NumberConstants.routeContainerHeightConstraint
+        if(height < NumberConstants.routeContainerHeightConstraint) {
             routeOptions.isHidden = true
             containerView.isHidden = true
         }

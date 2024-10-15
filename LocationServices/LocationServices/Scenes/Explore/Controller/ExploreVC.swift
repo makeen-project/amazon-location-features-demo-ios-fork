@@ -115,7 +115,6 @@ final class ExploreVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.cancelActiveRequests()
         removeKeyboardNotifications()
     }
     

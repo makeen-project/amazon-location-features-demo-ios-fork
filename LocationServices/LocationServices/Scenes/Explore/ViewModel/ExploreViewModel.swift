@@ -24,8 +24,6 @@ final class ExploreViewModel: ExploreViewModelProtocol {
     }
     let locationService: LocationServiceable
     
-    //private var activeRequests: [Any] = []
-    
     init(routingService: RoutingServiceable, locationService: LocationServiceable) {
         self.routingService = routingService
         self.locationService = locationService
@@ -75,20 +73,9 @@ final class ExploreViewModel: ExploreViewModelProtocol {
                                           travelModes: travelModes,
                                           avoidFerries: selectedRoute.avoidFerries,
                                           avoidTolls: selectedRoute.avoidTolls) //{ [weak self] response in
-            //guard let result = response[travelMode] else { return }
-            
-            //switch result {
-            //case .success(let route):
         for route in result {
             self.delegate?.routeReCalculated(route: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
         }
-            //case .failure(let error):
-            //    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-            //    self?.delegate?.showAlert(model)
-            //}
-            
-            
-        //}
     }
     
     func login() {
@@ -122,10 +109,6 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         let welcomeShownVersion = UserDefaultsHelper.get(for: String.self, key: .termsAndConditionsAgreedVersion)
         let currentVersion = UIApplication.appVersion()
         return welcomeShownVersion != currentVersion
-    }
-    
-    func cancelActiveRequests() {
-        //activeRequests.forEach { $0.cancel() }
     }
 }
 

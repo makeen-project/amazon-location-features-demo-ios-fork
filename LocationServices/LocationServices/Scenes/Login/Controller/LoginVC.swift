@@ -446,7 +446,6 @@ extension LoginVC: LoginViewModelOutputDelegate {
     
     func identityPoolIdValidationSucceed() {
         UserDefaultsHelper.save(value: isFromSettingScene, key: .awsCustomConnectFromSettings)
-        //UserDefaultsHelper.setAppState(state: .prepareCustomAWSConnect)
         UserDefaultsHelper.setAppState(state: .customAWSConnected)
         updateAccordingToAppState()
     }
