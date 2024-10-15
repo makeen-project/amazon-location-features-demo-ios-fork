@@ -6,13 +6,13 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
-import Mapbox
+import MapLibre
 
 class LSUserLocationHeadingBeamLayer: CALayer, LSUserLocationHeadingIndicator {
     
     private var _maskLayer: CAShapeLayer
     
-    required init(userLocationView: MGLUserLocationAnnotationView) {
+    required init(userLocationView: MLNUserLocationAnnotationView) {
         _maskLayer = CAShapeLayer()
         super.init()
         
@@ -88,8 +88,8 @@ class LSUserLocationHeadingBeamLayer: CALayer, LSUserLocationHeadingIndicator {
         // clip the oval to ± incoming accuracy degrees (converted to radians), from the top
         ovalPath.addArc(withCenter: CGPointMake(CGRectGetMidX(ovalRect), CGRectGetMidY(ovalRect)),
                             radius:CGRectGetWidth(ovalRect) / 2.0,
-                        startAngle:MGLRadiansFromDegrees(-180 + clippingDegrees),
-                          endAngle:MGLRadiansFromDegrees(-clippingDegrees),
+                        startAngle:MLNRadiansFromDegrees(-180 + clippingDegrees),
+                          endAngle:MLNRadiansFromDegrees(-clippingDegrees),
                          clockwise:true)
         
         let annotationSize = LSUserLocationAnnotationDotSize / 2

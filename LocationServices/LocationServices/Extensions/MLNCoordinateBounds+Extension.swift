@@ -1,15 +1,15 @@
 //
-//  MGLCoordinateBounds+Extension.swift
+//  MLNCoordinateBounds+Extension.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import Mapbox
+import MapLibre
 
-extension MGLCoordinateBounds {
-    static func create(from: [CLLocationCoordinate2D]) -> MGLCoordinateBounds {
+extension MLNCoordinateBounds {
+    static func create(from: [CLLocationCoordinate2D]) -> MLNCoordinateBounds {
         guard let firstLocation = from.first else { return .init() }
         
         var north: CGFloat = firstLocation.latitude
@@ -35,12 +35,12 @@ extension MGLCoordinateBounds {
         let swBoundLocation = CLLocationCoordinate2D(latitude: south, longitude: west)
         let neBoundLocation = CLLocationCoordinate2D(latitude: north, longitude: east)
         
-        let coordinateBounds = MGLCoordinateBounds(sw: swBoundLocation, ne: neBoundLocation)
+        let coordinateBounds = MLNCoordinateBounds(sw: swBoundLocation, ne: neBoundLocation)
         
         return coordinateBounds
     }
     
-    static func create(centerLocation: CLLocationCoordinate2D, radius: CGFloat) -> MGLCoordinateBounds {
+    static func create(centerLocation: CLLocationCoordinate2D, radius: CGFloat) -> MLNCoordinateBounds {
         let north = centerLocation.location(radius: radius, radians: 0)
         let east = centerLocation.location(radius: radius, radians: Double.pi/2)
         let south = centerLocation.location(radius: radius, radians: Double.pi)
@@ -49,7 +49,7 @@ extension MGLCoordinateBounds {
         let swBoundLocation = CLLocationCoordinate2D(latitude: south.latitude, longitude: west.longitude)
         let neBoundLocation = CLLocationCoordinate2D(latitude: north.latitude, longitude: east.longitude)
         
-        let coordinateBounds = MGLCoordinateBounds(sw: swBoundLocation, ne: neBoundLocation)
+        let coordinateBounds = MLNCoordinateBounds(sw: swBoundLocation, ne: neBoundLocation)
         
         return coordinateBounds
     }

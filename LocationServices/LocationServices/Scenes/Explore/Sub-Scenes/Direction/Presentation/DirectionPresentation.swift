@@ -6,17 +6,17 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
 
 struct DirectionPresentation {
-    let travelMode: AWSLocationTravelMode
+    let travelMode: LocationClientTypes.TravelMode
     let distance: Double
     let duration: Double
     let lineString: GeoData
     let navigationSteps: [NavigationSteps]
     
     
-    init(model: AWSLocationCalculateRouteResponse, travelMode: AWSLocationTravelMode) {
+    init(model: CalculateRouteOutput, travelMode: LocationClientTypes.TravelMode) {
         self.distance = Double(model.legs?[0].distance ?? 0)
         self.duration = Double(model.legs?[0].durationSeconds  ?? 0)
 
@@ -41,11 +41,11 @@ struct NavigationSteps {
     let startPosition: [Double]
     let endPosition: [Double]
     
-    init(model: AWSLocationStep) {
+    init(model: LocationClientTypes.Step) {
         self.distance = Double(model.distance ?? 0)
         self.duration = Double(model.durationSeconds ?? 0)
-        self.startPosition = model.startPosition as? [Double] ?? []
-        self.endPosition = model.endPosition as? [Double] ?? []
+        self.startPosition = model.startPosition ?? []
+        self.endPosition = model.endPosition ?? []
     }
 }
 

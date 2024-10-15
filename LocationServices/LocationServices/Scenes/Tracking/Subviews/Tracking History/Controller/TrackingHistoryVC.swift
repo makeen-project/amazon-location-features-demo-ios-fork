@@ -40,7 +40,9 @@ final class TrackingHistoryVC: UIViewController {
     private lazy var deletionView: DeleteTrackingView = {
         let view = DeleteTrackingView()
         view.callback = { [weak self] in
-            self?.viewModel.deleteHistory()
+            Task {
+                try await self?.viewModel.deleteHistory()
+            }
         }
         view.isHidden = true
         return view
@@ -94,7 +96,9 @@ final class TrackingHistoryVC: UIViewController {
         noInternetConnectionView.isHidden = Reachability.shared.isInternetReachable
         
         if Reachability.shared.isInternetReachable {
-            viewModel.loadData()
+            Task {
+                await viewModel.loadData()
+            }
         }
     }
     
@@ -141,7 +145,9 @@ final class TrackingHistoryVC: UIViewController {
                 if state && self.viewModel.sectionsCount() == 0 {
                     self.scrollView.isHidden = !Reachability.shared.isInternetReachable
                     self.noInternetConnectionView.isHidden = Reachability.shared.isInternetReachable
-                    self.viewModel.loadData()
+                    Task {
+                        await self.viewModel.loadData()
+                    }
                 }
                 
                 NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": state])

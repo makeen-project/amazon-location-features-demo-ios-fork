@@ -6,13 +6,13 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
+import AWSLocation
 
 struct GeofenceDataModel {
     var id: String?
     var lat: Double?
     var long: Double?
-    var radius: Int64?
+    var radius: Double?
     
     var name: String? {
         return id
@@ -21,7 +21,7 @@ struct GeofenceDataModel {
     init(id: String? = nil,
          lat: Double? = nil,
          long: Double? = nil,
-         radius: Int64? = nil) {
+         radius: Double? = nil) {
         
         self.id = id
         self.lat = lat
@@ -33,13 +33,13 @@ struct GeofenceDataModel {
         self.id = model.id
         self.lat = model.lat
         self.long = model.long
-        self.radius = model.radius
+        self.radius = Double(model.radius)
     }
     
-    init(model: AWSLocationListGeofenceResponseEntry) {
+    init(model: LocationClientTypes.ListGeofenceResponseEntry) {
         id = model.geofenceId
-        lat = model.geometry?.circle?.center?.last?.doubleValue
-        long = model.geometry?.circle?.center?.first?.doubleValue
-        radius = model.geometry?.circle?.radius?.int64Value
+        lat = model.geometry?.circle?.center?.last
+        long = model.geometry?.circle?.center?.first
+        radius = model.geometry?.circle?.radius
     }
 }

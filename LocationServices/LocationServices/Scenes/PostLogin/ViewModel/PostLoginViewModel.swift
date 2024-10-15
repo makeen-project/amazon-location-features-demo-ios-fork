@@ -20,7 +20,9 @@ final class PostLoginViewModel: PostLoginViewModelProtocol {
     var delegate: PostLoginViewModelOutputDelegate?
         
     func login() {
-        awsLoginService.login()
+        Task {
+            try await awsLoginService.login()
+        }
     }
 }
 

@@ -33,6 +33,7 @@ struct UITestAWSScreen: UITestScreen {
         static let userNameTextField = "Username"
         static let passwordTextField = "Password"
         static let signInSubmitButton = "Submit"
+        static let signinDifferentUserLink = "Sign in as a different user?"
         
         static var identityPoolId: String {
             return Bundle(for: UITestBundle.self).object(forInfoDictionaryKey: "TestIdentityPoolId") as! String
@@ -93,11 +94,8 @@ struct UITestAWSScreen: UITestScreen {
     }
     
     func waitForAWSConnectResponse() -> Self {
-        let alert = app.alerts.element
-        XCTAssertTrue(alert.waitForExistence(timeout: UITestWaitTime.request.time))
-        let responseMessage = alert.label
-        XCTAssertEqual(responseMessage, StringConstant.restartAppTitle)
-        alert.buttons.firstMatch.tap()
+        let disconnectButton = app.buttons.matching(identifier: Identifiers.disconnectButton).element
+        XCTAssertTrue(disconnectButton.waitForExistence(timeout: UITestWaitTime.regular.time))
         return self
     }
     
@@ -153,11 +151,14 @@ struct UITestAWSScreen: UITestScreen {
         }
         
         let userNameTextField = webview.textFields[Constants.userNameTextField]
-        let doesUserNameTextFieldExist = userNameTextField.waitForExistence(timeout: UITestWaitTime.request.time)
+        var doesUserNameTextFieldExist = userNameTextField.waitForExistence(timeout: UITestWaitTime.request.time)
         if required {
             XCTAssertTrue(doesUserNameTextFieldExist)
         } else if !doesUserNameTextFieldExist {
-            return signOutSignIn()
+            let link = webview.links[Constants.signinDifferentUserLink]
+            link.tap()
+            doesUserNameTextFieldExist = userNameTextField.waitForExistence(timeout: UITestWaitTime.request.time)
+            XCTAssertTrue(doesUserNameTextFieldExist)
         }
         
         userNameTextField.tap()

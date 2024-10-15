@@ -7,50 +7,39 @@
 
 import Foundation
 import CoreLocation
-import AWSLocationXCF
+import AWSLocation
 
 protocol RoutingServiceable {
     func calculateRouteWith(depaturePosition: CLLocationCoordinate2D,
                             destinationPosition: CLLocationCoordinate2D,
-                            travelModes: [AWSLocationTravelMode],
+                            travelModes: [LocationClientTypes.TravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool,
-                            completion: @escaping (([AWSLocationTravelMode: Result<DirectionPresentation, Error>]) -> Void))
+                            avoidTolls: Bool) async throws -> [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>]
 }
 
 struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
+    
     func calculateRouteWith(depaturePosition: CLLocationCoordinate2D,
                             destinationPosition: CLLocationCoordinate2D,
-                            travelModes: [AWSLocationTravelMode],
+                            travelModes: [LocationClientTypes.TravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool,
-                            completion: @escaping (([AWSLocationTravelMode: Result<DirectionPresentation, Error>]) -> Void)) {
+                            avoidTolls: Bool) async throws -> [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>] {
         
-        var presentationObject: [AWSLocationTravelMode: Result<DirectionPresentation, Error>] = [:]
+        var presentationObject: [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>] = [:]
         
-        let group = DispatchGroup()
-        
-        travelModes.forEach { travelMode in
-            group.enter()
-            calculateRoute(depaturePosition: depaturePosition,
-                           destinationPosition: destinationPosition,
-                           travelMode: travelMode,
-                           avoidFerries: avoidFerries,
-                           avoidTolls: avoidTolls) { response in
-                switch response {
-                case .success(let result):
-                    let model = DirectionPresentation(model: result, travelMode: travelMode)
-                    presentationObject[travelMode] = .success(model)
-                case .failure(let error):
-                    presentationObject[travelMode] = .failure(error)
-                }
-                
-                group.leave()
+        for travelMode in travelModes {
+            do {
+                let response = try await calculateRoute(depaturePosition: depaturePosition,
+                                                        destinationPosition: destinationPosition,
+                                                        travelMode: travelMode,
+                                                        avoidFerries: avoidFerries,
+                                                        avoidTolls: avoidTolls)!
+                let model = DirectionPresentation(model: response, travelMode: travelMode)
+                presentationObject[travelMode] = .success(model)
+            } catch {
+                presentationObject[travelMode] = .failure(error)
             }
         }
-        
-        group.notify(queue: .main) {
-            completion(presentationObject)
-        }
+        return presentationObject
     }
 }

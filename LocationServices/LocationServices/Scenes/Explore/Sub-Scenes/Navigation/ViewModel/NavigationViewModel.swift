@@ -24,43 +24,56 @@ final class NavigationVCViewModel {
         self.summaryData = summaryData
         self.firstDestionation = firstDestionation
         self.secondDestionation = secondDestionation
-        fetchStreetNames()
+        Task {
+            await fetchStreetNames()
+        }
+    }
+
+    actor PresentationManager {
+        var presentation: [NavigationPresentation] = []
+
+        func addPresentation(_ model: NavigationPresentation) {
+            presentation.append(model)
+        }
+
+        func getSortedPresentation() -> [NavigationPresentation] {
+            presentation.sort(by: { $0.id < $1.id })
+            return presentation
+        }
     }
     
-    private func fetchStreetNames() {
-        let dispatchQueue = DispatchQueue(label: "Serial", attributes: .concurrent)
-        
-        var presentation: [NavigationPresentation] = []
-        for (id, step) in steps.enumerated() {
-            dispatchGroup.enter()
-            let position = step.startPosition as [NSNumber]
-            dispatchQueue.sync { [weak self] in
-                service.searchWithPosition(text: position, userLat: nil, userLong: nil) { response in
+    private func fetchStreetNames() async {
+        let manager = PresentationManager()
+
+        await withTaskGroup(of: Void.self) { group in
+            for (id, step) in steps.enumerated() {
+                group.addTask {
+                    let position = step.startPosition
+                    let response = await self.service.searchWithPosition(position: position, userLat: nil, userLong: nil)
+
                     switch response {
                     case .success(let results):
-                        guard let result = results.first else { break }
-                            
+                        guard let result = results.first else { return }
                         let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: result.placeLabel ?? "")
-                        presentation.append(model)
+                        await manager.addPresentation(model)
                     case .failure:
                         break
                     }
-                    self?.dispatchGroup.leave()
                 }
             }
         }
-        
-        dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
-            presentation.sort(by: { $0.id < $1.id })
-            self?.presentation = presentation
-            self?.delegate?.updateResults()
-        }
+
+        let sortedPresentation = await manager.getSortedPresentation()
+        self.presentation = sortedPresentation
+        self.delegate?.updateResults()
     }
     
     func update(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double)) {
         self.steps = steps
         self.summaryData = summaryData
-        fetchStreetNames()
+        Task {
+            await fetchStreetNames()
+        }
     }
     
     func getSummaryData() -> (totalDistance: String, totalDuration: String) {

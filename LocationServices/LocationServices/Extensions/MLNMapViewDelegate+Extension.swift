@@ -1,15 +1,15 @@
 //
-//  MGLMapViewDelegate+Extension.swift
+//  MLNMapViewDelegate+Extension.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import Mapbox
+import MapLibre
 
-extension MGLMapViewDelegate where Self: NavigationMapProtocol {
-    func mapViewMode(_ mapView: MGLMapView?) -> MapMode {
+extension MLNMapViewDelegate where Self: NavigationMapProtocol {
+    func mapViewMode(_ mapView: MLNMapView?) -> MapMode {
         return mapMode
     }
 }

@@ -52,8 +52,6 @@ struct UITestTrackingScreen: UITestScreen {
     func continueTrackingAlert() -> Self {
         let alert = app.alerts.element
         if (alert.waitForExistence(timeout: UITestWaitTime.regular.time)) {
-           //let responseMessage = alert.label
-            //XCTAssertEqual(responseMessage, StringConstant.enableTracking)
             let continueButton = alert.buttons.firstMatch
             XCTAssertTrue(continueButton.waitForExistence(timeout: UITestWaitTime.regular.time))
             continueButton.tap()

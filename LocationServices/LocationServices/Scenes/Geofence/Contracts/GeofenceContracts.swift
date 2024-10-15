@@ -30,7 +30,7 @@ protocol GeofenceViewModelProtocol: AnyObject {
     func getGeofence(with id: String) -> GeofenceDataModel?
     func deleteGeofence(with id: String)
     func addGeofence(model: GeofenceDataModel)
-    func fetchListOfGeofences()
+    func fetchListOfGeofences() async
 }
 
 protocol GeofenceViewModelDelegate: AnyObject, AlertPresentable {

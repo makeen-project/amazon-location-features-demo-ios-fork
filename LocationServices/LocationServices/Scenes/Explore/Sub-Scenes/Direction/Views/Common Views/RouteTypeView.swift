@@ -14,7 +14,7 @@ enum RouteTypes {
     var title: String {
         switch self {
         case .walking:
-            return "Walk"
+            return "Walking"
         case .car:
             return "Car"
         case .truck:

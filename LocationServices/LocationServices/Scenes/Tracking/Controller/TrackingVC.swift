@@ -118,7 +118,9 @@ final class TrackingVC: UIViewController {
     }
     
     func showGeofenceAnnotations() {
-        viewModel.fetchListOfGeofences()
+        Task {
+            await viewModel.fetchListOfGeofences()
+        }
     }
     
     func removeGeofenceAnnotations() {
@@ -230,7 +232,9 @@ final class TrackingVC: UIViewController {
                 if !self.isInSplitViewController {
                     self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
                 }
-                self.viewModel.updateHistory()
+                Task {
+                    await self.viewModel.updateHistory()
+                }
             case .customConfig, .defaultConfig:
                 self.delegate?.showDashboardFlow()
             }
@@ -255,7 +259,9 @@ final class TrackingVC: UIViewController {
             if skipDashboard {
                 delegate?.showTrackingHistory(isTrackingActive: viewModel.isTrackingActive)
             } else {
-                viewModel.updateHistory()
+                Task {
+                    await viewModel.updateHistory()
+                }
                 delegate?.showNextTrackingScene()
             }
         case .customConfig:
@@ -311,10 +317,12 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
     }
     
     func geofenceButtonAction() {
-        guard let lat = userLocation?.coordinate.latitude,
-              let long = userLocation?.coordinate.longitude else { return }
-        GeofenceAPIService().evaluateGeofence(lat: lat, long: long)
-        self.geofenceHandler?()
+        Task {
+            guard let lat = userLocation?.coordinate.latitude,
+                  let long = userLocation?.coordinate.longitude else { return }
+           try await GeofenceAPIService().evaluateGeofence(lat: lat, long: long)
+            self.geofenceHandler?()
+        }
     }
     
     func showMapLayers() {

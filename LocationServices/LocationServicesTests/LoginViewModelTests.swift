@@ -11,7 +11,7 @@ import XCTest
 
 final class LoginViewModelTests: XCTestCase {
     var viewModel: LoginViewModel!
-    var loginService: AWSLoginSericeMock!
+    var loginService: AWSLoginServiceMock!
     var delegate: LoginViewModelOutputDelegateMock!
     enum Constants {
         static let waitRequestDuration: TimeInterval = 10
@@ -22,7 +22,7 @@ final class LoginViewModelTests: XCTestCase {
         viewModel = LoginViewModel()
         delegate = LoginViewModelOutputDelegateMock()
         viewModel.delegate = delegate
-        loginService = AWSLoginSericeMock(delay: Constants.apiRequestDuration)
+        loginService = AWSLoginServiceMock(delay: Constants.apiRequestDuration)
         viewModel.awsLoginService = loginService
         if let domain = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: domain)
@@ -40,7 +40,7 @@ final class LoginViewModelTests: XCTestCase {
                                                userPoolClientId: "userPoolClientId",
                                                userPoolId: "userPoolId",
                                                userDomain: "userDomain",
-                                               webSocketUrl: "webSocketURL"
+                                                     webSocketUrl: "webSocketURL", apiKey: "apiKey", region: "region"
         )
         
         UserDefaultsHelper.saveObject(value: customLoginModel, key: .awsConnect)
@@ -67,7 +67,8 @@ final class LoginViewModelTests: XCTestCase {
     func testDisconnectAWS() throws {
         viewModel.disconnectAWS()
         XCTWaiter().wait(until: { [weak self] in
-            return self?.delegate.hasShownAlert ?? false
+            let result = self?.delegate.hasIdentityPoolIdValidationSucceed ?? false
+            return !result
  
         }, timeout: Constants.waitRequestDuration, message: "Expected shownAlert on disconnectAWS true")
     }

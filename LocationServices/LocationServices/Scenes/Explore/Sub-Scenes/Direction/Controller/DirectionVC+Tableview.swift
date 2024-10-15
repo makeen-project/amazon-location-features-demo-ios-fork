@@ -107,14 +107,15 @@ extension DirectionVC: UITableViewDataSource {
         else {
             self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
         }
-        
-        let state = viewModel.searchSelectedPlaceWith(currentModel, lat: userLocation?.lat, long: userLocation?.long)
-        
-        let canSearch = firstDestionation != nil && firstDestionation?.lat != nil && secondDestionation != nil && secondDestionation?.lat != nil
-        
-        if state && canSearch {
-            self.sheetPresentationController?.selectedDetentIdentifier = .medium
-            calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls)
+        Task {
+            let state = try await viewModel.searchSelectedPlaceWith(currentModel, lat: userLocation?.lat, long: userLocation?.long)
+            
+            let canSearch = firstDestionation != nil && firstDestionation?.lat != nil && secondDestionation != nil && secondDestionation?.lat != nil
+            
+            if state && canSearch {
+                self.sheetPresentationController?.selectedDetentIdentifier = .medium
+                try await calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls)
+            }
         }
     }
     

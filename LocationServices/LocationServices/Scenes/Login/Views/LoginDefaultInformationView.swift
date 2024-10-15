@@ -73,11 +73,6 @@ final class LoginDefaultInformationView: UIView {
         return label
     }()
     
-    private var closeAppAlertView: UIView = {
-        let view = LoginCloseAppAlertView()
-        return view
-    }()
-    
     private var subHeader: UILabel = {
         let label = UILabel()
         label.text = getConstantsConfig().subHeader
@@ -253,7 +248,6 @@ final class LoginDefaultInformationView: UIView {
         self.addSubview(logoView)
         self.addSubview(mainTitle)
         self.addSubview(mainSubTitle)
-        self.addSubview(closeAppAlertView)
         self.addSubview(subHeader)
         self.addSubview(firstNumber)
         self.addSubview(firstItemTitle)
@@ -306,15 +300,9 @@ final class LoginDefaultInformationView: UIView {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }
-        
-        closeAppAlertView.snp.makeConstraints {
-            $0.top.equalTo(mainSubTitle.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-        }
-    
+
         subHeader.snp.makeConstraints {
-            $0.top.equalTo(closeAppAlertView.snp.bottom).offset(24)
+            $0.top.equalTo(mainSubTitle.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }

@@ -6,28 +6,8 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
-import AWSCore
 
 extension String {
-    
-    func toRegionType() -> AWSRegionType {
-        // by default
-        var region: AWSRegionType = .USEast1
-        // extract region from identity pool
-        
-        if let stringRegion = self.components(separatedBy: ":").first {
-            
-            if let extractedRegion = AWSEndpoint.regionTypeByString(regionString: stringRegion) {
-                region = extractedRegion
-            } else {
-                // regionString is not a valid region
-                print("Invalid region: \(stringRegion)")
-            }
-        }
-        
-        return region
-    }
-    
     func toRegionString() -> String {
         return components(separatedBy: ":").first ?? self
     }
@@ -58,13 +38,13 @@ extension String {
         return self.components(separatedBy: " ").reduce("") { ($0 == "" ? "" : "\($0.first!)") + "\($1.first!)" }
     }
     
-    func convertTextToCoordinate() -> [NSNumber] {
+    func convertTextToCoordinate() -> [Double] {
         let splitText = self.split(separator: ",", maxSplits: 1).map(String.init)
         guard let first = Double(splitText[0]), let secondElement = Double(splitText[1].trimmingCharacters(in: .whitespaces)) else { return [] }
         
-        var resultAr: [NSNumber] = []
-        resultAr.append(NSNumber(value: secondElement))
-        resultAr.append(NSNumber(value: first))
+        var resultAr: [Double] = []
+        resultAr.append(secondElement)
+        resultAr.append(first)
         
         return resultAr
     }

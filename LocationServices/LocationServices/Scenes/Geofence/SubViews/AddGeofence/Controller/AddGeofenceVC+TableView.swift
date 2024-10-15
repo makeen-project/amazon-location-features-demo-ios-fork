@@ -50,11 +50,12 @@ extension AddGeofenceVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let state = viewModel.searchSelectedPlaceWith(indexPath, lat: userLocation?.lat, long: userLocation?.long)
-        if state {
-            self.searchView.resignResponserSearchText()
+        Task {
+            let state = try await viewModel.searchSelectedPlaceWith(indexPath, lat: userLocation?.lat, long: userLocation?.long)
+            if state {
+                self.searchView.resignResponserSearchText()
+            }
+            self.sheetPresentationController?.selectedDetentIdentifier = .medium
         }
-        self.sheetPresentationController?.selectedDetentIdentifier = .medium
     }
 }

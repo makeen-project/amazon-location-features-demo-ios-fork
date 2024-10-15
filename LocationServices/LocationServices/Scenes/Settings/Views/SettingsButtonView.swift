@@ -8,7 +8,12 @@
 import UIKit
 import SnapKit
 
-final class SettingsLogoutButtonView: UIButton {
+public enum SettingsButtonState {
+    case logout
+    case disconnect
+}
+
+final class SettingsButtonView: UIButton {
     
     enum Constants {
         static let logoutIconSize: CGFloat = 20
@@ -23,7 +28,7 @@ final class SettingsLogoutButtonView: UIButton {
     
     private var containerView: UIView = UIView()
     
-    private var logoutIcon: UIImageView = {
+    private var buttonIcon: UIImageView = {
         let iv = UIImageView(image: .logoutIcon)
         iv.contentMode = .scaleAspectFit
         iv.tintColor = .navigationRedButton
@@ -32,7 +37,7 @@ final class SettingsLogoutButtonView: UIButton {
     
     private var itemTitle: UILabel = {
         var label = UILabel()
-        label.text = StringConstant.disconnect
+        label.text = StringConstant.logout
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left
@@ -64,7 +69,7 @@ final class SettingsLogoutButtonView: UIButton {
     
     private func setupViews() {
         self.addSubview(containerView)
-        containerView.addSubview(logoutIcon)
+        containerView.addSubview(buttonIcon)
         containerView.addSubview(arrowIcon)
         containerView.addSubview(itemTitle)
         
@@ -72,7 +77,7 @@ final class SettingsLogoutButtonView: UIButton {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
        
-        logoutIcon.snp.makeConstraints {
+        buttonIcon.snp.makeConstraints {
             $0.height.width.equalTo(Constants.logoutIconSize)
             $0.leading.equalToSuperview().offset(Constants.logoutIconLeadingOffset)
             $0.centerY.equalToSuperview()
@@ -86,9 +91,20 @@ final class SettingsLogoutButtonView: UIButton {
         
         itemTitle.snp.makeConstraints {
             $0.height.equalTo(Constants.itemTitleHeight)
-            $0.leading.equalTo(logoutIcon.snp.trailing).offset(Constants.itemTitleLeadingOffset)
+            $0.leading.equalTo(buttonIcon.snp.trailing).offset(Constants.itemTitleLeadingOffset)
             $0.trailing.equalTo(arrowIcon.snp.leading)
             $0.centerY.equalToSuperview()
+        }
+    }
+    
+    public func setButtonState(settingsButtonState: SettingsButtonState) {
+        switch settingsButtonState {
+            case .disconnect:
+                buttonIcon.image = .disconnectIcon
+                itemTitle.text = StringConstant.disconnect
+            case .logout:
+                buttonIcon.image = .logoutIcon
+                itemTitle.text = StringConstant.logout
         }
     }
 

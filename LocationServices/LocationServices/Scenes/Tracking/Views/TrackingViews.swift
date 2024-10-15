@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-import Mapbox
+import MapLibre
 
 protocol TrackingMapViewDelegate {
     var delegate: GeofenceMapViewOutputDelegate { get set }
@@ -42,7 +42,7 @@ final class TrackingMapView: UIView {
     private var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
     
-    private var trackingAnnotations: [MGLAnnotation] = []
+    private var trackingAnnotations: [MLNAnnotation] = []
     
     private let amazonMapLogo: UIImageView = {
         let imageView = UIImageView(image: .amazonLogo)
@@ -160,7 +160,7 @@ final class TrackingMapView: UIView {
         mapView.addAnnotations(annotations: annotations)
     }
     
-    func drawGeofenceCirle(id: String?, lat: Double?, long: Double?, radius: Int64, title: String?) {
+    func drawGeofenceCirle(id: String?, lat: Double?, long: Double?, radius: Double, title: String?) {
         mapView.drawGeofenceCircle(id: id, latitude: lat, longitude: long, radius: radius, title: title)
     }
     
@@ -189,11 +189,11 @@ final class TrackingMapView: UIView {
 }
 
 private extension TrackingMapView {
-    func createTrackingSource(history: [TrackingHistoryPresentation], identifier: String = "tracking-layer") -> MGLSource {
+    func createTrackingSource(history: [TrackingHistoryPresentation], identifier: String = "tracking-layer") -> MLNSource {
         let coordinates = transformHistoryToCoordinates(history)
         
-        let polyline = MGLPolyline(coordinates: coordinates, count: UInt(coordinates.count))
-        let source = MGLShapeSource(identifier: identifier, shape: polyline)
+        let polyline = MLNPolyline(coordinates: coordinates, count: UInt(coordinates.count))
+        let source = MLNShapeSource(identifier: identifier, shape: polyline)
         
         return source
     }
@@ -203,18 +203,16 @@ private extension TrackingMapView {
             let coordinates = history.cooordinates.convertTextToCoordinate()
             guard coordinates.count == 2 else { return nil }
             
-            let location = CLLocationCoordinate2D(latitude: coordinates[0].doubleValue, longitude: coordinates[1].doubleValue)
+            let location = CLLocationCoordinate2D(latitude: coordinates[0], longitude: coordinates[1])
             return location
         }
     }
     
-    func createDashedLayer(source: MGLSource, identifier: String = "dashed-layer") -> MGLStyleLayer {
+    func createDashedLayer(source: MLNSource, identifier: String = "dashed-layer") -> MLNStyleLayer {
         let lineJoinCap = NSExpression(forConstantValue: "round")
-        let lineWidth = NSExpression(
-            format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-            [16: 2, 20: 20])
+        let lineWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",[16: 2, 20: 20])
         
-        let dashedLayer = MGLLineStyleLayer(identifier: identifier, source: source)
+        let dashedLayer = MLNLineStyleLayer(identifier: identifier, source: source)
         dashedLayer.lineJoin = lineJoinCap
         dashedLayer.lineCap = lineJoinCap
         dashedLayer.lineColor = NSExpression(forConstantValue: UIColor.lsPrimary)
@@ -224,7 +222,7 @@ private extension TrackingMapView {
         return dashedLayer
     }
     
-    func createTrackingAnnotaions(_ history: [TrackingHistoryPresentation]) -> [MGLAnnotation] {
+    func createTrackingAnnotaions(_ history: [TrackingHistoryPresentation]) -> [MLNAnnotation] {
         let coordinates = transformHistoryToCoordinates(history)
         let annotations = coordinates.map {
             let annotation = ImageAnnotation(image: .stepIcon)

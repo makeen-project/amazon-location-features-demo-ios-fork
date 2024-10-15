@@ -18,28 +18,31 @@ final class GeofenceDashboardViewModel: GeofenceDasboardViewModelProtocol {
         self.geofenceService = geofenceService
     }
     
-    func fetchListOfGeofences() {
+    func fetchListOfGeofences() async {
         
         // if we are not authorized do not send it
         if UserDefaultsHelper.getAppState() != .loggedIn {
             return
         }
         
-        geofenceService.getGeofenceList { [weak self] result in
+        let result = await geofenceService.getGeofenceList()
             switch result {
             case .success(let geofences):
-                self?.geofences = geofences
-                self?.delegate?.refreshData(with: geofences)
-            case .failure(let error):
-                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                    ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                DispatchQueue.main.async {
+                    self.geofences = geofences
+                    self.delegate?.refreshData(with: geofences)
                 }
-                else {
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                    self?.delegate?.showAlert(model)
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+                    }
+                    else {
+                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+                        self.delegate?.showAlert(model)
+                    }
                 }
             }
-        }
     }
     
     func deleteGeofenceData(model: GeofenceDataModel) {
@@ -50,20 +53,24 @@ final class GeofenceDashboardViewModel: GeofenceDasboardViewModelProtocol {
         }
         
         let alertModel = AlertModel(title: StringConstant.deleteGeofence, message: StringConstant.deleteGeofenceAlertMessage) { [weak self] in
+            
+            guard let self = self else { return }
+                    
             print("LETS DELETE")
-            self?.geofenceService.deleteGeofence(with: id) { [weak self] result in
+            Task {
+                let result = await self.geofenceService.deleteGeofence(with: id)
                 switch result {
                 case .success:
                     NotificationCenter.default.post(name: Notification.deleteGeofenceData, object: nil, userInfo: ["id": id])
-                    self?.geofences.removeAll(where: { $0.id == id })
-                    self?.delegate?.refreshData(with: self?.geofences ?? [])
+                    self.geofences.removeAll(where: { $0.id == id })
+                    self.delegate?.refreshData(with: self.geofences)
                 case .failure(let error):
                     if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                        ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
                     }
                     else {
                         let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                        self?.delegate?.showAlert(model)
+                        self.delegate?.showAlert(model)
                     }
                 }
             }

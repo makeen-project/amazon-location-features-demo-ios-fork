@@ -6,9 +6,9 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocationXCF
-import AWSMobileClientXCF
+import AWSLocation
 import CoreLocation
+import UIKit
 
 
 enum GeofenceServiceConstant {
@@ -17,108 +17,83 @@ enum GeofenceServiceConstant {
 }
 
 protocol AWSGeofenceServiceProtocol {
-    func putGeofence(with id: String, center: [Double], radius: Int, completion: @escaping(Result<AWSLocationPutGeofenceResponse, Error>) -> Void)
-    func deleteGeofences(with ids: [String], completion: @escaping(Result<AWSLocationBatchDeleteGeofenceResponse, Error>) -> Void)
-    func fetchGeofenceList(completion: @escaping (Result<[AWSLocationListGeofenceResponseEntry], Error>)->())
-    func batchEvaluateGeofences(lat: Double, long: Double, completion: @escaping(Result<AWSLocationBatchEvaluateGeofencesResponse, Error>) -> Void)
+    func putGeofence(with id: String, center: [Double], radius: Double) async throws -> PutGeofenceOutput?
+    func deleteGeofences(with ids: [String]) async throws -> BatchDeleteGeofenceOutput?
+    func fetchGeofenceList() async throws -> ListGeofencesOutput?
+    func batchEvaluateGeofences(lat: Double, long: Double) async throws -> BatchEvaluateGeofencesOutput?
 }
 
 extension AWSGeofenceServiceProtocol {
     
-    func putGeofence(with id: String, center: [Double], radius: Int, completion: @escaping(Result<AWSLocationPutGeofenceResponse, Error>) -> Void) {
-        let request = AWSLocationPutGeofenceRequest()!
-        request.collectionName = GeofenceServiceConstant.collectionName
-
-        request.geofenceId = id
-        request.geometry = AWSLocationGeofenceGeometry()
-        request.geometry?.circle = AWSLocationCircle()
-        request.geometry?.circle?.center = center as [NSNumber]
-        request.geometry?.circle?.radius = radius as NSNumber
-        
-        let result = AWSLocation(forKey: "default").putGeofence(request)
-        result.continueWith { response in
-            if let taskResult = response.result {
-                completion(.success(taskResult))
+    func putGeofence(with id: String, center: [Double], radius: Double) async throws -> PutGeofenceOutput? {
+        do {
+            try await AWSLoginService.default().refreshLoginIfExpired()
+            let circle = LocationClientTypes.Circle(center: center, radius: radius)
+            let geometry = LocationClientTypes.GeofenceGeometry(circle: circle)
+            let input = PutGeofenceInput(collectionName: GeofenceServiceConstant.collectionName, geofenceId: id, geometry: geometry)
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
+                let result = try await client.putGeofence(input: input)
+                return result
             } else {
-                let defaultError = NSError(domain: "Geofence", code: -1)
-                let error = response.error ?? defaultError
-                print("error \(error)")
-                completion(.failure(error))
+                return nil
             }
-            
-            return nil
+        }
+        catch {
+            throw error
         }
     }
     
-    func deleteGeofences(with ids: [String], completion: @escaping(Result<AWSLocationBatchDeleteGeofenceResponse, Error>) -> Void) {
-        let request = AWSLocationBatchDeleteGeofenceRequest()!
-        request.collectionName = GeofenceServiceConstant.collectionName
-        request.geofenceIds = ids
-        
-        let result = AWSLocation(forKey: "default").batchDeleteGeofence(request)
-        result.continueWith { response in
-            if let taskResult = response.result {
-                completion(.success(taskResult))
+    func deleteGeofences(with ids: [String]) async throws -> BatchDeleteGeofenceOutput? {
+        do {
+            try await AWSLoginService.default().refreshLoginIfExpired()
+            let input = BatchDeleteGeofenceInput(collectionName: GeofenceServiceConstant.collectionName, geofenceIds: ids)
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
+                let result = try await client.batchDeleteGeofence(input: input)
+                return result
             } else {
-                let defaultError = NSError(domain: "Geofence", code: -1)
-                let error = response.error ?? defaultError
-                print("error \(error)")
-                completion(.failure(error))
+                return nil
             }
-            
-            return nil
+        }
+        catch {
+            throw error
         }
     }
     
-    func fetchGeofenceList(completion: @escaping (Result<[AWSLocationListGeofenceResponseEntry], Error>)->()) {
-        let request = AWSLocationListGeofencesRequest()!
-        request.collectionName = GeofenceServiceConstant.collectionName
-    
-        let result = AWSLocation(forKey: "default").listGeofences(request)
-        
-        result.continueWith { response in
-            if let error = response.error {
-                print("error \(error)")
-                completion(.failure(error))
-            } else if let taskResult = response.result {
-                print("taskResult \(taskResult)")
-                completion(.success(taskResult.entries ?? []))
+    func fetchGeofenceList() async throws -> ListGeofencesOutput? {
+        do {
+            try await AWSLoginService.default().refreshLoginIfExpired()
+            let input = ListGeofencesInput(collectionName: GeofenceServiceConstant.collectionName)
+            if let client = try await  AmazonLocationClient.defaultCognito()?.locationClient {
+                let result = try await client.listGeofences(input: input)
+                return result
+            } else {
+                return nil
             }
-            
-            return nil
+        }
+        catch {
+            throw error
         }
     }
     
-    func batchEvaluateGeofences(lat: Double, long: Double, completion: @escaping(Result<AWSLocationBatchEvaluateGeofencesResponse, Error>) -> Void) {
-        let request = AWSLocationBatchEvaluateGeofencesRequest()!
-        request.collectionName = GeofenceServiceConstant.collectionName
-        
-        let devicePositionUpdate = AWSLocationDevicePositionUpdate()!
-        devicePositionUpdate.deviceId = GeofenceServiceConstant.deviceId
-        devicePositionUpdate.position = [NSNumber(value: long), NSNumber(value: lat)]
-        devicePositionUpdate.sampleTime = Date()
-        
-        if let identityId = AWSMobileClient.default().identityId {
-            let region = identityId.toRegionString()
-            let id = identityId.toId()
-            devicePositionUpdate.positionProperties = ["region": region, "id": id]
-        }
-        
-        request.devicePositionUpdates = Array(arrayLiteral: devicePositionUpdate)
-        let result = AWSLocation(forKey: "default").batchEvaluateGeofences(request)
-        
-        result.continueWith { response in
-            if let taskResult = response.result {
-                print("Geofence evaluate result: \(taskResult)")
-                completion(.success(taskResult))
-            } else {
-                let defaultError = NSError(domain: "Geofence", code: -1)
-                let error = response.error ?? defaultError
-                print("error \(error)")
-                completion(.failure(error))
-            }
+    func batchEvaluateGeofences(lat: Double, long: Double) async throws -> BatchEvaluateGeofencesOutput? {
+        do {
+            try await AWSLoginService.default().refreshLoginIfExpired()
+            var devicePositionUpdate = LocationClientTypes.DevicePositionUpdate(deviceId: GeofenceServiceConstant.deviceId, position: [long, lat], sampleTime: Date())
             
-            return nil
+            if let identityId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId) {
+                print("batchEvaluateGeofences: deviceId: \(GeofenceServiceConstant.deviceId) region: \(identityId.toRegionString()) identity Id: \(identityId.toId())")
+                devicePositionUpdate.positionProperties = ["region": identityId.toRegionString(), "id": identityId.toId()]
+            }
+            let input = BatchEvaluateGeofencesInput(collectionName: GeofenceServiceConstant.collectionName, devicePositionUpdates: [devicePositionUpdate])
+            if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
+                let result = try await client.batchEvaluateGeofences(input: input)
+                return result
+            } else {
+                return nil
+            }
+        }
+        catch {
+            throw error
         }
     }
 }

@@ -79,6 +79,10 @@ enum StringConstant {
     static let geofenceNoIdentifier = "Couldn't delete geofence, no identifier exists"
     static let deleteGeofence = "Delete geofence"
     static let deleteGeofenceAlertMessage = "Are you sure you want to delete geofence?"
+    static let logout = "Logout"
+    static let logoutAlertMessage = "Are you sure you want to logout?"
+    static let disconnectAWS = "Disconnect AWS"
+    static let disconnectAWSAlertMessage = "Are you sure you want to Disconnect AWS?"
     static let noInternetConnection = "No internet connection"
     static let enableTracking = "Enable Tracker"
     static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
@@ -169,7 +173,7 @@ enum StringConstant {
         static let descriptionTitle = "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's Terms & Conditions for use."
         static let appTermsOfUse = "Terms & Conditions"
         static let appTermsOfUseURL = termsAndConditionsURL
-        static let copyright = "© 2023, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+        static let copyright = "© 2024, Amazon Web Services, Inc. or its affiliates. All rights reserved."
     }
     
     enum Tracking {
@@ -204,7 +208,7 @@ enum StringConstant {
     static let defaultRouteOptions = "Default route options"
     static let partnerAttributionTitle = "Partner Attribution"
     static let partnerAttributionESRIDescription = "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community"
-    static let partnerAttributionHEREDescription = "© 2022 HERE"
+    static let partnerAttributionHEREDescription = "© 2024 HERE"
     static let softwareAttributionTitle = "Software Attribution"
     static let softwareAttributionDescription = "Click learn more for software attribution"
     static let learnMore = "Learn More"

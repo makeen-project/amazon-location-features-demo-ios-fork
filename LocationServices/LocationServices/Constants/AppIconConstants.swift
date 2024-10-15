@@ -53,7 +53,8 @@ extension UIImage {
     static let mapStyleIcon = UIImage(named: "icon-paintroller")!
     static let routeOption = UIImage(named: "icon-shuffle")!
     static let unitIcons = UIImage(named: "icon-people-arrows")!
-    static let logoutIcon = UIImage(named: "Icon-log-out")!
+    static let logoutIcon = UIImage(named: "icon-logout")!
+    static let disconnectIcon = UIImage(named: "icon-disconnect")!
     
     /// Map Layer
     static let contrastMapLayer = UIImage(named: "contrast_map_layer")!

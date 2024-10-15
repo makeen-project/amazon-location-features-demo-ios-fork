@@ -8,6 +8,7 @@
 import XCTest
 @testable import LocationServices
 import CoreLocation
+import AWSLocation
 
 final class POICardViewModelTests: XCTestCase {
 
@@ -37,32 +38,34 @@ final class POICardViewModelTests: XCTestCase {
         XCTAssertEqual(pOICardViewModel.getMapModel()?.placeLat, mapModel.placeLat, "Expected mapModel placeLat equal")
     }
     
-    func testFetchDatasWithoutUserLocation() throws {
-        pOICardViewModel.fetchDatas()
+    func testFetchDatasWithoutUserLocation() async throws {
+        try await pOICardViewModel.fetchDatas()
         XCTAssertEqual(delegate.populateDatasErrorMessage, "Location permission denied", "Expected Location permission denied")
     }
     
-    func testFetchDatasWithMaxDistance() throws {
+    func testFetchDatasWithMaxDistance() async throws {
         pOICardViewModel.setUserLocation(lat: userLocation.latitude, long: userLocation.longitude)
-        pOICardViewModel.fetchDatas()
+        try await pOICardViewModel.fetchDatas()
         
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.populateDatasErrorMessage == "In DataSource Esri, all waypoints must be within 400km"
         }, timeout: Constants.waitRequestDuration, message: "MapModel should've throw max distance error")
     }
     
-    func testFetchDatasWithSuccess() throws {
+    func testFetchDatasWithSuccess() async throws {
         pOICardViewModel.setUserLocation(lat: 40.4400930458457, long: -80.00348250162394)
-        pOICardViewModel.fetchDatas()
+        let direction = DirectionPresentation(model:CalculateRouteOutput(), travelMode: .car)
+        routingService.putResult = [LocationClientTypes.TravelMode.car: .success(direction)]
+        try await pOICardViewModel.fetchDatas()
         
         XCTWaiter().wait(until: {
             return self.delegate.populateDatasCalled
         }, timeout: Constants.waitRequestDuration, message: "MapModel should've valid distance")
     }
     
-    func testFetchDatasWithFailure() throws {
+    func testFetchDatasWithFailure() async throws {
         pOICardViewModel.setUserLocation(lat: 0, long: -100)
-        pOICardViewModel.fetchDatas()
+        try await pOICardViewModel.fetchDatas()
 
         XCTWaiter().wait(until: { [weak self] in
             return (self?.delegate.populateDatasErrorMessage == "In DataSource Esri, all waypoints must be within 400km")

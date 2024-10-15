@@ -19,11 +19,13 @@
 	<string>EsriLight</string>
 	<key>IdentityPoolId</key>
 	<string>$(IDENTITY_POOL_ID)</string>
+	<key>ApiKey</key>
+	<string>$(API_KEY)</string>
 	<key>AWSRegion</key>
 	<string>$(AWS_REGION)</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
-		<key>MGLAccuracyAuthorizationDescription</key>
+		<key>MLNAccuracyAuthorizationDescription</key>
 		<string>We need your location to detect your location in map</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>

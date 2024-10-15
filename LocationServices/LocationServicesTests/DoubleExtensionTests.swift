@@ -25,12 +25,12 @@ final class DoubleExtensionTests: XCTestCase {
     
     func testConvertKMToM() throws {
         let km: Double = 1
-       XCTAssertEqual(km.convertKMToM(), 1000, "Expected 1000 M")
+       XCTAssertEqual(km.convertKMToMeters(), 1000, "Expected 1000 M")
     }
     
     func testConvertFormattedKMString() throws {
         let km: Double = 1
-       XCTAssertEqual(km.convertFormattedKMString(), "1000.0 m", "Expected formatted KM 1000.0 m string")
+       XCTAssertEqual(km.convertFormattedKMString(), "1.00 km", "Expected formatted KM 1 km string")
     }
 
 }

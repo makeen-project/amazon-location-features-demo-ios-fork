@@ -6,8 +6,6 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
-import AWSCore
-import AWSMobileClientXCF
 
 enum AuthStatus {
     case defaultConfig
@@ -37,7 +35,9 @@ final class LoginViewModel: LoginViewModelProtocol {
     }
 
     func login() {
-        awsLoginService.login()
+        Task {
+            try await awsLoginService.login()
+        }
     }
     
     func logout() {
@@ -45,100 +45,82 @@ final class LoginViewModel: LoginViewModelProtocol {
     }
     
     func connectAWS(identityPoolId: String?, userPoolId: String?, userPoolClientId: String?, userDomain: String?, websocketUrl: String?) {
-        
-        guard let identityPoolId = identityPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
-              let userPoolId = userPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
-              let userPoolClientId = userPoolClientId?.trimmingCharacters(in: .whitespacesAndNewlines),
-              var userDomain = userDomain?.trimmingCharacters(in: .whitespacesAndNewlines),
-              var webSocketUrl = websocketUrl?.trimmingCharacters(in: .whitespacesAndNewlines) else {
-            
-            let model = AlertModel(title: StringConstant.error, message: StringConstant.notAllFieldsAreConfigured, okButton: StringConstant.ok)
-            delegate?.showAlert(model)
-            
-            return
-        }
-        
-        // check if we have https:// or http:// - just eliminate it
-        ["https://", "http://"].forEach {
-            userDomain = userDomain.replacingOccurrences(of: $0, with: "")
-        }
-        ["https://", "http://"].forEach {
-            webSocketUrl = webSocketUrl.replacingOccurrences(of: $0, with: "")
-        }
-        
-        awsLoginService.validate(identityPoolId: identityPoolId) { [weak self] result in
-            switch result {
-            case .success:
-                DispatchQueue.main.async {
-                    self?.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomain, webSocketUrl: webSocketUrl)
+        Task {   
+            do {
+                guard let identityPoolId = identityPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let userPoolId = userPoolId?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let userPoolClientId = userPoolClientId?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let userDomain = userDomain?.trimmingCharacters(in: .whitespacesAndNewlines),
+                      let webSocketUrl = websocketUrl?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                    DispatchQueue.main.async {
+                        let model = AlertModel(title: StringConstant.error, message: StringConstant.notAllFieldsAreConfigured, okButton: StringConstant.ok)
+                        self.delegate?.showAlert(model)
+                    }
+                    return
                 }
-            case .failure:
-                let model = AlertModel(title: StringConstant.error, message: StringConstant.incorrectIdentityPoolIdMessage, cancelButton: nil, okButton: StringConstant.ok)
-                
+
+                let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId)
+                if isValid {
+                    DispatchQueue.main.async {
+                        var userDomainValid = userDomain
+                        var webSocketUrlValid = webSocketUrl
+                        // check if we have https:// or http:// - just eliminate it
+                        ["https://", "http://"].forEach {
+                            userDomainValid = userDomainValid.replacingOccurrences(of: $0, with: "")
+                        }
+                        ["https://", "http://"].forEach {
+                            webSocketUrlValid = webSocketUrlValid.replacingOccurrences(of: $0, with: "")
+                        }
+                        self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomainValid, webSocketUrl: webSocketUrlValid, region: "", apiKey: "")
+                    }
+                }
+                else {
+                    DispatchQueue.main.async {
+                        let model = AlertModel(title: StringConstant.error, message: StringConstant.incorrectIdentityPoolIdMessage, cancelButton: nil, okButton: StringConstant.ok)
+                        self.delegate?.showAlert(model)
+                    }
+                }
+            }
+            catch {
+                let model = AlertModel(title: StringConstant.error, message: "\(StringConstant.incorrectIdentityPoolIdMessage). \(error.localizedDescription)", cancelButton: nil, okButton: StringConstant.ok)
                 DispatchQueue.main.async {
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
             }
         }
     }
     
-    private func saveAWS(identityPoolId: String, userPoolId: String, userPoolClientId: String, userDomain: String, webSocketUrl: String) {
+    private func saveAWS(identityPoolId: String, userPoolId: String, userPoolClientId: String, userDomain: String, webSocketUrl: String, region: String, apiKey: String) {
         saveDatatoDefaults(identityPoolId: identityPoolId,
                            userPoolId: userPoolId,
                            userPoolClientId: userPoolClientId,
                            userDomain: userDomain,
-                           webSocketURL: webSocketUrl)
+                           webSocketURL: webSocketUrl,
+                           region: region,
+                           apiKey: apiKey)
         
         delegate?.identityPoolIdValidationSucceed()
-        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
-
-        // repeat until the user is kill the app itself and restart it.
-        model.okHandler = {
-            // for now we are just kill the app
-            exit(0)
-            // for Apple release seems like we need to constantly show an alert.
-            //self.delegate?.showAlert(model)
-        }
-        delegate?.showAlert(model)
     }
     
     func disconnectAWS() {
-        // TODO: here we need to investigate if we can apply default configuration to AWSMobileService without restart of application.
-        // if we signed it, make sign out first
-        if AWSMobileClient.default().isSignedIn {
-            awsLoginService.logout(skipPolicy: false)
-        }
-        
+        awsLoginService.disconnectAWS()
         delegate?.cloudConnectionDisconnected()
-                
-        UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
-        
-        // remove custom configuration
-        UserDefaultsHelper.removeObject(for: .awsConnect)
-        
-        let model = AlertModel(title: StringConstant.restartAppTitle, message: StringConstant.restartAppExplanation, cancelButton: nil, okButton: StringConstant.terminate)
-        
-        // repeat until the user is kill the app itself and restart it.
-        model.okHandler = {
-            // for now we are just kill the app
-            exit(0)
-            // for Apple release seems like we need to constantly show an alert.
-            //self.delegate?.showAlert(model)
-            
-        }
-        delegate?.showAlert(model)
     }
     
     private func saveDatatoDefaults(identityPoolId: String,
                                     userPoolId: String,
                                     userPoolClientId: String,
                                     userDomain: String,
-                                    webSocketURL: String) {
+                                    webSocketURL: String,
+                                    region: String,
+                                    apiKey: String) {
         let customLoginModel = CustomConnectionModel(identityPoolId: identityPoolId,
                                                userPoolClientId: userPoolClientId,
                                                userPoolId: userPoolId,
                                                userDomain: userDomain,
-                                               webSocketUrl: webSocketURL
+                                               webSocketUrl: webSocketURL,
+                                               apiKey: apiKey,
+                                               region: region
         )
         
         UserDefaultsHelper.saveObject(value: customLoginModel, key: .awsConnect)
@@ -150,7 +132,7 @@ final class LoginViewModel: LoginViewModelProtocol {
     }
     
     func isSignedIn() -> Bool {
-        return AWSMobileClient.default().isSignedIn
+        return UserDefaultsHelper.getAppState() == .loggedIn
     }
 }
 

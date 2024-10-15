@@ -11,7 +11,7 @@ final class LoginVCBuilder {
     static func create() -> LoginVC {
         let controller = LoginVC()
         let vm = LoginViewModel()
-        vm.awsLoginService = AWSLoginService()
+        vm.awsLoginService = AWSLoginService.default()
         controller.viewModel = vm
         return controller
     }
@@ -20,7 +20,7 @@ final class LoginVCBuilder {
         let controller = LoginVC()
         controller.hidesBottomBarWhenPushed = true
         let vm = LoginViewModel()
-        vm.awsLoginService = AWSLoginService()
+        vm.awsLoginService = AWSLoginService.default()
         controller.isFromSettingScene = settingScene
         controller.viewModel = vm
         return controller

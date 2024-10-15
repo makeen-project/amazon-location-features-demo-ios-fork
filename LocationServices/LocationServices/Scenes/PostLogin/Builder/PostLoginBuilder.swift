@@ -10,7 +10,7 @@ import UIKit
 final class PostLoginBuilder {
     static func create() -> PostLoginVC {
         let vc = PostLoginVC()
-        let service = AWSLoginService()
+        let service = AWSLoginService.default()
         service.viewController = vc
         let vm = PostLoginViewModel(awsLoginService: service)
         vc.viewModel = vm

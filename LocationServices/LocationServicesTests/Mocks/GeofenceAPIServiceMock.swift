@@ -9,43 +9,35 @@ import Foundation
 @testable import LocationServices
 
 class GeofenceAPIServiceMock: GeofenceServiceable {
-    var putResult: Result<GeofenceDataModel, Error>?
-    var deleteResult: Result<String, Error>?
-    var getResult: Result<[GeofenceDataModel], Error>?
+    var mockPutGeofenceResult: Result<GeofenceDataModel, Error> = .success(GeofenceDataModel(id: "test", lat: 0.0, long: 0.0, radius: 100))
+    var mockDeleteGeofenceResult: Result<String, Error> = .success("")
+    var mockGetGeofenceListResult: Result<[GeofenceDataModel], Error> = .success([GeofenceDataModel(id: "test", lat: 0.0, long: 0.0, radius: 100)])
+    var mockEvaluateGeofenceResult: Result<Void, Error> = .success(())
     
     let delay: TimeInterval
-    
+        
     init(delay: TimeInterval) {
         self.delay = delay
     }
     
-    func putGeofence(with id: String, lat: Double, long: Double, radius: Int, completion: @escaping (Result<GeofenceDataModel, Error>) -> Void) {
-        perform { [weak self] in
-            guard let result = self?.putResult else { return }
-            completion(result)
-        }
+    func putGeofence(with id: String, lat: Double, long: Double, radius: Double) async -> Result<GeofenceDataModel, Error> {
+        return mockPutGeofenceResult
     }
     
-    func deleteGeofence(with id: String, completion: @escaping (Result<String, Error>) -> Void) {
-        perform { [weak self] in
-            guard let result = self?.deleteResult else { return }
-            completion(result)
-        }
+    func deleteGeofence(with id: String) async -> Result<String, Error> {
+        return mockDeleteGeofenceResult
     }
     
-    func getGeofenceList(completion: @escaping (Result<[GeofenceDataModel], Error>) -> ()) {
-        perform { [weak self] in
-            guard let result = self?.getResult else { return }
-            completion(result)
-        }
+    func getGeofenceList() async -> Result<[GeofenceDataModel], Error> {
+        return mockGetGeofenceListResult
     }
     
-    func evaluateGeofence(lat: Double, long: Double) {
-    }
-    
-    private func perform(action: @escaping ()->()) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
-            action()
+    func evaluateGeofence(lat: Double, long: Double) async throws {
+        switch mockEvaluateGeofenceResult {
+        case .success:
+            return
+        case .failure(let error):
+            throw error
         }
     }
 }

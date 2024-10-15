@@ -9,7 +9,7 @@ import Foundation
 
 protocol TrackingHistoryViewModelProtocol : AnyObject  {
     var delegate: TrackingHistoryViewModelOutputDelegate? { get set }
-    func loadData()
+    func loadData() async
     func startTracking(lat: Double, long: Double)
     func getItemCount(for section: Int) -> Int
     func getCellModel(indexPath: IndexPath) -> TrackHistoryCellModel?
@@ -18,7 +18,7 @@ protocol TrackingHistoryViewModelProtocol : AnyObject  {
     func setHistory(_ history: [TrackingHistoryPresentation])
     func getTrackingStatus() -> Bool
     func changeTrackingStatus(_ isTrackingActive: Bool)
-    func deleteHistory()
+    func deleteHistory() async throws
 }
 
 protocol TrackingHistoryViewModelOutputDelegate: AnyObject, AlertPresentable {
