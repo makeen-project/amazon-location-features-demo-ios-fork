@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 struct TrackHistoryCellModel {
-    var stepType: StepType
+    var stepState: StepState
     var coordinates: String
     var time: String
     var date: String
@@ -18,7 +18,7 @@ struct TrackHistoryCellModel {
         self.coordinates = model.cooordinates
         self.time = model.time
         self.date = model.date
-        self.stepType = model.stepType
+        self.stepState = model.stepState
     }
 }
 
@@ -38,7 +38,7 @@ final class TrackHistoryCell: UITableViewCell {
             self.timeLabel.text = model.time
             stepImage.image = .stepIcon
             
-            switch model.stepType {
+            switch model.stepState{
             case .first:
                 stepLineStackView.isHidden = false
             case .last:

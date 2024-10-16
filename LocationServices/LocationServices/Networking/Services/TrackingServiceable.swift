@@ -30,7 +30,7 @@ struct TrackingAPIService: AWSTrackingServiceProtocol, TrackingServiceable {
                 return timestamp1 > timestamp2
             }
             let presentation = sortedPositions.map { TrackingHistoryPresentation(model: $0,
-                                stepType: sortedPositions.last?.sampleTime == $0.sampleTime ? .last : .first) }
+                                                                                 stepState: sortedPositions.last?.sampleTime == $0.sampleTime ? .last : .first) }
             return presentation
         }
         return []

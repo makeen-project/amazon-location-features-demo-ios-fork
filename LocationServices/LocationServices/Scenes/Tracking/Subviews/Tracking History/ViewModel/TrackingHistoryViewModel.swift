@@ -12,10 +12,10 @@ struct TrackingHistoryPresentation {
     let time: String
     let date: String
     let cooordinates: String
-    let stepType: StepType
+    let stepState: StepState
     let receivedTime: Date
     
-    init(model: LocationClientTypes.DevicePosition, stepType: StepType) {
+    init(model: LocationClientTypes.DevicePosition, stepState: StepState) {
         if let time = model.receivedTime {
             self.receivedTime = time
             self.time = time.convertTimeString()
@@ -31,7 +31,7 @@ struct TrackingHistoryPresentation {
         } else {
             cooordinates = ""
         }
-        self.stepType = stepType
+        self.stepState = stepState
     }
 }
 

@@ -42,37 +42,10 @@ final class NavigationVCViewModel {
         }
     }
     
-    private func fetchStreetNames() async {
-        let manager = PresentationManager()
-
-        await withTaskGroup(of: Void.self) { group in
-            for (id, step) in steps.enumerated() {
-                group.addTask {
-                    if let position = step.startPosition {
-                        let response = await self.service.searchNearby(position: position, userLat: nil, userLong: nil)
-                        
-                        switch response {
-                        case .success(let results):
-                            guard let result = results.first else { return }
-                            let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: result.placeLabel ?? "")
-                            await manager.addPresentation(model)
-                        case .failure:
-                            break
-                        }
-                    }
-                }
-            }
-        }
-
-        let sortedPresentation = await manager.getSortedPresentation()
-        self.presentation = sortedPresentation
-        self.delegate?.updateResults()
-    }
-    
     private func populateNavigationSteps() async {
         let manager = PresentationManager()
         for (id, step) in steps.enumerated() {
-            let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: step.instruction)
+            let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.formatToKmString(), instruction: step.instruction, stepType: step.type)
             await manager.addPresentation(model)
         }
         let sortedPresentation = await manager.getSortedPresentation()
@@ -89,7 +62,7 @@ final class NavigationVCViewModel {
     }
     
     func getSummaryData() -> (totalDistance: String, totalDuration: String) {
-        return (summaryData.totalDistance.convertFormattedKMString(),
+        return (summaryData.totalDistance.formatToKmString(),
                 summaryData.totalDuration.convertSecondsToMinString())
     }
     
@@ -99,9 +72,9 @@ final class NavigationVCViewModel {
             for i in 0...presentation.count - 1 {
                 let item = presentation[i]
                 if i == presentation.count - 1 {
-                    model.append(NavigationCellModel(model: item, stepType: .last))
+                    model.append(NavigationCellModel(model: item, stepState: .last))
                 } else {
-                    model.append(NavigationCellModel(model: item, stepType: .first))
+                    model.append(NavigationCellModel(model: item, stepState: .first))
                 }
             }
         }

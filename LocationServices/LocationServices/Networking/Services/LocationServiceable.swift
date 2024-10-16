@@ -37,16 +37,7 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
     func searchWithSuggest(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>  {
         do {
             let result = try await searchWithSuggestRequest(text: text, userLat: userLat, userLong: userLong)
-            let model = await result!.resultItems!.asyncMap({ model in
-//                guard let placeId = model.placeId else {
-//                    return SearchPresentation(model: model)
-//                }
-                
-//                var userLocation: CLLocation? = nil
-//                if let userLat, let userLong {
-//                    userLocation = CLLocation(latitude: userLat, longitude: userLong)
-//                }
-//                let place = try await getPlace(with: placeId)
+            let model = result!.resultItems!.map({ model in
                 return SearchPresentation(model: model)
             })
             return .success(model)

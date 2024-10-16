@@ -7,6 +7,7 @@
 
 import Foundation
 import AWSGeoRoutes
+import UIKit
 
 struct DirectionPresentation {
     let travelMode: GeoRoutesClientTypes.RouteTravelMode
@@ -84,6 +85,42 @@ enum NavigationStepType {
         case sdkUnkown
         case continueHighway
         case enterHighway
+    
+    // TO DO: replace image names with correct names in future
+    var image: UIImage? {
+        var imageName = "step-icon"
+            switch self {
+            case .arrive:
+                imageName = "step-icon"
+            case .continue:
+                imageName = "step-icon"
+            case .depart:
+                imageName = "step-icon"
+            case .exit:
+                imageName = "step-icon"
+            case .keep:
+                imageName = "step-icon"
+            case .ramp:
+                imageName = "step-icon"
+            case .roundaboutEnter:
+                imageName = "step-icon"
+            case .roundaboutExit:
+                imageName = "step-icon"
+            case .roundaboutPass:
+                imageName = "step-icon"
+            case .turn:
+                imageName = "step-icon"
+            case .uTurn:
+                imageName = "step-icon"
+            case .continueHighway:
+                imageName = "step-icon"
+            case .sdkUnkown:
+                imageName = "step-icon"
+            case .enterHighway:
+                imageName = "step-icon"
+            }
+        return UIImage(named: imageName)
+    }
     
     init(from type: GeoRoutesClientTypes.RoutePedestrianTravelStepType) {
         switch type {
