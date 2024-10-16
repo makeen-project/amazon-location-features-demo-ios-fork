@@ -127,7 +127,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         
     }
     
-    func showNavigationview(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?) {
+    func showNavigationview(steps: [RouteNavigationStep], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?) {
             let controller = NavigationBuilder.create(steps: steps, summaryData: summaryData, firstDestionation: firstDestionation, secondDestionation: secondDestionation)
             controller.delegate = self
             

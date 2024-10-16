@@ -208,7 +208,7 @@ struct SearchPresentation {
         self.distance = Double(model.distance)
        
         self.cityName = model.address?.district
-        self.placeLabel = model.title//.address?.label
+        self.placeLabel = model.title
    }
    
 
@@ -230,6 +230,6 @@ struct SearchPresentation {
         self.distance = Double(model.distance)
        
         self.cityName = model.address?.district
-        self.placeLabel = model.title//.address?.label
+        self.placeLabel = model.title
    }
 }

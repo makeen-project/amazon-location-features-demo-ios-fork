@@ -7,7 +7,7 @@
 
 import Foundation
 import CoreLocation
-import AWSLocation
+import AWSGeoRoutes
 import UIKit
 
 final class ExploreViewModel: ExploreViewModelProtocol {
@@ -66,13 +66,13 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         guard let selectedRoute else { return }
         self.selectedRoute?.departurePosition = userLocation
         
-        let travelMode = LocationClientTypes.TravelMode(routeType: selectedRoute.travelMode) ?? .walking
+        let travelMode = GeoRoutesClientTypes.RouteTravelMode(routeType: selectedRoute.travelMode) ?? .pedestrian
         let travelModes = [travelMode]
         let result = try await routingService.calculateRouteWith(depaturePosition: userLocation,
                                           destinationPosition: selectedRoute.destinationPosition,
                                           travelModes: travelModes,
                                           avoidFerries: selectedRoute.avoidFerries,
-                                          avoidTolls: selectedRoute.avoidTolls) //{ [weak self] response in
+                                          avoidTolls: selectedRoute.avoidTolls)
         for route in result {
             self.delegate?.routeReCalculated(route: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
         }

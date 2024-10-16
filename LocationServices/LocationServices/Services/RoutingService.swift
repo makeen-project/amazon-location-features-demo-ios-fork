@@ -6,31 +6,35 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocation
 import CoreLocation
+import AWSGeoRoutes
 
 protocol AWSRoutingServiceProtocol {
     func calculateRoute(depaturePosition: CLLocationCoordinate2D,
                         destinationPosition: CLLocationCoordinate2D,
-                        travelMode: LocationClientTypes.TravelMode,
+                        travelMode: GeoRoutesClientTypes.RouteTravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool) async throws -> CalculateRouteOutput?
+                        avoidTolls: Bool) async throws -> CalculateRoutesOutput?
 }
 
 extension AWSRoutingServiceProtocol {
     func calculateRoute(depaturePosition: CLLocationCoordinate2D,
                         destinationPosition: CLLocationCoordinate2D,
-                        travelMode: LocationClientTypes.TravelMode,
+                        travelMode: GeoRoutesClientTypes.RouteTravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool) async throws -> CalculateRouteOutput? {
-        var carModeOptions: LocationClientTypes.CalculateRouteCarModeOptions? = nil
+                        avoidTolls: Bool) async throws -> CalculateRoutesOutput? {
+        var routeAvoidanceOptions: GeoRoutesClientTypes.RouteAvoidanceOptions? = nil
         if travelMode == .car {
-            carModeOptions = LocationClientTypes.CalculateRouteCarModeOptions(avoidFerries: avoidFerries, avoidTolls: avoidTolls)
+            routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(ferries: avoidFerries, tollRoads: avoidTolls)
         }
-        let input = CalculateRouteInput(calculatorName: getCalculatorName(), carModeOptions: carModeOptions, departNow: true, departurePosition: [depaturePosition.longitude, depaturePosition.latitude], destinationPosition: [destinationPosition.longitude, destinationPosition.latitude], includeLegGeometry: true, travelMode: travelMode)
-        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
-            let result = try await client.calculateRoute(input: input)
-            
+        let origin = [depaturePosition.longitude, depaturePosition.latitude]
+        let destination = [destinationPosition.longitude, destinationPosition.latitude]
+        let legAdditionalFeatures: [GeoRoutesClientTypes.RouteLegAdditionalFeature] = [.travelStepInstructions, .summary]
+        
+        let input = CalculateRoutesInput(avoid: routeAvoidanceOptions, departNow: true, destination: destination, instructionsMeasurementSystem: .metric, key: AmazonLocationClient.defaultApiKey(), legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: GeoRoutesClientTypes.GeometryFormat.simple, origin: origin, travelStepType: .default)
+        
+        if let client = AmazonLocationClient.defaultApiRoutesClient() {
+            let result = try await client.calculateRoutes(input: input)
             return result
         } else {
             return nil

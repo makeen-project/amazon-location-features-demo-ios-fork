@@ -11,6 +11,7 @@ import SmithyIdentity
 import SmithyIdentityAPI
 import AWSSDKIdentity
 import AWSGeoPlaces
+import AWSGeoRoutes
 
 public enum HTTPMethod: String {
     case GET
@@ -85,7 +86,15 @@ public extension AmazonLocationClient {
         return ApiAuthHelper.default().geoPlacesClient
     }
     
+    static func defaultApiRoutesClient() -> GeoRoutesClient? {
+        return ApiAuthHelper.default().geoRoutesClient
+    }
+    
     static func defaultApiKey() -> String? {
         return ApiAuthHelper.default().locationCredentialsProvider?.getAPIKey()
+    }
+    
+    static func defaultApiKeyRegion() -> String? {
+        return ApiAuthHelper.default().locationCredentialsProvider?.getRegion()
     }
 }

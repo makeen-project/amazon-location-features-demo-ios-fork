@@ -59,7 +59,7 @@ struct ViewsIdentifiers {
         static let routeTypesContainer = "RouteTypesContainer"
         
         static let carContainer = "CarContainer"
-        static let walkContainer = "WalkContainer"
+        static let pedestrianContainer = "pedestrianContainer"
         static let truckContainer = "TruckContainer"
         
         static let routeEstimatedTime = "RouteEstimatedTime"

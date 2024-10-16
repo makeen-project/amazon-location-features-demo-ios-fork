@@ -510,7 +510,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
         let navigationLegs = self.viewModel.getCurrentNavigationLegsWith(type)
         
         switch navigationLegs {
-        case .success(let steps):
+        case .success(let routeLegdetails):
             let routeModel = self.getRouteModel(for: type)
             let sumData = self.viewModel.getSumData(type)
             
@@ -520,7 +520,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
                 }
             }
             
-            let userInfo = ["steps" : (steps: steps, sumData: sumData), "routeModel": routeModel as Any] as [String : Any]
+            let userInfo = ["routeLegdetails" : (routeLegdetails: routeLegdetails, sumData: sumData), "routeModel": routeModel as Any] as [String : Any]
             NotificationCenter.default.post(name: Notification.Name("NavigationSteps"), object: nil, userInfo: userInfo)
         case .failure(let error):
             let alertModel = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)

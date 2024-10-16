@@ -10,7 +10,7 @@ import Foundation
 final class NavigationVCViewModel {
     var delegate: NavigationViewModelOutputDelegate?
     var service: LocationService
-    var steps: [NavigationSteps]
+    var steps: [RouteNavigationStep]
     var presentation: [NavigationPresentation] = []
     private var summaryData: (totalDistance: Double, totalDuration: Double)
     let dispatchGroup = DispatchGroup()
@@ -18,14 +18,14 @@ final class NavigationVCViewModel {
     private(set) var firstDestionation: MapModel?
     private(set) var secondDestionation: MapModel?
     
-    init(service: LocationService, steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?) {
+    init(service: LocationService, steps: [RouteNavigationStep], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?) {
         self.service = service
         self.steps = steps
         self.summaryData = summaryData
         self.firstDestionation = firstDestionation
         self.secondDestionation = secondDestionation
         Task {
-            await fetchStreetNames()
+            await populateNavigationSteps()
         }
     }
 
@@ -48,16 +48,17 @@ final class NavigationVCViewModel {
         await withTaskGroup(of: Void.self) { group in
             for (id, step) in steps.enumerated() {
                 group.addTask {
-                    let position = step.startPosition
-                    let response = await self.service.searchNearby(position: position, userLat: nil, userLong: nil)
-
-                    switch response {
-                    case .success(let results):
-                        guard let result = results.first else { return }
-                        let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: result.placeLabel ?? "")
-                        await manager.addPresentation(model)
-                    case .failure:
-                        break
+                    if let position = step.startPosition {
+                        let response = await self.service.searchNearby(position: position, userLat: nil, userLong: nil)
+                        
+                        switch response {
+                        case .success(let results):
+                            guard let result = results.first else { return }
+                            let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: result.placeLabel ?? "")
+                            await manager.addPresentation(model)
+                        case .failure:
+                            break
+                        }
                     }
                 }
             }
@@ -68,11 +69,22 @@ final class NavigationVCViewModel {
         self.delegate?.updateResults()
     }
     
-    func update(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double)) {
+    private func populateNavigationSteps() async {
+        let manager = PresentationManager()
+        for (id, step) in steps.enumerated() {
+            let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.convertFormattedKMString(), streetAddress: step.instruction)
+            await manager.addPresentation(model)
+        }
+        let sortedPresentation = await manager.getSortedPresentation()
+        self.presentation = sortedPresentation
+        self.delegate?.updateResults()
+    }
+    
+    func update(steps: [RouteNavigationStep], summaryData: (totalDistance: Double, totalDuration: Double)) {
         self.steps = steps
         self.summaryData = summaryData
         Task {
-            await fetchStreetNames()
+            await populateNavigationSteps()
         }
     }
     

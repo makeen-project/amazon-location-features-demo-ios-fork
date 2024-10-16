@@ -6,13 +6,13 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocation
+import AWSGeoRoutes
 
-extension LocationClientTypes.TravelMode {
+extension GeoRoutesClientTypes.RouteTravelMode {
     init?(routeType: RouteTypes) {
         switch routeType {
-        case .walking:
-            self = .walking
+        case .pedestrian:
+            self = .pedestrian
         case .car:
             self = .car
         case .truck:

@@ -9,12 +9,12 @@ import UIKit
 import SnapKit
 
 enum RouteTypes {
-    case walking, car, truck
+    case pedestrian, car, truck
     
     var title: String {
         switch self {
-        case .walking:
-            return "Walking"
+        case .pedestrian:
+            return "Pedestrian"
         case .car:
             return "Car"
         case .truck:
@@ -24,7 +24,7 @@ enum RouteTypes {
     
     var image: UIImage {
         switch self {
-        case .walking:
+        case .pedestrian:
             return .navigationWalkingIcon.withRenderingMode(.alwaysTemplate)
         case .car:
             return .navigationCarIcon.withRenderingMode(.alwaysTemplate)

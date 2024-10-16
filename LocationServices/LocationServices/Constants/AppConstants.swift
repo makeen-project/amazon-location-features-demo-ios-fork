@@ -20,6 +20,16 @@ final class DefaultUserSettings {
 }
 
 final class DefaultMapStyles {
+    
+    static func getMapStyleUrl(styleName: String, colorName: String, variantName: String) -> URL? {
+        if let apiKey = AmazonLocationClient.defaultApiKey(), let regionName = AmazonLocationClient.defaultApiKeyRegion() {
+            return URL(string: "https://maps.geo.\(regionName).amazonaws.com/v2/styles/\(styleName)/descriptor?key=\(apiKey)&color-scheme=\(colorName)&variant=\(variantName)")
+        }
+        else {
+            return nil
+        }
+    }
+    
    static let mapStyles: [MapStyleModel] =  [
         MapStyleModel(title: "Light" ,
                       imageType: .light ,

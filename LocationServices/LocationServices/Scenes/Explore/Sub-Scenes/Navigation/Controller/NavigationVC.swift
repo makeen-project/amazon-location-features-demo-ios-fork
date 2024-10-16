@@ -163,7 +163,7 @@ private extension NavigationVC {
     }
     
     @objc private func updateNavigationSteps(_ notification: Notification) {
-        guard let datas = notification.userInfo?["steps"] as? (steps: [NavigationSteps], sumData: (totalDistance: Double, totalDuration: Double)) else { return }
+        guard let datas = notification.userInfo?["steps"] as? (steps: [RouteNavigationStep], sumData: (totalDistance: Double, totalDuration: Double)) else { return }
         viewModel.update(steps: datas.steps, summaryData: datas.sumData)
     }
 }

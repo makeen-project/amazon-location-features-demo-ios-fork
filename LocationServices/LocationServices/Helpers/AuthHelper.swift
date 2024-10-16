@@ -9,12 +9,14 @@ import Foundation
 import AwsCommonRuntimeKit
 import AWSGeoPlaces
 import SmithyHTTPAuthAPI
+import AWSGeoRoutes
 
 public class AuthHelper {
 
     private var locationCredentialsProvider: LocationCredentialsProvider?
     private var amazonLocationClient: AmazonLocationClient?
     private var geoPlacesClient: GeoPlacesClient?
+    private var geoRoutesClient: GeoRoutesClient?
     
     public init() {
     }
@@ -50,8 +52,11 @@ public class AuthHelper {
         let authScheme: AuthScheme = ApiKeyAuthScheme(signer: signer)
         let authSchemes: [AuthScheme] = [authScheme]
 
-        let config = try GeoPlacesClient.Config(region: region, authSchemes: authSchemes, authSchemeResolver: resolver)
-        geoPlacesClient = GeoPlacesClient(config: config)
+        let placesConfig = try GeoPlacesClient.Config(region: region, authSchemes: authSchemes, authSchemeResolver: resolver)
+        geoPlacesClient = GeoPlacesClient(config: placesConfig)
+        
+        let routesConfig = try GeoRoutesClient.Config(region: region, authSchemes: authSchemes, authSchemeResolver: resolver)
+        geoRoutesClient = GeoRoutesClient(config: routesConfig)
         
         return credentialProvider
     }
@@ -72,5 +77,10 @@ public class AuthHelper {
     public func getGeoPlacesClient() -> GeoPlacesClient?
     {
         return geoPlacesClient
+    }
+    
+    public func getGeoRoutesClient() -> GeoRoutesClient?
+    {
+        return geoRoutesClient
     }
 }
