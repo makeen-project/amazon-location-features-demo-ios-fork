@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 
 private enum Constants {
-    static let cellSize = CGSize(width: 80, height: 106)
+    static let cellSize = CGSize(width: 160, height: 106)
     static let minimumLineSpacing: CGFloat = 36
-    static let itemsCountPerRaw = 3
+    static let itemsCountPerRaw = 2
 }
 
 final class ExploreMapStyleCell: UITableViewCell {

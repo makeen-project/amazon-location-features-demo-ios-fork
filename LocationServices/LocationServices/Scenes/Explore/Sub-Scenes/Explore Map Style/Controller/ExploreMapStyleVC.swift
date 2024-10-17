@@ -60,8 +60,7 @@ final class ExploreMapStyleVC: UIViewController {
         colorSegment?.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(100)
-            $0.height.equalTo(50)
+            $0.width.equalTo(150)
         }
 
         tableView.snp.makeConstraints {
