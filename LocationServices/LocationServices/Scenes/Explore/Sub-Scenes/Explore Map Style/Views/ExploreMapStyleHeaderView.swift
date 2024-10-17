@@ -16,17 +16,7 @@ final class ExploreMapStyleHeaderView: UIView {
         var label = LargeTitleLabel(labelText: StringConstant.mapStyle)
         return label
     }()
-    
-    private var subtitle: UILabel = {
-        var label = UILabel()
-        label.font = .amazonFont(type: .regular, size: 13)
-        label.textColor = .searchBarTintColor
-        label.textAlignment = .left
-        label.text = "Changing data provider also affects Places & Routes API"
-        return label
-    }()
-    
-    
+
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.General.closeButton
@@ -43,7 +33,6 @@ final class ExploreMapStyleHeaderView: UIView {
         dismissHandler?()
     }
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -56,7 +45,6 @@ final class ExploreMapStyleHeaderView: UIView {
     private func setupViews() {
         self.addSubview(containerView)
         containerView.addSubview(title)
-        containerView.addSubview(subtitle)
         self.addSubview(closeButton)
         
         containerView.snp.makeConstraints {
@@ -68,14 +56,7 @@ final class ExploreMapStyleHeaderView: UIView {
             $0.top.equalToSuperview().offset(20)
             $0.height.equalTo(28)
         }
-        
-        subtitle.snp.makeConstraints {
-            $0.top.equalTo(title.snp.bottom).offset(2)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(18)
-        }
-        
+
         closeButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview().offset(-16)

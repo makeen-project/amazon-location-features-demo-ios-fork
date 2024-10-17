@@ -10,8 +10,8 @@ import Foundation
 final class ExploreMapStyleCellViewModel: ExploreMapStyleCellViewModelProtocol {
     private let mapStyles: [MapStyleModel]
     
-    init(mapStyleSourceType: MapStyleSourceType) {
-        self.mapStyles = DefaultMapStyles.mapStyles.filter { $0.type == mapStyleSourceType }
+    init() {
+        self.mapStyles = DefaultMapStyles.mapStyles
     }
     
     var delegate: ExploreMapStyleCellViewModelOutputDelegate?
@@ -32,7 +32,7 @@ final class ExploreMapStyleCellViewModel: ExploreMapStyleCellViewModelProtocol {
     
     func saveSelectedState(_ indexPath: IndexPath) {
         let item = mapStyles[indexPath.row]
-        saveUnitSettingsData(mapSource: item)
+        saveUnitSettingsData(mapStyle: item)
         delegate?.loadData(selectedIndex: indexPath.row)
     }
 }
@@ -43,8 +43,8 @@ private extension ExploreMapStyleCellViewModel {
         return mapStyles.firstIndex(where: { $0.title == localData?.title })
     }
     
-    func saveUnitSettingsData(mapSource: MapStyleModel) {
-        UserDefaultsHelper.saveObject(value: mapSource, key: .mapStyle)
+    func saveUnitSettingsData(mapStyle: MapStyleModel) {
+        UserDefaultsHelper.saveObject(value: mapStyle, key: .mapStyle)
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }
 }

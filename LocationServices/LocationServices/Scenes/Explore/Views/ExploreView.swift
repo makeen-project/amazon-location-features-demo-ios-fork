@@ -60,7 +60,6 @@ final class ExploreView: UIView, NavigationMapProtocol {
     private var wasCenteredByUserLocation = false
     private var searchDatas: [MapModel] = []
     
-    private var signingDelegate: MLNOfflineStorageDelegate?
     private var containerView: UIView = UIView()
     
     let searchBarView: SearchBarView = SearchBarView(becomeFirstResponder: true)
@@ -436,23 +435,15 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     func setupMapView() {
-        let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-
         DispatchQueue.main.async { [self] in
-            mapView.styleURL = DefaultMapStyles.getMapStyleUrl(styleName: "Standard", colorName: "Light", variantName: "Default")
+            mapView.styleURL = DefaultMapStyles.getMapStyleUrl()
             // it is just to force to redraw the mapView
             mapView.zoomLevel = mapView.zoomLevel + 0.01
             
-            locateMeAction()
+            locateMeAction(force: true)
             mapView.showsUserLocation = true
             mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
-
-            
-            // it is just to force to redraw the mapView
-            mapView.zoomLevel = mapView.zoomLevel + 0.01
-            amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo(mapImageType: mapName?.imageType)
-            mapView.showsUserLocation = true
-            locateMeAction(force: true)
+            amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo()
         }
     }
     

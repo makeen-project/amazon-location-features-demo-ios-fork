@@ -9,23 +9,21 @@ import Foundation
 import UIKit
 
 class GeneralHelper {
-    static func getAmazonMapLogo(mapImageType: MapStyleImages?) -> UIColor {
-        switch mapImageType {
-        case .darkGray,
-             .Imagery,
-             .hereImagery,
-             .hybrid:
+    static func getAmazonMapLogo() -> UIColor {
+        let mapColor = UserDefaultsHelper.getObject(value: MapStyleColorType.self, key: .mapStyleColorType)
+        let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
+        if mapStyle?.imageType == .hybrid || mapStyle?.imageType == .satellite {
             return UIColor.white
-        case .light,
-             .street,
-             .navigation,
-             .explore,
-             .contrast,
-             .exploreTruck,
-             .lightGray:
-            return UIColor.black
-        default:
-            return UIColor.black
+        }
+        else {
+            switch mapColor {
+            case .dark:
+                return UIColor.white
+            case .light:
+                return UIColor.black
+            default:
+                return UIColor.black
+            }
         }
     }
 }

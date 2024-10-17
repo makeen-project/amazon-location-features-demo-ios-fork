@@ -10,6 +10,5 @@ import UIKit
 struct MapStyleModel: Codable {
     var title: String
     var imageType: MapStyleImages
-    var type: MapStyleSourceType
     var isSelected: Bool
 }

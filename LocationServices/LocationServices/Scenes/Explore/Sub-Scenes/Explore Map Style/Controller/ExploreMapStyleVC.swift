@@ -7,12 +7,11 @@
 
 import UIKit
 final class ExploreMapStyleVC: UIViewController {
-    let datas: [MapStyleSourceType] =  [.esri, .here]
     var dismissHandler: VoidHandler?
     
     var selectedIndex: Int = 0
     var headerView: ExploreMapStyleHeaderView = ExploreMapStyleHeaderView()
-    
+    var colorSegment: UISegmentedControl? = nil
     
     var viewModel: ExploreMapStyleViewModelProtocol! {
         didSet {
@@ -41,8 +40,14 @@ final class ExploreMapStyleVC: UIViewController {
     }
     
     private func setupViews() {
+        let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
+        colorSegment = UISegmentedControl(items: colorNames)
+        let colorType = UserDefaultsHelper.getObject(value: MapStyleColorType.self, key: .mapStyleColorType)
+        colorSegment!.selectedSegmentIndex = (colorType != nil && colorType! == .dark) ? 1 : 0
+
         view.backgroundColor = .searchBarBackgroundColor
         self.view.addSubview(headerView)
+        self.view.addSubview(colorSegment!)
         self.view.addSubview(tableView)
         
         headerView.snp.makeConstraints {
@@ -52,12 +57,27 @@ final class ExploreMapStyleVC: UIViewController {
             $0.height.equalTo(80)
         }
         
+        colorSegment?.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(100)
+            $0.height.equalTo(50)
+        }
+
         tableView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(10)
+            $0.top.equalTo(colorSegment!.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(5)
             $0.trailing.equalToSuperview().offset(-5)
             $0.bottom.equalToSuperview()
         }
+        
+        colorSegment?.addTarget(self, action: #selector(mapColorChanged(_:)), for: .valueChanged)
+    }
+    
+    @objc func mapColorChanged(_ sender: UISegmentedControl) {
+        let colorType: MapStyleColorType = sender.selectedSegmentIndex == 1 ? .dark : .light
+        UserDefaultsHelper.saveObject(value: colorType, key: .mapStyleColorType)
+        NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }
 }
 

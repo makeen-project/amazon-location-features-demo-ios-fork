@@ -31,7 +31,6 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     var isDrawCirle = false
     var enableGeofenceDrag = false
     var geofenceAnnotationRadius: Int64 = 80
-    private var signingDelegate: MLNOfflineStorageDelegate?
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     private(set) var mapMode: MapMode = .search
@@ -77,7 +76,7 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     
     func setupMapView() {
         DispatchQueue.main.async { [self] in
-            mapView.styleURL = DefaultMapStyles.getMapStyleUrl(styleName: "Standard", colorName: "Light", variantName: "Default")
+            mapView.styleURL = DefaultMapStyles.getMapStyleUrl()
             // it is just to force to redraw the mapView
             mapView.zoomLevel = mapView.zoomLevel + 0.01
             

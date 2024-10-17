@@ -429,24 +429,7 @@ final class DirectionVC: UIViewController {
     }
     
     private func isDistanceValid(departureLoc: CLLocationCoordinate2D, destinationLoc: CLLocationCoordinate2D) -> Bool {
-        let currentMapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        switch currentMapStyle?.type {
-        case .esri, .none:
-            let userLocation = CLLocation(location: departureLoc)
-            let placeLocation = CLLocation(location: destinationLoc)
-            
-            let distance = userLocation.distance(from: placeLocation)
-            guard distance < NumberConstants.fourHundredKMInMeters else {
-                DispatchQueue.main.async {
-                    self.directionView.showErrorStackView()
-                    self.tableView.isHidden = true
-                    self.directionView.isHidden = false
-                }
-                return false
-            }
-        case .here:
-            break
-        }
+        //May implement this later if there is limit on distance
         return true
     }
 }

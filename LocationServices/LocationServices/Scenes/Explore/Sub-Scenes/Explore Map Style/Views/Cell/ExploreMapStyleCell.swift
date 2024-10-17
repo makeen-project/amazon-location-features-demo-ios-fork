@@ -27,20 +27,9 @@ final class ExploreMapStyleCell: UITableViewCell {
         return view
     }()
     
-    private var seperatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
-        return view
-    }()
-    
-    private var mainView = AmazonCustomSelectableView()
-    
-    func updateDatas(source: MapStyleSourceType, isSelected: Bool) {
-        mapStyleViewModel = ExploreMapStyleCellViewModel(mapStyleSourceType: source)
+    func updateDatas(isSelected: Bool) {
+        mapStyleViewModel = ExploreMapStyleCellViewModel()
         mapStyleViewModel?.delegate = self
-        mainView.setValues(title: source.title, isSelected: isSelected)
-        updateMainViewConstraits(state: isSelected)
-        seperatorView.isHidden = !isSelected
         if isSelected {
             mapStyleViewModel?.loadLocalMapData()
         }
@@ -66,30 +55,12 @@ final class ExploreMapStyleCell: UITableViewCell {
         self.selectionStyle = .none
         self.backgroundColor = .clear
         self.backgroundColor = .clear
-        mainView.isUserInteractionEnabled = false
         setupCollectionView()
         setupViews()
     }
 
     required init?(coder: NSCoder) {
         fatalError(.errorInitWithCoder)
-    }
-    
-    private func updateMainViewConstraits(state: Bool) {
-        mainView.snp.removeConstraints()
-        
-        if !state {
-            mainView.snp.makeConstraints {
-                $0.leading.trailing.equalToSuperview()
-                $0.centerY.equalToSuperview()
-                $0.height.equalTo(48)
-            }
-        } else {
-            mainView.snp.makeConstraints {
-                $0.top.leading.trailing.equalToSuperview()
-                $0.height.equalTo(48)
-            }
-        }
     }
     
     private func setupCollectionView() {
@@ -101,8 +72,6 @@ final class ExploreMapStyleCell: UITableViewCell {
     
     private func setupViews() {
         self.contentView.addSubview(containerView)
-        containerView.addSubview(mainView)
-        containerView.addSubview(seperatorView)
         containerView.addSubview(collectionViewWrapperView)
         
         containerView.snp.makeConstraints {
@@ -111,20 +80,8 @@ final class ExploreMapStyleCell: UITableViewCell {
             $0.trailing.equalToSuperview().offset(-8)
             $0.bottom.equalToSuperview().offset(-8)
         }
-        
-        mainView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48)
-        }
-        
-        seperatorView.snp.makeConstraints {
-            $0.top.equalTo(mainView.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(1)
-        }
-        
         collectionViewWrapperView.snp.makeConstraints {
-            $0.top.equalTo(seperatorView.snp.bottom).offset(24)
+            $0.top.leading.trailing.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-24)
         }

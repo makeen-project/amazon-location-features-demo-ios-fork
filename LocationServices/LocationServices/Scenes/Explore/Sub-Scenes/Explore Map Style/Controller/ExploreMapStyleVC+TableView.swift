@@ -35,10 +35,9 @@ extension ExploreMapStyleVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ExploreMapStyleCell.reuseId, for: indexPath) as? ExploreMapStyleCell else {
             
-            fatalError("Can't dequeu ExploreMapSytleCell")
+            fatalError("Can't deque ExploreMapSytleCell")
         }
-        let cellModel = viewModel.getItem(with: indexPath.row)
-        cell.updateDatas(source: cellModel, isSelected: indexPath.row == selectedIndex)
+        cell.updateDatas(isSelected: indexPath.row == selectedIndex)
         cell.collectionView.reloadData()
         return cell
     }

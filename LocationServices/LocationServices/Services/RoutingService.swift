@@ -41,15 +41,3 @@ extension AWSRoutingServiceProtocol {
         }
     }
 }
-
-extension AWSRoutingServiceProtocol {
-    private func getCalculatorName() -> String {
-        let localData = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        switch localData?.type {
-        case .esri, .none:
-            return DataProviderName.esri.routeCalculator
-        case .here:
-            return DataProviderName.here.routeCalculator
-        }
-    }
-}
