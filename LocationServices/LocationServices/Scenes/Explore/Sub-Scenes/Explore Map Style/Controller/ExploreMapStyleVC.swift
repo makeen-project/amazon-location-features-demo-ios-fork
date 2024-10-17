@@ -42,13 +42,22 @@ final class ExploreMapStyleVC: UIViewController {
     private func setupViews() {
         let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
         colorSegment = UISegmentedControl(items: colorNames)
+        
+        let lightImage = GeneralHelper.getImageAndText(image: UIImage(systemName: "sun.max")!, string: colorNames[0], isImageBeforeText: true)
+        let darkImage = GeneralHelper.getImageAndText(image: UIImage(systemName: "moon")!, string: colorNames[1], isImageBeforeText: true)
+        
+        colorSegment?.setImage(lightImage, forSegmentAt: 0)
+        colorSegment?.setImage(darkImage, forSegmentAt: 1)
+        colorSegment?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#018498")], for: .selected)
+        colorSegment?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+
         let colorType = UserDefaultsHelper.getObject(value: MapStyleColorType.self, key: .mapStyleColorType)
         colorSegment!.selectedSegmentIndex = (colorType != nil && colorType! == .dark) ? 1 : 0
 
         view.backgroundColor = .searchBarBackgroundColor
         self.view.addSubview(headerView)
-        self.view.addSubview(colorSegment!)
         self.view.addSubview(tableView)
+        self.view.addSubview(colorSegment!)
         
         headerView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -57,19 +66,20 @@ final class ExploreMapStyleVC: UIViewController {
             $0.height.equalTo(80)
         }
         
-        colorSegment?.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom)
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(150)
-        }
-
         tableView.snp.makeConstraints {
-            $0.top.equalTo(colorSegment!.snp.bottom).offset(10)
+            $0.top.equalTo(headerView.snp.bottom)
             $0.leading.equalToSuperview().offset(5)
             $0.trailing.equalToSuperview().offset(-5)
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(colorSegment!).offset(20)
         }
         
+        colorSegment?.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-5)
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview().offset(-50)
+            $0.height.equalTo(40)
+        }
+    
         colorSegment?.addTarget(self, action: #selector(mapColorChanged(_:)), for: .valueChanged)
     }
     
