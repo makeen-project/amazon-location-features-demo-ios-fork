@@ -8,15 +8,12 @@
 import Foundation
 
 struct CustomConnectionModel: Codable {
-    //identityPoolIdFormat: REGION:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     var identityPoolId: String
     var userPoolClientId: String
     var userPoolId: String
     var userDomain: String
     var webSocketUrl: String
+    var apiKey: String
     
-    var region: String {
-        let regionDivider: Character = ":"
-        return String(identityPoolId.prefix(while: { $0 != regionDivider }))
-    }
+    var region: String
 }

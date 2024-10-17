@@ -7,9 +7,8 @@
 
 import Foundation
 import CoreLocation
-
-import AWSMobileClientXCF
-import AWSLocationXCF
+import AWSLocation
+import UIKit
 
 final class ExploreViewModel: ExploreViewModelProtocol {
     
@@ -24,8 +23,6 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         }
     }
     let locationService: LocationServiceable
-    
-    private var activeRequests: [AWSRequest] = []
     
     init(routingService: RoutingServiceable, locationService: LocationServiceable) {
         self.routingService = routingService
@@ -60,75 +57,58 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         let distanceChanges = selectedRoute.departurePosition.distance(from: userLocation)
         guard distanceChanges > 15 else { return }
         
-        reCalculateRoute(with: userLocation)
+        Task {
+            try await reCalculateRoute(with: userLocation)
+        }
     }
     
-    func reCalculateRoute(with userLocation: CLLocationCoordinate2D) {
+    func reCalculateRoute(with userLocation: CLLocationCoordinate2D) async throws {
         guard let selectedRoute else { return }
         self.selectedRoute?.departurePosition = userLocation
         
-        let travelMode = AWSLocationTravelMode(routeType: selectedRoute.travelMode) ?? .walking
+        let travelMode = LocationClientTypes.TravelMode(routeType: selectedRoute.travelMode) ?? .walking
         let travelModes = [travelMode]
-        routingService.calculateRouteWith(depaturePosition: userLocation,
+        let result = try await routingService.calculateRouteWith(depaturePosition: userLocation,
                                           destinationPosition: selectedRoute.destinationPosition,
                                           travelModes: travelModes,
                                           avoidFerries: selectedRoute.avoidFerries,
-                                          avoidTolls: selectedRoute.avoidTolls) { [weak self] response in
-            guard let result = response[travelMode] else { return }
-            
-            switch result {
-            case .success(let route):
-                self?.delegate?.routeReCalculated(route: route, departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
-            case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                self?.delegate?.showAlert(model)
-            }
-            
-            
+                                          avoidTolls: selectedRoute.avoidTolls) //{ [weak self] response in
+        for route in result {
+            self.delegate?.routeReCalculated(route: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
         }
     }
     
     func login() {
-        awsLoginService.login()
+        Task {
+            try await awsLoginService.login()
+        }
     }
     
     func logout() {
         awsLoginService.logout()
     }
     
-    func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) {
-        var request: AWSLocationSearchPlaceIndexForPositionRequest? = nil
-        request = locationService.searchWithPosition(text: [NSNumber(value: coordinates.longitude), NSNumber(value: coordinates.latitude)], userLat: userLocation?.latitude, userLong: userLocation?.longitude) { [weak self] response in
-            switch response {
-            case .success(let results):
-                guard let result = results.first else { break }
-                DispatchQueue.main.async {
-                    self?.delegate?.showAnnotation(model: result, force: false)
-                }
-            case .failure(let error):
-                let nsError = error as NSError
-                guard nsError.code != StringConstant.Errors.requestCanceledCode else { break }
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self?.delegate?.showAlert(model)
+    func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) async {
+        let result = await locationService.searchWithPosition(position: [coordinates.longitude, coordinates.latitude], userLat: userLocation?.latitude, userLong: userLocation?.longitude)
+        DispatchQueue.main.async {
+            do {
+                if let model = try result.get().first {
+                    self.delegate?.showAnnotation(model: model, force: false)
                 }
             }
-            
-            self?.activeRequests.removeAll(where: { $0 == request })
+            catch {
+                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(model)
+                }
+            }
         }
-        
-        guard let request else { return }
-        activeRequests.append(request)
     }
     
     func shouldShowWelcome() -> Bool {
         let welcomeShownVersion = UserDefaultsHelper.get(for: String.self, key: .termsAndConditionsAgreedVersion)
         let currentVersion = UIApplication.appVersion()
         return welcomeShownVersion != currentVersion
-    }
-    
-    func cancelActiveRequests() {
-        activeRequests.forEach { $0.cancel() }
     }
 }
 

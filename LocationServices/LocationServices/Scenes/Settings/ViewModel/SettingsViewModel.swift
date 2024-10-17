@@ -31,10 +31,29 @@ final class SettingsViewModel: SettingsViewModelProtocol {
     }
     
     func logOut() {
-        DispatchQueue.main.async {
-            self.awsLoginService.logout()
-            NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
+        let alertModel = AlertModel(title: StringConstant.logout, message: StringConstant.logoutAlertMessage) {
+            [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.awsLoginService.logout()
+                NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
+                self.delegate?.logoutCompleted()
+            }
         }
+        delegate?.showAlert(alertModel)
+    }
+    
+    func disconnectAWS() {
+        let alertModel = AlertModel(title: StringConstant.disconnectAWS, message: StringConstant.disconnectAWSAlertMessage) {
+            [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.awsLoginService.disconnectAWS()
+                NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
+                self.delegate?.logoutCompleted()
+            }
+        }
+        delegate?.showAlert(alertModel)
     }
     
     private func populateConfiguredData() {

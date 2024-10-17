@@ -18,8 +18,8 @@ protocol SearchVCOutputDelegate: AnyObject {
 
 protocol SearchViewModelProcotol: AnyObject {
     var delegate: SearchViewModelOutputDelegate? { get set }
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?)
-    func searchWith(text: String, userLat: Double?, userLong: Double?)
+    func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async throws
+    func searchWith(text: String, userLat: Double?, userLong: Double?) async throws
     func numberOfRowsInSection() -> Int
     func getSearchCellModel() -> [SearchCellViewModel]
 }

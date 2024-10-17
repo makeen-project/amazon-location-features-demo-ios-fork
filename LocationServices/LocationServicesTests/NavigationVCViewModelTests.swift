@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import LocationServices
-import AWSLocationXCF
+import AWSLocation
 
 final class NavigationVCViewModelTests: XCTestCase {
 
@@ -24,7 +24,7 @@ final class NavigationVCViewModelTests: XCTestCase {
     }
     
     func testInitWithValidData() throws {
-        let step = AWSLocationStep()!
+        let step = LocationClientTypes.Step()
         let steps = NavigationSteps(model: step)
         let navigationVCViewModel = NavigationVCViewModel(service: LocationService(), steps: [steps], summaryData: (totalDistance: 0.7, totalDuration: 15), firstDestionation: firstDestination, secondDestionation: secondDestination)
         XCTAssertEqual(navigationVCViewModel.firstDestionation?.placeName, "Times Square", "Expected Times Square place name")
@@ -48,7 +48,7 @@ final class NavigationVCViewModelTests: XCTestCase {
         
         let navigationVCViewModel = NavigationVCViewModel(service: LocationService(), steps: [], summaryData: (totalDistance: 0.7, totalDuration: 15), firstDestionation: firstDestination, secondDestionation: secondDestination)
         
-        let step = AWSLocationStep()!
+        var step = LocationClientTypes.Step()
         step.durationSeconds = 2
         let steps = NavigationSteps(model: step)
         
@@ -61,13 +61,13 @@ final class NavigationVCViewModelTests: XCTestCase {
         
         let navigationVCViewModel = NavigationVCViewModel(service: LocationService(), steps: [], summaryData: (totalDistance: 0.7, totalDuration: 15), firstDestionation: firstDestination, secondDestionation: secondDestination)
         
-        let step = AWSLocationStep()!
+        var step = LocationClientTypes.Step()
         step.durationSeconds = 2
         let steps = NavigationSteps(model: step)
         
         navigationVCViewModel.update(steps: [steps], summaryData: (totalDistance: 0.7, totalDuration: 20))
         
-        XCTAssertEqual(navigationVCViewModel.getSummaryData().totalDistance, "700.0 m", "Expected summary total distance 700.0 m")
+        XCTAssertEqual(navigationVCViewModel.getSummaryData().totalDistance, "700 m", "Expected summary total distance 700.0 m")
     }
     
     func testGetDataWithZeroSteps() throws {
@@ -79,7 +79,7 @@ final class NavigationVCViewModelTests: XCTestCase {
     
     func testGetDataWithOneStep() throws {
         
-        let step = AWSLocationStep()!
+        var step = LocationClientTypes.Step()
         step.durationSeconds = 2
         step.distance = 0.01
         step.startPosition = [40.7487776237092, -73.98554260340953]
@@ -93,13 +93,13 @@ final class NavigationVCViewModelTests: XCTestCase {
     
     func testGetDataWithMultipleSteps() throws {
         
-        let step1 = AWSLocationStep()!
+        var step1 = LocationClientTypes.Step()
         step1.durationSeconds = 2
         step1.distance = 0.01
         step1.startPosition = [40.7487776237092, -73.98554260340953]
         let steps1 = NavigationSteps(model: step1)
         
-        let step2 = AWSLocationStep()!
+        var step2 = LocationClientTypes.Step()
         step2.durationSeconds = 2
         step2.distance = 0.01
         step2.startPosition = [40.75617221372751, -73.98621241967182]
@@ -118,13 +118,13 @@ final class NavigationVCViewModelTests: XCTestCase {
     
     func testGetItemCountWithValidSteps() throws {
         
-        let step1 = AWSLocationStep()!
+        var step1 = LocationClientTypes.Step()
         step1.durationSeconds = 2
         step1.distance = 0.01
         step1.startPosition = [40.7487776237092, -73.98554260340953]
         let steps1 = NavigationSteps(model: step1)
         
-        let step2 = AWSLocationStep()!
+        var step2 = LocationClientTypes.Step()
         step2.durationSeconds = 2
         step2.distance = 0.01
         step2.startPosition = [40.75617221372751, -73.98621241967182]

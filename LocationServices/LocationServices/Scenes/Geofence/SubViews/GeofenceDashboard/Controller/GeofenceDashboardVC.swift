@@ -116,7 +116,9 @@ final class GeofenceDashboardVC: UIViewController {
         initialGeofenceView.isHidden = !isGeofenceListEmpty
         
         if isGeofenceListEmpty {
-            viewModel.fetchListOfGeofences()
+            Task {
+                await viewModel.fetchListOfGeofences()
+            }
         }
     }
     
@@ -130,9 +132,7 @@ final class GeofenceDashboardVC: UIViewController {
     }
     
     @objc private func authorizationStatusChanged(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.setupViewsVisibility()
-        }
+        self.setupViewsVisibility()
     }
 }
 

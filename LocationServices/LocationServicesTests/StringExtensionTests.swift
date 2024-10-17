@@ -20,7 +20,7 @@ final class StringExtensionTests: XCTestCase {
 
     func testConvertIdentityPoolIdToRegionType() throws {
         let idpID = "us-east-2:35841fd0-257a-46c5-b44e-fd289ab6e194"
-        XCTAssertEqual(idpID.toRegionType(), .USEast2, "Expected region type from the provided text")
+        XCTAssertEqual(idpID.toRegionString(), "us-east-2", "Expected region type from the provided text")
     }
 
     func testConvertIdentityPoolIdToRegionString() throws {
@@ -35,7 +35,7 @@ final class StringExtensionTests: XCTestCase {
     
     func testConvertTextToCoordinate() throws {
        let text =  "40.75782863140032, -73.98573463547527"
-        XCTAssertEqual(text.convertTextToCoordinate().first?.stringValue, "-73.98573463547527", "testConvertTextToCoordinate successful")
+        XCTAssertEqual(text.convertTextToCoordinate().first, -73.98573463547527, "testConvertTextToCoordinate successful")
     }
 
     func testFormatAddressField() throws {

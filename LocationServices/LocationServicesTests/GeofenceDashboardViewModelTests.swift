@@ -2,8 +2,8 @@
 //  GeofenceDashboardViewModel.swift
 //  LocationServicesTests
 //
-//  Created by Zeeshan Sheikh on 27/09/2023.
-//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 
 import XCTest
 @testable import LocationServices
@@ -17,18 +17,18 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
         static let cityName = "New York"
         static let geofenceLatitude: Double = 12
         static let geofenceLongitude: Double = 13
-        static let geofenceRadius: Int = 50
+        static let geofenceRadius: Double = 50
         
         static let updateGeofenceLatitude: Double = 15
         static let updateGeofenceLongitude: Double = 20
-        static let updateGeofenceRadius: Int = 30
+        static let updateGeofenceRadius: Double = 30
         
         static var geofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: Int64(geofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: geofenceRadius)
         }
         
         static var updatedGeofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: Int64(updateGeofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: updateGeofenceRadius)
         }
         
         static let defaultError = NSError(domain: "Geofence error", code: -1)
@@ -45,19 +45,18 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
         viewModel.delegate = delegate
     }
     
-    func testFetchListOfGeofences() throws {
+    func testFetchListOfGeofences() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .success([Constants.geofence])
-        viewModel.fetchListOfGeofences()
+        await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasRefreshedData ?? false
         }, timeout: Constants.waitRequestDuration, message: "Geofence data should`ve been loaded")
     }
     
-    func testFetchListOfGeofencesFailure() throws {
+    func testFetchListOfGeofencesFailure() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .failure(Constants.defaultError)
-        viewModel.fetchListOfGeofences()
+        apiService.mockGetGeofenceListResult = .failure(Constants.defaultError)
+        await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
         }, timeout: Constants.waitRequestDuration, message: "Geofence error should've shown")
@@ -65,8 +64,7 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testDeleteGeofenceDataWithoutID() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        let geofenceModel = GeofenceDataModel(id: nil, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Int64(Constants.geofenceRadius))
-        apiService.getResult = .success([geofenceModel])
+        let geofenceModel = GeofenceDataModel(id: nil, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Constants.geofenceRadius)
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
@@ -75,7 +73,6 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testDeleteGeofenceData() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .success([Constants.geofence])
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
@@ -84,7 +81,7 @@ final class GeofenceDashboardViewModelTests: XCTestCase {
     
     func testDeleteGeofenceDataFailure() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiService.getResult = .failure(Constants.defaultError)
+        apiService.mockDeleteGeofenceResult = .failure(Constants.defaultError)
         viewModel.deleteGeofenceData(model: Constants.geofence )
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false

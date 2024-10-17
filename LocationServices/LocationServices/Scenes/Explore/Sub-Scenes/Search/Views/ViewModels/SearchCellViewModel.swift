@@ -15,7 +15,7 @@ struct SearchCellViewModel {
     let searchType: SearchType
     let placeId: String?
     let locationName: String?
-    let locationDistance: Int?
+    let locationDistance: Double?
     let locationCountry: String?
     let locationCity: String?
     let label: String?
@@ -44,7 +44,7 @@ struct SearchCellViewModel {
     init(searchType: SearchType,
          placeId: String?,
          locationName: String?,
-         locationDistance: Int?,
+         locationDistance: Double?,
          locationCountry: String?,
          locationCity: String?,
          label: String?,

@@ -6,9 +6,9 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
-import Mapbox
+import MapLibre
 
-class ImageAnnotation: MGLPointAnnotation {
+class ImageAnnotation:MLNPointAnnotation {
     var image: UIImage?
     
     init(image: UIImage) {
@@ -21,7 +21,7 @@ class ImageAnnotation: MGLPointAnnotation {
     }
 }
 
-class ImageAnnotationView: MGLAnnotationView {
+class ImageAnnotationView: MLNAnnotationView {
     
     enum Constants {
         static let size: CGSize = CGSize(width: 16, height: 16)

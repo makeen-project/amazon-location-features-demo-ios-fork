@@ -71,24 +71,28 @@ struct UITestSettingsScreen: UITestScreen {
     
     // MARK: - Private functions
     private func getRouteOptionCell() -> XCUIElement {
+        app.activate()
         let cell = app.cells[Identifiers.routeOptionCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
     }
     
     private func getAWSCloudCell() -> XCUIElement {
+        app.activate()
         let cell = app.cells[Identifiers.awsCloudCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
     }
     
     private func getDataProviderCell() -> XCUIElement {
+        app.activate()
         let cell = app.cells[Identifiers.dataProviderCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
     }
     
     private func getMapStyleCell() -> XCUIElement {
+        app.activate()
         let cell = app.cells[Identifiers.mapStyleCell]
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell

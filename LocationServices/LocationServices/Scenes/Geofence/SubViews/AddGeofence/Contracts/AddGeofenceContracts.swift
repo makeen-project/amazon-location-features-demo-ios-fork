@@ -13,11 +13,11 @@ protocol AddGeofenceViewModelProcotol: AnyObject {
     
     func isGeofenceNameValid(_ name: String?) -> Bool
     func isGeofenceModelValid(_ model: GeofenceDataModel) -> Bool
-    func saveData(with id: String, lat: Double, long: Double, radius: Int, completion: @escaping(Result<GeofenceDataModel, Error>) -> Void)
+    func saveData(with id: String, lat: Double, long: Double, radius: Double) async throws -> Result<GeofenceDataModel, Error>
     func deleteData(with model: GeofenceDataModel)
-    func searchWith(text: String, userLat: Double?, userLong: Double?)
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?)
-    func searchSelectedPlaceWith(_ indexPath: IndexPath, lat: Double?, long: Double?) -> Bool
+    func searchWith(text: String, userLat: Double?, userLong: Double?) async throws
+    func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async throws
+    func searchSelectedPlaceWith(_ indexPath: IndexPath, lat: Double?, long: Double?) async throws -> Bool
     func numberOfRowsInSection() -> Int
     func getSearchCellModel() -> [SearchCellViewModel]
 }

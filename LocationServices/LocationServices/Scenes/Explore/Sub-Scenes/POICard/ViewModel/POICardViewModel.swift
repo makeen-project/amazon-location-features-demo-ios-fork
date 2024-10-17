@@ -35,7 +35,7 @@ final class POICardViewModel: POICardViewModelProcotol {
         return datas.first
     }
     
-    func fetchDatas() {
+    func fetchDatas() async throws {
         guard let cardData = datas.first else { return }
         let isLoading = cardData.distance == nil && cardData.duration == nil
         
@@ -64,25 +64,24 @@ final class POICardViewModel: POICardViewModelProcotol {
         }
         
         delegate?.populateDatas(cardData: cardData, isLoadingData: isLoading, errorMessage: nil, errorInfoMessage: nil)
-        routingService.calculateRouteWith(depaturePosition: userLocation, destinationPosition: destinationPosition, travelModes: [.car], avoidFerries: true, avoidTolls: true) { [weak self] result in
+        let result = try await routingService.calculateRouteWith(depaturePosition: userLocation, destinationPosition: destinationPosition, travelModes: [.car], avoidFerries: true, avoidTolls: true)
             
             var responseError: Error? = nil
             switch result[.car] {
             case .success(let direction):
-                guard !(self?.datas.isEmpty ?? true) else { break }
+                guard !(self.datas.isEmpty) else { break }
                 
-                self?.datas[0].distance = Int(direction.distance.convertKMToM())
-                self?.datas[0].duration = direction.duration.convertSecondsToMinString()
+                self.datas[0].distance = direction.distance.convertKMToMeters()
+                self.datas[0].duration = direction.duration.convertSecondsToMinString()
             case .failure(let error):
                 responseError = error
             case .none:
                 break
             }
             
-            if let cardData = self?.datas.first {
-                self?.delegate?.populateDatas(cardData: cardData, isLoadingData: false, errorMessage: responseError?.localizedDescription, errorInfoMessage: nil)
+            if let cardData = self.datas.first {
+                self.delegate?.populateDatas(cardData: cardData, isLoadingData: false, errorMessage: responseError?.localizedDescription, errorInfoMessage: nil)
             }
-        }
     }
 }
 

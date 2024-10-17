@@ -9,7 +9,7 @@ import XCTest
 @testable import LocationServices
 
 extension GeofenceDataModel {
-    func compare(id: String? = nil, lat: Double? = nil, long: Double? = nil, radius: Int? = nil) {
+    func compare(id: String? = nil, lat: Double? = nil, long: Double? = nil, radius: Double? = nil) {
         if let id {
             XCTAssertEqual(self.id, id)
         }
@@ -20,7 +20,7 @@ extension GeofenceDataModel {
             XCTAssertEqual(self.long, long)
         }
         if let radius {
-            XCTAssertEqual(self.radius, Int64(radius))
+            XCTAssertEqual(self.radius, radius)
         }
     }
 }

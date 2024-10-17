@@ -31,6 +31,8 @@ final class LoginVC: UIViewController {
     private var userPoolClientId: String?
     private var userDomain: String?
     private var webSocketUrl: String?
+    private var region: String?
+    private var apiKey: String?
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -341,7 +343,6 @@ final class LoginVC: UIViewController {
     }
     
     private func setup() {
-        let appState = UserDefaultsHelper.getAppState()
         scrollView.contentInset = .init(top: 0, left: 0, bottom: -Constants.scrollViewBottomOffset, right: 0)
         
         view.addSubview(scrollView)
@@ -433,7 +434,7 @@ extension LoginVC: LoginViewModelOutputDelegate {
             self.updateAccordingToAppState()
         }
     }
-    
+
     func logoutCompleted() {
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
         
@@ -445,8 +446,7 @@ extension LoginVC: LoginViewModelOutputDelegate {
     
     func identityPoolIdValidationSucceed() {
         UserDefaultsHelper.save(value: isFromSettingScene, key: .awsCustomConnectFromSettings)
-        UserDefaultsHelper.setAppState(state: .prepareCustomAWSConnect)
-        
+        UserDefaultsHelper.setAppState(state: .customAWSConnected)
         updateAccordingToAppState()
     }
 }

@@ -24,6 +24,7 @@ final class SettingsUITests: LocationServicesUITests {
     
     func testSettingsOptions() throws {
         let app = startApp()
+
         let _ = UITestTabBarScreen(app: app)
             .tapSettingsButton()
             .waitAWSCloudRow()
@@ -31,7 +32,7 @@ final class SettingsUITests: LocationServicesUITests {
             .waitRouteOptionsRow()
             .waittDataProviderRow()
     }
-    
+
     func testRouteOptions() throws {
         let app = startApp(allowPermissions: true)
         var routeOptionsScreen = UITestTabBarScreen(app: app)
@@ -75,25 +76,14 @@ final class SettingsUITests: LocationServicesUITests {
             .waitForMapToBeRendered()
         
         exploreScreen = testMapStyle(screen: exploreScreen, style: .light)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .navigation)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .darkGray)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .lightGray)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .Imagery)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .explore)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .contrast)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .exploreTruck)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .hereImagery)
-//        exploreScreen = testMapStyle(screen: exploreScreen, style: .hybrid)
+        exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
     }
     
     func testDataSourceChanges() throws {
         let app = startApp(allowPermissions: false)
-        var exploreScreen = UITestExploreScreen(app: app)
+        let exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
-        
-        let screenshotBefore = exploreScreen.takeMapScreenshot()
-        
+
         var dataSourceScreen = exploreScreen.getTabBarScreen()
             .tapSettingsButton()
             .tapDataProviderRow()
@@ -104,14 +94,13 @@ final class SettingsUITests: LocationServicesUITests {
             .select(sourceType: .here)
         XCTAssertTrue(dataSourceScreen.isCellSelected(for: .here))
         
-        exploreScreen = dataSourceScreen
+        let mapStyleScreen = dataSourceScreen
             .tapBackButton()
             .getTabBarScreen()
             .tapExploreButton()
-            .waitForMapToBeRendered()
-        
-        let screenshotAfter = exploreScreen.takeMapScreenshot()
-        XCTAssertNotEqual(screenshotBefore.pngRepresentation, screenshotAfter.pngRepresentation)
+            .tapMapStyles()
+
+        XCTAssertTrue(mapStyleScreen.isCellSelected(for: .explore))
     }
     
     func testMapStyle(screen: UITestExploreScreen, style: MapStyleImages) -> UITestExploreScreen {

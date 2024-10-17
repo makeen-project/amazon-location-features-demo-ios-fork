@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 import CoreLocation
-import Mapbox
+import MapLibre
 
 final class GeofenceVC: UIViewController {
     weak var delegate: GeofenceNavigationDelegate?
@@ -119,15 +119,17 @@ final class GeofenceVC: UIViewController {
     }
     
     @objc private func authorizationStatusChanged(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.viewModel.fetchListOfGeofences()
+        Task {
+            await self.viewModel.fetchListOfGeofences()
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         geofenceMapView.reloadMap()
-        viewModel.fetchListOfGeofences()
+        Task {
+            await viewModel.fetchListOfGeofences()
+        }
         blurStatusBar()
         setupKeyboardNotifications()
     }
@@ -176,7 +178,9 @@ final class GeofenceVC: UIViewController {
         if let hardRefresh = notification.userInfo?["hardRefresh"] as? Bool,
            hardRefresh {
             geofenceMapView.removeAllAnnotations()
-            viewModel.fetchListOfGeofences()
+            Task {
+                await viewModel.fetchListOfGeofences()
+            }
         } else {
             geofenceMapView.showExistedGeofences()
         }
@@ -312,7 +316,7 @@ extension GeofenceVC: GeofenceMapViewOutputDelegate {
         directioButtonHandler?()
     }
     
-    func selectedAnnotation(_ annotation: MGLAnnotation) {
+    func selectedAnnotation(_ annotation: MLNAnnotation) {
         guard let geofenceAnnotation = annotation as? GeofenceAnnotation,
               let id = geofenceAnnotation.id else { return }
         

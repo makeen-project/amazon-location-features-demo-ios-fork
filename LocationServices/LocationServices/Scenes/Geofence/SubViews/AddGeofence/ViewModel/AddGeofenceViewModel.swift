@@ -55,19 +55,21 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
         }
         
         let alertModel = AlertModel(title: StringConstant.deleteGeofence, message: StringConstant.deleteGeofenceAlertMessage) { [weak self] in
+            guard let self = self else { return }
             print("LETS DELETE")
-            self?.geofenceService.deleteGeofence(with: id) { [weak self] result in
+            Task {
+                let result = await self.geofenceService.deleteGeofence(with: id)
                 switch result {
                 case .success:
-                    self?.activeGeofencesLists.removeAll(where: { $0.id == id })
-                    self?.delegate?.finishProcess()
+                    self.activeGeofencesLists.removeAll(where: { $0.id == id })
+                    self.delegate?.finishProcess()
                 case .failure(let error):
                     if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                        ErrorHandler.handleAWSStackDeletedError(delegate: self?.delegate as AlertPresentable?)
+                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
                     }
                     else {
                         let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                        self?.delegate?.showAlert(model)
+                        self.delegate?.showAlert(model)
                     }
                 }
             }
@@ -76,7 +78,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     }
     
     
-    func searchWithSuggesstion(text: String, userLat: Double?, userLong: Double?) {
+    func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async throws {
         guard !text.isEmpty else {
             self.delegate?.searchResult(mapModel: [])
             return
@@ -84,27 +86,26 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            searchService.searchWithPosition(text: requestValue, userLat: userLat, userLong: userLong) { [weak self] response in
-                switch response {
+            let response = await searchService.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
+            switch response {
                 case .success(let results):
-                    self?.presentation = results
+                    self.presentation = results
                     let model = results.map(MapModel.init)
-                    self?.delegate?.searchResult(mapModel: model)
+                    self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
-            }
         } else {
-            searchService.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong) { result in
-                self.presentation = result
-                let model = result.map(MapModel.init)
+            let result = await searchService.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            let resultValue = try result.get()
+                self.presentation = resultValue
+                let model = resultValue.map(MapModel.init)
                 self.delegate?.searchResult(mapModel: model)
-            }
         }
     }
     
-    func searchWith(text: String, userLat: Double?, userLong: Double?) {
+    func searchWith(text: String, userLat: Double?, userLong: Double?) async throws {
         guard !text.isEmpty else {
             self.delegate?.searchResult(mapModel: [])
             return
@@ -112,23 +113,22 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            searchService.searchWithPosition(text: requestValue, userLat: userLat, userLong: userLong) { [weak self] response in
+            let response = await searchService.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
-                    self?.presentation = results
+                    self.presentation = results
                     let model = results.map(MapModel.init)
-                    self?.delegate?.searchResult(mapModel: model)
+                    self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self?.delegate?.showAlert(model)
+                    self.delegate?.showAlert(model)
                 }
-            }
         } else {
-            searchService.searchText(text: text, userLat: userLat, userLong: userLong) { result in
-                self.presentation = result
-                let model = result.map(MapModel.init)
-                self.delegate?.searchResult(mapModel: model)
-            }
+            let result = await searchService.searchText(text: text, userLat: userLat, userLong: userLong)
+            let resultValue = try result.get()
+            self.presentation = resultValue
+            let model = resultValue.map(MapModel.init)
+            self.delegate?.searchResult(mapModel: model)
         }
     }
     
@@ -151,14 +151,13 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
         return searchCellModel
     }
     
-    func searchSelectedPlaceWith(_ indexPath: IndexPath, lat: Double?, long: Double?) -> Bool {
+    func searchSelectedPlaceWith(_ indexPath: IndexPath, lat: Double?, long: Double?) async throws -> Bool {
         let selectedItem = searchCellModel[indexPath.row]
         if let id = selectedItem.placeId  {
-            searchService.getPlace(with: id) { [weak self] result in
-                guard let result else { return }
-                let mapModel = MapModel(model: result)
-                self?.delegate?.selectedPlaceResult(mapModel: mapModel)
-            }
+            let result = try await searchService.getPlace(with: id)
+            guard let result else { return false}
+            let mapModel = MapModel(model: result)
+            self.delegate?.selectedPlaceResult(mapModel: mapModel)
             return true
         } else if selectedItem.lat != nil {
             let currentModel = presentation[indexPath.row]
@@ -167,40 +166,42 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
             return true
             
         } else {
-            searchService.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long) { result in
-                self.presentation = []
-                self.presentation = result
-                let model = result.map(MapModel.init)
+            let result = await searchService.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long)
+            self.presentation = []
+            
+            switch result {
+            case .success:
+                let resultValue = try result.get()
+                self.presentation = resultValue
+                let model = resultValue.map(MapModel.init)
                 if model.count == 1, let data = model[safe: 0] {
                     self.delegate?.searchResult(mapModel: [data])
                 } else {
                     self.delegate?.searchResult(mapModel: model)
                 }
+                return true
+            default:
+                return false
             }
-            return false
         }
     }
-    
 }
 
 extension AddGeofenceViewModel {
     // Geofence Services
-    func saveData(with id: String, lat: Double, long: Double, radius: Int, completion: @escaping(Result<GeofenceDataModel, Error>) -> Void) {
-        geofenceService.putGeofence(with: id, lat: lat, long: long, radius: radius, completion: { [weak self] result in
+    func saveData(with id: String, lat: Double, long: Double, radius: Double) async throws -> Result<GeofenceDataModel, Error> {
+        let result = await geofenceService.putGeofence(with: id, lat: lat, long: long, radius: radius)
             switch result {
             case .success:
-                let model = GeofenceDataModel(id: id, lat: lat, long: long, radius: Int64(radius))
+                let model = GeofenceDataModel(id: id, lat: lat, long: long, radius: radius)
                 
-                if let existedIndex = self?.activeGeofencesLists.firstIndex(where: { $0.id == model.id }) {
-                    self?.activeGeofencesLists.remove(at: existedIndex)
+                if let existedIndex = self.activeGeofencesLists.firstIndex(where: { $0.id == model.id }) {
+                    self.activeGeofencesLists.remove(at: existedIndex)
                 }
-                self?.activeGeofencesLists.insert(model, at: 0)
+                self.activeGeofencesLists.insert(model, at: 0)
             default:
                 break
             }
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        })
+            return result
     }
 }

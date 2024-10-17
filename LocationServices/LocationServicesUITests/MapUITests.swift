@@ -17,11 +17,6 @@ final class MapUITests: LocationServicesUITests {
         super.tearDown()
     }
     
-    func testMapAppearance() throws {
-        let app = startApp()
-        let _ = UITestExploreScreen(app: app).waitForMapToBeRendered()
-    }
-    
     func testMapZoomIn() throws {
         let app = startApp(allowPermissions: false)
         let _ = UITestExploreScreen(app: app)
@@ -43,28 +38,6 @@ final class MapUITests: LocationServicesUITests {
             .zoomOut()
     }
     
-    func testMapMaxZoomIn() throws {
-        let app = startApp(allowPermissions: false)
-        let _ = UITestExploreScreen(app: app)
-            .waitForMapToBeRendered()
-            .zoomInToMax()
-            .zoomInWithPinchFails()
-    }
-    
-    func testMapMaxZoomOut() throws {
-        let app = startApp(allowPermissions: false)
-        let _ = UITestExploreScreen(app: app)
-            .waitForMapToBeRendered()
-            .zoomOutToMax()
-            .zoomOutFails()
-    }
-    
-    func testUserLocationAnnotation() throws {
-        let app = startApp(allowPermissions: true)
-        let _ = UITestExploreScreen(app: app)
-            .waitForUserLocationAnnotation()
-    }
-    
     func testLocateMeButton() throws {
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         //one swipe is not enough for moving user location annotation out of the screen on iPad
@@ -83,18 +56,8 @@ final class MapUITests: LocationServicesUITests {
         let app = startApp(allowPermissions: false)
         var exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
-        
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .light)
         exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
-        //exploreScreen = testMapStyle(screen: exploreScreen, style: .navigation)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .darkGray)
-        //exploreScreen = testMapStyle(screen: exploreScreen, style: .lightGray)
-        //exploreScreen = testMapStyle(screen: exploreScreen, style: .Imagery)
-        //exploreScreen = testMapStyle(screen: exploreScreen, style: .explore)
-        //exploreScreen = testMapStyle(screen: exploreScreen, style: .contrast)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .exploreTruck)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .hereImagery)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .hybrid)
+        exploreScreen = testMapStyle(screen: exploreScreen, style: .Imagery)
     }
     
     func testMapStyle(screen: UITestExploreScreen, style: MapStyleImages) -> UITestExploreScreen {

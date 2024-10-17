@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import AWSMobileClientXCF
 
 final class SettingsVC: UIViewController {
     
@@ -33,10 +32,10 @@ final class SettingsVC: UIViewController {
         return tableView
     }()
     
-    private lazy var logoutButton: SettingsLogoutButtonView = {
-        let view = SettingsLogoutButtonView()
+    private lazy var settingsButton: SettingsButtonView = {
+        let view = SettingsButtonView()
         view.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(logoutAction))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(buttonAction))
         view.addGestureRecognizer(tap)
         return view
     }()
@@ -69,25 +68,32 @@ final class SettingsVC: UIViewController {
         navigationItem.backButtonTitle = ""
     }
     
-    @objc func logoutAction() {
-        viewModel.logOut()
+    @objc func buttonAction() {
+        switch UserDefaultsHelper.getAppState() {
+        case .loggedIn:
+            self.viewModel.logOut()
+        case .customAWSConnected:
+            self.viewModel.disconnectAWS()
+        default:
+            print("no action required")
+        }
     }
    
     private func setupViews() {
         self.view.addSubview(headerTitle)
-        self.view.addSubview(logoutButton)
         self.view.addSubview(tableView)
-        
+        self.view.addSubview(settingsButton)
+    
         headerTitle.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
             $0.leading.equalToSuperview().offset(Constants.horizontalOffset)
             $0.trailing.equalToSuperview()
         }
         
-        logoutButton.snp.makeConstraints {
+        settingsButton.snp.makeConstraints {
             $0.height.equalTo(72)
-            $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaInsets).offset(-16)
         }
         
         tableView.snp.makeConstraints {
@@ -97,7 +103,7 @@ final class SettingsVC: UIViewController {
             } else {
                 $0.leading.trailing.equalToSuperview().inset(Constants.horizontalOffset)
             }
-            $0.bottom.equalTo(logoutButton.snp.top)
+            $0.bottom.equalTo(settingsButton.snp.top)
         }
     }
     
@@ -106,14 +112,23 @@ final class SettingsVC: UIViewController {
     }
     
     @objc private func authorizationStatusChanged(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.updateLogoutButtonVisibility()
-        }
+        self.updateLogoutButtonVisibility()
     }
     
     private func updateLogoutButtonVisibility() {
-        // show logout button only if we are not signed in
-        logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        // show logout & disconnect button
+        DispatchQueue.main.async {
+            switch UserDefaultsHelper.getAppState() {
+            case .loggedIn:
+                self.settingsButton.setButtonState(settingsButtonState: .logout)
+                self.settingsButton.isHidden = false
+            case .customAWSConnected:
+                self.settingsButton.setButtonState(settingsButtonState: .disconnect)
+                self.settingsButton.isHidden = false
+            default:
+                self.settingsButton.isHidden = true
+            }
+        }
     }
 }
 
@@ -125,7 +140,6 @@ extension SettingsVC: SettingsViewModelOutputDelegate {
     }
     
     func logoutCompleted() {
-        // show logout button only if we are not signed in
-        self.logoutButton.isHidden = !AWSMobileClient.default().isSignedIn
+        updateLogoutButtonVisibility()
     }
 }

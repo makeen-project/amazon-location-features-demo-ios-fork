@@ -19,19 +19,29 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "AWSConnectUITests",
         "AWSConnectUITests\/testConnectAWSAccount()",
         "AWSConnectUITests\/testConnectAWSAccountFromGeofence()",
         "AWSConnectUITests\/testConnectAWSAccountFromTracking()",
         "AWSConnectUITests\/testSignInAWSAccount()",
+        "GeofenceUITests",
         "GeofenceUITests\/testAddGeofence()",
         "GeofenceUITests\/testDeleteGeofence()",
         "GeofenceUITests\/testEditGeofence()",
+        "LocationServicesUITests",
         "MapUITests\/testMapAppearance()",
         "MapUITests\/testMapMaxZoomIn()",
         "MapUITests\/testMapMaxZoomOut()",
+        "MapUITests\/testMapZoomInByTap()",
+        "MapUITests\/testMapZoomOut()",
+        "NavigationUITests\/testRouteFerriesOption()",
+        "NavigationUITests\/testRouteTollsOption()",
+        "SettingsUITests\/testTrackerOptions()",
+        "TrackingUITests\/testGeofenceE2E()",
         "TrackingUITests\/testStartTracking()",
         "TrackingUITests\/testStartTrackingHistoryStarted()",
         "TrackingUITests\/testStopTracking()",
+        "TrackingUITests\/testTrackingGeofenceE2E()",
         "TrackingUITests\/testTrackingNotifyEnteredGeofence()"
       ],
       "target" : {

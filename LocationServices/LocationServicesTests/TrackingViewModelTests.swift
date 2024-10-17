@@ -2,8 +2,8 @@
 //  TrackingViewModelTests.swift
 //  LocationServicesTests
 //
-//  Created by Zeeshan Sheikh on 26/09/2023.
-//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 
 import XCTest
 @testable import LocationServices
@@ -22,23 +22,20 @@ final class TrackingViewModelTests: XCTestCase {
         
         static let updateGeofenceLatitude: Double = 15
         static let updateGeofenceLongitude: Double = 20
-        static let updateGeofenceRadius: Int = 30
+        static let updateGeofenceRadius: Double = 30
         
         
         static var geofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: Int64(geofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: geofenceLatitude, long: geofenceLongitude, radius: Double(geofenceRadius))
         }
         
-//        static var trackingHistory: TrackingHistoryPresentation {
-//            return TrackingHistoryPresentation(model: AWSLocationDevicePosition , stepType: .first)
-//        }
-        
         static var updatedGeofence: GeofenceDataModel {
-            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: Int64(updateGeofenceRadius))
+            return GeofenceDataModel(id: cityName, lat: updateGeofenceLatitude, long: updateGeofenceLongitude, radius: updateGeofenceRadius)
         }
         
         static let defaultError = NSError(domain: "Tracking error", code: -1)
     }
+    
     
     let userLocation = (lat: 40.7487776237092, long: -73.98554260340953)
     let apiTrackingService = TrackingAPIServiceMock(delay: Constants.apiRequestDuration)
@@ -64,8 +61,6 @@ final class TrackingViewModelTests: XCTestCase {
     }
     
     func testTrackLocationUpdate() throws {
-        apiTrackingService.putResult = .success(())
-        apiTrackingService.getResult = .success([])
         viewModel.startTracking()
         viewModel.trackLocationUpdate(location: CLLocation(latitude: userLocation.lat, longitude: userLocation.long))
         XCTWaiter().wait(until: { [weak self] in
@@ -74,8 +69,8 @@ final class TrackingViewModelTests: XCTestCase {
     }
     
     func testTrackLocationUpdateFailure() throws {
-        apiTrackingService.putResult = .failure(Constants.defaultError)
-        apiTrackingService.getResult = .failure(Constants.defaultError)
+        apiTrackingService.mockUpdateTrackerLocationResult = .failure(Constants.defaultError)
+        apiTrackingService.mockGetAllTrackingHistoryResult = .failure(Constants.defaultError)
         viewModel.startTracking()
         viewModel.trackLocationUpdate(location: CLLocation(latitude: userLocation.lat, longitude: userLocation.long))
         XCTWaiter().wait(until: { [weak self] in
@@ -83,44 +78,41 @@ final class TrackingViewModelTests: XCTestCase {
         }, timeout: Constants.waitRequestDuration, message: "Tracking history should`ve failed")
     }
     
-    func testFetchListOfGeofencesEmpty() throws {
+    func testFetchListOfGeofencesEmpty() async throws {
         UserDefaultsHelper.setAppState(state: .initial)
-        apiGeofenceService.getResult = .success([Constants.geofence])
-        viewModel.fetchListOfGeofences()
+        await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownGeofences ?? false
         }, timeout: Constants.waitRequestDuration, message: "Geofence data is empty")
     }
 
-    func testFetchListOfGeofences() throws {
+    func testFetchListOfGeofences() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiGeofenceService.getResult = .success([Constants.geofence])
-        viewModel.fetchListOfGeofences()
+        await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownGeofences ?? false
         }, timeout: Constants.waitRequestDuration, message: "Geofence data should`ve been loaded")
     }
     
-    func testFetchListOfGeofencesFailure() throws {
+    func testFetchListOfGeofencesFailure() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
-        apiGeofenceService.getResult = .failure(Constants.defaultError)
-        viewModel.fetchListOfGeofences()
+        apiGeofenceService.mockGetGeofenceListResult = .failure(Constants.defaultError)
+        await viewModel.fetchListOfGeofences()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
         }, timeout: Constants.waitRequestDuration, message: "Geofence data should`ve failed")
     }
     
-    func testUpdateHistory() throws {
-        apiTrackingService.getResult = .success([])
-        viewModel.updateHistory()
+    func testUpdateHistory() async throws {
+        await viewModel.updateHistory()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasHistoryLoaded ?? false
         }, timeout: Constants.waitRequestDuration, message: "Tracking history should`ve been loaded")
     }
     
-    func testUpdateHistoryFailure() throws {
-        apiTrackingService.getResult = .failure(Constants.defaultError)
-        viewModel.updateHistory()
+    func testUpdateHistoryFailure() async throws {
+        apiTrackingService.mockGetAllTrackingHistoryResult = .failure(Constants.defaultError)
+        await viewModel.updateHistory()
         XCTWaiter().wait(until: { [weak self] in
             return self?.delegate.hasShownAlert ?? false
         }, timeout: Constants.waitRequestDuration, message: "Tracking history should`ve shown error alert")
