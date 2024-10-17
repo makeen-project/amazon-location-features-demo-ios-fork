@@ -9,7 +9,7 @@ import Foundation
 
 final class MapStyleViewModel: MapStyleViewModelProtocol {
     
-    private let mapStyles: [MapStyleModel]    
+    private let mapStyles: [MapStyleModel]
     var delegate: MapStyleViewModelOutputDelegate?
     
     init() {
@@ -51,7 +51,7 @@ private extension MapStyleViewModel {
     func loadCurentSourceMap() -> IndexPath? {
         guard let localData = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle) else { return nil }
         
-        let section = 1
+        let section = 0
         let row = mapStyles.firstIndex(where: { $0.title == localData.title })
         return IndexPath(row: row!, section: section)
     }

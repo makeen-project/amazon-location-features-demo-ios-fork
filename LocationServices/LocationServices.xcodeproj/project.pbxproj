@@ -397,6 +397,7 @@
 		F1BA943B2C526646002FEB51 /* AmazonLocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */; };
 		F1BA94442C624B63002FEB51 /* CognitoAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */; };
 		F1BA94462C6258F0002FEB51 /* ApiAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */; };
+		F1C4DC542CC1614800AA235A /* ColorSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C4DC532CC1614800AA235A /* ColorSegmentControl.swift */; };
 		F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */; };
 		F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */; };
 		F1E368602CB6C25E00AF3A5B /* AWSClientRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = F1E3685F2CB6C25E00AF3A5B /* AWSClientRuntime */; };
@@ -824,6 +825,7 @@
 		F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationClient.swift; sourceTree = "<group>"; };
 		F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoAuthHelper.swift; sourceTree = "<group>"; };
 		F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiAuthHelper.swift; sourceTree = "<group>"; };
+		F1C4DC532CC1614800AA235A /* ColorSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSegmentControl.swift; sourceTree = "<group>"; };
 		F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridBackgroundView.swift; sourceTree = "<group>"; };
 		F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVCViewModelTests.swift; sourceTree = "<group>"; };
 		F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionTests.swift; sourceTree = "<group>"; };
@@ -2296,6 +2298,7 @@
 				AD3E370D2987199F0041D952 /* New Group */,
 				ADBDDF062984392A00696EC6 /* Cell */,
 				ADBDDF022984386400696EC6 /* ExploreMapStyleHeaderView.swift */,
+				F1C4DC532CC1614800AA235A /* ColorSegmentControl.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3361,6 +3364,7 @@
 				ADBD7FC22949CBC2005DB4E4 /* BottomSheetTransitioningDelegate.swift in Sources */,
 				8A276E2629DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift in Sources */,
 				AD989734298B2B2D0041E867 /* TrackingDashboard.swift in Sources */,
+				F1C4DC542CC1614800AA235A /* ColorSegmentControl.swift in Sources */,
 				F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */,
 				ADD139902980A2590003F917 /* RouteOptionContracts.swift in Sources */,
 				AD625E9C293BEFAC00C67B44 /* SearchCell.swift in Sources */,

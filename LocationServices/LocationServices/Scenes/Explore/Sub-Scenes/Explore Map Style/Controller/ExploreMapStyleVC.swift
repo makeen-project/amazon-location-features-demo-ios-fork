@@ -11,7 +11,7 @@ final class ExploreMapStyleVC: UIViewController {
     
     var selectedIndex: Int = 0
     var headerView: ExploreMapStyleHeaderView = ExploreMapStyleHeaderView()
-    var colorSegment: UISegmentedControl? = nil
+    var colorSegment: ColorSegmentControl? = nil
     
     var viewModel: ExploreMapStyleViewModelProtocol! {
         didSet {
@@ -41,18 +41,7 @@ final class ExploreMapStyleVC: UIViewController {
     
     private func setupViews() {
         let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
-        colorSegment = UISegmentedControl(items: colorNames)
-        
-        let lightImage = GeneralHelper.getImageAndText(image: UIImage(systemName: "sun.max")!, string: colorNames[0], isImageBeforeText: true)
-        let darkImage = GeneralHelper.getImageAndText(image: UIImage(systemName: "moon")!, string: colorNames[1], isImageBeforeText: true)
-        
-        colorSegment?.setImage(lightImage, forSegmentAt: 0)
-        colorSegment?.setImage(darkImage, forSegmentAt: 1)
-        colorSegment?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#018498")], for: .selected)
-        colorSegment?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
-
-        let colorType = UserDefaultsHelper.getObject(value: MapStyleColorType.self, key: .mapStyleColorType)
-        colorSegment!.selectedSegmentIndex = (colorType != nil && colorType! == .dark) ? 1 : 0
+        colorSegment = ColorSegmentControl(items: colorNames)
 
         view.backgroundColor = .searchBarBackgroundColor
         self.view.addSubview(headerView)
@@ -74,7 +63,6 @@ final class ExploreMapStyleVC: UIViewController {
         }
         
         colorSegment?.snp.makeConstraints {
-            
             $0.centerX.equalToSuperview()
             if UIDevice.current.userInterfaceIdiom == .pad {
                 $0.width.equalTo(400)
@@ -86,15 +74,9 @@ final class ExploreMapStyleVC: UIViewController {
             }
             $0.height.equalTo(40)
         }
-    
-        colorSegment?.addTarget(self, action: #selector(mapColorChanged(_:)), for: .valueChanged)
     }
     
-    @objc func mapColorChanged(_ sender: UISegmentedControl) {
-        let colorType: MapStyleColorType = sender.selectedSegmentIndex == 1 ? .dark : .light
-        UserDefaultsHelper.saveObject(value: colorType, key: .mapStyleColorType)
-        NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
-    }
+
 }
 
 extension ExploreMapStyleVC: ExploreMapStyleViewModelOutputDelegate {

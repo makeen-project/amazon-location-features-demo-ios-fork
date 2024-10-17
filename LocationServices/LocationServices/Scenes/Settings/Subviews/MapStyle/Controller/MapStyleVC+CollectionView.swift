@@ -55,6 +55,7 @@ extension MapStyleVC: UICollectionViewDataSource {
 extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return Constants.cellSize
         let totalWidth = collectionView.frame.size.width
         let interitemSpacingSum = minimumInteritemSpacing * (numberOfItemsInRow - 1)
         let itemWidth = (totalWidth - horizontalItemPadding - interitemSpacingSum)/numberOfItemsInRow
@@ -86,6 +87,12 @@ extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return minimumInteritemSpacing
+        return calculateMinimumInteritemSpacing()
+    }
+    
+    func calculateMinimumInteritemSpacing() -> CGFloat {
+        let itemsCountPerRow = CGFloat(Constants.itemsCountPerRow)
+        let freeSpace = collectionView.frame.width - (Constants.cellSize.width * itemsCountPerRow)
+        return (freeSpace / itemsCountPerRow).rounded(.down)
     }
 }

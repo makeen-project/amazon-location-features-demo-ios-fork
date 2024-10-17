@@ -12,6 +12,9 @@ final class MapStyleVC: UIViewController {
     
     enum Constants {
         static let horizontalOffset: CGFloat = 16
+        static let cellSize = CGSize(width: 160, height: 106)
+        static let minimumLineSpacing: CGFloat = 36
+        static let itemsCountPerRow = 2
     }
     
     var selectedCell: IndexPath = IndexPath(row: 0, section: 0)
@@ -31,6 +34,7 @@ final class MapStyleVC: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         return collectionView
     }()
+    var colorSegment: ColorSegmentControl? = nil
     
     var isLargerPad: Bool {
         max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) > largerPadSideSizeThreshold
@@ -109,6 +113,9 @@ final class MapStyleVC: UIViewController {
     }
     
     private func setupViews() {
+        let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
+        colorSegment = ColorSegmentControl(items: colorNames)
+        
         navigationController?.navigationBar.tintColor = .mapDarkBlackColor
         navigationItem.title = UIDevice.current.isPad ? "" :  StringConstant.mapStyle
         view.backgroundColor = .white
@@ -123,6 +130,8 @@ final class MapStyleVC: UIViewController {
         }
         
         self.view.addSubview(collectionView)
+        self.view.addSubview(colorSegment!)
+        
         collectionView.snp.makeConstraints {
             if isPad {
                 $0.top.equalTo(screenTitleLabel.snp.bottom)
@@ -131,6 +140,19 @@ final class MapStyleVC: UIViewController {
             }
             $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(16)
+        }
+        
+        colorSegment!.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                $0.width.equalTo(400)
+                $0.bottom.equalToSuperview().offset(-20)
+            }
+            else {
+                $0.width.equalToSuperview().offset(-50)
+                $0.bottom.equalToSuperview().offset(-20)
+            }
+            $0.height.equalTo(40)
         }
     }
 }

@@ -11,7 +11,7 @@ import SnapKit
 private enum Constants {
     static let cellSize = CGSize(width: 160, height: 106)
     static let minimumLineSpacing: CGFloat = 36
-    static let itemsCountPerRaw = 2
+    static let itemsCountPerRow = 2
 }
 
 final class ExploreMapStyleCell: UITableViewCell {
@@ -120,9 +120,9 @@ extension ExploreMapStyleCell: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func calculateMinimumInteritemSpacing() -> CGFloat {
-        let itemsCountPerRaw = CGFloat(Constants.itemsCountPerRaw)
-        let freeSpace = collectionView.frame.width - (Constants.cellSize.width * itemsCountPerRaw)
-        return (freeSpace / itemsCountPerRaw).rounded(.down)
+        let itemsCountPerRow = CGFloat(Constants.itemsCountPerRow)
+        let freeSpace = collectionView.frame.width - (Constants.cellSize.width * itemsCountPerRow)
+        return (freeSpace / itemsCountPerRow).rounded(.down)
     }
 }
 
