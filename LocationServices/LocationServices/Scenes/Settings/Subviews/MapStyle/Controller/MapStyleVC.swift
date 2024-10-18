@@ -138,19 +138,18 @@ final class MapStyleVC: UIViewController {
             } else {
                 $0.top.equalTo(self.view.safeAreaLayoutGuide)
             }
-            $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(280)
         }
         
         colorSegment!.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
             if UIDevice.current.userInterfaceIdiom == .pad {
                 $0.width.equalTo(400)
-                $0.bottom.equalToSuperview().offset(-20)
             }
             else {
                 $0.width.equalToSuperview().offset(-50)
-                $0.bottom.equalToSuperview().offset(-20)
             }
             $0.height.equalTo(40)
         }

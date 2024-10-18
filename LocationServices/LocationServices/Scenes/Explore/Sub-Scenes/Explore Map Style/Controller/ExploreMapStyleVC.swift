@@ -59,18 +59,17 @@ final class ExploreMapStyleVC: UIViewController {
             $0.top.equalTo(headerView.snp.bottom)
             $0.leading.equalToSuperview().offset(5)
             $0.trailing.equalToSuperview().offset(-5)
-            $0.bottom.equalTo(colorSegment!).offset(20)
+            $0.height.equalTo(260)
         }
         
         colorSegment?.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
             if UIDevice.current.userInterfaceIdiom == .pad {
                 $0.width.equalTo(400)
-                $0.bottom.equalToSuperview().offset(-20)
             }
             else {
                 $0.width.equalToSuperview().offset(-50)
-                $0.bottom.equalToSuperview().offset(-5)
             }
             $0.height.equalTo(40)
         }
