@@ -30,7 +30,7 @@ private extension SplitViewSettingsCoordinator {
         controller.delegate = self
         splitViewController.setViewController(controller, for: .supplementary)
         splitViewController.show(.supplementary)
-        showNextScene(type: .dataProvider)
+        showNextScene(type: .mapStyle)
         splitViewController.viewController(for: .secondary)?.navigationController?.navigationBar.isHidden = false
     }
 }
