@@ -42,7 +42,6 @@ extension MapStyleVC: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MapStyleSectionHeaderView.reuseId, for: indexPath)
-            (view as? MapStyleSectionHeaderView)?.title = viewModel.getSectionTitle(at: indexPath.section)
         case UICollectionView.elementKindSectionFooter:
             view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MapStyleSectionFooterView.reuseId, for: indexPath)
         default:
@@ -56,11 +55,6 @@ extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayo
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return Constants.cellSize
-        let totalWidth = collectionView.frame.size.width
-        let interitemSpacingSum = minimumInteritemSpacing * (numberOfItemsInRow - 1)
-        let itemWidth = (totalWidth - horizontalItemPadding - interitemSpacingSum)/numberOfItemsInRow
-        return CGSize(width: itemWidth,
-                      height: itemHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
