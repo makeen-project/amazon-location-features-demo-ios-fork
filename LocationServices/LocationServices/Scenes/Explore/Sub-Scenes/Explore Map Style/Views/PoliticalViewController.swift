@@ -188,6 +188,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         selectedIndexPath = indexPath
         UserDefaultsHelper.saveObject(value: filteredPoliticalViews[indexPath.row], key: .politicalView)
         tableView.reloadData()
+        NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

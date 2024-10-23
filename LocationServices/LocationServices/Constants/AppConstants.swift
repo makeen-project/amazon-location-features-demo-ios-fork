@@ -24,7 +24,11 @@ final class DefaultMapStyles {
             if style.imageType == .hybrid || style.imageType == .satellite {
                 colorType = .light
             }
-            return URL(string: "https://maps.geo.\(regionName).amazonaws.com/v2/styles/\(style.title)/descriptor?key=\(apiKey)&color-scheme=\(colorType.colorName)")
+            
+            let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+            let urlString = "https://maps.geo.\(regionName).amazonaws.com/v2/styles/\(style.title)/descriptor?key=\(apiKey)&color-scheme=\(colorType.colorName)\(politicalView != nil ? "&political-view=\(politicalView!.countryCode)" : "")"
+            
+            return URL(string: urlString)
         }
         else {
             return nil

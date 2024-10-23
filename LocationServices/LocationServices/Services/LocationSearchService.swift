@@ -31,7 +31,8 @@ extension AWSLocationSearchService {
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
-        let input = SearchTextInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = SearchTextInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryText: text)
 
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.searchText(input: input)
@@ -48,8 +49,8 @@ extension AWSLocationSearchService {
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
-     
-        let input = SuggestInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryText: text)
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = SuggestInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryText: text)
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.suggest(input: input)
             return result
@@ -59,7 +60,8 @@ extension AWSLocationSearchService {
     }
     
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput? {
-        let input = GetPlaceInput(key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), placeId: placeId)
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = GetPlaceInput(key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), placeId: placeId, politicalView: politicalView?.countryCode)
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.getPlace(input: input)
             return result
@@ -69,7 +71,8 @@ extension AWSLocationSearchService {
     }
     
     func searchNearbyRequest(position: [Double]) async throws -> SearchNearbyOutput? {
-        let input = SearchNearbyInput(key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), queryPosition: position, queryRadius: 50)
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = SearchNearbyInput(key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryPosition: position, queryRadius: 50)
         if let client = AmazonLocationClient.defaultApiPlacesClient() {
             let result = try await client.searchNearby(input: input)
             return result
