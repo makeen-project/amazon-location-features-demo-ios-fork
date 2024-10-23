@@ -7,12 +7,8 @@
 
 import UIKit
 
-protocol PoliticalViewModelOutputDelegate: AnyObject, AlertPresentable {
-    func dismissView()
-    func updateSizeClass(_ sizeClass: POICardVC.DetentsSizeClass)
-}
-
 class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
+    
     var filteredPoliticalViews: [PoliticalViewType] = []
     var selectedIndexPath: IndexPath?
     var tableView: UITableView!
@@ -63,10 +59,13 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         return searchBar
     }()
     
+    var onDismiss: (() -> Void)?
+    
     @objc private func politicalViewDismiss() {
         self.dismiss(animated: true)
+        onDismiss?()
     }
-    
+
     @objc private func clearPoliticalView() {
         selectedIndexPath = nil
         UserDefaultsHelper.removeObject(for: .politicalView)
@@ -136,6 +135,16 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         tableView.layer.masksToBounds = true
         
         filteredPoliticalViews = PoliticalViewTypes
+        
+        let politicalViewType = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let selectedIndex = filteredPoliticalViews.firstIndex(where: { type in
+            if type.countryCode == politicalViewType?.countryCode {
+                return true
+            }
+            return false
+        })
+        selectedIndexPath = selectedIndex != nil ? IndexPath(row: selectedIndex!, section: 0) : nil
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -155,7 +164,6 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         let iv = UIImageView(image: image)
         iv.contentMode = .scaleAspectFill
         iv.tintColor = .mapStyleTintColor
-        iv.isUserInteractionEnabled = false // Disable interaction on the subview
         return iv
     }()
     

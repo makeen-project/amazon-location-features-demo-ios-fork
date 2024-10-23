@@ -59,7 +59,8 @@ class PoliticalViewCell: UITableViewCell {
         }
         
         itemTitle.snp.makeConstraints {
-            $0.top.leading.equalToSuperview()
+            $0.leading.equalToSuperview().offset(5)
+            $0.top.equalToSuperview()
             $0.trailing.lessThanOrEqualToSuperview().offset(-12)
         }
         

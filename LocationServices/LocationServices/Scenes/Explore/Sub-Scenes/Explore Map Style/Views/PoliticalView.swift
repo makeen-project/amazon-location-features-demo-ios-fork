@@ -13,7 +13,6 @@ final class PoliticalView: UIButton {
         let iv = UIImageView(image: image)
         iv.contentMode = .scaleAspectFit
         iv.tintColor = .mapStyleTintColor
-        iv.isUserInteractionEnabled = false // Disable interaction on the subview
         return iv
     }()
     
@@ -23,7 +22,6 @@ final class PoliticalView: UIButton {
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left
         label.text = "Political view"
-        label.isUserInteractionEnabled = false // Disable interaction on the subview
         return label
     }()
     
@@ -32,8 +30,7 @@ final class PoliticalView: UIButton {
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .mapStyleTintColor
         label.textAlignment = .left
-        label.text = "Map representation for different countries"
-        label.isUserInteractionEnabled = false // Disable interaction on the subview
+        label.text = ""
         return label
     }()
     
@@ -42,7 +39,6 @@ final class PoliticalView: UIButton {
         let iv = UIImageView(image: image)
         iv.contentMode = .scaleAspectFill
         iv.tintColor = .searchBarTintColor
-        iv.isUserInteractionEnabled = false // Disable interaction on the subview
         return iv
     }()
     
@@ -51,7 +47,6 @@ final class PoliticalView: UIButton {
         stackView.alignment = .leading
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
-        stackView.isUserInteractionEnabled = false // Disable interaction on the stack view
         return stackView
     }()
     
@@ -104,22 +99,26 @@ final class PoliticalView: UIButton {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         self.addGestureRecognizer(tapGestureRecognizer)
         
+        setPoliticalView()
     }
     
     @objc private func handleTapGesture() {
         let politicalVC = PoliticalViewController()
         politicalVC.modalPresentationStyle = .formSheet
+        politicalVC.onDismiss = {
+            self.setPoliticalView()
+        }
         viewController?.present(politicalVC, animated: true)
     }
-    
+
     public func setPoliticalView() {
-        if let politicalViewType = UserDefaultsHelper.get(for: PoliticalViewType.self, key: .politicalView) {
-            itemTitle.text = politicalViewType.fullName
-            itemSubtitle.text = politicalViewType.politicalDescription
+        if let politicalViewType = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView) {
+            itemSubtitle.text = "\(politicalViewType.countryCode). \(politicalViewType.politicalDescription)"
+            itemSubtitle.tintColor = .mapStyleTintColor
         }
         else {
-            itemTitle.text = "Political view"
             itemSubtitle.text = "Map representation for different countries"
+            itemSubtitle.tintColor = .gray
         }
     }
 }
