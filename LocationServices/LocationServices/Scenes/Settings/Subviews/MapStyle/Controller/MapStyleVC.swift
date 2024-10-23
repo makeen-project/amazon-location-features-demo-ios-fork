@@ -35,6 +35,7 @@ final class MapStyleVC: UIViewController {
         return collectionView
     }()
     var colorSegment: ColorSegmentControl? = nil
+    var politicalView = PoliticalView()
     
     var isLargerPad: Bool {
         max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) > largerPadSideSizeThreshold
@@ -131,6 +132,7 @@ final class MapStyleVC: UIViewController {
         
         self.view.addSubview(collectionView)
         self.view.addSubview(colorSegment!)
+        self.view.addSubview(politicalView)
         
         collectionView.snp.makeConstraints {
             if isPad {
@@ -153,6 +155,14 @@ final class MapStyleVC: UIViewController {
             }
             $0.height.equalTo(40)
         }
+        
+        politicalView.snp.makeConstraints {
+            $0.top.equalTo(colorSegment!.snp.bottom).offset(50)
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
+        politicalView.viewController = self
     }
 }
 
