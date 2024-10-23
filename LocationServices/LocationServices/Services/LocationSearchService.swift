@@ -31,6 +31,9 @@ extension AWSLocationSearchService {
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
+        else {
+            biasPosition = [AppConstants.amazonHqMapPosition.longitude, AppConstants.amazonHqMapPosition.latitude]
+        }
         let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
         let input = SearchTextInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryText: text)
 
@@ -48,6 +51,9 @@ extension AWSLocationSearchService {
         var biasPosition: [Double]? = nil
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
+        }
+        else {
+            biasPosition = [AppConstants.amazonHqMapPosition.longitude, AppConstants.amazonHqMapPosition.latitude]
         }
         let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
         let input = SuggestInput(biasPosition: biasPosition, key: AmazonLocationClient.defaultApiKey(), language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryText: text)

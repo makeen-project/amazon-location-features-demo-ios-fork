@@ -62,6 +62,14 @@ struct UITestAWSScreen: UITestScreen {
         static var samplePassword: String {
             Bundle(for: UITestBundle.self).object(forInfoDictionaryKey: "TestSamplePassword") as! String
         }
+        
+        static var apiKey: String {
+            Bundle(for: UITestBundle.self).object(forInfoDictionaryKey: "TestApiKey") as! String
+        }
+        
+        static var awsRegion: String {
+            Bundle(for: UITestBundle.self).object(forInfoDictionaryKey: "TestAWSRegion") as! String
+        }
     }
     
     func connectAWSConnect() -> Self {

@@ -16,7 +16,6 @@ private enum Constant {
     static let directionMapZoomValue: Double = 14
     static let annotationMapZoomValue: Double = 10
     static let locateMeMapZoomValue: Double = 14
-    static let amazonHqMapPosition = (latitude: 47.61506909519956, longitude: -122.33826750882835)
     static let geofenceViewIdentifier = "GeofenceViewIdentifier"
     static let userLocationViewIdentifier = "UserLocationViewIdentifier"
     static let imageAnnotationViewIdentifier = "ImageAnnotationViewIdentifier"
@@ -90,7 +89,7 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
         guard !state,
               let userCoordinates = mapView.userLocation?.coordinate,
               CLLocationCoordinate2DIsValid(userCoordinates) else {
-            mapView.setCenter(CLLocationCoordinate2D(latitude: Constant.amazonHqMapPosition.latitude, longitude: Constant.amazonHqMapPosition.longitude), zoomLevel: Constant.annotationMapZoomValue, animated: false)
+            mapView.setCenter(CLLocationCoordinate2D(latitude: AppConstants.amazonHqMapPosition.latitude, longitude: AppConstants.amazonHqMapPosition.longitude), zoomLevel: Constant.annotationMapZoomValue, animated: false)
             return
         }
         

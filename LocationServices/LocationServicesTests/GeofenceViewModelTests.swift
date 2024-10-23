@@ -45,38 +45,38 @@ final class GeofenceViewModelTests: XCTestCase {
         viewModel.delegate = delegate
     }
     
-    func test_hasUserLoggedIn_signedIn() throws {
+    func testHasUserLoggedInSignedIn() throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
         let isLoggedIn = viewModel.hasUserLoggedIn()
         XCTAssertTrue(isLoggedIn)
     }
     
-    func test_hasUserLoggedIn_signedOut() throws {
+    func testHasUserLoggedInSignedOut() throws {
         UserDefaultsHelper.setAppState(state: .initial)
         let isLoggedIn = viewModel.hasUserLoggedIn()
         XCTAssertFalse(isLoggedIn)
     }
     
-    func test_getGeofence_withEmptyArray() throws {
+    func testGetGeofenceWithEmptyArray() throws {
         let result = viewModel.getGeofence(with: Constants.cityName)
         XCTAssertNil(result)
     }
     
-    func test_getGeofence_withoutExistsId() throws {
+    func testGetGeofenceWithoutExistsId() throws {
         viewModel.addGeofence(model: Constants.geofence)
         
         let result = viewModel.getGeofence(with: Constants.cityName + "111")
         XCTAssertNil(result)
     }
     
-    func test_getGeofence_withExistsId() throws {
+    func testGetGeofenceWithExistsId() throws {
         viewModel.addGeofence(model: Constants.geofence)
         
         let result = viewModel.getGeofence(with: Constants.cityName)
         result?.compare(id: Constants.cityName, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Constants.geofenceRadius)
     }
     
-    func test_addGeofence_withNewValue() throws {
+    func testAddGeofenceWithNewValue() throws {
         viewModel.addGeofence(model: Constants.geofence)
         XCTAssertEqual(viewModel?.geofences.count, 1)
         
@@ -84,7 +84,7 @@ final class GeofenceViewModelTests: XCTestCase {
         result?.compare(id: Constants.cityName, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Constants.geofenceRadius)
     }
     
-    func test_addGeofence_withExistedValue() throws {
+    func testAddGeofenceWithExistedValue() throws {
         viewModel.addGeofence(model: Constants.geofence)
         XCTAssertEqual(viewModel?.geofences.count, 1)
         
@@ -99,14 +99,14 @@ final class GeofenceViewModelTests: XCTestCase {
         updatedResult?.compare(id: Constants.cityName, lat: Constants.updateGeofenceLatitude, long: Constants.updateGeofenceLongitude, radius: Constants.updateGeofenceRadius)
     }
     
-    func test_fetchListOfGeofences_signedOut() async throws {
+    func testFetchListOfGeofencesSignedOut() async throws {
         delegate.models = nil
         UserDefaultsHelper.setAppState(state: .initial)
         await viewModel.fetchListOfGeofences()
         XCTAssertNil(delegate?.models)
     }
     
-    func test_fetchListOfGeofences_SignedIn_success() async throws {
+    func testFetchListOfGeofencesSignedInSuccess() async throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
         
         apiService.mockGetGeofenceListResult = .success([Constants.geofence])
@@ -120,7 +120,7 @@ final class GeofenceViewModelTests: XCTestCase {
         delegate.models?.first?.compare(id: Constants.cityName, lat: Constants.geofenceLatitude, long: Constants.geofenceLongitude, radius: Constants.geofenceRadius)
     }
     
-    func test_fetchListOfGeofences_signedIn_failure() async  throws {
+    func testFetchListOfGeofencesSignedInFailure() async  throws {
         UserDefaultsHelper.setAppState(state: .loggedIn)
         
         apiService.mockGetGeofenceListResult = .failure(Constants.defaultError)

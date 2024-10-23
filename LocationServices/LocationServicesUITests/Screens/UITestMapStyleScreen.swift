@@ -15,9 +15,6 @@ struct UITestMapStyleScreen: UITestScreen {
     }
     
     func select(style: MapStyleImages) -> Self {
-        let header = getSourceHeader(for: style.sourceType)
-        header.tap()
-        
         let cell = getStyleCell(for: style)
         cell.tap()
         
@@ -37,12 +34,6 @@ struct UITestMapStyleScreen: UITestScreen {
     }
     
     // MARK: - Private
-    private func getSourceHeader(for sourceType: MapStyleSourceType) -> XCUIElement {
-        let view = app.staticTexts[sourceType.title].firstMatch
-        XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
-        return view
-    }
-    
     private func getStyleCell(for style: MapStyleImages, assert: Bool = true) -> XCUIElement {
         let cell = app.cells[style.mapName].firstMatch
         if assert {

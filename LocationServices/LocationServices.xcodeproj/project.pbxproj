@@ -361,7 +361,6 @@
 		F139208B29EE918E0042CBC9 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208729EE918E0042CBC9 /* DateExtensionTests.swift */; };
 		F139208D29EEA19D0042CBC9 /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208C29EEA19D0042CBC9 /* LoginViewModelTests.swift */; };
 		F139208F29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208E29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift */; };
-		F139DBC829F0283900D4BA98 /* DataProviderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBC729F0283900D4BA98 /* DataProviderViewModelTests.swift */; };
 		F139DBCA29F0346300D4BA98 /* RouteOptionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */; };
 		F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */; };
 		F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */; };
@@ -796,7 +795,6 @@
 		F139208729EE918E0042CBC9 /* DateExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		F139208C29EEA19D0042CBC9 /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		F139208E29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreMapStyleViewModelTests.swift; sourceTree = "<group>"; };
-		F139DBC729F0283900D4BA98 /* DataProviderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProviderViewModelTests.swift; sourceTree = "<group>"; };
 		F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteOptionViewModelTests.swift; sourceTree = "<group>"; };
 		F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewModelTests.swift; sourceTree = "<group>"; };
 		F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTabBarScreen.swift; sourceTree = "<group>"; };
@@ -1253,7 +1251,6 @@
 				F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */,
 				F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */,
 				F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */,
-				F139DBC729F0283900D4BA98 /* DataProviderViewModelTests.swift */,
 				F139208729EE918E0042CBC9 /* DateExtensionTests.swift */,
 				F1E5F8F129E9880600639EEC /* DebounceManagerTests.swift */,
 				F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */,
@@ -3229,7 +3226,6 @@
 			files = (
 				F139208D29EEA19D0042CBC9 /* LoginViewModelTests.swift in Sources */,
 				F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */,
-				F139DBC829F0283900D4BA98 /* DataProviderViewModelTests.swift in Sources */,
 				F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */,
 				8ADB62A429F2A4B6002C7971 /* AddGeofenceViewModelOutputProtocolMock.swift in Sources */,
 				8ADB629E29F2A051002C7971 /* GeofenceAPIServiceMock.swift in Sources */,

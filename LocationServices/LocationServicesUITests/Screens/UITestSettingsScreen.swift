@@ -27,11 +27,6 @@ struct UITestSettingsScreen: UITestScreen {
         return self
     }
     
-    func waittDataProviderRow() -> Self {
-        let _ = getDataProviderCell()
-        return self
-    }
-    
     func waitMapStyleRow() -> Self {
         let _ = getMapStyleCell()
         return self
@@ -58,13 +53,6 @@ struct UITestSettingsScreen: UITestScreen {
         return UITestSettingsMapStyleScreen(app: app)
     }
     
-    func tapDataProviderRow() -> UITestSettingsDataProviderScreen {
-        let cell = getDataProviderCell()
-        cell.tap()
-        
-        return UITestSettingsDataProviderScreen(app: app)
-    }
-    
     func getTabBarScreen() -> UITestTabBarScreen {
         return UITestTabBarScreen(app: app)
     }
@@ -83,13 +71,7 @@ struct UITestSettingsScreen: UITestScreen {
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
     }
-    
-    private func getDataProviderCell() -> XCUIElement {
-        app.activate()
-        let cell = app.cells[Identifiers.dataProviderCell]
-        XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
-        return cell
-    }
+
     
     private func getMapStyleCell() -> XCUIElement {
         app.activate()

@@ -55,6 +55,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         searchBar.image(for: .search, state: .normal)
         searchBar.backgroundColor = .clear
         searchBar.searchTextField.backgroundColor = .white
+        searchBar.searchTextField.borderStyle = .none
         searchBar.layer.borderWidth = 0
         return searchBar
     }()
@@ -65,7 +66,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         self.dismiss(animated: true)
         onDismiss?()
     }
-
+    
     @objc private func clearPoliticalView() {
         selectedIndexPath = nil
         UserDefaultsHelper.removeObject(for: .politicalView)
@@ -96,7 +97,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
             $0.trailing.equalToSuperview().offset(-10)
             $0.height.equalTo(50)
         }
-
+        
         titleLabel.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
@@ -208,6 +209,4 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         }
         tableView.reloadData()
     }
-
-
 }

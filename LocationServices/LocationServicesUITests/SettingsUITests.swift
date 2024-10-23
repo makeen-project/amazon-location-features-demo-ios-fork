@@ -30,7 +30,6 @@ final class SettingsUITests: LocationServicesUITests {
             .waitAWSCloudRow()
             .waitMapStyleRow()
             .waitRouteOptionsRow()
-            .waittDataProviderRow()
     }
 
     func testRouteOptions() throws {
@@ -75,32 +74,8 @@ final class SettingsUITests: LocationServicesUITests {
         var exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
         
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .light)
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .street)
-    }
-    
-    func testDataSourceChanges() throws {
-        let app = startApp(allowPermissions: false)
-        let exploreScreen = UITestExploreScreen(app: app)
-            .waitForMapToBeRendered()
-
-        var dataSourceScreen = exploreScreen.getTabBarScreen()
-            .tapSettingsButton()
-            .tapDataProviderRow()
-        
-        XCTAssertTrue(dataSourceScreen.isCellSelected(for: .esri))
-        
-        dataSourceScreen = dataSourceScreen
-            .select(sourceType: .here)
-        XCTAssertTrue(dataSourceScreen.isCellSelected(for: .here))
-        
-        let mapStyleScreen = dataSourceScreen
-            .tapBackButton()
-            .getTabBarScreen()
-            .tapExploreButton()
-            .tapMapStyles()
-
-        XCTAssertTrue(mapStyleScreen.isCellSelected(for: .explore))
+        exploreScreen = testMapStyle(screen: exploreScreen, style: .standard)
+        exploreScreen = testMapStyle(screen: exploreScreen, style: .monochrome)
     }
     
     func testMapStyle(screen: UITestExploreScreen, style: MapStyleImages) -> UITestExploreScreen {

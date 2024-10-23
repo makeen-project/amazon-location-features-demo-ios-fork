@@ -25,11 +25,11 @@ class LocationAPIServiceMock: LocationServiceable {
         return mockSearchTextResult
     }
     
-    func searchTextWithSuggestion(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
+    func searchWithSuggest(text: String, userLat: Double?, userLong: Double?) async -> Result<[LocationServices.SearchPresentation], any Error> {
         return mockSearchTextWithSuggestionResult
     }
     
-    func searchWithPosition(position: [Double], userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
+    func searchNearby(position: [Double], userLat: Double?, userLong: Double?) async -> Result<[LocationServices.SearchPresentation], any Error> {
         return mockSearchWithPositionResult
     }
     

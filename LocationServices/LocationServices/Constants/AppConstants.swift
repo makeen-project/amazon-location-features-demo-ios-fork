@@ -50,3 +50,7 @@ final class DefaultMapStyles {
                       isSelected: false),
     ]
 }
+
+enum AppConstants {
+    static let amazonHqMapPosition = (latitude: 47.61506909519956, longitude: -122.33826750882835)
+}

@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>TestAWSRegion</key>
+	<string>${TEST_AWS_REGION}</string>
+	<key>TestApiKey</key>
+	<string>${TEST_API_KEY}</string>
 	<key>TestIdentityPoolId</key>
 	<string>$(TEST_IDENTITY_POOL_ID)</string>
 	<key>TestSamplePassword</key>

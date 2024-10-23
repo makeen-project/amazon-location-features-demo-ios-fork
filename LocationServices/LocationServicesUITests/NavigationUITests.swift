@@ -22,8 +22,8 @@ final class NavigationUITests: LocationServicesUITests {
         
         static let timesSquareAddress = "New York Times Square"
         
-        static let walkDepartureAddress = "cloverdale perth"
-        static let walkDestinationAddress = "Kewdale Perth"
+        static let pedestrianDepartureAddress = "cloverdale perth"
+        static let pedestrianDestinationAddress = "Kewdale Perth"
         
         static let navigationStartLocation = CLLocation(latitude: 40.728489, longitude: -74.007167)
         static let navigationMoveLocation = CLLocation(latitude: 40.741940, longitude: -73.974948)
@@ -47,9 +47,9 @@ final class NavigationUITests: LocationServicesUITests {
         var screen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .tapMapStyles()
-            .select(style: .street)
-            .select(style: .light)
-            .select(style: .light)
+            .select(style: .standard)
+            .select(style: .monochrome)
+            .select(style: .satellite)
             .tapCloseButton()
             .tapRouting()
             .selectDepartureTextField()
@@ -69,21 +69,21 @@ final class NavigationUITests: LocationServicesUITests {
     }
     
     func testRouteTypes() throws {
-        let app = startApp(allowPermissions: false)
+        let app = startApp(allowPermissions: true)
         var screen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
             .tapRouting()
             .selectDepartureTextField()
-            .typeInDepartureTextField(text: Constants.walkDepartureAddress)
+            .typeInDepartureTextField(text: Constants.pedestrianDepartureAddress)
             .selectSearchResult(index: 1)
             .selectDestinationTextField()
-            .typeInDestinationTextField(text: Constants.walkDestinationAddress)
+            .typeInDestinationTextField(text: Constants.pedestrianDestinationAddress)
             .selectSearchResult(index: 1)
             .waitForRouteTypesContainer()
             .waitForNonEmptyRouteEstimatedTime(for: .car)
             .waitForNonEmptyRouteEstimatedDistance(for: .car)
-            .waitForNonEmptyRouteEstimatedTime(for: .walk)
-            .waitForNonEmptyRouteEstimatedDistance(for: .walk)
+            .waitForNonEmptyRouteEstimatedTime(for: .pedestrian)
+            .waitForNonEmptyRouteEstimatedDistance(for: .pedestrian)
             .waitForNonEmptyRouteEstimatedTime(for: .truck)
             .waitForNonEmptyRouteEstimatedDistance(for: .truck)
             .activate(mode: .car)
@@ -95,7 +95,7 @@ final class NavigationUITests: LocationServicesUITests {
             .waitForRootView()
             .tapExitButton()
             .waitForRouteTypesContainer()
-            .activate(mode: .walk)
+            .activate(mode: .pedestrian)
         
         if UIDevice.current.userInterfaceIdiom == .pad {
             screen = screen.tapRoutesButton()
@@ -129,6 +129,8 @@ final class NavigationUITests: LocationServicesUITests {
 
         let departureBeforeSwap = screenBeforeSwap.getDeparturePlace()
         let destinationBeforeSwap = screenBeforeSwap.getDestinationPlace()
+        
+        Thread.sleep(forTimeInterval: 2)
         
         let screenAfterSwap = screenBeforeSwap
             .swapRoute()
@@ -227,20 +229,5 @@ final class NavigationUITests: LocationServicesUITests {
             .typeInDestinationTextField(text: Constants.timesSquareAddress)
             .selectSearchResult(index: 1)
             .waitForRouteTypesContainer()
-    }
-    
-    func testNavigation() throws {
-        XCUIDevice.shared.location = .init(location: Constants.navigationStartLocation)
-        let app = startApp()
-        var screen = UITestExploreScreen(app: app)
-            .waitForMapToBeRendered()
-            .tapSearchTextField()
-            .type(text: Constants.navigationEndCoordinateSearchString)
-            .waitForResultsInTable()
-            .tapFirstCell()
-            .waitForPoiCardView()
-            .tapDirectionButton()
-            .waitForRouteTypesContainer()
-            .activate(mode: .car)
     }
 }

@@ -75,7 +75,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self.delegate?.showAlert(model)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(model)
+                    }
                 }
         } else {
             let response = await service.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
@@ -87,7 +89,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 self.delegate?.searchResult(mapModel: model)
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                self.delegate?.showAlert(model)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(model)
+                }
             }
         }
         
@@ -113,7 +117,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self.delegate?.showAlert(model)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(model)
+                    }
                 }
         } else {
             let result = await service.searchText(text: text, userLat: userLat, userLong: userLong)
@@ -260,10 +266,14 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 }
             case .failure(let error):
                 let alertModel = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                self.delegate?.showAlert(alertModel)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(alertModel)
+                }
             case .none:
                 let alertModel = AlertModel(title: StringConstant.error, message: StringConstant.failedToCalculateRoute, cancelButton: nil)
-                self.delegate?.showAlert(alertModel)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(alertModel)
+                }
             }
         return nil
     }

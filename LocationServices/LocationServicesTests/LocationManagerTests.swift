@@ -28,50 +28,50 @@ class LocationManagerTests: XCTestCase {
         locationManager = nil
     }
     
-    func test_getAuthorizationStatus() {
+    func testGetAuthorizationStatus() {
         mockLocationManager.authorizationStatus = .authorizedAlways
         XCTAssertEqual(locationManager.getAuthorizationStatus(), .authorizedAlways)
     }
     
-    func test_setDelegate() {
+    func testsetDelegate() {
         let mockDelegate = MockCLLocationManagerDelegate()
         locationManager.setDelegate(mockDelegate)
         XCTAssertEqual(mockLocationManager.delegate as? MockCLLocationManagerDelegate, mockDelegate)
     }
     
-    func test_startUpdatingLocation_withPermissions() {
+    func testStartUpdatingLocationWithPermissions() {
         locationManager.startUpdatingLocation()
         XCTAssertTrue(mockLocationManager.didStartUpdatingLocation)
         XCTAssertTrue(mockLocationManager.didStartUpdatingHeading)
     }
     
-    func test_startUpdatingLocation_withoutPermissions() {
+    func testStartUpdatingLocationWithoutPermissions() {
         mockLocationManager.authorizationStatus = .notDetermined
         locationManager.startUpdatingLocation()
         XCTAssertFalse(mockLocationManager.didStartUpdatingLocation)
         XCTAssertFalse(mockLocationManager.didStartUpdatingHeading)
     }
     
-    func test_startUpdatingLocation_withDeclinedPermissions() {
+    func testStartUpdatingLocationWithDeclinedPermissions() {
         mockLocationManager.authorizationStatus = .denied
         locationManager.startUpdatingLocation()
         XCTAssertFalse(mockLocationManager.didStartUpdatingLocation)
         XCTAssertFalse(mockLocationManager.didStartUpdatingHeading)
     }
     
-    func test_requestPermissions_withGrantedAccess() {
+    func testRequestPermissionsWithGrantedAccess() {
         mockLocationManager.authorizationStatus = .authorizedAlways
         locationManager.requestPermissions()
         XCTAssertFalse(mockAlertPresenter.didShowAlert)
     }
     
-    func test_requestPermissions_withDeniedAccess() {
+    func testRequestPermissionsWithDeniedAccess() {
         mockLocationManager.authorizationStatus = .denied
         locationManager.requestPermissions()
         XCTAssertTrue(mockAlertPresenter.didShowAlert)
     }
     
-    func test_requestPermissions_withNotDeterminedAccess() {
+    func testRequestPermissionsWithNotDeterminedAccess() {
         mockLocationManager.authorizationStatus = .notDetermined
         locationManager.requestPermissions()
         XCTAssertFalse(mockAlertPresenter.didShowAlert)
@@ -81,7 +81,7 @@ class LocationManagerTests: XCTestCase {
         XCTAssertEqual(locationManager.getAuthorizationStatus(), .authorizedWhenInUse)
     }
 
-    func test_performLocationDependentAction_withGrantedAccess() {
+    func testPerformLocationDependentActionWithGrantedAccess() {
         mockLocationManager.authorizationStatus = .authorizedWhenInUse
         
         let expectation = XCTestExpectation(description: "Location dependent action should be performed")
@@ -93,7 +93,7 @@ class LocationManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
     
-    func test_performLocationDependentAction_withoutGrantedAccess() {
+    func testPerformLocationDependentActionWithoutGrantedAccess() {
         mockLocationManager.authorizationStatus = .notDetermined
         
         let expectation = XCTestExpectation(description: "Location dependent action should not be performed")

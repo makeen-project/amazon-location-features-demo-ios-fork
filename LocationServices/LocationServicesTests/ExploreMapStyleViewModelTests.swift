@@ -40,9 +40,4 @@ final class ExploreMapStyleViewModelTests: XCTestCase {
         let exploreMapStyleViewModel = ExploreMapStyleViewModel()
         XCTAssertGreaterThan(exploreMapStyleViewModel.getItemsCount(), 0, "Expected data count greater than 0")
     }
-    
-    func testGetItem() throws {
-        let exploreMapStyleViewModel = ExploreMapStyleViewModel()
-        XCTAssertEqual(exploreMapStyleViewModel.getItem(with: 0), .esri, "Expected esri map style")
-    }
 }

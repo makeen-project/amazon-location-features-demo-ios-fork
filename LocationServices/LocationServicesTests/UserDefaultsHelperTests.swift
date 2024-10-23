@@ -35,7 +35,7 @@ final class UserDefaultsHelperTests: XCTestCase {
         let mapStyle: MapStyleModel = DefaultUserSettings.mapStyle
         UserDefaultsHelper.saveObject(value: mapStyle, key: .mapStyle)
         let savedMapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        XCTAssertEqual(savedMapStyle?.type, mapStyle.type, "Expected \(mapStyle) value for this key.")
+        XCTAssertEqual(savedMapStyle?.imageType, mapStyle.imageType, "Expected \(mapStyle) value for this key.")
     }
     
     func testSetAndGetAppState() throws {
