@@ -246,7 +246,6 @@
 		ADB0B9A0295AF59600C219EC /* DirectionPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB0B99F295AF59600C219EC /* DirectionPresentation.swift */; };
 		ADB0B9A5295BAE2B00C219EC /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB0B9A4295BAE2B00C219EC /* Double+Extension.swift */; };
 		ADB46519295D57A6004088AE /* DirectionTextFieldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB46518295D57A6004088AE /* DirectionTextFieldModel.swift */; };
-		ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FA92947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift */; };
 		ADBD7FB229493A9B005DB4E4 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FB129493A9B005DB4E4 /* Int+Extension.swift */; };
 		ADBD7FB62949B579005DB4E4 /* POICardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FB52949B579005DB4E4 /* POICardView.swift */; };
 		ADBD7FBB2949C687005DB4E4 /* POICardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBD7FBA2949C687005DB4E4 /* POICardVC.swift */; };
@@ -382,7 +381,6 @@
 		F18DEEE22C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE12C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift */; };
 		F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */; };
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
-		F18DEEEA2C75EC3400335F3E /* AWSSignerV4.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE92C75EC3300335F3E /* AWSSignerV4.swift */; };
 		F18DEEEC2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEEB2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift */; };
 		F18DEEEE2C75F2D300335F3E /* CognitoCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */; };
 		F18DEEF02C76178A00335F3E /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */; };
@@ -398,6 +396,9 @@
 		F1BA94442C624B63002FEB51 /* CognitoAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */; };
 		F1BA94462C6258F0002FEB51 /* ApiAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */; };
 		F1C4DC542CC1614800AA235A /* ColorSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C4DC532CC1614800AA235A /* ColorSegmentControl.swift */; };
+		F1C4DC642CC7ADD800AA235A /* PoliticalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C4DC632CC7ADCE00AA235A /* PoliticalViewController.swift */; };
+		F1C4DC662CC7BAA000AA235A /* PoliticalViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C4DC652CC7BA9D00AA235A /* PoliticalViewCell.swift */; };
+		F1C4DC682CC7BD7600AA235A /* PoliticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */; };
 		F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */; };
 		F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */; };
 		F1E368602CB6C25E00AF3A5B /* AWSClientRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = F1E3685F2CB6C25E00AF3A5B /* AWSClientRuntime */; };
@@ -680,7 +681,6 @@
 		ADB0B99F295AF59600C219EC /* DirectionPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionPresentation.swift; sourceTree = "<group>"; };
 		ADB0B9A4295BAE2B00C219EC /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		ADB46518295D57A6004088AE /* DirectionTextFieldModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionTextFieldModel.swift; sourceTree = "<group>"; };
-		ADBD7FA92947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSSignatureV4Delegate.swift; sourceTree = "<group>"; };
 		ADBD7FB129493A9B005DB4E4 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		ADBD7FB52949B579005DB4E4 /* POICardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POICardView.swift; sourceTree = "<group>"; };
 		ADBD7FBA2949C687005DB4E4 /* POICardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POICardVC.swift; sourceTree = "<group>"; };
@@ -811,7 +811,6 @@
 		F18DEEE12C75932800335F3E /* AmazonLocationCognitoCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationCognitoCredentialsProvider.swift; sourceTree = "<group>"; };
 		F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentials.swift; sourceTree = "<group>"; };
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		F18DEEE92C75EC3300335F3E /* AWSSignerV4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSSignerV4.swift; sourceTree = "<group>"; };
 		F18DEEEB2C75F0C800335F3E /* AmazonLocationApiCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationApiCredentialsProvider.swift; sourceTree = "<group>"; };
 		F18DEEED2C75F2D300335F3E /* CognitoCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentialsProvider.swift; sourceTree = "<group>"; };
 		F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainHelper.swift; sourceTree = "<group>"; };
@@ -826,6 +825,9 @@
 		F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoAuthHelper.swift; sourceTree = "<group>"; };
 		F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiAuthHelper.swift; sourceTree = "<group>"; };
 		F1C4DC532CC1614800AA235A /* ColorSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSegmentControl.swift; sourceTree = "<group>"; };
+		F1C4DC632CC7ADCE00AA235A /* PoliticalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoliticalViewController.swift; sourceTree = "<group>"; };
+		F1C4DC652CC7BA9D00AA235A /* PoliticalViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoliticalViewCell.swift; sourceTree = "<group>"; };
+		F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoliticalView.swift; sourceTree = "<group>"; };
 		F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridBackgroundView.swift; sourceTree = "<group>"; };
 		F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVCViewModelTests.swift; sourceTree = "<group>"; };
 		F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionTests.swift; sourceTree = "<group>"; };
@@ -1308,7 +1310,6 @@
 				F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */,
 				F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */,
 				F18DEEE52C75947000335F3E /* Logger.swift */,
-				F18DEEE92C75EC3300335F3E /* AWSSignerV4.swift */,
 				F18DEEEF2C76178A00335F3E /* KeyChainHelper.swift */,
 				F16C68A22CB959980008515E /* ApiKeyAuthScheme.swift */,
 			);
@@ -1905,13 +1906,6 @@
 			path = "Common Views";
 			sourceTree = "<group>";
 		};
-		AD3E370D2987199F0041D952 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		AD625E92293BCECF00C67B44 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -2295,9 +2289,10 @@
 		ADBDDF0029842CF000696EC6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AD3E370D2987199F0041D952 /* New Group */,
 				ADBDDF062984392A00696EC6 /* Cell */,
 				ADBDDF022984386400696EC6 /* ExploreMapStyleHeaderView.swift */,
+				F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */,
+				F1C4DC632CC7ADCE00AA235A /* PoliticalViewController.swift */,
 				F1C4DC532CC1614800AA235A /* ColorSegmentControl.swift */,
 			);
 			path = Views;
@@ -2315,6 +2310,7 @@
 		ADBDDF062984392A00696EC6 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				F1C4DC652CC7BA9D00AA235A /* PoliticalViewCell.swift */,
 				ADBDDF072984394500696EC6 /* ExploreMapStyleCell.swift */,
 			);
 			path = Cell;
@@ -2938,7 +2934,6 @@
 			children = (
 				ADF26F71293028BD000147A0 /* AWSLoginService.swift */,
 				ADABECD4293FD44200E66FC5 /* LocationSearchService.swift */,
-				ADBD7FA92947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift */,
 				ADB0B99A295AF23C00C219EC /* RoutingService.swift */,
 				ADC124A12979EA5F00B08C20 /* GeofenceService.swift */,
 				ADCF384B29902815008289BB /* TrackingService.swift */,
@@ -3360,6 +3355,7 @@
 				AD33F4CC29518A08005719D3 /* RouteOptionView.swift in Sources */,
 				AD2AF069292E98C700149904 /* LoginCoordinator.swift in Sources */,
 				F1BA94462C6258F0002FEB51 /* ApiAuthHelper.swift in Sources */,
+				F1C4DC682CC7BD7600AA235A /* PoliticalView.swift in Sources */,
 				ADD1395C298087840003F917 /* UnitSceneBuilder.swift in Sources */,
 				ADBD7FC22949CBC2005DB4E4 /* BottomSheetTransitioningDelegate.swift in Sources */,
 				8A276E2629DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift in Sources */,
@@ -3391,7 +3387,6 @@
 				F18DEEE62C75947000335F3E /* Logger.swift in Sources */,
 				AD989748298C56EE0041E867 /* TrackingHistoryBuilder.swift in Sources */,
 				8A76327C297EAE270064D60F /* MLNMapViewDelegate+Extension.swift in Sources */,
-				F18DEEEA2C75EC3400335F3E /* AWSSignerV4.swift in Sources */,
 				8A85A75A29A3A9C80022ABE0 /* TrackingEventModel.swift in Sources */,
 				AD625E94293BCEE200C67B44 /* SearchVCBuilder.swift in Sources */,
 				AD989742298C521E0041E867 /* TrackingHistoryVC.swift in Sources */,
@@ -3422,7 +3417,6 @@
 				ADCF384A298FF68D008289BB /* TrackHistoryCell.swift in Sources */,
 				ADD5D7D9296F87710022480B /* AddGeofenceSearchView.swift in Sources */,
 				ADC124A22979EA5F00B08C20 /* GeofenceService.swift in Sources */,
-				ADBD7FAA2947BFF6005DB4E4 /* AWSSignatureV4Delegate.swift in Sources */,
 				F1F0C5872A0E5401009C7151 /* ErrorHandler.swift in Sources */,
 				8AFDA09629DDBC3800114BB7 /* VersionVCBuilder.swift in Sources */,
 				ADAF3653294A6A0700DC4774 /* POICardViewModel.swift in Sources */,
@@ -3494,6 +3488,7 @@
 				8ACD71C82A08F6F200EC23F3 /* SplitViewExploreMapCoordinator.swift in Sources */,
 				8A3471CC2975D30B00BAF374 /* Locale+Extension.swift in Sources */,
 				8AE83A912A274B2F00CF6E7C /* UIView+Extension.swift in Sources */,
+				F1C4DC662CC7BAA000AA235A /* PoliticalViewCell.swift in Sources */,
 				AD2AF0DB292EABFE00149904 /* AboutContracts.swift in Sources */,
 				8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */,
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
@@ -3510,6 +3505,7 @@
 				AD2AF077292EA54D00149904 /* ExploreVC.swift in Sources */,
 				ADD5D7B4296E94240022480B /* PostLoginContracts.swift in Sources */,
 				ADD5D7A9296DFF8D0022480B /* PostLoginBuilder.swift in Sources */,
+				F1C4DC642CC7ADD800AA235A /* PoliticalViewController.swift in Sources */,
 				ADC474FA2971E11E00AAE7A3 /* InitialGeofenceView.swift in Sources */,
 				ADB46519295D57A6004088AE /* DirectionTextFieldModel.swift in Sources */,
 				ADBDDEED29830D9E00696EC6 /* UnitVC+TableView.swift in Sources */,

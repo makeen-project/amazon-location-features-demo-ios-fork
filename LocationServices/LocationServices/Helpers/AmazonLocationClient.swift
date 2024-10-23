@@ -13,37 +13,6 @@ import AWSSDKIdentity
 import AWSGeoPlaces
 import AWSGeoRoutes
 
-public enum HTTPMethod: String {
-    case GET
-    case POST
-    case PUT
-    case DELETE
-}
-
-public struct HTTPHeaders {
-    private var headers: [String: String]
-
-    public init() {
-        headers = [:]
-    }
-
-    mutating func add(name: String, value: String) {
-        headers[name] = value
-    }
-
-    mutating func remove(name: String) {
-        headers.removeValue(forKey: name)
-    }
-
-    func value(forName name: String) -> String? {
-        return headers[name]
-    }
-
-    func allHeaders() -> [String: String] {
-        return headers
-    }
-}
-
 public class AmazonLocationClient {
     public let locationProvider: LocationCredentialsProvider
     public var locationClient: LocationClient?

@@ -12,6 +12,7 @@ final class ExploreMapStyleVC: UIViewController {
     var selectedIndex: Int = 0
     var headerView: ExploreMapStyleHeaderView = ExploreMapStyleHeaderView()
     var colorSegment: ColorSegmentControl? = nil
+    var politicalView = PoliticalView()
     
     var viewModel: ExploreMapStyleViewModelProtocol! {
         didSet {
@@ -33,6 +34,10 @@ final class ExploreMapStyleVC: UIViewController {
         viewModel.loadData()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        politicalView.setPoliticalView()
+    }
+    
     private func setupHandlers() {
         self.headerView.dismissHandler = { [weak self] in
             self?.dismissHandler?()
@@ -47,6 +52,7 @@ final class ExploreMapStyleVC: UIViewController {
         self.view.addSubview(headerView)
         self.view.addSubview(tableView)
         self.view.addSubview(colorSegment!)
+        self.view.addSubview(politicalView)
         
         headerView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -73,9 +79,15 @@ final class ExploreMapStyleVC: UIViewController {
             }
             $0.height.equalTo(40)
         }
+        
+        politicalView.snp.makeConstraints {
+            $0.top.equalTo(colorSegment!.snp.bottom).offset(50)
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
+        politicalView.viewController = self
     }
-    
-
 }
 
 extension ExploreMapStyleVC: ExploreMapStyleViewModelOutputDelegate {

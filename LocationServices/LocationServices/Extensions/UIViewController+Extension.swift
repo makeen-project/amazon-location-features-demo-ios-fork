@@ -138,7 +138,7 @@ extension UIViewController {
         self.view.addGestureRecognizer(panGestureRecognizer)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
-       grabberView.addGestureRecognizer(tapGestureRecognizer)
+        grabberView.addGestureRecognizer(tapGestureRecognizer)
         
         NotificationCenter.default.post(name: Notification.updateMapLayerItems, object:nil, userInfo: ["height": height+8])
     }

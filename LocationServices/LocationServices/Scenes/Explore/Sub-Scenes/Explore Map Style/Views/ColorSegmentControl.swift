@@ -31,7 +31,7 @@ final class ColorSegmentControl: UISegmentedControl {
         
         self.setImage(lightImage, forSegmentAt: 0)
         self.setImage(darkImage, forSegmentAt: 1)
-        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#018498")], for: .selected)
+        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.mapStyleTintColor], for: .selected)
         self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
 
         let colorType = UserDefaultsHelper.getObject(value: MapStyleColorType.self, key: .mapStyleColorType)

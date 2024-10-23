@@ -32,7 +32,7 @@ final class ExploreMapStyleViewModel: ExploreMapStyleViewModelProtocol {
 
 private extension ExploreMapStyleViewModel {
     func getDataFromLocal() -> Int {
-        var currentIndex = 0
+        let currentIndex = 0
         return currentIndex
     }
 }

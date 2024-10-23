@@ -44,7 +44,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        controller.enableBottomSheetGrab()
+        controller.setBottomSheetHeight(to: controller.getLargeDetentHeight())
+        //controller.enableBottomSheetGrab()
         currentBottomSheet = controller
     }
     
