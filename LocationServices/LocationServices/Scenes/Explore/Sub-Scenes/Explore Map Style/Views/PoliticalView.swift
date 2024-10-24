@@ -18,7 +18,7 @@ final class PoliticalView: UIButton {
     
     private var itemTitle: UILabel = {
         var label = UILabel()
-        label.font = .amazonFont(type: .regular, size: 16)
+        label.font = .amazonFont(type: .medium, size: 18)
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left
         label.text = "Political view"
@@ -28,7 +28,7 @@ final class PoliticalView: UIButton {
     private var itemSubtitle: UILabel = {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textColor = .mapStyleTintColor
+        label.textColor = .gray
         label.textAlignment = .left
         label.text = ""
         return label
@@ -114,11 +114,11 @@ final class PoliticalView: UIButton {
     public func setPoliticalView() {
         if let politicalViewType = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView) {
             itemSubtitle.text = "\(politicalViewType.countryCode). \(politicalViewType.politicalDescription)"
-            itemSubtitle.tintColor = .mapStyleTintColor
+            itemSubtitle.textColor = .mapStyleTintColor
         }
         else {
             itemSubtitle.text = "Map representation for different countries"
-            itemSubtitle.tintColor = .gray
+            itemSubtitle.textColor = .gray
         }
     }
 }
