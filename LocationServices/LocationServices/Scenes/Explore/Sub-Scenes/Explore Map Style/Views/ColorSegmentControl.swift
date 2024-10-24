@@ -33,11 +33,25 @@ final class ColorSegmentControl: UISegmentedControl {
         self.setImage(darkImage, forSegmentAt: 1)
         self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.mapStyleTintColor], for: .selected)
         self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
-
+        
         let colorType = UserDefaultsHelper.getObject(value: MapStyleColorType.self, key: .mapStyleColorType)
         self.selectedSegmentIndex = (colorType != nil && colorType! == .dark) ? 1 : 0
         
         self.addTarget(self, action: #selector(mapColorChanged(_:)), for: .valueChanged)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(validateMapColor(_:)), name: Notification.validateMapColor, object: nil)
+    }
+    
+    @objc private func validateMapColor(_ notification: Notification) {
+        let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
+        if mapStyle?.imageType == .hybrid || mapStyle?.imageType == .satellite {
+            self.isEnabled = false
+            self.selectedSegmentIndex = 0
+            UserDefaultsHelper.saveObject(value: MapStyleColorType.light, key: .mapStyleColorType)
+        }
+        else {
+            self.isEnabled = true
+        }
     }
     
     @objc func mapColorChanged(_ sender: UISegmentedControl) {

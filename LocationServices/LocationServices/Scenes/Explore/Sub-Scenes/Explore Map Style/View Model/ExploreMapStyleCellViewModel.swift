@@ -46,5 +46,6 @@ private extension ExploreMapStyleCellViewModel {
     func saveUnitSettingsData(mapStyle: MapStyleModel) {
         UserDefaultsHelper.saveObject(value: mapStyle, key: .mapStyle)
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.validateMapColor, object: nil, userInfo: nil)
     }
 }

@@ -36,7 +36,7 @@ final class MapStyleViewModel: MapStyleViewModelProtocol {
     func saveSelectedState(_ indexPath: IndexPath) {
         let item = mapStyles[indexPath.row]
         
-        saveUnitSettingsData(mapSource: item)
+        saveUnitSettingsData(mapStyle: item)
         delegate?.loadData(selectedIndexPath: indexPath)
     }
     
@@ -56,8 +56,9 @@ private extension MapStyleViewModel {
         return IndexPath(row: row!, section: section)
     }
     
-    func saveUnitSettingsData(mapSource: MapStyleModel) {
-        UserDefaultsHelper.saveObject(value: mapSource, key: .mapStyle)
+    func saveUnitSettingsData(mapStyle: MapStyleModel) {
+        UserDefaultsHelper.saveObject(value: mapStyle, key: .mapStyle)
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.validateMapColor, object: nil, userInfo: nil)
     }
 }
