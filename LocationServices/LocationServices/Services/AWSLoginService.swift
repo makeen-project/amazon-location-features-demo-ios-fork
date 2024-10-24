@@ -259,7 +259,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         
         // remove custom configuration
         UserDefaultsHelper.removeObject(for: .awsConnect)
-        UserDefaultsHelper.setAppState(state: .defaultAWSConnected)
+        UserDefaultsHelper.setAppState(state: .initial)
     }
     
     

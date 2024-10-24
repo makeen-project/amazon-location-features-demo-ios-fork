@@ -70,7 +70,7 @@ extension GeofenceCoordinator: GeofenceNavigationDelegate {
             self.userLocation = (lat: lat, long: long)
         }
         let controller = GeofenceDashboardBuilder.create(lat: lat ?? self.userLocation.lat, long: long ?? self.userLocation.long, geofences: geofences)
-        
+        controller.delegate = self
         controller.addGeofence = { [weak self] parameters in
             self?.showAddGeofenceFlow(activeGeofencesLists: parameters.activeGeofences,
                                       isEditingSceneEnabled: parameters.isEditingSceneEnabled,
