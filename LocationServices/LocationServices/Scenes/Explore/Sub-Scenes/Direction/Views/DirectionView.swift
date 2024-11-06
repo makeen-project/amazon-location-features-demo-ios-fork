@@ -24,7 +24,7 @@ final class DirectionView: UIView {
     private var model: DirectionVM! {
         didSet {
             carRouteTypeView.setDatas(distance: model.carTypeDistane, duration: model.carTypeDuration, isPreview: isPreview)
-            walkRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, isPreview: isPreview)
+            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, isPreview: isPreview)
             truckRouteTypeView.setDatas(distance: model.truckTypeDistance, duration: model.truckTypeDuration, isPreview: isPreview)
         }
     }
@@ -52,8 +52,8 @@ final class DirectionView: UIView {
         view.backgroundColor = .searchBarBackgroundColor
         return view
     }()
-    private var walkRouteTypeView: RouteTypeView = RouteTypeView(viewType: .walking)
-    private var walkingSeperatorView: UIView = {
+    private var pedestrianRouteTypeView: RouteTypeView = RouteTypeView(viewType: .pedestrian)
+    private var pedestrianSeperatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .searchBarBackgroundColor
         return view
@@ -149,15 +149,15 @@ final class DirectionView: UIView {
     
         }
         
-        walkRouteTypeView.isSelectedHandle = { [weak self] state in
+        pedestrianRouteTypeView.isSelectedHandle = { [weak self] state in
             self?.changeSelectedTextFor(walkingType: state)
             Task {
-                try await self?.delegate?.changeRoute(type: .walking)
+                try await self?.delegate?.changeRoute(type: .pedestrian)
             }
         }
         
-        walkRouteTypeView.goButtonHandler =  { [weak self]  in
-            self?.delegate?.startNavigation(type: .walking)
+        pedestrianRouteTypeView.goButtonHandler =  { [weak self]  in
+            self?.delegate?.startNavigation(type: .pedestrian)
             
         }
         
@@ -201,7 +201,7 @@ final class DirectionView: UIView {
                                        walkingType: Bool = false,
                                        truckType: Bool = false) {
         carRouteTypeView.isDotViewVisible(carType)
-        walkRouteTypeView.isDotViewVisible(walkingType)
+        pedestrianRouteTypeView.isDotViewVisible(walkingType)
         truckRouteTypeView.isDotViewVisible(truckType)
     }
     
@@ -217,14 +217,14 @@ final class DirectionView: UIView {
     
     private func setupViews() {
         carRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.carContainer
-        walkRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.walkContainer
+        pedestrianRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.pedestrianContainer
         truckRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.truckContainer
         
         routeTypeStackView.removeArrangedSubViews()
         routeTypeStackView.addArrangedSubview(carRouteTypeView)
         routeTypeStackView.addArrangedSubview(carSeperatorView)
-        routeTypeStackView.addArrangedSubview(walkRouteTypeView)
-        routeTypeStackView.addArrangedSubview(walkingSeperatorView)
+        routeTypeStackView.addArrangedSubview(pedestrianRouteTypeView)
+        routeTypeStackView.addArrangedSubview(pedestrianSeperatorView)
         routeTypeStackView.addArrangedSubview(truckRouteTypeView)
         
         self.addSubview(routeOptions)
@@ -252,11 +252,11 @@ final class DirectionView: UIView {
             $0.height.equalTo(1)
         }
         
-        walkRouteTypeView.snp.makeConstraints {
+        pedestrianRouteTypeView.snp.makeConstraints {
             $0.height.equalTo(72)
         }
         
-        walkingSeperatorView.snp.makeConstraints {
+        pedestrianSeperatorView.snp.makeConstraints {
             $0.height.equalTo(1)
         }
         

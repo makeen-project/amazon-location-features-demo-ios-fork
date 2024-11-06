@@ -8,7 +8,7 @@
 import XCTest
 @testable import LocationServices
 import CoreLocation
-import AWSLocation
+import AWSGeoRoutes
 
 final class POICardViewModelTests: XCTestCase {
 
@@ -43,35 +43,16 @@ final class POICardViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.populateDatasErrorMessage, "Location permission denied", "Expected Location permission denied")
     }
     
-    func testFetchDatasWithMaxDistance() async throws {
-        pOICardViewModel.setUserLocation(lat: userLocation.latitude, long: userLocation.longitude)
-        try await pOICardViewModel.fetchDatas()
-        
-        XCTWaiter().wait(until: { [weak self] in
-            return self?.delegate.populateDatasErrorMessage == "In DataSource Esri, all waypoints must be within 400km"
-        }, timeout: Constants.waitRequestDuration, message: "MapModel should've throw max distance error")
-    }
-    
     func testFetchDatasWithSuccess() async throws {
         pOICardViewModel.setUserLocation(lat: 40.4400930458457, long: -80.00348250162394)
-        let direction = DirectionPresentation(model:CalculateRouteOutput(), travelMode: .car)
-        routingService.putResult = [LocationClientTypes.TravelMode.car: .success(direction)]
+        let direction = DirectionPresentation(model: GeoRoutesClientTypes.Route(), travelMode: .car)
+        routingService.putResult = [GeoRoutesClientTypes.RouteTravelMode.car: .success(direction)]
         try await pOICardViewModel.fetchDatas()
         
         XCTWaiter().wait(until: {
             return self.delegate.populateDatasCalled
         }, timeout: Constants.waitRequestDuration, message: "MapModel should've valid distance")
     }
-    
-    func testFetchDatasWithFailure() async throws {
-        pOICardViewModel.setUserLocation(lat: 0, long: -100)
-        try await pOICardViewModel.fetchDatas()
-
-        XCTWaiter().wait(until: { [weak self] in
-            return (self?.delegate.populateDatasErrorMessage == "In DataSource Esri, all waypoints must be within 400km")
-        }, timeout: Constants.waitRequestDuration, message: "populateDatas should've been called with failure")
-    }
-
 }
 
 

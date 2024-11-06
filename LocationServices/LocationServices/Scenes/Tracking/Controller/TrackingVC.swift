@@ -246,7 +246,6 @@ final class TrackingVC: UIViewController {
         super.viewWillAppear(animated)
         openLoginFlow(skipDashboard: viewModel.hasHistory)
         showGeofenceAnnotations()
-        blurStatusBar()
         setupKeyboardNotifications()
     }
     
@@ -320,7 +319,7 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
         Task {
             guard let lat = userLocation?.coordinate.latitude,
                   let long = userLocation?.coordinate.longitude else { return }
-           try await GeofenceAPIService().evaluateGeofence(lat: lat, long: long)
+            try await GeofenceAPIService().evaluateGeofence(lat: lat, long: long)
             self.geofenceHandler?()
         }
     }

@@ -50,11 +50,7 @@ final class TrackingHistoryHeaderView: UIView {
         }
         
         let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        if mapStyle?.type != .here && UserDefaultsHelper.getAppState() == .loggedIn && !isTrackingStarted {
-            showChangeStyleAlert()
-        } else {
-            toggleTrackingStatus()
-        }
+        toggleTrackingStatus()
     }
     
     private func showChangeStyleAlert() {

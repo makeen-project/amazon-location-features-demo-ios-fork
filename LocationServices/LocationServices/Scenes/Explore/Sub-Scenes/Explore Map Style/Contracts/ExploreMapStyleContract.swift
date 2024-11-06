@@ -10,7 +10,6 @@ import UIKit
 protocol ExploreMapStyleViewModelProtocol: AnyObject {
     var delegate: ExploreMapStyleViewModelOutputDelegate? { get set }
     func getItemsCount() -> Int
-    func getItem(with index: Int) -> MapStyleSourceType
     func loadData()
     func updateDataProviderWithMap(index: Int)
 }

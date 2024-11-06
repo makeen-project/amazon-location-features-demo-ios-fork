@@ -12,6 +12,9 @@ final class MapStyleVC: UIViewController {
     
     enum Constants {
         static let horizontalOffset: CGFloat = 16
+        static let cellSize = CGSize(width: 160, height: 106)
+        static let minimumLineSpacing: CGFloat = 36
+        static let itemsCountPerRow = 2
     }
     
     var selectedCell: IndexPath = IndexPath(row: 0, section: 0)
@@ -31,6 +34,8 @@ final class MapStyleVC: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         return collectionView
     }()
+    var colorSegment: ColorSegmentControl? = nil
+    var politicalView = PoliticalView()
     
     var isLargerPad: Bool {
         max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) > largerPadSideSizeThreshold
@@ -109,6 +114,9 @@ final class MapStyleVC: UIViewController {
     }
     
     private func setupViews() {
+        let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
+        colorSegment = ColorSegmentControl(items: colorNames)
+        
         navigationController?.navigationBar.tintColor = .mapDarkBlackColor
         navigationItem.title = UIDevice.current.isPad ? "" :  StringConstant.mapStyle
         view.backgroundColor = .white
@@ -123,15 +131,38 @@ final class MapStyleVC: UIViewController {
         }
         
         self.view.addSubview(collectionView)
+        self.view.addSubview(colorSegment!)
+        self.view.addSubview(politicalView)
+        
         collectionView.snp.makeConstraints {
             if isPad {
                 $0.top.equalTo(screenTitleLabel.snp.bottom)
             } else {
                 $0.top.equalTo(self.view.safeAreaLayoutGuide)
             }
-            $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(280)
         }
+        
+        colorSegment!.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(10)
+            $0.centerX.equalToSuperview()
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                $0.width.equalToSuperview().offset(-20)
+            }
+            else {
+                $0.width.equalToSuperview().offset(-50)
+            }
+            $0.height.equalTo(40)
+        }
+        
+        politicalView.snp.makeConstraints {
+            $0.top.equalTo(colorSegment!.snp.bottom).offset(50)
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
+        politicalView.viewController = self
     }
 }
 

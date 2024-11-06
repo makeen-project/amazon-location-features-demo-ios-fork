@@ -87,6 +87,14 @@ final class LoginVC: UIViewController {
         return stackView
     }()
     
+    let signInSpinner: UIActivityIndicatorView = {
+        let signInSpinner = UIActivityIndicatorView(style: .large)
+        signInSpinner.translatesAutoresizingMaskIntoConstraints = false
+        signInSpinner.color = .white
+        signInSpinner.hidesWhenStopped = true
+        return signInSpinner
+    }()
+    
     private lazy var signInButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.AWSConnect.signInButton
@@ -245,8 +253,20 @@ final class LoginVC: UIViewController {
         if let navigationController {
             (UIApplication.shared.delegate as? AppDelegate)?.navigationController = navigationController
         }
-        
+        showLoadingOnSignIn()
         viewModel.login()
+    }
+    
+    private func showLoadingOnSignIn() {
+        signInButton.setTitle("", for: .normal)
+        signInSpinner.startAnimating()
+        signInButton.isUserInteractionEnabled = false
+    }
+    
+    private func hideLoadingOnSignIn() {
+        signInSpinner.stopAnimating()
+        signInButton.setTitle("Sign In", for: .normal)
+        signInButton.isUserInteractionEnabled = true
     }
     
     @objc private func signOutAction() {
@@ -353,6 +373,13 @@ final class LoginVC: UIViewController {
         
         view.addSubview(bottomGradientView)
         view.addSubview(bottomButtonStackView)
+        
+        signInButton.addSubview(signInSpinner)
+        signInSpinner.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+        
         bottomButtonStackView.addArrangedSubview(signInButton)
         bottomButtonStackView.addArrangedSubview(signOutButton)
         
@@ -426,23 +453,28 @@ extension LoginVC: LoginViewModelOutputDelegate {
     }
     
     func loginCompleted() {
-        // TODO: investigate crash cause
-        //NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
-        
         DispatchQueue.main.async{
+            self.dismissHandler?()
             self.setup()
             self.updateAccordingToAppState()
+            self.hideLoadingOnSignIn()
+        }
+    }
+    
+    func loginCancelled() {
+        DispatchQueue.main.async{
+            self.hideLoadingOnSignIn()
         }
     }
 
     func logoutCompleted() {
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
-        
         DispatchQueue.main.async{
             self.setup()
             self.updateAccordingToAppState()
         }
     }
+    
     
     func identityPoolIdValidationSucceed() {
         UserDefaultsHelper.save(value: isFromSettingScene, key: .awsCustomConnectFromSettings)

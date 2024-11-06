@@ -60,7 +60,6 @@ final class ExploreView: UIView, NavigationMapProtocol {
     private var wasCenteredByUserLocation = false
     private var searchDatas: [MapModel] = []
     
-    private var signingDelegate: MLNOfflineStorageDelegate?
     private var containerView: UIView = UIView()
     
     let searchBarView: SearchBarView = SearchBarView(becomeFirstResponder: true)
@@ -315,27 +314,26 @@ final class ExploreView: UIView, NavigationMapProtocol {
         delegate?.showDirectionView(userLocation: (mapView.locationManager.authorizationStatus == .authorizedAlways || mapView.locationManager.authorizationStatus == .authorizedWhenInUse) ? mapView.userLocation?.coordinate : nil)
     }
     
-    func drawCalculatedRouteWith(_ data: Data, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, isRecalculation: Bool, routeType: RouteTypes) {
+    func drawCalculatedRouteWith(_ geoDatas: [Data], departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, isRecalculation: Bool, routeType: RouteTypes) {
         DispatchQueue.main.async {
             
             let isDashedLine: Bool
             switch routeType {
-            case .walking:
+            case .pedestrian:
                 isDashedLine = true
             case .car, .truck:
                 isDashedLine = false
             }
+            self.createAnnotationsForDirection(departureCoordinates: departureLocation, destinationCoordinates: destinationLocation)
             
-            self.drawPolyline(self.mapView, geoJson: data, isDashedLine: isDashedLine)
-            
-            let dashedData = self.mapMode == .search ? data : Data()
-            self.drawDashedLine(self.mapView, geoJson: dashedData, departureCoordinates: departureLocation, destinationCoordinates: destinationLocation)
+            self.drawPolyline(self.mapView, geoDatas: geoDatas, isDashedLine: isDashedLine)
             
             guard !isRecalculation else { return }
             
-            self.createAnnotationsForDirection(departureCoordinates: departureLocation, destinationCoordinates: destinationLocation)
-            
-            let routeCoordinates = self.getCoordinates(from: data)
+            var routeCoordinates: [CLLocationCoordinate2D] = []
+            for data in geoDatas {
+                routeCoordinates.append(contentsOf: self.getCoordinates(from: data))
+            }
             let boundsCoordinates = routeCoordinates.isEmpty ? [departureLocation, destinationLocation] : routeCoordinates
             let coordinateBounds = MLNCoordinateBounds.create(from: boundsCoordinates)
             let edgePadding = self.configureMapEdgePadding()
@@ -435,31 +433,17 @@ final class ExploreView: UIView, NavigationMapProtocol {
         }
     }
     
+    var mapLoaded = false
     func setupMapView() {
-        let identityPoolId: String
-        if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) {
-            identityPoolId = customModel.identityPoolId
-        } else {
-            identityPoolId = Bundle.main.object(forInfoDictionaryKey: Constants.dictinaryKeyIdentityPoolId) as! String
-        }
-        
-        let regionName = identityPoolId.toRegionString()
-        let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-
         DispatchQueue.main.async { [self] in
-            signingDelegate = AWSSignatureV4Delegate(region: regionName)
-            MLNOfflineStorage.shared.delegate = signingDelegate
-            mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
+            if !mapLoaded {
+                mapView.styleURL = DefaultMapStyles.getMapStyleUrl()
+                locateMeAction(force: true)
+                mapView.showsUserLocation = true
+                mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
+                amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo()
+            }
         }
-        
-        mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
-
-        
-        // it is just to force to redraw the mapView
-        mapView.zoomLevel = mapView.zoomLevel + 0.01
-        amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo(mapImageType: mapName?.imageType)
-        mapView.showsUserLocation = true
-        locateMeAction(force: true)
     }
     
     func setupTapGesture() {
@@ -503,21 +487,6 @@ final class ExploreView: UIView, NavigationMapProtocol {
         let mapLayerBottomOffset = Constants.mapLayerBottomOffset + additionalBottomOffset
         setupBottomStack(bottomStackOffset: mapLayerBottomOffset)
     }
-    
-//    func setupAmazonLogo(leadingOffset: CGFloat?, bottomOffset: CGFloat?) {
-//        let leadingOffset = leadingOffset ?? Constant.defaultHorizontalOffset
-//        let bottomOffset = bottomOffset ?? Constant.amazonLogoBottomOffset
-//        amazonMapLogo.snp.remakeConstraints {
-//            $0.leading.equalToSuperview().offset(leadingOffset)
-//            if isiPad {
-//                $0.bottom.equalTo(safeAreaLayoutGuide).offset(bottomOffset)
-//            } else {
-//                $0.bottom.equalTo(searchBarView.snp.top).offset(bottomOffset)
-//            }
-//            $0.height.equalTo(Constant.amazonLogoHeight)
-//            $0.width.equalTo(Constant.amazonLogoWidth)
-//        }
-//    }
     
     func setupAmazonLogo(bottomOffset: CGFloat?) {
         
@@ -594,45 +563,38 @@ private extension ExploreView {
         self.mapView.addAnnotations(pointsToAdd)
     }
     
-    func drawPolyline(_ mapView: MLNMapView, geoJson: Data, isDashedLine: Bool) {
-        // Add our GeoJSON data to the map as an MLNGeoJSONSource.
-        // We can then reference this data from an MLNStyleLayer.
-        
-        // MLNMapView.style is optional, so you must guard against it not being set.
+    func drawPolyline(_ mapView: MLNMapView, geoDatas: [Data], isDashedLine: Bool) {
+        // Ensure the style is loaded
         guard let style = mapView.style else { return }
-        
-        if let layer =  style.layer(withIdentifier: "polyline") {
-            style.removeLayer(layer)
+
+        // Remove existing layers if any
+        ["polyline", "polyline-case", "trails-path"].forEach { layerID in
+            if let layer = style.layer(withIdentifier: layerID) {
+                style.removeLayer(layer)
+            }
+        }
+
+        // Convert each GeoJSON Data into an MLNShape and add to the array of shapes
+        let shapes: [MLNShape] = geoDatas.compactMap { data in
+            return try? MLNShape(data: data, encoding: String.Encoding.utf8.rawValue)
         }
         
-        if let layer2 = style.layer(withIdentifier: "polyline-case") {
-            style.removeLayer(layer2)
+        // Create source from the combined shape and add it to the style
+        let source = MLNShapeSource(identifier: "polyline-source", shapes: shapes, options: nil)
+        if let existingSource = style.source(withIdentifier: "polyline-source") {
+            style.removeSource(existingSource)
         }
-        
-        if let layer3 = style.layer(withIdentifier: "trails-path") {
-            style.removeLayer(layer3)
-        }
-        
-        guard let shapeFromGeoJSON = try? MLNShape(data: geoJson,
-                                                   encoding: String.Encoding.utf8.rawValue) else {
-            fatalError("Could not generate MLNShape")
-        }
-        
-        // create source and add it to the style
-        let source = self.createSource(style, fromShape: shapeFromGeoJSON)
-        
-        // prepare layer parameters
-        // Set the line join and cap to a rounded end.
+        style.addSource(source)
+
+        // Prepare layer parameters
         let lineJoinCap = NSExpression(forConstantValue: "round")
-        // Use `NSExpression` to smoothly adjust the line width from 2pt to 20pt between zoom levels 14 and 18.
-        // The `interpolationBase` parameter allows the values to interpolate along an exponential curve.
         let lineWidth = NSExpression(
             format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-            [16: 2, 20: 20])
-        
+            [16: 2, 20: 20]
+        )
         let lineColor = UIColor(hex: "#008296")
-        
-        // create and add layers
+
+        // Create layers based on the dashed line option
         if isDashedLine {
             let dashedLayer = createDashLayer(source, withLineJoinCap: lineJoinCap, withLineWidth: lineWidth, color: lineColor)
             
@@ -654,39 +616,56 @@ private extension ExploreView {
         }
     }
     
+    func drawDashedLine(_ mapView: MLNMapView, geoJsonArray: [Data], departureCoordinates: CLLocationCoordinate2D, destinationCoordinates: CLLocationCoordinate2D) {
+        guard let style = mapView.style else { return }
+        
+        // Convert each GeoJSON Data into an MLNShape and combine into one shape collection
+        let shapes = geoJsonArray.compactMap { geoJson -> MLNShape? in
+            return try? MLNShape(data: geoJson, encoding: String.Encoding.utf8.rawValue)
+        }
+        
+        // Create a collection feature from all shapes
+        let combinedShape = MLNShapeCollectionFeature(shapes: shapes)
+        
+        // Draw the dashed line for the combined shape
+        drawDashedLine(style, combinedShape: combinedShape, point: departureCoordinates, isFirst: true)
+        drawDashedLine(style, combinedShape: combinedShape, point: destinationCoordinates, isFirst: false)
+    }
+    
     func drawDashedLine(_ mapView: MLNMapView, geoJson: Data, departureCoordinates: CLLocationCoordinate2D, destinationCoordinates: CLLocationCoordinate2D) {
         guard let style = mapView.style else { return }
         
         let shapeFromGeoJSON = (try? MLNShape(data: geoJson,
                                               encoding: String.Encoding.utf8.rawValue)) ?? MLNShape()
         
-        drawDashedLine(style, shape: shapeFromGeoJSON, point: departureCoordinates, isFirst: true)
-        drawDashedLine(style, shape: shapeFromGeoJSON, point: destinationCoordinates, isFirst: false)
+        drawDashedLine(style, combinedShape: shapeFromGeoJSON, point: departureCoordinates, isFirst: true)
+        drawDashedLine(style, combinedShape: shapeFromGeoJSON, point: destinationCoordinates, isFirst: false)
     }
     
-    func drawDashedLine(_ style: MLNStyle, shape: MLNShape, point: CLLocationCoordinate2D, isFirst: Bool) {
-        let layerName = isFirst ? "dashed-layer-start-point" : "dashed-layer-end-point"
-        let sourceName = isFirst ? "dashed-source-start-point" : "dashed-source-end-point"
-        if let layer =  style.layer(withIdentifier: layerName) {
-            style.removeLayer(layer)
+    func drawDashedLine(_ style: MLNStyle, combinedShape: MLNShape, point: CLLocationCoordinate2D, isFirst: Bool) {
+        // Remove any existing layers or sources
+        let sourceName = "dashed-source-combined"
+        let layerName = "dashed-layer-combined"
+        
+        if let existingLayer = style.layer(withIdentifier: layerName) {
+            style.removeLayer(existingLayer)
         }
-        if let source =  style.source(withIdentifier: sourceName) {
-            style.removeSource(source)
+        if let existingSource = style.source(withIdentifier: sourceName) {
+            style.removeSource(existingSource)
         }
         
-        guard let source = createDashedSource(shape: shape, point: point, isFirst: isFirst, identifier: sourceName) else { return }
+        // Create and add the source
+        guard let source = createDashedSource(combinedShape: combinedShape, point: point, isFirst: true, identifier: sourceName) else { return }
         style.addSource(source)
         
-        // prepare layer parameters
-        // Set the line join and cap to a rounded end.
+        // Prepare and add the dashed layer with required styling
         let lineJoinCap = NSExpression(forConstantValue: "round")
-        // Use `NSExpression` to smoothly adjust the line width from 2pt to 20pt between zoom levels 14 and 18.
-        // The `interpolationBase` parameter allows the values to interpolate along an exponential curve.
         let lineWidth = NSExpression(
             format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
             [16: 2, 20: 20])
         
         let dashedLayer = createDashLayer(source, withLineJoinCap: lineJoinCap, withLineWidth: lineWidth, color: .gray, identifier: layerName)
+        
         if let symbolLayer = style.layers.last {
             style.insertLayer(dashedLayer, below: symbolLayer)
         } else {
@@ -694,8 +673,8 @@ private extension ExploreView {
         }
     }
     
-    func createDashedSource(shape: MLNShape, point firstPoint: CLLocationCoordinate2D, isFirst: Bool, identifier: String) -> MLNSource? {
-        guard let secondPoint = findCoordinate(in: shape, isFirst: isFirst) else { return nil }
+    func createDashedSource(combinedShape: MLNShape, point firstPoint: CLLocationCoordinate2D, isFirst: Bool, identifier: String) -> MLNSource? {
+        guard let secondPoint = findCoordinate(in: combinedShape, isFirst: isFirst) else { return nil }
         
         let firstLocation = CLLocation(location: firstPoint)
         let secondLocation = CLLocation(location: secondPoint)
@@ -986,6 +965,7 @@ extension ExploreView: MLNMapViewDelegate {
             debounceForMapRendering.debounce { [weak self] in
                 self?.updateMapHelperConstraints()
                 self?.mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendered
+                self?.mapLoaded = true
             }
         } else {
             debounceForMapRendering.debounce {}

@@ -38,13 +38,13 @@ protocol ExploreVCProtocol: AnyObject {
 protocol ExploreNavigationDelegate: AnyObject {
     func showMapStyles()
     func showDirections(isRouteOptionEnabled: Bool?,
-                        firstDestionation: MapModel?,
-                        secondDestionation: MapModel?,
+                        firstDestination: MapModel?,
+                        secondDestination: MapModel?,
                         lat: Double?,
                         long: Double?)
     func showSearchSceneWith(lat: Double?, long: Double?)
     func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?)
-    func showNavigationview(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?)
+    func showNavigationview(routeLegDetails: [RouteLegDetails], summaryData: (totalDistance: Double, totalDuration: Double), firstDestination: MapModel?, secondDestination: MapModel?)
     func showLoginFlow()
     func showLoginSuccess()
     func showAttribution()

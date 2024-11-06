@@ -47,22 +47,6 @@ final class POICardViewModel: POICardViewModelProcotol {
         
         guard let placeLat = cardData.placeLat, let placeLong = cardData.placeLong else { return }
         let destinationPosition = CLLocationCoordinate2D(latitude: placeLat, longitude: placeLong)
-        
-        let currentMapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        switch currentMapStyle?.type {
-        case .esri, .none:
-            let userLocation = CLLocation(location: userLocation)
-            let placeLocation = CLLocation(location: destinationPosition)
-            
-            let distance = userLocation.distance(from: placeLocation)
-            guard distance < NumberConstants.fourHundredKMInMeters else {
-                delegate?.populateDatas(cardData: cardData, isLoadingData: false, errorMessage: StringConstant.esriDistanceError, errorInfoMessage: nil)
-                return
-            }
-        case .here:
-            break
-        }
-        
         delegate?.populateDatas(cardData: cardData, isLoadingData: isLoading, errorMessage: nil, errorInfoMessage: nil)
         let result = try await routingService.calculateRouteWith(depaturePosition: userLocation, destinationPosition: destinationPosition, travelModes: [.car], avoidFerries: true, avoidTolls: true)
             
@@ -71,7 +55,7 @@ final class POICardViewModel: POICardViewModelProcotol {
             case .success(let direction):
                 guard !(self.datas.isEmpty) else { break }
                 
-                self.datas[0].distance = direction.distance.convertKMToMeters()
+                self.datas[0].distance = direction.distance
                 self.datas[0].duration = direction.duration.convertSecondsToMinString()
             case .failure(let error):
                 responseError = error

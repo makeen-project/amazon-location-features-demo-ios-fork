@@ -7,7 +7,7 @@
 
 import Foundation
 import CoreLocation
-import AWSLocation
+import AWSGeoRoutes
 
 final class DirectionViewModel: DirectionViewModelProtocol {
     
@@ -17,7 +17,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     // to use in case of second call for routing
     private var cachedMapModel: MapModel?
     
-    var defaultTravelMode: [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>]  = [:]
+    var defaultTravelMode: [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>]  = [:]
     
     var userLocation: (lat: Double?, long: Double?)?
     
@@ -67,7 +67,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -75,10 +75,12 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self.delegate?.showAlert(model)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(model)
+                    }
                 }
         } else {
-            let response = await service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            let response = await service.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
             switch response {
             case .success(let results):
                 self.presentation = results
@@ -87,7 +89,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 self.delegate?.searchResult(mapModel: model)
             case .failure(let error):
                 let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                self.delegate?.showAlert(model)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(model)
+                }
             }
         }
         
@@ -105,7 +109,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -113,7 +117,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     self.delegate?.searchResult(mapModel: model)
                 case .failure(let error):
                     let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    self.delegate?.showAlert(model)
+                    DispatchQueue.main.async {
+                        self.delegate?.showAlert(model)
+                    }
                 }
         } else {
             let result = await service.searchText(text: text, userLat: userLat, userLong: userLong)
@@ -163,10 +169,8 @@ final class DirectionViewModel: DirectionViewModelProtocol {
             return true
         }
         
-        if let id = selectedItem.placeId  {
-            let result = try await service.getPlace(with: id)
-                guard let result else { return false }
-                let mapModel = MapModel(model: result)
+        if selectedItem.placeId != nil  {
+            let mapModel = MapModel(placeId: selectedItem.placeId, placeName: selectedItem.locationName, placeAddress: selectedItem.label, placeCity: selectedItem.locationCity, placeCountry: selectedItem.locationCountry, placeLat: selectedItem.lat, placeLong: selectedItem.long, distance: selectedItem.locationDistance)
                 // cache the latest result for future usage
                 self.cachedMapModel = mapModel
                 try await self.delegate?.selectedPlaceResult(mapModel: [mapModel])
@@ -189,11 +193,11 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         }
     }
     
-    func getCurrentNavigationLegsWith(_ type: RouteTypes) -> Result<[NavigationSteps], Error> {
+    func getCurrentNavigationLegsWith(_ type: RouteTypes) -> Result<[RouteLegDetails]?, Error> {
         let currentModel = getModel(for: type)
         switch currentModel {
         case .success(let presentation):
-            return .success(presentation.navigationSteps)
+            return .success(presentation.routeLegDetails)
         case .failure(let error):
             return .failure(error)
         case .none:
@@ -215,14 +219,14 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                             departurePosition: CLLocationCoordinate2D,
                             travelMode: RouteTypes = .car,
                             avoidFerries: Bool = false,
-                            avoidTolls: Bool = false) async throws -> (Data, DirectionVM)? {
+                            avoidTolls: Bool = false) async throws -> ([Data], DirectionVM)? {
         defaultTravelMode = [:]
         selectedTravelMode = travelMode
         self.avoidFerries = avoidFerries
         self.avoidTolls = avoidTolls
         let result = try await routingService.calculateRouteWith(depaturePosition: departurePosition,
                                           destinationPosition: destinationPosition,
-                                          travelModes: [LocationClientTypes.TravelMode.car, LocationClientTypes.TravelMode.walking, LocationClientTypes.TravelMode.truck],
+                                                                 travelModes: [GeoRoutesClientTypes.RouteTravelMode.car, GeoRoutesClientTypes.RouteTravelMode.pedestrian, GeoRoutesClientTypes.RouteTravelMode.truck],
                                           avoidFerries: avoidFerries,
                                           avoidTolls: avoidTolls)
             self.defaultTravelMode = result
@@ -233,13 +237,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 case .success(let model):
                     switch model.travelMode {
                     case .car:
-                        directionVM.carTypeDistane = model.distance.convertFormattedKMString()
+                        directionVM.carTypeDistane = model.distance.formatToKmString()
                         directionVM.carTypeDuration = model.duration.convertSecondsToMinString()
-                    case .walking:
-                        directionVM.walkingTypeDistance = model.distance.convertFormattedKMString()
+                    case .pedestrian:
+                        directionVM.walkingTypeDistance = model.distance.formatToKmString()
                         directionVM.walkingTypeDuration = model.duration.convertSecondsToMinString()
                     case .truck:
-                        directionVM.truckTypeDistance = model.distance.convertFormattedKMString()
+                        directionVM.truckTypeDistance = model.distance.formatToKmString()
                         directionVM.truckTypeDuration = model.duration.convertSecondsToMinString()
                     default: break
                     }
@@ -253,17 +257,27 @@ final class DirectionViewModel: DirectionViewModelProtocol {
             case .success(let travelMode):
                 let encoder = JSONEncoder()
                 do {
-                    let jsonData = try encoder.encode(travelMode.lineString)
-                    return (jsonData, directionVM)
+                    var jsonDatas: [Data] = []
+                    if let legDetails = travelMode.routeLegDetails {
+                        for leg in legDetails {
+                            let jsonData = try encoder.encode(leg.lineString)
+                            jsonDatas.append(jsonData)
+                        }
+                    }
+                    return (jsonDatas, directionVM)
                 } catch {
                     print(String.errorJSONDecoder)
                 }
             case .failure(let error):
                 let alertModel = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                self.delegate?.showAlert(alertModel)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(alertModel)
+                }
             case .none:
                 let alertModel = AlertModel(title: StringConstant.error, message: StringConstant.failedToCalculateRoute, cancelButton: nil)
-                self.delegate?.showAlert(alertModel)
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(alertModel)
+                }
             }
         return nil
     }
@@ -274,7 +288,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         return model
     }
     
-    private func convertToLocationTravelMode(type: RouteTypes) -> LocationClientTypes.TravelMode {
-        return LocationClientTypes.TravelMode(rawValue: type.title) ?? .walking
+    private func convertToLocationTravelMode(type: RouteTypes) -> GeoRoutesClientTypes.RouteTravelMode {
+        return GeoRoutesClientTypes.RouteTravelMode(rawValue: type.title) ?? .pedestrian
     }
 }

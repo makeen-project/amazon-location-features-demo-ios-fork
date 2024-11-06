@@ -83,15 +83,15 @@ final class NavigationVC: UIViewController {
     @objc private func closeScreen() {
         var lat: Double? = nil
         var long: Double? = nil
-        if viewModel.firstDestionation?.placeName == StringConstant.myLocation {
-            lat = viewModel.firstDestionation?.placeLat
-            long = viewModel.firstDestionation?.placeLong
-        } else if viewModel.secondDestionation?.placeName == StringConstant.myLocation {
-            lat = viewModel.secondDestionation?.placeLat
-            long = viewModel.secondDestionation?.placeLong
+        if viewModel.firstDestination?.placeName == StringConstant.myLocation {
+            lat = viewModel.firstDestination?.placeLat
+            long = viewModel.firstDestination?.placeLong
+        } else if viewModel.secondDestination?.placeName == StringConstant.myLocation {
+            lat = viewModel.secondDestination?.placeLat
+            long = viewModel.secondDestination?.placeLong
         }
         
-        delegate?.showDirections(isRouteOptionEnabled: true, firstDestionation: viewModel.firstDestionation, secondDestionation: viewModel.secondDestionation, lat: lat, long: long)
+        delegate?.showDirections(isRouteOptionEnabled: true, firstDestination: viewModel.firstDestination, secondDestination: viewModel.secondDestination, lat: lat, long: long)
         delegate?.closeNavigationScene()
     }
     
@@ -151,7 +151,7 @@ private extension NavigationVC {
     func sendMapViewData() {
         let datas = viewModel.getData()
         if let mapData = datas[safe: 0] {
-            let mapHeaderData = (distance: mapData.distance, street: mapData.streetAddress)
+            let mapHeaderData = (distance: mapData.distance, street: mapData.instruction)
             let summaryData = viewModel.getSummaryData()
             let data: [String: Any] = ["MapViewValues" : mapHeaderData, "SummaryData": summaryData]
             NotificationCenter.default.post(name: Notification.Name("UpdateMapViewValues"), object: nil, userInfo: data)
@@ -163,7 +163,7 @@ private extension NavigationVC {
     }
     
     @objc private func updateNavigationSteps(_ notification: Notification) {
-        guard let datas = notification.userInfo?["steps"] as? (steps: [NavigationSteps], sumData: (totalDistance: Double, totalDuration: Double)) else { return }
-        viewModel.update(steps: datas.steps, summaryData: datas.sumData)
+        guard let datas = notification.userInfo?["routeLegDetails"] as? (routeLegDetails: [RouteLegDetails], sumData: (totalDistance: Double, totalDuration: Double)) else { return }
+        viewModel.update(routeLegDetails: datas.routeLegDetails, summaryData: datas.sumData)
     }
 }

@@ -8,19 +8,21 @@
 import UIKit
 import SnapKit
 
-enum StepType {
+enum StepState {
     case first, last
 }
 
 struct NavigationCellModel {
-    var stepType: StepType
-    var streetAddress: String
+    var stepState: StepState
+    var instruction: String
     var distance: String
+    var stepType: NavigationStepType
     
-    init(model: NavigationPresentation, stepType: StepType? = .first) {
+    init(model: NavigationPresentation, stepState: StepState? = .first) {
         self.distance = model.distance
-        self.streetAddress = model.streetAddress
-        self.stepType = stepType ?? .first
+        self.instruction = model.instruction
+        self.stepState = stepState ?? .first
+        self.stepType = model.stepType
     }
 }
 
@@ -35,13 +37,12 @@ final class NavigationVCCell: UITableViewCell {
     
     var model: NavigationCellModel! {
         didSet {
-            self.streetLabel.text = model.streetAddress
+            self.streetLabel.text = model.instruction
             self.distanceLabel.text = model.distance
-            self.stepImage.image = model.stepType == .first ? .stepIcon : .selectedPlace
-            
-            switch model.stepType {
+
+            switch model.stepState {
             case .first:
-                self.stepImage.image = .stepIcon
+                self.stepImage.image = model.stepType.image
                 stepLine.isHidden = false
             case .last:
                 self.stepImage.image = .selectedPlace

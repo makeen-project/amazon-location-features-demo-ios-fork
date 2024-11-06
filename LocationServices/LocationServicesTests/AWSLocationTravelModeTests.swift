@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import LocationServices
-import AWSLocation
+import AWSGeoRoutes
 
 final class AWSLocationTravelModeTests: XCTestCase {
 
@@ -21,17 +21,17 @@ final class AWSLocationTravelModeTests: XCTestCase {
     }
 
     func testInitWithWalking() throws {
-        let travelMode = LocationClientTypes.TravelMode(routeType: .walking)
-        XCTAssertEqual(travelMode, .walking, "Route mode Waking expected")
+        let travelMode = GeoRoutesClientTypes.RouteTravelMode(routeType: .pedestrian)
+        XCTAssertEqual(travelMode, .pedestrian, "Route mode Waking expected")
     }
     
     func testInitWithCar() throws {
-        let travelMode = LocationClientTypes.TravelMode(routeType: .car)
+        let travelMode = GeoRoutesClientTypes.RouteTravelMode(routeType: .car)
         XCTAssertEqual(travelMode, .car, "Route mode Car expected")
     }
     
     func testInitWithTruck() throws {
-        let travelMode = LocationClientTypes.TravelMode(routeType: .truck)
+        let travelMode = GeoRoutesClientTypes.RouteTravelMode(routeType: .truck)
         XCTAssertEqual(travelMode, .truck, "Route mode Waking expected")
     }
 

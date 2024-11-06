@@ -55,7 +55,7 @@ final class SearchCell: UITableViewCell {
                 locationAddress.snp.remakeConstraints {
                     $0.top.equalTo(locationTitle.snp.bottom).offset(5)
                     $0.leading.equalTo(locationTitle.snp.leading)
-                    $0.trailing.equalToSuperview().offset(-20)
+                    $0.trailing.equalToSuperview().offset(-30)
                     $0.bottom.equalTo(contentCellView.snp.bottom)
                 }
             } else {

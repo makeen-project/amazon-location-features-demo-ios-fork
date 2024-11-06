@@ -35,15 +35,7 @@ final class AttributionVC: UIViewController {
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
         label.numberOfLines = 0
-        
-        let localData = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        switch localData?.type {
-        case .esri, .none:
-            label.text = StringConstant.partnerAttributionESRIDescription
-        case .here:
-            label.text = StringConstant.partnerAttributionHEREDescription
-        }
-        
+        label.text = StringConstant.partnerAttributionHEREDescription
         return label
     }()
     
@@ -224,14 +216,7 @@ final class AttributionVC: UIViewController {
     // NARK: - Actions
     @objc func partnerLearnButtonTapped() {
         let providerURL: String
-        let localData = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        switch localData?.type {
-        case .esri, .none:
-            providerURL = StringConstant.esriDataProviderLearnMoreURL
-        case .here:
-            providerURL = StringConstant.hereDataProviderLearnMoreURL
-        }
-        
+        providerURL = StringConstant.hereDataProviderLearnMoreURL
         let url = URL(string: providerURL)
         openSafariBrowser(with: url)
     }

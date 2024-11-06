@@ -25,16 +25,6 @@ final class SearchUITests: LocationServicesUITests {
         super.tearDown()
     }
     
-//    func testSearchByAddressName() throws {
-//        let app = startApp()
-//        let _ = UITestExploreScreen(app: app)
-//            .tapSearchTextField()
-//            .waitForSearchRootView()
-//            .type(text: Constants.addressName)
-//            .tapKeyboardReturnButton()
-//            .waitForResultsInTable()
-//    }
-    
     func testSearchByGeocodeLocation() throws {
         let app = startApp()
         let _ = UITestExploreScreen(app: app)

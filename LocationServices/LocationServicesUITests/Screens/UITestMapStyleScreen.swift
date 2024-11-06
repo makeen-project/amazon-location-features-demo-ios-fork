@@ -12,15 +12,33 @@ struct UITestMapStyleScreen: UITestScreen {
 
     private enum Identifiers {
         static var closeButton: String { ViewsIdentifiers.General.closeButton }
+        static var politicalViewButton: String { ViewsIdentifiers.General.politicalViewButton }
+        static var politicalViewSubitle: String { ViewsIdentifiers.General.politicalViewSubtitle }
     }
     
     func select(style: MapStyleImages) -> Self {
-        let header = getSourceHeader(for: style.sourceType)
-        header.tap()
-        
         let cell = getStyleCell(for: style)
         cell.tap()
         
+        return self
+    }
+    
+    func tapPoliticalViewButton() -> UITestPoliticalViewScreen {
+        let button = getPoliticalViewButton()
+        button.tap()
+        
+        return UITestPoliticalViewScreen(app: app)
+    }
+    
+    func checkPoliticalViewButtonSubtitle(type: PoliticalViewType?) -> Self {
+        let button = getPoliticalViewButton()
+        let value = button.staticTexts[Identifiers.politicalViewSubitle].firstMatch.label
+        if let countryCode = type?.countryCode {
+            XCTAssert(value.starts(with: countryCode))
+        }
+        else {
+            XCTFail("Political view subtitle not set correctly")
+        }
         return self
     }
     
@@ -37,12 +55,6 @@ struct UITestMapStyleScreen: UITestScreen {
     }
     
     // MARK: - Private
-    private func getSourceHeader(for sourceType: MapStyleSourceType) -> XCUIElement {
-        let view = app.staticTexts[sourceType.title].firstMatch
-        XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
-        return view
-    }
-    
     private func getStyleCell(for style: MapStyleImages, assert: Bool = true) -> XCUIElement {
         let cell = app.cells[style.mapName].firstMatch
         if assert {
@@ -55,6 +67,12 @@ struct UITestMapStyleScreen: UITestScreen {
     
     private func getCloseButton() -> XCUIElement {
         let button = app.buttons[Identifiers.closeButton]
+        XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
+        return button
+    }
+    
+    private func getPoliticalViewButton() -> XCUIElement {
+        let button = app.buttons[Identifiers.politicalViewButton]
         XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
         return button
     }

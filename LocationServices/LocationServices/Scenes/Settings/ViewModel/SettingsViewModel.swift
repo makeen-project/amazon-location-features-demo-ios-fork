@@ -61,7 +61,6 @@ final class SettingsViewModel: SettingsViewModelProtocol {
         let unitType = UserDefaultsHelper.get(for: String.self, key: .unitType)
     
         datas = [
-            SettingsCellModel(type: .dataProvider, subTitle: mapStyle?.type.title ?? ""),
             SettingsCellModel(type: .mapStyle, subTitle: mapStyle?.title ?? ""),
             SettingsCellModel(type: .routeOption),
             SettingsCellModel(type: .awsCloud)
@@ -76,6 +75,11 @@ extension SettingsViewModel: AWSLoginServiceOutputProtocol {
     }
     
     func loginResult(_ result: Result<Void, Error>) {
-        print("Logged in")
+        switch result {
+        case .success():
+            print("Logged in")
+        case .failure(let error):
+            print("Logged in failure")
+        }
     }
 }

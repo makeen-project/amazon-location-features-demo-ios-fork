@@ -21,6 +21,8 @@ extension UIColor {
     //Map Colors
     static let mapDarkBlackColor = UIColor(named: "mapdarkblackcolor")!
     static let maplightGrayColor = UIColor(named: "maplightGrayColor")!
+    static let mapStyleTintColor = UIColor(named: "mapStyleTintColor")!
+    static let politicalListViewBackgroundColor = UIColor(named: "politicalListViewBackgroundColor")!
     static let mapElementDiverColor = UIColor(named: "dividerColor")!
     static let closeButtonBackgroundColor = UIColor(named: "closeButtonBackgroundColor")!
     static let closeButtonTintColor = UIColor(named: "closeButtonTintColor")!

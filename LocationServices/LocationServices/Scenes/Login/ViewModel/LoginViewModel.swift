@@ -61,6 +61,7 @@ final class LoginViewModel: LoginViewModelProtocol {
 
                 let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId)
                 if isValid {
+                    let configurationModel = awsLoginService.getAWSConfigurationModel()
                     DispatchQueue.main.async {
                         var userDomainValid = userDomain
                         var webSocketUrlValid = webSocketUrl
@@ -71,7 +72,8 @@ final class LoginViewModel: LoginViewModelProtocol {
                         ["https://", "http://"].forEach {
                             webSocketUrlValid = webSocketUrlValid.replacingOccurrences(of: $0, with: "")
                         }
-                        self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomainValid, webSocketUrl: webSocketUrlValid, region: "", apiKey: "")
+                        
+                        self.saveAWS(identityPoolId: identityPoolId, userPoolId: userPoolId, userPoolClientId: userPoolClientId, userDomain: userDomainValid, webSocketUrl: webSocketUrlValid, region: configurationModel?.region ?? "", apiKey: configurationModel?.apiKey ?? "")
                     }
                 }
                 else {
@@ -138,7 +140,14 @@ final class LoginViewModel: LoginViewModelProtocol {
 
 extension LoginViewModel: AWSLoginServiceOutputProtocol {
     func loginResult(_ result: Result<Void, Error>) {
-        delegate?.loginCompleted()
+        switch result {
+        case .success():
+            print("Logged in")
+            delegate?.loginCompleted()
+        case .failure(let error):
+            print("Logged in failure \(error)")
+            delegate?.loginCancelled()
+        }
     }
     
     func logoutResult(_ error: Error?) {

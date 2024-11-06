@@ -22,6 +22,7 @@ protocol AWSLoginServiceProtocol {
     func logout(skipPolicy: Bool)
     func validate(identityPoolId: String) async throws -> Bool
     func disconnectAWS()
+    func getAWSConfigurationModel() -> CustomConnectionModel?
 }
 
 protocol AWSLoginServiceOutputProtocol {
@@ -184,8 +185,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
                 
                 let cognitoToken = CognitoToken(accessToken: json["access_token"] as! String, expiresIn: json["expires_in"] as! Int, idToken: json["id_token"] as! String, refreshToken: json["refresh_token"] as! String, tokenType: json["token_type"] as! String, issueDate: Date())
                 try await self.updateAWSServicesToken(cognitoToken: cognitoToken)
-                self.delegate?.loginResult(.success(()))
-                NotificationCenter.default.post(name: Notification.authorizationStatusChanged, object: self, userInfo: nil)
             }
         } catch {
             print("Error fetching tokens: \(error.localizedDescription)")
@@ -259,7 +258,7 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         
         // remove custom configuration
         UserDefaultsHelper.removeObject(for: .awsConnect)
-        UserDefaultsHelper.setAppState(state: .defaultAWSConnected)
+        UserDefaultsHelper.setAppState(state: .initial)
     }
     
     

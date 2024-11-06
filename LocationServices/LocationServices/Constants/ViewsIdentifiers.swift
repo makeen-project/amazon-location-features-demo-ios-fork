@@ -29,6 +29,12 @@ struct ViewsIdentifiers {
         static let imageAnnotationView = "ImageAnnotationView"
         static let bottomGrabberView = "BottomGrabberView"
         static let sideBarTableView = "SideBarTableView"
+        static let mapStyleRow = "MapStyleRow"
+        static let politicalViewButton = "politicalViewButton"
+        static let politicalViewTable = "politicalViewTable"
+        static let politicalViewCell = "politicalViewCell"
+        static let politicalViewSubtitle = "politicalViewSubtitle"
+        static let politicalViewCloseButton = "politicalViewCloseButton"
     }
     
     struct Explore {
@@ -59,7 +65,7 @@ struct ViewsIdentifiers {
         static let routeTypesContainer = "RouteTypesContainer"
         
         static let carContainer = "CarContainer"
-        static let walkContainer = "WalkContainer"
+        static let pedestrianContainer = "pedestrianContainer"
         static let truckContainer = "TruckContainer"
         
         static let routeEstimatedTime = "RouteEstimatedTime"

@@ -94,7 +94,7 @@ private extension TabBarCoordinator {
             let exploreCoordinator = ExploreCoordinator(navigationController: navigationController)
             exploreCoordinator.delegate = self
             self.childCoordinators.append(exploreCoordinator)
-            exploreCoordinator.showDirections(isRouteOptionEnabled: nil, firstDestionation: nil, secondDestionation: nil, lat: nil, long: nil)
+            exploreCoordinator.showDirections(isRouteOptionEnabled: nil, firstDestination: nil, secondDestination: nil, lat: nil, long: nil)
             
         }
         childCoordinators.append(exploreCoordinator)
@@ -111,8 +111,8 @@ private extension TabBarCoordinator {
             let exploreCoordinator = ExploreCoordinator(navigationController: navigationController)
             exploreCoordinator.delegate = self
             self.childCoordinators.append(exploreCoordinator)
-            exploreCoordinator.showDirections(isRouteOptionEnabled: nil, firstDestionation: nil,
-                                              secondDestionation: nil, lat: nil, long: nil)
+            exploreCoordinator.showDirections(isRouteOptionEnabled: nil, firstDestination: nil,
+                                              secondDestination: nil, lat: nil, long: nil)
         }
         childCoordinators.append(exploreCoordinator)
         exploreCoordinator.start()

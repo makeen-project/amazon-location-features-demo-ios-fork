@@ -9,6 +9,10 @@ import Foundation
 @testable import LocationServices
 
 class AWSLoginServiceMock : AWSLoginServiceProtocol {
+    func getAWSConfigurationModel() -> LocationServices.CustomConnectionModel? {
+        return CustomConnectionModel(identityPoolId: "mockidentityPoolId", userPoolClientId: "mockuserPoolClientId", userPoolId: "mockuserPoolId", userDomain: "mockuserDomain", webSocketUrl: "mockwebSocketUrl", apiKey: "mockapiKey", region: "mockregion")
+    }
+    
     func disconnectAWS() {
     }
     

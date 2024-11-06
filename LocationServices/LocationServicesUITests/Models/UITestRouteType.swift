@@ -8,12 +8,12 @@
 import Foundation
 
 enum RouteType {
-    case walk, car, truck
+    case pedestrian, car, truck
     
     var containerId: String {
         switch self {
-        case .walk:
-            return ViewsIdentifiers.Routing.walkContainer
+        case .pedestrian:
+            return ViewsIdentifiers.Routing.pedestrianContainer
         case .car:
             return ViewsIdentifiers.Routing.carContainer
         case .truck:

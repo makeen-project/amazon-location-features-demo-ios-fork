@@ -44,16 +44,9 @@ final class MapStyleSectionHeaderView: UICollectionReusableView {
     
     private func setupViews() {
         self.addSubview(containerView)
-        containerView.addSubview(titleLabel)
         
         containerView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
-        }
-        
-        titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(15)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-8)
         }
     }
 }

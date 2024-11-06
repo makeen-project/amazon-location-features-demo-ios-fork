@@ -130,7 +130,6 @@ final class GeofenceVC: UIViewController {
         Task {
             await viewModel.fetchListOfGeofences()
         }
-        blurStatusBar()
         setupKeyboardNotifications()
     }
     

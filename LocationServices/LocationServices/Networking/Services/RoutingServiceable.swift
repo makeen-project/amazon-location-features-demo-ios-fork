@@ -7,25 +7,28 @@
 
 import Foundation
 import CoreLocation
-import AWSLocation
+import AWSGeoRoutes
 
 protocol RoutingServiceable {
     func calculateRouteWith(depaturePosition: CLLocationCoordinate2D,
                             destinationPosition: CLLocationCoordinate2D,
-                            travelModes: [LocationClientTypes.TravelMode],
+                            travelModes: [GeoRoutesClientTypes.RouteTravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool) async throws -> [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>]
+                            avoidTolls: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>]
+}
+
+enum RouteError: Error {
+    case noRouteFound(String)
 }
 
 struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
-    
     func calculateRouteWith(depaturePosition: CLLocationCoordinate2D,
                             destinationPosition: CLLocationCoordinate2D,
-                            travelModes: [LocationClientTypes.TravelMode],
+                            travelModes: [GeoRoutesClientTypes.RouteTravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool) async throws -> [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>] {
+                            avoidTolls: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] {
         
-        var presentationObject: [LocationClientTypes.TravelMode: Result<DirectionPresentation, Error>] = [:]
+        var presentationObject: [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] = [:]
         
         for travelMode in travelModes {
             do {
@@ -34,8 +37,13 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                                                         travelMode: travelMode,
                                                         avoidFerries: avoidFerries,
                                                         avoidTolls: avoidTolls)!
-                let model = DirectionPresentation(model: response, travelMode: travelMode)
-                presentationObject[travelMode] = .success(model)
+                if let route = response.routes?[safe: 0] {
+                    let model = DirectionPresentation(model: route, travelMode: travelMode)
+                    presentationObject[travelMode] = .success(model)
+                }
+                else {
+                    presentationObject[travelMode] = .failure(RouteError.noRouteFound("No routes found"))
+                }
             } catch {
                 presentationObject[travelMode] = .failure(error)
             }

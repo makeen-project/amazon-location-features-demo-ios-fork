@@ -45,9 +45,9 @@ extension DirectionVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let destination: DirectionTextFieldModel?
         if isDestination {
-            destination = secondDestionation
+            destination = secondDestination
         } else {
-            destination = firstDestionation
+            destination = firstDestination
         }
         let isMyLocationSelected = destination?.placeName == "My Location"
         
@@ -89,9 +89,9 @@ extension DirectionVC: UITableViewDataSource {
         let searchTextModel = DirectionTextFieldModel(placeName: currentModel.locationName ?? "", placeAddress: currentModel.label, lat: currentModel.lat, long: currentModel.long)
         
         if self.isDestination {
-            secondDestionation = searchTextModel
+            secondDestination = searchTextModel
         } else {
-            firstDestionation = searchTextModel
+            firstDestination = searchTextModel
         }
         
         if currentModel.searchType == .mylocation {
@@ -110,7 +110,7 @@ extension DirectionVC: UITableViewDataSource {
         Task {
             let state = try await viewModel.searchSelectedPlaceWith(currentModel, lat: userLocation?.lat, long: userLocation?.long)
             
-            let canSearch = firstDestionation != nil && firstDestionation?.lat != nil && secondDestionation != nil && secondDestionation?.lat != nil
+            let canSearch = firstDestination != nil && firstDestination?.lat != nil && secondDestination != nil && secondDestination?.lat != nil
             
             if state && canSearch {
                 self.sheetPresentationController?.selectedDetentIdentifier = .medium
@@ -119,7 +119,7 @@ extension DirectionVC: UITableViewDataSource {
         }
     }
     
-    func sendDirectionsToExploreVC(data: Data,
+    func sendDirectionsToExploreVC(data: [Data],
                                    departureLocation: CLLocationCoordinate2D,
                                    destinationLocation: CLLocationCoordinate2D,
                                    routeType: RouteTypes) {
@@ -128,6 +128,5 @@ extension DirectionVC: UITableViewDataSource {
                                     "DestinationLocation": destinationLocation,
                                     "routeType": routeType]
         NotificationCenter.default.post(name: Notification.Name("DirectionLineString"), object: nil, userInfo: datas)
-        //NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
     }
 }

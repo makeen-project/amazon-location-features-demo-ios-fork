@@ -31,7 +31,7 @@ final class SearchViewModel: SearchViewModelProcotol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -44,7 +44,7 @@ final class SearchViewModel: SearchViewModelProcotol {
                     }
                 }
         } else {
-            let response = await service.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            let response = await service.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
             switch response {
             case .success(let results):
                 self.presentation = results
@@ -68,7 +68,7 @@ final class SearchViewModel: SearchViewModelProcotol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results

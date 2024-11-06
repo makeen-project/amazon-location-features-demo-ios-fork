@@ -42,7 +42,6 @@ extension MapStyleVC: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MapStyleSectionHeaderView.reuseId, for: indexPath)
-            (view as? MapStyleSectionHeaderView)?.title = viewModel.getSectionTitle(at: indexPath.section)
         case UICollectionView.elementKindSectionFooter:
             view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MapStyleSectionFooterView.reuseId, for: indexPath)
         default:
@@ -55,11 +54,7 @@ extension MapStyleVC: UICollectionViewDataSource {
 extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let totalWidth = collectionView.frame.size.width
-        let interitemSpacingSum = minimumInteritemSpacing * (numberOfItemsInRow - 1)
-        let itemWidth = (totalWidth - horizontalItemPadding - interitemSpacingSum)/numberOfItemsInRow
-        return CGSize(width: itemWidth,
-                      height: itemHeight)
+        return Constants.cellSize
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -86,6 +81,12 @@ extension MapStyleVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return minimumInteritemSpacing
+        return calculateMinimumInteritemSpacing()
+    }
+    
+    func calculateMinimumInteritemSpacing() -> CGFloat {
+        let itemsCountPerRow = CGFloat(Constants.itemsCountPerRow)
+        let freeSpace = collectionView.frame.width - (Constants.cellSize.width * itemsCountPerRow)
+        return (freeSpace / itemsCountPerRow).rounded(.down)
     }
 }

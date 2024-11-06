@@ -63,7 +63,7 @@ extension String {
     
     func isCoordinate() -> Bool {
         let regularExpression = #"""
-^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$
+^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$
 """#
         guard let regex = try? NSRegularExpression(pattern: regularExpression) else {
                return false

@@ -82,8 +82,8 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     }
     
     func showDirections(isRouteOptionEnabled: Bool?,
-                        firstDestionation: MapModel?,
-                        secondDestionation: MapModel?,
+                        firstDestination: MapModel?,
+                        secondDestination: MapModel?,
                         lat: Double?,
                         long: Double?
     ) {
@@ -95,17 +95,17 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
             self?.supplementaryNavigationController?.popViewController(animated: true)
         }
         
-        if let firstDestionation {
-            controller.firstDestionation = DirectionTextFieldModel(placeName: firstDestionation.placeName ?? "", placeAddress: firstDestionation.placeAddress, lat: firstDestionation.placeLat, long: firstDestionation.placeLong)
+        if let firstDestination {
+            controller.firstDestination = DirectionTextFieldModel(placeName: firstDestination.placeName ?? "", placeAddress: firstDestination.placeAddress, lat: firstDestination.placeLat, long: firstDestination.placeLong)
         }
         
         // first location as my current location
-        if controller.firstDestionation == nil, let lat, let long {
-            controller.firstDestionation = DirectionTextFieldModel(placeName: "My Location", placeAddress: nil, lat: lat, long: long)
+        if controller.firstDestination == nil, let lat, let long {
+            controller.firstDestination = DirectionTextFieldModel(placeName: "My Location", placeAddress: nil, lat: lat, long: long)
         }
 
-        if let secondDestionation {
-            controller.secondDestionation = DirectionTextFieldModel(placeName: secondDestionation.placeName ?? "", placeAddress: secondDestionation.placeAddress, lat: secondDestionation.placeLat, long: secondDestionation.placeLong)
+        if let secondDestination {
+            controller.secondDestination = DirectionTextFieldModel(placeName: secondDestination.placeName ?? "", placeAddress: secondDestination.placeAddress, lat: secondDestination.placeLat, long: secondDestination.placeLong)
         }
         
         controller.userLocation = (lat, long)
@@ -143,8 +143,8 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         splitDelegate?.showSupplementary()
     }
     
-    func showNavigationview(steps: [NavigationSteps], summaryData: (totalDistance: Double, totalDuration: Double), firstDestionation: MapModel?, secondDestionation: MapModel?) {
-        let controller = NavigationBuilder.create(steps: steps, summaryData: summaryData, firstDestionation: firstDestionation, secondDestionation: secondDestionation)
+    func showNavigationview(routeLegDetails: [RouteLegDetails], summaryData: (totalDistance: Double, totalDuration: Double), firstDestination: MapModel?, secondDestination: MapModel?) {
+        let controller = NavigationBuilder.create(routeLegDetails: routeLegDetails, summaryData: summaryData, firstDestination: firstDestination, secondDestination: secondDestination)
         controller.delegate = self
         
         isSearchHidden = true

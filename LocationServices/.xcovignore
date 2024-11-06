@@ -91,7 +91,19 @@
 - DataProviderViewModel.swift
 - NavigationViewModel.swift
 
-# Commenting partial code coverage files due to some code is not able to covered in unit test cases. Need refactoring 
+# Commenting partial code coverage files due to some code is not able to covered in unit test cases.
 - GeofenceDashboardViewModel.swift
 - TrackingViewModel.swift
 - ExploreViewModel.swift
+
+# Ignoring AuthHelper files as it will be accessed via Auth SDK when it is available
+- AuthHelper.swift
+- ApiAuthHelper.swift
+- CognitoAuthHelper.swift
+- LocationCredentialsProvider.swift
+- CognitoCredentialsProvider.swift
+- AmazonLocationCognitoCredentialsProvider.swift
+- AmazonLocationApiCredentialsProvider.swift
+- AmazonLocationClient.swift
+- ApiKeyAuthScheme.swift
+- KeyChainHelper.swift

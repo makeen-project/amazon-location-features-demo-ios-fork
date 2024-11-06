@@ -6,19 +6,19 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSLocation
+import AWSGeoPlaces
 
 enum LocationServiceConstant {
     static let maxResult: NSNumber = 5
 }
 
 protocol AWSLocationSearchService {
-    func searchTextRequest(text: String, userLat: Double?, userLong: Double?) async throws -> SearchPlaceIndexForTextOutput?
-    func searchTextWithSuggestionRequest(text: String,
+    func searchTextRequest(text: String, userLat: Double?, userLong: Double?) async throws -> SearchTextOutput?
+    func searchWithSuggestRequest(text: String,
                                           userLat: Double?,
-                                          userLong: Double?) async throws -> SearchPlaceIndexForSuggestionsOutput?
+                                          userLong: Double?) async throws -> SuggestOutput?
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput?
-    func searchWithPositionRequest(position: [Double]) async throws -> SearchPlaceIndexForPositionOutput?
+    func reverseGeocodeRequest(position: [Double]) async throws -> ReverseGeocodeOutput?
 }
 
 extension AWSLocationSearchService {
@@ -26,32 +26,39 @@ extension AWSLocationSearchService {
   
     func searchTextRequest(text: String,
                            userLat: Double?,
-                           userLong: Double?) async throws -> SearchPlaceIndexForTextOutput? {
+                           userLong: Double?) async throws -> SearchTextOutput? {
         var biasPosition: [Double]? = nil
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
-        let input = SearchPlaceIndexForTextInput(biasPosition: biasPosition, indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), text: text)
+        else {
+            biasPosition = [AppConstants.amazonHqMapPosition.longitude, AppConstants.amazonHqMapPosition.latitude]
+        }
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = SearchTextInput(biasPosition: biasPosition, language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryText: text)
 
-        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
-            let result = try await client.searchPlaceIndexForText(input: input)
+        if let client = AmazonLocationClient.getPlacesClient() {
+            let result = try await client.searchText(input: input)
             return result
         } else {
             return nil
         }
     }
     
-    func searchTextWithSuggestionRequest(text: String,
+    func searchWithSuggestRequest(text: String,
                                           userLat: Double?,
-                                          userLong: Double?) async throws -> SearchPlaceIndexForSuggestionsOutput? {
+                                           userLong: Double?) async throws -> SuggestOutput? {
         var biasPosition: [Double]? = nil
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
         }
-     
-        let input = SearchPlaceIndexForSuggestionsInput(biasPosition: biasPosition, indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), maxResults: LocationServiceConstant.maxResult as? Int, text: text)
-        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
-            let result = try await client.searchPlaceIndexForSuggestions(input: input)
+        else {
+            biasPosition = [AppConstants.amazonHqMapPosition.longitude, AppConstants.amazonHqMapPosition.latitude]
+        }
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = SuggestInput(additionalFeatures: [.sdkUnknown("Core")], biasPosition: biasPosition, language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryText: text)
+        if let client = AmazonLocationClient.getPlacesClient() {
+            let result = try await client.suggest(input: input)
             return result
         } else {
             return nil
@@ -59,8 +66,9 @@ extension AWSLocationSearchService {
     }
     
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput? {
-        let input = GetPlaceInput(indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), placeId: placeId)
-        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = GetPlaceInput(language: Locale.currentLanguageIdentifier(), placeId: placeId, politicalView: politicalView?.countryCode)
+        if let client = AmazonLocationClient.getPlacesClient() {
             let result = try await client.getPlace(input: input)
             return result
         } else {
@@ -68,25 +76,14 @@ extension AWSLocationSearchService {
         }
     }
     
-    func searchWithPositionRequest(position: [Double]) async throws -> SearchPlaceIndexForPositionOutput? {
-        let input = SearchPlaceIndexForPositionInput(indexName: getIndexName(), language: Locale.currentLanguageIdentifier(), position: position)
-        if let client = try await AmazonLocationClient.defaultCognito()?.locationClient {
-            let result = try await client.searchPlaceIndexForPosition(input: input)
+    func reverseGeocodeRequest(position: [Double]) async throws -> ReverseGeocodeOutput? {
+        let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
+        let input = ReverseGeocodeInput(language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryPosition: position, queryRadius: 50)
+        if let client = AmazonLocationClient.getPlacesClient() {
+            let result = try await client.reverseGeocode(input: input)
             return result
         } else {
             return nil
         }
-    }
-}
-
-extension AWSLocationSearchService {
-    private func getIndexName() -> String {
-        let localData = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        switch localData?.type {
-        case .esri, .none:
-            return DataProviderName.esri.placeIndexesName
-        case .here:
-            return DataProviderName.here.placeIndexesName
-        }        
     }
 }

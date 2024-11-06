@@ -8,7 +8,7 @@
 import XCTest
 @testable import LocationServices
 import CoreLocation
-import AWSLocation
+import AWSGeoRoutes
 
 final class ExploreViewModelTests: XCTestCase {
 
@@ -86,10 +86,10 @@ final class ExploreViewModelTests: XCTestCase {
     }
 
     func testReCalculateRouteReturnSuccess() async throws {
-        let direction = DirectionPresentation(model:CalculateRouteOutput(), travelMode: .car)
+        let direction = DirectionPresentation(model: GeoRoutesClientTypes.Route(), travelMode: .car)
         locationService.mockGetPlaceResult = .success(search)
         locationService.mockSearchWithPositionResult = .success([search])
-        routingService.putResult = [LocationClientTypes.TravelMode.car: .success(direction)]
+        routingService.putResult = [GeoRoutesClientTypes.RouteTravelMode.car: .success(direction)]
         exploreViewModel.activateRoute(route: routeModel)
         try await exploreViewModel.reCalculateRoute(with: destinationLocation)
         
@@ -119,7 +119,7 @@ final class ExploreViewModelTests: XCTestCase {
         await exploreViewModel.loadPlace(for: destinationLocation, userLocation: departureLocation)
         
         XCTWaiter().wait(until: {
-            return !self.delegate.hasAnnotationShown
+            return self.delegate.hasAnnotationShown
         }, timeout: Constants.waitRequestDuration, message: "Expected hasAnnotationShown true")
     }
     

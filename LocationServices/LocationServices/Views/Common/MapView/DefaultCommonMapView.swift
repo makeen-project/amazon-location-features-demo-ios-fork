@@ -16,12 +16,11 @@ private enum Constant {
     static let directionMapZoomValue: Double = 14
     static let annotationMapZoomValue: Double = 10
     static let locateMeMapZoomValue: Double = 14
-    static let amazonHqMapPosition = (latitude: 47.61506909519956, longitude: -122.33826750882835)
     static let geofenceViewIdentifier = "GeofenceViewIdentifier"
     static let userLocationViewIdentifier = "UserLocationViewIdentifier"
     static let imageAnnotationViewIdentifier = "ImageAnnotationViewIdentifier"
     static let mainBundleNameObject = "AWSRegion"
-    static let dictinaryKeyIdentityPoolId = "IdentityPoolId"
+    static let dictionaryKeyIdentityPoolId = "IdentityPoolId"
 }
 
 final class DefaultCommonMapView: UIView, NavigationMapProtocol {
@@ -31,7 +30,6 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     var isDrawCirle = false
     var enableGeofenceDrag = false
     var geofenceAnnotationRadius: Int64 = 80
-    private var signingDelegate: MLNOfflineStorageDelegate?
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     private(set) var mapMode: MapMode = .search
@@ -76,27 +74,11 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
     }
     
     func setupMapView() {
-        let identityPoolId: String
-        if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) {
-            identityPoolId = customModel.identityPoolId
-        } else {
-            identityPoolId = Bundle.main.object(forInfoDictionaryKey: Constant.dictinaryKeyIdentityPoolId) as! String
-        }
-        
-        let regionName = identityPoolId.toRegionString()
-        let mapName = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        
         DispatchQueue.main.async { [self] in
-            signingDelegate = AWSSignatureV4Delegate(region: regionName)
-            MLNOfflineStorage.shared.delegate = signingDelegate
-            mapView.styleURL = URL(string: "https://maps.geo.\(regionName).amazonaws.com/maps/v0/maps/\(mapName?.imageType.mapName ?? "EsriLight")/style-descriptor")
+            mapView.styleURL = DefaultMapStyles.getMapStyleUrl()
+            locateMeAction()
+            mapView.showsUserLocation = true
         }
-        
-        // it is just to force to redraw the mapView
-        mapView.zoomLevel = mapView.zoomLevel + 0.01
-        
-        locateMeAction()
-        mapView.showsUserLocation = true
     }
     
     func isLocateMeButtonDisabled(state: Bool) {
@@ -104,7 +86,7 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
         guard !state,
               let userCoordinates = mapView.userLocation?.coordinate,
               CLLocationCoordinate2DIsValid(userCoordinates) else {
-            mapView.setCenter(CLLocationCoordinate2D(latitude: Constant.amazonHqMapPosition.latitude, longitude: Constant.amazonHqMapPosition.longitude), zoomLevel: Constant.annotationMapZoomValue, animated: false)
+            mapView.setCenter(CLLocationCoordinate2D(latitude: AppConstants.amazonHqMapPosition.latitude, longitude: AppConstants.amazonHqMapPosition.longitude), zoomLevel: Constant.annotationMapZoomValue, animated: false)
             return
         }
         

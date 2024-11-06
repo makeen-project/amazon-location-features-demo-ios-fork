@@ -146,8 +146,8 @@ extension POICardVC: POICardViewModelOutputDelegate {
     func showDirections(secondDestination: MapModel) {
         DispatchQueue.main.async { [self] in
             delegate?.showDirections(isRouteOptionEnabled: true,
-                                     firstDestionation: nil,
-                                     secondDestionation: secondDestination,
+                                     firstDestination: nil,
+                                     secondDestination: secondDestination,
                                      lat: userLocation?.lat,
                                      long: userLocation?.long)
         }

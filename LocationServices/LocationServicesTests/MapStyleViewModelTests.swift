@@ -25,29 +25,29 @@ final class MapStyleViewModelTests: XCTestCase {
     }
 
     func testGetSectionsCount() throws {
-       XCTAssertEqual(mapStyleViewModel.getSectionsCount(), 2, "Expected sections count")
+       XCTAssertEqual(mapStyleViewModel.getSectionsCount(), 1, "Expected sections count")
     }
     
     func testGetSectionTitle() throws {
-        XCTAssertEqual(mapStyleViewModel.getSectionTitle(at: 0), "Esri", "Expected section title")
+        XCTAssertEqual(mapStyleViewModel.getSectionTitle(at: 0), "Map Style", "Expected section title")
     }
 
     func testGetItemCount() throws {
-        XCTAssertEqual(mapStyleViewModel.getItemCount(at: 0), 6, "Expected item count")
+        XCTAssertEqual(mapStyleViewModel.getItemCount(at: 0), 4, "Expected item count")
     }
     
     func testGetCellItems() throws {
         let indexPath = IndexPath(row: 1, section: 0)
         let item = mapStyleViewModel.getCellItem(indexPath)
                 
-        XCTAssertEqual(item?.title, "Streets", "Expected cell item title")
+        XCTAssertEqual(item?.title, "Monochrome", "Expected cell item title")
     }
     
     func testSaveSelectedState() throws {
         let indexPath = IndexPath(row: 1, section: 0)
         mapStyleViewModel.saveSelectedState(indexPath)
         let obj = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        XCTAssertEqual(obj?.title, "Streets", "Expected saved selected state")
+        XCTAssertEqual(obj?.title, "Monochrome", "Expected saved selected state")
         
     }
     
@@ -56,7 +56,7 @@ final class MapStyleViewModelTests: XCTestCase {
         mapStyleViewModel.saveSelectedState(indexPath)
         mapStyleViewModel.loadLocalMapData()
         let obj = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
-        XCTAssertEqual(obj?.title, "Navigation", "Expected saved selected state")
+        XCTAssertEqual(obj?.title, "Hybrid", "Expected saved selected state")
     }
 
 }

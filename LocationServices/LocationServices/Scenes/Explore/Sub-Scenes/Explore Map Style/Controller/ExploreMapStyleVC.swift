@@ -7,12 +7,12 @@
 
 import UIKit
 final class ExploreMapStyleVC: UIViewController {
-    let datas: [MapStyleSourceType] =  [.esri, .here]
     var dismissHandler: VoidHandler?
     
     var selectedIndex: Int = 0
     var headerView: ExploreMapStyleHeaderView = ExploreMapStyleHeaderView()
-    
+    var colorSegment: ColorSegmentControl? = nil
+    var politicalView = PoliticalView()
     
     var viewModel: ExploreMapStyleViewModelProtocol! {
         didSet {
@@ -34,6 +34,10 @@ final class ExploreMapStyleVC: UIViewController {
         viewModel.loadData()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        politicalView.setPoliticalView()
+    }
+    
     private func setupHandlers() {
         self.headerView.dismissHandler = { [weak self] in
             self?.dismissHandler?()
@@ -41,9 +45,14 @@ final class ExploreMapStyleVC: UIViewController {
     }
     
     private func setupViews() {
+        let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
+        colorSegment = ColorSegmentControl(items: colorNames)
+
         view.backgroundColor = .searchBarBackgroundColor
         self.view.addSubview(headerView)
         self.view.addSubview(tableView)
+        self.view.addSubview(colorSegment!)
+        self.view.addSubview(politicalView)
         
         headerView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -53,11 +62,31 @@ final class ExploreMapStyleVC: UIViewController {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(10)
+            $0.top.equalTo(headerView.snp.bottom)
             $0.leading.equalToSuperview().offset(5)
             $0.trailing.equalToSuperview().offset(-5)
-            $0.bottom.equalToSuperview()
+            $0.height.equalTo(260)
         }
+        
+        colorSegment?.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.bottom).offset(10)
+            $0.centerX.equalToSuperview()
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                $0.width.equalTo(400)
+            }
+            else {
+                $0.width.equalToSuperview().offset(-50)
+            }
+            $0.height.equalTo(40)
+        }
+        
+        politicalView.snp.makeConstraints {
+            $0.top.equalTo(colorSegment!.snp.bottom).offset(50)
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
+        politicalView.viewController = self
     }
 }
 

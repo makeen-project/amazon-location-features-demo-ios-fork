@@ -23,6 +23,7 @@ protocol LoginViewModelOutputDelegate: AnyObject, AlertPresentable {
     func cloudConnectionDisconnected()
     
     func loginCompleted()
+    func loginCancelled()
     func logoutCompleted()
     func identityPoolIdValidationSucceed()
 }

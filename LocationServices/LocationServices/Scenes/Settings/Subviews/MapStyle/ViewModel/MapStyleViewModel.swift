@@ -9,37 +9,34 @@ import Foundation
 
 final class MapStyleViewModel: MapStyleViewModelProtocol {
     
-    private let mapStyles: [MapStyleSourceType: [MapStyleModel]]
-    private let sortedKeys: [MapStyleSourceType]
-    
+    private let mapStyles: [MapStyleModel]
     var delegate: MapStyleViewModelOutputDelegate?
     
     init() {
-        mapStyles = Dictionary(grouping: DefaultMapStyles.mapStyles) { $0.type }
-        sortedKeys = Array(mapStyles.keys).sorted(by: { first, _ in first == .esri })
+        mapStyles = DefaultMapStyles.mapStyles
     }
     
     func getSectionsCount() -> Int {
-        return sortedKeys.count
+        return 1
     }
     
     func getSectionTitle(at section: Int) -> String {
-        return sortedKeys[section].title
+        return "Map Style"
     }
     
     func getItemCount(at section: Int) -> Int {
-        return mapStyles[sortedKeys[section]]?.count ?? 0
+        return mapStyles.count
     }
     
     func getCellItem(_ indexPath: IndexPath) -> MapStyleCellModel? {
-        guard let style = mapStyles[sortedKeys[indexPath.section]]?[indexPath.row] else { return nil }
+        let style = mapStyles[indexPath.row]
         return MapStyleCellModel(model: style)
     }
     
     func saveSelectedState(_ indexPath: IndexPath) {
-        guard let item = mapStyles[sortedKeys[indexPath.section]]?[indexPath.row] else { return }
+        let item = mapStyles[indexPath.row]
         
-        saveUnitSettingsData(mapSource: item)
+        saveUnitSettingsData(mapStyle: item)
         delegate?.loadData(selectedIndexPath: indexPath)
     }
     
@@ -54,16 +51,14 @@ private extension MapStyleViewModel {
     func loadCurentSourceMap() -> IndexPath? {
         guard let localData = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle) else { return nil }
         
-        guard let section = sortedKeys.firstIndex(of: localData.type) else { return nil }
-        
-        let mapStyles = self.mapStyles[localData.type]
-        guard let row = mapStyles?.firstIndex(where: { $0.title == localData.title }) else { return nil }
-        
-        return IndexPath(row: row, section: section)
+        let section = 0
+        let row = mapStyles.firstIndex(where: { $0.title == localData.title })
+        return IndexPath(row: row!, section: section)
     }
     
-    func saveUnitSettingsData(mapSource: MapStyleModel) {
-        UserDefaultsHelper.saveObject(value: mapSource, key: .mapStyle)
+    func saveUnitSettingsData(mapStyle: MapStyleModel) {
+        UserDefaultsHelper.saveObject(value: mapStyle, key: .mapStyle)
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.validateMapColor, object: nil, userInfo: nil)
     }
 }

@@ -86,7 +86,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await searchService.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await searchService.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
             switch response {
                 case .success(let results):
                     self.presentation = results
@@ -97,7 +97,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
                     self.delegate?.showAlert(model)
                 }
         } else {
-            let result = await searchService.searchTextWithSuggestion(text: text, userLat: userLat, userLong: userLong)
+            let result = await searchService.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
             let resultValue = try result.get()
                 self.presentation = resultValue
                 let model = resultValue.map(MapModel.init)
@@ -113,7 +113,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
         
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await searchService.searchWithPosition(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await searchService.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results

@@ -93,7 +93,6 @@ final class LoginViewModelTests: XCTestCase {
 }
 
 class LoginViewModelOutputDelegateMock: LoginViewModelOutputDelegate {
-    
     var hasCloudConnectionCompleted = false
     var hasCloudConnectionDisconnected = false
     var hasLoginCompleted = false
@@ -111,6 +110,9 @@ class LoginViewModelOutputDelegateMock: LoginViewModelOutputDelegate {
     
     func loginCompleted() {
         hasLoginCompleted = true
+    }
+    
+    func loginCancelled() {
     }
     
     func logoutCompleted() {
