@@ -73,15 +73,17 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
         }
     }
     
-    func setupMapView() {
+    func setupMapView(locateMe: Bool = true) {
         DispatchQueue.main.async { [self] in
             mapView.styleURL = DefaultMapStyles.getMapStyleUrl()
-            locateMeAction()
+            if locateMe {
+                locateMeAction(force: true)
+            }
             mapView.showsUserLocation = true
         }
     }
     
-    func isLocateMeButtonDisabled(state: Bool) {
+    func isLocateMeButtonDisabled(state: Bool, animatedUserLocation: Bool = true) {
         
         guard !state,
               let userCoordinates = mapView.userLocation?.coordinate,
@@ -90,7 +92,7 @@ final class DefaultCommonMapView: UIView, NavigationMapProtocol {
             return
         }
         
-        setMapCenter(userCoordinates: userCoordinates)
+        setMapCenter(userCoordinates: userCoordinates, animated: animatedUserLocation)
     }
     
     func grantedLocationPermissions() {
@@ -166,7 +168,7 @@ extension DefaultCommonMapView: MLNMapViewDelegate {
                   let userCoordinates = userLocation?.coordinate else { return }
             
             wasCenteredByUserLocation = true
-            setMapCenter(userCoordinates: userCoordinates)
+            setMapCenter(userCoordinates: userCoordinates, animated: true)
         case .turnByTurnNavigation:
             guard (userLocation?.coordinate) != nil else { return }
         }
@@ -193,16 +195,37 @@ extension DefaultCommonMapView: MLNMapViewDelegate {
             geofenceAnnotationView.update(mapView: mapView)
         })
     }
+    
+    func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
+        GeneralHelper.setMapLanguage(mapView: mapView, style: style)
+    }
+    
+    func mapViewDidFinishRenderingFrame(_ mapView: MLNMapView, fullyRendered: Bool) {
+        if fullyRendered {
+            if let style = mapView.style {
+                GeneralHelper.setMapLanguage(mapView: mapView, style: style)
+            }
+        }
+    }
+    
 }
 
 extension DefaultCommonMapView {
-    @objc func locateMeAction() {
-        let state = mapView.locationManager.authorizationStatus == .authorizedWhenInUse
-        isLocateMeButtonDisabled(state: !state)
+    @objc func locateMeAction(force: Bool = false) {
+        let action = { [weak self] in
+            guard let self else { return }
+            let state = self.mapView.locationManager.authorizationStatus == .authorizedWhenInUse
+            self.isLocateMeButtonDisabled(state: !state, animatedUserLocation: !force)
+        }
+        
+        guard !force else {
+            action()
+            return
+        }
     }
     
-    private func setMapCenter(userCoordinates: CLLocationCoordinate2D) {
-        mapView.setCenter(userCoordinates, zoomLevel: Constant.locateMeMapZoomValue, direction: mapView.direction, animated: true) { [weak self] in
+    private func setMapCenter(userCoordinates: CLLocationCoordinate2D, animated: Bool) {
+        mapView.setCenter(userCoordinates, zoomLevel: Constant.locateMeMapZoomValue, direction: mapView.direction, animated: animated) { [weak self] in
             switch self?.mapMode {
             case .search, .none:
                 self?.mapView.userTrackingMode = .follow

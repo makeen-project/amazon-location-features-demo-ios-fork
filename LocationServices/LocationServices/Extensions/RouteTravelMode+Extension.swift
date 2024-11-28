@@ -17,6 +17,8 @@ extension GeoRoutesClientTypes.RouteTravelMode {
             self = .car
         case .truck:
             self = .truck
+        case .scooter:
+            self = .scooter
         }
     }
 }

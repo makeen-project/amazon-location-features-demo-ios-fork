@@ -13,7 +13,7 @@ enum LocationServiceConstant {
 }
 
 protocol AWSLocationSearchService {
-    func searchTextRequest(text: String, userLat: Double?, userLong: Double?) async throws -> SearchTextOutput?
+    func searchTextRequest(text: String, userLat: Double?, userLong: Double?, queryId: String?) async throws -> SearchTextOutput?
     func searchWithSuggestRequest(text: String,
                                           userLat: Double?,
                                           userLong: Double?) async throws -> SuggestOutput?
@@ -26,7 +26,7 @@ extension AWSLocationSearchService {
   
     func searchTextRequest(text: String,
                            userLat: Double?,
-                           userLong: Double?) async throws -> SearchTextOutput? {
+                           userLong: Double?, queryId: String? = nil) async throws -> SearchTextOutput? {
         var biasPosition: [Double]? = nil
         if let lat = userLat, let long = userLong {
             biasPosition = [long, lat]
@@ -35,7 +35,7 @@ extension AWSLocationSearchService {
             biasPosition = [AppConstants.amazonHqMapPosition.longitude, AppConstants.amazonHqMapPosition.latitude]
         }
         let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
-        let input = SearchTextInput(biasPosition: biasPosition, language: Locale.currentLanguageIdentifier(), politicalView: politicalView?.countryCode, queryText: text)
+        let input = SearchTextInput(biasPosition: queryId == nil ? biasPosition: nil, language: queryId == nil ? Locale.currentLanguageIdentifier() : nil, politicalView: queryId == nil ? politicalView?.countryCode : nil, queryId: queryId, queryText: queryId == nil ? text : nil)
 
         if let client = AmazonLocationClient.getPlacesClient() {
             let result = try await client.searchText(input: input)
@@ -67,7 +67,7 @@ extension AWSLocationSearchService {
     
     func getPlaceRequest(with placeId: String) async throws -> GetPlaceOutput? {
         let politicalView = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
-        let input = GetPlaceInput(language: Locale.currentLanguageIdentifier(), placeId: placeId, politicalView: politicalView?.countryCode)
+        let input = GetPlaceInput(additionalFeatures: [GeoPlacesClientTypes.GetPlaceAdditionalFeature.contact], language: Locale.currentLanguageIdentifier(), placeId: placeId, politicalView: politicalView?.countryCode)
         if let client = AmazonLocationClient.getPlacesClient() {
             let result = try await client.getPlace(input: input)
             return result

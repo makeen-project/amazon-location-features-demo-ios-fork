@@ -16,6 +16,7 @@ enum UserDefaultKeyType: String {
     case mapStyle
     case mapStyleColorType
     case politicalView
+    case language
     case tollOptions
     case ferriesOptions
     // means we attach the policy to AWSLocation for tracking
@@ -31,6 +32,8 @@ enum UserDefaultKeyType: String {
     case appState
     case termsAndConditionsAgreedVersion
     case signedInIdentityId
+    
+    case mapCenter
 }
 
 enum AppState: Int {

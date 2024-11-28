@@ -83,10 +83,10 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
             self.delegate?.searchResult(mapModel: [])
             return
         }
-    
+        let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await searchService.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await searchService.reverseGeocode(position: requestValue, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
             switch response {
                 case .success(let results):
                     self.presentation = results
@@ -97,7 +97,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
                     self.delegate?.showAlert(model)
                 }
         } else {
-            let result = await searchService.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
+            let result = await searchService.searchWithSuggest(text: text, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
             let resultValue = try result.get()
                 self.presentation = resultValue
                 let model = resultValue.map(MapModel.init)
@@ -110,10 +110,10 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
             self.delegate?.searchResult(mapModel: [])
             return
         }
-        
+        let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await searchService.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await searchService.reverseGeocode(position: requestValue, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -124,7 +124,7 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
                     self.delegate?.showAlert(model)
                 }
         } else {
-            let result = await searchService.searchText(text: text, userLat: userLat, userLong: userLong)
+            let result = await searchService.searchText(text: text, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong, queryId: nil)
             let resultValue = try result.get()
             self.presentation = resultValue
             let model = resultValue.map(MapModel.init)
@@ -138,14 +138,24 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
     
     func getSearchCellModel() -> [SearchCellViewModel] {
         searchCellModel = presentation.map({
-            SearchCellViewModel(searchType: $0.placeId != nil ? .location : .search,
+            var searchType = SearchType.search
+            if $0.placeId == "myLocation" {
+                searchType = .mylocation
+            } else if $0.suggestType == .place {
+                searchType = .location
+            } else {
+                searchType = .search
+            }
+            //$0.placeId != nil ? .location : .search
+            return SearchCellViewModel(searchType: searchType,
                                 placeId: $0.placeId,
                                 locationName: $0.name,
                                 locationDistance: $0.distance,
                                 locationCountry: $0.countryName,
                                 locationCity: $0.cityName,
                                 label: $0.fullLocationAddress,
-                                long: $0.placeLong, lat: $0.placeLat)
+                                long: $0.placeLong, lat: $0.placeLat,
+                                queryId: $0.queryId, queryType: $0.queryType)
         })
         
         return searchCellModel
@@ -156,7 +166,8 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
         if let id = selectedItem.placeId  {
             let result = try await searchService.getPlace(with: id)
             guard let result else { return false}
-            let mapModel = MapModel(model: result)
+            let model = SearchPresentation(model: result)
+            let mapModel = MapModel(model: model)
             self.delegate?.selectedPlaceResult(mapModel: mapModel)
             return true
         } else if selectedItem.lat != nil {
@@ -166,7 +177,8 @@ final class AddGeofenceViewModel: AddGeofenceViewModelProcotol {
             return true
             
         } else {
-            let result = await searchService.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long)
+            let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
+            let result = await searchService.searchText(text: selectedItem.locationName ?? "", userLat: mapCenter != nil ? mapCenter?.latitude : lat, userLong: mapCenter != nil ? mapCenter?.longitude : long, queryId: selectedItem.queryId)
             self.presentation = []
             
             switch result {

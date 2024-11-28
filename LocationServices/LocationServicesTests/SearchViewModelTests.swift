@@ -8,6 +8,7 @@
 import XCTest
 @testable import LocationServices
 import CoreLocation
+import AWSGeoPlaces
 
 final class SearchViewModelTests: XCTestCase {
 
@@ -16,6 +17,8 @@ final class SearchViewModelTests: XCTestCase {
     var locationService: LocationAPIServiceMock!
     var delegate: MockSearchViewModelOutputDelegate!
     var search: SearchPresentation!
+    var place: GetPlaceOutput!
+    
     enum Constants {
         static let waitRequestDuration: TimeInterval = 10
         static let apiRequestDuration: TimeInterval = 1
@@ -38,6 +41,7 @@ final class SearchViewModelTests: XCTestCase {
                                        placeLat: userLocation?.latitude,
                                        placeLong: userLocation?.longitude,
                                        name: "Times Square")
+        place = GetPlaceOutput(placeId: "ID", position: [-73.98554260340953, 40.7487776237092], title: "dummy place")
     }
 
     override func tearDownWithError() throws {
@@ -131,7 +135,7 @@ final class SearchViewModelTests: XCTestCase {
     
     func testGetSearchCellModelWithResults() async throws {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        locationService.mockGetPlaceResult = .success(search)
+        locationService.mockGetPlaceResult = .success(place)
         locationService.mockSearchTextResult = .success([search])
         try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
         XCTWaiter().wait(until: {
@@ -142,7 +146,7 @@ final class SearchViewModelTests: XCTestCase {
 
     func testSearchSelectedPlaceWithPlaceId() async throws {
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        locationService.mockGetPlaceResult = .success(search)
+        locationService.mockGetPlaceResult = .success(place)
         locationService.mockSearchWithPositionResult = .success([search])
         locationService.mockSearchTextResult = .success([search])
         try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)
@@ -188,7 +192,7 @@ final class SearchViewModelTests: XCTestCase {
                                        name: "Times Square")
         locationService.mockSearchTextResult = .success([search])
         locationService.mockSearchWithPositionResult = .success([search])
-        locationService.mockGetPlaceResult = .success(search)
+        locationService.mockGetPlaceResult = .success(place)
         locationService.mockSearchTextWithSuggestionResult = .success([search])
         locationService.mockSearchTextResult = .success([search])
         _ = try await searchViewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.latitude, userLong: userLocation.longitude)

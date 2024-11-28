@@ -10,6 +10,8 @@ import UIKit
 struct DirectionVM {
     var carTypeDistane: String
     var carTypeDuration: String
+    var scooterTypeDuration: String
+    var scooterTypeDistance: String
     var walkingTypeDuration: String
     var walkingTypeDistance: String
     var truckTypeDistance: String
@@ -24,6 +26,7 @@ final class DirectionView: UIView {
     private var model: DirectionVM! {
         didSet {
             carRouteTypeView.setDatas(distance: model.carTypeDistane, duration: model.carTypeDuration, isPreview: isPreview)
+            scooterRouteTypeView.setDatas(distance: model.scooterTypeDistance, duration: model.scooterTypeDuration, isPreview: isPreview)
             pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, isPreview: isPreview)
             truckRouteTypeView.setDatas(distance: model.truckTypeDistance, duration: model.truckTypeDuration, isPreview: isPreview)
         }
@@ -54,6 +57,12 @@ final class DirectionView: UIView {
     }()
     private var pedestrianRouteTypeView: RouteTypeView = RouteTypeView(viewType: .pedestrian)
     private var pedestrianSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        return view
+    }()
+    private var scooterRouteTypeView: RouteTypeView = RouteTypeView(viewType: .scooter)
+    private var scooterSeperatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .searchBarBackgroundColor
         return view
@@ -161,6 +170,18 @@ final class DirectionView: UIView {
             
         }
         
+        scooterRouteTypeView.isSelectedHandle = { [weak self] state in
+            self?.changeSelectedTextFor(scooterType: state)
+            Task {
+                try await self?.delegate?.changeRoute(type: .scooter)
+            }
+        }
+        
+        scooterRouteTypeView.goButtonHandler =  { [weak self]  in
+            self?.delegate?.startNavigation(type: .scooter)
+            
+        }
+        
         truckRouteTypeView.isSelectedHandle = { [weak self] state in
             self?.changeSelectedTextFor(truckType: state)
             Task {
@@ -199,9 +220,11 @@ final class DirectionView: UIView {
     
     private func changeSelectedTextFor(carType: Bool = false,
                                        walkingType: Bool = false,
+                                       scooterType: Bool = false,
                                        truckType: Bool = false) {
         carRouteTypeView.isDotViewVisible(carType)
         pedestrianRouteTypeView.isDotViewVisible(walkingType)
+        scooterRouteTypeView.isDotViewVisible(scooterType)
         truckRouteTypeView.isDotViewVisible(truckType)
     }
     
@@ -218,6 +241,7 @@ final class DirectionView: UIView {
     private func setupViews() {
         carRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.carContainer
         pedestrianRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.pedestrianContainer
+        scooterRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.scooterContainer
         truckRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.truckContainer
         
         routeTypeStackView.removeArrangedSubViews()
@@ -225,6 +249,8 @@ final class DirectionView: UIView {
         routeTypeStackView.addArrangedSubview(carSeperatorView)
         routeTypeStackView.addArrangedSubview(pedestrianRouteTypeView)
         routeTypeStackView.addArrangedSubview(pedestrianSeperatorView)
+        routeTypeStackView.addArrangedSubview(scooterRouteTypeView)
+        routeTypeStackView.addArrangedSubview(scooterSeperatorView)
         routeTypeStackView.addArrangedSubview(truckRouteTypeView)
         
         self.addSubview(routeOptions)
@@ -257,6 +283,14 @@ final class DirectionView: UIView {
         }
         
         pedestrianSeperatorView.snp.makeConstraints {
+            $0.height.equalTo(1)
+        }
+        
+        scooterRouteTypeView.snp.makeConstraints {
+            $0.height.equalTo(72)
+        }
+        
+        scooterSeperatorView.snp.makeConstraints {
             $0.height.equalTo(1)
         }
         

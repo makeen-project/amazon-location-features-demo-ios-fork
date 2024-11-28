@@ -31,7 +31,7 @@ extension AWSRoutingServiceProtocol {
         let destination = [destinationPosition.longitude, destinationPosition.latitude]
         let legAdditionalFeatures: [GeoRoutesClientTypes.RouteLegAdditionalFeature] = [.travelStepInstructions, .summary]
         
-        let input = CalculateRoutesInput(avoid: routeAvoidanceOptions, departNow: true, destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: GeoRoutesClientTypes.GeometryFormat.simple, origin: origin, travelStepType: .default)
+        let input = CalculateRoutesInput(avoid: routeAvoidanceOptions, departNow: true, destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .simple, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
         
         if let client = AmazonLocationClient.getRoutesClient() {
             let result = try await client.calculateRoutes(input: input)

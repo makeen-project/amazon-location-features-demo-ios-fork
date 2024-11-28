@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import MapLibre
 
 class GeneralHelper {
     static func getAmazonMapLogo() -> UIColor {
@@ -55,4 +56,59 @@ class GeneralHelper {
             image.withRenderingMode(.alwaysTemplate).draw(in: rect)
         }
     }
+    
+    static func setMapLanguage(mapView: MLNMapView, style: MLNStyle) {
+        let language = Locale.currentLanguageIdentifier()
+        
+        style.localizeLabels(into: Locale(identifier: language))
+        
+        style.layers.forEach { layer in
+            guard let symbolLayer = layer as? MLNSymbolStyleLayer,
+                  let textExpression = symbolLayer.text else { return }
+            let exp = "\(String(describing: symbolLayer.text))"
+            if exp.contains("MLN_IF(") {
+                return
+            }
+            let mglExpression = textExpression.mgl_jsonExpressionObject
+            let expression = recurseExpression(exp: mglExpression, prevPropertyRegex: "^name:([A-Za-z\\-_]+)$", nextProperty: "name:\(language)", language: language)
+            symbolLayer.text = NSExpression(mglJSONObject: expression)
+        }
+    }
+
+    static func recurseExpression(exp: Any, prevPropertyRegex: String, nextProperty: String, language: String) -> Any {
+        if language == "zh-Hant" {
+            // Special handling for zh-Hant
+            return [
+                "coalesce",
+                ["get", "name:zh-Hant"],
+                ["get", "name:zh"],
+                ["get", "name:en"],
+                ["get", "name"]
+            ]
+        }
+        
+        if let arrayExp = exp as? [Any] {
+            guard arrayExp.first as? String == "coalesce" else {
+                return arrayExp.map { recurseExpression(exp: $0, prevPropertyRegex: prevPropertyRegex, nextProperty: nextProperty, language: language) }
+            }
+            
+            guard arrayExp.count > 2,
+                  let first = arrayExp[1] as? [Any], first.first as? String == "get",
+                  let firstProperty = first.last as? String,
+                  let _ = firstProperty.range(of: prevPropertyRegex, options: .regularExpression),
+                  let second = arrayExp[2] as? [Any], second.first as? String == "get" else {
+                return arrayExp.map { recurseExpression(exp: $0, prevPropertyRegex: prevPropertyRegex, nextProperty: nextProperty, language: language) }
+            }
+            
+            return [
+                "coalesce",
+                ["get", nextProperty],
+                ["get", "name:en"],
+                ["get", "name"]
+            ]
+        }
+        
+        return exp
+    }
+
 }

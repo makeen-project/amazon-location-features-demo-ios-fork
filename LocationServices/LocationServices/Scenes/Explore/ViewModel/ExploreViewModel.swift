@@ -89,18 +89,22 @@ final class ExploreViewModel: ExploreViewModelProtocol {
     }
     
     func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) async {
-        let result = await locationService.reverseGeocode(position: [coordinates.longitude, coordinates.latitude], userLat: userLocation?.latitude, userLong: userLocation?.longitude)
-        DispatchQueue.main.async {
-            do {
-                if let model = try result.get().first {
-                    self.delegate?.showAnnotation(model: model, force: false)
-                }
+        var biasLocation = userLocation
+        if let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter) {
+            biasLocation = CLLocationCoordinate2D(latitude: mapCenter.latitude, longitude: mapCenter.longitude)
+        }
+        let result = await locationService.reverseGeocode(position: [coordinates.longitude, coordinates.latitude], userLat: biasLocation?.latitude, userLong: biasLocation?.longitude)
+        do {
+            if var model = try result.get().first, let placeId = model.placeId,
+               let place = try await locationService.getPlace(with: placeId) {
+                model.place = place
+                self.delegate?.showAnnotation(model: model, force: false)
             }
-            catch {
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self.delegate?.showAlert(model)
-                }
+        }
+        catch {
+            let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
+            DispatchQueue.main.async {
+                self.delegate?.showAlert(model)
             }
         }
     }

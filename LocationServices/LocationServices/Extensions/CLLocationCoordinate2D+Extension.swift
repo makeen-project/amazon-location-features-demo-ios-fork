@@ -46,3 +46,8 @@ extension CLLocationCoordinate2D: Hashable {
         hasher.combine(longitude)
     }
 }
+
+struct LocationCoordinate2D: Codable {
+    var latitude: Double
+    var longitude: Double
+}

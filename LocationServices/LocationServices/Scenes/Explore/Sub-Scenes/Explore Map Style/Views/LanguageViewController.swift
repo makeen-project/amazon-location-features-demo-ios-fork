@@ -1,5 +1,5 @@
 //
-//  PoliticalViewController.swift
+//  LanguageViewController.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -7,9 +7,7 @@
 
 import UIKit
 
-class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
-    
-    var filteredPoliticalViews: [PoliticalViewType] = []
+class LanguageViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     var selectedIndexPath: IndexPath?
     var tableView: UITableView!
     private var isSearching: Bool = false
@@ -22,7 +20,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
     
     private var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Political View"
+        label.text = "Select Language"
         label.font = .boldSystemFont(ofSize: 18)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,37 +29,26 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
     
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .detailDisclosure)
-        button.accessibilityIdentifier = ViewsIdentifiers.General.politicalViewCloseButton
+        button.accessibilityIdentifier = ViewsIdentifiers.General.languageViewCloseButton
         button.setImage(.closeIcon, for: .normal)
         button.tintColor = .closeButtonTintColor
         button.backgroundColor = .closeButtonBackgroundColor
         button.isUserInteractionEnabled = true
         button.layer.cornerRadius = 15
-        button.addTarget(self, action: #selector(politicalViewDismiss), for: .touchUpInside)
+        button.addTarget(self, action: #selector(languageViewDismiss), for: .touchUpInside)
         return button
-    }()
-    
-    private var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search"
-        searchBar.image(for: .search, state: .normal)
-        searchBar.backgroundColor = .clear
-        searchBar.searchTextField.backgroundColor = .white
-        searchBar.searchTextField.borderStyle = .none
-        searchBar.layer.borderWidth = 0
-        return searchBar
     }()
     
     var onDismiss: (() -> Void)?
     
-    @objc private func politicalViewDismiss() {
+    @objc private func languageViewDismiss() {
         self.dismiss(animated: true)
         onDismiss?()
     }
     
-    @objc private func clearPoliticalView() {
+    @objc private func clearLanguage() {
         selectedIndexPath = nil
-        UserDefaultsHelper.removeObject(for: .politicalView)
+        UserDefaultsHelper.removeObject(for: .language)
         tableView.reloadData()
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }
@@ -75,14 +62,11 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         headerView.addSubview(closeButton)
         view.addSubview(headerView)
         
-        searchBar.delegate = self
-        view.addSubview(searchBar)
-        
         tableView = UITableView(frame: view.bounds)
-        tableView.accessibilityIdentifier = ViewsIdentifiers.General.politicalViewTable
+        tableView.accessibilityIdentifier = ViewsIdentifiers.General.languageViewTable
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(PoliticalViewCell.self, forCellReuseIdentifier: ViewsIdentifiers.General.politicalViewCell)
+        tableView.register(LanguageViewCell.self, forCellReuseIdentifier: ViewsIdentifiers.General.languageViewCell)
         view.addSubview(tableView)
         
         headerView.snp.makeConstraints {
@@ -102,32 +86,21 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
             $0.height.width.equalTo(30)
         }
         
-        searchBar.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(10)
-            $0.trailing.equalToSuperview().offset(-10)
-            $0.height.equalTo(60)
-        }
-        
         tableView.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom).offset(10)
+            $0.top.equalTo(headerView.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(10)
             $0.trailing.equalToSuperview().offset(-10)
             $0.bottom.equalToSuperview().offset(-40)
         }
-        
-        searchBar.backgroundColor = .clear
-        searchBar.layer.cornerRadius = 10
-        searchBar.layer.masksToBounds = true
+
         
         tableView.layer.cornerRadius = 10
         tableView.layer.masksToBounds = true
         
-        filteredPoliticalViews = PoliticalViewTypes
-        
-        let politicalViewType = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView)
-        var selectedIndex = filteredPoliticalViews.firstIndex(where: { type in
-            if type.countryCode == politicalViewType?.countryCode {
+
+        let language = Locale.currentLanguageIdentifier()
+        var selectedIndex = languageSwitcherData.firstIndex(where: { type in
+            if type.value == language {
                 return true
             }
             return false
@@ -140,15 +113,11 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 50
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredPoliticalViews.count
+        return languageSwitcherData.count
     }
     
     private var checkedIcon: UIImageView = {
@@ -160,11 +129,11 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
     }()
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewsIdentifiers.General.politicalViewCell, for: indexPath) as? PoliticalViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewsIdentifiers.General.languageViewCell, for: indexPath) as? LanguageViewCell else {
             return UITableViewCell()
         }
-        let politicalView = filteredPoliticalViews[indexPath.row]
-        cell.configure(with: politicalView)
+        let language = languageSwitcherData[indexPath.row]
+        cell.configure(with: language)
         
         if let selectedIndexPath = selectedIndexPath, selectedIndexPath == indexPath {
             cell.accessoryView = checkedIcon
@@ -178,31 +147,8 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         selectedIndexPath = indexPath
-        if selectedIndexPath?.row == 0 {
-            UserDefaultsHelper.removeObject(for: .politicalView)
-        }
-        else {
-            UserDefaultsHelper.saveObject(value: filteredPoliticalViews[indexPath.row], key: .politicalView)
-        }
+        UserDefaultsHelper.saveObject(value: languageSwitcherData[indexPath.row], key: .language)
         tableView.reloadData()
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filterPoliticalViews(for: searchText)
-    }
-    
-    private func filterPoliticalViews(for query: String) {
-        if query.isEmpty {
-            isSearching = false
-            filteredPoliticalViews = PoliticalViewTypes
-        } else {
-            isSearching = true
-            filteredPoliticalViews = PoliticalViewTypes.filter {
-                $0.fullName.lowercased().contains(query.lowercased()) ||
-                $0.politicalDescription.lowercased().contains(query.lowercased())
-            }
-        }
-        tableView.reloadData()
     }
 }

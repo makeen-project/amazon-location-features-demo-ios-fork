@@ -18,5 +18,6 @@ protocol POICardViewModelOutputDelegate: AnyObject, AlertPresentable {
     func dismissPoiView()
     func showDirectionView(seconDestination: MapModel)
     func updateSizeClass(_ sizeClass: POICardVC.DetentsSizeClass)
+    func setPOIHeight(_ height: CGFloat)
 }
 

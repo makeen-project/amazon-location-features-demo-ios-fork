@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
+import CoreLocation
 
 final class SearchViewModel: SearchViewModelProcotol {
     
@@ -28,10 +29,10 @@ final class SearchViewModel: SearchViewModelProcotol {
             self.delegate?.searchResult(mapModel: [], shouldDismiss: false, showOnMap: false)
             return
         }
-        
+        let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -44,7 +45,7 @@ final class SearchViewModel: SearchViewModelProcotol {
                     }
                 }
         } else {
-            let response = await service.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
+            let response = await service.searchWithSuggest(text: text, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
             switch response {
             case .success(let results):
                 self.presentation = results
@@ -65,10 +66,10 @@ final class SearchViewModel: SearchViewModelProcotol {
             self.delegate?.searchResult(mapModel: [], shouldDismiss: false, showOnMap: false)
             return
         }
-        
+        let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -79,7 +80,7 @@ final class SearchViewModel: SearchViewModelProcotol {
                     self.delegate?.showAlert(model)
                 }
         } else {
-            let result = await service.searchText(text: text, userLat: userLat, userLong: userLong)
+            let result = await service.searchText(text: text, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong, queryId: nil)
                 let resultValue = try result.get()
                 self.presentation = resultValue
                 let model = resultValue.map(MapModel.init)
@@ -93,14 +94,23 @@ final class SearchViewModel: SearchViewModelProcotol {
     
     func getSearchCellModel() -> [SearchCellViewModel] {
         searchCellModel = presentation.map({
-            return SearchCellViewModel(searchType: ($0.placeId != nil || $0.placeLat != nil) ? .location : .search,
+            var searchType = SearchType.search
+            if $0.placeId == "myLocation" {
+                searchType = .mylocation
+            } else if $0.suggestType == .place {
+                searchType = .location
+            } else {
+                searchType = .search
+            }
+            return SearchCellViewModel(searchType: searchType,
                                 placeId: $0.placeId,
                                 locationName: $0.name,
                                 locationDistance: $0.distance,
                                 locationCountry: $0.countryName,
                                 locationCity: $0.cityName,
                                 label: $0.fullLocationAddress,
-                                long: $0.placeLong, lat: $0.placeLat)
+                                long: $0.placeLong, lat: $0.placeLat,
+                                queryId: $0.queryId, queryType: $0.queryType)
         })
         
         return searchCellModel
@@ -112,7 +122,8 @@ final class SearchViewModel: SearchViewModelProcotol {
             Task {
                 let result = try await service.getPlace(with: id)
                 if let result = result {
-                    let mapModel = MapModel(model: result)
+                    let model = SearchPresentation(model: result)
+                    let mapModel = MapModel(model: model)
                     self.delegate?.selectedPlaceResult(mapModel: mapModel)
                 }
                 return true
@@ -124,7 +135,8 @@ final class SearchViewModel: SearchViewModelProcotol {
             return true
         } else {
             Task {
-                let result = await service.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long)
+                let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
+                let result = await service.searchText(text: selectedItem.locationName ?? "", userLat: mapCenter != nil ? mapCenter?.latitude : lat, userLong: mapCenter != nil ? mapCenter?.longitude : long, queryId: selectedItem.queryId)
                 let resultValue = try result.get()
                 self.presentation = []
                 self.presentation = resultValue

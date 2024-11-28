@@ -20,6 +20,11 @@ struct SearchPresentation {
     let placeLong: Double?
     let name: String?
     let placeLabel: String?
+    var place: GetPlaceOutput? = nil
+    let placeType: GeoPlacesClientTypes.PlaceType?
+    let queryType: GeoPlacesClientTypes.QueryType?
+    let suggestType: GeoPlacesClientTypes.SuggestResultItemType?
+    let queryId: String?
     
     init( placeId: String?,
           fullLocationAddress: String?,
@@ -39,6 +44,10 @@ struct SearchPresentation {
         self.placeLong = placeLong
         self.name = name
         self.placeLabel = fullLocationAddress
+        self.placeType = .none
+        self.queryType = .none
+        self.suggestType = .none
+        self.queryId = nil
     }
     
     init(placeId: String, model: GetPlaceOutput) {
@@ -61,6 +70,10 @@ struct SearchPresentation {
         }
         self.cityName = model.address?.district
         self.placeLabel = model.address?.label
+        self.placeType = model.placeType
+        self.suggestType = .none
+        self.queryType = .none
+        self.queryId = nil
     }
     
     init(model: GeoPlacesClientTypes.SearchTextResultItem, placeLat: Double? = nil, placeLong: Double? = nil, userLocation: CLLocation? = nil) {
@@ -86,6 +99,10 @@ struct SearchPresentation {
             self.distance = nil
         }
         self.placeLabel = model.title
+        self.placeType = model.placeType
+        self.queryType = .none
+        self.suggestType = .place
+        self.queryId = nil
     }
     
     init(model: GeoPlacesClientTypes.SearchNearbyResultItem, placeLat: Double? = nil, placeLong: Double? = nil, userLocation: CLLocation? = nil) {
@@ -111,6 +128,10 @@ struct SearchPresentation {
             self.distance = nil
         }
         self.placeLabel = model.title
+        self.placeType = model.placeType
+        self.queryType = .none
+        self.suggestType = .none
+        self.queryId = nil
     }
     
     init(model: GeoPlacesClientTypes.ReverseGeocodeResultItem, userLocation: CLLocation? = nil) {
@@ -135,6 +156,10 @@ struct SearchPresentation {
             self.distance = nil
         }
         self.placeLabel = model.title
+        self.placeType = model.placeType
+        self.queryType = .none
+        self.suggestType = .none
+        self.queryId = nil
     }
     
     init(model: GetPlaceOutput) {
@@ -157,6 +182,11 @@ struct SearchPresentation {
         self.distance = nil
         self.cityName = model.address?.district
         self.placeLabel = model.title
+        self.placeType = model.placeType
+        self.queryType = .none
+        self.suggestType = .none
+        self.queryId = nil
+        self.place = model
     }
     
     init(model: GeoPlacesClientTypes.SuggestResultItem, userLocation: CLLocation? = nil) {
@@ -179,6 +209,10 @@ struct SearchPresentation {
         }
         self.cityName = model.place?.address?.district
         self.placeLabel = model.title
+        self.placeType = model.place?.placeType
+        self.queryType = model.query?.queryType
+        self.suggestType = model.suggestResultItemType
+        self.queryId = model.query?.queryId
     }
     
     init(model: GeoPlacesClientTypes.SearchTextResultItem, userLocation: CLLocation?) {
@@ -198,5 +232,9 @@ struct SearchPresentation {
        
         self.cityName = model.address?.district
         self.placeLabel = model.title
+        self.placeType = model.placeType
+        self.queryType = .none
+        self.suggestType = .place
+        self.queryId = nil
    }
 }

@@ -172,6 +172,11 @@ extension POICardVC: POICardViewModelOutputDelegate {
         sheetPresentationController?.detents = [smallDetent]
         sheetPresentationController?.largestUndimmedDetentIdentifier = smallId
     }
+    
+    func setPOIHeight(_ height: CGFloat)
+    {
+        self.setBottomSheetHeight(to: height)
+    }
 }
 
 extension POICardVC: CLLocationManagerDelegate {

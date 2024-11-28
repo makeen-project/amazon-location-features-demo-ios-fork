@@ -294,7 +294,8 @@ final class DirectionVC: UIViewController {
                                                locationCity: nil,
                                                label: nil,
                                                long: secondDestination?.long,
-                                               lat: secondDestination?.lat)
+                                               lat: secondDestination?.lat,
+                                               queryId: nil, queryType: nil)
         try await calculateGenericRoute(currentModel: currentModel,
                               routeType: routeType,
                               avoidFerries: avoidFerries,
@@ -308,23 +309,22 @@ final class DirectionVC: UIViewController {
     
     func calculateGenericRoute(currentModel: SearchCellViewModel, routeType: RouteTypes = .car, avoidFerries: Bool = false, avoidTolls: Bool = false) async throws {
         guard let (departureLocation, destinationLocation) = getRouteLocations(currentModel: currentModel) else { return }
-        showLoadingIndicator()
+        
         guard isDistanceValid(departureLoc: departureLocation, destinationLoc: destinationLocation) else { return }
+        
+        showLoadingIndicator()
+        self.tableView.isHidden = true
+
         if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLocation,
                                      departurePosition: departureLocation,
                                      travelMode: routeType,
                                      avoidFerries: avoidFerries,
                                      avoidTolls: avoidTolls) {
             DispatchQueue.main.async {
-                self.tableView.isHidden = true
                 self.directionView.isHidden = false
-                
                 let isPreview = self.firstDestination?.placeName != "My Location"
                 self.directionView.setup(model: directionVM, isPreview: isPreview)
-                
                 self.directionView.showOptionsStackView()
-                
-                
                 self.setupSearchTitleDestinations()
                 self.view.endEditing(true)
                 self.sendDirectionsToExploreVC(data: data,
@@ -390,12 +390,14 @@ final class DirectionVC: UIViewController {
             let destinationLoc = CLLocationCoordinate2D(latitude: destinationLat, longitude: destinationLong)
             
             guard isDistanceValid(departureLoc: departureLoc, destinationLoc: destinationLoc) else { return }
+            showLoadingIndicator()
+
+
             if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls) {
-                
-                self.tableView.isHidden = true
-                self.directionView.isHidden = false
-                
                 DispatchQueue.main.async {
+                    self.hideLoadingIndicator()
+                    self.directionView.isHidden = false
+                    self.tableView.isHidden = true
                     self.directionView.showOptionsStackView()
                 }
                 
@@ -464,7 +466,8 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
                                                    locationCity: model.placeCity,
                                                    label: model.placeName,
                                                    long: model.placeLong,
-                                                   lat: model.placeLat)
+                                                   lat: model.placeLat,
+                                                   queryId: model.queryId, queryType: model.queryType)
             
             let searchTextModel = DirectionTextFieldModel(placeName: currentModel.locationName ?? "", placeAddress: model.placeAddress, lat: currentModel.lat, long: currentModel.long)
             

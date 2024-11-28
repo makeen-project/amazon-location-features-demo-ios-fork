@@ -54,6 +54,7 @@ final class ExploreVC: UIViewController {
         
         locationManagerSetup()
         setupView()
+        exploreView.setupMapView()
         exploreView.setupTapGesture()
     }
     
@@ -65,7 +66,6 @@ final class ExploreVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        exploreView.setupMapView()
         showWelcomeScreenIfNeeded()
     }
     
@@ -434,7 +434,7 @@ extension ExploreVC {
     }
     
     @objc private func refreshMapView(_ notification: Notification) {
-        exploreView.setupMapView()
+        exploreView.setupMapView(locateMe: false)
     }
     
     @objc private func logoutAction() {
@@ -523,8 +523,10 @@ extension ExploreVC: CLLocationManagerDelegate {
     }
     
     func showAnnotation(model: SearchPresentation, force: Bool) {
-        guard force || (presentedViewController == nil && viewIfLoaded?.window != nil) else { return }
-        showPoiCard(cardData: [MapModel(model: model)])
+        DispatchQueue.main.async { [self] in
+            guard force || (presentedViewController == nil && viewIfLoaded?.window != nil) else { return }
+            showPoiCard(cardData: [MapModel(model: model)])
+        }
     }
 }
 

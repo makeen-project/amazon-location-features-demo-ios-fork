@@ -7,21 +7,21 @@
 
 import Foundation
 import CoreLocation
-import AWSLocation
+import AWSGeoPlaces
 
 protocol LocationServiceable {
-    func searchText(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>
+    func searchText(text: String, userLat: Double?, userLong: Double?, queryId: String?) async -> Result<[SearchPresentation], Error>
     func searchWithSuggest(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>
     func reverseGeocode(position: [Double], userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error>
-    func getPlace(with placeId: String) async throws -> SearchPresentation?
+    func getPlace(with placeId: String) async throws -> GetPlaceOutput?
     
 }
 
 struct LocationService: AWSLocationSearchService, LocationServiceable {
     
-    func searchText(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
+    func searchText(text: String, userLat: Double?, userLong: Double?, queryId: String? = nil) async -> Result<[SearchPresentation], Error> {
         do {
-            let result = try await searchTextRequest(text: text, userLat: userLat, userLong: userLong)
+            let result = try await searchTextRequest(text: text, userLat: userLat, userLong: userLong, queryId: queryId)
             var userLocation: CLLocation? = nil
             if let userLat, let userLong {
                 userLocation = CLLocation(latitude: userLat, longitude: userLong)
@@ -48,7 +48,6 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
         }
     }
     
-    //@discardableResult
     func reverseGeocode(position: [Double], userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
         do {
             let result = try await reverseGeocodeRequest(position: position)
@@ -64,9 +63,8 @@ struct LocationService: AWSLocationSearchService, LocationServiceable {
         }
     }
     
-    func getPlace(with placeId: String) async throws -> SearchPresentation? {
+    func getPlace(with placeId: String) async throws -> GetPlaceOutput? {
         let response = try await getPlaceRequest(with: placeId)
-        let model = SearchPresentation(model: response!)
-        return model
+        return response
     }
 }
