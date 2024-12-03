@@ -14,7 +14,10 @@ protocol RoutingServiceable {
                             destinationPosition: CLLocationCoordinate2D,
                             travelModes: [GeoRoutesClientTypes.RouteTravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>]
+                            avoidTolls: Bool,
+                            avoidUturns: Bool,
+                            avoidTunnels: Bool,
+                            avoidDirtRoads: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>]
 }
 
 enum RouteError: Error {
@@ -26,7 +29,10 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                             destinationPosition: CLLocationCoordinate2D,
                             travelModes: [GeoRoutesClientTypes.RouteTravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] {
+                            avoidTolls: Bool,
+                            avoidUturns: Bool,
+                            avoidTunnels: Bool,
+                            avoidDirtRoads: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] {
         
         var presentationObject: [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] = [:]
         
@@ -36,8 +42,11 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                                                         destinationPosition: destinationPosition,
                                                         travelMode: travelMode,
                                                         avoidFerries: avoidFerries,
-                                                        avoidTolls: avoidTolls)!
-                if let route = response.routes?[safe: 0] {
+                                                        avoidTolls: avoidTolls,
+                                                        avoidUturns: avoidUturns,
+                                                        avoidTunnels: avoidTunnels,
+                                                        avoidDirtRoads: avoidDirtRoads)
+                if let route = response?.routes?[safe: 0] {
                     let model = try DirectionPresentation(model: route, travelMode: travelMode)
                     presentationObject[travelMode] = .success(model)
                 }

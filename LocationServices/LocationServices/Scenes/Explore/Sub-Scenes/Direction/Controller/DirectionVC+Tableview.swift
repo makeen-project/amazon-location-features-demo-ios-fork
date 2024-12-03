@@ -114,7 +114,7 @@ extension DirectionVC: UITableViewDataSource {
             
             if state && canSearch {
                 self.sheetPresentationController?.selectedDetentIdentifier = .medium
-                try await calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls)
+                try await calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads)
             }
         }
     }

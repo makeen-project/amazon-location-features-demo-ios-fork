@@ -12,8 +12,11 @@ protocol RouteOptionViewModelProtocol: AnyObject {
     func loadData()
     func saveTollOption(state: Bool)
     func saveFerriesOption(state: Bool)
+    func saveUturnsOption(state: Bool)
+    func saveTunnelsOption(state: Bool)
+    func saveDirtRoadsOption(state: Bool)
 }
 
 protocol RouteOptionViewModelOutputDelegate: AnyObject {
-    func updateViews(tollOption: Bool, ferriesOption: Bool)
+    func updateViews(tollOption: Bool, ferriesOption: Bool, uturnsOption: Bool, tunnelsOption: Bool, dirtRoadsOption: Bool)
 }

@@ -193,24 +193,60 @@ final class DirectionVC: UIViewController {
         }
         
         directionView.avoidTolls = { [weak self] state in
-            let travelModel = self?.viewModel.selectedTravelMode
-            let avoidFerries = self?.viewModel.avoidFerries
             Task {
-                try await self?.calculateRoute(routeType: travelModel ?? .car,
+                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
                                                avoidTolls: state,
-                                               avoidFerries: avoidFerries ?? false)
+                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
             }
         }
         
         directionView.avoidFerries = { [weak self] state in
-            let travelModel = self?.viewModel.selectedTravelMode
-            let avoidToll = self?.viewModel.avoidTolls
             Task {
-               try await self?.calculateRoute(routeType: travelModel ?? .car,
-                                     avoidTolls: avoidToll ?? false,
-                                     avoidFerries: state)
+                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
+                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                               avoidFerries: state,
+                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
             }
         }
+        
+        directionView.avoidUturns = { [weak self] state in
+            Task {
+                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
+                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                               avoidUturns: state,
+                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
+            }
+        }
+        
+        directionView.avoidTunnels = { [weak self] state in
+            Task {
+                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
+                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                               avoidTunnels: state,
+                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
+            }
+        }
+        
+        directionView.avoidDirtRoads = { [weak self] state in
+            Task {
+                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
+                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                               avoidDirtRoads: state)
+            }
+        }
+        
     }
     
     func setupNotifications() {
@@ -280,7 +316,10 @@ final class DirectionVC: UIViewController {
     
     private func calculateRoute(routeType: RouteTypes = .car,
                                 avoidTolls: Bool = false,
-                                avoidFerries: Bool = false) async throws {
+                                avoidFerries: Bool = false,
+                                avoidUturns: Bool = false,
+                                avoidTunnels: Bool = false,
+                                avoidDirtRoads: Bool = false) async throws {
         directionSearchView.closeKeyboard()
         self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
         
@@ -297,9 +336,12 @@ final class DirectionVC: UIViewController {
                                                lat: secondDestination?.lat,
                                                queryId: nil, queryType: nil)
         try await calculateGenericRoute(currentModel: currentModel,
-                              routeType: routeType,
-                              avoidFerries: avoidFerries,
-                              avoidTolls: avoidTolls)
+                                        routeType: routeType,
+                                        avoidFerries: avoidFerries,
+                                        avoidTolls: avoidTolls,
+                                        avoidUturns: avoidUturns,
+                                        avoidTunnels: avoidTunnels,
+                                        avoidDirtRoads: avoidDirtRoads)
     }
     
     func setupSearchTitleDestinations() {
@@ -307,7 +349,12 @@ final class DirectionVC: UIViewController {
         self.directionSearchView.changeSearchRouteName(with: secondDestination?.placeName ?? "", isDestination: true)
     }
     
-    func calculateGenericRoute(currentModel: SearchCellViewModel, routeType: RouteTypes = .car, avoidFerries: Bool = false, avoidTolls: Bool = false) async throws {
+    func calculateGenericRoute(currentModel: SearchCellViewModel, routeType: RouteTypes = .car,
+                               avoidFerries: Bool = false,
+                               avoidTolls: Bool = false,
+                               avoidUturns: Bool = false,
+                               avoidTunnels: Bool = false,
+                               avoidDirtRoads: Bool = false) async throws {
         guard let (departureLocation, destinationLocation) = getRouteLocations(currentModel: currentModel) else { return }
         
         guard isDistanceValid(departureLoc: departureLocation, destinationLoc: destinationLocation) else { return }
@@ -316,10 +363,13 @@ final class DirectionVC: UIViewController {
         self.tableView.isHidden = true
 
         if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLocation,
-                                     departurePosition: departureLocation,
-                                     travelMode: routeType,
-                                     avoidFerries: avoidFerries,
-                                     avoidTolls: avoidTolls) {
+                                                                            departurePosition: departureLocation,
+                                                                            travelMode: routeType,
+                                                                            avoidFerries: avoidFerries,
+                                                                            avoidTolls: avoidTolls,
+                                                                            avoidUturns: avoidUturns,
+                                                                            avoidTunnels: avoidTunnels,
+                                                                            avoidDirtRoads: avoidDirtRoads) {
             DispatchQueue.main.async {
                 self.directionView.isHidden = false
                 let isPreview = self.firstDestination?.placeName != "My Location"
@@ -393,7 +443,7 @@ final class DirectionVC: UIViewController {
             showLoadingIndicator()
 
 
-            if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls) {
+            if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads) {
                 DispatchQueue.main.async {
                     self.hideLoadingIndicator()
                     self.directionView.isHidden = false
@@ -436,10 +486,13 @@ final class DirectionVC: UIViewController {
         
         let avoidFerries = viewModel.avoidFerries
         let avoidToll = viewModel.avoidTolls
+        let avoidUturns = viewModel.avoidUturns
+        let avoidTunnels = viewModel.avoidTunnels
+        let avoidDirtRoads = viewModel.avoidDirtRoads
         
         let isPreview = departurePlaceName != "My Location"
         
-        let routeModel = RouteModel(departurePosition: departureLoc, destinationPosition: destinationLoc, travelMode: type, avoidFerries: avoidFerries, avoidTolls: avoidToll, isPreview: isPreview, departurePlaceName: departurePlaceName, departurePlaceAddress: departurePlaceAddress, destinationPlaceName: destinationPlaceName, destinationPlaceAddress: destinationPlaceAddress)
+        let routeModel = RouteModel(departurePosition: departureLoc, destinationPosition: destinationLoc, travelMode: type, avoidFerries: avoidFerries, avoidTolls: avoidToll, avoidUturns: avoidUturns, avoidTunnels: avoidTunnels, avoidDirtRoads: avoidDirtRoads, isPreview: isPreview, departurePlaceName: departurePlaceName, departurePlaceAddress: departurePlaceAddress, destinationPlaceName: destinationPlaceName, destinationPlaceAddress: destinationPlaceAddress)
         
         return routeModel
     }
@@ -451,8 +504,8 @@ final class DirectionVC: UIViewController {
 }
 
 extension DirectionVC: DirectionViewModelOutputDelegate {
-    func getLocalRouteOptions(tollOption: Bool, ferriesOption: Bool) {
-        directionView.setLocalValues(toll: tollOption, ferries: ferriesOption)
+    func getLocalRouteOptions(tollOption: Bool, ferriesOption: Bool, uturnsOption: Bool, tunnelsOption: Bool, dirtRoadsOption: Bool) {
+        directionView.setLocalValues(toll: tollOption, ferries: ferriesOption, uturns: uturnsOption, tunnels: tunnelsOption, dirtRoads: dirtRoadsOption)
     }
     
     func selectedPlaceResult(mapModel: [MapModel]) async throws {
@@ -529,7 +582,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
     }
     
     func changeRoute(type: RouteTypes) async throws {
-        try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries)
+        try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads)
     }
 }
 

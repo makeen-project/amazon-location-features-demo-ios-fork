@@ -14,6 +14,9 @@ struct RouteModel {
     let travelMode: RouteTypes
     let avoidFerries: Bool
     let avoidTolls: Bool
+    let avoidUturns: Bool
+    let avoidTunnels: Bool
+    let avoidDirtRoads: Bool
     
     let isPreview: Bool
     

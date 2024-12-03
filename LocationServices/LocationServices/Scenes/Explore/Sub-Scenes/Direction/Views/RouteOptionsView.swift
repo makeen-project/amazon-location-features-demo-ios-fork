@@ -18,6 +18,9 @@ final class RouteOptionsView: UIView {
     var changeRouteOptionHeight: IntHandler?
     var avoidFerries: BoolHandler?
     var avoidTolls: BoolHandler?
+    var avoidUturns: BoolHandler?
+    var avoidTunnels: BoolHandler?
+    var avoidDirtRoads: BoolHandler?
     
     private var routeOptionState: Bool = true
     private let containerView: UIView = {
@@ -83,6 +86,24 @@ final class RouteOptionsView: UIView {
         return view
     }()
     
+    private let uturnsOption: RouteOptionView = {
+        let view = RouteOptionView(title: StringConstant.avoidUturns)
+        view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidUturnsOptionContainer
+        return view
+    }()
+    
+    private let tunnelsOption: RouteOptionView = {
+        let view = RouteOptionView(title: StringConstant.avoidTunnels)
+        view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidTunnelsOptionContainer
+        return view
+    }()
+    
+    private let dirtRoadsOption: RouteOptionView = {
+        let view = RouteOptionView(title: StringConstant.avoidDirtRoads)
+        view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidDirtRoadsOptionContainer
+        return view
+    }()
+    
     private let optionStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
@@ -116,11 +137,25 @@ final class RouteOptionsView: UIView {
             self?.avoidTolls?(state)
         }
         
+        uturnsOption.boolHandler = { [weak self] state in
+            self?.avoidUturns?(state)
+        }
+        
+        tunnelsOption.boolHandler = { [weak self] state in
+            self?.avoidTunnels?(state)
+        }
+        
+        dirtRoadsOption.boolHandler = { [weak self] state in
+            self?.avoidDirtRoads?(state)
+        }
     }
     
-    func setLocalValues(toll: Bool, ferries: Bool) {
+    func setLocalValues(toll: Bool, ferries: Bool, uturns: Bool, tunnels: Bool, dirtRoads: Bool) {
         tollOption.setDefaultState(state: toll)
         ferriesOption.setDefaultState(state: ferries)
+        uturnsOption.setDefaultState(state: ferries)
+        tunnelsOption.setDefaultState(state: ferries)
+        dirtRoadsOption.setDefaultState(state: ferries)
     }
     
     required init?(coder: NSCoder) {
@@ -131,8 +166,11 @@ final class RouteOptionsView: UIView {
     private func setupViews() {
         optionStackView.removeArrangedSubViews()
         optionStackView.addArrangedSubview(tollOption)
-        optionStackView.addArrangedSubview(firstSeperatorView)
+        //optionStackView.addArrangedSubview(firstSeperatorView)
         optionStackView.addArrangedSubview(ferriesOption)
+        optionStackView.addArrangedSubview(uturnsOption)
+        optionStackView.addArrangedSubview(tunnelsOption)
+        optionStackView.addArrangedSubview(dirtRoadsOption)
         
         routeOptionContainerView.addSubview(routeOptionTitle)
         routeOptionContainerView.addSubview(routeOptionImage)

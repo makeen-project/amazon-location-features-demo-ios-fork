@@ -38,6 +38,9 @@ final class DirectionView: UIView {
     
     var avoidFerries: BoolHandler?
     var avoidTolls: BoolHandler?
+    var avoidUturns: BoolHandler?
+    var avoidTunnels: BoolHandler?
+    var avoidDirtRoads: BoolHandler?
     
     private var containerView: UIView = {
         let view = UIView()
@@ -126,8 +129,8 @@ final class DirectionView: UIView {
         setupErrorViews()
     }
     
-    func setLocalValues(toll: Bool, ferries: Bool) {
-        routeOptions.setLocalValues(toll: toll, ferries: ferries)
+    func setLocalValues(toll: Bool, ferries: Bool, uturns: Bool, tunnels: Bool, dirtRoads: Bool) {
+        routeOptions.setLocalValues(toll: toll, ferries: ferries, uturns: uturns, tunnels: tunnels, dirtRoads: dirtRoads)
     }
     
     func setup(model: DirectionVM, isPreview: Bool) {
@@ -199,6 +202,18 @@ final class DirectionView: UIView {
         
         routeOptions.avoidFerries = { [weak self] state in
             self?.avoidFerries?(state)
+        }
+        
+        routeOptions.avoidUturns = { [weak self] state in
+            self?.avoidUturns?(state)
+        }
+        
+        routeOptions.avoidTunnels = { [weak self] state in
+            self?.avoidTunnels?(state)
+        }
+        
+        routeOptions.avoidDirtRoads = { [weak self] state in
+            self?.avoidDirtRoads?(state)
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateRouteContainerConstraint(_:)), name: Notification.updateMapLayerItems, object: nil)

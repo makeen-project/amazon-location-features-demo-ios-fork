@@ -48,7 +48,7 @@ final class POICardViewModel: POICardViewModelProcotol {
         guard let placeLat = cardData.placeLat, let placeLong = cardData.placeLong else { return }
         let destinationPosition = CLLocationCoordinate2D(latitude: placeLat, longitude: placeLong)
         delegate?.populateDatas(cardData: cardData, isLoadingData: isLoading, errorMessage: nil, errorInfoMessage: nil)
-        let result = try await routingService.calculateRouteWith(depaturePosition: userLocation, destinationPosition: destinationPosition, travelModes: [.car], avoidFerries: true, avoidTolls: true)
+        let result = try await routingService.calculateRouteWith(depaturePosition: userLocation, destinationPosition: destinationPosition, travelModes: [.car], avoidFerries: true, avoidTolls: true, avoidUturns: true, avoidTunnels: true, avoidDirtRoads: true)
             
             var responseError: Error? = nil
             switch result[.car] {

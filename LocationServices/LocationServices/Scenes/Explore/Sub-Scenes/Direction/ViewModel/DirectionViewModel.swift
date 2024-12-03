@@ -27,6 +27,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     var selectedTravelMode: RouteTypes?
     var avoidFerries: Bool = false
     var avoidTolls: Bool = false
+    var avoidUturns: Bool = false
+    var avoidTunnels: Bool = false
+    var avoidDirtRoads: Bool = false
     
     init(service: LocationServiceable, routingService: RoutingServiceable) {
         self.service = service
@@ -36,7 +39,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     func loadLocalOptions() {
         self.avoidFerries = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions) ?? true
         self.avoidTolls = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions) ?? true
-        delegate?.getLocalRouteOptions(tollOption: avoidTolls, ferriesOption: avoidFerries)
+        delegate?.getLocalRouteOptions(tollOption: avoidTolls, ferriesOption: avoidFerries, uturnsOption: avoidUturns, tunnelsOption: avoidTunnels, dirtRoadsOption: avoidDirtRoads)
     }
     
     func addMyLocationItem() {
@@ -228,18 +231,28 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                             departurePosition: CLLocationCoordinate2D,
                             travelMode: RouteTypes = .car,
                             avoidFerries: Bool = false,
-                            avoidTolls: Bool = false) async throws -> ([Data], DirectionVM)? {
+                            avoidTolls: Bool = false,
+                            avoidUturns: Bool = false,
+                            avoidTunnels: Bool = false,
+                            avoidDirtRoads: Bool = false) async throws -> ([Data], DirectionVM)? {
         defaultTravelMode = [:]
         selectedTravelMode = travelMode
         self.avoidFerries = avoidFerries
         self.avoidTolls = avoidTolls
+        self.avoidUturns = avoidUturns
+        self.avoidTunnels = avoidTunnels
+        self.avoidDirtRoads = avoidDirtRoads
+
         let result = try await routingService.calculateRouteWith(depaturePosition: departurePosition,
                                           destinationPosition: destinationPosition,
                                                                  travelModes: [GeoRoutesClientTypes.RouteTravelMode.car,         GeoRoutesClientTypes.RouteTravelMode.pedestrian,
                                                                        GeoRoutesClientTypes.RouteTravelMode.scooter,
                                                                        GeoRoutesClientTypes.RouteTravelMode.truck],
-                                          avoidFerries: avoidFerries,
-                                          avoidTolls: avoidTolls)
+                                                                 avoidFerries: avoidFerries,
+                                                                 avoidTolls: avoidTolls,
+                                                                 avoidUturns: avoidUturns,
+                                                                 avoidTunnels: avoidTunnels,
+                                                                 avoidDirtRoads: avoidDirtRoads)
             self.defaultTravelMode = result
         var directionVM: DirectionVM = DirectionVM(carTypeDistane: "", carTypeDuration: "", scooterTypeDuration: "", scooterTypeDistance: "", walkingTypeDuration: "", walkingTypeDistance: "", truckTypeDistance: "", truckTypeDuration: "")
             

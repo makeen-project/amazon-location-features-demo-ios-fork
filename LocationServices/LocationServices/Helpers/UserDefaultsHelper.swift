@@ -19,6 +19,9 @@ enum UserDefaultKeyType: String {
     case language
     case tollOptions
     case ferriesOptions
+    case uturnsOptions
+    case tunnelsOptions
+    case dirtRoadsOptions
     // means we attach the policy to AWSLocation for tracking
     case attachedPolicy
     // use when we are going to connect via CF form

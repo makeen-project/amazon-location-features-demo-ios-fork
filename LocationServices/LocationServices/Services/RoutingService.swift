@@ -14,7 +14,10 @@ protocol AWSRoutingServiceProtocol {
                         destinationPosition: CLLocationCoordinate2D,
                         travelMode: GeoRoutesClientTypes.RouteTravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool) async throws -> CalculateRoutesOutput?
+                        avoidTolls: Bool,
+                        avoidUturns: Bool,
+                        avoidTunnels: Bool,
+                        avoidDirtRoads: Bool) async throws -> CalculateRoutesOutput?
 }
 
 extension AWSRoutingServiceProtocol {
@@ -22,10 +25,13 @@ extension AWSRoutingServiceProtocol {
                         destinationPosition: CLLocationCoordinate2D,
                         travelMode: GeoRoutesClientTypes.RouteTravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool) async throws -> CalculateRoutesOutput? {
+                        avoidTolls: Bool,
+                        avoidUturns: Bool,
+                        avoidTunnels: Bool,
+                        avoidDirtRoads: Bool) async throws -> CalculateRoutesOutput? {
         var routeAvoidanceOptions: GeoRoutesClientTypes.RouteAvoidanceOptions? = nil
         if travelMode == .car {
-            routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(ferries: avoidFerries, tollRoads: avoidTolls)
+            routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(dirtRoads: avoidDirtRoads, ferries: avoidFerries, tollRoads: avoidTolls, tunnels: avoidTunnels, uTurns: avoidUturns)
         }
         let origin = [depaturePosition.longitude, depaturePosition.latitude]
         let destination = [destinationPosition.longitude, destinationPosition.latitude]
