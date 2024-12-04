@@ -48,7 +48,6 @@ enum StringConstant {
     
     
     // strings:
-    static let direction = "Directions"
     static let directions = "Directions"
     static let geofence = "Geofence"
     static let login = "Login"

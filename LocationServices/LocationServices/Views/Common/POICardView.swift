@@ -354,7 +354,7 @@ final class POICardView: UIView {
     
     private let directionLabel: UILabel = {
         let label = UILabel()
-        label.text = StringConstant.direction
+        label.text = StringConstant.directions
         label.textAlignment = .left
         label.font = .amazonFont(type: .bold, size: 16)
         label.textColor = .white

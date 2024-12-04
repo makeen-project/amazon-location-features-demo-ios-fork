@@ -76,17 +76,6 @@ class GeneralHelper {
     }
 
     static func recurseExpression(exp: Any, prevPropertyRegex: String, nextProperty: String, language: String) -> Any {
-        if language == "zh-Hant" {
-            // Special handling for zh-Hant
-            return [
-                "coalesce",
-                ["get", "name:zh-Hant"],
-                ["get", "name:zh"],
-                ["get", "name:en"],
-                ["get", "name"]
-            ]
-        }
-        
         if let arrayExp = exp as? [Any] {
             guard arrayExp.first as? String == "coalesce" else {
                 return arrayExp.map { recurseExpression(exp: $0, prevPropertyRegex: prevPropertyRegex, nextProperty: nextProperty, language: language) }
@@ -100,12 +89,24 @@ class GeneralHelper {
                 return arrayExp.map { recurseExpression(exp: $0, prevPropertyRegex: prevPropertyRegex, nextProperty: nextProperty, language: language) }
             }
             
-            return [
-                "coalesce",
-                ["get", nextProperty],
-                ["get", "name:en"],
-                ["get", "name"]
-            ]
+            if language == "zh-Hant" {
+                // Special handling for zh-Hant
+                return [
+                    "coalesce",
+                    ["get", "name:zh-Hant"],
+                    ["get", "name:zh"],
+                    ["get", "name:en"],
+                    ["get", "name"]
+                ]
+            }
+            else {
+                return [
+                    "coalesce",
+                    ["get", nextProperty],
+                    ["get", "name:en"],
+                    ["get", "name"]
+                ]
+            }
         }
         
         return exp
