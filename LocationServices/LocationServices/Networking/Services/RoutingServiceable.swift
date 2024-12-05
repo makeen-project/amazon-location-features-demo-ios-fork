@@ -38,7 +38,7 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                                                         avoidFerries: avoidFerries,
                                                         avoidTolls: avoidTolls)!
                 if let route = response.routes?[safe: 0] {
-                    let model = DirectionPresentation(model: route, travelMode: travelMode)
+                    let model = try DirectionPresentation(model: route, travelMode: travelMode)
                     presentationObject[travelMode] = .success(model)
                 }
                 else {

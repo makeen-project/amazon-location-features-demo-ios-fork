@@ -13,6 +13,7 @@ final class ExploreMapStyleVC: UIViewController {
     var headerView: ExploreMapStyleHeaderView = ExploreMapStyleHeaderView()
     var colorSegment: ColorSegmentControl? = nil
     var politicalView = PoliticalView()
+    var languageView = LanguageView()
     
     var viewModel: ExploreMapStyleViewModelProtocol! {
         didSet {
@@ -48,11 +49,12 @@ final class ExploreMapStyleVC: UIViewController {
         let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
         colorSegment = ColorSegmentControl(items: colorNames)
 
-        view.backgroundColor = .searchBarBackgroundColor
+        view.backgroundColor = .white
         self.view.addSubview(headerView)
         self.view.addSubview(tableView)
         self.view.addSubview(colorSegment!)
         self.view.addSubview(politicalView)
+        self.view.addSubview(languageView)
         
         headerView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -86,7 +88,14 @@ final class ExploreMapStyleVC: UIViewController {
             $0.width.equalToSuperview()
         }
         
+        languageView.snp.makeConstraints {
+            $0.top.equalTo(politicalView.snp.bottom).offset(50)
+            $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
         politicalView.viewController = self
+        languageView.viewController = self
     }
 }
 

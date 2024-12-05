@@ -164,7 +164,7 @@ final class DirectionViewModelTests: XCTestCase {
     
     func testSearchSelectedPlaceWith() async throws {
         locationService.mockSearchTextResult = .success([search])
-        let model = SearchCellViewModel(searchType: .location, placeId: nil, locationName: "Times Square", locationDistance: 12, locationCountry: "USA", locationCity: "Manhattan", label: "Times Square", long: nil, lat: nil)
+        let model = SearchCellViewModel(searchType: .location, placeId: nil, locationName: "Times Square", locationDistance: 12, locationCountry: "USA", locationCity: "Manhattan", label: "Times Square", long: nil, lat: nil, queryId: nil, queryType: .none)
         
         let result = try await self.directionViewModel.searchSelectedPlaceWith(model, lat: self.userLocation.lat, long: self.userLocation.long)
         XCTAssertEqual(result, false, "Expected false")
@@ -179,7 +179,7 @@ final class DirectionViewModelTests: XCTestCase {
         let legDetails = GeoRoutesClientTypes.RouteVehicleLegDetails(travelSteps: [step])
         let routeLeg = GeoRoutesClientTypes.RouteLeg(travelMode: .car, vehicleLegDetails: legDetails)
         let route = GeoRoutesClientTypes.Route(legs: [routeLeg])
-        let direction = DirectionPresentation(model: route, travelMode: .car)
+        let direction = try DirectionPresentation(model: route, travelMode: .car)
         routingService.putResult = [GeoRoutesClientTypes.RouteTravelMode.car: .success(direction)]
         if let result = try await directionViewModel.calculateRouteWith(destinationPosition: CLLocationCoordinate2D(latitude: 40.75803155895524, longitude: -73.9855533309874) , departurePosition: CLLocationCoordinate2D(latitude: 40.75803155895524, longitude: -73.9855533309874))
         {

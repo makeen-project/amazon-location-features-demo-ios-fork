@@ -44,8 +44,9 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        controller.setBottomSheetHeight(to: controller.getLargeDetentHeight())
+        controller.setBottomSheetHeight(to: 600)
         currentBottomSheet = controller
+        NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": 500])
     }
     
     func showDirections(isRouteOptionEnabled: Bool?,
@@ -119,7 +120,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.userLocation = (lat, long)
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        controller.setBottomSheetHeight(to: 200)
+        controller.setBottomSheetHeight(to: 450)
         currentBottomSheet = controller
     }
     

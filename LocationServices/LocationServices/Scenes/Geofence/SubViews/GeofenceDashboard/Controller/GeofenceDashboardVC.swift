@@ -82,11 +82,18 @@ final class GeofenceDashboardVC: UIViewController {
             $0.top.equalTo(headerView.snp.bottom).offset(10)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-        
-        initialGeofenceView.snp.makeConstraints {
-            $0.centerY.equalToSuperview().multipliedBy(0.9)
-            $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalToSuperview().offset(-24)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            initialGeofenceView.snp.makeConstraints {
+                $0.centerY.equalToSuperview().multipliedBy(0.9)
+                $0.leading.equalToSuperview().offset(24)
+                $0.trailing.equalToSuperview().offset(-24)
+            }
+        }
+        else {
+            initialGeofenceView.snp.makeConstraints {
+                $0.top.leading.equalTo(view.safeAreaLayoutGuide).offset(16)
+                $0.trailing.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+            }
         }
     }
     

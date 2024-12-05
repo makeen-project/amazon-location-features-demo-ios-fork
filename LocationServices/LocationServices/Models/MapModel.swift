@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
+import AWSGeoPlaces
 
 struct MapModel {
     let placeId: String?
@@ -17,6 +18,11 @@ struct MapModel {
     let placeLong: Double?
     var distance: Double?
     var duration: String?
+    var place: GetPlaceOutput? = nil
+    let placeType: GeoPlacesClientTypes.PlaceType?
+    let queryType: GeoPlacesClientTypes.QueryType?
+    let suggestType: GeoPlacesClientTypes.SuggestResultItemType?
+    let queryId: String?
     
     init(placeId: String? = nil, placeName: String? = nil, placeAddress: String? = nil, placeCity: String? = nil, placeCountry: String? = nil, placeLat: Double? = nil, placeLong: Double? = nil, distance: Double? = nil, duration: String? = nil) {
         self.placeId = placeId
@@ -28,6 +34,10 @@ struct MapModel {
         self.placeLong = placeLong
         self.distance = distance
         self.duration = duration
+        self.placeType = nil
+        self.queryType = nil
+        self.suggestType = nil
+        self.queryId = nil
     }
     
     init(model: SearchPresentation) {
@@ -40,5 +50,10 @@ struct MapModel {
         self.placeLong = model.placeLong
         self.distance = model.distance
         self.duration = nil
+        self.place = model.place
+        self.placeType = model.placeType
+        self.queryType = model.queryType
+        self.suggestType = model.suggestType
+        self.queryId = model.queryId
     }
 }

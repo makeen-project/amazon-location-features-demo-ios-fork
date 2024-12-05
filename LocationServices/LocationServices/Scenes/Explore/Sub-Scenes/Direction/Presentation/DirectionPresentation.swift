@@ -15,7 +15,7 @@ struct DirectionPresentation {
     let duration: Double
     var routeLegDetails: [RouteLegDetails]? = nil
     
-    init(model: GeoRoutesClientTypes.Route, travelMode: GeoRoutesClientTypes.RouteTravelMode) {
+    init(model: GeoRoutesClientTypes.Route, travelMode: GeoRoutesClientTypes.RouteTravelMode) throws {
         self.distance = Double(model.summary?.distance ?? 0)
         self.duration = Double(model.summary?.duration  ?? 0)
 
@@ -27,17 +27,17 @@ struct DirectionPresentation {
             for leg in legs {
                 if let legDetails = leg.pedestrianLegDetails {
                     var legDetails = RouteLegDetails(model: legDetails)
-                    legDetails.setLineString(leg: leg)
+                    try legDetails.setLineString(leg: leg)
                     routeLegDetails?.append(legDetails)
                 }
                 if let legDetails = leg.vehicleLegDetails {
                     var legDetails = RouteLegDetails(model: legDetails)
-                    legDetails.setLineString(leg: leg)
+                    try legDetails.setLineString(leg: leg)
                     routeLegDetails?.append(legDetails)
                 }
                 if let legDetails = leg.ferryLegDetails {
                     var legDetails = RouteLegDetails(model: legDetails)
-                    legDetails.setLineString(leg: leg)
+                    try legDetails.setLineString(leg: leg)
                     routeLegDetails?.append(legDetails)
                 }
             }
@@ -75,9 +75,9 @@ struct RouteLegDetails {
         }) ?? []
     }
     
-    mutating func setLineString(leg: GeoRoutesClientTypes.RouteLeg) {
-        let geometry = Geometry(type: "LineString", coordinates: leg.geometry?.lineString as? [[Double]])
-        let properties = Properties(name: "Crema to Council Cres")
+    mutating func setLineString(leg: GeoRoutesClientTypes.RouteLeg) throws {
+        let geometry = Geometry(type: "LineString", coordinates: leg.geometry?.lineString)
+        let properties = Properties(name: "Polyline")
         let feature = [Feature(type: "Feature", properties: properties, geometry: geometry)]
         self.lineString = GeoData(type: "FeatureCollection", features: feature)
     }

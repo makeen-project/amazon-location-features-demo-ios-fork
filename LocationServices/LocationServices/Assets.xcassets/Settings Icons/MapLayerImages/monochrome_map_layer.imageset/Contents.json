@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "Preview.png",
+      "filename" : "monochrome_map_layer.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Preview@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Preview@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

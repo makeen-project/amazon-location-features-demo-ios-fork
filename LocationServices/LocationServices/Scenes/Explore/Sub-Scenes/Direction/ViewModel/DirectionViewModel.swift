@@ -64,10 +64,10 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 
             return
         }
-        
+        let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -80,7 +80,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     }
                 }
         } else {
-            let response = await service.searchWithSuggest(text: text, userLat: userLat, userLong: userLong)
+            let response = await service.searchWithSuggest(text: text, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
             switch response {
             case .success(let results):
                 self.presentation = results
@@ -106,10 +106,10 @@ final class DirectionViewModel: DirectionViewModelProtocol {
             delegate?.searchResult(mapModel: [])
             return
         }
-        
+        let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter)
         if text.isCoordinate() {
             let requestValue = text.convertTextToCoordinate()
-            let response = await service.reverseGeocode(position: requestValue, userLat: userLat, userLong: userLong)
+            let response = await service.reverseGeocode(position: requestValue, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong)
                 switch response {
                 case .success(let results):
                     self.presentation = results
@@ -122,7 +122,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     }
                 }
         } else {
-            let result = await service.searchText(text: text, userLat: userLat, userLong: userLong)
+            let result = await service.searchText(text: text, userLat: mapCenter != nil ? mapCenter?.latitude : userLat, userLong: mapCenter != nil ? mapCenter?.longitude : userLong, queryId: nil)
             let resultValue = try result.get()
             self.presentation = resultValue
             self.addMyLocationItem()
@@ -149,14 +149,23 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     
     func getSearchCellModel() -> [SearchCellViewModel] {
         searchCellModel = presentation.map({
-            return SearchCellViewModel(searchType: ($0.placeId != nil || $0.placeLat != nil) ? ($0.placeId == "myLocation" ? .mylocation : .location) : .search,
+            var searchType = SearchType.search
+            if $0.placeId == "myLocation" {
+                searchType = .mylocation
+            } else if $0.suggestType == .place {
+                searchType = .location
+            } else {
+                searchType = .search
+            }
+            return SearchCellViewModel(searchType: searchType,
                                 placeId: $0.placeId,
                                 locationName: $0.name,
                                 locationDistance: $0.distance,
                                 locationCountry: $0.countryName,
                                 locationCity: $0.cityName,
                                 label: $0.fullLocationAddress,
-                                long: $0.placeLong, lat: $0.placeLat)
+                                long: $0.placeLong, lat: $0.placeLat,
+                                queryId: $0.queryId, queryType: $0.queryType)
         })
         
         return searchCellModel
@@ -178,7 +187,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         } else if selectedItem.lat != nil {
             return true
         } else {
-            let result = await service.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long)
+            let result = await service.searchText(text: selectedItem.locationName ?? "", userLat: lat, userLong: long, queryId: selectedItem.queryId)
             let resultValue = try result.get()
                 self.presentation = []
                 self.presentation = resultValue
@@ -226,11 +235,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         self.avoidTolls = avoidTolls
         let result = try await routingService.calculateRouteWith(depaturePosition: departurePosition,
                                           destinationPosition: destinationPosition,
-                                                                 travelModes: [GeoRoutesClientTypes.RouteTravelMode.car, GeoRoutesClientTypes.RouteTravelMode.pedestrian, GeoRoutesClientTypes.RouteTravelMode.truck],
+                                                                 travelModes: [GeoRoutesClientTypes.RouteTravelMode.car,         GeoRoutesClientTypes.RouteTravelMode.pedestrian,
+                                                                       GeoRoutesClientTypes.RouteTravelMode.scooter,
+                                                                       GeoRoutesClientTypes.RouteTravelMode.truck],
                                           avoidFerries: avoidFerries,
                                           avoidTolls: avoidTolls)
             self.defaultTravelMode = result
-            var directionVM: DirectionVM = DirectionVM(carTypeDistane: "", carTypeDuration: "", walkingTypeDuration: "", walkingTypeDistance: "", truckTypeDistance: "", truckTypeDuration: "")
+        var directionVM: DirectionVM = DirectionVM(carTypeDistane: "", carTypeDuration: "", scooterTypeDuration: "", scooterTypeDistance: "", walkingTypeDuration: "", walkingTypeDistance: "", truckTypeDistance: "", truckTypeDuration: "")
             
             result.values.forEach { model in
                 switch model {
@@ -239,6 +250,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     case .car:
                         directionVM.carTypeDistane = model.distance.formatToKmString()
                         directionVM.carTypeDuration = model.duration.convertSecondsToMinString()
+                    case .scooter:
+                        directionVM.scooterTypeDistance = model.distance.formatToKmString()
+                        directionVM.scooterTypeDuration = model.duration.convertSecondsToMinString()
                     case .pedestrian:
                         directionVM.walkingTypeDistance = model.distance.formatToKmString()
                         directionVM.walkingTypeDuration = model.duration.convertSecondsToMinString()

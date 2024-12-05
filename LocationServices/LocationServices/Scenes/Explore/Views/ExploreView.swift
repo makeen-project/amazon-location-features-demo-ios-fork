@@ -34,8 +34,8 @@ private enum Constants {
     
     static let mapLayerBottomOffset: CGFloat = 16
     static let bottomStackViewOffset: CGFloat = 16
-    static let topStackViewOffsetiPhone: CGFloat = 16
-    static let topStackViewOffsetiPad: CGFloat = 0
+    static let topStackViewOffsetiPhone: CGFloat = 50
+    static let topStackViewOffsetiPad: CGFloat = 50
 }
 
 enum MapMode {
@@ -74,6 +74,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         mapView.tintColor = .lsPrimary
         mapView.compassView.isHidden = true
         mapView.zoomLevel = 12
+        mapView.minimumZoomLevel  = 2
         mapView.logoView.isHidden = true
         mapView.attributionButton.isHidden = true
         mapView.showsUserHeadingIndicator = false
@@ -321,7 +322,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
             switch routeType {
             case .pedestrian:
                 isDashedLine = true
-            case .car, .truck:
+            case .car, .truck, .scooter:
                 isDashedLine = false
             }
             self.createAnnotationsForDirection(departureCoordinates: departureLocation, destinationCoordinates: destinationLocation)
@@ -434,11 +435,13 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     var mapLoaded = false
-    func setupMapView() {
+    func setupMapView(locateMe: Bool = true) {
         DispatchQueue.main.async { [self] in
             if !mapLoaded {
                 mapView.styleURL = DefaultMapStyles.getMapStyleUrl()
-                locateMeAction(force: true)
+                if locateMe {
+                    locateMeAction(force: true)
+                }
                 mapView.showsUserLocation = true
                 mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
                 amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo()
@@ -817,7 +820,7 @@ private extension ExploreView {
         }
         
         topStackView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(
+            $0.top.equalToSuperview().offset(
                 isiPad ? Constants.topStackViewOffsetiPad : Constants.topStackViewOffsetiPhone
             )
             $0.trailing.equalToSuperview().offset(-Constants.defaultHorizontalOffset)
@@ -869,28 +872,9 @@ private extension ExploreView {
 }
 
 extension ExploreView: MLNMapViewDelegate {
-    
-    
-    // in the difference of standard approach if we are in live navigation mode we always return to
-    // current location and zoom mode.
+
     func mapView(_ mapView: MLNMapView, regionDidChangeWith reason: MLNCameraChangeReason, animated: Bool) {
-        //disabling auto focus on user location while in navigation mode to allow user to view map freely
-//        switch reason {
-//        case .gesturePan, .gesturePinch, .gestureRotate, .gestureZoomIn, .gestureZoomOut, .gestureTilt:
-//
-//            if mapMode == .turnByTurnNavigation {
-//
-//                return
-//                if let userCoordinates = mapView.userLocation?.coordinate,
-//                   CLLocationCoordinate2DIsValid(userCoordinates) {
-//                    mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
-//                        self?.mapView.userTrackingMode = .followWithCourse
-//                    }
-//                }
-//            }
-//        default:
-//            break
-//        }
+        UserDefaultsHelper.saveObject(value: LocationCoordinate2D(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude), key: .mapCenter)
     }
     
     func mapView(_ mapView: MLNMapView, didSelect annotation: MLNAnnotation) {
@@ -966,6 +950,7 @@ extension ExploreView: MLNMapViewDelegate {
                 self?.updateMapHelperConstraints()
                 self?.mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendered
                 self?.mapLoaded = true
+                
             }
         } else {
             debounceForMapRendering.debounce {}
@@ -975,11 +960,19 @@ extension ExploreView: MLNMapViewDelegate {
     
     func mapViewWillStartRenderingFrame(_ mapView: MLNMapView) {
         mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendering
+
+    }
+    
+    func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
+        GeneralHelper.setMapLanguage(mapView: mapView, style: style)
     }
     
     //frame callback called multiple times even before all map layers are rendered. The fullRendered propery also isn't reliable as it sends true state before map fully rendered. Based on this debounce manager is used here to overcome these issues.
     func mapViewDidFinishRenderingFrame(_ mapView: MLNMapView, fullyRendered: Bool) {
         if fullyRendered {
+            if let style = mapView.style {
+                GeneralHelper.setMapLanguage(mapView: mapView, style: style)
+            }
             debounceForMapRendering.debounce { [weak self] in
                 self?.updateMapHelperConstraints()
                 self?.mapView.accessibilityIdentifier = ViewsIdentifiers.General.mapRendered

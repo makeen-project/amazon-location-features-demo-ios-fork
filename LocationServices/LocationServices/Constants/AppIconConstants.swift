@@ -32,14 +32,15 @@ extension UIImage {
     static let annotationIcon = UIImage(named: "annotation-icon")!
     static let selectedPlace = UIImage(named: "selected-place")!
     static let stepIcon = UIImage(named: "step-icon")!
-    static let carIcon = UIImage(named: "icon-car-solid")!
+    static let carIcon = UIImage(systemName: "car.fill")!
     static let closeIcon = UIImage(named: "icon-close")!
     static let swapDestinations = UIImage(named: "swapDestinations")!
     static let myLocationIcon = UIImage(named: "mylocation-icon")!
     
-    static let navigationCarIcon = UIImage(named: "navigationCarIcon")!
-    static let navigationWalkingIcon = UIImage(named: "navigationWalkingIcon")!
-    static let navigationTruckIcon = UIImage(named: "navigationTruckIcon")!
+    static let navigationCarIcon = UIImage(systemName: "car.fill")!
+    static let navigationWalkingIcon = UIImage(systemName: "figure.walk")!
+    static let navigationScooterIcon = UIImage(systemName: "scooter")!
+    static let navigationTruckIcon = UIImage(systemName: "truck.box.fill")!
     static let navigationDashedIcon = UIImage(named: "navigationDashedIcon")!
     
     static let loginLogo = UIImage(named: "login-logo")
@@ -57,23 +58,19 @@ extension UIImage {
     static let disconnectIcon = UIImage(named: "icon-disconnect")!
     
     /// Map Layer
-    static let contrastMapLayer = UIImage(named: "contrast_map_layer")!
-    static let exploreMapLayer = UIImage(named: "explore_map_layer")!
-    static let lightMapLayer = UIImage(named: "light_map_layer")!
-    static let navigationMapLayer = UIImage(named: "navigation_map_layer")!
-    static let streetMapLayer = UIImage(named: "street_map_layer")!
-    static let esri_imagerey = UIImage(named: "esri_imagerey")!
-    static let explore_truck_map_layer = UIImage(named: "explore_truck_map_layer")!
-    static let here_imagerey_map_layer = UIImage(named: "here_imagerey_map_layer")!
-    static let hybird_map_layer = UIImage(named: "hybird_map_layer")!
-    static let light_gray_map_layer = UIImage(named: "light_gray_map_layer")!
-    static let dark_gray_map_layer = UIImage(named: "dark_gray_map_layer")!
+    static let standardMapLayer = UIImage(named: "standard_map_layer")!
+    static let monochromeMapLayer = UIImage(named: "monochrome_map_layer")!
+    static let satelliteMapLayer = UIImage(named: "satellite_map_layer")!
+    static let hybridMapLayer = UIImage(named: "hybrid_map_layer")!
     
     static let trashIcon = UIImage(named: "icon-trash")!
     static let geofenceDashoard = UIImage(named: "geofence-dashboard")!
     static let alertTriangleSolid = UIImage(named: "alert-triangle-solid")!
     static let infoIcon = UIImage(named: "info-icon")
     static let logoPoweredByAWS = UIImage(named: "logo-powered-by-aws")
+    static let expandUpIcon = UIImage(systemName: "chevron.up")
+    static let expandDownIcon = UIImage(systemName: "chevron.down")
+    static let copyIcon = UIImage(systemName: "clipboard")
     
     //system
     static let sidebarLeft = UIImage(systemName: "sidebar.left")

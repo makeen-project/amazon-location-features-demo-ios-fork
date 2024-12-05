@@ -11,7 +11,7 @@ final class SearchUITests: LocationServicesUITests {
     
     enum Constants {
         static let addressName = "44 Boobialla Street, Corbie Hill, Australia"
-        static let geocode = "-31.9627092, 115.9248736"
+        static let geocode = "115.9248736, -31.9627092"
         static let searchText = "Rio Tinto"
         static let category = "School"
         static let timesSquareAddress = "New York Times Square"

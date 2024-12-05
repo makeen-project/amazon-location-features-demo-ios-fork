@@ -6,9 +6,10 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
+import AWSGeoPlaces
 
 enum SearchType {
-    case location, search,mylocation
+    case location, search, mylocation
 }
 
 struct SearchCellViewModel {
@@ -21,6 +22,8 @@ struct SearchCellViewModel {
     let label: String?
     let long: Double?
     let lat: Double?
+    let queryId: String?
+    let queryType: GeoPlacesClientTypes.QueryType?
     
     init(model: SearchPresentation) {
         self.placeId = model.placeId
@@ -34,11 +37,13 @@ struct SearchCellViewModel {
 
         if placeId == "myLocation" {
             self.searchType = .mylocation
-        } else if placeId != nil {
+        } else if model.suggestType == .place {
             self.searchType = .location
         } else {
             self.searchType = .search
         }
+        self.queryType = model.queryType
+        self.queryId = model.queryId
     }
     
     init(searchType: SearchType,
@@ -49,7 +54,9 @@ struct SearchCellViewModel {
          locationCity: String?,
          label: String?,
          long: Double?,
-         lat: Double?) {
+         lat: Double?,
+         queryId: String?,
+         queryType: GeoPlacesClientTypes.QueryType?) {
         self.searchType = searchType
         self.placeId = placeId
         self.locationName = locationName
@@ -59,5 +66,7 @@ struct SearchCellViewModel {
         self.label = label
         self.long = long
         self.lat = lat
+        self.queryType = queryType
+        self.queryId = queryId
     }
 }

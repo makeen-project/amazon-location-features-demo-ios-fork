@@ -159,7 +159,7 @@ final class GeofenceMapView: UIView {
     }
     
     func reloadMap() {
-        mapView.setupMapView()
+        mapView.setupMapView(locateMe: false)
         deselectAnnotation()
         amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo()
     }

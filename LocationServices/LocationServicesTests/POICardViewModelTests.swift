@@ -45,7 +45,7 @@ final class POICardViewModelTests: XCTestCase {
     
     func testFetchDatasWithSuccess() async throws {
         pOICardViewModel.setUserLocation(lat: 40.4400930458457, long: -80.00348250162394)
-        let direction = DirectionPresentation(model: GeoRoutesClientTypes.Route(), travelMode: .car)
+        let direction = try DirectionPresentation(model: GeoRoutesClientTypes.Route(), travelMode: .car)
         routingService.putResult = [GeoRoutesClientTypes.RouteTravelMode.car: .success(direction)]
         try await pOICardViewModel.fetchDatas()
         
@@ -66,6 +66,10 @@ class MockPOICardViewModelOutputDelegate: POICardViewModelOutputDelegate {
     }
     
     func updateSizeClass(_ sizeClass: POICardVC.DetentsSizeClass) {
+        
+    }
+    
+    func setPOIHeight(_ height: CGFloat) {
         
     }
     

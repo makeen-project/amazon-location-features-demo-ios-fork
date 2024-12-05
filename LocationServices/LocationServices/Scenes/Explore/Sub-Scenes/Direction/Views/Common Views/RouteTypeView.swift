@@ -9,12 +9,14 @@ import UIKit
 import SnapKit
 
 enum RouteTypes {
-    case pedestrian, car, truck
+    case pedestrian, scooter, car, truck
     
     var title: String {
         switch self {
         case .pedestrian:
             return "Pedestrian"
+        case .scooter:
+            return "Scooter"
         case .car:
             return "Car"
         case .truck:
@@ -26,6 +28,8 @@ enum RouteTypes {
         switch self {
         case .pedestrian:
             return .navigationWalkingIcon.withRenderingMode(.alwaysTemplate)
+        case .scooter:
+            return .navigationScooterIcon.withRenderingMode(.alwaysTemplate)
         case .car:
             return .navigationCarIcon.withRenderingMode(.alwaysTemplate)
         case .truck:
@@ -152,7 +156,8 @@ final class RouteTypeView: UIView {
         
         let isGoButtonEnabled = !distance.isEmpty && !duration.isEmpty
         self.goButton.alpha = isGoButtonEnabled ? 1 : 0.3
-        
+        self.goButton.isEnabled = isGoButtonEnabled
+        self.isUserInteractionEnabled = isGoButtonEnabled
         let goButtonTitle = isPreview ? StringConstant.preview : StringConstant.go
         self.goButton.setTitle(goButtonTitle, for: .normal)
         self.layoutIfNeeded()
@@ -186,13 +191,13 @@ final class RouteTypeView: UIView {
         
         routeTypeImage.snp.makeConstraints {
             $0.width.height.equalTo(20)
-            $0.leading.equalToSuperview().offset(18)
+            $0.leading.equalToSuperview().offset(10)
             $0.centerY.equalToSuperview()
         }
         
         leftContainerView.snp.makeConstraints {
             $0.centerY.equalTo(routeTypeImage.snp.centerY)
-            $0.leading.equalTo(routeTypeImage.snp.trailing).offset(16)
+            $0.leading.equalTo(routeTypeImage.snp.trailing).offset(10)
         }
         
         routeTypeTitle.snp.makeConstraints {
@@ -219,7 +224,7 @@ final class RouteTypeView: UIView {
         }
         
         goButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview().offset(-10)
             $0.width.equalTo(77)
             $0.height.equalTo(40)
             $0.centerY.equalToSuperview()
@@ -231,7 +236,7 @@ final class RouteTypeView: UIView {
         }
         
         durationLabel.snp.makeConstraints {
-            $0.trailing.equalTo(goButton.snp.leading).offset(-24)
+            $0.trailing.equalTo(goButton.snp.leading).offset(-10)
             $0.height.equalTo(28)
             $0.centerY.equalTo(goButton.snp.centerY)
             $0.leading.equalTo(leftContainerView.snp.trailing).offset(5)

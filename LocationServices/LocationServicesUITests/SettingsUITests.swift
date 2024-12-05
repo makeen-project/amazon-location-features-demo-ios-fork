@@ -90,7 +90,7 @@ final class SettingsUITests: LocationServicesUITests {
         mapStyleScreen = mapStyleScreen
             .select(style: style)
         XCTAssertTrue(mapStyleScreen.isCellSelected(for: style))
-        
+        Thread.sleep(forTimeInterval: 2)
         let exploreScreen = mapStyleScreen
             .tapBackButton()
             .getTabBarScreen()

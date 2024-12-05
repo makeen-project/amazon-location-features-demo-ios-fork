@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import LocationServices
+import AWSGeoPlaces
 
 final class AddGeofenceViewModelTests: XCTestCase {
     
@@ -35,6 +36,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
     var viewModelDelegate: AddGeofenceViewModelOutputProtocolMock!
     var userLocation: (lat: Double, long: Double)!
     var search: SearchPresentation!
+    var place: GetPlaceOutput!
     
     override func setUpWithError() throws {
         userLocation = (lat: 40.7487776237092, long: -73.98554260340953)
@@ -50,6 +52,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         locationService = LocationAPIServiceMock(delay: Constants.apiRequestDuration)
         viewModelDelegate = AddGeofenceViewModelOutputProtocolMock()
         setupViewModel(with: [])
+        place = GetPlaceOutput(placeId: "ID", position: [-73.98554260340953, 40.7487776237092], title: "dummy place")
     }
     
     override func tearDownWithError() throws {
@@ -305,7 +308,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
         setupViewModel(with: [Constants.testGeofenceModel])
         locationService.mockSearchTextResult = .success([search])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        locationService.mockGetPlaceResult = .success(search)
+        locationService.mockGetPlaceResult = .success(place)
         _ = try await viewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
@@ -329,7 +332,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
                                         name: "Times Square")
         setupViewModel(with: [model])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        locationService.mockGetPlaceResult = .success(search)
+        locationService.mockGetPlaceResult = .success(place)
         _ = try await viewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled
@@ -353,7 +356,7 @@ final class AddGeofenceViewModelTests: XCTestCase {
                                         name: "Times Square")
         setupViewModel(with: [model])
         locationService.mockSearchTextWithSuggestionResult = .success([search])
-        locationService.mockGetPlaceResult = .success(search)
+        locationService.mockGetPlaceResult = .success(place)
         _ = try await viewModel.searchWithSuggestion(text: "Times Square", userLat: userLocation.lat, userLong: userLocation.long)
         XCTWaiter().wait(until: {
             return self.viewModelDelegate.searchResultCalled

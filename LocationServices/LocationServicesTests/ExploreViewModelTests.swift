@@ -9,6 +9,7 @@ import XCTest
 @testable import LocationServices
 import CoreLocation
 import AWSGeoRoutes
+import AWSGeoPlaces
 
 final class ExploreViewModelTests: XCTestCase {
 
@@ -21,6 +22,7 @@ final class ExploreViewModelTests: XCTestCase {
     var delegate: MockExploreViewModelOutputDelegate!
     var userLocation: (lat: Double, long: Double)!
     var search: SearchPresentation!
+    var place: GetPlaceOutput!
     enum Constants {
         static let waitRequestDuration: TimeInterval = 10
         static let apiRequestDuration: TimeInterval = 1
@@ -50,6 +52,8 @@ final class ExploreViewModelTests: XCTestCase {
         departureLocation  = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
         destinationLocation = CLLocationCoordinate2D(latitude:40.75474012009525, longitude: -73.98387963388527)
         routeModel = RouteModel(departurePosition: departureLocation, destinationPosition: destinationLocation, travelMode: RouteTypes.car, avoidFerries: false, avoidTolls: false, isPreview: true, departurePlaceName: "Time Square", departurePlaceAddress: "Manhattan, NY 10036, United States", destinationPlaceName: "CUNY Graduate Center", destinationPlaceAddress: "365 5th Ave, New York, NY 10016, United States")
+        
+        place = GetPlaceOutput(placeId: "ID", position: [-73.98554260340953, 40.7487776237092], title: "dummy place")
     }
 
     override func tearDownWithError() throws {
@@ -86,8 +90,8 @@ final class ExploreViewModelTests: XCTestCase {
     }
 
     func testReCalculateRouteReturnSuccess() async throws {
-        let direction = DirectionPresentation(model: GeoRoutesClientTypes.Route(), travelMode: .car)
-        locationService.mockGetPlaceResult = .success(search)
+        let direction = try DirectionPresentation(model: GeoRoutesClientTypes.Route(), travelMode: .car)
+        locationService.mockGetPlaceResult = .success(place)
         locationService.mockSearchWithPositionResult = .success([search])
         routingService.putResult = [GeoRoutesClientTypes.RouteTravelMode.car: .success(direction)]
         exploreViewModel.activateRoute(route: routeModel)
@@ -116,6 +120,7 @@ final class ExploreViewModelTests: XCTestCase {
                                        placeLong: departureLocation?.longitude,
                                        name: "My Location")
         locationService.mockSearchWithPositionResult = .success([search])
+        locationService.mockGetPlaceResult = .success(place)
         await exploreViewModel.loadPlace(for: destinationLocation, userLocation: departureLocation)
         
         XCTWaiter().wait(until: {

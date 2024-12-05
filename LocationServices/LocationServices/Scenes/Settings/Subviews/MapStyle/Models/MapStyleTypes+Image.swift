@@ -11,13 +11,13 @@ extension MapStyleImages {
     var image: UIImage {
         switch self {
         case .standard:
-            return .streetMapLayer
+            return .standardMapLayer
         case .monochrome:
-            return .light_gray_map_layer
+            return .monochromeMapLayer
         case .hybrid:
-            return .hybird_map_layer
+            return .hybridMapLayer
         case .satellite:
-            return .here_imagerey_map_layer
+            return .satelliteMapLayer
         }
     }
 }

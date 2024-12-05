@@ -139,7 +139,7 @@ final class TrackingMapView: UIView {
     }
     
     func reloadMap() {
-        mapView.setupMapView()
+        mapView.setupMapView(locateMe: false)
         amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo()
     }
     

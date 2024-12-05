@@ -7,22 +7,20 @@
 
 import Foundation
 @testable import LocationServices
-import AWSLocation
+import AWSGeoPlaces
 
-class LocationAPIServiceMock: LocationServiceable {
-
+class LocationAPIServiceMock: LocationServiceable {    
     var mockSearchTextResult: Result<[SearchPresentation], Error> = .success([])
     var mockSearchTextWithSuggestionResult: Result<[SearchPresentation], Error> = .success([])
     var mockSearchWithPositionResult: Result<[SearchPresentation], Error> = .success([])
-    var mockGetPlaceResult: Result<SearchPresentation?, Error> = .success(nil)
-    
+    var mockGetPlaceResult: Result<GetPlaceOutput?, Error> = .success(nil)
     let delay: TimeInterval
         
     init(delay: TimeInterval) {
         self.delay = delay
     }
     
-    func searchText(text: String, userLat: Double?, userLong: Double?) async -> Result<[SearchPresentation], Error> {
+    func searchText(text: String, userLat: Double?, userLong: Double?, queryId: String?) async -> Result<[SearchPresentation], Error> {
         return mockSearchTextResult
     }
     
@@ -34,7 +32,7 @@ class LocationAPIServiceMock: LocationServiceable {
         return mockSearchWithPositionResult
     }
     
-    func getPlace(with placeId: String) async throws -> SearchPresentation? {
+    func getPlace(with placeId: String) async throws -> GetPlaceOutput? {
         switch mockGetPlaceResult {
         case .success(let model):
             return model
@@ -42,5 +40,6 @@ class LocationAPIServiceMock: LocationServiceable {
             throw error
         }
     }
+    
 }
 

@@ -357,6 +357,9 @@
 		F11E045E2CD509A2003F1641 /* AmazonLocationiOSAuthSDK in Frameworks */ = {isa = PBXBuildFile; productRef = F11E045D2CD509A2003F1641 /* AmazonLocationiOSAuthSDK */; };
 		F11E04612CD515C0003F1641 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F11E04602CD515C0003F1641 /* KeychainSwift */; };
 		F11E04632CD516DD003F1641 /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04622CD516DD003F1641 /* KeyChainHelper.swift */; };
+		F11E046F2CE788EA003F1641 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E046E2CE788DA003F1641 /* LanguageView.swift */; };
+		F11E04712CE788FD003F1641 /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04702CE788F3003F1641 /* LanguageViewController.swift */; };
+		F11E04732CE791A3003F1641 /* LanguageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04722CE791A1003F1641 /* LanguageViewCell.swift */; };
 		F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */; };
 		F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */; };
 		F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */; };
@@ -779,6 +782,9 @@
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
 		F111DF0E29F0214B00D08641 /* MapStyleViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStyleViewModelTests.swift; sourceTree = "<group>"; };
 		F11E04622CD516DD003F1641 /* KeyChainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainHelper.swift; sourceTree = "<group>"; };
+		F11E046E2CE788DA003F1641 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
+		F11E04702CE788F3003F1641 /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
+		F11E04722CE791A1003F1641 /* LanguageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewCell.swift; sourceTree = "<group>"; };
 		F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocationTravelModeTests.swift; sourceTree = "<group>"; };
 		F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtensionTests.swift; sourceTree = "<group>"; };
 		F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationExtensionTests.swift; sourceTree = "<group>"; };
@@ -2260,6 +2266,8 @@
 			children = (
 				ADBDDF062984392A00696EC6 /* Cell */,
 				ADBDDF022984386400696EC6 /* ExploreMapStyleHeaderView.swift */,
+				F11E046E2CE788DA003F1641 /* LanguageView.swift */,
+				F11E04702CE788F3003F1641 /* LanguageViewController.swift */,
 				F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */,
 				F1C4DC632CC7ADCE00AA235A /* PoliticalViewController.swift */,
 				F1C4DC532CC1614800AA235A /* ColorSegmentControl.swift */,
@@ -2279,6 +2287,7 @@
 		ADBDDF062984392A00696EC6 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				F11E04722CE791A1003F1641 /* LanguageViewCell.swift */,
 				F1C4DC652CC7BA9D00AA235A /* PoliticalViewCell.swift */,
 				ADBDDF072984394500696EC6 /* ExploreMapStyleCell.swift */,
 			);
@@ -3283,6 +3292,7 @@
 				F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */,
 				ADD139952980A34E0003F917 /* RouteOptionRowView.swift in Sources */,
 				ADD5D7B1296E00340022480B /* PostLoginView.swift in Sources */,
+				F11E046F2CE788EA003F1641 /* LanguageView.swift in Sources */,
 				ADD1396A2980966E0003F917 /* DataProviderVC.swift in Sources */,
 				8A75093729EEE1D100B9985F /* NumberConstants.swift in Sources */,
 				ADD1395A2980874A0003F917 /* UnitSceneViewModel.swift in Sources */,
@@ -3408,6 +3418,7 @@
 				8ACAAD7629F14B9D00523256 /* CLLocationManager+Extension.swift in Sources */,
 				AD2AF0EB292EAEDF00149904 /* AppColorsConstants.swift in Sources */,
 				AD2AF030292E892000149904 /* AppDelegate.swift in Sources */,
+				F11E04732CE791A3003F1641 /* LanguageViewCell.swift in Sources */,
 				AD2AF0CF292EAB9000149904 /* SettingsContracts.swift in Sources */,
 				AD33F4C52950FE03005719D3 /* DirectionSearchView.swift in Sources */,
 				ADAE4FFD2935734E0000F7FC /* String+Extensions.swift in Sources */,
@@ -3445,6 +3456,7 @@
 				ADABECDE293FE8F200E66FC5 /* SearchVCContracts.swift in Sources */,
 				AD625EA5293CDC5500C67B44 /* Endpoint.swift in Sources */,
 				ADD1398E2980A24E0003F917 /* RouteOptionViewModel.swift in Sources */,
+				F11E04712CE788FD003F1641 /* LanguageViewController.swift in Sources */,
 				ADD5D7E52970A9EB0022480B /* AddGeofenceMessageTextField.swift in Sources */,
 				AD2AF095292EA8A800149904 /* GeofenceVC.swift in Sources */,
 				AD989727298B0A250041E867 /* CommonDashboardView.swift in Sources */,
@@ -3634,6 +3646,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -3901,6 +3914,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";

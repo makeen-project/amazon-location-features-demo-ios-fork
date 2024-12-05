@@ -74,9 +74,15 @@ class PoliticalViewCell: UITableViewCell {
 
     func configure(with politicalView: PoliticalViewType) {
         let countryFlag = flag(country: politicalView.flagCode)
+        if politicalView.flagCode.isEmpty {
+            itemIcon.isHidden = true
+        }
+        else {
+            itemIcon.isHidden = false
+        }
         itemTitle.text = politicalView.fullName
         itemIcon.text = countryFlag
-        itemIcon.font = UIFont.systemFont(ofSize: 24) // Adjust flag size
+        itemIcon.font = UIFont.systemFont(ofSize: 24)
         itemSubtitle.text = politicalView.politicalDescription
     }
     

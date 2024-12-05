@@ -21,7 +21,6 @@ final class ExploreMapStyleCell: UITableViewCell {
     
     private var containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
         view.layer.cornerRadius = 10
         view.isUserInteractionEnabled = true
         return view
@@ -53,8 +52,6 @@ final class ExploreMapStyleCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
-        self.backgroundColor = .clear
-        self.backgroundColor = .clear
         setupCollectionView()
         setupViews()
     }
