@@ -12,7 +12,7 @@ final class RouteOptionsView: UIView {
     
     enum Constants {
         static let collapsedHeight: Int = 32
-        static let expandedHeight: Int = 144
+        static let expandedHeight: Int = 300
     }
     
     var changeRouteOptionHeight: IntHandler?
