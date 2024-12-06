@@ -192,7 +192,7 @@ struct SearchPresentation {
     init(model: GeoPlacesClientTypes.SuggestResultItem, userLocation: CLLocation? = nil) {
         self.placeId = model.place?.placeId
         if let fullAddress = model.place?.address?.label?.formatAddressField() {
-            self.name = fullAddress[safe: 0] ?? ""
+            self.name = fullAddress[safe: 0] ?? model.place?.address?.label
             self.fullLocationAddress = fullAddress[safe: 1] ?? ""
         } else {
             self.name = model.title
