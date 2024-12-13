@@ -34,8 +34,8 @@ private enum Constants {
     
     static let mapLayerBottomOffset: CGFloat = 16
     static let bottomStackViewOffset: CGFloat = 16
-    static let topStackViewOffsetiPhone: CGFloat = 50
-    static let topStackViewOffsetiPad: CGFloat = 50
+    static let topStackViewOffsetiPhone: CGFloat = 70
+    static let topStackViewOffsetiPad: CGFloat = 70
 }
 
 enum MapMode {
