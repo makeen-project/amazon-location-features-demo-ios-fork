@@ -6,13 +6,13 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
+import AWSGeoRoutes
 
 struct NavigationPresentation {
     var id: Int
-    var duration: String
-    var distance: String
-    var instruction: String
-    var stepType: NavigationStepType
+    var vehicleStep: GeoRoutesClientTypes.RouteVehicleTravelStep?
+    var pedestrianStep: GeoRoutesClientTypes.RoutePedestrianTravelStep?
+    var ferryStep: GeoRoutesClientTypes.RouteFerryTravelStep?
 }
 
 

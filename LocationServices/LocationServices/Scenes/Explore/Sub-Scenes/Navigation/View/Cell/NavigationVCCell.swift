@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import AWSGeoRoutes
 
 enum StepState {
     case first, last
@@ -16,13 +17,23 @@ struct NavigationCellModel {
     var stepState: StepState
     var instruction: String
     var distance: String
-    var stepType: NavigationStepType
+    var vehicleStep: GeoRoutesClientTypes.RouteVehicleTravelStep?
+    var pedestrianStep: GeoRoutesClientTypes.RoutePedestrianTravelStep?
     
     init(model: NavigationPresentation, stepState: StepState? = .first) {
-        self.distance = model.distance
-        self.instruction = model.instruction
+        self.vehicleStep = model.vehicleStep
+        self.pedestrianStep = model.pedestrianStep
+        self.distance = ""
+        self.instruction = ""
+        if let step = model.pedestrianStep {
+            self.distance =  String(step.distance)
+            self.instruction = step.instruction!
+        }
+        else if let step = model.vehicleStep {
+            self.distance =  String(step.distance)
+            self.instruction = step.instruction!
+        }
         self.stepState = stepState ?? .first
-        self.stepType = model.stepType
     }
 }
 
@@ -42,7 +53,12 @@ final class NavigationVCCell: UITableViewCell {
 
             switch model.stepState {
             case .first:
-                self.stepImage.image = model.stepType.image
+                if let step = model.pedestrianStep {
+                    self.stepImage.image = model.pedestrianStep?.type?.image
+                }
+                else if let step = model.vehicleStep {
+                    self.stepImage.image = model.vehicleStep?.type?.image
+                }
                 stepLine.isHidden = false
             case .last:
                 self.stepImage.image = .selectedPlace

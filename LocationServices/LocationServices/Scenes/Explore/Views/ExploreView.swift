@@ -311,7 +311,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     @objc func direactionAction() {
-        
+        locateMeAction()
         delegate?.showDirectionView(userLocation: (mapView.locationManager.authorizationStatus == .authorizedAlways || mapView.locationManager.authorizationStatus == .authorizedWhenInUse) ? mapView.userLocation?.coordinate : nil)
     }
     

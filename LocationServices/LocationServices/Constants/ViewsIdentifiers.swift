@@ -64,6 +64,7 @@ struct ViewsIdentifiers {
         
         static let routeOptionsVisibilityButton = "RouteOptionsVisibilityButton"
         static let routeOptionsContainer = "RouteOptionsContainer"
+        static let leaveOptionsContainer = "LeaveOptionsContainer"
         static let avoidTollsOptionContainer = "AvoidTollsOptionContainer"
         static let avoidFerriesOptionContainer = "AvoidFerriesOptionContainer"
         static let avoidUturnsOptionContainer = "AvoidUturnsOptionContainer"

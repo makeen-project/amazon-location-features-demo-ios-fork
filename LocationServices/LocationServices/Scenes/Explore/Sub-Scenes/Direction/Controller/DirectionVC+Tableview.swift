@@ -78,7 +78,7 @@ extension DirectionVC: UITableViewDataSource {
         if model != nil {
             cell.model = model
         }
-        
+        cell.hideDistance()
         return cell
     }
     
@@ -114,7 +114,7 @@ extension DirectionVC: UITableViewDataSource {
             
             if state && canSearch {
                 self.sheetPresentationController?.selectedDetentIdentifier = .medium
-                try await calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads)
+                try await calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads,departNow: viewModel.departNow, departureTime: viewModel.departureTime, arrivalTime: viewModel.arrivalTime)
             }
         }
     }

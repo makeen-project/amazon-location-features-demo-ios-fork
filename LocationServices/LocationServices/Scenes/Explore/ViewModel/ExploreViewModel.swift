@@ -75,9 +75,12 @@ final class ExploreViewModel: ExploreViewModelProtocol {
                                                                  avoidTolls: selectedRoute.avoidTolls,
                                                                  avoidUturns: selectedRoute.avoidUturns,
                                                                  avoidTunnels: selectedRoute.avoidTunnels,
-                                                                 avoidDirtRoads: selectedRoute.avoidDirtRoads)
+                                                                 avoidDirtRoads: selectedRoute.avoidDirtRoads,
+                                                                 departNow: selectedRoute.departNow,
+                                                                 departureTime: selectedRoute.departureTime,
+                                                                 arrivalTime: selectedRoute.arrivalTime)
         for route in result {
-            self.delegate?.routeReCalculated(route: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
+            self.delegate?.routeReCalculated(direction: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
         }
     }
     

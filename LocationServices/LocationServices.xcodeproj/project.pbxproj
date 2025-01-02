@@ -378,6 +378,7 @@
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
 		F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
+		F1A306B52D1319D500B16126 /* LeaveOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B42D13199B00B16126 /* LeaveOptions.swift */; };
 		F1AD36F82CCA7CA000E1BB7B /* UITestPoliticalViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */; };
 		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
@@ -393,6 +394,7 @@
 		F1C4DC682CC7BD7600AA235A /* PoliticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */; };
 		F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */; };
 		F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */; };
+		F1D1BC402D1043F300D263B6 /* RouteTypeSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D1BC3F2D1043E600D263B6 /* RouteTypeSegment.swift */; };
 		F1E368602CB6C25E00AF3A5B /* AWSClientRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = F1E3685F2CB6C25E00AF3A5B /* AWSClientRuntime */; };
 		F1E368622CB6C25E00AF3A5B /* AWSCognitoIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = F1E368612CB6C25E00AF3A5B /* AWSCognitoIdentity */; };
 		F1E368642CB6C25E00AF3A5B /* AWSLocation in Frameworks */ = {isa = PBXBuildFile; productRef = F1E368632CB6C25E00AF3A5B /* AWSLocation */; };
@@ -803,6 +805,7 @@
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttIoTContext.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
+		F1A306B42D13199B00B16126 /* LeaveOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveOptions.swift; sourceTree = "<group>"; };
 		F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestPoliticalViewScreen.swift; sourceTree = "<group>"; };
 		F1B060962AD0209C0020CD8C /* LocationServicesUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocationServicesUITests.xctestplan; sourceTree = "<group>"; };
 		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -818,6 +821,7 @@
 		F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoliticalView.swift; sourceTree = "<group>"; };
 		F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridBackgroundView.swift; sourceTree = "<group>"; };
 		F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVCViewModelTests.swift; sourceTree = "<group>"; };
+		F1D1BC3F2D1043E600D263B6 /* RouteTypeSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTypeSegment.swift; sourceTree = "<group>"; };
 		F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDefaultValueHelperTests.swift; sourceTree = "<group>"; };
 		F1E5F8EF29E986F300639EEC /* UserDefaultsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelperTests.swift; sourceTree = "<group>"; };
@@ -1875,6 +1879,8 @@
 		AD33F4CA295189FA005719D3 /* Common Views */ = {
 			isa = PBXGroup;
 			children = (
+				F1A306B42D13199B00B16126 /* LeaveOptions.swift */,
+				F1D1BC3F2D1043E600D263B6 /* RouteTypeSegment.swift */,
 				AD33F4CB29518A08005719D3 /* RouteOptionView.swift */,
 				AD33F4CD29518A13005719D3 /* RouteTypeView.swift */,
 			);
@@ -3287,6 +3293,7 @@
 				8AEFDDC72A262F5300090D9E /* GradientView.swift in Sources */,
 				ADD5D7CE296F843D0022480B /* GeofenceDashboardCell.swift in Sources */,
 				F11E04632CD516DD003F1641 /* KeyChainHelper.swift in Sources */,
+				F1A306B52D1319D500B16126 /* LeaveOptions.swift in Sources */,
 				AD2AF06C292E99B700149904 /* TabBarCoordinator.swift in Sources */,
 				ADBDDF082984394500696EC6 /* ExploreMapStyleCell.swift in Sources */,
 				F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */,
@@ -3326,6 +3333,7 @@
 				8A85A75E29A5059D0022ABE0 /* MapStyleSectionHeaderView.swift in Sources */,
 				96E742AA2967381900D5C0BC /* Sequence+Extension.swift in Sources */,
 				ADD13978298098760003F917 /* ResetPasswordVC.swift in Sources */,
+				F1D1BC402D1043F300D263B6 /* RouteTypeSegment.swift in Sources */,
 				ADD1398029809C360003F917 /* ResetPasswordContracts.swift in Sources */,
 				ADC1245329774A7700B08C20 /* DefaultCommonMapView.swift in Sources */,
 				8A3360DA296C3BE400320B87 /* MLNCoordinateBounds+Extension.swift in Sources */,

@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
+import AWSGeoRoutes
 
 final class NavigationVC: UIViewController {
     
@@ -163,7 +164,7 @@ private extension NavigationVC {
     }
     
     @objc private func updateNavigationSteps(_ notification: Notification) {
-        guard let datas = notification.userInfo?["routeLegDetails"] as? (routeLegDetails: [RouteLegDetails], sumData: (totalDistance: Double, totalDuration: Double)) else { return }
-        viewModel.update(routeLegDetails: datas.routeLegDetails, summaryData: datas.sumData)
+        guard let route = notification.userInfo?["route"] as? GeoRoutesClientTypes.Route else { return }
+        viewModel.update(route: route)
     }
 }

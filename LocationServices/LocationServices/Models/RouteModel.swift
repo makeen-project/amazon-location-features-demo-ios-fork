@@ -24,4 +24,8 @@ struct RouteModel {
     let departurePlaceAddress: String?
     let destinationPlaceName: String?
     let destinationPlaceAddress: String?
+    
+    let departNow: Bool
+    let departureTime: Date?
+    let arrivalTime: Date?
 }

@@ -12,7 +12,8 @@ final class RouteOptionsView: UIView {
     
     enum Constants {
         static let collapsedHeight: Int = 32
-        static let expandedHeight: Int = 300
+        static let expandedRouteOptionHeight: Int = 300
+        static let expandedLeaveOptionHeight: Int = 500
     }
     
     var changeRouteOptionHeight: IntHandler?
@@ -21,9 +22,12 @@ final class RouteOptionsView: UIView {
     var avoidUturns: BoolHandler?
     var avoidTunnels: BoolHandler?
     var avoidDirtRoads: BoolHandler?
+    var leaveOptionHandler: Handler<Any>?
     
-    private var routeOptionState: Bool = true
-    private let containerView: UIView = {
+    private var routeOptionState: Bool = false
+    private var leaveOptionState: Bool = false
+    
+    private let avoidOptions: UIView = {
         let view = UIView()
         view.accessibilityIdentifier = ViewsIdentifiers.Routing.routeOptionsContainer
         view.backgroundColor = .white
@@ -32,6 +36,52 @@ final class RouteOptionsView: UIView {
         view.layer.masksToBounds = true
         view.layer.borderColor = UIColor.lsLight2.cgColor
         view.layer.borderWidth = 1
+        return view
+    }()
+    
+    private let leaveOptions: LeaveOptions = {
+        let view = LeaveOptions()
+        view.accessibilityIdentifier = ViewsIdentifiers.Routing.leaveOptionsContainer
+//        view.backgroundColor = .white
+//        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+//        view.layer.cornerRadius = 8
+//        view.layer.masksToBounds = true
+//        view.layer.borderColor = UIColor.lsLight2.cgColor
+//        view.layer.borderWidth = 1
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    
+    private lazy var leaveOptionToggleButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.accessibilityIdentifier = ViewsIdentifiers.Routing.routeOptionsVisibilityButton
+        button.tintColor = .black
+        button.backgroundColor = .mapElementDiverColor
+        button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(leaveOptionExpand), for: .touchUpInside)
+        return button
+    }()
+    
+    private var leaveOptionImage: UIImageView = {
+        let image = UIImage(systemName: "chevron.down")!
+        let view = UIImageView(image: image)
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    
+    private var leaveOptionTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Leave Now"
+        label.font = .amazonFont(type: .bold, size: 12)
+        return label
+    }()
+    
+    private var leaveOptionContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.isUserInteractionEnabled = false
+
         return view
     }()
     
@@ -104,6 +154,14 @@ final class RouteOptionsView: UIView {
         return view
     }()
     
+    private let routeOptionsStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .horizontal
+        sv.distribution = .equalSpacing
+        sv.spacing = 5
+        return sv
+    }()
+    
     private let optionStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
@@ -113,13 +171,35 @@ final class RouteOptionsView: UIView {
     }()
     
     @objc func routeOptionExpand() {
-        routeOptionToggleButton.backgroundColor = routeOptionState ? .white : .mapElementDiverColor
-        routeOptionToggleButton.layer.maskedCorners = routeOptionState ? [.layerMinXMinYCorner, .layerMaxXMinYCorner] : [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        // Collapse Leave Option if expanded
+        if leaveOptionState {
+            leaveOptionState = false
+            toggleOption(state: &leaveOptionState, toggleButton: leaveOptionToggleButton, optionsView: leaveOptions, optionImage: leaveOptionImage, expandedHeight: Constants.expandedLeaveOptionHeight)
+        }
         
-        containerView.isHidden = !routeOptionState
-        routeOptionImage.image = UIImage(systemName: routeOptionState ? "chevron.up" : "chevron.down")
-        changeRouteOptionHeight?(routeOptionState ? Constants.expandedHeight : Constants.collapsedHeight)
+        // Toggle Route Option
         routeOptionState.toggle()
+        toggleOption(state: &routeOptionState, toggleButton: routeOptionToggleButton, optionsView: avoidOptions, optionImage: routeOptionImage, expandedHeight: Constants.expandedRouteOptionHeight)
+    }
+
+    @objc func leaveOptionExpand() {
+        // Collapse Route Option if expanded
+        if routeOptionState {
+            routeOptionState = false
+            toggleOption(state: &routeOptionState, toggleButton: routeOptionToggleButton, optionsView: avoidOptions, optionImage: routeOptionImage, expandedHeight: Constants.expandedRouteOptionHeight)
+        }
+        
+        // Toggle Leave Option
+        leaveOptionState.toggle()
+        toggleOption(state: &leaveOptionState, toggleButton: leaveOptionToggleButton, optionsView: leaveOptions, optionImage: leaveOptionImage, expandedHeight: Constants.expandedLeaveOptionHeight)
+    }
+
+    private func toggleOption(state: inout Bool, toggleButton: UIButton, optionsView: UIView, optionImage: UIImageView, expandedHeight: Int) {
+        toggleButton.backgroundColor = state ? .white : .mapElementDiverColor
+        toggleButton.layer.maskedCorners = state ? [.layerMinXMinYCorner, .layerMaxXMinYCorner] : [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        optionsView.isHidden = !state
+        optionImage.image = UIImage(systemName: state ? "chevron.up" : "chevron.down")
+        changeRouteOptionHeight?(state ? expandedHeight : Constants.collapsedHeight)
     }
     
     override init(frame: CGRect) {
@@ -172,22 +252,55 @@ final class RouteOptionsView: UIView {
         optionStackView.addArrangedSubview(tunnelsOption)
         optionStackView.addArrangedSubview(dirtRoadsOption)
         
-        routeOptionContainerView.addSubview(routeOptionTitle)
-        routeOptionContainerView.addSubview(routeOptionImage)
-        routeOptionToggleButton.addSubview(routeOptionContainerView)
-        
-        self.addSubview(routeOptionToggleButton)
-        self.addSubview(containerView)
+        avoidOptions.addSubview(optionStackView)
         
         routeOptionContainerView.addSubview(routeOptionTitle)
         routeOptionContainerView.addSubview(routeOptionImage)
         routeOptionToggleButton.addSubview(routeOptionContainerView)
         
-        containerView.addSubview(optionStackView)
+        leaveOptionContainerView.addSubview(leaveOptionTitle)
+        leaveOptionContainerView.addSubview(leaveOptionImage)
+        leaveOptionToggleButton.addSubview(leaveOptionContainerView)
+
+        routeOptionsStackView.addArrangedSubview(leaveOptionToggleButton)
+        routeOptionsStackView.addArrangedSubview(routeOptionToggleButton)
+
+        self.addSubview(routeOptionsStackView)
+        self.addSubview(avoidOptions)
+        self.addSubview(leaveOptions)
         
+        routeOptionsStackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        leaveOptionToggleButton.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.height.equalTo(32)
+            $0.width.equalTo(152)
+        }
+        
+        leaveOptionContainerView.snp.makeConstraints {
+            $0.width.equalTo(118)
+            $0.height.equalTo(16)
+            $0.centerX.centerY.equalToSuperview()
+        }
+        
+        leaveOptionTitle.snp.makeConstraints {
+            $0.top.bottom.leading.equalToSuperview()
+        }
+        
+        leaveOptionImage.snp.makeConstraints {
+            $0.centerY.equalTo(routeOptionTitle.snp.centerY)
+            $0.height.equalTo(4)
+            $0.width.equalTo(6)
+            $0.trailing.equalToSuperview()
+        }
+
         routeOptionToggleButton.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            //$0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(32)
             $0.width.equalTo(152)
         }
@@ -209,8 +322,14 @@ final class RouteOptionsView: UIView {
             $0.trailing.equalToSuperview()
         }
         
-        containerView.snp.makeConstraints {
-            $0.top.equalTo(routeOptionToggleButton.snp.bottom)
+        leaveOptions.snp.makeConstraints {
+            $0.top.equalTo(routeOptionsStackView.snp.bottom)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        
+        avoidOptions.snp.makeConstraints {
+            $0.top.equalTo(leaveOptions.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }
@@ -231,6 +350,7 @@ final class RouteOptionsView: UIView {
             $0.top.trailing.leading.bottom.equalToSuperview()
         }
         
-        containerView.isHidden = true
+        avoidOptions.isHidden = true
+        leaveOptions.isHidden = true
     }
 }

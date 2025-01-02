@@ -31,6 +31,10 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     var avoidTunnels: Bool = false
     var avoidDirtRoads: Bool = false
     
+    var departNow: Bool = true
+    var departureTime: Date? = nil
+    var arrivalTime: Date? = nil
+    
     init(service: LocationServiceable, routingService: RoutingServiceable) {
         self.service = service
         self.routingService = routingService
@@ -39,6 +43,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     func loadLocalOptions() {
         self.avoidFerries = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions) ?? true
         self.avoidTolls = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions) ?? true
+        self.avoidUturns = UserDefaultsHelper.get(for: Bool.self, key: .uturnsOptions) ?? true
+        self.avoidTunnels = UserDefaultsHelper.get(for: Bool.self, key: .tunnelsOptions) ?? true
+        self.avoidDirtRoads = UserDefaultsHelper.get(for: Bool.self, key: .dirtRoadsOptions) ?? true
         delegate?.getLocalRouteOptions(tollOption: avoidTolls, ferriesOption: avoidFerries, uturnsOption: avoidUturns, tunnelsOption: avoidTunnels, dirtRoadsOption: avoidDirtRoads)
     }
     
@@ -205,11 +212,11 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         }
     }
     
-    func getCurrentNavigationLegsWith(_ type: RouteTypes) -> Result<[RouteLegDetails]?, Error> {
+    func getCurrentNavigationRouteWith(_ type: RouteTypes) -> Result<GeoRoutesClientTypes.Route?, Error> {
         let currentModel = getModel(for: type)
         switch currentModel {
         case .success(let presentation):
-            return .success(presentation.routeLegDetails)
+            return .success(presentation.route)
         case .failure(let error):
             return .failure(error)
         case .none:
@@ -221,7 +228,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         let currentModel = getModel(for: type)
         switch currentModel {
         case .success(let presentation):
-            return (presentation.distance, presentation.duration)
+            return (Double(presentation.route.summary!.distance), Double(presentation.route.summary!.duration))
         case .failure, .none:
             return (0.0, 0.0)
         }
@@ -229,13 +236,16 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     
     func calculateRouteWith(destinationPosition:  CLLocationCoordinate2D,
                             departurePosition: CLLocationCoordinate2D,
-                            travelMode: RouteTypes = .car,
+                            travelMode: RouteTypes,
                             avoidFerries: Bool = false,
                             avoidTolls: Bool = false,
                             avoidUturns: Bool = false,
                             avoidTunnels: Bool = false,
-                            avoidDirtRoads: Bool = false) async throws -> ([Data], DirectionVM)? {
-        defaultTravelMode = [:]
+                            avoidDirtRoads: Bool = false,
+                            departNow: Bool,
+                            departureTime: Date?,
+                            arrivalTime: Date?) async throws -> ([Data], DirectionVM)? {
+        //defaultTravelMode = [:]
         selectedTravelMode = travelMode
         self.avoidFerries = avoidFerries
         self.avoidTolls = avoidTolls
@@ -245,33 +255,35 @@ final class DirectionViewModel: DirectionViewModelProtocol {
 
         let result = try await routingService.calculateRouteWith(depaturePosition: departurePosition,
                                           destinationPosition: destinationPosition,
-                                                                 travelModes: [GeoRoutesClientTypes.RouteTravelMode.car,         GeoRoutesClientTypes.RouteTravelMode.pedestrian,
-                                                                       GeoRoutesClientTypes.RouteTravelMode.scooter,
-                                                                       GeoRoutesClientTypes.RouteTravelMode.truck],
+                                                                 travelModes: [GeoRoutesClientTypes.RouteTravelMode(rawValue: travelMode.title)!],
                                                                  avoidFerries: avoidFerries,
                                                                  avoidTolls: avoidTolls,
                                                                  avoidUturns: avoidUturns,
                                                                  avoidTunnels: avoidTunnels,
-                                                                 avoidDirtRoads: avoidDirtRoads)
-            self.defaultTravelMode = result
+                                                                 avoidDirtRoads: avoidDirtRoads,
+                                                                 departNow: departNow,
+                                                                 departureTime: departureTime,
+                                                                 arrivalTime: arrivalTime)
+       // self.defaultTravelMode[travelMode] = result[travelMode]
         var directionVM: DirectionVM = DirectionVM(carTypeDistane: "", carTypeDuration: "", scooterTypeDuration: "", scooterTypeDistance: "", walkingTypeDuration: "", walkingTypeDistance: "", truckTypeDistance: "", truckTypeDuration: "")
             
-            result.values.forEach { model in
-                switch model {
+            result.values.forEach { data in
+                switch data {
                 case .success(let model):
+                    self.defaultTravelMode[model.travelMode] = data
                     switch model.travelMode {
                     case .car:
-                        directionVM.carTypeDistane = model.distance.formatToKmString()
-                        directionVM.carTypeDuration = model.duration.convertSecondsToMinString()
+                        directionVM.carTypeDistane = model.route.summary!.distance.formatToKmString()
+                        directionVM.carTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
                     case .scooter:
-                        directionVM.scooterTypeDistance = model.distance.formatToKmString()
-                        directionVM.scooterTypeDuration = model.duration.convertSecondsToMinString()
+                        directionVM.scooterTypeDistance = model.route.summary!.distance.formatToKmString()
+                        directionVM.scooterTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
                     case .pedestrian:
-                        directionVM.walkingTypeDistance = model.distance.formatToKmString()
-                        directionVM.walkingTypeDuration = model.duration.convertSecondsToMinString()
+                        directionVM.walkingTypeDistance = model.route.summary!.distance.formatToKmString()
+                        directionVM.walkingTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
                     case .truck:
-                        directionVM.truckTypeDistance = model.distance.formatToKmString()
-                        directionVM.truckTypeDuration = model.duration.convertSecondsToMinString()
+                        directionVM.truckTypeDistance = model.route.summary!.distance.formatToKmString()
+                        directionVM.truckTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
                     default: break
                     }
                 case .failure:
@@ -285,9 +297,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 let encoder = JSONEncoder()
                 do {
                     var jsonDatas: [Data] = []
-                    if let legDetails = travelMode.routeLegDetails {
+                    if let legDetails = travelMode.route.legs {
                         for leg in legDetails {
-                            let jsonData = try encoder.encode(leg.lineString)
+                            let jsonData = try encoder.encode(getLineString(leg: leg))
                             jsonDatas.append(jsonData)
                         }
                     }
@@ -307,6 +319,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 }
             }
         return nil
+    }
+    
+    func getLineString(leg: GeoRoutesClientTypes.RouteLeg) -> GeoData {
+        let geometry = Geometry(type: "LineString", coordinates: leg.geometry?.lineString)
+        let properties = Properties(name: "Polyline")
+        let feature = [Feature(type: "Feature", properties: properties, geometry: geometry)]
+        return GeoData(type: "FeatureCollection", features: feature)
     }
     
     private func getModel(for type: RouteTypes) -> Result<DirectionPresentation, Error>? {

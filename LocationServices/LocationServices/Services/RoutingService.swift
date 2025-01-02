@@ -17,7 +17,10 @@ protocol AWSRoutingServiceProtocol {
                         avoidTolls: Bool,
                         avoidUturns: Bool,
                         avoidTunnels: Bool,
-                        avoidDirtRoads: Bool) async throws -> CalculateRoutesOutput?
+                        avoidDirtRoads: Bool,
+                        departNow: Bool,
+                        departureTime: Date?,
+                        arrivalTime: Date?) async throws -> CalculateRoutesOutput?
 }
 
 extension AWSRoutingServiceProtocol {
@@ -28,7 +31,10 @@ extension AWSRoutingServiceProtocol {
                         avoidTolls: Bool,
                         avoidUturns: Bool,
                         avoidTunnels: Bool,
-                        avoidDirtRoads: Bool) async throws -> CalculateRoutesOutput? {
+                        avoidDirtRoads: Bool,
+                        departNow: Bool,
+                        departureTime: Date?,
+                        arrivalTime: Date?) async throws -> CalculateRoutesOutput? {
         var routeAvoidanceOptions: GeoRoutesClientTypes.RouteAvoidanceOptions? = nil
         if travelMode == .car {
             routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(dirtRoads: avoidDirtRoads, ferries: avoidFerries, tollRoads: avoidTolls, tunnels: avoidTunnels, uTurns: avoidUturns)
@@ -37,7 +43,7 @@ extension AWSRoutingServiceProtocol {
         let destination = [destinationPosition.longitude, destinationPosition.latitude]
         let legAdditionalFeatures: [GeoRoutesClientTypes.RouteLegAdditionalFeature] = [.travelStepInstructions, .summary]
         
-        let input = CalculateRoutesInput(avoid: routeAvoidanceOptions, departNow: true, destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .simple, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
+        let input = CalculateRoutesInput(arrivalTime: arrivalTime?.convertTimeString(), avoid: routeAvoidanceOptions, departNow: departNow, departureTime: departureTime?.convertTimeString(), destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .simple, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
         
         if let client = AmazonLocationClient.getRoutesClient() {
             let result = try await client.calculateRoutes(input: input)

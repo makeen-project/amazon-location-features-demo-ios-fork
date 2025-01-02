@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import CoreLocation
+import AWSGeoRoutes
 
 final class ExploreVC: UIViewController {
     
@@ -133,7 +134,7 @@ extension ExploreVC: ExploreViewOutputDelegate {
         delegate?.showMapStyles()
     }
     
-    func showNavigationView(steps: [RouteNavigationStep]) {
+    func showNavigationView(steps: [GeoRoutesClientTypes.RouteVehicleTravelStep]) {
         
     }
     
@@ -395,7 +396,7 @@ extension ExploreVC {
     }
     
     @objc private func showNavigationScene(_ notification: Notification) {
-        if let datas = notification.userInfo?["routeLegdetails"] as? (routeLegdetails: [RouteLegDetails]?, sumData: (totalDistance: Double, totalDuration: Double)),
+        if let datas = notification.userInfo?["route"] as? GeoRoutesClientTypes.Route,
         let routeModel = notification.userInfo?["routeModel"] as? RouteModel {
             viewModel.activateRoute(route: routeModel)
             if !routeModel.isPreview {
@@ -409,8 +410,7 @@ extension ExploreVC {
             let firstDestination = MapModel(placeName: routeModel.departurePlaceName, placeAddress: routeModel.departurePlaceAddress, placeLat: routeModel.departurePosition.latitude, placeLong: routeModel.departurePosition.longitude)
             let secondDestination = MapModel(placeName: routeModel.destinationPlaceName, placeAddress: routeModel.destinationPlaceAddress, placeLat: routeModel.destinationPosition.latitude, placeLong: routeModel.destinationPosition.longitude)
             
-            self.delegate?.showNavigationview(routeLegDetails: datas.routeLegdetails!,
-                                              summaryData: datas.sumData,
+            self.delegate?.showNavigationview(route: datas,
                                               firstDestination: firstDestination,
                                               secondDestination: secondDestination)
         }
@@ -501,17 +501,16 @@ extension ExploreVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     }
     
-    func routeReCalculated(route: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes) {
-        if let routeLegDetails = route.routeLegDetails {
-            
-            let sumData = (route.distance, route.duration)
-            let userInfo = ["routeLegDetails": (routeLegDetails: routeLegDetails, sumData: sumData)]
+    func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes) {
+            let userInfo = ["route": direction.route]
             NotificationCenter.default.post(name: Notification.Name("NavigationStepsUpdated"), object: nil, userInfo: userInfo)
-            
             var datas: [Data] = []
-            for legDetails in routeLegDetails {
-                let data = (try? JSONEncoder().encode(legDetails.lineString)) ?? Data()
-                datas.append(data)
+            if let legs = direction.route.legs {
+                for leg in legs {
+                    if let linestring = leg.geometry?.lineString {
+                        let data = (try? JSONEncoder().encode(linestring)) ?? Data()
+                        datas.append(data)
+                }
             }
             self.exploreView.drawCalculatedRouteWith(datas, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: true, routeType: routeType)
         }

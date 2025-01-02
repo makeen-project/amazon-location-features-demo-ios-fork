@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
+import AWSGeoRoutes
 
 final class ExploreCoordinator: Coordinator {
     var delegate: CoordinatorCompletionDelegate?
@@ -128,8 +129,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         
     }
     
-    func showNavigationview(routeLegDetails: [RouteLegDetails], summaryData: (totalDistance: Double, totalDuration: Double), firstDestination: MapModel?, secondDestination: MapModel?) {
-            let controller = NavigationBuilder.create(routeLegDetails: routeLegDetails, summaryData: summaryData, firstDestination: firstDestination, secondDestination: secondDestination)
+    func showNavigationview(route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?) {
+            let controller = NavigationBuilder.create(route: route, firstDestination: firstDestination, secondDestination: secondDestination)
             controller.delegate = self
             
             currentBottomSheet?.dismissBottomSheet()
