@@ -18,20 +18,18 @@ struct DirectionVM {
     var truckTypeDuration: String = ""
 }
 
+struct LeaveOptions {
+    var leaveNow: Bool = true
+    var leaveTime: Date? = nil
+    var arrivalTime: Date? = nil
+}
+
 final class DirectionView: UIView {
     var delegate: DirectionViewOutputDelegate?
     
     private var isPreview = false
     
     private var model: DirectionVM!
-//    {
-//        didSet {
-//            carRouteTypeView.setDatas(distance: model.carTypeDistane, duration: model.carTypeDuration, isPreview: isPreview)
-//            scooterRouteTypeView.setDatas(distance: model.scooterTypeDistance, duration: model.scooterTypeDuration, isPreview: isPreview)
-//            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, isPreview: isPreview)
-//            truckRouteTypeView.setDatas(distance: model.truckTypeDistance, duration: model.truckTypeDuration, isPreview: isPreview)
-//        }
-//    }
     
     private var routeOptionHeight = NumberConstants.routeOptionHeight
 
@@ -42,7 +40,7 @@ final class DirectionView: UIView {
     var avoidUturns: BoolHandler?
     var avoidTunnels: BoolHandler?
     var avoidDirtRoads: BoolHandler?
-    var leaveOptionsHandler: Handler<Any>?
+    var leaveOptionsHandler: Handler<LeaveOptions>?
     
     private var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -242,8 +240,8 @@ final class DirectionView: UIView {
             self?.avoidDirtRoads?(state)
         }
         
-        routeOptions.leaveOptionHandler = { [weak self] state in
-            self?.leaveOptionsHandler?([])
+        routeOptions.leaveOptionHandler = { [weak self] options in
+            self?.leaveOptionsHandler?(options)
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateRouteContainerConstraint(_:)), name: Notification.updateMapLayerItems, object: nil)

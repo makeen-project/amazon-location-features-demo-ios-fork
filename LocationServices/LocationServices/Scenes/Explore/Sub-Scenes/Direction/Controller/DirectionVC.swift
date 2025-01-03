@@ -247,16 +247,19 @@ final class DirectionVC: UIViewController {
             }
         }
         
-//        directionView.leaveNowHandler = { [weak self] data in
-//            let popup = LeaveNowController()
-//            popup.viewModel = self?.viewModel
-//            popup.modalPresentationStyle = .overCurrentContext
-//            popup.modalTransitionStyle = .crossDissolve
-//            popup.setLeaveNowHandler = { [weak self] data in
-//                
-//            }
-//            self?.present(popup, animated: true, completion: {})
-//        }
+        directionView.leaveOptionsHandler = { [weak self] option in
+            Task {
+                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
+                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false,
+                                               leaveNow: option.leaveNow,
+                                               leaveTime: option.leaveTime,
+                                               arrivalTime: option.arrivalTime)
+            }
+        }
     }
     
     func setupNotifications() {
@@ -329,7 +332,10 @@ final class DirectionVC: UIViewController {
                                 avoidFerries: Bool = false,
                                 avoidUturns: Bool = false,
                                 avoidTunnels: Bool = false,
-                                avoidDirtRoads: Bool = false) async throws {
+                                avoidDirtRoads: Bool = false,
+                                leaveNow: Bool = true,
+                                leaveTime: Date? = nil,
+                                arrivalTime: Date? = nil) async throws {
         directionSearchView.closeKeyboard()
         self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
         
@@ -351,7 +357,10 @@ final class DirectionVC: UIViewController {
                                         avoidTolls: avoidTolls,
                                         avoidUturns: avoidUturns,
                                         avoidTunnels: avoidTunnels,
-                                        avoidDirtRoads: avoidDirtRoads)
+                                        avoidDirtRoads: avoidDirtRoads,
+                                        leaveNow: leaveNow,
+                                        leaveTime: leaveTime,
+                                        arrivalTime: arrivalTime)
     }
     
     func setupSearchTitleDestinations() {
@@ -365,8 +374,8 @@ final class DirectionVC: UIViewController {
                                avoidUturns: Bool = false,
                                avoidTunnels: Bool = false,
                                avoidDirtRoads: Bool = false,
-                               departNow: Bool = true,
-                               departureTime: Date? = nil,
+                               leaveNow: Bool = true,
+                               leaveTime: Date? = nil,
                                arrivalTime: Date? = nil) async throws {
         guard let (departureLocation, destinationLocation) = getRouteLocations(currentModel: currentModel) else { return }
         
@@ -383,8 +392,8 @@ final class DirectionVC: UIViewController {
                                                                             avoidUturns: avoidUturns,
                                                                             avoidTunnels: avoidTunnels,
                                                                             avoidDirtRoads: avoidDirtRoads,
-                                                                            departNow: departNow,
-                                                                            departureTime: departureTime,
+                                                                            leaveNow: leaveNow,
+                                                                            leaveTime: leaveTime,
                                                                             arrivalTime: arrivalTime) {
             DispatchQueue.main.async {
                 self.directionView.isHidden = false
@@ -459,7 +468,7 @@ final class DirectionVC: UIViewController {
             showLoadingIndicator()
 
             for routeType in [RouteTypes.car, .pedestrian, .scooter, .truck] {
-                if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, travelMode: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, departNow: viewModel.departNow, departureTime: viewModel.departureTime, arrivalTime: viewModel.arrivalTime) {
+                if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, travelMode: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime) {
                     DispatchQueue.main.async {
                         self.hideLoadingIndicator()
                         self.directionView.isHidden = false
@@ -506,8 +515,8 @@ final class DirectionVC: UIViewController {
         let avoidUturns = viewModel.avoidUturns
         let avoidTunnels = viewModel.avoidTunnels
         let avoidDirtRoads = viewModel.avoidDirtRoads
-        let departNow = viewModel.departNow
-        let departureTime = viewModel.departureTime
+        let departNow = viewModel.leaveNow
+        let departureTime = viewModel.leaveTime
         let arrivalTime = viewModel.arrivalTime
         
         let isPreview = departurePlaceName != "My Location"
@@ -550,7 +559,7 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
                 firstDestination = searchTextModel
             }
             for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
-                try await calculateGenericRoute(currentModel: currentModel, routeType: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, departNow: viewModel.departNow, departureTime: viewModel.departureTime, arrivalTime: viewModel.arrivalTime)
+                try await calculateGenericRoute(currentModel: currentModel, routeType: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime)
             }
             DispatchQueue.main.async {
                 self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId

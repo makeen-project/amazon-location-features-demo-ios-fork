@@ -378,7 +378,6 @@
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
 		F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
-		F1A306B52D1319D500B16126 /* LeaveOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B42D13199B00B16126 /* LeaveOptions.swift */; };
 		F1AD36F82CCA7CA000E1BB7B /* UITestPoliticalViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */; };
 		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
@@ -805,7 +804,6 @@
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttIoTContext.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
-		F1A306B42D13199B00B16126 /* LeaveOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaveOptions.swift; sourceTree = "<group>"; };
 		F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestPoliticalViewScreen.swift; sourceTree = "<group>"; };
 		F1B060962AD0209C0020CD8C /* LocationServicesUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocationServicesUITests.xctestplan; sourceTree = "<group>"; };
 		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -1879,7 +1877,6 @@
 		AD33F4CA295189FA005719D3 /* Common Views */ = {
 			isa = PBXGroup;
 			children = (
-				F1A306B42D13199B00B16126 /* LeaveOptions.swift */,
 				F1D1BC3F2D1043E600D263B6 /* RouteTypeSegment.swift */,
 				AD33F4CB29518A08005719D3 /* RouteOptionView.swift */,
 				AD33F4CD29518A13005719D3 /* RouteTypeView.swift */,
@@ -3293,7 +3290,6 @@
 				8AEFDDC72A262F5300090D9E /* GradientView.swift in Sources */,
 				ADD5D7CE296F843D0022480B /* GeofenceDashboardCell.swift in Sources */,
 				F11E04632CD516DD003F1641 /* KeyChainHelper.swift in Sources */,
-				F1A306B52D1319D500B16126 /* LeaveOptions.swift in Sources */,
 				AD2AF06C292E99B700149904 /* TabBarCoordinator.swift in Sources */,
 				ADBDDF082984394500696EC6 /* ExploreMapStyleCell.swift in Sources */,
 				F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */,

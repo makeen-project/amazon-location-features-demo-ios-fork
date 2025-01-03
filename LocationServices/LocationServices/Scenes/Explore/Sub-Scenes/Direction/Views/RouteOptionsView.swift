@@ -22,7 +22,8 @@ final class RouteOptionsView: UIView {
     var avoidUturns: BoolHandler?
     var avoidTunnels: BoolHandler?
     var avoidDirtRoads: BoolHandler?
-    var leaveOptionHandler: Handler<Any>?
+    var leaveOptionHandler: Handler<LeaveOptions>?
+    var viewModel: DirectionViewModel?
     
     private var routeOptionState: Bool = false
     private var leaveOptionState: Bool = false
@@ -39,17 +40,31 @@ final class RouteOptionsView: UIView {
         return view
     }()
     
-    private let leaveOptions: LeaveOptions = {
-        let view = LeaveOptions()
+    private let leaveOptions: UIView = {
+        let view = UIView()
         view.accessibilityIdentifier = ViewsIdentifiers.Routing.leaveOptionsContainer
-//        view.backgroundColor = .white
-//        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-//        view.layer.cornerRadius = 8
-//        view.layer.masksToBounds = true
-//        view.layer.borderColor = UIColor.lsLight2.cgColor
-//        view.layer.borderWidth = 1
-        view.isUserInteractionEnabled = false
+        view.backgroundColor = .white
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.layer.borderColor = UIColor.lsLight2.cgColor
+        view.layer.borderWidth = 1
         return view
+    }()
+    
+    private lazy var leaveSegmentControl: UISegmentedControl = {
+        let segment = UISegmentedControl(items: ["Leave now", "Leave at", "Arrive by"])
+        segment.tintColor = .lsPrimary
+        segment.addTarget(self, action: #selector(leaveSegmentChanged), for: .valueChanged)
+        return segment
+    }()
+    
+    private let leaveDatePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.tintColor = .lsPrimary
+        picker.datePickerMode = .dateAndTime
+        picker.preferredDatePickerStyle = .inline
+        return picker
     }()
     
     private lazy var leaveOptionToggleButton: UIButton = {
@@ -129,6 +144,24 @@ final class RouteOptionsView: UIView {
         view.backgroundColor = .searchBarBackgroundColor
         return view
     }()
+    
+    private var secondSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        return view
+    }()
+    
+    private var thirdSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        return view
+    }()
+    
+    private var fourthSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        return view
+    }()
         
     private let ferriesOption: RouteOptionView = {
         let view = RouteOptionView(title: StringConstant.avoidFerries)
@@ -162,7 +195,15 @@ final class RouteOptionsView: UIView {
         return sv
     }()
     
-    private let optionStackView: UIStackView = {
+    private let avoidOptionStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .vertical
+        sv.distribution = .equalSpacing
+        sv.spacing = 0
+        return sv
+    }()
+    
+    private let leaveOptionStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.distribution = .equalSpacing
@@ -193,13 +234,25 @@ final class RouteOptionsView: UIView {
         leaveOptionState.toggle()
         toggleOption(state: &leaveOptionState, toggleButton: leaveOptionToggleButton, optionsView: leaveOptions, optionImage: leaveOptionImage, expandedHeight: Constants.expandedLeaveOptionHeight)
     }
-
+    
     private func toggleOption(state: inout Bool, toggleButton: UIButton, optionsView: UIView, optionImage: UIImageView, expandedHeight: Int) {
         toggleButton.backgroundColor = state ? .white : .mapElementDiverColor
         toggleButton.layer.maskedCorners = state ? [.layerMinXMinYCorner, .layerMaxXMinYCorner] : [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         optionsView.isHidden = !state
         optionImage.image = UIImage(systemName: state ? "chevron.up" : "chevron.down")
         changeRouteOptionHeight?(state ? expandedHeight : Constants.collapsedHeight)
+    }
+    
+    @objc private func leaveSegmentChanged() {
+        if leaveSegmentControl.selectedSegmentIndex == 0 {
+            leaveOptionHandler?(LeaveOptions(leaveNow: true, leaveTime: nil, arrivalTime: nil))
+        }
+        else if leaveSegmentControl.selectedSegmentIndex == 1 {
+            leaveOptionHandler?(LeaveOptions(leaveNow: false, leaveTime: leaveDatePicker.date, arrivalTime: nil))
+        }
+        else if leaveSegmentControl.selectedSegmentIndex == 2 {
+            leaveOptionHandler?(LeaveOptions(leaveNow: false, leaveTime: nil, arrivalTime: leaveDatePicker.date))
+        }
     }
     
     override init(frame: CGRect) {
@@ -242,17 +295,24 @@ final class RouteOptionsView: UIView {
         fatalError(.errorInitWithCoder)
     }
     
-    
     private func setupViews() {
-        optionStackView.removeArrangedSubViews()
-        optionStackView.addArrangedSubview(tollOption)
-        //optionStackView.addArrangedSubview(firstSeperatorView)
-        optionStackView.addArrangedSubview(ferriesOption)
-        optionStackView.addArrangedSubview(uturnsOption)
-        optionStackView.addArrangedSubview(tunnelsOption)
-        optionStackView.addArrangedSubview(dirtRoadsOption)
+        avoidOptionStackView.removeArrangedSubViews()
+        avoidOptionStackView.addArrangedSubview(tollOption)
+        avoidOptionStackView.addArrangedSubview(firstSeperatorView)
+        avoidOptionStackView.addArrangedSubview(ferriesOption)
+        avoidOptionStackView.addArrangedSubview(secondSeperatorView)
+        avoidOptionStackView.addArrangedSubview(uturnsOption)
+        avoidOptionStackView.addArrangedSubview(thirdSeperatorView)
+        avoidOptionStackView.addArrangedSubview(tunnelsOption)
+        avoidOptionStackView.addArrangedSubview(fourthSeperatorView)
+        avoidOptionStackView.addArrangedSubview(dirtRoadsOption)
+        avoidOptions.addSubview(avoidOptionStackView)
         
-        avoidOptions.addSubview(optionStackView)
+        leaveOptionStackView.removeArrangedSubViews()
+        leaveOptionStackView.addArrangedSubview(leaveSegmentControl)
+        leaveOptionStackView.addArrangedSubview(leaveDatePicker)
+        leaveOptions.addSubview(leaveOptionStackView)
+        
         
         routeOptionContainerView.addSubview(routeOptionTitle)
         routeOptionContainerView.addSubview(routeOptionImage)
@@ -261,13 +321,23 @@ final class RouteOptionsView: UIView {
         leaveOptionContainerView.addSubview(leaveOptionTitle)
         leaveOptionContainerView.addSubview(leaveOptionImage)
         leaveOptionToggleButton.addSubview(leaveOptionContainerView)
-
+        
         routeOptionsStackView.addArrangedSubview(leaveOptionToggleButton)
         routeOptionsStackView.addArrangedSubview(routeOptionToggleButton)
 
         self.addSubview(routeOptionsStackView)
         self.addSubview(avoidOptions)
         self.addSubview(leaveOptions)
+        
+        leaveSegmentControl.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.width.equalToSuperview().offset(16)
+        }
+        
+        leaveDatePicker.snp.makeConstraints {
+            $0.top.equalTo(leaveSegmentControl.snp.bottom).offset(16)
+            $0.width.equalToSuperview().offset(16)
+        }
         
         routeOptionsStackView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -300,7 +370,7 @@ final class RouteOptionsView: UIView {
 
         routeOptionToggleButton.snp.makeConstraints {
             $0.top.equalToSuperview()
-            //$0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(32)
             $0.width.equalTo(152)
         }
@@ -329,7 +399,7 @@ final class RouteOptionsView: UIView {
         }
         
         avoidOptions.snp.makeConstraints {
-            $0.top.equalTo(leaveOptions.snp.bottom)
+            $0.top.equalTo(routeOptionsStackView.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }
@@ -346,7 +416,11 @@ final class RouteOptionsView: UIView {
             $0.height.equalTo(56)
         }
         
-        optionStackView.snp.makeConstraints {
+        avoidOptionStackView.snp.makeConstraints {
+            $0.top.trailing.leading.bottom.equalToSuperview()
+        }
+        
+        leaveOptionStackView.snp.makeConstraints {
             $0.top.trailing.leading.bottom.equalToSuperview()
         }
         

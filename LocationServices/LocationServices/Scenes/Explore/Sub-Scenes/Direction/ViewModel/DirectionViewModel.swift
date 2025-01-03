@@ -31,8 +31,8 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     var avoidTunnels: Bool = false
     var avoidDirtRoads: Bool = false
     
-    var departNow: Bool = true
-    var departureTime: Date? = nil
+    var leaveNow: Bool = true
+    var leaveTime: Date? = nil
     var arrivalTime: Date? = nil
     
     init(service: LocationServiceable, routingService: RoutingServiceable) {
@@ -242,17 +242,18 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                             avoidUturns: Bool = false,
                             avoidTunnels: Bool = false,
                             avoidDirtRoads: Bool = false,
-                            departNow: Bool,
-                            departureTime: Date?,
+                            leaveNow: Bool,
+                            leaveTime: Date?,
                             arrivalTime: Date?) async throws -> ([Data], DirectionVM)? {
-        //defaultTravelMode = [:]
         selectedTravelMode = travelMode
         self.avoidFerries = avoidFerries
         self.avoidTolls = avoidTolls
         self.avoidUturns = avoidUturns
         self.avoidTunnels = avoidTunnels
         self.avoidDirtRoads = avoidDirtRoads
-
+        self.leaveNow = leaveNow
+        self.leaveTime = leaveTime
+        self.arrivalTime = arrivalTime
         let result = try await routingService.calculateRouteWith(depaturePosition: departurePosition,
                                           destinationPosition: destinationPosition,
                                                                  travelModes: [GeoRoutesClientTypes.RouteTravelMode(rawValue: travelMode.title)!],
@@ -261,10 +262,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                                                                  avoidUturns: avoidUturns,
                                                                  avoidTunnels: avoidTunnels,
                                                                  avoidDirtRoads: avoidDirtRoads,
-                                                                 departNow: departNow,
-                                                                 departureTime: departureTime,
+                                                                 departNow: leaveNow,
+                                                                 departureTime: leaveTime,
                                                                  arrivalTime: arrivalTime)
-       // self.defaultTravelMode[travelMode] = result[travelMode]
         var directionVM: DirectionVM = DirectionVM(carTypeDistane: "", carTypeDuration: "", scooterTypeDuration: "", scooterTypeDistance: "", walkingTypeDuration: "", walkingTypeDistance: "", truckTypeDistance: "", truckTypeDuration: "")
             
             result.values.forEach { data in
