@@ -312,7 +312,6 @@ final class DirectionVC: UIViewController {
             $0.leading.top.equalToSuperview()
             $0.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-5)
-            
         }
         
         directionSearchView.snp.makeConstraints {

@@ -58,6 +58,8 @@ final class RouteOptionsView: UIView {
         segment.selectedSegmentTintColor = .white
         segment.backgroundColor = .lsLight2
         segment.addTarget(self, action: #selector(leaveSegmentChanged), for: .valueChanged)
+        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lsPrimary, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 13)], for: .selected)
+        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 13)], for: .normal)
         return segment
     }()
     
@@ -330,17 +332,17 @@ final class RouteOptionsView: UIView {
         self.addSubview(routeOptionsStackView)
         self.addSubview(leaveOptions)
         self.addSubview(avoidOptions)
-
         
         leaveSegmentControl.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(32)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(40)
         }
         
         leaveDatePicker.snp.makeConstraints {
             $0.top.equalTo(leaveSegmentControl.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         routeOptionsStackView.snp.makeConstraints {
