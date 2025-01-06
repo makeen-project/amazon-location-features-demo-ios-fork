@@ -42,13 +42,6 @@ final class DirectionView: UIView {
     var avoidDirtRoads: BoolHandler?
     var leaveOptionsHandler: Handler<LeaveOptions>?
     
-    private var scrollView: UIScrollView = {
-        let view = UIScrollView()
-        view.backgroundColor = .clear
-        view.showsVerticalScrollIndicator = true
-        return view
-    }()
-    
     private var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -294,31 +287,22 @@ final class DirectionView: UIView {
         routeTypeStackView.addArrangedSubview(scooterSeperatorView)
         routeTypeStackView.addArrangedSubview(truckRouteTypeView)
     
-        self.addSubview(scrollView)
-        scrollView.addSubview(routeOptions)
-        scrollView.addSubview(containerView)
+        self.addSubview(routeOptions)
+        self.addSubview(containerView)
         
         containerView.addSubview(routeTypeStackView)
-    
-//        self.snp.makeConstraints {
-//            $0.height.equalToSuperview()
-//        }
-        
-        scrollView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
-            $0.height.equalToSuperview()
-        }
         
         routeOptions.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.height.equalTo(32)
         }
         
         containerView.snp.makeConstraints {
             $0.top.equalTo(routeOptions.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.height.lessThanOrEqualToSuperview()
         }
         
@@ -375,14 +359,14 @@ final class DirectionView: UIView {
         
         distanceErrorTitleLabel.snp.makeConstraints {
             $0.top.equalTo(errorIconImageView.snp.bottom).offset(32)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
         }
         
         distanceErrorMessageLabel.snp.makeConstraints {
             $0.top.equalTo(distanceErrorTitleLabel.snp.bottom).offset(8)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
     }

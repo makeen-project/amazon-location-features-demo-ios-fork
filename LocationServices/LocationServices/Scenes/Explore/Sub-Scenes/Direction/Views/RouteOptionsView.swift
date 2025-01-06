@@ -55,6 +55,8 @@ final class RouteOptionsView: UIView {
     private lazy var leaveSegmentControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Leave now", "Leave at", "Arrive by"])
         segment.tintColor = .lsPrimary
+        segment.selectedSegmentTintColor = .white
+        segment.backgroundColor = .lsLight2
         segment.addTarget(self, action: #selector(leaveSegmentChanged), for: .valueChanged)
         return segment
     }()
@@ -326,17 +328,19 @@ final class RouteOptionsView: UIView {
         routeOptionsStackView.addArrangedSubview(routeOptionToggleButton)
 
         self.addSubview(routeOptionsStackView)
-        self.addSubview(avoidOptions)
         self.addSubview(leaveOptions)
+        self.addSubview(avoidOptions)
+
         
         leaveSegmentControl.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
-            $0.width.equalToSuperview().offset(16)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(32)
         }
         
         leaveDatePicker.snp.makeConstraints {
             $0.top.equalTo(leaveSegmentControl.snp.bottom).offset(16)
-            $0.width.equalToSuperview().offset(16)
+            $0.leading.trailing.equalToSuperview()
         }
         
         routeOptionsStackView.snp.makeConstraints {
@@ -346,8 +350,8 @@ final class RouteOptionsView: UIView {
         
         leaveOptionToggleButton.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.equalToSuperview().offset(16)
-            $0.height.equalTo(32)
+            $0.leading.equalToSuperview()
+            $0.height.equalTo(40)
             $0.width.equalTo(152)
         }
         
@@ -370,7 +374,7 @@ final class RouteOptionsView: UIView {
 
         routeOptionToggleButton.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview()
             $0.height.equalTo(32)
             $0.width.equalTo(152)
         }
@@ -394,14 +398,14 @@ final class RouteOptionsView: UIView {
         
         leaveOptions.snp.makeConstraints {
             $0.top.equalTo(routeOptionsStackView.snp.bottom)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
         }
         
         avoidOptions.snp.makeConstraints {
             $0.top.equalTo(routeOptionsStackView.snp.bottom)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
         }
         
         tollOption.snp.makeConstraints {

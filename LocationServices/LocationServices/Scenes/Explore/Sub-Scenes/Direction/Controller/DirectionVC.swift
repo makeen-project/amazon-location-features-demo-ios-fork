@@ -53,6 +53,14 @@ final class DirectionVC: UIViewController {
         }
     }
     
+    private var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.backgroundColor = .clear
+        view.showsVerticalScrollIndicator = true
+        view.showsHorizontalScrollIndicator = false
+        return view
+    }()
+    
     private let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
@@ -293,10 +301,19 @@ final class DirectionVC: UIViewController {
         directionSearchView.changeSearchRouteName(with: firstDestination?.placeName, isDestination: false)
         directionSearchView.changeSearchRouteName(with: secondDestination?.placeName, isDestination: true)
         
-        self.view.addSubview(directionSearchView)
-        self.view.addSubview(directionView)
-        self.view.addSubview(activityIndicator)
-        self.view.addSubview(tableView)
+        self.view.addSubview(scrollView)
+        
+        scrollView.addSubview(directionSearchView)
+        scrollView.addSubview(directionView)
+        scrollView.addSubview(activityIndicator)
+        scrollView.addSubview(tableView)
+        
+        scrollView.snp.makeConstraints {
+            $0.leading.top.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-5)
+            
+        }
         
         directionSearchView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().offset(14)
@@ -308,9 +325,9 @@ final class DirectionVC: UIViewController {
         
         directionView.snp.makeConstraints {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(560)
-            $0.width.equalToSuperview()
+            $0.leading.equalToSuperview().offset(14)
+            $0.trailing.equalToSuperview().offset(-14)
+            $0.bottom.equalToSuperview()
         }
         
         activityIndicator.snp.makeConstraints {
