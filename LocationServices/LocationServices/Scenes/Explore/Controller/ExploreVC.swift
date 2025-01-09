@@ -99,9 +99,9 @@ final class ExploreVC: UIViewController {
             }
         } else {
             mapNavigationView.snp.remakeConstraints {
-                $0.top.equalTo(view.safeAreaInsets).offset(topOffset)
-                $0.leading.equalToSuperview().offset(horizontalOffset)
-                $0.trailing.equalToSuperview().offset(-horizontalOffset)
+                $0.top.equalToSuperview()
+                $0.leading.equalToSuperview()
+                $0.trailing.equalToSuperview()
             }
             mapNavigationActionsView.snp.remakeConstraints {
                 $0.bottom.equalTo(view.safeAreaInsets)
@@ -346,8 +346,8 @@ extension ExploreVC {
     }
     
     @objc private func updateMapViewValue(_ notification: Notification) {
-        if let data = notification.userInfo?["MapViewValues"] as? (distance: String, street: String) {
-            mapNavigationView.updateValues(distance: data.distance, street: data.street)
+        if let data = notification.userInfo?["MapViewValues"] as? (distance: String, street: String, stepImage: UIImage?) {
+            mapNavigationView.updateValues(distance: data.distance, street: data.street, stepImage: data.stepImage)
         }
         if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String) {
             mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)

@@ -326,7 +326,6 @@ final class DirectionVC: UIViewController {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview().offset(-14)
-            $0.bottom.equalToSuperview()
         }
         
         activityIndicator.snp.makeConstraints {
@@ -338,6 +337,8 @@ final class DirectionVC: UIViewController {
             $0.top.equalTo(activityIndicator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
             $0.width.equalToSuperview()
+            $0.height.equalTo(600)
+            $0.bottom.equalToSuperview().offset(-2)
         }
 
         directionView.isHidden = true

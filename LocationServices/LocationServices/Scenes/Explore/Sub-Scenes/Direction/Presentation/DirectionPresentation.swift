@@ -14,10 +14,10 @@ struct DirectionPresentation {
     let travelMode: GeoRoutesClientTypes.RouteTravelMode
 }
 
-extension GeoRoutesClientTypes.RouteVehicleTravelStepType {
+extension GeoRoutesClientTypes.RouteVehicleTravelStep {
     var image: UIImage? {
         var imageName = "step-icon"
-            switch self {
+        switch self.type {
             case .arrive:
                 imageName = "depart"
             case .continue:
@@ -25,26 +25,28 @@ extension GeoRoutesClientTypes.RouteVehicleTravelStepType {
             case .depart:
                 imageName = "depart"
             case .exit:
-                imageName = "arrow-exit-right"
+            imageName = self.exitStepDetails?.steeringDirection == .right ? "arrow-exit-right": "arrow-exit-left"
             case .keep:
                 imageName = "arrow-up"
             case .ramp:
-                imageName = "arrow-ramp-right"
+                imageName = self.rampStepDetails?.steeringDirection == .right ? "arrow-ramp-right" : "arrow-ramp-left"
             case .roundaboutEnter:
                 imageName = "arrow-roundabout-enter"
             case .roundaboutExit:
-                imageName = "arrow-roundabout-exit"
+                imageName = self.roundaboutExitStepDetails?.steeringDirection == .right ? "arrow-roundabout-exit-right" :"arrow-roundabout-exit-left"
             case .roundaboutPass:
-                imageName = "arrow-roundabout-pass"
+                imageName = self.roundaboutPassStepDetails?.steeringDirection == .right ? "arrow-roundabout-pass-right" : "arrow-roundabout-pass-left"
             case .turn:
-                imageName = "corner-up-right"
+                imageName = self.turnStepDetails?.steeringDirection == .right ? "corner-up-right" : "corner-up-left"
             case .uTurn:
-                imageName = "arrow-uTurn-right"
+                imageName = self.uTurnStepDetails?.steeringDirection == .right ? "arrow-uTurn-right" : "arrow-uTurn-left"
             case .continueHighway:
                 imageName = "arrow-up"
             case .enterHighway:
-                imageName = "arrow-up"
+                imageName = self.enterHighwayStepDetails?.steeringDirection == .right ? "arrow-up-right" : "arrow-up-left"
             case .sdkUnknown(_):
+                imageName = "step-icon"
+            case .none:
                 imageName = "step-icon"
             }
         return UIImage(named: imageName)
@@ -52,35 +54,50 @@ extension GeoRoutesClientTypes.RouteVehicleTravelStepType {
     
 }
 
-extension GeoRoutesClientTypes.RoutePedestrianTravelStepType {
+extension GeoRoutesClientTypes.RoutePedestrianTravelStep {
     var image: UIImage? {
         var imageName = "step-icon"
-            switch self {
+        switch self.type {
             case .arrive:
                 imageName = "depart"
             case .continue:
                 imageName = "arrow-up"
             case .depart:
                 imageName = "depart"
-            case .exit:
-                imageName = "arrow-exit-right"
             case .keep:
                 imageName = "arrow-up"
-            case .ramp:
-                imageName = "arrow-ramp-right"
             case .roundaboutEnter:
                 imageName = "arrow-roundabout-enter"
             case .roundaboutExit:
-                imageName = "arrow-roundabout-exit"
+                imageName = self.roundaboutExitStepDetails?.steeringDirection == .right ? "arrow-roundabout-exit-right" :"arrow-roundabout-exit-left"
             case .roundaboutPass:
-                imageName = "arrow-roundabout-pass"
+                imageName = self.roundaboutPassStepDetails?.steeringDirection == .right ? "arrow-roundabout-pass-right" : "arrow-roundabout-pass-left"
             case .turn:
-                imageName = "corner-up-right"
+                imageName = self.turnStepDetails?.steeringDirection == .right ? "corner-up-right" : "corner-up-left"
             case .uTurn:
-                imageName = "arrow-uTurn-right"
+                imageName = self.turnStepDetails?.steeringDirection == .right ? "arrow-uTurn-right" : "arrow-uTurn-left"
             case .sdkUnknown(_):
                 imageName = "step-icon"
-            }
+            case .none:
+                imageName = "step-icon"
+            case .exit:
+                imageName = "arrow-exit-right"
+            case .ramp:
+                imageName = "arrow-ramp-right"
+        }
+        return UIImage(named: imageName)
+    }
+}
+
+extension GeoRoutesClientTypes.RouteFerryTravelStep {
+    var image: UIImage? {
+        var imageName = "step-icon"
+        switch self.type {
+        case .none:
+            imageName = "step-icon"
+        case .some(_):
+            imageName = "step-icon"
+        }
         return UIImage(named: imageName)
     }
 }

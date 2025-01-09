@@ -121,6 +121,10 @@ final class NavigationVC: UIViewController {
             $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
             $0.top.bottom.trailing.equalToSuperview()
         }
+        
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(navigationHeaderView.snp.bottom).offset(5)
+        }
     }
     
     private func changeExploreActionButtonsVisibility() {
@@ -152,7 +156,7 @@ private extension NavigationVC {
     func sendMapViewData() {
         let datas = viewModel.getData()
         if let mapData = datas[safe: 0] {
-            let mapHeaderData = (distance: mapData.distance, street: mapData.instruction)
+            let mapHeaderData = (distance: mapData.distance, street: mapData.instruction, stepImage: mapData.getStepImage())
             let summaryData = viewModel.getSummaryData()
             let data: [String: Any] = ["MapViewValues" : mapHeaderData, "SummaryData": summaryData]
             NotificationCenter.default.post(name: Notification.Name("UpdateMapViewValues"), object: nil, userInfo: data)

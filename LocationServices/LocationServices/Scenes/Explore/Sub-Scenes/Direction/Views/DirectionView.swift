@@ -335,7 +335,7 @@ final class DirectionView: UIView {
         }
         
         routeTypeStackView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.top.bottom.leading.trailing.equalToSuperview()
         }
     }
     

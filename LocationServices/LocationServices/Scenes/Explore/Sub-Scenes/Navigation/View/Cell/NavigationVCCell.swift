@@ -19,10 +19,12 @@ struct NavigationCellModel {
     var distance: String
     var vehicleStep: GeoRoutesClientTypes.RouteVehicleTravelStep?
     var pedestrianStep: GeoRoutesClientTypes.RoutePedestrianTravelStep?
+    var ferryStep: GeoRoutesClientTypes.RouteFerryTravelStep?
     
     init(model: NavigationPresentation, stepState: StepState? = .first) {
         self.vehicleStep = model.vehicleStep
         self.pedestrianStep = model.pedestrianStep
+        self.ferryStep = model.ferryStep
         self.distance = ""
         self.instruction = ""
         if let step = model.pedestrianStep {
@@ -34,6 +36,19 @@ struct NavigationCellModel {
             self.instruction = step.instruction!
         }
         self.stepState = stepState ?? .first
+    }
+    
+    func getStepImage() -> UIImage? {
+        if let step = self.pedestrianStep {
+            return step.image
+        }
+        else if let step = self.ferryStep {
+            return step.image
+        }
+        else if let step = self.vehicleStep {
+            return step.image
+        }
+        return nil
     }
 }
 
@@ -49,20 +64,15 @@ final class NavigationVCCell: UITableViewCell {
     var model: NavigationCellModel! {
         didSet {
             self.streetLabel.text = model.instruction
-            self.distanceLabel.text = model.distance
+            self.distanceLabel.text = model.distance+" m"
 
             switch model.stepState {
-            case .first:
-                if let step = model.pedestrianStep {
-                    self.stepImage.image = model.pedestrianStep?.type?.image
-                }
-                else if let step = model.vehicleStep {
-                    self.stepImage.image = model.vehicleStep?.type?.image
-                }
+            case .first, .last:
+                self.stepImage.image = model.getStepImage()?.withTintColor(.lsPrimary)
                 stepLine.isHidden = false
-            case .last:
-                self.stepImage.image = .selectedPlace
-                stepLine.isHidden = true
+                if model.stepState == .last {
+                    stepLine.isHidden = true
+                }
             }
         }
     }
@@ -83,7 +93,7 @@ final class NavigationVCCell: UITableViewCell {
         label.text = "300 m"
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textColor = .searchBarTintColor
+        label.textColor = .lsGrey
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
@@ -91,12 +101,13 @@ final class NavigationVCCell: UITableViewCell {
     
     private var stepLine: UIView = {
         let view = UIView()
-        view.backgroundColor = .lsPrimary
+        view.backgroundColor = .lsLight3
         return view
     }()
     
     private var stepImage: UIImageView = {
         let imageView = UIImageView(image: .stepIcon)
+        imageView.tintColor = .lsPrimary
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -124,28 +135,28 @@ final class NavigationVCCell: UITableViewCell {
         }
         
         streetLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(52)
             $0.trailing.equalToSuperview().offset(-10)
         }
         
         distanceLabel.snp.makeConstraints {
-            $0.top.equalTo(streetLabel.snp.bottom)
+            $0.top.equalTo(streetLabel.snp.bottom).offset(5)
             $0.leading.equalToSuperview().offset(52)
             $0.height.equalTo(18)
         }
         
         stepImage.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(23)
+            $0.centerY.equalTo(streetLabel.snp.centerY)
             $0.leading.equalToSuperview().offset(20.5)
-            $0.height.width.equalTo(16)
+            $0.height.equalTo(24)
         }
         
         stepLine.snp.makeConstraints {
-            $0.top.equalTo(stepImage.snp.bottom)
             $0.centerX.equalTo(stepImage.snp.centerX)
-            $0.height.equalTo(49)
-            $0.width.equalTo(4)
+            $0.top.equalTo(distanceLabel.snp.top)
+            $0.bottom.equalTo(distanceLabel.snp.bottom)
+            $0.width.equalTo(2)
         }
     }
 }

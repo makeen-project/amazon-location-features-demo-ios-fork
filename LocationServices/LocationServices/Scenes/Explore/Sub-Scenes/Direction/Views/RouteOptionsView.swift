@@ -54,20 +54,21 @@ final class RouteOptionsView: UIView {
     
     private lazy var leaveSegmentControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Leave now", "Leave at", "Arrive by"])
-        segment.tintColor = .lsPrimary
+        segment.setDividerImage(nil, forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
         segment.selectedSegmentTintColor = .white
-        segment.backgroundColor = .lsLight2
         segment.addTarget(self, action: #selector(leaveSegmentChanged), for: .valueChanged)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lsPrimary, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 13)], for: .selected)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 13)], for: .normal)
+        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lsPrimary, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)], for: .selected)
+        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lsTetriary, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)], for: .normal)
         return segment
     }()
     
-    private let leaveDatePicker: UIDatePicker = {
+    private lazy var leaveDatePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.tintColor = .lsPrimary
         picker.datePickerMode = .dateAndTime
         picker.preferredDatePickerStyle = .inline
+        picker.minimumDate = Date()
+        picker.addTarget(self, action: #selector(leaveValueChanged(_:)), for: .valueChanged)
         return picker
     }()
     
@@ -143,30 +144,6 @@ final class RouteOptionsView: UIView {
         return view
     }()
     
-    private var firstSeperatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
-        return view
-    }()
-    
-    private var secondSeperatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
-        return view
-    }()
-    
-    private var thirdSeperatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
-        return view
-    }()
-    
-    private var fourthSeperatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
-        return view
-    }()
-        
     private let ferriesOption: RouteOptionView = {
         let view = RouteOptionView(title: StringConstant.avoidFerries)
         view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidFerriesOptionContainer
@@ -188,6 +165,30 @@ final class RouteOptionsView: UIView {
     private let dirtRoadsOption: RouteOptionView = {
         let view = RouteOptionView(title: StringConstant.avoidDirtRoads)
         view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidDirtRoadsOptionContainer
+        return view
+    }()
+    
+    private var firstSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        return view
+    }()
+    
+    private var secondSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        return view
+    }()
+    
+    private var thirdSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
+        return view
+    }()
+    
+    private var fourthSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarBackgroundColor
         return view
     }()
     
@@ -241,7 +242,6 @@ final class RouteOptionsView: UIView {
     
     private func toggleOption(state: inout Bool, toggleButton: UIButton, optionsView: UIView, optionImage: UIImageView, expandedHeight: Int) {
         toggleButton.backgroundColor = state ? .white : .mapElementDiverColor
-        toggleButton.layer.maskedCorners = state ? [.layerMinXMinYCorner, .layerMaxXMinYCorner] : [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         optionsView.isHidden = !state
         optionImage.image = UIImage(systemName: state ? "chevron.up" : "chevron.down")
         changeRouteOptionHeight?(state ? expandedHeight : Constants.collapsedHeight)
@@ -249,13 +249,35 @@ final class RouteOptionsView: UIView {
     
     @objc private func leaveSegmentChanged() {
         if leaveSegmentControl.selectedSegmentIndex == 0 {
+            leaveDatePicker.isHidden = true
             leaveOptionHandler?(LeaveOptions(leaveNow: true, leaveTime: nil, arrivalTime: nil))
         }
         else if leaveSegmentControl.selectedSegmentIndex == 1 {
+            leaveDatePicker.isHidden = false
             leaveOptionHandler?(LeaveOptions(leaveNow: false, leaveTime: leaveDatePicker.date, arrivalTime: nil))
         }
         else if leaveSegmentControl.selectedSegmentIndex == 2 {
+            leaveDatePicker.isHidden = false
             leaveOptionHandler?(LeaveOptions(leaveNow: false, leaveTime: nil, arrivalTime: leaveDatePicker.date))
+        }
+        leaveValueChanged(leaveDatePicker)
+    }
+    
+    @objc private func leaveValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd HH:mm"
+        if leaveSegmentControl.selectedSegmentIndex == 0 {
+            leaveOptionTitle.textColor = .lsTetriary
+            leaveOptionTitle.text = "Leave now"
+        }
+        else if leaveSegmentControl.selectedSegmentIndex == 1 {
+            leaveOptionTitle.textColor = .lsPrimary
+            leaveOptionTitle.text = "Leave \(dateFormatter.string(from: selectedDate))"
+        }
+        else if leaveSegmentControl.selectedSegmentIndex == 2 {
+            leaveOptionTitle.textColor = .lsPrimary
+            leaveOptionTitle.text = "Arrive \(dateFormatter.string(from: selectedDate))"
         }
     }
     
@@ -268,23 +290,29 @@ final class RouteOptionsView: UIView {
     private func setupHandlers() {
         ferriesOption.boolHandler = { [weak self] state in
             self?.avoidFerries?(state)
+            self?.setRouteTitle()
         }
         
         tollOption.boolHandler = { [weak self] state in
             self?.avoidTolls?(state)
+            self?.setRouteTitle()
         }
         
         uturnsOption.boolHandler = { [weak self] state in
             self?.avoidUturns?(state)
+            self?.setRouteTitle()
         }
         
         tunnelsOption.boolHandler = { [weak self] state in
             self?.avoidTunnels?(state)
+            self?.setRouteTitle()
         }
         
         dirtRoadsOption.boolHandler = { [weak self] state in
             self?.avoidDirtRoads?(state)
+            self?.setRouteTitle()
         }
+        leaveSegmentControl.selectedSegmentIndex = 0
     }
     
     func setLocalValues(toll: Bool, ferries: Bool, uturns: Bool, tunnels: Bool, dirtRoads: Bool) {
@@ -293,6 +321,21 @@ final class RouteOptionsView: UIView {
         uturnsOption.setDefaultState(state: ferries)
         tunnelsOption.setDefaultState(state: ferries)
         dirtRoadsOption.setDefaultState(state: ferries)
+
+        setRouteTitle()
+        leaveSegmentChanged()
+    }
+    
+    func setRouteTitle() {
+        let avoidCount = [tollOption.getState(), ferriesOption.getState(), uturnsOption.getState(), tunnelsOption.getState(), dirtRoadsOption.getState()].filter{$0}.count
+        if avoidCount == 0 {
+            routeOptionTitle.text = "Route Options"
+            routeOptionTitle.textColor = .lsTetriary
+        }
+        else {
+            routeOptionTitle.text = "Avoid \(avoidCount)"
+            routeOptionTitle.textColor = .lsPrimary
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -334,8 +377,9 @@ final class RouteOptionsView: UIView {
         self.addSubview(avoidOptions)
         
         leaveSegmentControl.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
         }
         
@@ -399,13 +443,13 @@ final class RouteOptionsView: UIView {
         }
         
         leaveOptions.snp.makeConstraints {
-            $0.top.equalTo(routeOptionsStackView.snp.bottom)
+            $0.top.equalTo(routeOptionsStackView.snp.bottom).offset(16)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
         }
         
         avoidOptions.snp.makeConstraints {
-            $0.top.equalTo(routeOptionsStackView.snp.bottom)
+            $0.top.equalTo(routeOptionsStackView.snp.bottom).offset(16)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
         }
@@ -423,11 +467,13 @@ final class RouteOptionsView: UIView {
         }
         
         avoidOptionStackView.snp.makeConstraints {
-            $0.top.trailing.leading.bottom.equalToSuperview()
+            $0.top.equalToSuperview().offset(16)
+            $0.trailing.leading.bottom.equalToSuperview()
         }
         
         leaveOptionStackView.snp.makeConstraints {
-            $0.top.trailing.leading.bottom.equalToSuperview()
+            $0.top.equalToSuperview().offset(16)
+            $0.trailing.leading.bottom.equalToSuperview()
         }
         
         avoidOptions.isHidden = true
