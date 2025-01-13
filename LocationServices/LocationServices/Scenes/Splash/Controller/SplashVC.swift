@@ -18,5 +18,6 @@ final class SplashVC: UIViewController, SplashViewModelDelegate {
         viewModel.delegate = self
         viewModel.setupCompleteHandler = setupCompleteHandler
         viewModel.setupAWS()
+        viewModel.setupDefaults()
     }
 }

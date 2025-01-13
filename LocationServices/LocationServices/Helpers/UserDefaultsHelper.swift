@@ -37,6 +37,9 @@ enum UserDefaultKeyType: String {
     case signedInIdentityId
     
     case mapCenter
+    // if app is in navigation mode
+    case isNavigationMode
+    case navigationRoute
 }
 
 enum AppState: Int {

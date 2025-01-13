@@ -125,6 +125,15 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         currentBottomSheet = controller
     }
     
+    func showArrivalCardScene(route: RouteModel) {
+        let controller = ArrivalCardVCBuilder.create(route: route)
+        controller.delegate = self
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
+        controller.setBottomSheetHeight(to: 200)
+        currentBottomSheet = controller
+    }
+    
     func showDirectionScene() {
         
     }

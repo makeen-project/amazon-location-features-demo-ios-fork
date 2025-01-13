@@ -44,6 +44,7 @@ protocol ExploreNavigationDelegate: AnyObject {
                         long: Double?)
     func showSearchSceneWith(lat: Double?, long: Double?)
     func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?)
+    func showArrivalCardScene(route: RouteModel)
     func showNavigationview(route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?)
     func showLoginFlow()
     func showLoginSuccess()

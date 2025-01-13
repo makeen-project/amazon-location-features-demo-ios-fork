@@ -152,6 +152,11 @@ extension ExploreVC: ExploreViewOutputDelegate {
         delegate?.showPoiCardScene(cardData: cardData, lat: userCoreLocation?.latitude, long: userCoreLocation?.longitude)
     }
     
+    func showArrivalCard(route: RouteModel) {
+        exploreView.shouldBottomStackViewPositionUpdate(state: true)
+        delegate?.showArrivalCardScene(route: route)
+    }
+    
     func loginButtonTapped() {
         switch LoginViewModel.getAuthStatus() {
         case .authorized:
@@ -479,6 +484,13 @@ extension ExploreVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         userCoreLocation = manager.location?.coordinate
         exploreView.update(userLocation: manager.location, userHeading: manager.heading)
+        if let isNavigationMode = UserDefaultsHelper.get(for: Bool.self, key: .isNavigationMode), isNavigationMode, let route = UserDefaultsHelper.getObject(value: RouteModel.self, key: .navigationRoute), let userCoreLocation = userCoreLocation, isArrivalInProximity(userCoreLocation: userCoreLocation, route: route) {
+            self.showArrivalCard(route: route)
+        }
+    }
+    
+    func isArrivalInProximity(userCoreLocation: CLLocationCoordinate2D, route: RouteModel) -> Bool {
+        return userCoreLocation.distance(from: route.destinationPosition) < 10
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {

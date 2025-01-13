@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-enum RouteTypes {
+enum RouteTypes: Codable {
     case pedestrian, scooter, car, truck
     
     var title: String {

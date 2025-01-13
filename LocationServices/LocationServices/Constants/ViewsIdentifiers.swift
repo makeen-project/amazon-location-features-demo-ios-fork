@@ -97,6 +97,12 @@ struct ViewsIdentifiers {
         static let travelTimeLabel = "TravelTimeLabel"
         static let directionButton = "DirectionButton"
     }
+    
+    struct ArrivalCard {
+        static let arrivalCardView = "ArrivalCardView"
+        static let arrivalLabel = "ArrivalLabel"
+        static let doneButton = "DoneButton"
+    }
 
     struct AWSConnect {
         static let awsConnectScrollView = "AWSConnectScrollView"

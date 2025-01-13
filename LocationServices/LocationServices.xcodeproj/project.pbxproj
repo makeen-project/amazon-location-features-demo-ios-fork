@@ -378,6 +378,11 @@
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
 		F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
+		F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */; };
+		F1A306BE2D3023E300B16126 /* ArrivalCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */; };
+		F1A306C02D3023F800B16126 /* ArrivalCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306BF2D3023EA00B16126 /* ArrivalCardViewModel.swift */; };
+		F1A306C22D30241300B16126 /* ArrivalCardVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306C12D30240800B16126 /* ArrivalCardVCBuilder.swift */; };
+		F1A306C42D30242A00B16126 /* ArrivalCardVCContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306C32D30242000B16126 /* ArrivalCardVCContracts.swift */; };
 		F1AD36F82CCA7CA000E1BB7B /* UITestPoliticalViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */; };
 		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
@@ -804,6 +809,11 @@
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttIoTContext.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
+		F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardView.swift; sourceTree = "<group>"; };
+		F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVC.swift; sourceTree = "<group>"; };
+		F1A306BF2D3023EA00B16126 /* ArrivalCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardViewModel.swift; sourceTree = "<group>"; };
+		F1A306C12D30240800B16126 /* ArrivalCardVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVCBuilder.swift; sourceTree = "<group>"; };
+		F1A306C32D30242000B16126 /* ArrivalCardVCContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVCContracts.swift; sourceTree = "<group>"; };
 		F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestPoliticalViewScreen.swift; sourceTree = "<group>"; };
 		F1B060962AD0209C0020CD8C /* LocationServicesUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocationServicesUITests.xctestplan; sourceTree = "<group>"; };
 		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -1854,6 +1864,7 @@
 		AD33F4C02950FC48005719D3 /* Sub-Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				F1A306B82D30234E00B16126 /* ArrivalCard */,
 				ADBDDEF229842C3900696EC6 /* Explore Map Style */,
 				ADC9737F295EDA04005AE918 /* Navigation */,
 				AD33F4B32950F3FB005719D3 /* Direction */,
@@ -2191,6 +2202,7 @@
 				DF8005DB2A0A6B6C00758BBE /* WebViewController */,
 				ADC1245129774A6700B08C20 /* MapView */,
 				ADBD7FBE2949CB9C005DB4E4 /* BottomSheet Controller */,
+				F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */,
 				ADF26F56292FEC0A000147A0 /* SearchBarView.swift */,
 				ADF26F58292FECA9000147A0 /* SearchTextField.swift */,
 				ADBD7FB52949B579005DB4E4 /* POICardView.swift */,
@@ -2966,6 +2978,49 @@
 			path = iot;
 			sourceTree = "<group>";
 		};
+		F1A306B82D30234E00B16126 /* ArrivalCard */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306B92D30235E00B16126 /* Controller */,
+				F1A306BA2D30236900B16126 /* Builder */,
+				F1A306BB2D30237200B16126 /* ViewModel */,
+				F1A306BC2D30237A00B16126 /* Contracts */,
+			);
+			path = ArrivalCard;
+			sourceTree = "<group>";
+		};
+		F1A306B92D30235E00B16126 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F1A306BA2D30236900B16126 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306C12D30240800B16126 /* ArrivalCardVCBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		F1A306BB2D30237200B16126 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306BF2D3023EA00B16126 /* ArrivalCardViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F1A306BC2D30237A00B16126 /* Contracts */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306C32D30242000B16126 /* ArrivalCardVCContracts.swift */,
+			);
+			path = Contracts;
+			sourceTree = "<group>";
+		};
 		F1AD36F92CCBABC700E1BB7B /* AuthHelpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -3440,6 +3495,7 @@
 				ADC1249A29788D0100B08C20 /* GeofenceDataModel.swift in Sources */,
 				8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */,
 				ADBDDF032984386400696EC6 /* ExploreMapStyleHeaderView.swift in Sources */,
+				F1A306C02D3023F800B16126 /* ArrivalCardViewModel.swift in Sources */,
 				F1BA943B2C526646002FEB51 /* AmazonLocationClient.swift in Sources */,
 				8A0EB58A2983F9CF00FBB3E5 /* GeofenceAnnotation.swift in Sources */,
 				8A439F0829C0BA1B00B59D0B /* UIApplication+Extension.swift in Sources */,
@@ -3470,6 +3526,7 @@
 				AD2AF0D1292EAB9A00149904 /* SettingsVC.swift in Sources */,
 				8ACD71CA2A091A8F00EC23F3 /* MapFloatingViewHandler.swift in Sources */,
 				AD989746298C53E40041E867 /* TrackingHistoryContracts.swift in Sources */,
+				F1A306BE2D3023E300B16126 /* ArrivalCardVC.swift in Sources */,
 				8ACD71C82A08F6F200EC23F3 /* SplitViewExploreMapCoordinator.swift in Sources */,
 				8A3471CC2975D30B00BAF374 /* Locale+Extension.swift in Sources */,
 				8AE83A912A274B2F00CF6E7C /* UIView+Extension.swift in Sources */,
@@ -3477,6 +3534,7 @@
 				AD2AF0DB292EABFE00149904 /* AboutContracts.swift in Sources */,
 				8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */,
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
+				F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */,
 				ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
 				ADC474FE2971E7A300AAE7A3 /* AmazonLocationLabel.swift in Sources */,
@@ -3510,6 +3568,7 @@
 				AD33F4B72950F410005719D3 /* DirectionVCBuilder.swift in Sources */,
 				AD625E9F293BF1F900C67B44 /* SearchCellViewModel.swift in Sources */,
 				F1BA94442C624B63002FEB51 /* CognitoAuthHelper.swift in Sources */,
+				F1A306C22D30241300B16126 /* ArrivalCardVCBuilder.swift in Sources */,
 				ADD139A42981C7070003F917 /* MapStyleViewModel.swift in Sources */,
 				AD2AF03A292E892000149904 /* LocationServices.xcdatamodeld in Sources */,
 				ADABECD5293FD44200E66FC5 /* LocationSearchService.swift in Sources */,
@@ -3539,6 +3598,7 @@
 				ADC124A42979F18B00B08C20 /* GeofenceServiceable.swift in Sources */,
 				AD2AF079292EA55300149904 /* ExploreView.swift in Sources */,
 				AD2AF032292E892000149904 /* SceneDelegate.swift in Sources */,
+				F1A306C42D30242A00B16126 /* ArrivalCardVCContracts.swift in Sources */,
 				AD625E96293BCEE800C67B44 /* SearchViewModel.swift in Sources */,
 				AD2AF0D9292EABE700149904 /* AboutVCBuilder.swift in Sources */,
 				AD989744298C534C0041E867 /* TrackingHistory+TableView.swift in Sources */,

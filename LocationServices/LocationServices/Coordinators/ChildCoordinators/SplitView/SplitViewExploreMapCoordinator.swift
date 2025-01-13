@@ -144,6 +144,20 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         splitDelegate?.showSupplementary()
     }
     
+    func showArrivalCardScene(route: RouteModel) {
+        let controller = ArrivalCardVCBuilder.create(route: route)
+        controller.delegate = self
+        
+        supplementaryNavigationController?.pushViewController(controller, animated: true)
+        if let viewControllers = supplementaryNavigationController?.viewControllers,
+           viewControllers.count > 2,
+           let firstController = viewControllers.first,
+           let lastController = viewControllers.last {
+            supplementaryNavigationController?.viewControllers = [firstController, lastController]
+        }
+        splitDelegate?.showSupplementary()
+    }
+    
     func showNavigationview(route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?) {
         let controller = NavigationBuilder.create(route: route, firstDestination: firstDestination, secondDestination: secondDestination)
         controller.delegate = self

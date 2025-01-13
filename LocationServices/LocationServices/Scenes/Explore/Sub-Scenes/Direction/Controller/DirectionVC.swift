@@ -622,6 +622,8 @@ extension DirectionVC: DirectionViewOutputDelegate {
                 let userInfo = ["route" : route, "routeModel": routeModel as Any] as [String : Any]
                 NotificationCenter.default.post(name: Notification.Name("NavigationSteps"), object: nil, userInfo: userInfo)
             }
+            UserDefaultsHelper.saveObject(value: routeModel, key: .navigationRoute)
+            UserDefaultsHelper.save(value: true, key: .isNavigationMode)
         case .failure(let error):
             let alertModel = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
             self.showAlert(alertModel)

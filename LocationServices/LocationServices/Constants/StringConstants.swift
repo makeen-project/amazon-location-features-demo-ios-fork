@@ -101,6 +101,7 @@ enum StringConstant {
     static let go = "Go"
     static let preview = "Preview"
     static let info = "Info"
+    static let done = "Done"
     
     static let locationPermissionDenied = "Location permission denied"
     static let locationPermissionDeniedDescription = "Distance can't be calculated if location permission is not granted. Please enable location permission for Amazon Location from Settings"

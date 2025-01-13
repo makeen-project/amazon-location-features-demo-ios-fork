@@ -77,7 +77,10 @@ final class NavigationVC: UIViewController {
     
     func setupHandler() {
         navigationHeaderView.dismissHandler = { [weak self] in
+            UserDefaultsHelper.save(value: false, key: .isNavigationMode)
+            UserDefaultsHelper.removeObject(for: .navigationRoute)
             self?.closeScreen()
+            
         }
     }
     
