@@ -135,7 +135,7 @@ final class NavigationVCCell: UITableViewCell {
         }
         
         streetLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(5)
             $0.leading.equalToSuperview().offset(52)
             $0.trailing.equalToSuperview().offset(-10)
         }
@@ -155,7 +155,7 @@ final class NavigationVCCell: UITableViewCell {
         stepLine.snp.makeConstraints {
             $0.centerX.equalTo(stepImage.snp.centerX)
             $0.top.equalTo(distanceLabel.snp.top)
-            $0.bottom.equalTo(distanceLabel.snp.bottom)
+            $0.bottom.equalTo(distanceLabel.snp.bottom).offset(5)
             $0.width.equalTo(2)
         }
     }
