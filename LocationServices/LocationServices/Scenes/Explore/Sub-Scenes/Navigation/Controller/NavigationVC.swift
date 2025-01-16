@@ -271,7 +271,6 @@ extension NavigationVC: NavigationViewModelOutputDelegate {
             self.updateTableViewContent()
         }
     }
-    
 }
 
 private extension NavigationVC {

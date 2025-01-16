@@ -163,6 +163,10 @@ final class RouteTypeView: UIView {
         self.layoutIfNeeded()
     }
     
+    func disableGoButton() {
+        self.goButton.isEnabled = false
+    }
+    
     func updateSelectedLabel(state: Bool) {
         self.selectedLabel.text = state ? "Selected" : ""
     }

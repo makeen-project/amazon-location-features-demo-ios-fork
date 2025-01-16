@@ -56,8 +56,6 @@ final class DirectionVC: UIViewController {
     private var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .clear
-        view.showsVerticalScrollIndicator = true
-        view.showsHorizontalScrollIndicator = false
         return view
     }()
     
@@ -132,10 +130,16 @@ final class DirectionVC: UIViewController {
     
     func showLoadingIndicator() {
         activityIndicator.startAnimating()
+        activityIndicator.snp.updateConstraints {
+            $0.width.height.equalTo(50)
+        }
     }
     
     func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
+        activityIndicator.snp.updateConstraints {
+            $0.width.height.equalTo(0)
+        }
     }
 
     private func applyStyles() {
@@ -202,72 +206,85 @@ final class DirectionVC: UIViewController {
         
         directionView.avoidTolls = { [weak self] state in
             Task {
-                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
-                                               avoidTolls: state,
-                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
-                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
-                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
-                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
+                try await self?.calculateAllRoutes(avoidTolls: state,
+                                                   avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                                   avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                                   avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                                   avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false,
+                                                   leaveNow: self?.viewModel.leaveNow ?? true,
+                                                   leaveTime: self?.viewModel.leaveTime,
+                                                   arrivalTime: self?.viewModel.arrivalTime)
             }
         }
         
         directionView.avoidFerries = { [weak self] state in
             Task {
-                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
-                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
-                                               avoidFerries: state,
-                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
-                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
-                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
+                try await self?.calculateAllRoutes(avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                                   avoidFerries: state,
+                                                   avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                                   avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                                   avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false,
+                                                   leaveNow: self?.viewModel.leaveNow ?? true,
+                                                   leaveTime: self?.viewModel.leaveTime,
+                                                   arrivalTime: self?.viewModel.arrivalTime)
             }
         }
         
         directionView.avoidUturns = { [weak self] state in
             Task {
-                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
-                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
-                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
-                                               avoidUturns: state,
-                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
-                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
+                try await self?.calculateAllRoutes(avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                                   avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                                   avoidUturns: state,
+                                                   avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                                   avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false,
+                                                   leaveNow: self?.viewModel.leaveNow ?? true,
+                                                   leaveTime: self?.viewModel.leaveTime,
+                                                   arrivalTime: self?.viewModel.arrivalTime)
             }
         }
         
         directionView.avoidTunnels = { [weak self] state in
             Task {
-                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
-                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
-                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
-                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
-                                               avoidTunnels: state,
-                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false)
+                try await self?.calculateAllRoutes(avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                                   avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                                   avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                                   avoidTunnels: state,
+                                                   avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false,
+                                                   leaveNow: self?.viewModel.leaveNow ?? true,
+                                                   leaveTime: self?.viewModel.leaveTime,
+                                                   arrivalTime: self?.viewModel.arrivalTime)
             }
         }
         
         directionView.avoidDirtRoads = { [weak self] state in
             Task {
-                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
-                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
-                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
-                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
-                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
-                                               avoidDirtRoads: state)
+                try await self?.calculateAllRoutes(avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                                   avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                                   avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                                   avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                                   avoidDirtRoads: state,
+                                                   leaveNow: self?.viewModel.leaveNow ?? true,
+                                                   leaveTime: self?.viewModel.leaveTime,
+                                                   arrivalTime: self?.viewModel.arrivalTime)
             }
         }
         
         directionView.leaveOptionsHandler = { [weak self] option in
             Task {
-                try await self?.calculateRoute(routeType: self?.viewModel.selectedTravelMode ?? .car,
-                                               avoidTolls: self?.viewModel.avoidTolls ?? false,
-                                               avoidFerries: self?.viewModel.avoidFerries ?? false,
-                                               avoidUturns: self?.viewModel.avoidUturns ?? false,
-                                               avoidTunnels: self?.viewModel.avoidTunnels ?? false,
-                                               avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false,
-                                               leaveNow: option.leaveNow,
-                                               leaveTime: option.leaveTime,
-                                               arrivalTime: option.arrivalTime)
+                try await self?.calculateAllRoutes(avoidTolls: self?.viewModel.avoidTolls ?? false,
+                                                   avoidFerries: self?.viewModel.avoidFerries ?? false,
+                                                   avoidUturns: self?.viewModel.avoidUturns ?? false,
+                                                   avoidTunnels: self?.viewModel.avoidTunnels ?? false,
+                                                   avoidDirtRoads: self?.viewModel.avoidDirtRoads ?? false,
+                                                   leaveNow: option.leaveNow,
+                                                   leaveTime: option.leaveTime,
+                                                   arrivalTime: option.arrivalTime)
             }
         }
+    }
+    
+    func calculateAllRoute() {
+        
     }
     
     func setupNotifications() {
@@ -309,9 +326,11 @@ final class DirectionVC: UIViewController {
         scrollView.addSubview(tableView)
         
         scrollView.snp.makeConstraints {
+            $0.top.equalToSuperview()
             $0.leading.top.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-5)
+            $0.bottom.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
         
         directionSearchView.snp.makeConstraints {
@@ -326,19 +345,21 @@ final class DirectionVC: UIViewController {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview().offset(-14)
+            $0.height.equalTo(800)
         }
         
         activityIndicator.snp.makeConstraints {
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(0)
         }
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(activityIndicator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.width.equalToSuperview()
+            //$0.width.equalToSuperview()
             $0.height.equalTo(600)
-            $0.bottom.equalToSuperview().offset(-2)
+            //$0.bottom.equalToSuperview().offset(-2)
         }
 
         directionView.isHidden = true
@@ -383,6 +404,28 @@ final class DirectionVC: UIViewController {
     func setupSearchTitleDestinations() {
         self.directionSearchView.changeSearchRouteName(with: firstDestination?.placeName ?? "", isDestination: false)
         self.directionSearchView.changeSearchRouteName(with: secondDestination?.placeName ?? "", isDestination: true)
+    }
+    
+    func calculateAllRoutes(avoidTolls: Bool = false,
+                            avoidFerries: Bool = false,
+                            avoidUturns: Bool = false,
+                            avoidTunnels: Bool = false,
+                            avoidDirtRoads: Bool = false,
+                            leaveNow: Bool = true,
+                            leaveTime: Date? = nil,
+                            arrivalTime: Date? = nil) async throws {
+        directionView.disableRouteTypesView()
+        for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
+            try await calculateRoute(routeType: routeType,
+                                           avoidTolls: avoidTolls,
+                                           avoidFerries: avoidFerries,
+                                           avoidUturns: avoidUturns,
+                                           avoidTunnels: avoidTunnels,
+                                           avoidDirtRoads: avoidDirtRoads,
+                                           leaveNow: leaveNow,
+                                           leaveTime: leaveTime,
+                                           arrivalTime: arrivalTime)
+        }
     }
     
     func calculateGenericRoute(currentModel: SearchCellViewModel, routeType: RouteTypes = .car,
@@ -575,6 +618,7 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
             } else {
                 firstDestination = searchTextModel
             }
+            directionView.disableRouteTypesView()
             for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
                 try await calculateGenericRoute(currentModel: currentModel, routeType: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime)
             }
