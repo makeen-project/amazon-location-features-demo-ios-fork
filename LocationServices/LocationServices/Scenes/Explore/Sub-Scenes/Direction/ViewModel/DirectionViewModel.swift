@@ -31,7 +31,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     var avoidTunnels: Bool = false
     var avoidDirtRoads: Bool = false
     
-    var leaveNow: Bool = true
+    var leaveNow: Bool? = nil
     var leaveTime: Date? = nil
     var arrivalTime: Date? = nil
     
@@ -242,7 +242,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                             avoidUturns: Bool = false,
                             avoidTunnels: Bool = false,
                             avoidDirtRoads: Bool = false,
-                            leaveNow: Bool,
+                            leaveNow: Bool?,
                             leaveTime: Date?,
                             arrivalTime: Date?) async throws -> ([Data], DirectionVM)? {
         selectedTravelMode = travelMode

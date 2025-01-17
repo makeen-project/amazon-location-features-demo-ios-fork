@@ -35,6 +35,15 @@ extension Date {
         return dateFormatter.date(from: dateString)
     }
     
+    func convertDateToIsoString() -> String? {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        isoFormatter.timeZone = TimeZone(secondsFromGMT: 0) // Set to UTC if needed
+        
+        let isoDateString = isoFormatter.string(from: self)
+        return isoDateString
+    }
+    
     func convertTimeString() -> String {
         return convertToString(format: "h:mm a")
     }

@@ -258,12 +258,12 @@ final class RouteOptionsView: UIView {
         }
         else if leaveSegmentControl.selectedSegmentIndex == 1 {
             leaveDatePicker.isHidden = false
-            leaveOptionsHandler?(LeaveOptions(leaveNow: false, leaveTime: leaveDatePicker.date, arrivalTime: nil))
+            leaveOptionsHandler?(LeaveOptions(leaveNow: nil, leaveTime: getLeaveDate(), arrivalTime: nil))
             changeRouteOptionHeight?(Constants.expandedLeaveOptionHeight)
         }
         else if leaveSegmentControl.selectedSegmentIndex == 2 {
             leaveDatePicker.isHidden = false
-            leaveOptionsHandler?(LeaveOptions(leaveNow: false, leaveTime: nil, arrivalTime: leaveDatePicker.date))
+            leaveOptionsHandler?(LeaveOptions(leaveNow: nil, leaveTime: nil, arrivalTime: getLeaveDate()))
             changeRouteOptionHeight?(Constants.expandedLeaveOptionHeight)
         }
         setLeaveOptionTitle()
@@ -272,8 +272,12 @@ final class RouteOptionsView: UIView {
     @objc private func leaveValueChanged(_ sender: UIDatePicker) {
         setLeaveOptionTitle()
         leaveOptionsHandler?(LeaveOptions(leaveNow: leaveSegmentControl.selectedSegmentIndex == 0,
-                                          leaveTime: leaveSegmentControl.selectedSegmentIndex == 1 ? leaveDatePicker.date: nil,
-                                          arrivalTime: leaveSegmentControl.selectedSegmentIndex == 2 ? leaveDatePicker.date: nil))
+                                          leaveTime: leaveSegmentControl.selectedSegmentIndex == 1 ? getLeaveDate(): nil,
+                                          arrivalTime: leaveSegmentControl.selectedSegmentIndex == 2 ? getLeaveDate(): nil))
+    }
+    
+    private func getLeaveDate() -> Date? {
+        return leaveDatePicker.date
     }
     
     private func setLeaveOptionTitle() {

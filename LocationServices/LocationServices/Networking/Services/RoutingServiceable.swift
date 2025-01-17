@@ -18,7 +18,7 @@ protocol RoutingServiceable {
                             avoidUturns: Bool,
                             avoidTunnels: Bool,
                             avoidDirtRoads: Bool,
-                            departNow: Bool,
+                            departNow: Bool?,
                             departureTime: Date?,
                             arrivalTime: Date?) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>]
 }
@@ -36,7 +36,7 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                             avoidUturns: Bool,
                             avoidTunnels: Bool,
                             avoidDirtRoads: Bool,
-                            departNow: Bool,
+                            departNow: Bool?,
                             departureTime: Date?,
                             arrivalTime: Date?) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] {
         

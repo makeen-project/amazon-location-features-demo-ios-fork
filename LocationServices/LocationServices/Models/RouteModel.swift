@@ -22,7 +22,7 @@ struct RouteModel: Codable {
     let departurePlaceAddress: String?
     let destinationPlaceName: String?
     let destinationPlaceAddress: String?
-    let departNow: Bool
+    let departNow: Bool?
     let departureTime: Date?
     let arrivalTime: Date?
 
@@ -113,7 +113,7 @@ struct RouteModel: Codable {
             departurePlaceAddress: String? = nil,
             destinationPlaceName: String? = nil,
             destinationPlaceAddress: String? = nil,
-            departNow: Bool,
+            departNow: Bool? = nil,
             departureTime: Date? = nil,
             arrivalTime: Date? = nil
         ) {

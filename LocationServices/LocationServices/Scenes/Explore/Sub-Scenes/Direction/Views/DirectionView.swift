@@ -19,7 +19,7 @@ struct DirectionVM {
 }
 
 struct LeaveOptions {
-    var leaveNow: Bool = true
+    var leaveNow: Bool? = true
     var leaveTime: Date? = nil
     var arrivalTime: Date? = nil
 }
@@ -314,7 +314,7 @@ final class DirectionView: UIView {
             $0.top.equalTo(routeOptions.snp.bottom).offset(16)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.height.lessThanOrEqualToSuperview()
+            $0.height.equalTo(400)
         }
         
         carRouteTypeView.snp.makeConstraints {

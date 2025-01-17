@@ -371,7 +371,7 @@ final class DirectionVC: UIViewController {
                                 avoidUturns: Bool = false,
                                 avoidTunnels: Bool = false,
                                 avoidDirtRoads: Bool = false,
-                                leaveNow: Bool = true,
+                                leaveNow: Bool? = nil,
                                 leaveTime: Date? = nil,
                                 arrivalTime: Date? = nil) async throws {
         directionSearchView.closeKeyboard()
@@ -411,7 +411,7 @@ final class DirectionVC: UIViewController {
                             avoidUturns: Bool = false,
                             avoidTunnels: Bool = false,
                             avoidDirtRoads: Bool = false,
-                            leaveNow: Bool = true,
+                            leaveNow: Bool? = nil,
                             leaveTime: Date? = nil,
                             arrivalTime: Date? = nil) async throws {
         directionView.disableRouteTypesView()
@@ -434,7 +434,7 @@ final class DirectionVC: UIViewController {
                                avoidUturns: Bool = false,
                                avoidTunnels: Bool = false,
                                avoidDirtRoads: Bool = false,
-                               leaveNow: Bool = true,
+                               leaveNow: Bool? = nil,
                                leaveTime: Date? = nil,
                                arrivalTime: Date? = nil) async throws {
         guard let (departureLocation, destinationLocation) = getRouteLocations(currentModel: currentModel) else { return }
