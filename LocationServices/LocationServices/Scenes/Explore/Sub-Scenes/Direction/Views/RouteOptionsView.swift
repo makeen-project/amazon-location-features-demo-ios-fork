@@ -56,11 +56,29 @@ final class RouteOptionsView: UIView {
     private lazy var leaveSegmentControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Leave now", "Leave at", "Arrive by"])
         segment.backgroundColor = .white
-        segment.setDividerImage(nil, forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
         segment.selectedSegmentTintColor = .white
+        
+        segment.setTitleTextAttributes(
+            [
+                NSAttributedString.Key.foregroundColor: UIColor.lsPrimary,
+                NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)
+            ],
+            for: .selected
+        )
+        segment.setTitleTextAttributes(
+            [
+                NSAttributedString.Key.foregroundColor: UIColor.lsTetriary,
+                NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)
+            ],
+            for: .normal
+        )
+
+        segment.setWidth(100, forSegmentAt: 0)
+        segment.setWidth(100, forSegmentAt: 1)
+        segment.setWidth(100, forSegmentAt: 2)
+
         segment.addTarget(self, action: #selector(leaveSegmentChanged), for: .valueChanged)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lsPrimary, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)], for: .selected)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lsTetriary, NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)], for: .normal)
+
         return segment
     }()
     
@@ -427,13 +445,13 @@ final class RouteOptionsView: UIView {
         leaveSegmentControl.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview()
+            $0.width.equalToSuperview().offset(-32)
             $0.height.equalTo(40)
         }
         
         leaveDatePicker.snp.makeConstraints {
             $0.top.equalTo(leaveSegmentControl.snp.bottom).offset(16)
-            //$0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }
         
