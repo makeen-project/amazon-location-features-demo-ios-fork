@@ -35,6 +35,14 @@ extension Date {
         return dateFormatter.date(from: dateString)
     }
     
+    static func convertStringToDate(_ dateString: String, format: String) -> Date? {
+        if dateFormatter.dateFormat != format {
+            dateFormatter.dateFormat = format
+        }
+        
+        return dateFormatter.date(from: dateString)
+    }
+    
     func convertDateToIsoString() -> String? {
         let isoFormatter = ISO8601DateFormatter()
         isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

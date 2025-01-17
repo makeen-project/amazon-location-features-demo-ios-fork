@@ -82,7 +82,7 @@ final class NavigationVCCell: UITableViewCell {
         label.text = "2 min"
         label.textAlignment = .left
         label.font = .amazonFont(type: .bold, size: 13)
-        label.textColor = .black
+        label.textColor = .lsTetriary
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
@@ -154,9 +154,11 @@ final class NavigationVCCell: UITableViewCell {
         
         stepLine.snp.makeConstraints {
             $0.centerX.equalTo(stepImage.snp.centerX)
-            $0.top.equalTo(distanceLabel.snp.top)
-            $0.bottom.equalTo(distanceLabel.snp.bottom).offset(5)
+            //$0.top.equalTo(distanceLabel.snp.top)
+            //$0.bottom.equalTo(distanceLabel.snp.bottom).offset(5)
+            $0.centerY.equalTo(distanceLabel.snp.centerY)
             $0.width.equalTo(2)
+            $0.height.equalTo(16)
         }
     }
 }

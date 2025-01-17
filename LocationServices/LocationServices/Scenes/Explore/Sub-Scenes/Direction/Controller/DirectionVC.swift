@@ -321,8 +321,8 @@ final class DirectionVC: UIViewController {
         self.view.addSubview(scrollView)
         
         scrollView.addSubview(directionSearchView)
-        scrollView.addSubview(directionView)
         scrollView.addSubview(activityIndicator)
+        scrollView.addSubview(directionView)
         scrollView.addSubview(tableView)
         
         scrollView.snp.makeConstraints {
@@ -341,17 +341,17 @@ final class DirectionVC: UIViewController {
             $0.width.equalToSuperview()
         }
         
+        activityIndicator.snp.makeConstraints {
+            $0.top.equalTo(directionSearchView.snp.bottom)
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(0)
+        }
+        
         directionView.snp.makeConstraints {
-            $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
+            $0.top.equalTo(activityIndicator.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview().offset(-14)
             $0.height.equalTo(800)
-        }
-        
-        activityIndicator.snp.makeConstraints {
-            $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
-            $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(0)
         }
         
         tableView.snp.makeConstraints {

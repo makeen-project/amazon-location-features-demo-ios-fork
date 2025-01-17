@@ -354,8 +354,8 @@ extension ExploreVC {
         if let data = notification.userInfo?["MapViewValues"] as? (distance: String, street: String, stepImage: UIImage?) {
             mapNavigationView.updateValues(distance: data.distance, street: data.street, stepImage: data.stepImage)
         }
-        if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String) {
-            mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
+        if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String, arrivalTime: String) {
+            mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration, arrivalTime: data.arrivalTime)
         }
     }
     

@@ -204,12 +204,14 @@ final class NavigationVC: UIViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerStackView.snp.bottom)
             $0.bottom.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
         }
 
         stackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.trailing.bottom.equalToSuperview()
             $0.width.equalTo(scrollView.snp.width)
+            $0.bottom.equalToSuperview().offset(-16)
         }
 
         navigationHeaderView.snp.makeConstraints {
@@ -243,7 +245,7 @@ final class NavigationVC: UIViewController {
     private func adjustTableViewHeight() {
         tableView.layoutIfNeeded()
         tableView.snp.updateConstraints {
-            $0.height.equalTo(tableView.contentSize.height+16)
+            $0.height.equalTo(tableView.contentSize.height+32)
         }
     }
 
@@ -276,7 +278,7 @@ extension NavigationVC: NavigationViewModelOutputDelegate {
 private extension NavigationVC {
     func updateNavigationHeaderData() {
         let data = viewModel.getSummaryData()
-        self.navigationHeaderView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
+        self.navigationHeaderView.updateDatas(distance: data.totalDistance, duration: data.totalDuration, arrivalTime: data.arrivalTime)
         departLabel.text = viewModel.firstDestination?.placeName
         departAddress.text = viewModel.firstDestination?.placeAddress
         

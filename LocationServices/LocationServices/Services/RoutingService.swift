@@ -42,7 +42,10 @@ extension AWSRoutingServiceProtocol {
         let origin = [depaturePosition.longitude, depaturePosition.latitude]
         let destination = [destinationPosition.longitude, destinationPosition.latitude]
         let legAdditionalFeatures: [GeoRoutesClientTypes.RouteLegAdditionalFeature] = [.travelStepInstructions, .summary]
-        
+        var departNow = departNow
+        if departureTime == nil && arrivalTime == nil {
+            departNow = true
+        }
         let input = CalculateRoutesInput(arrivalTime: arrivalTime?.convertDateToIsoString(), avoid: routeAvoidanceOptions, departNow: departNow, departureTime: departureTime?.convertDateToIsoString(), destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .simple, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
         
         if let client = AmazonLocationClient.getRoutesClient() {

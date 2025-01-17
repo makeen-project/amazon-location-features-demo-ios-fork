@@ -17,7 +17,7 @@ extension NavigationVC {
 
 extension NavigationVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64
+        return 52
     }
 }
 
