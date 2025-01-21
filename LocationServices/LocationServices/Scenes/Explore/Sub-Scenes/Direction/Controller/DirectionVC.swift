@@ -116,6 +116,13 @@ final class DirectionVC: UIViewController {
             let isDestination = firstDestination?.placeName != nil
             directionSearchView.becomeFirstResponder(isDestination: isDestination)
         }
+        
+        Task {
+            try await calculateRoute()
+        }
+        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true, mapStyleIsHidden: true)
+        
+        setupNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -326,20 +333,21 @@ final class DirectionVC: UIViewController {
         directionSearchView.changeSearchRouteName(with: firstDestination?.placeName, isDestination: false)
         directionSearchView.changeSearchRouteName(with: secondDestination?.placeName, isDestination: true)
         
+        self.view.addSubview(directionSearchView)
         self.view.addSubview(scrollView)
         
         scrollView.addSubview(scrollViewContentView)
-        scrollViewContentView.addSubview(directionSearchView)
         scrollViewContentView.addSubview(activityIndicator)
         scrollViewContentView.addSubview(directionView)
         scrollViewContentView.addSubview(tableView)
         
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
         }
         
         scrollViewContentView.snp.makeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.top.leading.trailing.bottom.equalToSuperview()
             $0.width.equalTo(scrollView.frameLayoutGuide)
         }
         
@@ -352,7 +360,7 @@ final class DirectionVC: UIViewController {
         }
         
         activityIndicator.snp.makeConstraints {
-            $0.top.equalTo(directionSearchView.snp.bottom)
+            $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(0)
         }
