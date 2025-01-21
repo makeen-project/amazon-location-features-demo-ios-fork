@@ -289,6 +289,11 @@ final class DirectionView: UIView {
         scooterRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.scooterContainer
         truckRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.truckContainer
         
+        self.addSubview(routeOptions)
+        self.addSubview(routeTypesContainerView)
+        
+        routeTypesContainerView.addSubview(routeTypeStackView)
+        
         routeTypeStackView.removeArrangedSubViews()
         routeTypeStackView.addArrangedSubview(carRouteTypeView)
         routeTypeStackView.addArrangedSubview(carSeperatorView)
@@ -297,11 +302,6 @@ final class DirectionView: UIView {
         routeTypeStackView.addArrangedSubview(scooterRouteTypeView)
         routeTypeStackView.addArrangedSubview(scooterSeperatorView)
         routeTypeStackView.addArrangedSubview(truckRouteTypeView)
-    
-        self.addSubview(routeOptions)
-        self.addSubview(routeTypesContainerView)
-        
-        routeTypesContainerView.addSubview(routeTypeStackView)
         
         routeOptions.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -314,7 +314,7 @@ final class DirectionView: UIView {
             $0.top.equalTo(routeOptions.snp.bottom).offset(16)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(400)
+            $0.height.equalTo(300)
         }
         
         carRouteTypeView.snp.makeConstraints {
@@ -346,7 +346,7 @@ final class DirectionView: UIView {
         }
         
         routeTypeStackView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
         }
     }
     

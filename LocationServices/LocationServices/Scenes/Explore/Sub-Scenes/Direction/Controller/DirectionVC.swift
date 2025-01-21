@@ -56,6 +56,14 @@ final class DirectionVC: UIViewController {
     private var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .clear
+        view.alwaysBounceVertical = true
+        view.isDirectionalLockEnabled = true
+        return view
+    }()
+    
+    private let scrollViewContentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -320,22 +328,24 @@ final class DirectionVC: UIViewController {
         
         self.view.addSubview(scrollView)
         
-        scrollView.addSubview(directionSearchView)
-        scrollView.addSubview(activityIndicator)
-        scrollView.addSubview(directionView)
-        scrollView.addSubview(tableView)
+        scrollView.addSubview(scrollViewContentView)
+        scrollViewContentView.addSubview(directionSearchView)
+        scrollViewContentView.addSubview(activityIndicator)
+        scrollViewContentView.addSubview(directionView)
+        scrollViewContentView.addSubview(tableView)
         
         scrollView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.top.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
             $0.edges.equalToSuperview()
+        }
+        
+        scrollViewContentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)
         }
         
         directionSearchView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().offset(14)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(140)
             $0.width.equalToSuperview()
@@ -351,15 +361,13 @@ final class DirectionVC: UIViewController {
             $0.top.equalTo(activityIndicator.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview().offset(-14)
-            $0.height.equalTo(800)
+            $0.height.equalTo(900)
         }
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(activityIndicator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
-            //$0.width.equalToSuperview()
-            $0.height.equalTo(600)
-            //$0.bottom.equalToSuperview().offset(-2)
+            $0.height.equalTo(900)
         }
 
         directionView.isHidden = true

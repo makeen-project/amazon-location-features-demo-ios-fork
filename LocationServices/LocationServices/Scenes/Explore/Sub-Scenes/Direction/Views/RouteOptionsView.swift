@@ -14,7 +14,7 @@ final class RouteOptionsView: UIView {
         static let collapsedHeight: Int = 32
         static let collapsedLeaveOptionHeight: Int = 120
         static let expandedAvoidOptionHeight: Int = 350
-        static let expandedLeaveOptionHeight: Int = 536
+        static let expandedLeaveOptionHeight: Int = 530
     }
     
     var changeRouteOptionHeight: IntHandler?
