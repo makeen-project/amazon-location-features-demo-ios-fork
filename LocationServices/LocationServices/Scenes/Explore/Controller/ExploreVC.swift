@@ -363,7 +363,7 @@ extension ExploreVC {
         guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
             let size = self.view.bounds.size.height / 2 - 20
-            let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
+            let offset:CGFloat = ((notification.userInfo?["height"] as? CGFloat) ?? size)-80
             self.exploreView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
     }
