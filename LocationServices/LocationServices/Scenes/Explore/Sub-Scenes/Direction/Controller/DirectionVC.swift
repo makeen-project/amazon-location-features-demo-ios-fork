@@ -20,6 +20,7 @@ final class DirectionVC: UIViewController {
         static let titleOffsetiPad: CGFloat = 0
     }
     
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     var directionScreenStyle: DirectionScreenStyle = DirectionScreenStyle(backgroundColor: .white)
     var isInSplitViewController: Bool = false
     var dismissHandler: VoidHandler?
@@ -336,6 +337,19 @@ final class DirectionVC: UIViewController {
         scrollViewContentView.addSubview(directionView)
         scrollViewContentView.addSubview(tableView)
         
+        directionSearchView.snp.makeConstraints {
+            if isiPad {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+            }
+            else {
+                $0.top.equalToSuperview()
+            }
+            $0.leading.trailing.equalToSuperview().offset(14)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(140)
+            $0.width.equalToSuperview()
+        }
+        
         scrollView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
@@ -344,14 +358,6 @@ final class DirectionVC: UIViewController {
         scrollViewContentView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
             $0.width.equalTo(scrollView.frameLayoutGuide)
-        }
-        
-        directionSearchView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().offset(14)
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(140)
-            $0.width.equalToSuperview()
         }
         
         activityIndicator.snp.makeConstraints {

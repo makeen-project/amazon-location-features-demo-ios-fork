@@ -76,7 +76,7 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
         self.view.addSubview(poiCardView)
         poiCardView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-32)
+            $0.bottom.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide)
         }
     }
