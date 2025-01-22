@@ -140,11 +140,12 @@ final class NavigationVC: UIViewController {
         let barButtonItem = UIBarButtonItem(title: nil, image: .arrowUpLeftAndArrowDownRight, target: self, action: #selector(hideScreen))
         barButtonItem.tintColor = .lsPrimary
         navigationItem.leftBarButtonItem = barButtonItem
+        changeExploreActionButtonsVisibility()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        changeExploreActionButtonsVisibility()
+        
     }
     
     func setupHandler() {
@@ -245,14 +246,9 @@ final class NavigationVC: UIViewController {
     private func adjustTableViewHeight() {
         tableView.layoutIfNeeded()
         tableView.snp.updateConstraints {
-            $0.height.equalTo(tableView.contentSize.height+32)
+            $0.height.equalTo(tableView.contentSize.height+50)
         }
     }
-
-    func updateTableViewContent() {
-        adjustTableViewHeight()
-    }
-
     
     private func changeExploreActionButtonsVisibility() {
         let userInfo = [
@@ -270,7 +266,10 @@ extension NavigationVC: NavigationViewModelOutputDelegate {
             self.tableView.reloadData()
             self.updateNavigationHeaderData()
             self.sendMapViewData()
-            self.updateTableViewContent()
+            // Delay adjusting the tableView height until reloadData completes
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                self.adjustTableViewHeight()
+            }
         }
     }
 }
