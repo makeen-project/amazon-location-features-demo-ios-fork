@@ -127,15 +127,10 @@ final class DirectionVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        Task {
-            try await calculateRoute()
-        }
-        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true, mapStyleIsHidden: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupNotifications()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
