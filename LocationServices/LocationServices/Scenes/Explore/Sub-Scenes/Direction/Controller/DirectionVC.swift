@@ -649,6 +649,7 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
         isInitalState = false
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            NotificationCenter.default.post(name: Notification.Name("ShownSearchResults"), object: nil, userInfo: nil)
         }
     }
     

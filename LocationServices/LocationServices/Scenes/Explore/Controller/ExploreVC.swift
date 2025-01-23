@@ -241,6 +241,8 @@ extension ExploreVC {
         
         NotificationCenter.default.addObserver(self, selector: #selector(dismissDirectionScene(_:)), name: Notification.Name("DirectionViewDismissed"), object: nil)
         
+    
+        NotificationCenter.default.addObserver(self, selector: #selector(shownSearchResults(_:)), name: Notification.Name("ShownSearchResults"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMapView(_:)), name: Notification.refreshMapView, object: nil)
         
@@ -437,6 +439,12 @@ extension ExploreVC {
         exploreView.hideMapStyleButton(state: false)
         exploreView.deleteDrawing()
     }
+    
+    @objc private func shownSearchResults(_ notification: Notification?) {
+        viewModel.deactivateRoute()
+        exploreView.deleteDrawing()
+    }
+    
     
     @objc private func refreshMapView(_ notification: Notification) {
         exploreView.setupMapView(locateMe: false)
