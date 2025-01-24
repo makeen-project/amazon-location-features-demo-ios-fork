@@ -36,8 +36,11 @@ extension AWSRoutingServiceProtocol {
                         departureTime: Date?,
                         arrivalTime: Date?) async throws -> CalculateRoutesOutput? {
         var routeAvoidanceOptions: GeoRoutesClientTypes.RouteAvoidanceOptions? = nil
-        if travelMode == .car {
+        if travelMode == .car || travelMode == .truck {
             routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(dirtRoads: avoidDirtRoads, ferries: avoidFerries, tollRoads: avoidTolls, tunnels: avoidTunnels, uTurns: avoidUturns)
+        }
+        else {
+            routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(dirtRoads: avoidDirtRoads, ferries: avoidFerries, tollRoads: avoidTolls, tunnels: avoidTunnels)
         }
         let origin = [depaturePosition.longitude, depaturePosition.latitude]
         let destination = [destinationPosition.longitude, destinationPosition.latitude]

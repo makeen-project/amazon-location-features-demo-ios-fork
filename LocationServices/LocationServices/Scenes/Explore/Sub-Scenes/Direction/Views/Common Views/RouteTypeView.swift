@@ -155,7 +155,7 @@ final class RouteTypeView: UIView {
         self.durationLabel.text = duration
         
         let isGoButtonEnabled = !distance.isEmpty && !duration.isEmpty
-        self.goButton.alpha = isGoButtonEnabled ? 1 : 0.3
+        self.goButton.backgroundColor = isGoButtonEnabled ? UIColor.buttonOrangeColor : .lsGrey
         self.goButton.isEnabled = isGoButtonEnabled
         self.isUserInteractionEnabled = isGoButtonEnabled
         let goButtonTitle = isPreview ? StringConstant.preview : StringConstant.go
@@ -163,8 +163,10 @@ final class RouteTypeView: UIView {
         self.layoutIfNeeded()
     }
     
-    func disableGoButton() {
+    func disableRouteType() {
         self.goButton.isEnabled = false
+        self.goButton.backgroundColor = .lsGrey
+        self.isUserInteractionEnabled = false
     }
     
     func updateSelectedLabel(state: Bool) {

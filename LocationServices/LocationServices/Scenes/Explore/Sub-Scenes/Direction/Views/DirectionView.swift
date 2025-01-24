@@ -163,10 +163,10 @@ final class DirectionView: UIView {
     }
     
     public func disableRouteTypesView() {
-        carRouteTypeView.disableGoButton()
-        scooterRouteTypeView.disableGoButton()
-        pedestrianRouteTypeView.disableGoButton()
-        truckRouteTypeView.disableGoButton()
+        carRouteTypeView.disableRouteType()
+        scooterRouteTypeView.disableRouteType()
+        pedestrianRouteTypeView.disableRouteType()
+        truckRouteTypeView.disableRouteType()
     }
     
     func showOptionsStackView() {

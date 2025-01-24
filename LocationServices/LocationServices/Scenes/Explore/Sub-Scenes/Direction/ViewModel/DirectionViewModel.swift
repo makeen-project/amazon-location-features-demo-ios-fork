@@ -307,16 +307,8 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 } catch {
                     print(String.errorJSONDecoder)
                 }
-            case .failure(let error):
-                let alertModel = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self.delegate?.showAlert(alertModel)
-                }
-            case .none:
-                let alertModel = AlertModel(title: StringConstant.error, message: StringConstant.failedToCalculateRoute, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self.delegate?.showAlert(alertModel)
-                }
+            case .failure, .none:
+                print(StringConstant.failedToCalculateRoute)
             }
         return nil
     }

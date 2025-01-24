@@ -144,7 +144,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             
             currentBottomSheet?.dismissBottomSheet()
             controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
-            controller.enableBottomSheetGrab()
+            let minHeight = 0.18
+            controller.enableBottomSheetGrab(smallHeight: minHeight)
             currentBottomSheet = controller
     }
     
