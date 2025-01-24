@@ -273,17 +273,17 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     self.defaultTravelMode[model.travelMode] = data
                     switch model.travelMode {
                     case .car:
-                        directionVM.carTypeDistane = model.route.summary!.distance.formatToKmString()
-                        directionVM.carTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
+                        directionVM.carTypeDistane = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.carTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                     case .scooter:
-                        directionVM.scooterTypeDistance = model.route.summary!.distance.formatToKmString()
-                        directionVM.scooterTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
+                        directionVM.scooterTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.scooterTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                     case .pedestrian:
-                        directionVM.walkingTypeDistance = model.route.summary!.distance.formatToKmString()
-                        directionVM.walkingTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
+                        directionVM.walkingTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.walkingTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                     case .truck:
-                        directionVM.truckTypeDistance = model.route.summary!.distance.formatToKmString()
-                        directionVM.truckTypeDuration = model.route.summary!.duration.convertSecondsToMinString()
+                        directionVM.truckTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.truckTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                     default: break
                     }
                 case .failure:

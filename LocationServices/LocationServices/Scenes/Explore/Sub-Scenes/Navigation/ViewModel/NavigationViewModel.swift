@@ -80,13 +80,13 @@ final class NavigationVCViewModel {
     func getSummaryData() -> (totalDistance: String, totalDuration: String, arrivalTime: String) {
         var arrivalTime = ""
         let lastLeg = route.legs?.last
-        if let leg = lastLeg?.ferryLegDetails, let time = leg.arrival?.time {
+        if let leg = lastLeg?.ferryLegDetails, let arrival = leg.arrival, let time = arrival.time {
             arrivalTime = time
         }
-        else if let leg = lastLeg?.pedestrianLegDetails, let time = leg.arrival?.time {
+        else if let leg = lastLeg?.pedestrianLegDetails, let arrival = leg.arrival, let time = arrival.time {
             arrivalTime = time
         }
-        else if let leg = lastLeg?.vehicleLegDetails, let time = leg.arrival?.time {
+        else if let leg = lastLeg?.vehicleLegDetails, let arrival = leg.arrival, let time = arrival.time {
             arrivalTime = time
         }
         return (route.summary!.distance.formatToKmString(),

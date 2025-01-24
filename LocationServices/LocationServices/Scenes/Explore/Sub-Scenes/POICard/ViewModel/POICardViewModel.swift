@@ -55,8 +55,8 @@ final class POICardViewModel: POICardViewModelProcotol {
             case .success(let direction):
                 guard !(self.datas.isEmpty) else { break }
                 
-                self.datas[0].distance = Double(direction.route.summary!.distance)
-                self.datas[0].duration = direction.route.summary!.duration.convertSecondsToMinString()
+                self.datas[0].distance = Double(direction.route.summary?.distance ?? 0)
+                self.datas[0].duration = direction.route.summary?.duration.convertSecondsToMinString()
             case .failure(let error):
                 responseError = error
             case .none:
