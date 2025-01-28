@@ -146,6 +146,8 @@ final class PoliticalView: UIButton {
                 $0.top.leading.trailing.equalToSuperview()
                 $0.bottom.equalToSuperview().offset(5)
             }
+            UserDefaultsHelper.removeObject(for: .politicalView)
+            setPoliticalView()
         }
     }
 }
