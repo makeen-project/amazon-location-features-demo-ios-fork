@@ -49,7 +49,6 @@ final class NavigationUITests: LocationServicesUITests {
             .tapMapStyles()
             .select(style: .standard)
             .select(style: .monochrome)
-            .select(style: .satellite)
             .tapPoliticalViewButton()
             .select(politicalView: PoliticalViewTypes.first)
             .tapCloseButton()
