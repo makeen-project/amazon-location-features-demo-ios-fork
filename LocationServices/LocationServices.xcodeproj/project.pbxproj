@@ -377,6 +377,7 @@
 		F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */; };
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
 		F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */; };
+		F18FFB4E2D48EF7900573B54 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = F18FFB4D2D48EF7900573B54 /* Polyline */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
 		F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */; };
 		F1A306BE2D3023E300B16126 /* ArrivalCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */; };
@@ -870,6 +871,7 @@
 				F1E368622CB6C25E00AF3A5B /* AWSCognitoIdentity in Frameworks */,
 				F1E368642CB6C25E00AF3A5B /* AWSLocation in Frameworks */,
 				F1E368912CB6C93100AF3A5B /* AWSIoT in Frameworks */,
+				F18FFB4E2D48EF7900573B54 /* Polyline in Frameworks */,
 				F11E045E2CD509A2003F1641 /* AmazonLocationiOSAuthSDK in Frameworks */,
 				F11E04612CD515C0003F1641 /* KeychainSwift in Frameworks */,
 				ADF26F6529300E59000147A0 /* SafariServices.framework in Frameworks */,
@@ -3095,6 +3097,7 @@
 				F1E368922CB6C93B00AF3A5B /* AWSIoTEvents */,
 				F11E045D2CD509A2003F1641 /* AmazonLocationiOSAuthSDK */,
 				F11E04602CD515C0003F1641 /* KeychainSwift */,
+				F18FFB4D2D48EF7900573B54 /* Polyline */,
 			);
 			productName = LocationServices;
 			productReference = ADAE4FFA2935611C0000F7FC /* LocationServices.app */;
@@ -3139,6 +3142,7 @@
 				F1E3688D2CB6C8D800AF3A5B /* XCRemoteSwiftPackageReference "aws-crt-swift" */,
 				F11E045C2CD509A2003F1641 /* XCRemoteSwiftPackageReference "amazon-location-mobile-auth-sdk-ios" */,
 				F11E045F2CD515C0003F1641 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				F18FFB4C2D48EF7900573B54 /* XCRemoteSwiftPackageReference "polyline" */,
 			);
 			productRefGroup = AD2AF023292E892000149904;
 			projectDirPath = "";
@@ -4121,6 +4125,14 @@
 				minimumVersion = 20.0.0;
 			};
 		};
+		F18FFB4C2D48EF7900573B54 /* XCRemoteSwiftPackageReference "polyline" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-geospatial/polyline/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
 		F1E3685E2CB6C25E00AF3A5B /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
@@ -4154,6 +4166,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F11E045F2CD515C0003F1641 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		F18FFB4D2D48EF7900573B54 /* Polyline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F18FFB4C2D48EF7900573B54 /* XCRemoteSwiftPackageReference "polyline" */;
+			productName = Polyline;
 		};
 		F1BA942A2C510CAC002FEB51 /* MapLibre */ = {
 			isa = XCSwiftPackageProductDependency;

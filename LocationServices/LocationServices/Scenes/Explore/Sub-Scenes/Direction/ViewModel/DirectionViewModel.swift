@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 import AWSGeoRoutes
+import Polyline
 
 final class DirectionViewModel: DirectionViewModelProtocol {
     
@@ -313,11 +314,20 @@ final class DirectionViewModel: DirectionViewModelProtocol {
         return nil
     }
     
-    func getLineString(leg: GeoRoutesClientTypes.RouteLeg) -> GeoData {
-        let geometry = Geometry(type: "LineString", coordinates: leg.geometry?.lineString)
-        let properties = Properties(name: "Polyline")
-        let feature = [Feature(type: "Feature", properties: properties, geometry: geometry)]
-        return GeoData(type: "FeatureCollection", features: feature)
+    func getLineString(leg: GeoRoutesClientTypes.RouteLeg) throws -> GeoData? {
+        do {
+            if let polyline = leg.geometry?.polyline {
+                let coordinates = try Polyline.decodeToLngLatArray(polyline)
+                let geometry = Geometry(type: "LineString", coordinates: coordinates)
+                let properties = Properties(name: "Polyline")
+                let feature = [Feature(type: "Feature", properties: properties, geometry: geometry)]
+                return GeoData(type: "FeatureCollection", features: feature)
+            }
+        }
+        catch {
+            throw error
+        }
+        return nil
     }
     
     private func getModel(for type: RouteTypes) -> Result<DirectionPresentation, Error>? {
