@@ -498,7 +498,7 @@ extension ExploreVC: CLLocationManagerDelegate {
     }
     
     func isArrivalInProximity(userCoreLocation: CLLocationCoordinate2D, route: RouteModel) -> Bool {
-        return userCoreLocation.distance(from: route.destinationPosition) < 10
+        return userCoreLocation.distance(from: route.destinationPosition) < 80
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {

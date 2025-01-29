@@ -94,7 +94,7 @@ struct RouteModel: Codable {
         departurePlaceAddress = try container.decodeIfPresent(String.self, forKey: .departurePlaceAddress)
         destinationPlaceName = try container.decodeIfPresent(String.self, forKey: .destinationPlaceName)
         destinationPlaceAddress = try container.decodeIfPresent(String.self, forKey: .destinationPlaceAddress)
-        departNow = try container.decode(Bool.self, forKey: .departNow)
+        departNow = try container.decode(Bool?.self, forKey: .departNow)
         departureTime = try container.decodeIfPresent(Date.self, forKey: .departureTime)
         arrivalTime = try container.decodeIfPresent(Date.self, forKey: .arrivalTime)
     }

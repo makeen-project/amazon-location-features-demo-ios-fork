@@ -64,7 +64,7 @@ final class UserDefaultsHelper {
             UserDefaults.standard.set(data, forKey: key.rawValue)
             UserDefaults.standard.synchronize()
         } catch {
-            print(.errorUserDefaultsSave + " \(T.self)")
+            print(.errorUserDefaultsSave + " \(T.self), \(error)")
         }
     }
       
@@ -98,7 +98,7 @@ final class UserDefaultsHelper {
             return nil
             
         } catch {
-            print(.errorUserDefaultsSave +  " \(T.self)")
+            print(.errorUserDefaultsSave +  " \(T.self), \(error)")
             return nil
         }
     }
