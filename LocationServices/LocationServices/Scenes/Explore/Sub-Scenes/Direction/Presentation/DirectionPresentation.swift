@@ -8,10 +8,29 @@
 import Foundation
 import AWSGeoRoutes
 import UIKit
+import Polyline
 
 struct DirectionPresentation {
     let route: GeoRoutesClientTypes.Route
     let travelMode: GeoRoutesClientTypes.RouteTravelMode
+}
+
+extension GeoRoutesClientTypes.RouteLegGeometry {
+    func getPolylineGeoData() throws -> GeoData? {
+        do {
+            if let polyline = self.polyline {
+                let coordinates = try Polyline.decodeToLngLatArray(polyline)
+                let geometry = Geometry(type: "LineString", coordinates: coordinates)
+                let properties = Properties(name: "Polyline")
+                let feature = [Feature(type: "Feature", properties: properties, geometry: geometry)]
+                return GeoData(type: "FeatureCollection", features: feature)
+            }
+        }
+        catch {
+            throw error
+        }
+        return nil
+    }
 }
 
 extension GeoRoutesClientTypes.RouteVehicleTravelStep {

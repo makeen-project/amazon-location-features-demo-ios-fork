@@ -524,16 +524,19 @@ extension ExploreVC: CLLocationManagerDelegate {
     func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes) {
             let userInfo = ["route": direction.route]
             NotificationCenter.default.post(name: Notification.Name("NavigationStepsUpdated"), object: nil, userInfo: userInfo)
-            var datas: [Data] = []
-            if let legs = direction.route.legs {
-                for leg in legs {
-                    if let linestring = leg.geometry?.lineString {
-                        let data = (try? JSONEncoder().encode(linestring)) ?? Data()
+            let encoder = JSONEncoder()
+            do {
+                var datas: [Data] = []
+                if let legDetails = direction.route.legs {
+                    for leg in legDetails {
+                        let data = try encoder.encode(leg.geometry?.getPolylineGeoData())
                         datas.append(data)
+                    }
                 }
+                self.exploreView.drawCalculatedRouteWith(datas, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: true, routeType: routeType)
+            } catch {
+                print(String.errorJSONDecoder)
             }
-            self.exploreView.drawCalculatedRouteWith(datas, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: true, routeType: routeType)
-        }
     }
     
     func userReachedDestination(_ destination: MapModel) {
