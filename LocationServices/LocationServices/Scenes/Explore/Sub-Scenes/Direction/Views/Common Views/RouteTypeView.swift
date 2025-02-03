@@ -67,7 +67,7 @@ final class RouteTypeView: UIView {
     private lazy var routeTypeImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        iv.tintColor = .searchBarTintColor
+        iv.tintColor = .lsTetriary
         return iv
     }()
     
@@ -86,8 +86,8 @@ final class RouteTypeView: UIView {
     private var durationLabel: UILabel = {
         let label = UILabel()
         label.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedTime
-        label.font = .amazonFont(type: .regular, size: 16)
-        label.textColor = .black
+        label.font = .amazonFont(type: .bold, size: 14)
+        label.textColor = .lsTetriary
         label.textAlignment = .right
         label.text = ""
         label.setContentHuggingPriority(UILayoutPriority(249), for: .horizontal)
@@ -98,17 +98,19 @@ final class RouteTypeView: UIView {
     private var distanceLabel: UILabel = {
         let label = UILabel()
         label.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedDistance
-        label.font = .amazonFont(type: .regular, size: 13)
-        label.textColor = .searchBarTintColor
+        label.font = .amazonFont(type: .regular, size: 14)
+        label.textColor = .lsGrey
         label.text = ""
         label.textAlignment = .left
         return label
     }()
     
-    private lazy var routeTypeTitle: UILabel = {
+    private var leaveLabel: UILabel = {
         let label = UILabel()
-        label.font = .amazonFont(type: .bold, size: 13)
-        label.textColor = .mapDarkBlackColor
+        label.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedLeave
+        label.font = .amazonFont(type: .regular, size: 14)
+        label.textColor = .lsGrey
+        label.text = ""
         label.textAlignment = .left
         return label
     }()
@@ -123,8 +125,8 @@ final class RouteTypeView: UIView {
     private var selectedLabel: UILabel = {
         let label = UILabel()
         label.text = "Selected"
-        label.font = .amazonFont(type: .bold, size: 13)
-        label.textColor = .searchBarTintColor
+        label.font = .amazonFont(type: .bold, size: 14)
+        label.textColor = .lsPrimary
         label.lineBreakMode = .byTruncatingTail
         label.setContentCompressionResistancePriority(UILayoutPriority(748), for: .horizontal)
         return label
@@ -133,7 +135,6 @@ final class RouteTypeView: UIView {
     convenience init(viewType: RouteTypes, isSelected: Bool = false) {
         self.init(frame: .zero)
         self.routeTypeImage.image = viewType.image
-        self.routeTypeTitle.text = viewType.title
         isDotViewVisible(isSelected)
     }
  
@@ -150,10 +151,10 @@ final class RouteTypeView: UIView {
        goButtonHandler?()
     }
     
-    func setDatas(distance: String, duration: String, isPreview: Bool) {
+    func setDatas(distance: String, duration: String, leaveTime: String, isPreview: Bool) {
         self.distanceLabel.text = distance
         self.durationLabel.text = duration
-        
+        self.leaveLabel.text = leaveTime == "" ? "": "Leave at \(leaveTime)"
         let isGoButtonEnabled = !distance.isEmpty && !duration.isEmpty
         self.goButton.backgroundColor = isGoButtonEnabled ? UIColor.buttonOrangeColor : .lsGrey
         self.goButton.isEnabled = isGoButtonEnabled
@@ -182,49 +183,55 @@ final class RouteTypeView: UIView {
         containerView.addSubview(routeTypeImage)
         
         containerView.addSubview(leftContainerView)
-        leftContainerView.addSubview(routeTypeTitle)
+        leftContainerView.addSubview(durationLabel)
         leftContainerView.addSubview(dotView)
         leftContainerView.addSubview(selectedLabel)
         leftContainerView.addSubview(distanceLabel)
+        leftContainerView.addSubview(leaveLabel)
         
         containerView.addSubview(goButton)
-        containerView.addSubview(durationLabel)
         containerView.addSubview(selectedViewButton)
         
         containerView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        routeTypeImage.snp.makeConstraints {
-            $0.width.height.equalTo(20)
-            $0.leading.equalToSuperview().offset(10)
-            $0.centerY.equalToSuperview()
-        }
-        
         leftContainerView.snp.makeConstraints {
-            $0.centerY.equalTo(routeTypeImage.snp.centerY)
+            $0.top.equalTo(routeTypeImage.snp.top)
             $0.leading.equalTo(routeTypeImage.snp.trailing).offset(10)
         }
         
-        routeTypeTitle.snp.makeConstraints {
+        routeTypeImage.snp.makeConstraints {
+            $0.width.height.equalTo(20)
+            $0.leading.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(16)
+        }
+        
+        durationLabel.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
         }
         
         dotView.snp.makeConstraints {
-            $0.leading.equalTo(routeTypeTitle.snp.trailing).offset(4)
+            $0.leading.equalTo(durationLabel.snp.trailing).offset(4)
             $0.height.width.equalTo(3)
-            $0.centerY.equalTo(routeTypeTitle.snp.centerY)
+            $0.centerY.equalTo(durationLabel.snp.centerY)
         }
     
         selectedLabel.snp.makeConstraints {
             $0.leading.equalTo(dotView.snp.trailing).offset(4)
             $0.height.equalTo(18)
-            $0.centerY.equalTo(routeTypeTitle.snp.centerY)
+            $0.centerY.equalTo(durationLabel.snp.centerY)
             $0.trailing.equalToSuperview()
         }
                 
         distanceLabel.snp.makeConstraints {
-            $0.top.equalTo(routeTypeTitle.snp.bottom)
+            $0.top.equalTo(durationLabel.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(18)
+        }
+        
+        leaveLabel.snp.makeConstraints {
+            $0.top.equalTo(distanceLabel.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(18)
         }
@@ -241,17 +248,29 @@ final class RouteTypeView: UIView {
             $0.trailing.equalTo(goButton.snp.leading)
         }
         
-        durationLabel.snp.makeConstraints {
-            $0.trailing.equalTo(goButton.snp.leading).offset(-10)
-            $0.height.equalTo(28)
-            $0.centerY.equalTo(goButton.snp.centerY)
-            $0.leading.equalTo(leftContainerView.snp.trailing).offset(5)
-        }
+//        durationLabel.snp.makeConstraints {
+//            $0.leading.equalTo(goButton.snp.leading).offset(-10)
+//            $0.height.equalTo(28)
+//            $0.centerY.equalTo(goButton.snp.centerY)
+//            $0.leading.equalTo(leftContainerView.snp.trailing).offset(5)
+//        }
 
     }
     
     func isDotViewVisible(_ state: Bool) {
         dotView.isHidden = !state
         selectedLabel.isHidden = !state
+        if state {
+            routeTypeImage.tintColor = .lsPrimary
+            durationLabel.textColor = .lsPrimary
+            dotView.backgroundColor = .lsPrimary
+            selectedLabel.textColor = .lsPrimary
+        }
+        else {
+            routeTypeImage.tintColor = .lsTetriary
+            durationLabel.textColor = .lsTetriary
+            dotView.backgroundColor = .lsTetriary
+            selectedLabel.textColor = .lsTetriary
+        }
     }
 }

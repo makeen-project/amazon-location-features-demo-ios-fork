@@ -10,12 +10,17 @@ import UIKit
 struct DirectionVM {
     var carTypeDistane: String = ""
     var carTypeDuration: String = ""
+    var carTypeLeave: String = ""
     var scooterTypeDuration: String = ""
     var scooterTypeDistance: String = ""
+    var scooterTypeLeave: String = ""
     var walkingTypeDuration: String = ""
     var walkingTypeDistance: String = ""
+    var walkingTypeLeave: String = ""
     var truckTypeDistance: String = ""
     var truckTypeDuration: String = ""
+    var truckTypeLeave: String = ""
+    
 }
 
 struct LeaveOptions {
@@ -143,22 +148,22 @@ final class DirectionView: UIView {
             carRouteTypeView.isHidden = false
             self.model.carTypeDistane = model.carTypeDistane
             self.model.carTypeDuration = model.carTypeDuration
-            carRouteTypeView.setDatas(distance: model.carTypeDistane, duration: model.carTypeDuration, isPreview: isPreview)
+            carRouteTypeView.setDatas(distance: model.carTypeDistane, duration: model.carTypeDuration, leaveTime: model.carTypeLeave, isPreview: isPreview)
         case .pedestrian:
             pedestrianRouteTypeView.isHidden = false
             self.model.walkingTypeDistance = model.walkingTypeDistance
             self.model.walkingTypeDuration = model.walkingTypeDuration
-            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, isPreview: isPreview)
+            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, leaveTime: model.walkingTypeDistance, isPreview: isPreview)
         case .scooter:
             scooterRouteTypeView.isHidden = false
             self.model.scooterTypeDistance = model.scooterTypeDistance
             self.model.scooterTypeDuration = model.scooterTypeDuration
-            scooterRouteTypeView.setDatas(distance: model.scooterTypeDistance, duration: model.scooterTypeDuration, isPreview: isPreview)
+            scooterRouteTypeView.setDatas(distance: model.scooterTypeDistance, duration: model.scooterTypeDuration, leaveTime: model.scooterTypeLeave, isPreview: isPreview)
         case .truck:
             truckRouteTypeView.isHidden = false
             self.model.scooterTypeDistance = model.truckTypeDistance
             self.model.truckTypeDuration = model.truckTypeDuration
-            truckRouteTypeView.setDatas(distance: model.truckTypeDistance, duration: model.truckTypeDuration, isPreview: isPreview)
+            truckRouteTypeView.setDatas(distance: model.truckTypeDistance, duration: model.truckTypeDuration, leaveTime: model.truckTypeLeave, isPreview: isPreview)
         }
     }
     

@@ -37,7 +37,7 @@ final class RouteToggleButton: UIView {
     
     public var routeOptionTitle: UILabel = {
         let label = UILabel()
-        label.text = "Leave Now"
+        label.text = ""
         label.font = .amazonFont(type: .medium, size: 14)
         return label
     }()

@@ -81,6 +81,7 @@ struct ViewsIdentifiers {
         
         static let routeEstimatedTime = "RouteEstimatedTime"
         static let routeEstimatedDistance = "RouteEstimatedDistance"
+        static let routeEstimatedLeave = "RouteEstimatedLeave"
         
         static let navigateButton = "NavigateButton"
         static let tableView = "DirectionsTableView"
