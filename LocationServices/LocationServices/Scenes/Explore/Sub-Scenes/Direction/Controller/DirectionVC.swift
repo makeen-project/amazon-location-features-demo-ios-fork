@@ -294,10 +294,6 @@ final class DirectionVC: UIViewController {
         }
     }
     
-    func calculateAllRoute() {
-        
-    }
-    
     func setupNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(grantedLocationPermissions(_:)), name: Notification.grantedLocationPermissions, object: nil)
     }
@@ -367,7 +363,7 @@ final class DirectionVC: UIViewController {
         }
         
         directionView.snp.makeConstraints {
-            $0.top.equalTo(activityIndicator.snp.bottom).offset(16)
+            $0.top.equalTo(activityIndicator.snp.bottom)
             $0.leading.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview().offset(-14)
             $0.height.equalTo(900)

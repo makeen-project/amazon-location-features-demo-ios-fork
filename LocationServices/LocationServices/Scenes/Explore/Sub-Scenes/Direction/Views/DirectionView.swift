@@ -55,19 +55,19 @@ final class DirectionView: UIView {
     private var carRouteTypeView: RouteTypeView = RouteTypeView(viewType: .car, isSelected: true)
     private var carSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lsLight3
+        view.backgroundColor = .lsLight2
         return view
     }()
     private var pedestrianRouteTypeView: RouteTypeView = RouteTypeView(viewType: .pedestrian)
     private var pedestrianSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lsLight3
+        view.backgroundColor = .lsLight2
         return view
     }()
     private var scooterRouteTypeView: RouteTypeView = RouteTypeView(viewType: .scooter)
     private var scooterSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lsLight3
+        view.backgroundColor = .lsLight2
         return view
     }()
     private var truckRouteTypeView: RouteTypeView = RouteTypeView(viewType: .truck)
