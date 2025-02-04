@@ -92,9 +92,12 @@ final class RouteOptionsView: UIView {
     
     enum Constants {
         static let collapsedHeight: Int = 72
-        static let collapsedLeaveOptionHeight: Int = 150
-        static let expandedLeaveOptionHeight: Int = 530
-        static let expandedLeaveStackOffset: Int = 100
+        
+        static let segmentLeaveOptionHeight: Int = 76
+        static let dateLeaveOptionHeight: Int = 462
+        static let segmentRouteOptionHeight: Int = 156
+        static let dateRouteOptionHeight: Int = 540
+        
         static let expandedAvoidOptionHeight: Int = 363
     }
     
@@ -126,11 +129,14 @@ final class RouteOptionsView: UIView {
     
     private lazy var leaveSegmentControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Leave now", "Leave at", "Arrive by"])
-        segment.backgroundColor = .white
+        segment.backgroundColor = .clear
+        
+        segment.tintColor = .clear
         segment.selectedSegmentTintColor = .white
         
         segment.setTitleTextAttributes(
             [
+                NSAttributedString.Key.backgroundColor: UIColor.white,
                 NSAttributedString.Key.foregroundColor: UIColor.lsPrimary,
                 NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)
             ],
@@ -138,16 +144,19 @@ final class RouteOptionsView: UIView {
         )
         segment.setTitleTextAttributes(
             [
+                NSAttributedString.Key.backgroundColor: UIColor.clear,
                 NSAttributedString.Key.foregroundColor: UIColor.lsTetriary,
                 NSAttributedString.Key.font: UIFont.amazonFont(type: .regular, size: 14)
             ],
             for: .normal
         )
 
-        segment.setWidth(100, forSegmentAt: 0)
-        segment.setWidth(100, forSegmentAt: 1)
-        segment.setWidth(100, forSegmentAt: 2)
-
+        segment.setWidth(120, forSegmentAt: 0)
+        segment.setWidth(110, forSegmentAt: 1)
+        segment.setWidth(110, forSegmentAt: 2)
+        
+        segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .compact)
         segment.addTarget(self, action: #selector(leaveSegmentChanged), for: .valueChanged)
 
         return segment
@@ -260,7 +269,7 @@ final class RouteOptionsView: UIView {
         // Collapse Leave Option if expanded
         if leaveOptionState {
             leaveOptionState = false
-            toggleOption(state: &leaveOptionState, optionsView: leaveOptions, toggleButton: leaveOptionToggleButton, expandedHeight: leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.collapsedLeaveOptionHeight : Constants.expandedLeaveOptionHeight)
+            toggleOption(state: &leaveOptionState, optionsView: leaveOptions, toggleButton: leaveOptionToggleButton, expandedHeight: leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.segmentRouteOptionHeight : Constants.dateRouteOptionHeight)
         }
         
         // Toggle Route Option
@@ -277,11 +286,11 @@ final class RouteOptionsView: UIView {
         
         // Toggle Leave Option
         leaveOptionState.toggle()
-        toggleOption(state: &leaveOptionState, optionsView: leaveOptions, toggleButton: leaveOptionToggleButton, expandedHeight: leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.collapsedLeaveOptionHeight : Constants.expandedLeaveOptionHeight)
+        toggleOption(state: &leaveOptionState, optionsView: leaveOptions, toggleButton: leaveOptionToggleButton, expandedHeight: leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.segmentRouteOptionHeight : Constants.dateRouteOptionHeight)
         
         if leaveOptionState {
             leaveOptions.snp.updateConstraints {
-                $0.height.equalTo((leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.collapsedLeaveOptionHeight : Constants.expandedLeaveOptionHeight)-Constants.expandedLeaveStackOffset)
+                $0.height.equalTo(leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.segmentLeaveOptionHeight : Constants.dateLeaveOptionHeight)
             }
         }
     }
@@ -296,21 +305,21 @@ final class RouteOptionsView: UIView {
         if leaveSegmentControl.selectedSegmentIndex == 0 {
             leaveDatePicker.isHidden = true
             leaveOptionsHandler?(LeaveOptions(leaveNow: true, leaveTime: nil, arrivalTime: nil))
-            changeRouteOptionHeight?(Constants.collapsedLeaveOptionHeight)
+            changeRouteOptionHeight?(Constants.segmentRouteOptionHeight)
         }
         else if leaveSegmentControl.selectedSegmentIndex == 1 {
             leaveDatePicker.isHidden = false
             leaveOptionsHandler?(LeaveOptions(leaveNow: nil, leaveTime: getLeaveDate(), arrivalTime: nil))
-            changeRouteOptionHeight?(Constants.expandedLeaveOptionHeight)
+            changeRouteOptionHeight?(Constants.dateRouteOptionHeight)
         }
         else if leaveSegmentControl.selectedSegmentIndex == 2 {
             leaveDatePicker.isHidden = false
             leaveOptionsHandler?(LeaveOptions(leaveNow: nil, leaveTime: nil, arrivalTime: getLeaveDate()))
-            changeRouteOptionHeight?(Constants.expandedLeaveOptionHeight)
+            changeRouteOptionHeight?(Constants.dateRouteOptionHeight)
         }
         if leaveOptionState {
             leaveOptions.snp.updateConstraints {
-                $0.height.equalTo((leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.collapsedLeaveOptionHeight : Constants.expandedLeaveOptionHeight)-Constants.expandedLeaveStackOffset)
+                $0.height.equalTo(leaveSegmentControl.selectedSegmentIndex == 0 ? Constants.segmentLeaveOptionHeight : Constants.dateLeaveOptionHeight)
             }
         }
         setLeaveOptionTitle()
@@ -454,9 +463,11 @@ final class RouteOptionsView: UIView {
         }
         
         leaveSegmentControl.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(16)
             $0.centerX.equalToSuperview()
-            $0.width.equalToSuperview().offset(-32)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            //$0.width.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
         }
         

@@ -153,7 +153,7 @@ final class DirectionView: UIView {
             pedestrianRouteTypeView.isHidden = false
             self.model.walkingTypeDistance = model.walkingTypeDistance
             self.model.walkingTypeDuration = model.walkingTypeDuration
-            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, leaveTime: model.walkingTypeDistance, isPreview: isPreview)
+            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, leaveTime: model.walkingTypeLeave, isPreview: isPreview)
         case .scooter:
             scooterRouteTypeView.isHidden = false
             self.model.scooterTypeDistance = model.scooterTypeDistance
@@ -319,11 +319,11 @@ final class DirectionView: UIView {
             $0.top.equalTo(routeOptions.snp.bottom).offset(16)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(300)
+            $0.height.equalTo(365)
         }
         
         carRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
         carSeperatorView.snp.makeConstraints {
@@ -331,7 +331,7 @@ final class DirectionView: UIView {
         }
         
         pedestrianRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
         pedestrianSeperatorView.snp.makeConstraints {
@@ -339,7 +339,7 @@ final class DirectionView: UIView {
         }
         
         scooterRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
         scooterSeperatorView.snp.makeConstraints {
@@ -347,7 +347,7 @@ final class DirectionView: UIView {
         }
         
         truckRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
         routeTypeStackView.snp.makeConstraints {

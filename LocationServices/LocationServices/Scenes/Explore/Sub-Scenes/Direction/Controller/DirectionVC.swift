@@ -74,6 +74,34 @@ final class DirectionVC: UIViewController {
         return indicator
     }()
     
+    private let headerContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
+    private var headerSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lsLight2
+        return view
+    }()
+    
+    private var directionSearchTitle: LargeTitleLabel = {
+        let label = LargeTitleLabel(labelText: StringConstant.directions)
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(.closeIcon, for: .normal)
+        button.tintColor = .closeButtonTintColor
+        button.backgroundColor = .closeButtonBackgroundColor
+        button.layer.cornerRadius = 15
+        button.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
+        return button
+    }()
+    
     lazy var directionSearchView: DirectionSearchView = {
         let titleTopOffset: CGFloat = isInSplitViewController ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
         return DirectionSearchView(titleTopOffset: titleTopOffset, isCloseButtonHidden: isInSplitViewController)
@@ -87,6 +115,10 @@ final class DirectionVC: UIViewController {
         tableView.keyboardDismissMode = .interactive
         return tableView
     }()
+    
+    @objc func closeModal() {
+        dismissView()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -325,13 +357,43 @@ final class DirectionVC: UIViewController {
         directionSearchView.changeSearchRouteName(with: firstDestination?.placeName, isDestination: false)
         directionSearchView.changeSearchRouteName(with: secondDestination?.placeName, isDestination: true)
         
-        self.view.addSubview(directionSearchView)
+        self.view.addSubview(headerContainerView)
         self.view.addSubview(scrollView)
         
+        headerContainerView.addSubview(directionSearchTitle)
+        headerContainerView.addSubview(closeButton)
+        headerContainerView.addSubview(headerSeperatorView)
+        
         scrollView.addSubview(scrollViewContentView)
+        scrollViewContentView.addSubview(directionSearchView)
         scrollViewContentView.addSubview(activityIndicator)
         scrollViewContentView.addSubview(directionView)
         scrollViewContentView.addSubview(tableView)
+        
+        headerContainerView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.height.equalTo(56)
+            $0.width.equalToSuperview()
+        }
+        
+        directionSearchTitle.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(Constants.titleOffsetiPhone)
+            $0.leading.equalToSuperview().offset(16)
+            $0.height.equalTo(28)
+            $0.bottom.equalToSuperview()
+        }
+        
+        closeButton.snp.makeConstraints {
+            $0.height.width.equalTo(30)
+            $0.top.equalToSuperview().offset(14)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        
+        headerSeperatorView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+            $0.bottom.equalToSuperview()
+        }
         
         directionSearchView.snp.makeConstraints {
             if isiPad {
@@ -342,13 +404,13 @@ final class DirectionVC: UIViewController {
             }
             $0.leading.trailing.equalToSuperview().offset(14)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(140)
+            $0.height.equalTo(86)
             $0.width.equalToSuperview()
         }
         
         scrollView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.top.equalTo(directionSearchView.snp.bottom).offset(16)
+            $0.top.equalTo(headerContainerView.snp.bottom).offset(16)
         }
         
         scrollViewContentView.snp.makeConstraints {
@@ -357,25 +419,26 @@ final class DirectionVC: UIViewController {
         }
         
         activityIndicator.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalTo(directionSearchView.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(0)
         }
         
         directionView.snp.makeConstraints {
-            $0.top.equalTo(activityIndicator.snp.bottom)
+            $0.top.equalTo(activityIndicator.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview().offset(-14)
-            $0.height.equalTo(900)
+            $0.bottom.equalToSuperview()
         }
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(activityIndicator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(900)
+            $0.height.equalTo(964)
         }
 
         directionView.isHidden = true
+        closeButton.isHidden = isInSplitViewController
     }
     
     private func calculateRoute(routeType: RouteTypes = .car,

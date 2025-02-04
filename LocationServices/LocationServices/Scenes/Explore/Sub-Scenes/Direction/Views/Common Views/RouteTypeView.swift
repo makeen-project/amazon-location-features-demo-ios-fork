@@ -202,8 +202,8 @@ final class RouteTypeView: UIView {
         }
         
         routeTypeImage.snp.makeConstraints {
-            $0.width.height.equalTo(20)
-            $0.leading.equalToSuperview().offset(10)
+            $0.width.height.equalTo(16)
+            $0.leading.equalToSuperview().offset(16)
             $0.top.equalToSuperview().offset(16)
         }
         
@@ -225,19 +225,19 @@ final class RouteTypeView: UIView {
         }
                 
         distanceLabel.snp.makeConstraints {
-            $0.top.equalTo(durationLabel.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(durationLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(durationLabel.snp.leading)
             $0.height.equalTo(18)
         }
         
         leaveLabel.snp.makeConstraints {
             $0.top.equalTo(distanceLabel.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.equalTo(durationLabel.snp.leading)
             $0.height.equalTo(18)
         }
         
         goButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-10)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(77)
             $0.height.equalTo(40)
             $0.centerY.equalToSuperview()
@@ -247,14 +247,6 @@ final class RouteTypeView: UIView {
             $0.top.bottom.leading.equalToSuperview()
             $0.trailing.equalTo(goButton.snp.leading)
         }
-        
-//        durationLabel.snp.makeConstraints {
-//            $0.leading.equalTo(goButton.snp.leading).offset(-10)
-//            $0.height.equalTo(28)
-//            $0.centerY.equalTo(goButton.snp.centerY)
-//            $0.leading.equalTo(leftContainerView.snp.trailing).offset(5)
-//        }
-
     }
     
     func isDotViewVisible(_ state: Bool) {
