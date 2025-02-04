@@ -132,6 +132,31 @@ final class RouteTypeView: UIView {
         return label
     }()
     
+    private let loaderContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let firstLoaderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lsLight3
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    private let secondLoaderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lsLight3
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    private let thirdLoaderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lsLight3
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    
     convenience init(viewType: RouteTypes, isSelected: Bool = false) {
         self.init(frame: .zero)
         self.routeTypeImage.image = viewType.image
@@ -152,6 +177,8 @@ final class RouteTypeView: UIView {
     }
     
     func setDatas(distance: String, duration: String, leaveTime: String, isPreview: Bool) {
+        containerView.isHidden = false
+        loaderContainer.isHidden = true
         self.distanceLabel.text = distance
         self.durationLabel.text = duration
         self.leaveLabel.text = leaveTime == "" ? "": "Leave at \(leaveTime)"
@@ -165,6 +192,8 @@ final class RouteTypeView: UIView {
     }
     
     func disableRouteType() {
+        containerView.isHidden = true
+        loaderContainer.isHidden = false
         self.goButton.isEnabled = false
         self.goButton.backgroundColor = .lsGrey
         self.isUserInteractionEnabled = false
@@ -246,6 +275,38 @@ final class RouteTypeView: UIView {
         selectedViewButton.snp.makeConstraints {
             $0.top.bottom.leading.equalToSuperview()
             $0.trailing.equalTo(goButton.snp.leading)
+        }
+        
+        // loader view:
+        loaderContainer.addSubview(firstLoaderView)
+        loaderContainer.addSubview(secondLoaderView)
+        loaderContainer.addSubview(thirdLoaderView)
+        self.addSubview(loaderContainer)
+        
+        
+        loaderContainer.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview()
+        }
+        
+        firstLoaderView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(16)
+            $0.width.equalTo(124)
+            $0.height.equalTo(8)
+        }
+        
+        secondLoaderView.snp.makeConstraints {
+            $0.top.equalTo(firstLoaderView.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(16)
+            $0.width.equalTo(72)
+            $0.height.equalTo(8)
+        }
+        
+        thirdLoaderView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.width.equalTo(72)
+            $0.height.equalTo(16)
         }
     }
     
