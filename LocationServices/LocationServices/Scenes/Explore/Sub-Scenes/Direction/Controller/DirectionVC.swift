@@ -12,7 +12,7 @@ struct DirectionScreenStyle {
     var backgroundColor: UIColor
 }
 
-final class DirectionVC: UIViewController {
+final class DirectionVC: UIViewController, UIScrollViewDelegate {
     
     enum Constants {
         static let mediumId = UISheetPresentationController.Detent.Identifier("medium")
@@ -76,7 +76,7 @@ final class DirectionVC: UIViewController {
     
     private let headerContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .searchBarBackgroundColor
         return view
     }()
     
@@ -169,6 +169,16 @@ final class DirectionVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         removeNotifications()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y > 0 {
+            headerContainerView.backgroundColor = .white
+            headerSeperatorView.isHidden = false
+        } else {
+            headerContainerView.backgroundColor = .searchBarBackgroundColor
+            headerSeperatorView.isHidden = true
+        }
     }
     
     func showLoadingIndicator() {
@@ -324,6 +334,8 @@ final class DirectionVC: UIViewController {
                                                    arrivalTime: option.arrivalTime)
             }
         }
+        
+        scrollView.delegate = self
     }
     
     func setupNotifications() {
@@ -439,6 +451,7 @@ final class DirectionVC: UIViewController {
 
         directionView.isHidden = true
         closeButton.isHidden = isInSplitViewController
+        headerSeperatorView.isHidden = true
     }
     
     private func calculateRoute(routeType: RouteTypes = .car,

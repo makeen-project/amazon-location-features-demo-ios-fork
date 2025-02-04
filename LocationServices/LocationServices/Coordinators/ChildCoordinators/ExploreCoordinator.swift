@@ -87,9 +87,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
-        let minHeight = 0.2
-        let mediumHeight = 0.69
-        controller.enableBottomSheetGrab(smallHeight: minHeight, mediumHeight: mediumHeight)
+        controller.enableBottomSheetGrab(smallHeight: 0.2, mediumHeight: 0.69, largeHeight: 0.93)
         
         NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": controller.getMediumDetentHeight()])
         currentBottomSheet = controller

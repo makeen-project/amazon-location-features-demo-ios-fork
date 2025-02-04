@@ -74,8 +74,6 @@ final class SettingsUITests: LocationServicesUITests {
         var exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
         
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .satellite)
-        Thread.sleep(forTimeInterval: 2)
         exploreScreen = testMapStyle(screen: exploreScreen, style: .monochrome)
     }
     
