@@ -446,7 +446,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         tableView.snp.makeConstraints {
             $0.top.equalTo(activityIndicator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(964)
+            $0.height.equalTo(1000)
         }
 
         directionView.isHidden = true

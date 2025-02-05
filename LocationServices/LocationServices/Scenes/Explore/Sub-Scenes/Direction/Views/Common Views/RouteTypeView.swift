@@ -141,19 +141,19 @@ final class RouteTypeView: UIView {
     private let firstLoaderView: UIView = {
         let view = UIView()
         view.backgroundColor = .lsLight3
-        view.layer.cornerRadius = 3
+        view.layer.cornerRadius = 4
         return view
     }()
     private let secondLoaderView: UIView = {
         let view = UIView()
         view.backgroundColor = .lsLight3
-        view.layer.cornerRadius = 3
+        view.layer.cornerRadius = 4
         return view
     }()
     private let thirdLoaderView: UIView = {
         let view = UIView()
         view.backgroundColor = .lsLight3
-        view.layer.cornerRadius = 3
+        view.layer.cornerRadius = 8
         return view
     }()
     

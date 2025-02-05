@@ -91,14 +91,14 @@ final class RouteToggleButton: UIView {
 final class RouteOptionsView: UIView {
     
     enum Constants {
-        static let collapsedHeight: Int = 72
+        static let collapsedHeight: Int = 86
         
         static let segmentLeaveOptionHeight: Int = 76
-        static let dateLeaveOptionHeight: Int = 462
-        static let segmentRouteOptionHeight: Int = 156
-        static let dateRouteOptionHeight: Int = 540
+        static let dateLeaveOptionHeight: Int = 478
+        static let segmentRouteOptionHeight: Int = 172
+        static let dateRouteOptionHeight: Int = 572
         
-        static let expandedAvoidOptionHeight: Int = 363
+        static let expandedAvoidOptionHeight: Int = 379
     }
     
     var changeRouteOptionHeight: IntHandler?
@@ -170,6 +170,16 @@ final class RouteOptionsView: UIView {
         picker.preferredDatePickerStyle = .inline
         picker.minimumDate = Date()
         picker.addTarget(self, action: #selector(leaveValueChanged(_:)), for: .valueChanged)
+        
+        for subview in picker.subviews {
+                for view in subview.subviews {
+                    if let label = view as? UILabel {
+                        label.font = UIFont.amazonFont(type: .regular, size: 17)
+                        label.textAlignment = .justified
+                    }
+                }
+            }
+        
         return picker
     }()
     
@@ -447,6 +457,7 @@ final class RouteOptionsView: UIView {
         avoidOptionStackView.addArrangedSubview(dirtRoadsOption)
         
         leaveOptionToggleButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(11)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(32)
             $0.width.equalToSuperview()
@@ -467,7 +478,6 @@ final class RouteOptionsView: UIView {
             $0.centerX.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
-            //$0.width.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
         }
         
@@ -479,7 +489,7 @@ final class RouteOptionsView: UIView {
         
         avoidOptionToggleButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(32)
+            $0.height.equalTo(36)
             $0.width.equalToSuperview()
         }
         
