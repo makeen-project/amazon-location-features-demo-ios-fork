@@ -33,6 +33,8 @@
         "MapUITests\/testMapAppearance()",
         "MapUITests\/testMapMaxZoomIn()",
         "MapUITests\/testMapMaxZoomOut()",
+        "MapUITests\/testMapStyleChanges()",
+        "MapUITests\/testMapZoomIn()",
         "MapUITests\/testMapZoomInByTap()",
         "MapUITests\/testMapZoomOut()",
         "NavigationUITests\/testRouteFerriesOption()",
