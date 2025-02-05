@@ -493,6 +493,7 @@ extension ExploreVC: CLLocationManagerDelegate {
         userCoreLocation = manager.location?.coordinate
         exploreView.update(userLocation: manager.location, userHeading: manager.heading)
         if let isNavigationMode = UserDefaultsHelper.get(for: Bool.self, key: .isNavigationMode), isNavigationMode, let route = UserDefaultsHelper.getObject(value: RouteModel.self, key: .navigationRoute), let userCoreLocation = userCoreLocation, isArrivalInProximity(userCoreLocation: userCoreLocation, route: route) {
+            NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
             self.showArrivalCard(route: route)
         }
     }
