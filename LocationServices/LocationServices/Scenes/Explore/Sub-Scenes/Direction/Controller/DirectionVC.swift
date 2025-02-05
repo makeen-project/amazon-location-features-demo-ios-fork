@@ -616,7 +616,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
             guard isDistanceValid(departureLoc: departureLoc, destinationLoc: destinationLoc) else { return }
             showLoadingIndicator()
 
-            for routeType in [RouteTypes.car, .pedestrian, .scooter, .truck] {
+            for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
                 if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, travelMode: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime) {
                     DispatchQueue.main.async {
                         self.hideLoadingIndicator()
