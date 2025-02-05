@@ -10,9 +10,13 @@ import AWSGeoRoutes
 import UIKit
 import Polyline
 
+enum LeaveType: String {
+    case leaveNow, leaveAt, arriveAt
+}
 struct DirectionPresentation {
     let route: GeoRoutesClientTypes.Route
     let travelMode: GeoRoutesClientTypes.RouteTravelMode
+    let leaveType: LeaveType
 }
 
 extension GeoRoutesClientTypes.RouteLegGeometry {

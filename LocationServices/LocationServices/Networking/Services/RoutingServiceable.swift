@@ -56,7 +56,8 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                                                         departureTime: departureTime,
                                                         arrivalTime: arrivalTime)
                 if let route = response?.routes?[safe: 0] {
-                    let model = DirectionPresentation(route: route, travelMode: travelMode)
+                    let leaveType: LeaveType = arrivalTime != nil ? .arriveAt : (departureTime != nil ? .leaveAt : .leaveNow)
+                    let model = DirectionPresentation(route: route, travelMode: travelMode, leaveType: leaveType)
                     presentationObject[travelMode] = .success(model)
                 }
                 else {

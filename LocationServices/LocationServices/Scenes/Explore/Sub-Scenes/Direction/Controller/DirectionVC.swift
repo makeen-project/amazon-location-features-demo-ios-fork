@@ -360,9 +360,9 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         } else if secondDestination?.placeName == "My Location" {
             secondDestination = currentLocation
         }
-        Task {
-            try await calculateRoute()
-        }
+//        Task {
+//            try await calculateRoute()
+//        }
     }
     
     private func setupViews() {

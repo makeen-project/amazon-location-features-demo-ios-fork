@@ -176,12 +176,12 @@ final class RouteTypeView: UIView {
        goButtonHandler?()
     }
     
-    func setDatas(distance: String, duration: String, leaveTime: String, isPreview: Bool) {
+    func setDatas(distance: String, duration: String, time: String, leaveType: LeaveType, isPreview: Bool) {
         containerView.isHidden = false
         loaderContainer.isHidden = true
         self.distanceLabel.text = distance
         self.durationLabel.text = duration
-        self.leaveLabel.text = leaveTime == "" ? "": "Leave at \(leaveTime)"
+        self.leaveLabel.text = time == "" ? "": "\(leaveType == .arriveAt ? "Leave at" : "Arrive by") \(time)"
         let isGoButtonEnabled = !distance.isEmpty && !duration.isEmpty
         self.goButton.backgroundColor = isGoButtonEnabled ? UIColor.buttonOrangeColor : .lsGrey
         self.goButton.isEnabled = isGoButtonEnabled

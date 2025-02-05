@@ -32,7 +32,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     var avoidTunnels: Bool = false
     var avoidDirtRoads: Bool = false
     
-    var leaveNow: Bool? = nil
+    var leaveNow: Bool? = true
     var leaveTime: Date? = nil
     var arrivalTime: Date? = nil
     
@@ -272,31 +272,35 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 switch data {
                 case .success(let model):
                     self.defaultTravelMode[model.travelMode] = data
-                    var leaveTime = ""
-                    if model.travelMode == .pedestrian, let time = model.route.legs?.first?.pedestrianLegDetails?.departure?.time {
-                        leaveTime = time
+                    directionVM.leaveType = model.leaveType
+                    var routeTime = ""
+                    if model.travelMode == .pedestrian, let time = model.leaveType == .arriveAt ? model.route.legs?.first?.pedestrianLegDetails?.departure?.time :
+                        model.route.legs?.last?.pedestrianLegDetails?.arrival?.time {
+                        routeTime = time
                     }
-                    else if let time = model.route.legs?.first?.vehicleLegDetails?.departure?.time {
-                        leaveTime = time
+                    else if let time = model.leaveType == .arriveAt ?
+                                model.route.legs?.first?.vehicleLegDetails?.departure?.time :
+                                model.route.legs?.last?.vehicleLegDetails?.arrival?.time {
+                        routeTime = time
                     }
-                    leaveTime = Date.convertStringToDate(leaveTime, format: "yyyy-MM-dd'T'HH:mm:ssXXX")?.convertTimeString() ?? ""
+                    routeTime = Date.convertStringToDate(routeTime, format: "yyyy-MM-dd'T'HH:mm:ssXXX")?.convertTimeString() ?? ""
                     switch model.travelMode {
                     case .car:
                         directionVM.carTypeDistane = model.route.summary?.distance.formatToKmString() ?? ""
                         directionVM.carTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
-                        directionVM.carTypeLeave = leaveTime
+                        directionVM.carTypeTime = routeTime
                     case .scooter:
                         directionVM.scooterTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
                         directionVM.scooterTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
-                        directionVM.scooterTypeLeave = leaveTime
+                        directionVM.scooterTypeTime = routeTime
                     case .pedestrian:
                         directionVM.walkingTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
                         directionVM.walkingTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
-                        directionVM.walkingTypeLeave = leaveTime
+                        directionVM.walkingTypeTime = routeTime
                     case .truck:
                         directionVM.truckTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
                         directionVM.truckTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
-                        directionVM.truckTypeLeave = leaveTime
+                        directionVM.truckTypeTime = routeTime
                     default: break
                     }
                 case .failure:
