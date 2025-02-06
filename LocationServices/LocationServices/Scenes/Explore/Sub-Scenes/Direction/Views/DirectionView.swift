@@ -167,6 +167,27 @@ final class DirectionView: UIView {
         }
     }
     
+    func hideLoader(isPreview: Bool, routeType: RouteTypes) {
+        self.isPreview = isPreview
+        if self.model == nil {
+            self.model = DirectionVM()
+        }
+        switch routeType {
+        case .car:
+            carRouteTypeView.isHidden = false
+            carRouteTypeView.hideLoader(isPreview: isPreview)
+        case .pedestrian:
+            pedestrianRouteTypeView.isHidden = false
+            pedestrianRouteTypeView.hideLoader(isPreview: isPreview)
+        case .scooter:
+            scooterRouteTypeView.isHidden = false
+            scooterRouteTypeView.hideLoader(isPreview: isPreview)
+        case .truck:
+            truckRouteTypeView.isHidden = false
+            truckRouteTypeView.hideLoader(isPreview: isPreview)
+        }
+    }
+    
     public func disableRouteTypesView() {
         carRouteTypeView.disableRouteType()
         scooterRouteTypeView.disableRouteType()

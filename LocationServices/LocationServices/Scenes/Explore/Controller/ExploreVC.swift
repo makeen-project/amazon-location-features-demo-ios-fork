@@ -406,13 +406,9 @@ extension ExploreVC {
         if let datas = notification.userInfo?["route"] as? GeoRoutesClientTypes.Route,
         let routeModel = notification.userInfo?["routeModel"] as? RouteModel {
             viewModel.activateRoute(route: routeModel)
-            if !routeModel.isPreview {
-                mapNavigationView.isHidden = false
-                updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
-                exploreView.focusNavigationMode()
-            } else {
-                exploreView.focus(on: routeModel.departurePosition)
-            }
+            mapNavigationView.isHidden = false
+            updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
+            exploreView.focusNavigationMode()
             mapNavigationActionsView.isHidden = !self.isInSplitViewController
             let firstDestination = MapModel(placeName: routeModel.departurePlaceName, placeAddress: routeModel.departurePlaceAddress, placeLat: routeModel.departurePosition.latitude, placeLong: routeModel.departurePosition.longitude)
             let secondDestination = MapModel(placeName: routeModel.destinationPlaceName, placeAddress: routeModel.destinationPlaceAddress, placeLat: routeModel.destinationPosition.latitude, placeLong: routeModel.destinationPosition.longitude)

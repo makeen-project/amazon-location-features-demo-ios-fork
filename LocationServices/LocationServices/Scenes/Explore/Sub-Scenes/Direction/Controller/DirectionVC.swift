@@ -532,31 +532,40 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         
         showLoadingIndicator()
         self.tableView.isHidden = true
-
-        if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLocation,
-                                                                            departurePosition: departureLocation,
-                                                                            travelMode: routeType,
-                                                                            avoidFerries: avoidFerries,
-                                                                            avoidTolls: avoidTolls,
-                                                                            avoidUturns: avoidUturns,
-                                                                            avoidTunnels: avoidTunnels,
-                                                                            avoidDirtRoads: avoidDirtRoads,
-                                                                            leaveNow: leaveNow,
-                                                                            leaveTime: leaveTime,
-                                                                            arrivalTime: arrivalTime) {
-            DispatchQueue.main.async {
+        do {
+            if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLocation,
+                                                                                departurePosition: departureLocation,
+                                                                                travelMode: routeType,
+                                                                                avoidFerries: avoidFerries,
+                                                                                avoidTolls: avoidTolls,
+                                                                                avoidUturns: avoidUturns,
+                                                                                avoidTunnels: avoidTunnels,
+                                                                                avoidDirtRoads: avoidDirtRoads,
+                                                                                leaveNow: leaveNow,
+                                                                                leaveTime: leaveTime,
+                                                                                arrivalTime: arrivalTime) {
+                DispatchQueue.main.async {
+                    self.directionView.isHidden = false
+                    let isPreview = self.firstDestination?.placeName != "My Location"
+                    self.directionView.setup(model: directionVM, isPreview: isPreview, routeType: routeType)
+                    self.directionView.showOptionsStackView()
+                    self.setupSearchTitleDestinations()
+                    self.view.endEditing(true)
+                    self.sendDirectionsToExploreVC(data: data,
+                                                   departureLocation: departureLocation,
+                                                   destinationLocation: destinationLocation,
+                                                   routeType: routeType)
+                    self.hideLoadingIndicator()
+                }
+            }
+            else {
                 self.directionView.isHidden = false
                 let isPreview = self.firstDestination?.placeName != "My Location"
-                self.directionView.setup(model: directionVM, isPreview: isPreview, routeType: routeType)
-                self.directionView.showOptionsStackView()
-                self.setupSearchTitleDestinations()
-                self.view.endEditing(true)
-                self.sendDirectionsToExploreVC(data: data,
-                                               departureLocation: departureLocation,
-                                               destinationLocation: destinationLocation,
-                                               routeType: routeType)
-                self.hideLoadingIndicator()
+                self.directionView.hideLoader(isPreview: isPreview, routeType: routeType)
             }
+        }
+        catch {
+            print(error)
         }
         
     }

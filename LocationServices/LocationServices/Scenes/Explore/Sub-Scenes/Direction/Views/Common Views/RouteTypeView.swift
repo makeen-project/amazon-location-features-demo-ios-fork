@@ -199,6 +199,12 @@ final class RouteTypeView: UIView {
         self.isUserInteractionEnabled = false
     }
     
+    func hideLoader( isPreview: Bool) {
+        containerView.isHidden = false
+        loaderContainer.isHidden = true
+        let goButtonTitle = isPreview ? StringConstant.preview : StringConstant.go
+    }
+    
     func updateSelectedLabel(state: Bool) {
         self.selectedLabel.text = state ? "Selected" : ""
     }
