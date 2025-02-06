@@ -90,7 +90,7 @@ final class ExploreViewModelTests: XCTestCase {
     }
 
     func testReCalculateRouteReturnSuccess() async throws {
-        let direction = DirectionPresentation(route: GeoRoutesClientTypes.Route(), travelMode: .car)
+        let direction = DirectionPresentation(route: GeoRoutesClientTypes.Route(), travelMode: .car, leaveType: .leaveNow)
         locationService.mockGetPlaceResult = .success(place)
         locationService.mockSearchWithPositionResult = .success([search])
         routingService.putResult = [GeoRoutesClientTypes.RouteTravelMode.car: .success(direction)]
