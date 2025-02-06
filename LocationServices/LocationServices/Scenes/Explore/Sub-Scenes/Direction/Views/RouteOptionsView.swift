@@ -349,7 +349,7 @@ final class RouteOptionsView: UIView {
     private func setLeaveOptionTitle() {
         let selectedDate = leaveDatePicker.date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
+        dateFormatter.dateFormat = "MM/dd hh:mm a"
         if leaveSegmentControl.selectedSegmentIndex == 0 {
             leaveOptionToggleButton.routeOptionTitle.textColor = .lsTetriary
             leaveOptionToggleButton.routeOptionTitle.text = "Leave now"

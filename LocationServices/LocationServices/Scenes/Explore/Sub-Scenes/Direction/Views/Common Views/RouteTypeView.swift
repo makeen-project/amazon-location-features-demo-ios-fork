@@ -181,7 +181,7 @@ final class RouteTypeView: UIView {
         loaderContainer.isHidden = true
         self.distanceLabel.text = distance
         self.durationLabel.text = duration
-        self.leaveLabel.text = time == "" ? "": "\(leaveType == .arriveAt ? "Leave at" : "Arrive by") \(time)"
+        self.leaveLabel.text = time == "" || leaveType != .arriveAt ? "": "Leave at \(time)"
         let isGoButtonEnabled = !distance.isEmpty && !duration.isEmpty
         self.goButton.backgroundColor = isGoButtonEnabled ? UIColor.buttonOrangeColor : .lsGrey
         self.goButton.isEnabled = isGoButtonEnabled
@@ -203,6 +203,7 @@ final class RouteTypeView: UIView {
         containerView.isHidden = false
         loaderContainer.isHidden = true
         let goButtonTitle = isPreview ? StringConstant.preview : StringConstant.go
+        self.goButton.setTitle(goButtonTitle, for: .normal)
     }
     
     func updateSelectedLabel(state: Bool) {

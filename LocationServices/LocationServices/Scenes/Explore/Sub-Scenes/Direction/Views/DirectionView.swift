@@ -323,10 +323,10 @@ final class DirectionView: UIView {
         routeTypeStackView.removeArrangedSubViews()
         routeTypeStackView.addArrangedSubview(carRouteTypeView)
         routeTypeStackView.addArrangedSubview(carSeperatorView)
-        routeTypeStackView.addArrangedSubview(pedestrianRouteTypeView)
-        routeTypeStackView.addArrangedSubview(pedestrianSeperatorView)
         routeTypeStackView.addArrangedSubview(scooterRouteTypeView)
         routeTypeStackView.addArrangedSubview(scooterSeperatorView)
+        routeTypeStackView.addArrangedSubview(pedestrianRouteTypeView)
+        routeTypeStackView.addArrangedSubview(pedestrianSeperatorView)
         routeTypeStackView.addArrangedSubview(truckRouteTypeView)
         
         routeOptions.snp.makeConstraints {
