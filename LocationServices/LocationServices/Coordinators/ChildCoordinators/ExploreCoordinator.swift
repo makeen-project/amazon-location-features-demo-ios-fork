@@ -100,7 +100,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.searchScreenStyle = searchScreenStyle
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
-        controller.enableBottomSheetGrab(largeHeight: 1)
+        controller.enableBottomSheetGrab(largeHeight: 0.93)
         currentBottomSheet = controller
     }
     
@@ -109,7 +109,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
-        controller.enableBottomSheetGrab()
+        controller.enableBottomSheetGrab(largeHeight: 0.93)
         currentBottomSheet = controller
     }
     

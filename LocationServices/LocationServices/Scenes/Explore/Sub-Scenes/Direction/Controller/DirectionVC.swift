@@ -143,6 +143,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         navigationItem.leftBarButtonItem = barButtonItem
         
         tableView.isHidden = isRoutingOptionsEnabled
+        updateScrollViewContentSize()
         if isRoutingOptionsEnabled {
             sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
         } else {
@@ -206,6 +207,16 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    func updateScrollViewContentSize() {
+        let tableViewHeight: CGFloat = tableView.isHidden ? CGFloat(directionView.routeOptionHeight+RouteOptionsView.Constants.collapsedHeight+96) : 1000
+        let otherContentHeight: CGFloat = (89*4) // 4 Route Travel modes
+        let totalContentHeight = tableViewHeight + otherContentHeight
+        scrollViewContentView.snp.updateConstraints {
+            $0.height.equalTo(totalContentHeight)
+        }
+
+    }
+    
     private func changeExploreActionButtonsVisibility(geofenceIsHidden: Bool, directionIsHidden: Bool, mapStyleIsHidden: Bool) {
         let userInfo = [
             StringConstant.NotificationsInfoField.geofenceIsHidden: geofenceIsHidden,
@@ -239,6 +250,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
             self?.isDestination = model.isDestination
             self?.directionView.isHidden = true
             self?.tableView.isHidden = false
+            self?.updateScrollViewContentSize()
             Task {
                 await self?.viewModel.searchWithSuggestion(text: model.searchText,
                                                             userLat: self?.userLocation?.lat,
@@ -250,6 +262,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
             self?.isDestination = model.isDestination
             self?.directionView.isHidden = true
             self?.tableView.isHidden = false
+            self?.updateScrollViewContentSize()
             Task {
                try await self?.viewModel.searchWith(text: model.searchText,
                                            userLat: self?.userLocation?.lat,
@@ -333,6 +346,10 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                                    leaveTime: option.leaveTime,
                                                    arrivalTime: option.arrivalTime)
             }
+        }
+        
+        directionView.heightChangedHandler = { [weak self] height in
+            self?.updateScrollViewContentSize()
         }
         
         scrollView.delegate = self
@@ -428,6 +445,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         scrollViewContentView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
             $0.width.equalTo(scrollView.frameLayoutGuide)
+            $0.height.equalTo(1000)
         }
         
         activityIndicator.snp.makeConstraints {
@@ -532,6 +550,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         
         showLoadingIndicator()
         self.tableView.isHidden = true
+        self.updateScrollViewContentSize()
         do {
             if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLocation,
                                                                                 departurePosition: departureLocation,
@@ -632,6 +651,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                         self.directionView.isHidden = false
                         self.tableView.isHidden = true
                         self.directionView.showOptionsStackView()
+                        self.updateScrollViewContentSize()
                     }
                     
                     let isPreview = self.firstDestination?.placeName != "My Location"
@@ -767,6 +787,12 @@ extension DirectionVC: DirectionViewOutputDelegate {
             }
             UserDefaultsHelper.saveObject(value: routeModel, key: .navigationRoute)
             UserDefaultsHelper.save(value: true, key: .isNavigationMode)
+            if let departurePosition = routeModel?.departurePosition {
+                let userInfo = ["coordinates": departurePosition]
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    NotificationCenter.default.post(name: Notification.focusOnLocation, object: nil, userInfo: userInfo)
+                }
+            }
         case .failure(let error):
             let alertModel = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
             self.showAlert(alertModel)

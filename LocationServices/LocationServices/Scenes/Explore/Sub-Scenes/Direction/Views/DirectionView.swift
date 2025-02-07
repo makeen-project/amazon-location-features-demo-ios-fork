@@ -36,7 +36,7 @@ final class DirectionView: UIView {
     
     private var model: DirectionVM!
     
-    private var routeOptionHeight = NumberConstants.routeOptionHeight
+    public var routeOptionHeight = NumberConstants.routeOptionHeight
 
     private var routeOptions: RouteOptionsView = RouteOptionsView()
     
@@ -46,6 +46,7 @@ final class DirectionView: UIView {
     var avoidTunnels: BoolHandler?
     var avoidDirtRoads: BoolHandler?
     var leaveOptionsHandler: Handler<LeaveOptions>?
+    var heightChangedHandler: Handler<Int>?
     
     private var routeTypesContainerView: UIView = {
         let view = UIView()
@@ -126,6 +127,7 @@ final class DirectionView: UIView {
         self.accessibilityIdentifier = ViewsIdentifiers.Routing.routeTypesContainer
         routeOptions.changeRouteOptionHeight = { [weak self] value in
             self?.routeOptionHeight = value
+            self?.heightChangedHandler?(value)
             self?.updateRouteOptionHeight()
         }
         

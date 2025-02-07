@@ -32,6 +32,7 @@ extension Notification {
     static let grantedLocationPermissions = Notification.Name("GrantedLocationPermissions")
     static let validateMapColor = Notification.Name("ValidateMapColor")
     static let validatePoliticalView = Notification.Name("ValidatePoliticalView")
+    static let focusOnLocation = Notification.Name("focusOnLocation")
     
     static let searchAppearanceChanged = Notification.Name("SearchAppearanceChanged")
     static let trackingAppearanceChanged = Notification.Name("TrackingAppearanceChanged")

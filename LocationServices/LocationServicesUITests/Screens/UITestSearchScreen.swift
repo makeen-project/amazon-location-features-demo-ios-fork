@@ -139,7 +139,7 @@ struct UITestSearchScreen: UITestScreen {
     }
     
     private func getSearchBar() -> XCUIElement {
-        let searchBar = app.textFields[Identifiers.searchTextField]
+        let searchBar = app.textFields[Identifiers.searchTextField].firstMatch
         XCTAssertTrue(searchBar.waitForExistence(timeout: UITestWaitTime.regular.time))
         return searchBar
     }

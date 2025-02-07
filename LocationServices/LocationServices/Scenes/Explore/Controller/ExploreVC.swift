@@ -251,6 +251,9 @@ extension ExploreVC {
         NotificationCenter.default.addObserver(self, selector: #selector(exploreActionButtonsVisibilityChanged(_:)), name: Notification.exploreActionButtonsVisibilityChanged, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerItems(_:)), name: Notification.updateMapLayerItems, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(focusOnLocation(_:)), name: Notification.focusOnLocation, object: nil)
+
     }
     
     private func setupKeyboardNotifications() {
@@ -396,6 +399,12 @@ extension ExploreVC {
         }
     }
     
+    @objc private func focusOnLocation(_ notification: Notification) {
+        if let location = notification.userInfo?["coordinates"] as? CLLocationCoordinate2D {
+            self.exploreView.focus(on: location)
+        }
+    }
+    
     @objc private func selectPlace(_ notification: Notification) {
         if let place = notification.userInfo?["place"] as? MapModel {
             self.exploreView.show(selectedPlace: place)
@@ -408,7 +417,7 @@ extension ExploreVC {
             viewModel.activateRoute(route: routeModel)
             mapNavigationView.isHidden = false
             updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
-            exploreView.focusNavigationMode()
+            
             mapNavigationActionsView.isHidden = !self.isInSplitViewController
             let firstDestination = MapModel(placeName: routeModel.departurePlaceName, placeAddress: routeModel.departurePlaceAddress, placeLat: routeModel.departurePosition.latitude, placeLong: routeModel.departurePosition.longitude)
             let secondDestination = MapModel(placeName: routeModel.destinationPlaceName, placeAddress: routeModel.destinationPlaceAddress, placeLat: routeModel.destinationPosition.latitude, placeLong: routeModel.destinationPosition.longitude)
@@ -416,6 +425,7 @@ extension ExploreVC {
             self.delegate?.showNavigationview(route: datas,
                                               firstDestination: firstDestination,
                                               secondDestination: secondDestination)
+            exploreView.focus(on: routeModel.departurePosition)
         }
     }
     
