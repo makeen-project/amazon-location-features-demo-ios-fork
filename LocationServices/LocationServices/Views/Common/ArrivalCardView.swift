@@ -139,7 +139,6 @@ final class ArrivalCardView: UIView {
     
     @objc private func poiCardDismiss() {
         delegate?.dismissArrivalView()
-        NotificationCenter.default.post(name: Notification.Name("POICardDismissed"), object: nil)
     }
     
     func setupViews() {
