@@ -53,7 +53,7 @@ extension Date {
     }
     
     func convertTimeString() -> String {
-        return convertToString(format: "h:mm a")
+        return convertToString(format: "hh:mm a")
     }
     
     func convertDateString() -> String {
@@ -75,6 +75,7 @@ extension Date {
         let dateFormatter = Self.dateFormatter
         if dateFormatter.dateFormat != format {
             dateFormatter.dateFormat = format
+            dateFormatter.locale = Locale(identifier: "en_US")
         }
         
         return dateFormatter.string(from: self)

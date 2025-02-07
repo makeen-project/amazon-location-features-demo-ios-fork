@@ -169,6 +169,7 @@ final class RouteOptionsView: UIView {
         picker.datePickerMode = .dateAndTime
         picker.preferredDatePickerStyle = .inline
         picker.minimumDate = Date()
+        picker.locale = Locale(identifier: "en_US")
         picker.addTarget(self, action: #selector(leaveValueChanged(_:)), for: .valueChanged)
         
         for subview in picker.subviews {
@@ -349,7 +350,7 @@ final class RouteOptionsView: UIView {
     private func setLeaveOptionTitle() {
         let selectedDate = leaveDatePicker.date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd hh:mm a"
+        dateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
         if leaveSegmentControl.selectedSegmentIndex == 0 {
             leaveOptionToggleButton.routeOptionTitle.textColor = .lsTetriary
             leaveOptionToggleButton.routeOptionTitle.text = "Leave now"
