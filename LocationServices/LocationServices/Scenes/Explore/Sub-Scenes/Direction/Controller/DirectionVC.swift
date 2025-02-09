@@ -787,12 +787,6 @@ extension DirectionVC: DirectionViewOutputDelegate {
             }
             UserDefaultsHelper.saveObject(value: routeModel, key: .navigationRoute)
             UserDefaultsHelper.save(value: true, key: .isNavigationMode)
-            if let departurePosition = routeModel?.departurePosition {
-                let userInfo = ["coordinates": departurePosition]
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    NotificationCenter.default.post(name: Notification.focusOnLocation, object: nil, userInfo: userInfo)
-                }
-            }
         case .failure(let error):
             let alertModel = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
             self.showAlert(alertModel)

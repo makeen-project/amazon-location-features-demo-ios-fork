@@ -154,6 +154,7 @@ extension ExploreVC: ExploreViewOutputDelegate {
     
     func showArrivalCard(route: RouteModel) {
         exploreView.shouldBottomStackViewPositionUpdate(state: true)
+        exploreView.hideGeoFence(state: true)
         delegate?.showArrivalCardScene(route: route)
     }
     
@@ -425,7 +426,7 @@ extension ExploreVC {
             self.delegate?.showNavigationview(route: datas,
                                               firstDestination: firstDestination,
                                               secondDestination: secondDestination)
-            exploreView.focus(on: routeModel.departurePosition)
+            exploreView.focusNavigationMode()
         }
     }
     
