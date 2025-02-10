@@ -85,7 +85,6 @@ final class RouteTypeView: UIView {
     
     private var durationLabel: UILabel = {
         let label = UILabel()
-        label.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedTime
         label.font = .amazonFont(type: .bold, size: 14)
         label.textColor = .lsTetriary
         label.textAlignment = .right
@@ -97,7 +96,6 @@ final class RouteTypeView: UIView {
     
     private var distanceLabel: UILabel = {
         let label = UILabel()
-        label.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedDistance
         label.font = .amazonFont(type: .regular, size: 14)
         label.textColor = .lsGrey
         label.text = ""
@@ -107,7 +105,6 @@ final class RouteTypeView: UIView {
     
     private var leaveLabel: UILabel = {
         let label = UILabel()
-        label.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedLeave
         label.font = .amazonFont(type: .regular, size: 14)
         label.textColor = .lsGrey
         label.text = ""
@@ -161,11 +158,20 @@ final class RouteTypeView: UIView {
         self.init(frame: .zero)
         self.routeTypeImage.image = viewType.image
         isDotViewVisible(isSelected)
+        setAccessibilityIdentifier(viewType: viewType)
     }
  
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+    }
+    
+    func setAccessibilityIdentifier(viewType: RouteTypes) {
+        containerView.accessibilityIdentifier = ViewsIdentifiers.Routing.routeMainContainer+viewType.title
+        leftContainerView.accessibilityIdentifier = ViewsIdentifiers.Routing.routeLeftContainer+viewType.title
+        durationLabel.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedTime+viewType.title
+        distanceLabel.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedDistance+viewType.title
+        leaveLabel.accessibilityIdentifier = ViewsIdentifiers.Routing.routeEstimatedLeave+viewType.title
     }
     
     @objc func routeTypeChanged() {

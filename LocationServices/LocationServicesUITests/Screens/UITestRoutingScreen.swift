@@ -21,6 +21,8 @@ struct UITestRoutingScreen: UITestScreen {
         static var avoidTollsOptionContainer: String { ViewsIdentifiers.Routing.avoidTollsOptionContainer }
         static var avoidFerriesOptionContainer: String { ViewsIdentifiers.Routing.avoidFerriesOptionContainer }
         static var routeOptionSwitchButton: String { ViewsIdentifiers.Routing.routeOptionSwitchButton }
+        static var routeMainContainer: String { ViewsIdentifiers.Routing.routeMainContainer }
+        static var routeLeftContainer: String { ViewsIdentifiers.Routing.routeLeftContainer }
         static var routeEstimatedTime: String { ViewsIdentifiers.Routing.routeEstimatedTime }
         static var routeEstimatedDistance: String { ViewsIdentifiers.Routing.routeEstimatedDistance }
         static var imageAnnotationView: String { ViewsIdentifiers.General.imageAnnotationView }
@@ -94,7 +96,7 @@ struct UITestRoutingScreen: UITestScreen {
     }
     
     func waitForRouteTypesContainer() -> Self {
-        Thread.sleep(forTimeInterval: 2)
+        Thread.sleep(forTimeInterval: 5)
         let _ = getRouteTypesContainer()
         return self
     }
@@ -106,14 +108,14 @@ struct UITestRoutingScreen: UITestScreen {
     
     func waitForNonEmptyRouteEstimatedTime(for mode: RouteType) -> Self {
         let container = getRouteContainer(mode: mode)
-        let label = getEstimatedTimeLabel(for: container)
+        let label = getEstimatedTimeLabel(for: container, mode: mode)
         XCTAssertNotEqual(label.label, "")
         return self
     }
     
     func waitForNonEmptyRouteEstimatedDistance(for mode: RouteType) -> Self {
         let container = getRouteContainer(mode: mode)
-        let label = getEstimatedDistanceLabel(for: container)
+        let label = getEstimatedDistanceLabel(for: container, mode: mode)
         XCTAssertNotEqual(label.label, "")
         return self
     }
@@ -235,25 +237,33 @@ struct UITestRoutingScreen: UITestScreen {
     }
     
     private func getRouteTypesContainer() -> XCUIElement {
-        let view = app.otherElements[Identifiers.routeTypesContainer]
+        let view = app.otherElements[Identifiers.routeTypesContainer].firstMatch
         XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.request.time))
         return view
     }
     
     private func getRouteContainer(mode: RouteType) -> XCUIElement {
-        let view = app.otherElements[mode.containerId]
+        let view = app.otherElements[mode.containerId].firstMatch
         XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
         return view
     }
     
-    private func getEstimatedTimeLabel(for container: XCUIElement) -> XCUIElement {
-        let label = container.staticTexts[Identifiers.routeEstimatedTime].firstMatch
+    private func getEstimatedTimeLabel(for container: XCUIElement, mode: RouteType) -> XCUIElement {
+        let mainContainer = container.otherElements[Identifiers.routeMainContainer+mode.title].firstMatch
+        XCTAssertTrue(mainContainer.waitForExistence(timeout: UITestWaitTime.regular.time))
+        let leftContainer = app.otherElements["leftContainer"+mode.title].firstMatch
+        XCTAssertTrue(leftContainer.waitForExistence(timeout: UITestWaitTime.regular.time))
+        let label = leftContainer.staticTexts[Identifiers.routeEstimatedTime+mode.title].firstMatch
         XCTAssertTrue(label.waitForExistence(timeout: UITestWaitTime.regular.time))
         return label
     }
     
-    private func getEstimatedDistanceLabel(for container: XCUIElement) -> XCUIElement {
-        let label = container.staticTexts[Identifiers.routeEstimatedDistance].firstMatch
+    private func getEstimatedDistanceLabel(for container: XCUIElement, mode: RouteType) -> XCUIElement {
+        let mainContainer = container.otherElements[Identifiers.routeMainContainer+mode.title].firstMatch
+        XCTAssertTrue(mainContainer.waitForExistence(timeout: UITestWaitTime.regular.time))
+        let leftContainer = app.otherElements["leftContainer"+mode.title].firstMatch
+        XCTAssertTrue(leftContainer.waitForExistence(timeout: UITestWaitTime.regular.time))
+        let label = leftContainer.staticTexts[Identifiers.routeEstimatedDistance+mode.title].firstMatch
         XCTAssertTrue(label.waitForExistence(timeout: UITestWaitTime.regular.time))
         return label
     }

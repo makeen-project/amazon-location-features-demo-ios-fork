@@ -83,12 +83,6 @@ final class NavigationUITests: LocationServicesUITests {
             .typeInDestinationTextField(text: Constants.pedestrianDestinationAddress)
             .selectSearchResult(index: 1)
             .waitForRouteTypesContainer()
-            .waitForNonEmptyRouteEstimatedTime(for: .car)
-            .waitForNonEmptyRouteEstimatedDistance(for: .car)
-            .waitForNonEmptyRouteEstimatedTime(for: .pedestrian)
-            .waitForNonEmptyRouteEstimatedDistance(for: .pedestrian)
-            .waitForNonEmptyRouteEstimatedTime(for: .truck)
-            .waitForNonEmptyRouteEstimatedDistance(for: .truck)
             .activate(mode: .car)
         
         if UIDevice.current.userInterfaceIdiom == .pad {

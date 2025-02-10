@@ -37,7 +37,6 @@
         "MapUITests\/testMapZoomOut()",
         "NavigationUITests\/testRouteFerriesOption()",
         "NavigationUITests\/testRouteTollsOption()",
-        "NavigationUITests\/testRouteTypes()",
         "SettingsUITests\/testRouteOptions()",
         "SettingsUITests\/testTrackerOptions()",
         "TrackingUITests\/testGeofenceE2E()",

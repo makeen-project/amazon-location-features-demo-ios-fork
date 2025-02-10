@@ -426,7 +426,12 @@ extension ExploreVC {
             self.delegate?.showNavigationview(route: datas,
                                               firstDestination: firstDestination,
                                               secondDestination: secondDestination)
-            exploreView.focusNavigationMode()
+            if !routeModel.isPreview {
+                exploreView.focusNavigationMode()
+            }
+            else {
+                exploreView.focus(on: routeModel.departurePosition)
+            }
         }
     }
     

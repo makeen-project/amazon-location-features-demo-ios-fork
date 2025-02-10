@@ -241,7 +241,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     
     func focus(on coordinates: CLLocationCoordinate2D) {
         guard CLLocationCoordinate2DIsValid(coordinates) else { return }
-        mapView.setCenter(coordinates, zoomLevel: Constants.mapZoomValue, direction: mapView.direction, animated: true)
+        mapView.setCenter(coordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true)
     }
     
     func isLocateMeButtonDisabled(state: Bool, animatedUserLocation: Bool = true) {
