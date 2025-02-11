@@ -14,7 +14,13 @@ protocol AWSRoutingServiceProtocol {
                         destinationPosition: CLLocationCoordinate2D,
                         travelMode: GeoRoutesClientTypes.RouteTravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool) async throws -> CalculateRoutesOutput?
+                        avoidTolls: Bool,
+                        avoidUturns: Bool,
+                        avoidTunnels: Bool,
+                        avoidDirtRoads: Bool,
+                        departNow: Bool?,
+                        departureTime: Date?,
+                        arrivalTime: Date?) async throws -> CalculateRoutesOutput?
 }
 
 extension AWSRoutingServiceProtocol {
@@ -22,16 +28,28 @@ extension AWSRoutingServiceProtocol {
                         destinationPosition: CLLocationCoordinate2D,
                         travelMode: GeoRoutesClientTypes.RouteTravelMode,
                         avoidFerries: Bool,
-                        avoidTolls: Bool) async throws -> CalculateRoutesOutput? {
+                        avoidTolls: Bool,
+                        avoidUturns: Bool,
+                        avoidTunnels: Bool,
+                        avoidDirtRoads: Bool,
+                        departNow: Bool?,
+                        departureTime: Date?,
+                        arrivalTime: Date?) async throws -> CalculateRoutesOutput? {
         var routeAvoidanceOptions: GeoRoutesClientTypes.RouteAvoidanceOptions? = nil
-        if travelMode == .car {
-            routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(ferries: avoidFerries, tollRoads: avoidTolls)
+        if travelMode == .car || travelMode == .truck {
+            routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(dirtRoads: avoidDirtRoads, ferries: avoidFerries, tollRoads: avoidTolls, tunnels: avoidTunnels, uTurns: avoidUturns)
+        }
+        else {
+            routeAvoidanceOptions = GeoRoutesClientTypes.RouteAvoidanceOptions(dirtRoads: avoidDirtRoads, ferries: avoidFerries, tollRoads: avoidTolls, tunnels: avoidTunnels)
         }
         let origin = [depaturePosition.longitude, depaturePosition.latitude]
         let destination = [destinationPosition.longitude, destinationPosition.latitude]
         let legAdditionalFeatures: [GeoRoutesClientTypes.RouteLegAdditionalFeature] = [.travelStepInstructions, .summary]
-        
-        let input = CalculateRoutesInput(avoid: routeAvoidanceOptions, departNow: true, destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .simple, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
+        var departNow = departNow
+        if departureTime != nil || arrivalTime != nil {
+            departNow = nil
+        }
+        let input = CalculateRoutesInput(arrivalTime: arrivalTime?.convertDateToIsoString(), avoid: routeAvoidanceOptions, departNow: departNow, departureTime: departureTime?.convertDateToIsoString(), destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .flexiblePolyline, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
         
         if let client = AmazonLocationClient.getRoutesClient() {
             let result = try await client.calculateRoutes(input: input)

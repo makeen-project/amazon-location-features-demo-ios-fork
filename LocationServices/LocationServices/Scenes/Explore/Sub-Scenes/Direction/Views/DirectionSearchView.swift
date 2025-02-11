@@ -100,28 +100,6 @@ final class DirectionSearchView: UIView {
         return stackView
     }()
     
-    private let headerContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }()
-    
-    private var directionSearchTitle: LargeTitleLabel = {
-        let label = LargeTitleLabel(labelText: StringConstant.directions)
-        label.numberOfLines = 2
-        return label
-    }()
-    
-    private lazy var closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(.closeIcon, for: .normal)
-        button.tintColor = .closeButtonTintColor
-        button.backgroundColor = .closeButtonBackgroundColor
-        button.layer.cornerRadius = 15
-        button.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
-        return button
-    }()
-    
     private lazy var swapButton: UIButton = {
         var button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.Routing.swapButton
@@ -148,7 +126,6 @@ final class DirectionSearchView: UIView {
         self.titleTopOffset = titleTopOffset
         setupDelegates()
         setupViews()
-        closeButton.isHidden = isCloseButtonHidden
     }
     
     override init(frame: CGRect) {
@@ -189,9 +166,6 @@ final class DirectionSearchView: UIView {
         iconStackView.addArrangedSubview(secondDestinationImage)
         
         self.addSubview(topStackView)
-        topStackView.addArrangedSubview(headerContainerView)
-        headerContainerView.addSubview(directionSearchTitle)
-        headerContainerView.addSubview(closeButton)
         
         topStackView.addArrangedSubview(containerView)
         containerView.addSubview(iconStackView)
@@ -205,19 +179,6 @@ final class DirectionSearchView: UIView {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.bottom.equalToSuperview()
-        }
-        
-        directionSearchTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(titleTopOffset)
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(28)
-            $0.bottom.equalToSuperview()
-        }
-        
-        closeButton.snp.makeConstraints {
-            $0.height.width.equalTo(30)
-            $0.top.equalToSuperview().offset(14)
-            $0.trailing.equalToSuperview()
         }
         
         containerView.snp.makeConstraints {
@@ -272,12 +233,17 @@ final class DirectionSearchView: UIView {
         }
     }
     
+    var disableSearch = false
     func changeSearchRouteName(with value: String?, isDestination: Bool) {
         guard let value else { return }
+        disableSearch = true
         if isDestination {
             secondDestinationTextField.text = value
         } else {
             firstDestinationTextField.text = value
+        }
+        debounceManager.debounce {
+            self.disableSearch = false
         }
     }
     
@@ -292,9 +258,10 @@ final class DirectionSearchView: UIView {
     @objc private func textFieldDidChange(_ textField: UITextField) {
         let isDestination = textField == secondDestinationTextField
         let model = DirectionSeachViewModel(searchText: textField.text ?? "", isDestination: isDestination)
-        
-        debounceManager.debounce {
-            self.searchTextHandler?(model)
+        if !disableSearch {
+            debounceManager.debounce {
+                self.searchTextHandler?(model)
+            }
         }
     }
 }

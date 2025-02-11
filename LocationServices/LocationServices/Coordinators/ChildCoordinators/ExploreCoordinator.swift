@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
+import AWSGeoRoutes
 
 final class ExploreCoordinator: Coordinator {
     var delegate: CoordinatorCompletionDelegate?
@@ -43,7 +44,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
         }
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
         controller.setBottomSheetHeight(to: 600)
         currentBottomSheet = controller
         NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": 500])
@@ -85,10 +86,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.userLocation = (lat, long)
         controller.isRoutingOptionsEnabled = isRouteOptionEnabled ?? false
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        let minHeight = 0.2
-        let mediumHeight = 0.69
-        controller.enableBottomSheetGrab(smallHeight: minHeight, mediumHeight: mediumHeight)
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.enableBottomSheetGrab(smallHeight: 0.2, mediumHeight: 0.69, largeHeight: 0.93)
         
         NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": controller.getMediumDetentHeight()])
         currentBottomSheet = controller
@@ -100,8 +99,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.userLocation = (lat, long)
         controller.searchScreenStyle = searchScreenStyle
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        controller.enableBottomSheetGrab(largeHeight: 1)
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.enableBottomSheetGrab(largeHeight: 0.93)
         currentBottomSheet = controller
     }
     
@@ -109,8 +108,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         let controller = SearchVCBuilder.create()
         
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-        controller.enableBottomSheetGrab()
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.enableBottomSheetGrab(largeHeight: 0.93)
         currentBottomSheet = controller
     }
     
@@ -119,8 +118,17 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.delegate = self
         controller.userLocation = (lat, long)
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
         controller.setBottomSheetHeight(to: 450)
+        currentBottomSheet = controller
+    }
+    
+    func showArrivalCardScene(route: RouteModel) {
+        let controller = ArrivalCardVCBuilder.create(route: route)
+        controller.delegate = self
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.setBottomSheetHeight(to: 200)
         currentBottomSheet = controller
     }
     
@@ -128,13 +136,13 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         
     }
     
-    func showNavigationview(routeLegDetails: [RouteLegDetails], summaryData: (totalDistance: Double, totalDuration: Double), firstDestination: MapModel?, secondDestination: MapModel?) {
-            let controller = NavigationBuilder.create(routeLegDetails: routeLegDetails, summaryData: summaryData, firstDestination: firstDestination, secondDestination: secondDestination)
+    func showNavigationview(route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?) {
+            let controller = NavigationBuilder.create(route: route, firstDestination: firstDestination, secondDestination: secondDestination)
             controller.delegate = self
             
             currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: ExploreCoordinator.exploreController!)
-            controller.enableBottomSheetGrab()
+            controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+            controller.enableBottomSheetGrab(smallHeight: 0.18, largeHeight: 0.93)
             currentBottomSheet = controller
     }
     

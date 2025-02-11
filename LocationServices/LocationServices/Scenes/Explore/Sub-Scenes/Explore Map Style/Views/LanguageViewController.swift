@@ -121,7 +121,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
     }
     
     private var checkedIcon: UIImageView = {
-        let image = UIImage(systemName: "checkmark")
+        let image = UIImage.checkMark
         let iv = UIImageView(image: image)
         iv.contentMode = .scaleAspectFill
         iv.tintColor = .mapStyleTintColor

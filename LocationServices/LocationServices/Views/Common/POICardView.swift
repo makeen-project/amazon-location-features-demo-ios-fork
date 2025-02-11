@@ -56,7 +56,7 @@ final class POICardView: UIView {
                 }
                 
                 // Assuming label widths are the same; adjust as needed
-                let labelWidth: CGFloat = scheduleDetail.frame.width // Use appropriate frame width
+                let labelWidth: CGFloat = containerView.frame.width //scheduleDetail.frame.width // Use appropriate frame width
                 let font = scheduleDetail.font ?? .amazonFont(type: .regular, size: 13)
 
                 // Calculate precise heights for each label
@@ -78,9 +78,13 @@ final class POICardView: UIView {
             let hideDistanceValuesContainer = !hasDistanceValues && !isLoadingData
             distanceValuesContainer.isHidden = hideDistanceValuesContainer
             
-            delegate?.setPOIHeight(height)
+            if !isiPad {
+                delegate?.setPOIHeight(height)
+            }
         }
     }
+    
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     // Helper function to calculate height for each label
     func calculateHeight(for text: String?, font: UIFont, width: CGFloat) -> CGFloat {
@@ -109,8 +113,6 @@ final class POICardView: UIView {
     private let containerView: UIView =  {
        let view = UIView()
         view.backgroundColor = .searchBarBackgroundColor
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        view.layer.cornerRadius = 20
         view.isUserInteractionEnabled = true
         return view
     }()
@@ -472,9 +474,11 @@ final class POICardView: UIView {
         
         containerView.addSubview(directionPlaceholderView)
         containerView.addSubview(durationPlaceholderView)
-       
+    
+        
         containerView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
+            $0.top.bottom.leading.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         topStackView.snp.makeConstraints {
@@ -608,7 +612,7 @@ final class POICardView: UIView {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
-            $0.bottom.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-32)
         }
         
         buttonContainerView.snp.makeConstraints {

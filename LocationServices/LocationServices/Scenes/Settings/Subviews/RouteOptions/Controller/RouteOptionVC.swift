@@ -79,11 +79,23 @@ final class RouteOptionVC: UIViewController {
         routeOptions.ferriesHandlers = { [weak self] option in
             self?.viewModel.saveFerriesOption(state: option)
         }
+        
+        routeOptions.uturnsHandlers = { [weak self] option in
+            self?.viewModel.saveUturnsOption(state: option)
+        }
+        
+        routeOptions.tunnelsHandlers = { [weak self] option in
+            self?.viewModel.saveTunnelsOption(state: option)
+        }
+        
+        routeOptions.dirtRoadsHandlers = { [weak self] option in
+            self?.viewModel.saveDirtRoadsOption(state: option)
+        }
     }
 }
 
 extension RouteOptionVC: RouteOptionViewModelOutputDelegate {
-    func updateViews(tollOption: Bool, ferriesOption: Bool) {
-        routeOptions.setLocalValues(toll: tollOption, ferries: ferriesOption)
+    func updateViews(tollOption: Bool, ferriesOption: Bool, uturnsOption: Bool, tunnelsOption: Bool, dirtRoadsOption: Bool) {
+        routeOptions.setLocalValues(toll: tollOption, ferries: ferriesOption, uturns: uturnsOption, tunnels: tunnelsOption, dirtRoads: dirtRoadsOption)
     }
 }

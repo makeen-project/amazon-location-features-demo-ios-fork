@@ -101,6 +101,7 @@ enum StringConstant {
     static let go = "Go"
     static let preview = "Preview"
     static let info = "Info"
+    static let done = "Done"
     
     static let locationPermissionDenied = "Location permission denied"
     static let locationPermissionDeniedDescription = "Distance can't be calculated if location permission is not granted. Please enable location permission for Amazon Location from Settings"
@@ -172,7 +173,7 @@ enum StringConstant {
         static let descriptionTitle = "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's Terms & Conditions for use."
         static let appTermsOfUse = "Terms & Conditions"
         static let appTermsOfUseURL = termsAndConditionsURL
-        static let copyright = "© 2024, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+        static let copyright = "© \(Calendar.current.component(.year, from: Date())), Amazon Web Services, Inc. or its affiliates. All rights reserved."
     }
     
     enum Tracking {
@@ -207,7 +208,7 @@ enum StringConstant {
     static let defaultRouteOptions = "Default route options"
     static let partnerAttributionTitle = "Partner Attribution"
     static let partnerAttributionESRIDescription = "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community"
-    static let partnerAttributionHEREDescription = "© 2024 HERE"
+    static let partnerAttributionHEREDescription = "© AWS, HERE"
     static let softwareAttributionTitle = "Software Attribution"
     static let softwareAttributionDescription = "Click learn more for software attribution"
     static let learnMore = "Learn More"
@@ -218,6 +219,9 @@ enum StringConstant {
     static let continueString = "Continue"
     static let avoidTolls = "Avoid tolls"
     static let avoidFerries = "Avoid ferries"
+    static let avoidUturns = "Avoid uturns"
+    static let avoidTunnels = "Avoid tunnels"
+    static let avoidDirtRoads = "Avoid dirt roads"
     static let myLocation = "My Location"
     static let appVersion = "App version: "
     static let termsAndConditions = "Terms & Conditions"

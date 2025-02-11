@@ -51,7 +51,7 @@ final class ExploreViewModelTests: XCTestCase {
                                        name: "Times Square")
         departureLocation  = CLLocationCoordinate2D(latitude: 40.75790965683081, longitude: -73.98559624758715)
         destinationLocation = CLLocationCoordinate2D(latitude:40.75474012009525, longitude: -73.98387963388527)
-        routeModel = RouteModel(departurePosition: departureLocation, destinationPosition: destinationLocation, travelMode: RouteTypes.car, avoidFerries: false, avoidTolls: false, isPreview: true, departurePlaceName: "Time Square", departurePlaceAddress: "Manhattan, NY 10036, United States", destinationPlaceName: "CUNY Graduate Center", destinationPlaceAddress: "365 5th Ave, New York, NY 10016, United States")
+        routeModel = RouteModel(departurePosition: departureLocation, destinationPosition: destinationLocation, travelMode: RouteTypes.car, avoidFerries: false, avoidTolls: false, avoidUturns: false, avoidTunnels: false, avoidDirtRoads: false, isPreview: true, departurePlaceName: "Time Square", departurePlaceAddress: "Manhattan, NY 10036, United States", destinationPlaceName: "CUNY Graduate Center", destinationPlaceAddress: "365 5th Ave, New York, NY 10016, United States")
         
         place = GetPlaceOutput(placeId: "ID", position: [-73.98554260340953, 40.7487776237092], title: "dummy place")
     }
@@ -90,7 +90,7 @@ final class ExploreViewModelTests: XCTestCase {
     }
 
     func testReCalculateRouteReturnSuccess() async throws {
-        let direction = try DirectionPresentation(model: GeoRoutesClientTypes.Route(), travelMode: .car)
+        let direction = DirectionPresentation(route: GeoRoutesClientTypes.Route(), travelMode: .car, leaveType: .leaveNow)
         locationService.mockGetPlaceResult = .success(place)
         locationService.mockSearchWithPositionResult = .success([search])
         routingService.putResult = [GeoRoutesClientTypes.RouteTravelMode.car: .success(direction)]
@@ -168,7 +168,7 @@ class MockExploreViewModelOutputDelegate : ExploreViewModelOutputDelegate {
         isLogoutCompleted = true
     }
     
-    func routeReCalculated(route: LocationServices.DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: LocationServices.RouteTypes) {
+    func routeReCalculated(direction: LocationServices.DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: LocationServices.RouteTypes) {
         self.isRouteReCalculated = true
     }
     

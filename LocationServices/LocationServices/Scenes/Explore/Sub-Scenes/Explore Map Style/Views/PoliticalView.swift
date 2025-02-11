@@ -101,7 +101,14 @@ final class PoliticalView: UIButton {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         self.addGestureRecognizer(tapGestureRecognizer)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(validatePoliticalView(_:)), name: Notification.validateMapColor, object: nil)
+        
         setPoliticalView()
+        validatePoliticalView()
+    }
+    
+    @objc private func validatePoliticalView(_ notification: Notification) {
+        validatePoliticalView()
     }
     
     @objc private func handleTapGesture() {
@@ -121,6 +128,26 @@ final class PoliticalView: UIButton {
         else {
             itemSubtitle.text = "Map representation for different countries"
             itemSubtitle.textColor = .gray
+        }
+    }
+    
+    public func validatePoliticalView() {
+        let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
+        isUserInteractionEnabled = mapStyle?.imageType != .satellite
+        if isUserInteractionEnabled {
+            viewWithTag(999)?.removeFromSuperview()
+        } else {
+            let overlay = UIView()
+            overlay.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+            overlay.isUserInteractionEnabled = true
+            overlay.tag = 999
+            addSubview(overlay)
+            overlay.snp.makeConstraints {
+                $0.top.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview().offset(5)
+            }
+            UserDefaultsHelper.removeObject(for: .politicalView)
+            setPoliticalView()
         }
     }
 }

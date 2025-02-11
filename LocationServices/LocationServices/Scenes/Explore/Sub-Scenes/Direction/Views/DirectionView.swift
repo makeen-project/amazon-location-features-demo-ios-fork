@@ -8,14 +8,25 @@
 import UIKit
 
 struct DirectionVM {
-    var carTypeDistane: String
-    var carTypeDuration: String
-    var scooterTypeDuration: String
-    var scooterTypeDistance: String
-    var walkingTypeDuration: String
-    var walkingTypeDistance: String
-    var truckTypeDistance: String
-    var truckTypeDuration: String
+    var carTypeDistane: String = ""
+    var carTypeDuration: String = ""
+    var carTypeTime: String = ""
+    var scooterTypeDuration: String = ""
+    var scooterTypeDistance: String = ""
+    var scooterTypeTime: String = ""
+    var walkingTypeDuration: String = ""
+    var walkingTypeDistance: String = ""
+    var walkingTypeTime: String = ""
+    var truckTypeDistance: String = ""
+    var truckTypeDuration: String = ""
+    var truckTypeTime: String = ""
+    var leaveType: LeaveType = .leaveAt
+}
+
+struct LeaveOptions {
+    var leaveNow: Bool? = true
+    var leaveTime: Date? = nil
+    var arrivalTime: Date? = nil
 }
 
 final class DirectionView: UIView {
@@ -23,23 +34,21 @@ final class DirectionView: UIView {
     
     private var isPreview = false
     
-    private var model: DirectionVM! {
-        didSet {
-            carRouteTypeView.setDatas(distance: model.carTypeDistane, duration: model.carTypeDuration, isPreview: isPreview)
-            scooterRouteTypeView.setDatas(distance: model.scooterTypeDistance, duration: model.scooterTypeDuration, isPreview: isPreview)
-            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, isPreview: isPreview)
-            truckRouteTypeView.setDatas(distance: model.truckTypeDistance, duration: model.truckTypeDuration, isPreview: isPreview)
-        }
-    }
+    private var model: DirectionVM!
     
-    private var routeOptionHeight = NumberConstants.routeOptionHeight
+    public var routeOptionHeight = NumberConstants.routeOptionHeight
 
     private var routeOptions: RouteOptionsView = RouteOptionsView()
     
     var avoidFerries: BoolHandler?
     var avoidTolls: BoolHandler?
+    var avoidUturns: BoolHandler?
+    var avoidTunnels: BoolHandler?
+    var avoidDirtRoads: BoolHandler?
+    var leaveOptionsHandler: Handler<LeaveOptions>?
+    var heightChangedHandler: Handler<Int>?
     
-    private var containerView: UIView = {
+    private var routeTypesContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 8
@@ -52,19 +61,19 @@ final class DirectionView: UIView {
     private var carRouteTypeView: RouteTypeView = RouteTypeView(viewType: .car, isSelected: true)
     private var carSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
+        view.backgroundColor = .lsLight2
         return view
     }()
     private var pedestrianRouteTypeView: RouteTypeView = RouteTypeView(viewType: .pedestrian)
     private var pedestrianSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
+        view.backgroundColor = .lsLight2
         return view
     }()
     private var scooterRouteTypeView: RouteTypeView = RouteTypeView(viewType: .scooter)
     private var scooterSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .searchBarBackgroundColor
+        view.backgroundColor = .lsLight2
         return view
     }()
     private var truckRouteTypeView: RouteTypeView = RouteTypeView(viewType: .truck)
@@ -118,21 +127,74 @@ final class DirectionView: UIView {
         self.accessibilityIdentifier = ViewsIdentifiers.Routing.routeTypesContainer
         routeOptions.changeRouteOptionHeight = { [weak self] value in
             self?.routeOptionHeight = value
+            self?.heightChangedHandler?(value)
             self?.updateRouteOptionHeight()
-            
         }
-        setupHandlers()
+        
         setupViews()
+        setupHandlers()
         setupErrorViews()
     }
     
-    func setLocalValues(toll: Bool, ferries: Bool) {
-        routeOptions.setLocalValues(toll: toll, ferries: ferries)
+    func setLocalValues(toll: Bool, ferries: Bool, uturns: Bool, tunnels: Bool, dirtRoads: Bool) {
+        routeOptions.setLocalValues(toll: toll, ferries: ferries, uturns: uturns, tunnels: tunnels, dirtRoads: dirtRoads)
     }
     
-    func setup(model: DirectionVM, isPreview: Bool) {
+    func setup(model: DirectionVM, isPreview: Bool, routeType: RouteTypes) {
         self.isPreview = isPreview
-        self.model = model
+        if self.model == nil {
+            self.model = DirectionVM()
+        }
+        switch routeType {
+        case .car:
+            carRouteTypeView.isHidden = false
+            self.model.carTypeDistane = model.carTypeDistane
+            self.model.carTypeDuration = model.carTypeDuration
+            carRouteTypeView.setDatas(distance: model.carTypeDistane, duration: model.carTypeDuration, time: model.carTypeTime, leaveType: model.leaveType, isPreview: isPreview)
+        case .pedestrian:
+            pedestrianRouteTypeView.isHidden = false
+            self.model.walkingTypeDistance = model.walkingTypeDistance
+            self.model.walkingTypeDuration = model.walkingTypeDuration
+            pedestrianRouteTypeView.setDatas(distance: model.walkingTypeDistance, duration: model.walkingTypeDuration, time: model.walkingTypeTime, leaveType: model.leaveType, isPreview: isPreview)
+        case .scooter:
+            scooterRouteTypeView.isHidden = false
+            self.model.scooterTypeDistance = model.scooterTypeDistance
+            self.model.scooterTypeDuration = model.scooterTypeDuration
+            scooterRouteTypeView.setDatas(distance: model.scooterTypeDistance, duration: model.scooterTypeDuration, time: model.scooterTypeTime, leaveType: model.leaveType, isPreview: isPreview)
+        case .truck:
+            truckRouteTypeView.isHidden = false
+            self.model.scooterTypeDistance = model.truckTypeDistance
+            self.model.truckTypeDuration = model.truckTypeDuration
+            truckRouteTypeView.setDatas(distance: model.truckTypeDistance, duration: model.truckTypeDuration, time: model.truckTypeTime, leaveType: model.leaveType, isPreview: isPreview)
+        }
+    }
+    
+    func hideLoader(isPreview: Bool, routeType: RouteTypes) {
+        self.isPreview = isPreview
+        if self.model == nil {
+            self.model = DirectionVM()
+        }
+        switch routeType {
+        case .car:
+            carRouteTypeView.isHidden = false
+            carRouteTypeView.hideLoader(isPreview: isPreview)
+        case .pedestrian:
+            pedestrianRouteTypeView.isHidden = false
+            pedestrianRouteTypeView.hideLoader(isPreview: isPreview)
+        case .scooter:
+            scooterRouteTypeView.isHidden = false
+            scooterRouteTypeView.hideLoader(isPreview: isPreview)
+        case .truck:
+            truckRouteTypeView.isHidden = false
+            truckRouteTypeView.hideLoader(isPreview: isPreview)
+        }
+    }
+    
+    public func disableRouteTypesView() {
+        carRouteTypeView.disableRouteType()
+        scooterRouteTypeView.disableRouteType()
+        pedestrianRouteTypeView.disableRouteType()
+        truckRouteTypeView.disableRouteType()
     }
     
     func showOptionsStackView() {
@@ -155,7 +217,6 @@ final class DirectionView: UIView {
         
         carRouteTypeView.goButtonHandler =  { [weak self] in
             self?.delegate?.startNavigation(type: .car)
-    
         }
         
         pedestrianRouteTypeView.isSelectedHandle = { [weak self] state in
@@ -167,7 +228,6 @@ final class DirectionView: UIView {
         
         pedestrianRouteTypeView.goButtonHandler =  { [weak self]  in
             self?.delegate?.startNavigation(type: .pedestrian)
-            
         }
         
         scooterRouteTypeView.isSelectedHandle = { [weak self] state in
@@ -179,7 +239,6 @@ final class DirectionView: UIView {
         
         scooterRouteTypeView.goButtonHandler =  { [weak self]  in
             self?.delegate?.startNavigation(type: .scooter)
-            
         }
         
         truckRouteTypeView.isSelectedHandle = { [weak self] state in
@@ -201,22 +260,36 @@ final class DirectionView: UIView {
             self?.avoidFerries?(state)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateRouteContainerConstraint(_:)), name: Notification.updateMapLayerItems, object: nil)
+        routeOptions.avoidUturns = { [weak self] state in
+            self?.avoidUturns?(state)
+        }
         
+        routeOptions.avoidTunnels = { [weak self] state in
+            self?.avoidTunnels?(state)
+        }
+        
+        routeOptions.avoidDirtRoads = { [weak self] state in
+            self?.avoidDirtRoads?(state)
+        }
+        
+        routeOptions.leaveOptionsHandler = { [weak self] options in
+            self?.leaveOptionsHandler?(options)
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateRouteContainerConstraint(_:)), name: Notification.updateMapLayerItems, object: nil)
     }
     
     @objc private func updateRouteContainerConstraint(_ notification: Notification) {
         let height = (notification.userInfo?["height"] as? CGFloat) ?? NumberConstants.routeContainerHeightConstraint
         if(height < NumberConstants.routeContainerHeightConstraint) {
             routeOptions.isHidden = true
-            containerView.isHidden = true
+            routeTypesContainerView.isHidden = true
         }
         else {
             routeOptions.isHidden = false
-            containerView.isHidden = false
+            routeTypesContainerView.isHidden = false
         }
     }
-    
     
     private func changeSelectedTextFor(carType: Bool = false,
                                        walkingType: Bool = false,
@@ -244,34 +317,36 @@ final class DirectionView: UIView {
         scooterRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.scooterContainer
         truckRouteTypeView.accessibilityIdentifier = ViewsIdentifiers.Routing.truckContainer
         
+        self.addSubview(routeOptions)
+        self.addSubview(routeTypesContainerView)
+        
+        routeTypesContainerView.addSubview(routeTypeStackView)
+        
         routeTypeStackView.removeArrangedSubViews()
         routeTypeStackView.addArrangedSubview(carRouteTypeView)
         routeTypeStackView.addArrangedSubview(carSeperatorView)
-        routeTypeStackView.addArrangedSubview(pedestrianRouteTypeView)
-        routeTypeStackView.addArrangedSubview(pedestrianSeperatorView)
         routeTypeStackView.addArrangedSubview(scooterRouteTypeView)
         routeTypeStackView.addArrangedSubview(scooterSeperatorView)
+        routeTypeStackView.addArrangedSubview(pedestrianRouteTypeView)
+        routeTypeStackView.addArrangedSubview(pedestrianSeperatorView)
         routeTypeStackView.addArrangedSubview(truckRouteTypeView)
         
-        self.addSubview(routeOptions)
-        self.addSubview(containerView)
-        containerView.addSubview(routeTypeStackView)
-    
         routeOptions.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.height.equalTo(32)
         }
         
-        containerView.snp.makeConstraints {
+        routeTypesContainerView.snp.makeConstraints {
             $0.top.equalTo(routeOptions.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.height.lessThanOrEqualToSuperview()
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(365)
         }
         
         carRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
         carSeperatorView.snp.makeConstraints {
@@ -279,7 +354,7 @@ final class DirectionView: UIView {
         }
         
         pedestrianRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
         pedestrianSeperatorView.snp.makeConstraints {
@@ -287,7 +362,7 @@ final class DirectionView: UIView {
         }
         
         scooterRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
         scooterSeperatorView.snp.makeConstraints {
@@ -295,17 +370,16 @@ final class DirectionView: UIView {
         }
         
         truckRouteTypeView.snp.makeConstraints {
-            $0.height.equalTo(72)
+            $0.height.equalTo(88)
         }
         
-        
         routeTypeStackView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
         }
     }
     
     private func setupErrorViews() {
-        containerView.addSubview(errorContainer)
+        routeTypesContainerView.addSubview(errorContainer)
         errorContainer.addSubview(errorIconImageView)
         errorContainer.addSubview(distanceErrorTitleLabel)
         errorContainer.addSubview(distanceErrorMessageLabel)
@@ -324,14 +398,14 @@ final class DirectionView: UIView {
         
         distanceErrorTitleLabel.snp.makeConstraints {
             $0.top.equalTo(errorIconImageView.snp.bottom).offset(32)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
         }
         
         distanceErrorMessageLabel.snp.makeConstraints {
             $0.top.equalTo(distanceErrorTitleLabel.snp.bottom).offset(8)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
     }

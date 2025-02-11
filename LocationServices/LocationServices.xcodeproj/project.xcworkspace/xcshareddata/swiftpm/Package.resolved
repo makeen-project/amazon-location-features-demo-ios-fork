@@ -1,5 +1,5 @@
 {
-  "originHash" : "37fc4666dc940bc2b2a2f41d16bb81b2d1c617bbb6ce9c52d9cf2662479f17b0",
+  "originHash" : "2fb2a69be6e86ea0e566e9ae41071b2670dadaeb74685f9b13856fa7e85594c4",
   "pins" : [
     {
       "identity" : "amazon-location-mobile-auth-sdk-ios",
@@ -44,6 +44,15 @@
       "state" : {
         "revision" : "f23db791d7b6f0329e3c6788d8e4152c24c52b6b",
         "version" : "6.7.1"
+      }
+    },
+    {
+      "identity" : "polyline",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/aws-geospatial/polyline/",
+      "state" : {
+        "revision" : "73a07923d416d7d69a0d488e4d7f74d3b77ab8c0",
+        "version" : "0.3.0"
       }
     },
     {

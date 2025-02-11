@@ -22,4 +22,17 @@ enum RouteType {
             return ViewsIdentifiers.Routing.truckContainer
         }
     }
+    
+    var title: String {
+        switch self {
+        case .pedestrian:
+            return "Pedestrian"
+        case .scooter:
+            return "Scooter"
+        case .car:
+            return "Car"
+        case .truck:
+            return "Truck"
+        }
+    }
 }

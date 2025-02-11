@@ -12,11 +12,11 @@ import AWSGeoRoutes
 import CoreLocation
 
 class RoutingAPIServiceMock: RoutingServiceable {
-    func calculateRouteWith(depaturePosition: CLLocationCoordinate2D, destinationPosition: CLLocationCoordinate2D, travelModes: [GeoRoutesClientTypes.RouteTravelMode], avoidFerries: Bool, avoidTolls: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode : Result<LocationServices.DirectionPresentation, any Error>] {
-            let result = self.putResult
-            return result!
+    func calculateRouteWith(depaturePosition: CLLocationCoordinate2D, destinationPosition: CLLocationCoordinate2D, travelModes: [AWSGeoRoutes.GeoRoutesClientTypes.RouteTravelMode], avoidFerries: Bool, avoidTolls: Bool, avoidUturns: Bool, avoidTunnels: Bool, avoidDirtRoads: Bool, departNow: Bool?, departureTime: Date?, arrivalTime: Date?) async throws -> [AWSGeoRoutes.GeoRoutesClientTypes.RouteTravelMode : Result<LocationServices.DirectionPresentation, any Error>] {
+        let result = self.putResult
+        return result!
     }
-    
+
     var putResult: [GeoRoutesClientTypes.RouteTravelMode: Result<LocationServices.DirectionPresentation, Error>]?
     
     let delay: TimeInterval
