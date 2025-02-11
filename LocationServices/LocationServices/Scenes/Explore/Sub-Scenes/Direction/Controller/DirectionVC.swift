@@ -509,8 +509,8 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setupSearchTitleDestinations() {
-        self.directionSearchView.changeSearchRouteName(with: firstDestination?.placeName ?? "", isDestination: false)
-        self.directionSearchView.changeSearchRouteName(with: secondDestination?.placeName ?? "", isDestination: true)
+        self.directionSearchView.changeSearchRouteName(with: firstDestination?.placeName == "My Location" ? firstDestination?.placeName : "\(firstDestination?.placeName ?? ""), \(firstDestination?.placeAddress ?? "")", isDestination: false)
+        self.directionSearchView.changeSearchRouteName(with: secondDestination?.placeName == "My Location" ? secondDestination?.placeName : "\(secondDestination?.placeName ?? ""), \(secondDestination?.placeAddress ?? "")", isDestination: true)
     }
     
     func calculateAllRoutes(avoidTolls: Bool = false,
@@ -794,7 +794,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
     }
     
     func changeRoute(type: RouteTypes) async throws {
-        try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads)
+        try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime )
     }
 }
 

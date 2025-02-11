@@ -562,7 +562,6 @@ extension ExploreVC: CLLocationManagerDelegate {
     
     func userReachedDestination(_ destination: MapModel) {
         dismissNavigationScene(nil)
-        self.exploreView.show(selectedPlace: destination)
     }
     
     func showAnnotation(model: SearchPresentation, force: Bool) {

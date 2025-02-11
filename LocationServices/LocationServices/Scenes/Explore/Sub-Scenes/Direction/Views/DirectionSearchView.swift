@@ -233,12 +233,17 @@ final class DirectionSearchView: UIView {
         }
     }
     
+    var disableSearch = false
     func changeSearchRouteName(with value: String?, isDestination: Bool) {
         guard let value else { return }
+        disableSearch = true
         if isDestination {
             secondDestinationTextField.text = value
         } else {
             firstDestinationTextField.text = value
+        }
+        debounceManager.debounce {
+            self.disableSearch = false
         }
     }
     
@@ -253,9 +258,10 @@ final class DirectionSearchView: UIView {
     @objc private func textFieldDidChange(_ textField: UITextField) {
         let isDestination = textField == secondDestinationTextField
         let model = DirectionSeachViewModel(searchText: textField.text ?? "", isDestination: isDestination)
-        
-        debounceManager.debounce {
-            self.searchTextHandler?(model)
+        if !disableSearch {
+            debounceManager.debounce {
+                self.searchTextHandler?(model)
+            }
         }
     }
 }

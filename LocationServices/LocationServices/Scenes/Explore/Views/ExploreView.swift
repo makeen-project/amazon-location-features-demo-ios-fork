@@ -15,7 +15,7 @@ private enum Constants {
     static let singleAnnotationMapZoomValue: Double = 17
     static let directionMapZoomValue: Double = 14
     static let annotationMapZoomValue: Double = 10
-    static let navigationMapZoonValue: Double = 14
+    static let navigationMapZoomValue: Double = 14
     static let amazonHqMapPosition = (latitude: 47.61506909519956, longitude: -122.33826750882835)
     static let userLocationViewIdentifier = "UserLocationViewIdentifier"
     static let imageAnnotationViewIdentifier = "ImageAnnotationViewIdentifier"
@@ -233,7 +233,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         self.mapMode = .turnByTurnNavigation
         if let userCoordinates = mapView.userLocation?.coordinate,
            CLLocationCoordinate2DIsValid(userCoordinates) {
-            mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true) { [weak self] in
+            mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoomValue, direction: mapView.direction, animated: true) { [weak self] in
                 self?.mapView.userTrackingMode = .followWithCourse
             }
         }
@@ -241,7 +241,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     
     func focus(on coordinates: CLLocationCoordinate2D) {
         guard CLLocationCoordinate2DIsValid(coordinates) else { return }
-        mapView.setCenter(coordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: true)
+        mapView.setCenter(coordinates, zoomLevel: Constants.navigationMapZoomValue, direction: mapView.direction, animated: true)
     }
     
     func isLocateMeButtonDisabled(state: Bool, animatedUserLocation: Bool = true) {
@@ -256,7 +256,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     private func setMapCenter(userCoordinates: CLLocationCoordinate2D, animated: Bool) {
-        mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoonValue, direction: mapView.direction, animated: animated) { [weak self] in
+        mapView.setCenter(userCoordinates, zoomLevel: Constants.navigationMapZoomValue, direction: mapView.direction, animated: animated) { [weak self] in
             switch self?.mapMode {
             case .search, .none:
                 self?.mapView.userTrackingMode = .follow
@@ -593,7 +593,7 @@ private extension ExploreView {
         let lineJoinCap = NSExpression(forConstantValue: "round")
         let lineWidth = NSExpression(
             format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-            [16: 2, 20: 20]
+            [16: 4, 20: 20]
         )
         let lineColor = UIColor(hex: "#008296")
 

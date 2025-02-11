@@ -105,7 +105,7 @@ extension DirectionVC: UITableViewDataSource {
             }
         }
         else {
-            self.directionSearchView.changeSearchRouteName(with: currentModel.locationName ?? "", isDestination: self.isDestination)
+            self.directionSearchView.changeSearchRouteName(with: "\(currentModel.locationName ?? ""), \(currentModel.label ?? "")", isDestination: self.isDestination)
         }
         Task {
             let state = try await viewModel.searchSelectedPlaceWith(currentModel, lat: userLocation?.lat, long: userLocation?.long)
@@ -116,7 +116,9 @@ extension DirectionVC: UITableViewDataSource {
                 self.sheetPresentationController?.selectedDetentIdentifier = .medium
                 try await calculateGenericRoute(currentModel: currentModel, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime)
             }
+            tableView.isHidden = true
         }
+       
     }
     
     func sendDirectionsToExploreVC(data: [Data],
