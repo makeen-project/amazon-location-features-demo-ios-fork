@@ -299,7 +299,7 @@ extension TrackingVC: CLLocationManagerDelegate {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
             viewModel.trackLocationUpdate(location: manager.location)
-            NotificationCenter.default.post(name: Notification.Name("GrantedLocationPermissions"), object: nil, userInfo: ["userLocation": manager.location as Any])
+            NotificationCenter.default.post(name: Notification.grantedLocationPermissions, object: nil, userInfo: ["userLocation": manager.location as Any])
             trackingMapView.grantedLocationPermissions()
         default:
             break

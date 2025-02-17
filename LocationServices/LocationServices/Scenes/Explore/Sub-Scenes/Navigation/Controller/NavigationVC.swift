@@ -291,12 +291,12 @@ private extension NavigationVC {
             let mapHeaderData = (distance: datas[0].distance, street: mapData.instruction, stepImage: mapData.getStepImage())
             let summaryData = viewModel.getSummaryData()
             let data: [String: Any] = ["MapViewValues" : mapHeaderData, "SummaryData": summaryData]
-            NotificationCenter.default.post(name: Notification.Name("UpdateMapViewValues"), object: nil, userInfo: data)
+            NotificationCenter.default.post(name: Notification.updateMapViewValues, object: nil, userInfo: data)
         }
     }
     
     func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateNavigationSteps(_:)), name: Notification.Name("NavigationStepsUpdated"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateNavigationSteps(_:)), name: Notification.navigationStepsUpdated, object: nil)
     }
     
     @objc private func updateNavigationSteps(_ notification: Notification) {

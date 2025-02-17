@@ -231,19 +231,19 @@ extension ExploreVC {
     func setupNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateLocation(_:)), name: Notification.userLocation, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(selectPlace(_:)), name: Notification.selectedPlace, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateButtonConstraits(_:)), name: Notification.Name("updateMapViewButtons"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(drawDirectionRoute(_:)), name: Notification.Name("DirectionLineString"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(showNavigationScene(_:)), name: Notification.Name("NavigationSteps"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateButtonConstraits(_:)), name: Notification.updateMapViewButtons, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(drawDirectionRoute(_:)), name: Notification.directionLineString, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showNavigationScene(_:)), name: Notification.navigationSteps, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissNavigationScene(_:)), name: Notification.Name("NavigationViewDismissed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissNavigationScene(_:)), name: Notification.navigationViewDismissed, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateMapViewValue(_:)), name: Notification.Name("UpdateMapViewValues"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMapViewValue(_:)), name: Notification.updateMapViewValues, object: nil)
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissDirectionScene(_:)), name: Notification.Name("DirectionViewDismissed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissDirectionScene(_:)), name: Notification.directionViewDismissed, object: nil)
         
     
-        NotificationCenter.default.addObserver(self, selector: #selector(shownSearchResults(_:)), name: Notification.Name("ShownSearchResults"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(shownSearchResults(_:)), name: Notification.shownSearchResults, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMapView(_:)), name: Notification.refreshMapView, object: nil)
         
@@ -505,7 +505,7 @@ extension ExploreVC: CLLocationManagerDelegate {
         userCoreLocation = manager.location?.coordinate
         exploreView.update(userLocation: manager.location, userHeading: manager.heading)
         if let isNavigationMode = UserDefaultsHelper.get(for: Bool.self, key: .isNavigationMode), isNavigationMode, let route = UserDefaultsHelper.getObject(value: RouteModel.self, key: .navigationRoute), let userCoreLocation = userCoreLocation, isArrivalInProximity(userCoreLocation: userCoreLocation, route: route) {
-            NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.navigationViewDismissed, object: nil, userInfo: nil)
             self.showArrivalCard(route: route)
         }
     }
@@ -530,7 +530,7 @@ extension ExploreVC: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
-            NotificationCenter.default.post(name: Notification.Name("GrantedLocationPermissions"), object: nil, userInfo: ["userLocation": manager.location as Any])
+            NotificationCenter.default.post(name: Notification.grantedLocationPermissions, object: nil, userInfo: ["userLocation": manager.location as Any])
             exploreView.grantedLocationPermissions()
         default:
             userCoreLocation = nil
@@ -544,7 +544,7 @@ extension ExploreVC: CLLocationManagerDelegate {
     
     func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes) {
             let userInfo = ["route": direction.route]
-            NotificationCenter.default.post(name: Notification.Name("NavigationStepsUpdated"), object: nil, userInfo: userInfo)
+            NotificationCenter.default.post(name: Notification.navigationStepsUpdated, object: nil, userInfo: userInfo)
             let encoder = JSONEncoder()
             do {
                 var datas: [Data] = []
