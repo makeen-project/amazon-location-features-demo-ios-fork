@@ -28,20 +28,24 @@ extension Double {
         }
     }
     
-    func convertFormattedKMString() -> String {
-        let distanceInMeters = convertKMToMeters()
-        return distanceInMeters.formatToKmString()
-    }
-    
-    func convertKMToMeters() -> Double {
-        return self * 1000
+    func formatDistance() -> String {
+        let unitType = UnitHelper.getResolvedUnit()
+        let num = Double(self)
+        if unitType == .metric {
+            if num > 1000 {
+                let result = num * 1000 / 1000000 // Convert meters to km
+                return String(format: "%.2f km", result)
+            } else {
+                return String(format: "%.0f m", num)
+            }
+        } else {
+            let numMiles = convertMetersToImperial(meters: num)
+            return String(format: "%.2f mi", numMiles)
+        }
     }
 
-    func formatToKmString() -> String {
-        if self >= 1000 {
-            return String(format: "%.2f km", self / 1000)
-        } else {
-            return String(format: "%.0f m", self)
-        }
+    func convertMetersToImperial(meters: Double) -> Double {
+        let miles = meters / 1609
+        return miles
     }
 }
