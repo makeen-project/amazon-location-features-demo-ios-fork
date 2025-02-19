@@ -49,7 +49,8 @@ extension AWSRoutingServiceProtocol {
         if departureTime != nil || arrivalTime != nil {
             departNow = nil
         }
-        let input = CalculateRoutesInput(arrivalTime: arrivalTime?.convertDateToIsoString(), avoid: routeAvoidanceOptions, departNow: departNow, departureTime: departureTime?.convertDateToIsoString(), destination: destination, instructionsMeasurementSystem: .metric, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .flexiblePolyline, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
+        let measureUnit = GeoRoutesClientTypes.MeasurementSystem.metric
+        let input = CalculateRoutesInput(arrivalTime: arrivalTime?.convertDateToIsoString(), avoid: routeAvoidanceOptions, departNow: departNow, departureTime: departureTime?.convertDateToIsoString(), destination: destination, instructionsMeasurementSystem: measureUnit, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .flexiblePolyline, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
         
         if let client = AmazonLocationClient.getRoutesClient() {
             let result = try await client.calculateRoutes(input: input)
