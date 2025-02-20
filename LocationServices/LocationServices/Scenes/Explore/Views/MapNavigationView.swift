@@ -12,8 +12,6 @@ final class MapNavigationView: UIView {
     private var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        //view.layer.cornerRadius = 8
-        //view.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
     return view
     }()
     
@@ -57,7 +55,7 @@ final class MapNavigationView: UIView {
     
     func updateValues(distance: String?, street: String?, stepImage: UIImage?) {
         if let distance = distance {
-            distanceLabel.text = "\(distance) m"
+            distanceLabel.text = distance
         }
         streetLabel.text = street
         self.stepImage.image = stepImage

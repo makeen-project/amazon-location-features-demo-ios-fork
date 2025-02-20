@@ -39,12 +39,12 @@ extension Double {
                 return String(format: "%.0f m", num)
             }
         } else {
-            let numMiles = convertMetersToImperial(meters: num)
+            let numMiles = convertMetersToMiles(meters: num)
             return String(format: "%.2f mi", numMiles)
         }
     }
 
-    func convertMetersToImperial(meters: Double) -> Double {
+    private func convertMetersToMiles(meters: Double) -> Double {
         let miles = meters / 1609
         return miles
     }
