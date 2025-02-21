@@ -86,7 +86,7 @@ extension ArrivalCardVC: ArrivalCardViewModelOutputDelegate {
                 self.view.removeFromSuperview()
             }
         }
-        NotificationCenter.default.post(name: Notification.poiCardDismissed, object: nil)
+        NotificationCenter.default.post(name: Notification.Name("POICardDismissed"), object: nil)
         let userInfo = [
             StringConstant.NotificationsInfoField.geofenceIsHidden: false,
             StringConstant.NotificationsInfoField.mapStyleIsHidden: false,
@@ -94,7 +94,7 @@ extension ArrivalCardVC: ArrivalCardViewModelOutputDelegate {
         ]
         NotificationCenter.default.post(name: Notification.exploreActionButtonsVisibilityChanged, object: nil, userInfo: userInfo)
         let height:CGFloat = 150
-        NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
     }
     
     func updateSizeClass(_ sizeClass: DetentsSizeClass) {

@@ -32,7 +32,7 @@ final class ExploreCoordinator: Coordinator {
 extension ExploreCoordinator: ExploreNavigationDelegate {
     func dismissSearchScene() {
         currentBottomSheet?.dismissBottomSheet()
-        NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
     }
     
     func showMapStyles() {
@@ -41,7 +41,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
 
         controller.dismissHandler = { [weak self] in
             self?.currentBottomSheet?.dismissBottomSheet()
-            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
         }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
@@ -63,8 +63,8 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         controller.dismissHandler = { [weak self] in
             self?.currentBottomSheet?.dismissBottomSheet()
             
-            NotificationCenter.default.post(name: Notification.directionViewDismissed, object: nil, userInfo: nil)
-            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
             guard let secondDestination, firstDestination == nil else { return }
             let userInfo = ["place" : secondDestination]
             NotificationCenter.default.post(name: Notification.selectedPlace, object: nil, userInfo: userInfo)
@@ -152,7 +152,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
         let controller = LoginVCBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.navigationController.dismiss(animated: true)
-            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
         }
         
         controller.postLoginHandler = { [weak self] in
@@ -177,7 +177,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             let controller = PostLoginBuilder.create()
             controller.dismissHandler = { [weak self] in
                 self?.navigationController.dismiss(animated: true)
-                NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+                NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
             }
             controller.modalPresentationStyle = .pageSheet
 
@@ -217,7 +217,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
     }
     
     func closeNavigationScene() {
-        NotificationCenter.default.post(name: Notification.navigationViewDismissed, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
     }
     
     func hideNavigationScene() {

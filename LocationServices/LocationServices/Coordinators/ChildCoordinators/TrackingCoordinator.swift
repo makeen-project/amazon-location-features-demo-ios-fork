@@ -71,7 +71,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
                 self?.showTrackingHistory(isTrackingActive: true)
             }
             else { self?.showDashboardFlow() }
-            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
         }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: trackingController!)

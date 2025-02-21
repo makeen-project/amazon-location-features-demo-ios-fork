@@ -750,7 +750,7 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
         isInitalState = false
         DispatchQueue.main.async {
             self.tableView.reloadData()
-            NotificationCenter.default.post(name: Notification.shownSearchResults, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("ShownSearchResults"), object: nil, userInfo: nil)
         }
     }
     
@@ -783,7 +783,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
             }
             if let route = route {
                 let userInfo = ["route" : route, "routeModel": routeModel as Any] as [String : Any]
-                NotificationCenter.default.post(name: Notification.navigationSteps, object: nil, userInfo: userInfo)
+                NotificationCenter.default.post(name: Notification.Name("NavigationSteps"), object: nil, userInfo: userInfo)
             }
             UserDefaultsHelper.saveObject(value: routeModel, key: .navigationRoute)
             UserDefaultsHelper.save(value: true, key: .isNavigationMode)
@@ -819,7 +819,7 @@ extension DirectionVC: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
-            NotificationCenter.default.post(name: Notification.grantedLocationPermissions, object: nil, userInfo: ["userLocation": manager.location as Any])
+            NotificationCenter.default.post(name: Notification.Name("GrantedLocationPermissions"), object: nil, userInfo: ["userLocation": manager.location as Any])
         default:
             break
         }

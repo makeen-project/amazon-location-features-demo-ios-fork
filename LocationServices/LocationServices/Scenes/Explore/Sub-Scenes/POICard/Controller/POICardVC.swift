@@ -90,7 +90,7 @@ final class POICardVC: UIViewController, UIViewControllerTransitioningDelegate {
     }
     
     private func updateMapViewBottomIcons() {
-        NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
     }
     
     private func clearAnnotations() {
@@ -134,7 +134,7 @@ extension POICardVC: POICardViewModelOutputDelegate {
         DispatchQueue.main.async { [self] in
             clearAnnotations()
             updateMapViewBottomIcons()
-            NotificationCenter.default.post(name: Notification.directionViewDismissed, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
             if(isInSplitViewController){
                 self.navigationController?.popViewController(animated: true)
             }
@@ -204,7 +204,7 @@ extension POICardVC: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
-            NotificationCenter.default.post(name: Notification.grantedLocationPermissions, object: nil, userInfo: ["userLocation": manager.location as Any])
+            NotificationCenter.default.post(name: Notification.Name("GrantedLocationPermissions"), object: nil, userInfo: ["userLocation": manager.location as Any])
             authorizationStatusChanged = true
         default:
             userLocation = nil
