@@ -14,7 +14,13 @@ protocol RoutingServiceable {
                             destinationPosition: CLLocationCoordinate2D,
                             travelModes: [GeoRoutesClientTypes.RouteTravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>]
+                            avoidTolls: Bool,
+                            avoidUturns: Bool,
+                            avoidTunnels: Bool,
+                            avoidDirtRoads: Bool,
+                            departNow: Bool?,
+                            departureTime: Date?,
+                            arrivalTime: Date?) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>]
 }
 
 enum RouteError: Error {
@@ -26,7 +32,13 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                             destinationPosition: CLLocationCoordinate2D,
                             travelModes: [GeoRoutesClientTypes.RouteTravelMode],
                             avoidFerries: Bool,
-                            avoidTolls: Bool) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] {
+                            avoidTolls: Bool,
+                            avoidUturns: Bool,
+                            avoidTunnels: Bool,
+                            avoidDirtRoads: Bool,
+                            departNow: Bool?,
+                            departureTime: Date?,
+                            arrivalTime: Date?) async throws -> [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] {
         
         var presentationObject: [GeoRoutesClientTypes.RouteTravelMode: Result<DirectionPresentation, Error>] = [:]
         
@@ -36,9 +48,16 @@ struct RoutingAPIService: AWSRoutingServiceProtocol, RoutingServiceable {
                                                         destinationPosition: destinationPosition,
                                                         travelMode: travelMode,
                                                         avoidFerries: avoidFerries,
-                                                        avoidTolls: avoidTolls)!
-                if let route = response.routes?[safe: 0] {
-                    let model = try DirectionPresentation(model: route, travelMode: travelMode)
+                                                        avoidTolls: avoidTolls,
+                                                        avoidUturns: avoidUturns,
+                                                        avoidTunnels: avoidTunnels,
+                                                        avoidDirtRoads: avoidDirtRoads,
+                                                        departNow: departNow,
+                                                        departureTime: departureTime,
+                                                        arrivalTime: arrivalTime)
+                if let route = response?.routes?[safe: 0] {
+                    let leaveType: LeaveType = arrivalTime != nil ? .arriveAt : (departureTime != nil ? .leaveAt : .leaveNow)
+                    let model = DirectionPresentation(route: route, travelMode: travelMode, leaveType: leaveType)
                     presentationObject[travelMode] = .success(model)
                 }
                 else {

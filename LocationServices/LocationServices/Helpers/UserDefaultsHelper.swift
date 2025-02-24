@@ -19,6 +19,9 @@ enum UserDefaultKeyType: String {
     case language
     case tollOptions
     case ferriesOptions
+    case uturnsOptions
+    case tunnelsOptions
+    case dirtRoadsOptions
     // means we attach the policy to AWSLocation for tracking
     case attachedPolicy
     // use when we are going to connect via CF form
@@ -34,6 +37,9 @@ enum UserDefaultKeyType: String {
     case signedInIdentityId
     
     case mapCenter
+    // if app is in navigation mode
+    case isNavigationMode
+    case navigationRoute
 }
 
 enum AppState: Int {
@@ -58,7 +64,7 @@ final class UserDefaultsHelper {
             UserDefaults.standard.set(data, forKey: key.rawValue)
             UserDefaults.standard.synchronize()
         } catch {
-            print(.errorUserDefaultsSave + " \(T.self)")
+            print(.errorUserDefaultsSave + " \(T.self), \(error)")
         }
     }
       
@@ -92,7 +98,7 @@ final class UserDefaultsHelper {
             return nil
             
         } catch {
-            print(.errorUserDefaultsSave +  " \(T.self)")
+            print(.errorUserDefaultsSave +  " \(T.self), \(error)")
             return nil
         }
     }

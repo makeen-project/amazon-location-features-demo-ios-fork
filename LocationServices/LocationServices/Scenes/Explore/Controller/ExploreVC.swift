@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import CoreLocation
+import AWSGeoRoutes
 
 final class ExploreVC: UIViewController {
     
@@ -98,9 +99,9 @@ final class ExploreVC: UIViewController {
             }
         } else {
             mapNavigationView.snp.remakeConstraints {
-                $0.top.equalTo(view.safeAreaInsets).offset(topOffset)
-                $0.leading.equalToSuperview().offset(horizontalOffset)
-                $0.trailing.equalToSuperview().offset(-horizontalOffset)
+                $0.top.equalToSuperview()
+                $0.leading.equalToSuperview()
+                $0.trailing.equalToSuperview()
             }
             mapNavigationActionsView.snp.remakeConstraints {
                 $0.bottom.equalTo(view.safeAreaInsets)
@@ -133,7 +134,7 @@ extension ExploreVC: ExploreViewOutputDelegate {
         delegate?.showMapStyles()
     }
     
-    func showNavigationView(steps: [RouteNavigationStep]) {
+    func showNavigationView(steps: [GeoRoutesClientTypes.RouteVehicleTravelStep]) {
         
     }
     
@@ -149,6 +150,12 @@ extension ExploreVC: ExploreViewOutputDelegate {
     func showPoiCard(cardData: [MapModel]) {
         exploreView.shouldBottomStackViewPositionUpdate(state: true)
         delegate?.showPoiCardScene(cardData: cardData, lat: userCoreLocation?.latitude, long: userCoreLocation?.longitude)
+    }
+    
+    func showArrivalCard(route: RouteModel) {
+        exploreView.shouldBottomStackViewPositionUpdate(state: true)
+        exploreView.hideGeoFence(state: true)
+        delegate?.showArrivalCardScene(route: route)
     }
     
     func loginButtonTapped() {
@@ -235,6 +242,8 @@ extension ExploreVC {
         
         NotificationCenter.default.addObserver(self, selector: #selector(dismissDirectionScene(_:)), name: Notification.Name("DirectionViewDismissed"), object: nil)
         
+    
+        NotificationCenter.default.addObserver(self, selector: #selector(shownSearchResults(_:)), name: Notification.Name("ShownSearchResults"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMapView(_:)), name: Notification.refreshMapView, object: nil)
         
@@ -243,6 +252,9 @@ extension ExploreVC {
         NotificationCenter.default.addObserver(self, selector: #selector(exploreActionButtonsVisibilityChanged(_:)), name: Notification.exploreActionButtonsVisibilityChanged, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerItems(_:)), name: Notification.updateMapLayerItems, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(focusOnLocation(_:)), name: Notification.focusOnLocation, object: nil)
+
     }
     
     private func setupKeyboardNotifications() {
@@ -345,11 +357,11 @@ extension ExploreVC {
     }
     
     @objc private func updateMapViewValue(_ notification: Notification) {
-        if let data = notification.userInfo?["MapViewValues"] as? (distance: String, street: String) {
-            mapNavigationView.updateValues(distance: data.distance, street: data.street)
+        if let data = notification.userInfo?["MapViewValues"] as? (distance: String, street: String, stepImage: UIImage?) {
+            mapNavigationView.updateValues(distance: data.distance, street: data.street, stepImage: data.stepImage)
         }
-        if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String) {
-            mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
+        if let data = notification.userInfo?["SummaryData"] as? (totalDistance: String, totalDuration: String, arrivalTime: String) {
+            mapNavigationActionsView.updateDatas(distance: data.totalDistance, duration: data.totalDuration, arrivalTime: data.arrivalTime)
         }
     }
     
@@ -357,7 +369,7 @@ extension ExploreVC {
         guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
             let size = self.view.bounds.size.height / 2 - 20
-            let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
+            let offset:CGFloat = ((notification.userInfo?["height"] as? CGFloat) ?? size)-80
             self.exploreView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
     }
@@ -388,6 +400,12 @@ extension ExploreVC {
         }
     }
     
+    @objc private func focusOnLocation(_ notification: Notification) {
+        if let location = notification.userInfo?["coordinates"] as? CLLocationCoordinate2D {
+            self.exploreView.focus(on: location)
+        }
+    }
+    
     @objc private func selectPlace(_ notification: Notification) {
         if let place = notification.userInfo?["place"] as? MapModel {
             self.exploreView.show(selectedPlace: place)
@@ -395,24 +413,25 @@ extension ExploreVC {
     }
     
     @objc private func showNavigationScene(_ notification: Notification) {
-        if let datas = notification.userInfo?["routeLegdetails"] as? (routeLegdetails: [RouteLegDetails]?, sumData: (totalDistance: Double, totalDuration: Double)),
+        if let datas = notification.userInfo?["route"] as? GeoRoutesClientTypes.Route,
         let routeModel = notification.userInfo?["routeModel"] as? RouteModel {
             viewModel.activateRoute(route: routeModel)
-            if !routeModel.isPreview {
-                mapNavigationView.isHidden = false
-                updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
-                exploreView.focusNavigationMode()
-            } else {
-                exploreView.focus(on: routeModel.departurePosition)
-            }
+            mapNavigationView.isHidden = false
+            updateAmazonLogoPositioning(isBottomNavigationShown: self.isInSplitViewController)
+            
             mapNavigationActionsView.isHidden = !self.isInSplitViewController
             let firstDestination = MapModel(placeName: routeModel.departurePlaceName, placeAddress: routeModel.departurePlaceAddress, placeLat: routeModel.departurePosition.latitude, placeLong: routeModel.departurePosition.longitude)
             let secondDestination = MapModel(placeName: routeModel.destinationPlaceName, placeAddress: routeModel.destinationPlaceAddress, placeLat: routeModel.destinationPosition.latitude, placeLong: routeModel.destinationPosition.longitude)
             
-            self.delegate?.showNavigationview(routeLegDetails: datas.routeLegdetails!,
-                                              summaryData: datas.sumData,
+            self.delegate?.showNavigationview(route: datas,
                                               firstDestination: firstDestination,
                                               secondDestination: secondDestination)
+            if !routeModel.isPreview {
+                exploreView.focusNavigationMode()
+            }
+            else {
+                exploreView.focus(on: routeModel.departurePosition)
+            }
         }
     }
     
@@ -432,6 +451,12 @@ extension ExploreVC {
         exploreView.hideMapStyleButton(state: false)
         exploreView.deleteDrawing()
     }
+    
+    @objc private func shownSearchResults(_ notification: Notification?) {
+        viewModel.deactivateRoute()
+        exploreView.deleteDrawing()
+    }
+    
     
     @objc private func refreshMapView(_ notification: Notification) {
         exploreView.setupMapView(locateMe: false)
@@ -479,6 +504,22 @@ extension ExploreVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         userCoreLocation = manager.location?.coordinate
         exploreView.update(userLocation: manager.location, userHeading: manager.heading)
+        if let isNavigationMode = UserDefaultsHelper.get(for: Bool.self, key: .isNavigationMode), isNavigationMode, let route = UserDefaultsHelper.getObject(value: RouteModel.self, key: .navigationRoute), let userCoreLocation = userCoreLocation, isArrivalInProximity(userCoreLocation: userCoreLocation, route: route) {
+            NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+            self.showArrivalCard(route: route)
+        }
+    }
+    
+    func isArrivalInProximity(userCoreLocation: CLLocationCoordinate2D, route: RouteModel) -> Bool {
+        let distance = userCoreLocation.distance(from: route.destinationPosition)
+        switch route.travelMode {
+        case .car, .truck:
+            return distance < 50
+        case .pedestrian:
+            return distance < 15
+        case .scooter:
+            return distance < 30
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
@@ -501,25 +542,26 @@ extension ExploreVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     }
     
-    func routeReCalculated(route: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes) {
-        if let routeLegDetails = route.routeLegDetails {
-            
-            let sumData = (route.distance, route.duration)
-            let userInfo = ["routeLegDetails": (routeLegDetails: routeLegDetails, sumData: sumData)]
+    func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes) {
+            let userInfo = ["route": direction.route]
             NotificationCenter.default.post(name: Notification.Name("NavigationStepsUpdated"), object: nil, userInfo: userInfo)
-            
-            var datas: [Data] = []
-            for legDetails in routeLegDetails {
-                let data = (try? JSONEncoder().encode(legDetails.lineString)) ?? Data()
-                datas.append(data)
+            let encoder = JSONEncoder()
+            do {
+                var datas: [Data] = []
+                if let legDetails = direction.route.legs {
+                    for leg in legDetails {
+                        let data = try encoder.encode(leg.geometry?.getPolylineGeoData())
+                        datas.append(data)
+                    }
+                }
+                self.exploreView.drawCalculatedRouteWith(datas, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: true, routeType: routeType)
+            } catch {
+                print(String.errorJSONDecoder)
             }
-            self.exploreView.drawCalculatedRouteWith(datas, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: true, routeType: routeType)
-        }
     }
     
     func userReachedDestination(_ destination: MapModel) {
         dismissNavigationScene(nil)
-        self.exploreView.show(selectedPlace: destination)
     }
     
     func showAnnotation(model: SearchPresentation, force: Bool) {

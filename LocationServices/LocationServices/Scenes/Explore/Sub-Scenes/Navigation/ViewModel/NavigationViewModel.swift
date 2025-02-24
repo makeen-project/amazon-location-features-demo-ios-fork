@@ -6,22 +6,21 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
+import AWSGeoRoutes
 
 final class NavigationVCViewModel {
     var delegate: NavigationViewModelOutputDelegate?
     var service: LocationService
-    var routeLegDetails: [RouteLegDetails]
     var presentation: [NavigationPresentation] = []
-    private var summaryData: (totalDistance: Double, totalDuration: Double)
+    var route: GeoRoutesClientTypes.Route
     let dispatchGroup = DispatchGroup()
     
     private(set) var firstDestination: MapModel?
     private(set) var secondDestination: MapModel?
     
-    init(service: LocationService, routeLegDetails: [RouteLegDetails], summaryData: (totalDistance: Double, totalDuration: Double), firstDestination: MapModel?, secondDestination: MapModel?) {
+    init(service: LocationService, route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?) {
         self.service = service
-        self.routeLegDetails = routeLegDetails
-        self.summaryData = summaryData
+        self.route = route
         self.firstDestination = firstDestination
         self.secondDestination = secondDestination
         Task {
@@ -44,10 +43,26 @@ final class NavigationVCViewModel {
     
     private func populateNavigationSteps() async {
         let manager = PresentationManager()
-        for legDetails in routeLegDetails {
-            for (id, step) in legDetails.navigationSteps.enumerated() {
-                let model = NavigationPresentation(id: id, duration: step.duration.convertSecondsToMinString(), distance: step.distance.formatToKmString(), instruction: step.instruction, stepType: step.type)
-                await manager.addPresentation(model)
+        if let routeLegDetails = route.legs {
+            for legDetails in routeLegDetails {
+                if let steps = legDetails.pedestrianLegDetails?.travelSteps {
+                    for (id, step) in steps.enumerated() {
+                        let model = NavigationPresentation(id: id, pedestrianStep: step)
+                        await manager.addPresentation(model)
+                    }
+                }
+                if let steps = legDetails.vehicleLegDetails?.travelSteps {
+                    for (id, step) in steps.enumerated() {
+                        let model = NavigationPresentation(id: id, vehicleStep: step)
+                        await manager.addPresentation(model)
+                    }
+                }
+                if let steps = legDetails.ferryLegDetails?.travelSteps {
+                    for (id, step) in steps.enumerated() {
+                        let model = NavigationPresentation(id: id, ferryStep: step)
+                        await manager.addPresentation(model)
+                    }
+                }
             }
         }
         let sortedPresentation = await manager.getSortedPresentation()
@@ -55,17 +70,28 @@ final class NavigationVCViewModel {
         self.delegate?.updateResults()
     }
     
-    func update(routeLegDetails: [RouteLegDetails], summaryData: (totalDistance: Double, totalDuration: Double)) {
-        self.routeLegDetails = routeLegDetails
-        self.summaryData = summaryData
+    func update(route: GeoRoutesClientTypes.Route) {
+        self.route = route
         Task {
             await populateNavigationSteps()
         }
     }
     
-    func getSummaryData() -> (totalDistance: String, totalDuration: String) {
-        return (summaryData.totalDistance.formatToKmString(),
-                summaryData.totalDuration.convertSecondsToMinString())
+    func getSummaryData() -> (totalDistance: String, totalDuration: String, arrivalTime: String) {
+        var arrivalTime = ""
+        let lastLeg = route.legs?.last
+        if let leg = lastLeg?.ferryLegDetails, let arrival = leg.arrival, let time = arrival.time {
+            arrivalTime = time
+        }
+        else if let leg = lastLeg?.pedestrianLegDetails, let arrival = leg.arrival, let time = arrival.time {
+            arrivalTime = time
+        }
+        else if let leg = lastLeg?.vehicleLegDetails, let arrival = leg.arrival, let time = arrival.time {
+            arrivalTime = time
+        }
+        return (route.summary!.distance.formatToKmString(),
+                route.summary!.duration.convertSecondsToMinString(),
+                arrivalTime)
     }
     
     func getData() -> [NavigationCellModel] {

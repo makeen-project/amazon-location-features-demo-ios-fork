@@ -48,13 +48,25 @@ final class RouteOptionViewModelTests: XCTestCase {
 }
 
 class MockRouteOptionViewModelOutputDelegate: RouteOptionViewModelOutputDelegate {
-    
     var tollOption: Bool?
     var ferriesOption: Bool?
+    var uturnsOption: Bool?
+    var tunnelsOption: Bool?
+    var dirtRoadsOption: Bool?
     
-    func updateViews(tollOption: Bool, ferriesOption: Bool) {
+    func updateViews(tollOption: Bool, ferriesOption: Bool, uturnsOption: Bool, tunnelsOption: Bool, dirtRoadsOption: Bool) {
         self.tollOption = tollOption
         self.ferriesOption = ferriesOption
+        self.uturnsOption = uturnsOption
+        self.tunnelsOption = tunnelsOption
+        self.dirtRoadsOption = dirtRoadsOption
+    }
+    
+    
+
+    
+    func updateViews(tollOption: Bool, ferriesOption: Bool) {
+
     }
     
 }

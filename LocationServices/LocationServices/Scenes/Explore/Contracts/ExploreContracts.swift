@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 import UIKit
-
+import AWSGeoRoutes
 
 protocol ExploreViewModelProtocol: AnyObject {
     var delegate: ExploreViewModelOutputDelegate? { get set }
@@ -26,7 +26,7 @@ protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {
     func loginCompleted(_ presentation: ExplorePresentation)
     func logoutCompleted()
     
-    func routeReCalculated(route: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes)
+    func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes)
     func userReachedDestination(_ destination: MapModel)
     func showAnnotation(model: SearchPresentation, force: Bool)
 }
@@ -44,7 +44,8 @@ protocol ExploreNavigationDelegate: AnyObject {
                         long: Double?)
     func showSearchSceneWith(lat: Double?, long: Double?)
     func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?)
-    func showNavigationview(routeLegDetails: [RouteLegDetails], summaryData: (totalDistance: Double, totalDuration: Double), firstDestination: MapModel?, secondDestination: MapModel?)
+    func showArrivalCardScene(route: RouteModel)
+    func showNavigationview(route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?)
     func showLoginFlow()
     func showLoginSuccess()
     func showAttribution()

@@ -12,7 +12,7 @@ protocol TabBarCoordinatorProtocol: Coordinator {
 }
 
 final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
-
+    static var tabBarController: UITabBarController?
     var tabBarController: UITabBarController
     weak var delegate: CoordinatorCompletionDelegate?
     var childCoordinators: [Coordinator] = []
@@ -32,6 +32,7 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
 }
 
 private extension TabBarCoordinator {
+    
     func createTabBarController(with viewControllers: [UIViewController]) {
         tabBarController.setViewControllers(viewControllers, animated: true)
         tabBarController.tabBar.clipsToBounds = true
@@ -44,6 +45,7 @@ private extension TabBarCoordinator {
         tabBarController.delegate = self
         navigationController.navigationBar.isHidden = true
         navigationController.setViewControllers([tabBarController], animated: true)
+        TabBarCoordinator.tabBarController = tabBarController
     }
 }
 

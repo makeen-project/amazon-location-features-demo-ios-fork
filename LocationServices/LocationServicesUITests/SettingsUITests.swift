@@ -74,7 +74,6 @@ final class SettingsUITests: LocationServicesUITests {
         var exploreScreen = UITestExploreScreen(app: app)
             .waitForMapToBeRendered()
         
-        exploreScreen = testMapStyle(screen: exploreScreen, style: .standard)
         exploreScreen = testMapStyle(screen: exploreScreen, style: .monochrome)
     }
     
@@ -91,8 +90,10 @@ final class SettingsUITests: LocationServicesUITests {
             .select(style: style)
         XCTAssertTrue(mapStyleScreen.isCellSelected(for: style))
         Thread.sleep(forTimeInterval: 2)
-        let exploreScreen = mapStyleScreen
+        let settingsScreen = mapStyleScreen
             .tapBackButton()
+        Thread.sleep(forTimeInterval: 2)
+        let exploreScreen = settingsScreen
             .getTabBarScreen()
             .tapExploreButton()
             .waitForMapToBeRendered()

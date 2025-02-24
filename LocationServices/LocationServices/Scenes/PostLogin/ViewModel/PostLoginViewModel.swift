@@ -33,13 +33,8 @@ extension PostLoginViewModel: AWSLoginServiceOutputProtocol {
             switch result {
             case .success:
                 self.delegate?.sigInCompleted()
-                //            let presentation = ExplorePresentation(model: user)
-                //            UserDefaultsHelper.save(value: presentation.userInitial, key: .userInitial)
-                //            let userInfo = ["loginInfo": presentation.userInitial]
-                //            NotificationCenter.default.post(name: Notification.updateSearchTextBarIcon, object: nil, userInfo: userInfo)
             case .failure(let error):
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                self.delegate?.showAlert(model)
+                print("Logged in failure \(error)")
             }
         }
     }

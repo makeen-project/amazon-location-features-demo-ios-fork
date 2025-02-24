@@ -18,9 +18,24 @@ final class RouteOptionViewModel: RouteOptionViewModelProtocol {
         UserDefaultsHelper.save(value: state, key: .ferriesOptions)
     }
     
+    func saveUturnsOption(state: Bool) {
+        UserDefaultsHelper.save(value: state, key: .uturnsOptions)
+    }
+    
+    func saveTunnelsOption(state: Bool) {
+        UserDefaultsHelper.save(value: state, key: .tunnelsOptions)
+    }
+    
+    func saveDirtRoadsOption(state: Bool) {
+        UserDefaultsHelper.save(value: state, key: .dirtRoadsOptions)
+    }
+    
     func loadData() {
         let tollOption = UserDefaultsHelper.get(for: Bool.self, key: .tollOptions)
         let ferriesOptions = UserDefaultsHelper.get(for: Bool.self, key: .ferriesOptions)
-        delegate?.updateViews(tollOption: tollOption ?? true, ferriesOption: ferriesOptions ?? true)
+        let uturnsOptions = UserDefaultsHelper.get(for: Bool.self, key: .uturnsOptions)
+        let tunnelsOptions = UserDefaultsHelper.get(for: Bool.self, key: .tunnelsOptions)
+        let dirtRoadsOptions = UserDefaultsHelper.get(for: Bool.self, key: .dirtRoadsOptions)
+        delegate?.updateViews(tollOption: tollOption ?? true, ferriesOption: ferriesOptions ?? true, uturnsOption: uturnsOptions ?? true, tunnelsOption: tunnelsOptions ?? true, dirtRoadsOption: dirtRoadsOptions ?? true)
     }
 }
