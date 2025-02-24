@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import UIKit
+import AWSGeoRoutes
 
 final class NavigationVC: UIViewController {
     
@@ -23,7 +24,24 @@ final class NavigationVC: UIViewController {
         }
     }
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .clear
+        scrollView.alwaysBounceVertical = true
+        scrollView.isDirectionalLockEnabled = true
+        return scrollView
+    }()
+    
     private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        return stackView
+    }()
+    
+    private let headerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 5
@@ -43,10 +61,65 @@ final class NavigationVC: UIViewController {
         return label
     }()
     
+    private let departStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .leading
+        stackView.isUserInteractionEnabled = true
+        return stackView
+    }()
+    
+    private let departLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel()
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
+    
+    private let departAddress: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = .amazonFont(type: .regular, size: 13)
+        label.textColor = .searchBarTintColor
+        label.numberOfLines = 3
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
+    
+    private let destinationStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .leading
+        stackView.isUserInteractionEnabled = true
+        return stackView
+    }()
+    
+    private let destinationLabel: LargeTitleLabel = {
+        let label = LargeTitleLabel()
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
+    
+    private let destinationAddress: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = .amazonFont(type: .regular, size: 13)
+        label.textColor = .searchBarTintColor
+        label.numberOfLines = 3
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
+    
     private var navigationHeaderView: NavigationHeaderView = NavigationHeaderView()
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.isScrollEnabled = false
         tableView.backgroundColor = .searchBarBackgroundColor
         tableView.separatorStyle = .none
         return tableView
@@ -67,16 +140,20 @@ final class NavigationVC: UIViewController {
         let barButtonItem = UIBarButtonItem(title: nil, image: .arrowUpLeftAndArrowDownRight, target: self, action: #selector(hideScreen))
         barButtonItem.tintColor = .lsPrimary
         navigationItem.leftBarButtonItem = barButtonItem
+        changeExploreActionButtonsVisibility()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        changeExploreActionButtonsVisibility()
+        
     }
     
     func setupHandler() {
         navigationHeaderView.dismissHandler = { [weak self] in
+            UserDefaultsHelper.save(value: false, key: .isNavigationMode)
+            UserDefaultsHelper.removeObject(for: .navigationRoute)
             self?.closeScreen()
+            
         }
     }
     
@@ -100,25 +177,76 @@ final class NavigationVC: UIViewController {
     }
     
     private func setupViews() {
-        view.addSubview(stackView)
-        stackView.addArrangedSubview(titleLabelContainer)
-        stackView.addArrangedSubview(navigationHeaderView)
+        view.addSubview(headerStackView)
+        headerStackView.addArrangedSubview(titleLabelContainer)
+        headerStackView.addArrangedSubview(navigationHeaderView)
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+
+        stackView.addArrangedSubview(departStackView)
         stackView.addArrangedSubview(tableView)
-        
+        stackView.addArrangedSubview(destinationStackView)
+
         titleLabelContainer.addSubview(titleLabel)
-        
-        stackView.snp.makeConstraints {
+
+        departStackView.addArrangedSubview(departLabel)
+        departStackView.addArrangedSubview(departAddress)
+
+        destinationStackView.addArrangedSubview(destinationLabel)
+        destinationStackView.addArrangedSubview(destinationAddress)
+
+        headerStackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.bottom.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(Constants.navigationHeaderHeight)
         }
-        
+
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(headerStackView.snp.bottom)
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+        }
+
+        stackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.width.equalTo(scrollView.snp.width)
+            $0.bottom.equalToSuperview().offset(-16)
+        }
+
         navigationHeaderView.snp.makeConstraints {
             $0.height.equalTo(Constants.navigationHeaderHeight)
         }
-        
+
         titleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
             $0.top.bottom.trailing.equalToSuperview()
+        }
+
+        departStackView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(44)
+        }
+
+        tableView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(0)
+            $0.top.equalTo(departStackView.snp.bottom).offset(16)
+        }
+
+        destinationStackView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
+            $0.top.equalTo(tableView.snp.bottom).offset(16)
+            $0.height.equalTo(44)
+        }
+    }
+
+    private func adjustTableViewHeight() {
+        tableView.layoutIfNeeded()
+        tableView.snp.updateConstraints {
+            $0.height.equalTo(tableView.contentSize.height+50)
         }
     }
     
@@ -138,20 +266,29 @@ extension NavigationVC: NavigationViewModelOutputDelegate {
             self.tableView.reloadData()
             self.updateNavigationHeaderData()
             self.sendMapViewData()
+            // Delay adjusting the tableView height until reloadData completes
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                self.adjustTableViewHeight()
+            }
         }
     }
-    
 }
 
 private extension NavigationVC {
     func updateNavigationHeaderData() {
         let data = viewModel.getSummaryData()
-        self.navigationHeaderView.updateDatas(distance: data.totalDistance, duration: data.totalDuration)
+        self.navigationHeaderView.updateDatas(distance: data.totalDistance, duration: data.totalDuration, arrivalTime: data.arrivalTime)
+        departLabel.text = viewModel.firstDestination?.placeName
+        departAddress.text = viewModel.firstDestination?.placeAddress
+        
+        destinationLabel.text = viewModel.secondDestination?.placeName
+        destinationAddress.text = viewModel.secondDestination?.placeAddress
     }
     func sendMapViewData() {
         let datas = viewModel.getData()
-        if let mapData = datas[safe: 0] {
-            let mapHeaderData = (distance: mapData.distance, street: mapData.instruction)
+        let index = datas.count > 1 ? 1 : 0
+        if let mapData = datas[safe: index] {
+            let mapHeaderData = (distance: datas[0].distance, street: mapData.instruction, stepImage: mapData.getStepImage())
             let summaryData = viewModel.getSummaryData()
             let data: [String: Any] = ["MapViewValues" : mapHeaderData, "SummaryData": summaryData]
             NotificationCenter.default.post(name: Notification.Name("UpdateMapViewValues"), object: nil, userInfo: data)
@@ -163,7 +300,7 @@ private extension NavigationVC {
     }
     
     @objc private func updateNavigationSteps(_ notification: Notification) {
-        guard let datas = notification.userInfo?["routeLegDetails"] as? (routeLegDetails: [RouteLegDetails], sumData: (totalDistance: Double, totalDuration: Double)) else { return }
-        viewModel.update(routeLegDetails: datas.routeLegDetails, summaryData: datas.sumData)
+        guard let route = notification.userInfo?["route"] as? GeoRoutesClientTypes.Route else { return }
+        viewModel.update(route: route)
     }
 }

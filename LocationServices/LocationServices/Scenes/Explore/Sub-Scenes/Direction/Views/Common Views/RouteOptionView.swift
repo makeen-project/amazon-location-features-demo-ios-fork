@@ -60,6 +60,10 @@ final class RouteOptionView: UIView {
         self.optionSwitch.setOn(state, animated: false)
     }
     
+    func getState() -> Bool {
+        return optionSwitch.isOn
+    }
+    
     private func setupViews() {
         self.addSubview(containerView)
         containerView.addSubview(optionTitle)

@@ -50,7 +50,6 @@ final class AmazonCustomSelectableView: UIView {
         return stackView
     }()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }

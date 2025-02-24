@@ -64,19 +64,26 @@ struct ViewsIdentifiers {
         
         static let routeOptionsVisibilityButton = "RouteOptionsVisibilityButton"
         static let routeOptionsContainer = "RouteOptionsContainer"
+        static let leaveOptionsContainer = "LeaveOptionsContainer"
         static let avoidTollsOptionContainer = "AvoidTollsOptionContainer"
         static let avoidFerriesOptionContainer = "AvoidFerriesOptionContainer"
+        static let avoidUturnsOptionContainer = "AvoidUturnsOptionContainer"
+        static let avoidTunnelsOptionContainer = "AvoidTunnelsOptionContainer"
+        static let avoidDirtRoadsOptionContainer = "AvoidDirtRoadsOptionContainer"
         static let routeOptionSwitchButton = "RouteOptionSwitchButton"
         
         static let routeTypesContainer = "RouteTypesContainer"
         
         static let carContainer = "CarContainer"
-        static let pedestrianContainer = "pedestrianContainer"
-        static let scooterContainer = "scooterContainer"
+        static let pedestrianContainer = "PedestrianContainer"
+        static let scooterContainer = "ScooterContainer"
         static let truckContainer = "TruckContainer"
         
+        static let routeMainContainer = "RouteMainContainer"
+        static let routeLeftContainer = "RouteLeftContainer"
         static let routeEstimatedTime = "RouteEstimatedTime"
         static let routeEstimatedDistance = "RouteEstimatedDistance"
+        static let routeEstimatedLeave = "RouteEstimatedLeave"
         
         static let navigateButton = "NavigateButton"
         static let tableView = "DirectionsTableView"
@@ -92,6 +99,12 @@ struct ViewsIdentifiers {
         static let poiCardView = "POICardView"
         static let travelTimeLabel = "TravelTimeLabel"
         static let directionButton = "DirectionButton"
+    }
+    
+    struct ArrivalCard {
+        static let arrivalCardView = "ArrivalCardView"
+        static let arrivalLabel = "ArrivalLabel"
+        static let doneButton = "DoneButton"
     }
 
     struct AWSConnect {

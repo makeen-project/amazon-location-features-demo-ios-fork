@@ -11,6 +11,9 @@ import SnapKit
 final class RouteOptionRowView: UIView {
     var tollHandlers: BoolHandler?
     var ferriesHandlers: BoolHandler?
+    var uturnsHandlers: BoolHandler?
+    var tunnelsHandlers: BoolHandler?
+    var dirtRoadsHandlers: BoolHandler?
     
     private let tollOption: RouteOptionView = {
         let view = RouteOptionView(title: StringConstant.avoidTolls)
@@ -30,6 +33,24 @@ final class RouteOptionRowView: UIView {
         return view
     }()
     
+    private let uturnsOption: RouteOptionView = {
+        let view = RouteOptionView(title: StringConstant.avoidUturns)
+        view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidUturnsOptionContainer
+        return view
+    }()
+    
+    private let tunnelsOption: RouteOptionView = {
+        let view = RouteOptionView(title: StringConstant.avoidTunnels)
+        view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidTunnelsOptionContainer
+        return view
+    }()
+    
+    private let dirtRoadsOption: RouteOptionView = {
+        let view = RouteOptionView(title: StringConstant.avoidDirtRoads)
+        view.accessibilityIdentifier = ViewsIdentifiers.Routing.avoidDirtRoadsOptionContainer
+        return view
+    }()
+    
     private let optionStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
@@ -44,9 +65,12 @@ final class RouteOptionRowView: UIView {
         setupViews()
     }
     
-    func setLocalValues(toll: Bool, ferries: Bool) {
+    func setLocalValues(toll: Bool, ferries: Bool, uturns: Bool, tunnels: Bool, dirtRoads: Bool) {
         tollOption.setDefaultState(state: toll)
         ferriesOption.setDefaultState(state: ferries)
+        uturnsOption.setDefaultState(state: uturns)
+        tunnelsOption.setDefaultState(state: tunnels)
+        dirtRoadsOption.setDefaultState(state: dirtRoads)
     }
     
     required init?(coder: NSCoder) {
@@ -62,6 +86,18 @@ final class RouteOptionRowView: UIView {
         tollOption.boolHandler = { [weak self] option in
             self?.tollHandlers?(option)
         }
+        
+        uturnsOption.boolHandler = { [weak self] option in
+            self?.uturnsHandlers?(option)
+        }
+        
+        tunnelsOption.boolHandler = { [weak self] option in
+            self?.tunnelsHandlers?(option)
+        }
+        
+        dirtRoadsOption.boolHandler = { [weak self] option in
+            self?.dirtRoadsHandlers?(option)
+        }
     }
     
     
@@ -70,7 +106,10 @@ final class RouteOptionRowView: UIView {
         optionStackView.addArrangedSubview(tollOption)
         optionStackView.addArrangedSubview(firstSeperatorView)
         optionStackView.addArrangedSubview(ferriesOption)
-  
+        optionStackView.addArrangedSubview(uturnsOption)
+        optionStackView.addArrangedSubview(tunnelsOption)
+        optionStackView.addArrangedSubview(dirtRoadsOption)
+        
         self.addSubview(optionStackView)
                 
         tollOption.snp.makeConstraints {
@@ -82,6 +121,18 @@ final class RouteOptionRowView: UIView {
         }
         
         ferriesOption.snp.makeConstraints {
+            $0.height.equalTo(56)
+        }
+        
+        uturnsOption.snp.makeConstraints {
+            $0.height.equalTo(56)
+        }
+        
+        tunnelsOption.snp.makeConstraints {
+            $0.height.equalTo(56)
+        }
+        
+        dirtRoadsOption.snp.makeConstraints {
             $0.height.equalTo(56)
         }
         

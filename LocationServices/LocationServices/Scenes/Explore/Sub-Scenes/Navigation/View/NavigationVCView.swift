@@ -11,6 +11,7 @@ import SnapKit
 struct NavigationHeaderViewModel {
     let duration: String
     let distance: String
+    let arrivalTime: String?
 }
 
 struct NavigationHeaderViewStyle {
@@ -53,6 +54,9 @@ final class NavigationHeaderView: UIView {
         didSet {
             self.durationLabel.text = model.duration
             self.distanceLabel.text = model.distance
+            if let time = model.arrivalTime {
+                self.timeLabel.text = Date.convertStringToDate(time, format: "yyyy-MM-dd'T'HH:mm:ssXXX")?.convertTimeString()
+            }
         }
     }
     
@@ -75,6 +79,12 @@ final class NavigationHeaderView: UIView {
         return stackView
     }()
     
+    private let distanceContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     private var durationLabel: LargeTitleLabel = {
         let label = LargeTitleLabel()
         label.numberOfLines = 2
@@ -95,12 +105,31 @@ final class NavigationHeaderView: UIView {
         let label = UILabel()
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textColor = .searchBarTintColor
+        label.textColor = .lsGrey
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
     }()
     
+    private let dotView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .searchBarTintColor
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    
+    
+    private var timeLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = .amazonFont(type: .regular, size: 13)
+        label.textColor = .lsGrey
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
+    
+
     private lazy var routeVisibilityButton: UIButton = {
         let button = UIButton(type: .system)
         button.accessibilityIdentifier = ViewsIdentifiers.Navigation.navigationRoutesButton
@@ -143,9 +172,14 @@ final class NavigationHeaderView: UIView {
         setupViews()
     }
     
-    func updateDatas(distance: String?, duration: String?) {
+    func updateDatas(distance: String?, duration: String?, arrivalTime: String?) {
         distanceLabel.text = distance
         durationLabel.text = duration
+        dotView.isHidden = true
+        if let arrivalTime = arrivalTime, let time = Date.convertStringToDate(arrivalTime, format: "yyyy-MM-dd'T'HH:mm:ssXXX")?.convertTimeString() {
+            self.timeLabel.text = time
+            dotView.isHidden = false
+        }
     }
     
     func update(style: NavigationHeaderViewStyle) {
@@ -164,9 +198,15 @@ final class NavigationHeaderView: UIView {
     
     private func setupViews() {
         self.addSubview(containerView)
+        
         containerView.addSubview(infoContainerStackView)
+        
         infoContainerStackView.addArrangedSubview(durationLabel)
-        infoContainerStackView.addArrangedSubview(distanceLabel)
+        infoContainerStackView.addArrangedSubview(distanceContainerView)
+        
+        distanceContainerView.addSubview(distanceLabel)
+        distanceContainerView.addSubview(dotView)
+        distanceContainerView.addSubview(timeLabel)
         
         containerView.addSubview(actionsContainerStackView)
         actionsContainerStackView.addArrangedSubview(routeVisibilityButton)
@@ -179,6 +219,25 @@ final class NavigationHeaderView: UIView {
         infoContainerStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
+        }
+        
+        distanceContainerView.snp.makeConstraints {
+            $0.height.equalTo(18)
+        }
+        
+        distanceLabel.snp.makeConstraints {
+            $0.top.bottom.leading.equalToSuperview()
+        }
+        
+        dotView.snp.makeConstraints {
+            $0.leading.equalTo(distanceLabel.snp.trailing).offset(10)
+            $0.height.width.equalTo(3)
+            $0.centerY.equalTo(distanceLabel.snp.centerY)
+        }
+        
+        timeLabel.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.equalTo(dotView.snp.leading).offset(10)
         }
         
         actionsContainerStackView.snp.makeConstraints {

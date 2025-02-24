@@ -21,6 +21,11 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
         loginService.delegate = self
     }
     
+    func setupDefaults() {
+        UserDefaultsHelper.removeObject(for: .navigationRoute)
+        UserDefaultsHelper.removeObject(for: .isNavigationMode)
+    }
+    
     func setupAWS() {
         Task {
             try await setupAWSConfiguration()

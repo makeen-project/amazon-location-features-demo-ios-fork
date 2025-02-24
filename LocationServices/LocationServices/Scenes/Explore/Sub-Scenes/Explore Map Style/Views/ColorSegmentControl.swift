@@ -40,9 +40,14 @@ final class ColorSegmentControl: UISegmentedControl {
         self.addTarget(self, action: #selector(mapColorChanged(_:)), for: .valueChanged)
         
         NotificationCenter.default.addObserver(self, selector: #selector(validateMapColor(_:)), name: Notification.validateMapColor, object: nil)
+        validateMapColor()
     }
     
     @objc private func validateMapColor(_ notification: Notification) {
+        validateMapColor()
+    }
+    
+    private func validateMapColor() {
         let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         if mapStyle?.imageType == .hybrid || mapStyle?.imageType == .satellite {
             self.isEnabled = false

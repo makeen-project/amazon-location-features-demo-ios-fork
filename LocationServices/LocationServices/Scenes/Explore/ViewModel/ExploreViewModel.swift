@@ -69,12 +69,18 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         let travelMode = GeoRoutesClientTypes.RouteTravelMode(routeType: selectedRoute.travelMode) ?? .pedestrian
         let travelModes = [travelMode]
         let result = try await routingService.calculateRouteWith(depaturePosition: userLocation,
-                                          destinationPosition: selectedRoute.destinationPosition,
-                                          travelModes: travelModes,
-                                          avoidFerries: selectedRoute.avoidFerries,
-                                          avoidTolls: selectedRoute.avoidTolls)
+                                                                 destinationPosition: selectedRoute.destinationPosition,
+                                                                 travelModes: travelModes,
+                                                                 avoidFerries: selectedRoute.avoidFerries,
+                                                                 avoidTolls: selectedRoute.avoidTolls,
+                                                                 avoidUturns: selectedRoute.avoidUturns,
+                                                                 avoidTunnels: selectedRoute.avoidTunnels,
+                                                                 avoidDirtRoads: selectedRoute.avoidDirtRoads,
+                                                                 departNow: selectedRoute.departNow,
+                                                                 departureTime: selectedRoute.departureTime,
+                                                                 arrivalTime: selectedRoute.arrivalTime)
         for route in result {
-            self.delegate?.routeReCalculated(route: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
+            self.delegate?.routeReCalculated(direction: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
         }
     }
     

@@ -21,7 +21,7 @@ protocol DirectionViewModelOutputDelegate: AnyObject, AlertPresentable {
     func reloadView()
     func selectedPlaceResult(mapModel: [MapModel]) async throws
     func isMyLocationAlreadySelected() -> Bool
-    func getLocalRouteOptions(tollOption: Bool, ferriesOption: Bool)
+    func getLocalRouteOptions(tollOption: Bool, ferriesOption: Bool, uturnsOption: Bool, tunnelsOption: Bool, dirtRoadsOption: Bool)
 }
 
 protocol DirectionViewOutputDelegate: AnyObject {

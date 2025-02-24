@@ -196,3 +196,9 @@ private extension SearchCell {
         }
     }
 }
+
+extension SearchCell {
+    func hideDistance() {
+        locationDistance.isHidden = true
+    }
+}

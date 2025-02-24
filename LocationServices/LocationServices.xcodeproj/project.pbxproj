@@ -377,7 +377,13 @@
 		F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */; };
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
 		F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */; };
+		F18FFB4E2D48EF7900573B54 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = F18FFB4D2D48EF7900573B54 /* Polyline */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
+		F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */; };
+		F1A306BE2D3023E300B16126 /* ArrivalCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */; };
+		F1A306C02D3023F800B16126 /* ArrivalCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306BF2D3023EA00B16126 /* ArrivalCardViewModel.swift */; };
+		F1A306C22D30241300B16126 /* ArrivalCardVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306C12D30240800B16126 /* ArrivalCardVCBuilder.swift */; };
+		F1A306C42D30242A00B16126 /* ArrivalCardVCContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306C32D30242000B16126 /* ArrivalCardVCContracts.swift */; };
 		F1AD36F82CCA7CA000E1BB7B /* UITestPoliticalViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */; };
 		F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */; };
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
@@ -393,6 +399,7 @@
 		F1C4DC682CC7BD7600AA235A /* PoliticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */; };
 		F1CB5B5C2A4486F200A346F5 /* GridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */; };
 		F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */; };
+		F1D1BC402D1043F300D263B6 /* RouteTypeSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D1BC3F2D1043E600D263B6 /* RouteTypeSegment.swift */; };
 		F1E368602CB6C25E00AF3A5B /* AWSClientRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = F1E3685F2CB6C25E00AF3A5B /* AWSClientRuntime */; };
 		F1E368622CB6C25E00AF3A5B /* AWSCognitoIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = F1E368612CB6C25E00AF3A5B /* AWSCognitoIdentity */; };
 		F1E368642CB6C25E00AF3A5B /* AWSLocation in Frameworks */ = {isa = PBXBuildFile; productRef = F1E368632CB6C25E00AF3A5B /* AWSLocation */; };
@@ -803,6 +810,11 @@
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttIoTContext.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
+		F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardView.swift; sourceTree = "<group>"; };
+		F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVC.swift; sourceTree = "<group>"; };
+		F1A306BF2D3023EA00B16126 /* ArrivalCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardViewModel.swift; sourceTree = "<group>"; };
+		F1A306C12D30240800B16126 /* ArrivalCardVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVCBuilder.swift; sourceTree = "<group>"; };
+		F1A306C32D30242000B16126 /* ArrivalCardVCContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVCContracts.swift; sourceTree = "<group>"; };
 		F1AD36F72CCA7C9000E1BB7B /* UITestPoliticalViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestPoliticalViewScreen.swift; sourceTree = "<group>"; };
 		F1B060962AD0209C0020CD8C /* LocationServicesUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocationServicesUITests.xctestplan; sourceTree = "<group>"; };
 		F1B2388229EFD402001E2066 /* DirectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -818,6 +830,7 @@
 		F1C4DC672CC7BD7100AA235A /* PoliticalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoliticalView.swift; sourceTree = "<group>"; };
 		F1CB5B5B2A4486F200A346F5 /* GridBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridBackgroundView.swift; sourceTree = "<group>"; };
 		F1CE147129EFC63500680447 /* NavigationVCViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVCViewModelTests.swift; sourceTree = "<group>"; };
+		F1D1BC3F2D1043E600D263B6 /* RouteTypeSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTypeSegment.swift; sourceTree = "<group>"; };
 		F1E5F8E929E94EEF00639EEC /* NSMutableAttributedStringExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionTests.swift; sourceTree = "<group>"; };
 		F1E5F8EA29E94EEF00639EEC /* SettingsDefaultValueHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsDefaultValueHelperTests.swift; sourceTree = "<group>"; };
 		F1E5F8EF29E986F300639EEC /* UserDefaultsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelperTests.swift; sourceTree = "<group>"; };
@@ -858,6 +871,7 @@
 				F1E368622CB6C25E00AF3A5B /* AWSCognitoIdentity in Frameworks */,
 				F1E368642CB6C25E00AF3A5B /* AWSLocation in Frameworks */,
 				F1E368912CB6C93100AF3A5B /* AWSIoT in Frameworks */,
+				F18FFB4E2D48EF7900573B54 /* Polyline in Frameworks */,
 				F11E045E2CD509A2003F1641 /* AmazonLocationiOSAuthSDK in Frameworks */,
 				F11E04612CD515C0003F1641 /* KeychainSwift in Frameworks */,
 				ADF26F6529300E59000147A0 /* SafariServices.framework in Frameworks */,
@@ -1852,6 +1866,7 @@
 		AD33F4C02950FC48005719D3 /* Sub-Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				F1A306B82D30234E00B16126 /* ArrivalCard */,
 				ADBDDEF229842C3900696EC6 /* Explore Map Style */,
 				ADC9737F295EDA04005AE918 /* Navigation */,
 				AD33F4B32950F3FB005719D3 /* Direction */,
@@ -1875,6 +1890,7 @@
 		AD33F4CA295189FA005719D3 /* Common Views */ = {
 			isa = PBXGroup;
 			children = (
+				F1D1BC3F2D1043E600D263B6 /* RouteTypeSegment.swift */,
 				AD33F4CB29518A08005719D3 /* RouteOptionView.swift */,
 				AD33F4CD29518A13005719D3 /* RouteTypeView.swift */,
 			);
@@ -2188,6 +2204,7 @@
 				DF8005DB2A0A6B6C00758BBE /* WebViewController */,
 				ADC1245129774A6700B08C20 /* MapView */,
 				ADBD7FBE2949CB9C005DB4E4 /* BottomSheet Controller */,
+				F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */,
 				ADF26F56292FEC0A000147A0 /* SearchBarView.swift */,
 				ADF26F58292FECA9000147A0 /* SearchTextField.swift */,
 				ADBD7FB52949B579005DB4E4 /* POICardView.swift */,
@@ -2963,6 +2980,49 @@
 			path = iot;
 			sourceTree = "<group>";
 		};
+		F1A306B82D30234E00B16126 /* ArrivalCard */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306B92D30235E00B16126 /* Controller */,
+				F1A306BA2D30236900B16126 /* Builder */,
+				F1A306BB2D30237200B16126 /* ViewModel */,
+				F1A306BC2D30237A00B16126 /* Contracts */,
+			);
+			path = ArrivalCard;
+			sourceTree = "<group>";
+		};
+		F1A306B92D30235E00B16126 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F1A306BA2D30236900B16126 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306C12D30240800B16126 /* ArrivalCardVCBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		F1A306BB2D30237200B16126 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306BF2D3023EA00B16126 /* ArrivalCardViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F1A306BC2D30237A00B16126 /* Contracts */ = {
+			isa = PBXGroup;
+			children = (
+				F1A306C32D30242000B16126 /* ArrivalCardVCContracts.swift */,
+			);
+			path = Contracts;
+			sourceTree = "<group>";
+		};
 		F1AD36F92CCBABC700E1BB7B /* AuthHelpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -3037,6 +3097,7 @@
 				F1E368922CB6C93B00AF3A5B /* AWSIoTEvents */,
 				F11E045D2CD509A2003F1641 /* AmazonLocationiOSAuthSDK */,
 				F11E04602CD515C0003F1641 /* KeychainSwift */,
+				F18FFB4D2D48EF7900573B54 /* Polyline */,
 			);
 			productName = LocationServices;
 			productReference = ADAE4FFA2935611C0000F7FC /* LocationServices.app */;
@@ -3081,6 +3142,7 @@
 				F1E3688D2CB6C8D800AF3A5B /* XCRemoteSwiftPackageReference "aws-crt-swift" */,
 				F11E045C2CD509A2003F1641 /* XCRemoteSwiftPackageReference "amazon-location-mobile-auth-sdk-ios" */,
 				F11E045F2CD515C0003F1641 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				F18FFB4C2D48EF7900573B54 /* XCRemoteSwiftPackageReference "polyline" */,
 			);
 			productRefGroup = AD2AF023292E892000149904;
 			projectDirPath = "";
@@ -3326,6 +3388,7 @@
 				8A85A75E29A5059D0022ABE0 /* MapStyleSectionHeaderView.swift in Sources */,
 				96E742AA2967381900D5C0BC /* Sequence+Extension.swift in Sources */,
 				ADD13978298098760003F917 /* ResetPasswordVC.swift in Sources */,
+				F1D1BC402D1043F300D263B6 /* RouteTypeSegment.swift in Sources */,
 				ADD1398029809C360003F917 /* ResetPasswordContracts.swift in Sources */,
 				ADC1245329774A7700B08C20 /* DefaultCommonMapView.swift in Sources */,
 				8A3360DA296C3BE400320B87 /* MLNCoordinateBounds+Extension.swift in Sources */,
@@ -3436,6 +3499,7 @@
 				ADC1249A29788D0100B08C20 /* GeofenceDataModel.swift in Sources */,
 				8A6C390829A2664F0003666C /* NoInternetConnectionView.swift in Sources */,
 				ADBDDF032984386400696EC6 /* ExploreMapStyleHeaderView.swift in Sources */,
+				F1A306C02D3023F800B16126 /* ArrivalCardViewModel.swift in Sources */,
 				F1BA943B2C526646002FEB51 /* AmazonLocationClient.swift in Sources */,
 				8A0EB58A2983F9CF00FBB3E5 /* GeofenceAnnotation.swift in Sources */,
 				8A439F0829C0BA1B00B59D0B /* UIApplication+Extension.swift in Sources */,
@@ -3466,6 +3530,7 @@
 				AD2AF0D1292EAB9A00149904 /* SettingsVC.swift in Sources */,
 				8ACD71CA2A091A8F00EC23F3 /* MapFloatingViewHandler.swift in Sources */,
 				AD989746298C53E40041E867 /* TrackingHistoryContracts.swift in Sources */,
+				F1A306BE2D3023E300B16126 /* ArrivalCardVC.swift in Sources */,
 				8ACD71C82A08F6F200EC23F3 /* SplitViewExploreMapCoordinator.swift in Sources */,
 				8A3471CC2975D30B00BAF374 /* Locale+Extension.swift in Sources */,
 				8AE83A912A274B2F00CF6E7C /* UIView+Extension.swift in Sources */,
@@ -3473,6 +3538,7 @@
 				AD2AF0DB292EABFE00149904 /* AboutContracts.swift in Sources */,
 				8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */,
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
+				F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */,
 				ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
 				ADC474FE2971E7A300AAE7A3 /* AmazonLocationLabel.swift in Sources */,
@@ -3506,6 +3572,7 @@
 				AD33F4B72950F410005719D3 /* DirectionVCBuilder.swift in Sources */,
 				AD625E9F293BF1F900C67B44 /* SearchCellViewModel.swift in Sources */,
 				F1BA94442C624B63002FEB51 /* CognitoAuthHelper.swift in Sources */,
+				F1A306C22D30241300B16126 /* ArrivalCardVCBuilder.swift in Sources */,
 				ADD139A42981C7070003F917 /* MapStyleViewModel.swift in Sources */,
 				AD2AF03A292E892000149904 /* LocationServices.xcdatamodeld in Sources */,
 				ADABECD5293FD44200E66FC5 /* LocationSearchService.swift in Sources */,
@@ -3535,6 +3602,7 @@
 				ADC124A42979F18B00B08C20 /* GeofenceServiceable.swift in Sources */,
 				AD2AF079292EA55300149904 /* ExploreView.swift in Sources */,
 				AD2AF032292E892000149904 /* SceneDelegate.swift in Sources */,
+				F1A306C42D30242A00B16126 /* ArrivalCardVCContracts.swift in Sources */,
 				AD625E96293BCEE800C67B44 /* SearchViewModel.swift in Sources */,
 				AD2AF0D9292EABE700149904 /* AboutVCBuilder.swift in Sources */,
 				AD989744298C534C0041E867 /* TrackingHistory+TableView.swift in Sources */,
@@ -4057,6 +4125,14 @@
 				minimumVersion = 20.0.0;
 			};
 		};
+		F18FFB4C2D48EF7900573B54 /* XCRemoteSwiftPackageReference "polyline" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-geospatial/polyline/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
 		F1E3685E2CB6C25E00AF3A5B /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
@@ -4090,6 +4166,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F11E045F2CD515C0003F1641 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		F18FFB4D2D48EF7900573B54 /* Polyline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F18FFB4C2D48EF7900573B54 /* XCRemoteSwiftPackageReference "polyline" */;
+			productName = Polyline;
 		};
 		F1BA942A2C510CAC002FEB51 /* MapLibre */ = {
 			isa = XCSwiftPackageProductDependency;
