@@ -18,9 +18,9 @@ extension Int {
         return formatter
     }()
     
-    func formatDistance() -> String {
+    func formatDistance(decimalPoints: Int = 2) -> String {
         let num = Double(self)
-        return num.formatDistance()
+        return num.formatDistance(decimalPoints: decimalPoints)
     }
 
     func convertSecondsToMinString() -> String {
@@ -34,8 +34,8 @@ extension Int {
 }
 
 extension Int64 {
-    func formatDistance() -> String {
+    func formatDistance(decimalPoints: Int = 2) -> String {
         let num = Double(self)
-        return num.formatDistance()
+        return num.formatDistance(decimalPoints: decimalPoints)
     }
 }

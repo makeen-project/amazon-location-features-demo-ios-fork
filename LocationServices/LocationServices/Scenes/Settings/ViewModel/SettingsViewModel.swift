@@ -61,7 +61,7 @@ final class SettingsViewModel: SettingsViewModelProtocol {
         let unitType = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)
 
         datas = [
-            SettingsCellModel(type: .units, subTitle: unitType?.subTitle ?? ""),
+            SettingsCellModel(type: .units, subTitle: unitType?.title ?? ""),
             SettingsCellModel(type: .mapStyle, subTitle: mapStyle?.title ?? ""),
             SettingsCellModel(type: .routeOption),
             SettingsCellModel(type: .awsCloud)
