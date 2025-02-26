@@ -78,7 +78,7 @@ final class NavigationVCViewModelTests: XCTestCase {
         route = GeoRoutesClientTypes.Route(legs: [routeLegDetails], summary: GeoRoutesClientTypes.RouteSummary(distance: 10, duration: 1, tolls: nil))
         navigationVCViewModel.update(route: route)
         
-        XCTAssertEqual(navigationVCViewModel.getSummaryData().totalDistance, "10.0 m", "Expected summary total distance 1 m")
+        XCTAssertEqual(navigationVCViewModel.getSummaryData().totalDistance, "0.01 mi", "Expected summary total distance 0.01 mi")
     }
     
     func testGetDataWithZeroSteps() throws {

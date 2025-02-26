@@ -20,7 +20,7 @@ final class SettingsDefaultValueHelper {
             UserDefaultsHelper.saveObject(value: DefaultUserSettings.mapStyleColorType, key: .mapStyleColorType)
         }
         
-        if UserDefaultsHelper.get(for: String.self, key: .unitType) == nil {
+        if UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType) == nil {
             UserDefaultsHelper.saveObject(value: DefaultUserSettings.unitValue, key: .unitType)
         }
         
