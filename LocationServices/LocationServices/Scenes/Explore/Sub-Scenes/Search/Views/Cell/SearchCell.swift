@@ -55,7 +55,7 @@ final class SearchCell: UITableViewCell {
             
             if model.searchType == .location {
                 self.subView.isHidden = false
-                self.locationDistance.text = model.locationDistance?.formatToKmString()
+                self.locationDistance.text = model.locationDistance?.formatDistance()
                 subView.snp.remakeConstraints {
                     $0.top.equalTo(locationTitle.snp.bottom).offset(5)
                     $0.leading.trailing.equalToSuperview()
