@@ -26,6 +26,11 @@ final class SearchCell: UITableViewCell {
     
     private let containerView: UIView = UIView()
     private let contentCellView: UIView = UIView()
+    private let subView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
     
     var model: SearchCellViewModel! {
         didSet {
@@ -49,20 +54,18 @@ final class SearchCell: UITableViewCell {
             }
             
             if model.searchType == .location {
-                self.locationDistance.isHidden = false
-                self.locationAddress.isHidden = false
+                self.subView.isHidden = false
                 self.locationDistance.text = model.locationDistance?.formatToKmString()
-                locationAddress.snp.remakeConstraints {
+                subView.snp.remakeConstraints {
                     $0.top.equalTo(locationTitle.snp.bottom).offset(5)
-                    $0.leading.equalTo(locationTitle.snp.leading)
-                    $0.trailing.equalToSuperview().offset(-30)
+                    $0.leading.trailing.equalToSuperview()
                     $0.bottom.equalTo(contentCellView.snp.bottom)
+                    $0.height.equalTo(18)
                 }
             } else {
-                self.locationDistance.isHidden = true
+                self.subView.isHidden = true
                 updateConstraintsForTitle(shouldAlingCenter: true)
-                self.locationAddress.isHidden = true
-                locationAddress.snp.remakeConstraints{
+                subView.snp.remakeConstraints{
                     $0.width.equalTo(0)
                     $0.height.equalTo(0)
                 }
@@ -101,11 +104,18 @@ final class SearchCell: UITableViewCell {
     private let locationDistance: UILabel = {
         let label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textAlignment = .right
-        label.textColor = .tertiaryColor
+        label.textAlignment = .left
+        label.textColor = .gray
         label.setContentHuggingPriority(UILayoutPriority(251), for: .horizontal)
         label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
         return label
+    }()
+    
+    private let dotView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lsGrey
+        view.layer.cornerRadius = 5
+        return view
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -123,8 +133,9 @@ final class SearchCell: UITableViewCell {
             }
         } else {
             locationTitle.snp.remakeConstraints {
+                $0.leading.equalToSuperview()
                 $0.top.equalToSuperview()
-                $0.trailing.lessThanOrEqualTo(locationDistance.snp.leading).offset(-8)
+                $0.trailing.lessThanOrEqualToSuperview().offset(-12)
             }
         }
     }
@@ -158,8 +169,10 @@ private extension SearchCell {
         containerView.addSubview(contentCellView)
         containerView.addSubview(searchTypeImage)
         contentCellView.addSubview(locationTitle)
-        contentCellView.addSubview(locationAddress)
-        contentCellView.addSubview(locationDistance)
+        contentCellView.addSubview(subView)
+        subView.addSubview(locationDistance)
+        subView.addSubview(dotView)
+        subView.addSubview(locationAddress)
         
         containerView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
@@ -178,27 +191,38 @@ private extension SearchCell {
             $0.centerY.equalToSuperview()
         }
         
-        locationDistance.snp.makeConstraints {
-            $0.centerY.equalTo(locationTitle.snp.centerY)
-            $0.trailing.equalToSuperview()
-        }
-        
         locationTitle.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
-            $0.trailing.lessThanOrEqualTo(locationDistance.snp.leading).offset(-12)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        
+        subView.snp.makeConstraints {
+            $0.top.equalTo(locationTitle.snp.bottom).offset(5)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(contentCellView.snp.bottom)
+            $0.height.equalTo(18)
+        }
+        
+        locationDistance.snp.makeConstraints {
+            $0.top.bottom.leading.equalToSuperview()
         }
 
+        dotView.snp.makeConstraints {
+            $0.leading.equalTo(locationDistance.snp.trailing).offset(5)
+            $0.height.width.equalTo(5)
+            $0.centerY.equalTo(locationDistance.snp.centerY)
+        }
+        
         locationAddress.snp.makeConstraints {
-            $0.top.equalTo(locationTitle.snp.bottom).offset(5)
-            $0.leading.equalTo(locationTitle.snp.leading)
-            $0.trailing.equalToSuperview().offset(-20)
-            $0.bottom.equalTo(contentCellView.snp.bottom)
+            $0.top.bottom.equalToSuperview()
+            $0.leading.equalTo(dotView.snp.trailing).offset(5)
+            $0.trailing.equalToSuperview().offset(-16)
         }
     }
 }
 
 extension SearchCell {
     func hideDistance() {
-        locationDistance.isHidden = true
+      locationDistance.isHidden = true
     }
 }
