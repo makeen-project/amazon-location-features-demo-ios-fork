@@ -246,7 +246,6 @@ final class NavigationVC: UIViewController {
 
     private func adjustTableViewHeight() {
         tableView.layoutIfNeeded()
-        //var height = tableView.contentSize.height
         let legsCount = viewModel.getData().count
         let height = CGFloat(legsCount) * Constants.navigationCellRowHeight
         tableView.snp.updateConstraints {

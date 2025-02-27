@@ -121,7 +121,6 @@ private extension CommonSelectableCell {
             $0.height.equalTo(72)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalTo(selectionButton.snp.leading)
-            //$0.centerY.equalToSuperview()
         }
     }
 }
