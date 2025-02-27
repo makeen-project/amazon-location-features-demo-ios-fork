@@ -28,11 +28,11 @@ struct NavigationCellModel {
         self.distance = ""
         self.instruction = ""
         if let step = model.pedestrianStep {
-            self.distance =  String(step.distance.formatDistance(decimalPoints: 1))
+            self.distance =  String(step.distance.formatDistance(decimalPoints: 2))
             self.instruction = step.instruction!
         }
         else if let step = model.vehicleStep {
-            self.distance =  String(step.distance.formatDistance(decimalPoints: 1))
+            self.distance =  String(step.distance.formatDistance(decimalPoints: 2))
             self.instruction = step.instruction!
         }
         self.stepState = stepState ?? .first

@@ -223,6 +223,12 @@ private extension SearchCell {
 
 extension SearchCell {
     func hideDistance() {
-      locationDistance.isHidden = true
+        locationDistance.isHidden = true
+        dotView.isHidden = true
+        locationAddress.snp.remakeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-16)
+        }
     }
 }

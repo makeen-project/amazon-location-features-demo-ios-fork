@@ -31,20 +31,18 @@ extension Double {
     func formatDistance(decimalPoints: Int = 2) -> String {
         let unitType = UnitHelper.getResolvedUnit()
         let num = Double(self)
-        let format = "%.\(decimalPoints)f"
-
+        let factor = pow(10.0, Double(decimalPoints))
+        
         if unitType == .metric {
-            let result = num / 1000 // Convert meters to km
-            return String(format: format + " km", result)
+            let result = (num / 1000 * factor).rounded() / factor // Convert meters to km and round
+            return String(format: "%.\(decimalPoints)f km", result)
         } else {
-            let numMiles = convertMetersToMiles(meters: num)
-            return String(format: format + " mi", numMiles)
+            let numMiles = (convertMetersToMiles(meters: num) * factor).rounded() / factor
+            return String(format: "%.\(decimalPoints)f mi", numMiles)
         }
     }
 
-
     private func convertMetersToMiles(meters: Double) -> Double {
-        let miles = meters * 0.00062137
-        return miles
+        return meters * 0.00062137
     }
 }

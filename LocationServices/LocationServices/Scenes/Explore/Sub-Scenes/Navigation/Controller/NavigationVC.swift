@@ -13,6 +13,7 @@ final class NavigationVC: UIViewController {
     enum Constants {
         static let navigationHeaderHeight: CGFloat = 80
         static let titleLeadingOffset: CGFloat = 16
+        static let navigationCellRowHeight: CGFloat = 52
     }
     
     weak var delegate: ExploreNavigationDelegate?
@@ -238,15 +239,18 @@ final class NavigationVC: UIViewController {
 
         destinationStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
-            $0.top.equalTo(tableView.snp.bottom).offset(16)
+            $0.top.equalTo(tableView.snp.bottom).offset(32)
             $0.height.equalTo(44)
         }
     }
 
     private func adjustTableViewHeight() {
         tableView.layoutIfNeeded()
+        //var height = tableView.contentSize.height
+        let legsCount = viewModel.getData().count
+        let height = CGFloat(legsCount) * Constants.navigationCellRowHeight
         tableView.snp.updateConstraints {
-            $0.height.equalTo(tableView.contentSize.height+50)
+            $0.height.equalTo(height)
         }
     }
     
