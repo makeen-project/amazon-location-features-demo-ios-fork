@@ -34,12 +34,8 @@ extension Double {
         let format = "%.\(decimalPoints)f"
 
         if unitType == .metric {
-            if num > 1000 {
-                let result = num / 1000 // Convert meters to km
-                return String(format: format + " km", result)
-            } else {
-                return String(format: "%.0f m", num) // Meters always as whole number
-            }
+            let result = num / 1000 // Convert meters to km
+            return String(format: format + " km", result)
         } else {
             let numMiles = convertMetersToMiles(meters: num)
             return String(format: format + " mi", numMiles)
