@@ -28,20 +28,21 @@ extension Double {
         }
     }
     
-    func convertFormattedKMString() -> String {
-        let distanceInMeters = convertKMToMeters()
-        return distanceInMeters.formatToKmString()
-    }
-    
-    func convertKMToMeters() -> Double {
-        return self * 1000
+    func formatDistance(decimalPoints: Int = 2) -> String {
+        let unitType = UnitHelper.getResolvedUnit()
+        let num = Double(self)
+        let factor = pow(10.0, Double(decimalPoints))
+        
+        if unitType == .metric {
+            let result = (num / 1000 * factor).rounded() / factor // Convert meters to km and round
+            return String(format: "%.\(decimalPoints)f km", result)
+        } else {
+            let numMiles = (convertMetersToMiles(meters: num) * factor).rounded() / factor
+            return String(format: "%.\(decimalPoints)f mi", numMiles)
+        }
     }
 
-    func formatToKmString() -> String {
-        if self >= 1000 {
-            return String(format: "%.2f km", self / 1000)
-        } else {
-            return String(format: "%.0f m", self)
-        }
+    private func convertMetersToMiles(meters: Double) -> Double {
+        return meters * 0.00062137
     }
 }

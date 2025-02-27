@@ -89,7 +89,7 @@ final class NavigationVCViewModel {
         else if let leg = lastLeg?.vehicleLegDetails, let arrival = leg.arrival, let time = arrival.time {
             arrivalTime = time
         }
-        return (route.summary!.distance.formatToKmString(),
+        return (route.summary!.distance.formatDistance(),
                 route.summary!.duration.convertSecondsToMinString(),
                 arrivalTime)
     }

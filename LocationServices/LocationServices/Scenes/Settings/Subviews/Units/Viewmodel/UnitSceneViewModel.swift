@@ -11,21 +11,24 @@ final class UnitSceneViewModel: UnitSceneViewModelProcotol {
     var delegate: UnitSceneViewModelOutputDelegate?
     
     private var initialDatas: [CommonSelectableCellModel] = [
-        CommonSelectableCellModel(title: "Automatic",
-                                  subTitle: nil,
+        CommonSelectableCellModel(title: UnitTypes.automatic.title,
+                                  subTitle: UnitTypes.automatic.subTitle,
                                   isSelected: true,
-                                  identifier: "Automatic"),
-        CommonSelectableCellModel(title: "Imperial",
-                                  subTitle: "Miles, pounds",
+                                  identifier: UnitTypes.automatic.title,
+                                  unitType: UnitTypes.automatic),
+        CommonSelectableCellModel(title: UnitTypes.imperial.title,
+                                  subTitle: UnitTypes.imperial.subTitle,
                                   isSelected: false,
-                                  identifier: "Imperial"),
-        CommonSelectableCellModel(title: "Metric",
-                                  subTitle: "Kilometers, kilograms",
+                                  identifier: UnitTypes.imperial.title,
+                                  unitType: UnitTypes.imperial),
+        CommonSelectableCellModel(title: UnitTypes.metric.title,
+                                  subTitle: UnitTypes.metric.subTitle,
                                   isSelected: false,
-                                  identifier: "Metric")
+                                  identifier: UnitTypes.metric.title,
+                                  unitType: UnitTypes.metric)
     ]
     func loadCurrentData() {
-        let index =  getDataFromLocal()
+        let index = getDataFromLocal()
         delegate?.updateTableView(index: index)
     }
     
@@ -38,8 +41,9 @@ final class UnitSceneViewModel: UnitSceneViewModelProcotol {
     }
     
     func saveSelectedState(_ indexPath: IndexPath) {
-        let title = initialDatas[indexPath.row].title
-        saveUnitSettingsData(title: title)
+        if let unitType = initialDatas[indexPath.row].unitType {
+            saveUnitSettingsData(unitType: unitType)
+        }
         delegate?.updateTableView(index: indexPath.row)
     }
 }
@@ -47,10 +51,10 @@ final class UnitSceneViewModel: UnitSceneViewModelProcotol {
 private extension UnitSceneViewModel {
     func getDataFromLocal() -> Int {
         var currentDataIndex = 0
-        let localData =  UserDefaultsHelper.get(for: String.self, key: .unitType)
+        let localData =  UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)
         
         for index in initialDatas.indices {
-            if initialDatas[index].title == localData {
+            if initialDatas[index].title == localData?.title {
                 currentDataIndex = index
                 initialDatas[index].isSelected = true
             } else {
@@ -60,7 +64,7 @@ private extension UnitSceneViewModel {
         return currentDataIndex
     }
     
-    func saveUnitSettingsData(title: String) {
-        UserDefaultsHelper.save(value: title, key: .unitType)
+    func saveUnitSettingsData(unitType: UnitTypes) {
+        UserDefaultsHelper.saveObject(value: unitType, key: .unitType)
     }
 }

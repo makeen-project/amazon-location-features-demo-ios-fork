@@ -18,18 +18,11 @@ extension Int {
         return formatter
     }()
     
-    func formatToKmString() -> String {
-        let num: Double = Double(self)
-        if num > 1000 {
-            let result = Double(round(num * 1000 / 1000) / 1000)
-            return String(format: "%.2f", result) + " km"
-        } else {
-            return "\(num) m"
-        }
+    func formatDistance(decimalPoints: Int = 2) -> String {
+        let num = Double(self)
+        return num.formatDistance(decimalPoints: decimalPoints)
     }
-    
 
-    
     func convertSecondsToMinString() -> String {
         if let formattedString = Self.durationFormatter.string(from: Double(self)) {
             return formattedString
@@ -41,13 +34,8 @@ extension Int {
 }
 
 extension Int64 {
-    func formatToKmString() -> String {
-        let num: Double = Double(self)
-        if num > 1000 {
-            let result = Double(round(num * 1000 / 1000) / 1000)
-            return String(format: "%.2f", result) + " km"
-        } else {
-            return "\(num) m"
-        }
+    func formatDistance(decimalPoints: Int = 2) -> String {
+        let num = Double(self)
+        return num.formatDistance(decimalPoints: decimalPoints)
     }
 }

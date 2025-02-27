@@ -23,14 +23,9 @@ final class DoubleExtensionTests: XCTestCase {
        XCTAssertEqual(seconds.convertSecondsToMinString(), "1 hr", "Expected formatted 1 hr string")
     }
     
-    func testConvertKMToM() throws {
-        let km: Double = 1
-       XCTAssertEqual(km.convertKMToMeters(), 1000, "Expected 1000 M")
-    }
-    
-    func testConvertFormattedKMString() throws {
-        let km: Double = 1
-       XCTAssertEqual(km.convertFormattedKMString(), "1.00 km", "Expected formatted KM 1 km string")
+    func testformatDistance() throws {
+        let km: Double = 1000
+       XCTAssertEqual(km.formatDistance(), "0.62 mi", "Expected formatted KM 1 km string")
     }
 
 }
