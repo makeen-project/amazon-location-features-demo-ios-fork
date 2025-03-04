@@ -33,7 +33,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     private lazy var dashboardController: TrackingDashboardController = {
         let controller = TrackingDashboardBuilder.create()
         controller.delegate = self
-        controller.trackingHistoryHandler = { [weak self] in
+        controller.trackingSimulationHandler = { [weak self] in
             self?.showTrackingHistory(isTrackingActive: true)
         }
         return controller
@@ -77,6 +77,22 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         historyIsRootController = false
         guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
         showNextTrackingScene()
+    }
+    
+    func showTrackingSimulation() {
+        let controller = TrackingSimulationBuilder.create()
+        controller.modalPresentationStyle = .formSheet
+        controller.isModalInPresentation = true
+        
+        controller.dismissHandler = { [weak self] in
+            self?.splitViewController.dismiss(animated: true)
+        }
+        
+        if let sheet = controller.sheetPresentationController {
+            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
+        }
+        
+        splitViewController.present(controller, animated: true)
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {

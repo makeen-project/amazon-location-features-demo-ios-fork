@@ -11,17 +11,15 @@ import SnapKit
 final class TrackingDashboardController: UIViewController {
     
     weak var delegate: TrackingNavigationDelegate?
-    var trackingHistoryHandler: VoidHandler?
+    var trackingSimulationHandler: VoidHandler?
     
-    private var dashboardView = CommonDashboardView(
-        title: StringConstant.enableTracking,
+    private var dashboardView = TrackingDashboardView(
+        title: StringConstant.trackers,
         detail: StringConstant.enableTrackingDescription,
-        image: .locateMeMapIcon,
+        image: .trackingIcon,
         iconBackgroundColor: .white,
-        buttonTitle: StringConstant.enableTracking
+        buttonTitle: StringConstant.startTrackingSimulation
     )
-    
-    private let authActionsHelper = AuthActionsHelper()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +27,6 @@ final class TrackingDashboardController: UIViewController {
         navigationItem.backButtonTitle = ""
         setupHandlers()
         setupViews()
-        authActionsHelper.delegate = delegate
         if UIDevice.current.userInterfaceIdiom == .pad {
             navigationController?.isNavigationBarHidden = false
         }
@@ -54,9 +51,7 @@ final class TrackingDashboardController: UIViewController {
     
     private func setupHandlers() {
         dashboardView.dashboardButtonHandler = { [weak self] in
-            self?.authActionsHelper.tryToPerformAuthAction { [weak self] in
-                self?.trackingHistoryHandler?()
-            }
+            self?.trackingSimulationHandler?()
         }
     }
 }

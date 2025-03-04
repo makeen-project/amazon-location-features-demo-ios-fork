@@ -244,8 +244,7 @@ final class TrackingVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        openLoginFlow(skipDashboard: viewModel.hasHistory)
-        showGeofenceAnnotations()
+        delegate?.showDashboardFlow()
         setupKeyboardNotifications()
     }
     

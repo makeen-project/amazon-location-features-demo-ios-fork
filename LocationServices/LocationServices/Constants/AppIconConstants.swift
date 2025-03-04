@@ -72,10 +72,14 @@ extension UIImage {
     static let expandDownIcon = UIImage(systemName: "chevron.down")
     static let copyIcon = UIImage(systemName: "clipboard")
     
-    //system
+    /// system
     static let sidebarLeft = UIImage(systemName: "sidebar.left")
     static let arrowUpLeftAndArrowDownRight = UIImage(systemName: "arrow.up.left.and.arrow.down.right")
     static let chevronBackward = UIImage(systemName: "chevron.backward")
     static let checkMark = UIImage(systemName: "checkmark")
+    
+    /// tracker
+    static let simulationBackground = UIImage(named: "icon-simulation-bg")
+    static let notificationIcon = UIImage(named: "icon-notification")!
 }
 

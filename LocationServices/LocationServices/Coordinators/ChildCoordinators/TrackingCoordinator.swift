@@ -42,14 +42,27 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     func showDashboardFlow() {
         let controller = TrackingDashboardBuilder.create()
         controller.delegate = self
-        controller.trackingHistoryHandler = { [weak self] in
-            self?.showTrackingHistory(isTrackingActive: true)
+        controller.trackingSimulationHandler = { [weak self] in
+            self?.showTrackingSimulation()
         }
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: trackingController!)
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
         controller.enableBottomSheetGrab(smallHeight: 0.48)
         currentBottomSheet = controller
     }
+    
+    func showTrackingSimulation() {
+        let controller = TrackingSimulationBuilder.create()
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.90))
+        currentBottomSheet = controller
+        
+        controller.dismissHandler = { [weak self] in
+            self?.currentBottomSheet?.dismissBottomSheet()
+        }
+    }
+    
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
         let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)

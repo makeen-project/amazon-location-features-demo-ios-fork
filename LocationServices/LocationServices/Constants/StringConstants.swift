@@ -84,6 +84,7 @@ enum StringConstant {
     static let disconnectAWSAlertMessage = "Are you sure you want to Disconnect AWS?"
     static let noInternetConnection = "No internet connection"
     static let enableTracking = "Enable Tracker"
+    static let trackers = "Trackers"
     static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
     static let viewTermsAndConditions = "View Terms and Conditions"
     static let continueToTracker = "Continue"
@@ -91,6 +92,16 @@ enum StringConstant {
     
     static let startTracking = "Start Tracking"
     static let stopTracking = "Stop Tracking"
+    static let startSimulation = "Start Simulation"
+    static let simulation = "Simulation"
+    static let trackersGeofences = "Trackers and Geofences"
+    static let trackersGeofencesDetail = "Enter the tracking simulation to view the path across Vacouver streets that crosses geofences"
+    static let startTrackingSimulation = "Try Trackers & Geofences Simulation"
+    static let trackersDetail = "Visualize your location history on the map"
+    static let geofences = "Geofences"
+    static let geofencesDetail = "Define virtual boundaries around a specific area to detect entry and exit events"
+    static let notifications = "Notifications"
+    static let notificationsDetail = "Get geofence messages when you enter and leave locations"
     
     static let emptyTrackingHistory = "No tracking history available"
     

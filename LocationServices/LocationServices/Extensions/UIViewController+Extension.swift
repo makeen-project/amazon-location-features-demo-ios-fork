@@ -29,7 +29,7 @@ extension UIViewController {
         // Handle keyboard hide event
     }
     
-    private struct DetentHeights {
+    public struct DetentHeights {
         static var small = DefaultDetentHeights.small
         static var medium = DefaultDetentHeights.medium
         static var large = DefaultDetentHeights.large
@@ -51,6 +51,10 @@ extension UIViewController {
     
     func getLargeDetentHeight() -> CGFloat {
         return ceil(self.parent!.view.frame.height * DetentHeights.large)
+    }
+    
+    func getDetentHeight(heightFactor: CGFloat) -> CGFloat {
+        return ceil(self.parent!.view.frame.height * heightFactor)
     }
     
    func createGrabberView() -> UIView {

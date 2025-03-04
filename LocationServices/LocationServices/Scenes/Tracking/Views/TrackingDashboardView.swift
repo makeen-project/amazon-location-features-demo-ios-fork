@@ -7,12 +7,12 @@
 
 import UIKit
 
-enum CommonDashoardConstant {
+enum TrackingDashoardConstant {
     static let titleFont = UIFont.amazonFont(type: .bold, size: 20)
     static let detailLabelFont = UIFont.amazonFont(type: .regular, size: 13)
 }
 
-final class CommonDashboardView: UIView {
+final class TrackingDashboardView: UIView {
     var dashboardButtonHandler: VoidHandler?
     
     private let iconContainerView: UIView = {
@@ -27,14 +27,14 @@ final class CommonDashboardView: UIView {
     }()
     
     private let titleLabel = AmazonLocationLabel(labelText: StringConstant.geofence,
-                                                 font: CommonDashoardConstant.titleFont,
+                                                 font: TrackingDashoardConstant.titleFont,
                                                  fontColor: .black,
                                                  textAlignment: .center)
     
     private let detailLabel = AmazonLocationLabel(labelText: StringConstant.amazonLocationDetail,
-                                                  font: CommonDashoardConstant.detailLabelFont,
+                                                  font: TrackingDashoardConstant.detailLabelFont,
                                                   isMultiline: true,
-                                                  fontColor: .searchBarTintColor,
+                                                  fontColor: .lsGrey,
                                                   textAlignment: .center)
     
     private lazy var comonButton: AmazonLocationButton =  {
@@ -66,8 +66,8 @@ final class CommonDashboardView: UIView {
                      image: UIImage,
                      iconBackgroundColor: UIColor,
                      buttonTitle: String,
-                     titleFont: UIFont = CommonDashoardConstant.titleFont,
-                     detailLabelFont: UIFont = CommonDashoardConstant.detailLabelFont) {
+                     titleFont: UIFont = TrackingDashoardConstant.titleFont,
+                     detailLabelFont: UIFont = TrackingDashoardConstant.detailLabelFont) {
         self.init(frame: .zero)
         setupDefaultValues(title: title,
                            detail: detail,
@@ -118,14 +118,14 @@ final class CommonDashboardView: UIView {
         self.addSubview(comonButton)
         
         iconContainerView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(30)
             $0.centerX.equalToSuperview()
             $0.height.width.equalTo(96)
         }
         
         iconView.snp.makeConstraints {
             $0.height.width.equalTo(35)
-            $0.centerX.centerY.equalToSuperview()
+            $0.centerX.centerY.equalToSuperview(                  )
         }
         
         titleLabel.snp.makeConstraints {
@@ -143,7 +143,7 @@ final class CommonDashboardView: UIView {
             $0.top.greaterThanOrEqualTo(detailLabel.snp.bottom).offset(30)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(48)
-            $0.bottom.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-26)
         }
     }
     
