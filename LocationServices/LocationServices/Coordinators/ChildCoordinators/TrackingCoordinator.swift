@@ -43,7 +43,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = TrackingDashboardBuilder.create()
         controller.delegate = self
         controller.trackingSimulationHandler = { [weak self] in
-            self?.showTrackingSimulation()
+            self?.showTrackingSimulationScene()
         }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
@@ -51,8 +51,12 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         currentBottomSheet = controller
     }
     
-    func showTrackingSimulation() {
-        let controller = TrackingSimulationBuilder.create()
+    func showTrackingSimulationScene() {
+        let controller = TrackingSimulationIntroBuilder.create()
+        controller.delegate = self
+        controller.trackingSimulationHandler = { [weak self] in
+            self?.showRouteTrackingScene()
+        }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
         controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.90))
@@ -63,6 +67,9 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         }
     }
     
+    func showRouteTrackingScene() {
+        currentBottomSheet?.dismissBottomSheet()
+    }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {
         let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)

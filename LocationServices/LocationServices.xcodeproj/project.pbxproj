@@ -374,8 +374,8 @@
 		F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */; };
 		F17BE2B029F819C2001A4ADF /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */; };
 		F18055E32D71EF1300045301 /* TrackingSimulationDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E22D71EEFF00045301 /* TrackingSimulationDashboardView.swift */; };
-		F18055E82D71F2D200045301 /* TrackingSimulationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E72D71F2B000045301 /* TrackingSimulationBuilder.swift */; };
-		F18055EA2D71F30500045301 /* TrackingSimulationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E92D71F2F900045301 /* TrackingSimulationController.swift */; };
+		F18055E82D71F2D200045301 /* TrackingSimulationIntroBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E72D71F2B000045301 /* TrackingSimulationIntroBuilder.swift */; };
+		F18055EA2D71F30500045301 /* TrackingSimulationIntroController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E92D71F2F900045301 /* TrackingSimulationIntroController.swift */; };
 		F18BD50A2AC481DA008FD008 /* AWSLoginServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */; };
 		F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */; };
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
@@ -422,6 +422,8 @@
 		F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */; };
 		F1F8061829D571E9002BDF85 /* GeofenceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */; };
 		F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */; };
+		F1FAC8532D773468000238C4 /* TrackingSimulationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8522D77345E000238C4 /* TrackingSimulationController.swift */; };
+		F1FAC8552D773476000238C4 /* TrackingSimulationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8542D773471000238C4 /* TrackingSimulationBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -809,8 +811,8 @@
 		F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingAPIServiceMock.swift; sourceTree = "<group>"; };
 		F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
 		F18055E22D71EEFF00045301 /* TrackingSimulationDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationDashboardView.swift; sourceTree = "<group>"; };
-		F18055E72D71F2B000045301 /* TrackingSimulationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationBuilder.swift; sourceTree = "<group>"; };
-		F18055E92D71F2F900045301 /* TrackingSimulationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationController.swift; sourceTree = "<group>"; };
+		F18055E72D71F2B000045301 /* TrackingSimulationIntroBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationIntroBuilder.swift; sourceTree = "<group>"; };
+		F18055E92D71F2F900045301 /* TrackingSimulationIntroController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationIntroController.swift; sourceTree = "<group>"; };
 		F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSLoginServiceMock.swift; sourceTree = "<group>"; };
 		F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentials.swift; sourceTree = "<group>"; };
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -851,6 +853,8 @@
 		F1F8061729D571E9002BDF85 /* GeofenceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceUITests.swift; sourceTree = "<group>"; };
 		F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingUITests.swift; sourceTree = "<group>"; };
 		F1F8063229D7683E002BDF85 /* TrackingSimulateLocation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackingSimulateLocation.xctestplan; sourceTree = "<group>"; };
+		F1FAC8522D77345E000238C4 /* TrackingSimulationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationController.swift; sourceTree = "<group>"; };
+		F1FAC8542D773471000238C4 /* TrackingSimulationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1995,6 +1999,7 @@
 		AD98972A298B29110041E867 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				F1FAC8512D772E33000238C4 /* New Group */,
 				AD98973B298C4F670041E867 /* Tracking History */,
 				AD98972B298B291F0041E867 /* Tracking Dashboard */,
 				F18055E42D71F18F00045301 /* Tracking Simulation */,
@@ -2992,7 +2997,8 @@
 		F18055E52D71F1D300045301 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F18055E92D71F2F900045301 /* TrackingSimulationController.swift */,
+				F1FAC8522D77345E000238C4 /* TrackingSimulationController.swift */,
+				F18055E92D71F2F900045301 /* TrackingSimulationIntroController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -3000,7 +3006,8 @@
 		F18055E62D71F1E400045301 /* Builder */ = {
 			isa = PBXGroup;
 			children = (
-				F18055E72D71F2B000045301 /* TrackingSimulationBuilder.swift */,
+				F1FAC8542D773471000238C4 /* TrackingSimulationBuilder.swift */,
+				F18055E72D71F2B000045301 /* TrackingSimulationIntroBuilder.swift */,
 			);
 			path = Builder;
 			sourceTree = "<group>";
@@ -3064,6 +3071,13 @@
 				F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */,
 			);
 			path = AuthHelpers;
+			sourceTree = "<group>";
+		};
+		F1FAC8512D772E33000238C4 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3363,7 +3377,7 @@
 				ADABECE829417A5900E66FC5 /* UIViewController+Extension.swift in Sources */,
 				AD2AF0D7292EABD800149904 /* SettingsView.swift in Sources */,
 				AD33F4CE29518A13005719D3 /* RouteTypeView.swift in Sources */,
-				F18055EA2D71F30500045301 /* TrackingSimulationController.swift in Sources */,
+				F18055EA2D71F30500045301 /* TrackingSimulationIntroController.swift in Sources */,
 				AD2AF0D3292EABC800149904 /* SettingsPresentation.swift in Sources */,
 				AD33F4C9295189A6005719D3 /* RouteOptionsView.swift in Sources */,
 				AD2AF06E292E9AA600149904 /* TabBarCoordinatorConstants.swift in Sources */,
@@ -3377,6 +3391,7 @@
 				ADC97393295F3399005AE918 /* NavigationVCCell.swift in Sources */,
 				ADD13960298087C80003F917 /* UnitVC.swift in Sources */,
 				ADD1394D29806A1B0003F917 /* SettingsCell.swift in Sources */,
+				F1FAC8532D773468000238C4 /* TrackingSimulationController.swift in Sources */,
 				8A439EFB29BB968800B59D0B /* AttributionVCBuilder.swift in Sources */,
 				ADD13962298088380003F917 /* AmazonCustomSelectableView.swift in Sources */,
 				ADABECD9293FD65B00E66FC5 /* AppConstants.swift in Sources */,
@@ -3548,7 +3563,7 @@
 				8A1110DB297AB5BA00BC86E1 /* LSUserLocationHeadingIndicator.swift in Sources */,
 				8AFDA09429DDBB3600114BB7 /* VersionVC.swift in Sources */,
 				8AF7D2AB2976B3F700E1563E /* LocationManager.swift in Sources */,
-				F18055E82D71F2D200045301 /* TrackingSimulationBuilder.swift in Sources */,
+				F18055E82D71F2D200045301 /* TrackingSimulationIntroBuilder.swift in Sources */,
 				DF8005E12A0A737000758BBE /* WebViewVCBuilder.swift in Sources */,
 				AD2AF097292EA8CE00149904 /* GeofenceViewModel.swift in Sources */,
 				ADABECE12940F5BF00E66FC5 /* MapModel.swift in Sources */,
@@ -3594,6 +3609,7 @@
 				ADBDDEED29830D9E00696EC6 /* UnitVC+TableView.swift in Sources */,
 				8AC0806929A90BFC0000D79B /* DeleteTrackingView.swift in Sources */,
 				AD2AF0DD292EAC0500149904 /* AboutVC.swift in Sources */,
+				F1FAC8552D773476000238C4 /* TrackingSimulationBuilder.swift in Sources */,
 				F1B642692A2F330D00FB40E3 /* UIColor+Extension.swift in Sources */,
 				ADD1398229809C640003F917 /* ResetPasswordViewModel.swift in Sources */,
 				9660600129A4F20100FB88D0 /* StringConstants.swift in Sources */,

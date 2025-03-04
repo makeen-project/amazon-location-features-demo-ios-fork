@@ -80,7 +80,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
     }
     
     func showTrackingSimulation() {
-        let controller = TrackingSimulationBuilder.create()
+        let controller = TrackingSimulationIntroBuilder.create()
         controller.modalPresentationStyle = .formSheet
         controller.isModalInPresentation = true
         
