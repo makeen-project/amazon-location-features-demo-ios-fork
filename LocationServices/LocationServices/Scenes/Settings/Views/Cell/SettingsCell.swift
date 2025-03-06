@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 enum SettingsCellType {
-    case units,dataProvider, mapStyle, routeOption, resetPassword, awsCloud
+    case units, dataProvider, mapStyle, routeOption, resetPassword, awsCloud
     
     var title: String {
         switch self {

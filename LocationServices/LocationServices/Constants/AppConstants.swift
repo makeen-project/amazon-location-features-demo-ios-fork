@@ -12,7 +12,7 @@ final class DefaultUserSettings {
                                         imageType: .standard,
                                         isSelected: true)
     static let mapStyleColorType = MapStyleColorType.light
-    static let unitValue = "Metric"
+    static let unitValue = UnitTypes.automatic
 }
 
 final class DefaultMapStyles {

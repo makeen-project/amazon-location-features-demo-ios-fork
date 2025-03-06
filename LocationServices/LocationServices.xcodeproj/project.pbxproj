@@ -373,6 +373,9 @@
 		F16681A029D323B200FBD27C /* UITestGeofenceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */; };
 		F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */; };
 		F17BE2B029F819C2001A4ADF /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */; };
+		F18055DD2D64D2CF00045301 /* UnitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055DC2D64D2C700045301 /* UnitModel.swift */; };
+		F18055DF2D64D32200045301 /* UnitTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055DE2D64D31B00045301 /* UnitTypes.swift */; };
+		F18055E12D65DDE200045301 /* UnitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E02D65DDD800045301 /* UnitHelper.swift */; };
 		F18BD50A2AC481DA008FD008 /* AWSLoginServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */; };
 		F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */; };
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
@@ -805,6 +808,9 @@
 		F166819F29D323B200FBD27C /* UITestGeofenceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestGeofenceScreen.swift; sourceTree = "<group>"; };
 		F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingAPIServiceMock.swift; sourceTree = "<group>"; };
 		F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
+		F18055DC2D64D2C700045301 /* UnitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitModel.swift; sourceTree = "<group>"; };
+		F18055DE2D64D31B00045301 /* UnitTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTypes.swift; sourceTree = "<group>"; };
+		F18055E02D65DDD800045301 /* UnitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitHelper.swift; sourceTree = "<group>"; };
 		F18BD5092AC481DA008FD008 /* AWSLoginServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSLoginServiceMock.swift; sourceTree = "<group>"; };
 		F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentials.swift; sourceTree = "<group>"; };
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -1300,6 +1306,7 @@
 				F1F0C5862A0E5401009C7151 /* ErrorHandler.swift */,
 				F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */,
 				F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */,
+				F18055E02D65DDD800045301 /* UnitHelper.swift */,
 				F18DEEE52C75947000335F3E /* Logger.swift */,
 			);
 			path = Helpers;
@@ -2415,6 +2422,7 @@
 		ADD139502980831C0003F917 /* Units */ = {
 			isa = PBXGroup;
 			children = (
+				F18055DB2D64D2B100045301 /* Models */,
 				ADD139542980866E0003F917 /* Conracts */,
 				ADD13953298086620003F917 /* Viewmodel */,
 				ADD139522980865B0003F917 /* Builder */,
@@ -2972,6 +2980,15 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		F18055DB2D64D2B100045301 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F18055DE2D64D31B00045301 /* UnitTypes.swift */,
+				F18055DC2D64D2C700045301 /* UnitModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		F18DEEF72C77504900335F3E /* iot */ = {
 			isa = PBXGroup;
 			children = (
@@ -3446,6 +3463,7 @@
 				AD20616D2968A83A005F8BBB /* LoginVC.swift in Sources */,
 				ADBDDEFA29842CC500696EC6 /* ExploreMapStyleViewModel.swift in Sources */,
 				ADD1397E29809BF00003F917 /* ResetPasswordBuilder.swift in Sources */,
+				F18055DD2D64D2CF00045301 /* UnitModel.swift in Sources */,
 				ADBDDEEF29830E8B00696EC6 /* CommonSelectableCell.swift in Sources */,
 				ADD13970298097890003F917 /* DataProviderViewModel.swift in Sources */,
 				ADD5D7BB296F7EFC0022480B /* GeofenceDashboardVC.swift in Sources */,
@@ -3471,6 +3489,7 @@
 				ADC1249C2978A56E00B08C20 /* GeofenceDashboardContracts.swift in Sources */,
 				8AD132752A267FCC00608FCD /* KeyboardObserver.swift in Sources */,
 				F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */,
+				F18055E12D65DDE200045301 /* UnitHelper.swift in Sources */,
 				ADD5D7E2296F87FF0022480B /* AddGeofenceContracts.swift in Sources */,
 				AD2AF09F292EA91200149904 /* GeofenceCoordinator.swift in Sources */,
 				AD2AF064292E929C00149904 /* Coordinator.swift in Sources */,
@@ -3504,6 +3523,7 @@
 				8A0EB58A2983F9CF00FBB3E5 /* GeofenceAnnotation.swift in Sources */,
 				8A439F0829C0BA1B00B59D0B /* UIApplication+Extension.swift in Sources */,
 				ADF26F59292FECA9000147A0 /* SearchTextField.swift in Sources */,
+				F18055DF2D64D32200045301 /* UnitTypes.swift in Sources */,
 				AD20616F2968A841005F8BBB /* LoginVCBuilder.swift in Sources */,
 				F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */,
 				ADBD7FBD2949C699005DB4E4 /* POICardVCBuilder.swift in Sources */,
