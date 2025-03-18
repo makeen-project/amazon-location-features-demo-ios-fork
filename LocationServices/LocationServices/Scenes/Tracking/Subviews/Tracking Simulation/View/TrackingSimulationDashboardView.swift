@@ -101,7 +101,7 @@ final class TrackingSimulationDashboardView: UIView {
     }()
     
     private let notificationsIcon: UIImageView = {
-        let iv = UIImageView(image: .notificationIcon.withTintColor(.lsPrimary))
+        let iv = UIImageView(image: .notificationIcon?.withTintColor(.lsPrimary))
         iv.contentMode = .scaleAspectFill
         return iv
     }()

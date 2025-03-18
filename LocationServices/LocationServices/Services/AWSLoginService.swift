@@ -306,7 +306,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         UserDefaultsHelper.save(value: false, key: .attachedPolicy)
         print("Detached policy successully...")
     }
-   
     
     func validate(identityPoolId: String) async throws -> Bool {
         do {

@@ -40,24 +40,24 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showDashboardFlow() {
+        currentBottomSheet?.dismissBottomSheet()
         let controller = TrackingDashboardBuilder.create()
         controller.delegate = self
         controller.trackingSimulationHandler = { [weak self] in
             self?.showTrackingSimulationScene()
         }
-        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
         controller.enableBottomSheetGrab(smallHeight: 0.48)
         currentBottomSheet = controller
     }
     
     func showTrackingSimulationScene() {
+        currentBottomSheet?.dismissBottomSheet()
         let controller = TrackingSimulationIntroBuilder.create()
         controller.delegate = self
         controller.trackingSimulationHandler = { [weak self] in
             self?.showRouteTrackingScene()
         }
-        currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
         controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.90))
         currentBottomSheet = controller
@@ -69,6 +69,13 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     
     func showRouteTrackingScene() {
         currentBottomSheet?.dismissBottomSheet()
+        let controller = TrackingSimulationBuilder.create()
+        controller.trackingVC = trackingController
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.enableBottomSheetGrab(smallHeight: 0.27, mediumHeight: 0.50, largeHeight: 0.90)
+        controller.updateBottomSheetHeight(to: controller.getSmallDetentHeight())
+        currentBottomSheet = controller
     }
     
     func showTrackingHistory(isTrackingActive: Bool = false) {

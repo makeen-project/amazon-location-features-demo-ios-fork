@@ -39,7 +39,7 @@ final class TrackingMapView: UIView {
     }
     
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
-    private var mapView: DefaultCommonMapView = DefaultCommonMapView()
+    public var mapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
     
     private var trackingAnnotations: [MLNAnnotation] = []
@@ -119,11 +119,12 @@ final class TrackingMapView: UIView {
     private func setupMapLayer(bottomOffset: CGFloat?) {
         let bottomOffset = bottomOffset ?? Constants.mapLayerBottomOffset
         mapLayer.snp.remakeConstraints {
-            $0.top.trailing.bottom.equalToSuperview()
+            $0.top.equalToSuperview().offset(56)
+            $0.trailing.bottom.equalToSuperview()
             if isiPad {
                 $0.bottom.equalTo(safeAreaLayoutGuide).inset(bottomOffset)
             } else {
-                $0.bottom.equalToSuperview().inset(bottomOffset)
+               // $0.bottom.equalToSuperview().inset(bottomOffset)
             }
             $0.width.equalTo(Constants.mapLayerWidth)
         }
@@ -171,11 +172,95 @@ final class TrackingMapView: UIView {
             return
         }
         let source = createTrackingSource(history: history)
-        let dashedLayer = createDashedLayer(source: source)
+        let dashedLayer = createDashedLayer(source: source, strokeColor: .lsPrimary)
         mapView.draw(layer: dashedLayer, source: source)
         mapView.remove(annotations: trackingAnnotations)
         trackingAnnotations = createTrackingAnnotaions(history)
         mapView.addAnnotations(annotations: trackingAnnotations)
+    }
+    
+    func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
+        let source = createTrackingSource(coordinates: coordinates, identifier: "\(routeId)-dash-source")
+        let dashedLayer = createDashedLayer(source: source, identifier: "\(routeId)-dash-layer", strokeColor: .lsGrey)
+        mapView.draw(layer: dashedLayer, source: source)
+        createTrackingAnnotations(sourceId: "\(routeId)-track", coordinates: coordinates, strokeColor: UIColor.lightGray)
+    }
+    
+    func updateDashLayer(routeId: String, coordinates: [CLLocationCoordinate2D]) {
+        let source = createTrackingSource(coordinates: coordinates, identifier: "\(routeId)-update-dash-source")
+        let dashedLayer = createDashedLayer(source: source, identifier: "\(routeId)-update-dash-layer", strokeColor: .lsPrimary)
+        mapView.draw(layer: dashedLayer, source: source)
+    }
+    
+    func deleteTrackingRoute(routeId: String) {
+        guard let style = mapView.mapView.style else { return }
+        if let existingSource = style.source(withIdentifier: "\(routeId)-dash-source") {
+            style.removeSource(existingSource)
+        }
+        if let existingLayer = style.layer(withIdentifier: "\(routeId)-dash-layer") {
+            style.removeLayer(existingLayer)
+        }
+        
+        if let existingSource = style.source(withIdentifier: "\(routeId)-track") {
+            style.removeSource(existingSource)
+        }
+        if let existingLayer = style.layer(withIdentifier: "\(routeId)-track-circle-layer") {
+            style.removeLayer(existingLayer)
+        }
+    }
+    
+    func generateBusImage(size: CGSize = CGSize(width: 72, height: 572)) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: size)
+
+        return renderer.image { context in
+            let rect = CGRect(origin: .zero, size: size)
+            let circleRect = rect.insetBy(dx: 3, dy: 3) // Adjust for stroke width
+
+            // Create a circular path
+            let path = UIBezierPath(ovalIn: circleRect)
+
+            // Clip to the circle so the white background stays inside
+            path.addClip()
+
+            // Fill the clipped area with white
+            UIColor.white.setFill()
+            context.fill(rect)
+
+            // Draw the blue circle (stroke)
+            let strokeColor = UIColor.lsPrimary.withAlphaComponent(0.3)
+            strokeColor.setStroke()
+            path.lineWidth = 100
+            path.stroke()
+
+            // Draw the bus icon inside the circle
+            if let busIcon = UIImage(systemName: "bus.fill") {
+                let iconSize = CGSize(width: size.width * 0.6, height: size.height * 0.6)
+                let iconOrigin = CGPoint(x: (size.width - iconSize.width) / 2, y: (size.height - iconSize.height) / 2)
+                let iconRect = CGRect(origin: iconOrigin, size: iconSize)
+
+                UIColor.black.setFill() // Set icon color
+                busIcon.withTintColor(.black, renderingMode: .alwaysOriginal).draw(in: iconRect)
+            }
+        }
+    }
+
+
+    
+    func addRouteBusAnnotation(id: String, coordinate: CLLocationCoordinate2D) -> ImageAnnotation {
+        let busAnnotation = ImageAnnotation(image: generateBusImage()!, identifier: "\(id)-bus")
+        busAnnotation.coordinate = coordinate
+        mapView.mapView.addAnnotation(busAnnotation)
+        return busAnnotation
+    }
+    
+    func updateFeatureColor(at index: Int, sourceId: String, isCovered: Bool) {
+        if let routeFeatures = routesFeatures["\(sourceId)-track"] {
+            routeFeatures[index].attributes = ["index": index, "isCovered": isCovered ? 1 : 0]
+            guard let style = mapView.mapView.style,
+                  let source = style.source(withIdentifier: "\(sourceId)-track") as? MLNShapeSource else { return }
+            let updatedShapeCollection = MLNShapeCollectionFeature(shapes: routeFeatures)
+            source.shape = updatedShapeCollection
+        }
     }
     
     @objc private func infoButtonAction() {
@@ -185,6 +270,8 @@ final class TrackingMapView: UIView {
     func update(userLocation: CLLocation?, userHeading: CLHeading?) {
         mapView.update(userLocation: userLocation, userHeading: userHeading)
     }
+    
+    var routesFeatures: [String:[MLNPointFeature]] = [:]
 }
 
 private extension TrackingMapView {
@@ -197,6 +284,15 @@ private extension TrackingMapView {
         return source
     }
     
+    func createTrackingSource(coordinates: [CLLocationCoordinate2D], identifier: String) -> MLNSource {
+        let polyline = MLNPolyline(coordinates: coordinates, count: UInt(coordinates.count))
+        let source = MLNShapeSource(identifier: identifier, shape: polyline)
+        
+        return source
+    }
+    
+
+    
     func transformHistoryToCoordinates(_ history: [TrackingHistoryPresentation]) -> [CLLocationCoordinate2D] {
         return history.compactMap { history -> CLLocationCoordinate2D? in
             let coordinates = history.cooordinates.convertTextToCoordinate()
@@ -207,16 +303,16 @@ private extension TrackingMapView {
         }
     }
     
-    func createDashedLayer(source: MLNSource, identifier: String = "dashed-layer") -> MLNStyleLayer {
+    func createDashedLayer(source: MLNSource, identifier: String = "dashed-layer", strokeColor: UIColor) -> MLNStyleLayer {
         let lineJoinCap = NSExpression(forConstantValue: "round")
-        let lineWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",[16: 2, 20: 20])
+        let lineWidth = NSExpression(forConstantValue: 5) //NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",[16: 5, 20: 20])
         
         let dashedLayer = MLNLineStyleLayer(identifier: identifier, source: source)
         dashedLayer.lineJoin = lineJoinCap
         dashedLayer.lineCap = lineJoinCap
-        dashedLayer.lineColor = NSExpression(forConstantValue: UIColor.lsPrimary)
+        dashedLayer.lineColor = NSExpression(forConstantValue: strokeColor)
         dashedLayer.lineWidth = lineWidth
-        dashedLayer.lineDashPattern = NSExpression(forConstantValue: [0, 1.5])
+        dashedLayer.lineDashPattern = NSExpression(forConstantValue: [0, 1.7])
         
         return dashedLayer
     }
@@ -230,6 +326,41 @@ private extension TrackingMapView {
         }
         
         return annotations
+    }
+    
+    func createTrackingAnnotations(sourceId: String, coordinates: [CLLocationCoordinate2D], strokeColor: UIColor) {
+        guard let style = mapView.mapView.style else { return }
+
+        // Convert coordinates to MLNPointFeature with properties
+        let features = coordinates.enumerated().map { (index, coordinate) -> MLNPointFeature in
+            let feature = MLNPointFeature()
+            feature.coordinate = coordinate
+            feature.attributes = ["index": index, "isCovered": 0]
+            return feature
+        }
+        routesFeatures[sourceId] = features
+        
+        // Remove old source and layer if they exist
+        if let existingSource = style.source(withIdentifier: sourceId) {
+            style.removeSource(existingSource)
+        }
+        if let existingLayer = style.layer(withIdentifier: "\(sourceId)-circle-layer") {
+            style.removeLayer(existingLayer)
+        }
+
+        // Ensure shape source contains a valid shape collection
+        let shapeCollection = MLNShapeCollectionFeature(shapes: features)
+        let shapeSource = MLNShapeSource(identifier: sourceId, shape: shapeCollection, options: nil)
+        style.addSource(shapeSource)
+
+        // Create the circle layer with dynamic color expression
+        let circleLayer = MLNCircleStyleLayer(identifier: "\(sourceId)-circle-layer", source: shapeSource)
+        circleLayer.circleRadius = NSExpression(forConstantValue: 6)
+        circleLayer.circleColor = NSExpression(forConstantValue: UIColor.white)
+        circleLayer.circleStrokeColor = NSExpression(format: "TERNARY(isCovered == 1, %@, %@)", UIColor.lsPrimary, UIColor.lsGrey)
+        circleLayer.circleStrokeWidth = NSExpression(forConstantValue: 3)
+
+        style.addLayer(circleLayer)
     }
 }
 
@@ -256,5 +387,32 @@ extension TrackingMapView: MapOverlayItemsOutputDelegate {
     
     func loginButtonTapped() {
         // TODO: Will be implemented later
+    }
+}
+
+class BusAnnotationView: MLNAnnotationView {
+    override init(annotation: MLNAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        setupView()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupView()
+    }
+
+    private func setupView() {
+        let size: CGFloat = 30
+        frame = CGRect(x: 0, y: 0, width: size, height: size)
+
+        layer.cornerRadius = size / 2
+        layer.backgroundColor = UIColor.white.cgColor // White background
+        layer.borderColor = UIColor.lsPrimary.withAlphaComponent(0.3).cgColor // Blue with 30% opacity
+        layer.borderWidth = 3
+
+        let imageView = UIImageView(image: UIImage(systemName: "bus.fill"))
+        imageView.tintColor = .black
+        imageView.frame = CGRect(x: 5, y: 5, width: size - 10, height: size - 10)
+        addSubview(imageView)
     }
 }

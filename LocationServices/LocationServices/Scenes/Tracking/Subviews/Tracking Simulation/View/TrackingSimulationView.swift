@@ -1,5 +1,5 @@
 //
-//  CommonDashboardView.swift
+//  TrackingSimulationView.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -7,12 +7,12 @@
 
 import UIKit
 
-enum TrackingDashoardConstant {
+enum TrackingSimulationConstant {
     static let titleFont = UIFont.amazonFont(type: .bold, size: 20)
     static let detailLabelFont = UIFont.amazonFont(type: .regular, size: 13)
 }
 
-final class TrackingDashboardView: UIView {
+final class TrackingSimulationView: UIView {
     var dashboardButtonHandler: VoidHandler?
     
     private let iconContainerView: UIView = {
@@ -43,18 +43,6 @@ final class TrackingDashboardView: UIView {
         button.addTarget(self, action: #selector(commonButtonAction), for: .touchUpInside)
         return button
     }()
-    
-    private lazy var maybeLaterButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle(StringConstant.maybeLater, for: .normal)
-        button.titleLabel?.font = UIFont.amazonFont(type: .regular, size: 13)
-        button.titleLabel?.textAlignment = .center
-        //button.addTarget(self, action: #selector(maybeLaterAction), for: .touchUpInside)
-        button.tintColor = .black
-        button.isHidden = true
-        return button
-    }()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -104,10 +92,6 @@ final class TrackingDashboardView: UIView {
         self.iconView.backgroundColor = iconBackgroundColor
         self.iconView.tintColor = .black
         self.comonButton.setTitle(buttonTitle, for: .normal)
-    }
-    
-    func hideMaybeLaterButton(state: Bool) {
-        self.maybeLaterButton.isHidden = true // state
     }
     
     private func setupViews() {

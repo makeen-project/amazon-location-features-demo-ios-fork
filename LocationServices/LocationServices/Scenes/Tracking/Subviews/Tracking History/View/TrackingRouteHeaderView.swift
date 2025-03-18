@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class TrackingHistoryHeaderView: UIView {
+final class TrackingRouteHeaderView: UIView {
     
     private var isTrackingStarted: Bool = false
     var trackingButtonHandler: BoolHandler?
@@ -18,7 +18,7 @@ final class TrackingHistoryHeaderView: UIView {
     private var titleTopOffset: CGFloat = 27
     
     private let titleLabel: LargeTitleLabel = {
-        let label = LargeTitleLabel(labelText: StringConstant.trackingHistory)
+        let label = LargeTitleLabel(labelText: StringConstant.trackers)
         label.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingStartedLabel
         return label
     }()
@@ -49,7 +49,6 @@ final class TrackingHistoryHeaderView: UIView {
             return
         }
         
-        let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         toggleTrackingStatus()
     }
     

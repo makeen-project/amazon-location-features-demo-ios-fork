@@ -18,7 +18,7 @@ enum GeofenceError: Error {
 protocol GeofenceServiceable {
     func putGeofence(with id: String, lat: Double, long: Double, radius: Double) async -> Result<GeofenceDataModel,  Error>
     func deleteGeofence(with id: String) async -> Result<String, Error>
-    func getGeofenceList() async -> Result<[GeofenceDataModel], Error>
+    func getGeofenceList(collectionName: String) async -> Result<[GeofenceDataModel], Error>
     func evaluateGeofence(lat: Double, long: Double) async throws
 }
 
@@ -50,9 +50,9 @@ struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
         }
     }
     
-    func getGeofenceList() async -> Result<[GeofenceDataModel], Error> {
+    func getGeofenceList(collectionName: String) async -> Result<[GeofenceDataModel], Error> {
         do {
-            let result = try await fetchGeofenceList()
+            let result = try await fetchGeofenceList(collectionName: collectionName)
             if result != nil {
                 let models = result!.entries!.map( { GeofenceDataModel(model: $0) })
                 return .success(models)

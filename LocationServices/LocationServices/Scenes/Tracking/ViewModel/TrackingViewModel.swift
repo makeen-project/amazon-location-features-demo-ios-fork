@@ -70,32 +70,51 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         }
     }
     
-    func fetchListOfGeofences() async {
-        
-        // if we are not authorized do not send it
-        if UserDefaultsHelper.getAppState() != .loggedIn {
-            delegate?.showGeofences([])
-            return
+    func fetchListOfGeofences(collectionName: String) async -> [GeofenceDataModel]? {
+        let result = await geofenceService.getGeofenceList(collectionName: collectionName)
+        switch result {
+        case .success(let geofences):
+            return geofences
+        case .failure(let error):
+            print(error)
+            return nil
         }
-        
-        let result = await geofenceService.getGeofenceList()
-            switch result {
-            case .success(let geofences):
-                DispatchQueue.main.async {
-                    self.delegate?.showGeofences(geofences)
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
-                    }
-                    else {
-                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-                        self.delegate?.showAlert(model)
-                    }
-                }
-            }
     }
+    
+    func showGeofences(routeId: String, geofences: [GeofenceDataModel]) {
+        self.delegate?.showGeofences(routeId: routeId, geofences)
+    }
+    
+    func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
+        self.delegate?.drawTrackingRoute(routeId: routeId, coordinates: coordinates)
+    }
+    
+//    func fetchListOfGeofences() async {
+//        
+//        // if we are not authorized do not send it
+//        if UserDefaultsHelper.getAppState() != .loggedIn {
+//            delegate?.showGeofences([])
+//            return
+//        }
+//        
+//        let result = await geofenceService.getGeofenceList(collectionName: "")
+//            switch result {
+//            case .success(let geofences):
+//                DispatchQueue.main.async {
+//                    self.delegate?.showGeofences(geofences)
+//                }
+//            case .failure(let error):
+//                DispatchQueue.main.async {
+//                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
+//                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
+//                    }
+//                    else {
+//                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
+//                        self.delegate?.showAlert(model)
+//                    }
+//                }
+//            }
+//    }
     
     private func sendLocationUpdate(_ location: CLLocation) async {
         do {

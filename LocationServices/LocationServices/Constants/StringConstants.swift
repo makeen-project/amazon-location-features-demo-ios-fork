@@ -95,6 +95,7 @@ enum StringConstant {
     static let startSimulation = "Start Simulation"
     static let simulation = "Simulation"
     static let trackersGeofences = "Trackers and Geofences"
+    static let trackersGeofencesHeader = "Tracking and Geofence simulation"
     static let trackersGeofencesDetail = "Enter the tracking simulation to view the path across Vacouver streets that crosses geofences"
     static let startTrackingSimulation = "Try Trackers & Geofences Simulation"
     static let trackersDetail = "Visualize your location history on the map"
@@ -102,12 +103,16 @@ enum StringConstant {
     static let geofencesDetail = "Define virtual boundaries around a specific area to detect entry and exit events"
     static let notifications = "Notifications"
     static let notificationsDetail = "Get geofence messages when you enter and leave locations"
+    static let routesNotifications = "Routes Notifications"
     
     static let emptyTrackingHistory = "No tracking history available"
     
     static let tracker = "Tracker"
     static let entered = "entered"
     static let exited = "exited"
+    static let exit = "Exit"
+    
+    static let change = "Change"
     
     static let go = "Go"
     static let preview = "Preview"
@@ -188,8 +193,8 @@ enum StringConstant {
     }
     
     enum Tracking {
-        static let noTracking = "Not tracking your device location"
-        static let isTracking = "Tracking your device location"
+        static let noTracking = "Device tracking inactive"
+        static let isTracking = "Device tracking is active"
     }
     
     enum TabBar {

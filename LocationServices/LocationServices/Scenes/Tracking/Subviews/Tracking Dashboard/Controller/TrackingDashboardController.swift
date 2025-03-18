@@ -13,13 +13,7 @@ final class TrackingDashboardController: UIViewController {
     weak var delegate: TrackingNavigationDelegate?
     var trackingSimulationHandler: VoidHandler?
     
-    private var dashboardView = TrackingDashboardView(
-        title: StringConstant.trackers,
-        detail: StringConstant.enableTrackingDescription,
-        image: .trackingIcon,
-        iconBackgroundColor: .white,
-        buttonTitle: StringConstant.startTrackingSimulation
-    )
+    private var dashboardView = TrackingDashboardView()
     
     override func viewDidLoad() {
         super.viewDidLoad()

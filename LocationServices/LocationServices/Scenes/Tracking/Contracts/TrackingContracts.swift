@@ -26,13 +26,18 @@ protocol TrackingViewModelProtocol: AnyObject {
     func startTracking()
     func stopTracking()
     func trackLocationUpdate(location: CLLocation?)
-    func fetchListOfGeofences() async
+    func fetchListOfGeofences(collectionName: String) async -> [GeofenceDataModel]?
+    func showGeofences(routeId: String, geofences: [GeofenceDataModel])
+    func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D])
     func updateHistory() async
     func resetHistory()
+    
+    
 }
 
 protocol TrackingViewModelDelegate: AnyObject, AlertPresentable {
+    func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D])
     func drawTrack(history: [TrackingHistoryPresentation])
     func historyLoaded()
-    func showGeofences(_ models: [GeofenceDataModel])
+    func showGeofences(routeId: String, _ models: [GeofenceDataModel])
 }

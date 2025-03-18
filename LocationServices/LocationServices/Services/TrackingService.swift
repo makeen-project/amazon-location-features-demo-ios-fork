@@ -11,7 +11,7 @@ import CoreLocation
 import UIKit
 
 private enum TrackingServiceConstant {
-    static let collectionName = "location.aws.com.demo.trackers.Tracker"
+    static let collectionName = "tracker"
     static let deviceId = UIDevice.current.identifierForVendor!.uuidString
 }
 

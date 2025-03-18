@@ -24,7 +24,7 @@ protocol MapOverlayItemsOutputDelegate: AnyObject {
 final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
     enum Constants {
-        static let topStackViewTopOffsetiPhone: CGFloat = 16
+        static let topStackViewTopOffsetiPhone: CGFloat = 60
         static let topStackViewTopOffsetiPad: CGFloat = 0
         
         static let bottomStackViewHorizontalOffset: CGFloat = 16
@@ -40,57 +40,40 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
    private var containerView: UIView = UIView()
     
-   private lazy var directonButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.tintColor = .maplightGrayColor
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 8
-        button.setImage(.directionMapIcon, for: .normal)
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
-                                                                      leading: 23,
-                                                                      bottom: 23,
-                                                                      trailing: 23)
-        button.addTarget(self, action: #selector(directionAction), for: .touchUpInside)
-       button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
-        return button
-    }()
-    
-    private lazy var locateMeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.tintColor = .maplightGrayColor
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 8
-        button.setImage(.locateMeMapIcon, for: .normal)
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
-                                                                      leading: 23,
-                                                                      bottom: 23,
-                                                                      trailing: 23)
-        button.addTarget(self, action: #selector(locateMeAction), for: .touchUpInside)
-        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
-        return button
-    }()
-    
-    private lazy var geofenceButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.tintColor = .maplightGrayColor
-        button.backgroundColor = .white
-        button.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        button.layer.cornerRadius = 8
-        button.setImage(.geofenceMapIcon, for: .normal)
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
-                                                                      leading: 23,
-                                                                      bottom: 23,
-                                                                      trailing: 23)
-        button.addTarget(self, action: #selector(geofenceButtonAction), for: .touchUpInside)
-        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
-        return button
-    }()
+//   private lazy var directonButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.tintColor = .maplightGrayColor
+//        button.backgroundColor = .white
+//        button.layer.cornerRadius = 8
+//        button.setImage(.directionMapIcon, for: .normal)
+//        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
+//                                                                      leading: 23,
+//                                                                      bottom: 23,
+//                                                                      trailing: 23)
+//        button.addTarget(self, action: #selector(directionAction), for: .touchUpInside)
+//       button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
+//        return button
+//    }()
+//    
+//    private lazy var locateMeButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.tintColor = .maplightGrayColor
+//        button.backgroundColor = .white
+//        button.layer.cornerRadius = 8
+//        button.setImage(.locateMeMapIcon, for: .normal)
+//        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
+//                                                                      leading: 23,
+//                                                                      bottom: 23,
+//                                                                      trailing: 23)
+//        button.addTarget(self, action: #selector(locateMeAction), for: .touchUpInside)
+//        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
+//        return button
+//    }()
     
     private lazy var mapStyleButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .maplightGrayColor
         button.backgroundColor = .white
-        button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         button.layer.cornerRadius = 8
         button.setImage(.mapStyleMapIcon, for: .normal)
         button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
@@ -100,12 +83,6 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
         button.addTarget(self, action: #selector(mapStyleButtonAction), for: .touchUpInside)
         button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
         return button
-    }()
-    
-    private let dividerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .mapElementDiverColor
-        return view
     }()
     
     private let bottomStackView: UIStackView = {
@@ -160,10 +137,8 @@ private extension MapOverlayItems {
         topStackView.removeArrangedSubViews()
         bottomStackView.removeArrangedSubViews()
         topStackView.addArrangedSubview(mapStyleButton)
-        topStackView.addArrangedSubview(dividerView)
-        topStackView.addArrangedSubview(geofenceButton)
-        bottomStackView.addArrangedSubview(locateMeButton)
-        bottomStackView.addArrangedSubview(directonButton)
+//        bottomStackView.addArrangedSubview(locateMeButton)
+//        bottomStackView.addArrangedSubview(directonButton)
     }
     
     func setupViews() {
@@ -176,13 +151,9 @@ private extension MapOverlayItems {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
         
-        geofenceButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
-        }
-        
-        dividerView.snp.makeConstraints {
-            $0.height.width.equalTo(1)
-        }
+//        dividerView.snp.makeConstraints {
+//            $0.height.width.equalTo(1)
+//        }
         
         mapStyleButton.snp.makeConstraints {
             $0.height.width.equalTo(48)
@@ -195,16 +166,16 @@ private extension MapOverlayItems {
             )
             $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(48)
-            $0.height.equalTo(100)
+            $0.height.equalTo(48)
         }
         
-        directonButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
-        }
-        
-        locateMeButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
-        }
+//        directonButton.snp.makeConstraints {
+//            $0.height.width.equalTo(48)
+//        }
+//        
+//        locateMeButton.snp.makeConstraints {
+//            $0.height.width.equalTo(48)
+//        }
         
         bottomStackView.snp.remakeConstraints {
             $0.bottom.equalToSuperview()

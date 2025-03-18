@@ -9,6 +9,8 @@ import Foundation
 import AWSLocation
 import CoreLocation
 import UIKit
+import AWSCognitoIdentity
+import AmazonLocationiOSAuthSDK
 
 
 enum GeofenceServiceConstant {
@@ -75,9 +77,24 @@ extension AWSGeofenceServiceProtocol {
         }
     }
     
+    func fetchGeofenceList(collectionName: String) async throws -> ListGeofencesOutput? {
+        do {
+            if let client = CognitoAuthHelper.default().locationClient {
+                let input = ListGeofencesInput(collectionName: "location.aws.com.demo.geofences.\(collectionName)")
+                let result = try await client.listGeofences(input: input)
+                return result
+            } else {
+                return nil
+            }
+        }
+        catch {
+            print(error)
+            throw error
+        }
+    }
+    
     func batchEvaluateGeofences(lat: Double, long: Double) async throws -> BatchEvaluateGeofencesOutput? {
         do {
-            try await AWSLoginService.default().refreshLoginIfExpired()
             var devicePositionUpdate = LocationClientTypes.DevicePositionUpdate(deviceId: GeofenceServiceConstant.deviceId, position: [long, lat], sampleTime: Date())
             
             if let identityId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId) {
@@ -85,7 +102,7 @@ extension AWSGeofenceServiceProtocol {
                 devicePositionUpdate.positionProperties = ["region": identityId.toRegionString(), "id": identityId.toId()]
             }
             let input = BatchEvaluateGeofencesInput(collectionName: GeofenceServiceConstant.collectionName, devicePositionUpdates: [devicePositionUpdate])
-            if let client = try await AmazonLocationClient.getCognitoLocationClient() {
+            if let client = CognitoAuthHelper.default().locationClient {
                 let result = try await client.batchEvaluateGeofences(input: input)
                 return result
             } else {

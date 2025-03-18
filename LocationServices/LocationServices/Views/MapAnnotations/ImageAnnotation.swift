@@ -10,9 +10,10 @@ import MapLibre
 
 class ImageAnnotation:MLNPointAnnotation {
     var image: UIImage?
-    
-    init(image: UIImage) {
+    var identifier: String?
+    init(image: UIImage, identifier: String? = "ImageAnnotationViewIdentifier") {
         self.image = image
+        self.identifier = identifier
         super.init()
     }
     
