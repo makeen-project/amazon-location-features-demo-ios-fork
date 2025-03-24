@@ -108,8 +108,8 @@ enum StringConstant {
     static let emptyTrackingHistory = "No tracking history available"
     
     static let tracker = "Tracker"
-    static let entered = "entered"
-    static let exited = "exited"
+    static let entered = "Entered"
+    static let exited = "Exited"
     static let exit = "Exit"
     
     static let change = "Change"
@@ -249,6 +249,8 @@ enum StringConstant {
     static let trackingHistory = "Tracking History"
     static let viewRoute = "View Route"
     static let hideRoute = "Hide Route"
+    
+    static let trackingNotificationTitle = "Amazon Location"
 }
 
 protocol ConstantsLoginInfoConfig {

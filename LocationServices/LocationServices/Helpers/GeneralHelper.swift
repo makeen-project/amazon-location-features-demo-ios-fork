@@ -112,4 +112,19 @@ class GeneralHelper {
         return exp
     }
 
+        static func getAWSConfigurationModel() -> CustomConnectionModel? {
+            var defaultConfiguration: CustomConnectionModel? = nil
+            // default configuration
+            if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String,
+               let region = Bundle.main.object(forInfoDictionaryKey: "AWSRegion") as? String,
+               let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") as? String,
+               let webSocketUrl = Bundle.main.object(forInfoDictionaryKey: "WebSocketUrl") as? String {
+                defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, userPoolClientId: "", userPoolId: "", userDomain: "", webSocketUrl: webSocketUrl, apiKey: apiKey, region: region)
+            }
+    
+            // custom configuration
+            let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
+    
+            return customConfiguration ?? defaultConfiguration
+        }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 final class TrackingHeaderView: UIView {
-    var exitButtonHandler: BoolHandler?
+    var exitButtonHandler: VoidHandler?
     
     private var containerView: UIView = {
         let view = UIView()
@@ -39,6 +39,7 @@ final class TrackingHeaderView: UIView {
         button.showsMenuAsPrimaryAction = true
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(exitTracking), for: .touchUpInside)
         return button
     }()
     
@@ -49,6 +50,10 @@ final class TrackingHeaderView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError(.errorInitWithCoder)
+    }
+    
+    @objc private func exitTracking() {
+        exitButtonHandler?()
     }
     
     private func setupViews() {

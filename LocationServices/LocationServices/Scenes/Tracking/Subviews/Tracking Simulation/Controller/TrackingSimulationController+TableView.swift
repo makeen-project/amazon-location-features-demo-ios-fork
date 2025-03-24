@@ -12,40 +12,25 @@ extension TrackingSimulationController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.sectionHeaderTopPadding = 0
-        self.tableView.register(TrackHistoryCell.self, forCellReuseIdentifier: TrackHistoryCell.reuseId)
-        self.tableView.register(TrackingHistorySectionHeaderView.self, forHeaderFooterViewReuseIdentifier: TrackingHistorySectionHeaderView.reuseId)
+        self.tableView.register(TrackSimulationCell.self, forCellReuseIdentifier: TrackSimulationCell.reuseId)
     }
 }
 
 extension TrackingSimulationController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        tableView.backgroundView = viewModel == nil || viewModel.sectionsCount() == 0 ? TrackingHistoryEmptyView() : nil
-        return viewModel.sectionsCount()
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: TrackingHistorySectionHeaderView.reuseId) as? TrackingHistorySectionHeaderView
-        view?.title = viewModel.getTitle(for: section)
-        return view
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 57
+        return Constants.trackingRowHeight
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getItemCount(for: section)
+        let count = getActiveRouteCoordinates().count
+        return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackHistoryCell.reuseId, for: indexPath) as? TrackHistoryCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackSimulationCell.reuseId, for: indexPath) as? TrackSimulationCell else {
             fatalError(.errorCellCannotBeInititalized)
         }
-        let data = viewModel.getCellModel(indexPath: indexPath)
+        let data = getActiveRouteCoordinates()[indexPath.row]
         cell.model = data
         return cell
     }

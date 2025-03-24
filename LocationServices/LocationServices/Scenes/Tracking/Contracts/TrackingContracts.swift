@@ -20,24 +20,17 @@ protocol TrackingNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
 
 protocol TrackingViewModelProtocol: AnyObject {
     var delegate: TrackingViewModelDelegate? { get set }
-    var isTrackingActive: Bool { get }
-    var hasHistory: Bool { get }
+    var busRoutes: [BusRoute] { get set }
     
-    func startTracking()
-    func stopTracking()
-    func trackLocationUpdate(location: CLLocation?)
+    func startIoTSubscription()
+    func stopIoTSubscription()
     func fetchListOfGeofences(collectionName: String) async -> [GeofenceDataModel]?
     func showGeofences(routeId: String, geofences: [GeofenceDataModel])
     func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D])
-    func updateHistory() async
-    func resetHistory()
-    
-    
+    func evaluateGeofence(coordinate: CLLocationCoordinate2D, collectionName: String) async
 }
 
 protocol TrackingViewModelDelegate: AnyObject, AlertPresentable {
     func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D])
-    func drawTrack(history: [TrackingHistoryPresentation])
-    func historyLoaded()
     func showGeofences(routeId: String, _ models: [GeofenceDataModel])
 }

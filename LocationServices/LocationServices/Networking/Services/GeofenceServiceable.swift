@@ -19,7 +19,7 @@ protocol GeofenceServiceable {
     func putGeofence(with id: String, lat: Double, long: Double, radius: Double) async -> Result<GeofenceDataModel,  Error>
     func deleteGeofence(with id: String) async -> Result<String, Error>
     func getGeofenceList(collectionName: String) async -> Result<[GeofenceDataModel], Error>
-    func evaluateGeofence(lat: Double, long: Double) async throws
+    func evaluateGeofence(lat: Double, long: Double, collectionName: String) async throws
 }
 
 struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
@@ -66,7 +66,7 @@ struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
         }
     }
     
-    func evaluateGeofence(lat: Double, long: Double) async throws {
-        let _ = try await batchEvaluateGeofences(lat: lat, long: long)
+    func evaluateGeofence(lat: Double, long: Double, collectionName: String) async throws {
+        let _ = try await batchEvaluateGeofences(lat: lat, long: long, collectionName: collectionName)
     }
 }

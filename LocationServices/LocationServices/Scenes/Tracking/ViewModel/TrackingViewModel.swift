@@ -13,7 +13,6 @@ import AWSCognitoIdentity
 import AwsCommonRuntimeKit
 
 final class TrackingViewModel: TrackingViewModelProtocol {
-    
     enum Constants {
         static let majorDistanceChange: CGFloat = 30
     }
@@ -24,50 +23,41 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     private let geofenceService: GeofenceServiceable
     
     private var lastLocation: CLLocation?
-    private(set) var isTrackingActive: Bool = false
     private var history: [TrackingHistoryPresentation] = []
-    var hasHistory: Bool { !history.isEmpty }
     var mqttClient: Mqtt5Client?
     var mqttIoTContext: MqttIoTContext?
     let backgroundQueue = DispatchQueue(label: "background_queue",
                                         qos: .background)
     
+    var busRoutes: [BusRoute] = []
+    
     init(trackingService: TrackingServiceable, geofenceService: GeofenceServiceable) {
         self.trackingService = trackingService
         self.geofenceService = geofenceService
+        busRoutes = getBusRoutesData()?.busRoutesData ?? []
     }
     
-    func startTracking() {
-        isTrackingActive = true
+    func getBusRoutesData() -> BusRoutesData? {
+        do {
+            if let jsonData = JsonHelper.loadJSONFile(fileName: "RoutesData") {
+                let decoder = JSONDecoder()
+                let busRoutesData = try decoder.decode(BusRoutesData.self, from: jsonData)
+                return busRoutesData
+            }
+            return nil
+        }
+        catch {
+            print("Error decoding BusRoutesData: \(error)")
+            return nil
+        }
+    }
+    
+    func startIoTSubscription() {
         subscribeToAWSNotifications()
     }
     
-    func stopTracking() {
-        isTrackingActive = false
+    func stopIoTSubscription() {
         unsubscribeFromAWSNotifications()
-    }
-    
-    func resetHistory() {
-        history = []
-    }
-    
-    func trackLocationUpdate(location: CLLocation?) {
-        guard let location else { return }
-        
-        guard isTrackingActive else {
-            stopTracking()
-            return
-        }
-        Task {
-            if let lastLocation {
-                guard location.distance(from: lastLocation) > Constants.majorDistanceChange else { return }
-                self.lastLocation = location
-                await sendLocationUpdate(location)
-            } else {
-                lastLocation = location
-                await sendLocationUpdate(location)
-            }
-        }
     }
     
     func fetchListOfGeofences(collectionName: String) async -> [GeofenceDataModel]? {
@@ -89,77 +79,12 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         self.delegate?.drawTrackingRoute(routeId: routeId, coordinates: coordinates)
     }
     
-//    func fetchListOfGeofences() async {
-//        
-//        // if we are not authorized do not send it
-//        if UserDefaultsHelper.getAppState() != .loggedIn {
-//            delegate?.showGeofences([])
-//            return
-//        }
-//        
-//        let result = await geofenceService.getGeofenceList(collectionName: "")
-//            switch result {
-//            case .success(let geofences):
-//                DispatchQueue.main.async {
-//                    self.delegate?.showGeofences(geofences)
-//                }
-//            case .failure(let error):
-//                DispatchQueue.main.async {
-//                    if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-//                        ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
-//                    }
-//                    else {
-//                        let model = AlertModel(title: StringConstant.error, message: error.localizedDescription)
-//                        self.delegate?.showAlert(model)
-//                    }
-//                }
-//            }
-//    }
-    
-    private func sendLocationUpdate(_ location: CLLocation) async {
+    func evaluateGeofence(coordinate: CLLocationCoordinate2D, collectionName: String) async {
         do {
-            let lat = location.coordinate.latitude
-            let long = location.coordinate.longitude
-            
-            let _ = try await trackingService.updateTrackerLocation(lat: lat, long: long)
-            await updateHistory()
-            try await geofenceService.evaluateGeofence(lat: lat, long: long)
+            try await geofenceService.evaluateGeofence(lat: coordinate.latitude, long: coordinate.longitude, collectionName: collectionName)
         }
         catch {
-            DispatchQueue.main.async {
-                self.history = []
-                if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                    ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
-                } else {
-                    let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                    
-                    self.delegate?.showAlert(model)
-                }
-            }
-        }
-    }
-    
-    func updateHistory() async {
-        do {
-            let result = try await trackingService.getAllTrackingHistory()
-            NotificationCenter.default.post(name: Notification.updateTrackingHistory, object: self, userInfo: ["history": history])
-            self.history = result
-            if self.isTrackingActive {
-                self.delegate?.drawTrack(history: history)
-            } else {
-                self.delegate?.historyLoaded()
-            }
-        }
-        catch {
-            self.history = []
-            if(ErrorHandler.isAWSStackDeletedError(error: error)) {
-                ErrorHandler.handleAWSStackDeletedError(delegate: self.delegate as AlertPresentable?)
-            } else {
-                let model = AlertModel(title: StringConstant.error, message: error.localizedDescription, cancelButton: nil)
-                DispatchQueue.main.async {
-                    self.delegate?.showAlert(model)
-                }
-            }
+            print(error)
         }
     }
     
@@ -200,64 +125,76 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     
     private func subscribeToAWSNotifications() {
         backgroundQueue.async {
-            do {
-                self.createIoTClientIfNeeded()
-                if self.mqttClient != nil {
-                    try self.connectClient(client: self.mqttClient!, iotContext: self.mqttIoTContext!)
+            Task {
+                do {
+                    await self.createIoTClientIfNeeded()
+                    if self.mqttClient != nil {
+                        try self.connectClient(client: self.mqttClient!, iotContext: self.mqttIoTContext!)
+                    }
                 }
-            }
-            catch {
-                print(error)
+                catch {
+                    print(error)
+                }
             }
         }
     }
     
-    private func createIoTClientIfNeeded() {
-        guard let configuration = getAWSConfigurationModel(),
-              let identityId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId),
+    private func createIoTClientIfNeeded() async {
+        guard let configuration = GeneralHelper.getAWSConfigurationModel(),
               !configuration.webSocketUrl.isEmpty, mqttClient == nil else {
             return
         }
         do {
-            mqttIoTContext = MqttIoTContext(onPublishReceived: {payloadData in
-                if let payload = payloadData.publishPacket.payload {
-                    guard let model = try? JSONDecoder().decode(TrackingEventModel.self, from: payload) else { return }
-                    
-                    let eventText: String
-                    switch model.trackerEventType {
-                    case .enter:
-                        eventText = StringConstant.entered
-                    case .exit:
-                        eventText = StringConstant.exited
+            let identityIdOutput = try await CognitoAuthHelper.getAWSIdentityId(identityPoolId: configuration.identityPoolId)
+            if let identityId = identityIdOutput.identityId {
+                UserDefaultsHelper.save(value: identityId, key: .identityId)
+                mqttIoTContext = MqttIoTContext(onPublishReceived: {payloadData in
+                    if let payload = payloadData.publishPacket.payload {
+                        guard let model = try? JSONDecoder().decode(TrackingEventModel.self, from: payload) else { return }
+                        self.sendGeofenceNotification(model: model)
+
                     }
-                    
-                    let alertModel = AlertModel(title: model.geofenceId, message: "\(StringConstant.tracker) \(eventText) \(model.geofenceId)", cancelButton: nil)
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: Notification.trackingEvent, object: nil, userInfo: ["trackingEvent": model])
-                        self.delegate?.showAlert(alertModel)
-                    }
-                }
-            }, topicName: "\(identityId)/tracker")
-            let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60000, clientId: identityId)
-            let tlsOptions = TLSContextOptions.makeDefault()
-            let tlsContext = try TLSContext(options: tlsOptions, mode: .client)
-            let elg = try EventLoopGroup()
-            let resolver = try HostResolver.makeDefault(eventLoopGroup: elg,
-                                            maxHosts: 8,
-                                            maxTTL: 30)
-            let bootstrap = try ClientBootstrap(eventLoopGroup: elg, hostResolver: resolver)
-            let clientOptions = MqttClientOptions(
-                hostName: configuration.webSocketUrl,
-                port: UInt32(443),
-                bootstrap: bootstrap,
-                tlsCtx: tlsContext,
-                connectOptions: ConnectPacket,
-                connackTimeout: TimeInterval(10))
-            mqttClient = try createClient(clientOptions: clientOptions, iotContext: mqttIoTContext!)
-            mqttIoTContext?.client = mqttClient
+                }, topicName: "\(identityId)/tracker", identityId: identityId)
+                print("topicName: \(identityId)/tracker")
+                let ConnectPacket = MqttConnectOptions(keepAliveInterval: 60000, clientId: identityId)
+                let tlsOptions = TLSContextOptions.makeDefault()
+                let tlsContext = try TLSContext(options: tlsOptions, mode: .client)
+                let elg = try EventLoopGroup()
+                let resolver = try HostResolver.makeDefault(eventLoopGroup: elg,
+                                                            maxHosts: 8,
+                                                            maxTTL: 30)
+                let bootstrap = try ClientBootstrap(eventLoopGroup: elg, hostResolver: resolver)
+                let clientOptions = MqttClientOptions(
+                    hostName: configuration.webSocketUrl,
+                    port: UInt32(443),
+                    bootstrap: bootstrap,
+                    tlsCtx: tlsContext,
+                    connectOptions: ConnectPacket,
+                    connackTimeout: TimeInterval(10))
+                mqttClient = try createClient(clientOptions: clientOptions, iotContext: mqttIoTContext!)
+                mqttIoTContext?.client = mqttClient
+            }
         }
         catch {
             mqttIoTContext?.printView("Failed to setup client.")
+        }
+    }
+    
+    func sendGeofenceNotification(model: TrackingEventModel) {
+        let eventText: String
+        switch model.trackerEventType {
+        case .enter:
+            eventText = StringConstant.entered
+        case .exit:
+            eventText = StringConstant.exited
+        }
+        
+        let busRouteId = model.geofenceId.split(separator: "-").first ?? ""
+        let stopId = Int(model.geofenceId.split(separator: "-").last?.lowercased() ?? "0")
+        if let busRoute = busRoutes.first(where:  { $0.id == busRouteId }),
+           let stop = busRoute.stopCoordinates.first(where: { $0.id == stopId })?.stopProperties {
+            let body = "\(busRoute.name.split(separator: " ").dropLast().joined(separator: " ")): \(eventText) \(stop.stop_name)"
+            NotificationsHelper.scheduleNotification(title: StringConstant.trackingNotificationTitle, body: body)
         }
     }
     
@@ -287,20 +224,5 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             return
         }
         stopClient(client: mqttClient!, iotContext: mqttIoTContext!)
-    }
-    
-    private func getAWSConfigurationModel() -> CustomConnectionModel? {
-        var defaultConfiguration: CustomConnectionModel? = nil
-        // default configuration
-        if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String,
-           let region = Bundle.main.object(forInfoDictionaryKey: "AWSRegion") as? String,
-           let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") as? String {
-            defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, userPoolClientId: "", userPoolId: "", userDomain: "", webSocketUrl: "", apiKey: apiKey, region: region)
-        }
-
-        // custom configuration
-        let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
-        
-        return customConfiguration ?? defaultConfiguration
     }
 }

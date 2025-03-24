@@ -68,9 +68,9 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showRouteTrackingScene() {
-        currentBottomSheet?.dismissBottomSheet()
         let controller = TrackingSimulationBuilder.create()
         controller.trackingVC = trackingController
+        controller.viewModel = trackingController?.viewModel
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
         controller.enableBottomSheetGrab(smallHeight: 0.27, mediumHeight: 0.50, largeHeight: 0.90)
@@ -94,10 +94,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.currentBottomSheet?.dismissBottomSheet()
-            if(self?.trackingController?.viewModel.isTrackingActive == true){
-                self?.showTrackingHistory(isTrackingActive: true)
-            }
-            else { self?.showDashboardFlow() }
+            self?.showDashboardFlow()
             NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
         }
         currentBottomSheet?.dismissBottomSheet()

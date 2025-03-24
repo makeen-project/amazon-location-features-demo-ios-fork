@@ -350,6 +350,8 @@
 		F1013B4C2AC31FB0003CFD15 /* TrackingAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1013B4B2AC31FB0003CFD15 /* TrackingAPIServiceMock.swift */; };
 		F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */; };
 		F1021F4C2A1D079400B84312 /* TrackingHistoryEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F4B2A1D079400B84312 /* TrackingHistoryEmptyView.swift */; };
+		F10625742D89D75900312572 /* TrackingSimulationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10625732D89D75200312572 /* TrackingSimulationCell.swift */; };
+		F10625762D8D7F2400312572 /* NotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10625752D8D7F1E00312572 /* NotificationHelper.swift */; };
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
@@ -798,6 +800,8 @@
 		F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		F1021F4A2A1B864400B84312 /* LocationServicesUnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = LocationServicesUnitTests.xctestplan; path = ../LocationServicesUnitTests.xctestplan; sourceTree = "<group>"; };
 		F1021F4B2A1D079400B84312 /* TrackingHistoryEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHistoryEmptyView.swift; sourceTree = "<group>"; };
+		F10625732D89D75200312572 /* TrackingSimulationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationCell.swift; sourceTree = "<group>"; };
+		F10625752D8D7F1E00312572 /* NotificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHelper.swift; sourceTree = "<group>"; };
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
@@ -1315,6 +1319,7 @@
 			children = (
 				F1AD36F92CCBABC700E1BB7B /* AuthHelpers */,
 				AD16A42129357F38006AEA8E /* UserDefaultsHelper.swift */,
+				F10625752D8D7F1E00312572 /* NotificationHelper.swift */,
 				F1FAC8682D784D03000238C4 /* JsonHelper.swift */,
 				F11E04622CD516DD003F1641 /* KeyChainHelper.swift */,
 				8A3CC5EB2968510600A542DC /* DebounceManager.swift */,
@@ -3107,6 +3112,7 @@
 		F1FAC85D2D7751C0000238C4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F10625732D89D75200312572 /* TrackingSimulationCell.swift */,
 				F14ACD4A2D8845ED004BDCDC /* TrackingHeaderView.swift */,
 				F1FAC86A2D78563B000238C4 /* TrackingRouteOptionView.swift */,
 				AD989726298B0A250041E867 /* TrackingDashboardView.swift */,
@@ -3437,6 +3443,7 @@
 				ADD13960298087C80003F917 /* UnitVC.swift in Sources */,
 				ADD1394D29806A1B0003F917 /* SettingsCell.swift in Sources */,
 				F1FAC8532D773468000238C4 /* TrackingSimulationController.swift in Sources */,
+				F10625742D89D75900312572 /* TrackingSimulationCell.swift in Sources */,
 				8A439EFB29BB968800B59D0B /* AttributionVCBuilder.swift in Sources */,
 				ADD13962298088380003F917 /* AmazonCustomSelectableView.swift in Sources */,
 				ADABECD9293FD65B00E66FC5 /* AppConstants.swift in Sources */,
@@ -3573,6 +3580,7 @@
 				AD2AF064292E929C00149904 /* Coordinator.swift in Sources */,
 				8AFBAFDA296F002A0022A7E3 /* RouteModel.swift in Sources */,
 				ADABECD7293FD56B00E66FC5 /* SearchModel.swift in Sources */,
+				F10625762D8D7F2400312572 /* NotificationHelper.swift in Sources */,
 				ADC124A02979E3C200B08C20 /* AddGeofenceVC+TableView.swift in Sources */,
 				ADAF3657294A841000DC4774 /* Array+Extension.swift in Sources */,
 				8ACAAD7629F14B9D00523256 /* CLLocationManager+Extension.swift in Sources */,

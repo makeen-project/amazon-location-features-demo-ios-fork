@@ -14,15 +14,16 @@ import AmazonLocationiOSAuthSDK
 
 
 enum GeofenceServiceConstant {
-    static let collectionName = "location.aws.com.demo.geofences.GeofenceCollection"
-    static let deviceId = UIDevice.current.identifierForVendor!.uuidString
+    static let collectionName = "GeofenceCollection"
+    static let collectionNamePrefix = "location.aws.com.demo.geofences."
+    static let deviceId = "iOS-\(UIDevice.current.identifierForVendor!.uuidString)"
 }
 
 protocol AWSGeofenceServiceProtocol {
     func putGeofence(with id: String, center: [Double], radius: Double) async throws -> PutGeofenceOutput?
     func deleteGeofences(with ids: [String]) async throws -> BatchDeleteGeofenceOutput?
-    func fetchGeofenceList() async throws -> ListGeofencesOutput?
-    func batchEvaluateGeofences(lat: Double, long: Double) async throws -> BatchEvaluateGeofencesOutput?
+    func fetchGeofenceList(collectionName: String) async throws -> ListGeofencesOutput?
+    func batchEvaluateGeofences(lat: Double, long: Double, collectionName: String) async throws -> BatchEvaluateGeofencesOutput?
 }
 
 extension AWSGeofenceServiceProtocol {
@@ -80,7 +81,7 @@ extension AWSGeofenceServiceProtocol {
     func fetchGeofenceList(collectionName: String) async throws -> ListGeofencesOutput? {
         do {
             if let client = CognitoAuthHelper.default().locationClient {
-                let input = ListGeofencesInput(collectionName: "location.aws.com.demo.geofences.\(collectionName)")
+                let input = ListGeofencesInput(collectionName: "\(GeofenceServiceConstant.collectionNamePrefix)\(collectionName)")
                 let result = try await client.listGeofences(input: input)
                 return result
             } else {
@@ -93,15 +94,15 @@ extension AWSGeofenceServiceProtocol {
         }
     }
     
-    func batchEvaluateGeofences(lat: Double, long: Double) async throws -> BatchEvaluateGeofencesOutput? {
+    func batchEvaluateGeofences(lat: Double, long: Double, collectionName: String) async throws -> BatchEvaluateGeofencesOutput? {
         do {
             var devicePositionUpdate = LocationClientTypes.DevicePositionUpdate(deviceId: GeofenceServiceConstant.deviceId, position: [long, lat], sampleTime: Date())
             
-            if let identityId = UserDefaultsHelper.get(for: String.self, key: .signedInIdentityId) {
+            if let identityId = UserDefaultsHelper.get(for: String.self, key: .identityId) {
                 print("batchEvaluateGeofences: deviceId: \(GeofenceServiceConstant.deviceId) region: \(identityId.toRegionString()) identity Id: \(identityId.toId())")
                 devicePositionUpdate.positionProperties = ["region": identityId.toRegionString(), "id": identityId.toId()]
             }
-            let input = BatchEvaluateGeofencesInput(collectionName: GeofenceServiceConstant.collectionName, devicePositionUpdates: [devicePositionUpdate])
+            let input = BatchEvaluateGeofencesInput(collectionName: "\(GeofenceServiceConstant.collectionNamePrefix)\(collectionName)", devicePositionUpdates: [devicePositionUpdate])
             if let client = CognitoAuthHelper.default().locationClient {
                 let result = try await client.batchEvaluateGeofences(input: input)
                 return result

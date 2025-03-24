@@ -35,6 +35,7 @@ enum UserDefaultKeyType: String {
     case appState
     case termsAndConditionsAgreedVersion
     case signedInIdentityId
+    case identityId
     
     case mapCenter
     // if app is in navigation mode

@@ -9,6 +9,19 @@ import UIKit
 import SnapKit
 import CoreLocation
 
+struct RouteStatus {
+    var id: String
+    var isActive: Bool = false
+    var simulateIndex: Int = 0
+    var busAnnotation: ImageAnnotation?
+    var routeCoordinates: [RouteCoordinate] = []
+}
+
+struct RouteCoordinate {
+    var time: Date
+    var coordinate: CLLocationCoordinate2D
+}
+
 final class TrackingSimulationController: UIViewController, UIScrollViewDelegate {
     enum Constants {
         static let titleOffsetiPhone: CGFloat = 27
@@ -17,6 +30,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         static let expandedRouteHeight: Int = 400
         static let collapsedTrackingHeight: Int = 56
         static let expandedTrackingHeight: Int = 400
+        static let trackingRowHeight: CGFloat = 64
     }
     var trackingVC: TrackingVC?
     
@@ -179,28 +193,16 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         tableView.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingHistoryTableView
         tableView.separatorStyle = .none
         tableView.layer.cornerRadius = 10
-        tableView.isHidden = true
+        tableView.isHidden = false
         return tableView
     }()
+
+    var viewModel: TrackingViewModelProtocol!
     
-    var viewModel: TrackingHistoryViewModelProtocol! {
-        didSet {
-            viewModel.delegate = self
-        }
-    }
-    
-    private var busRoutes: [BusRoute] = []
     private var routeToggles: [RouteToggleView] = []
     var isTrackingActive: Bool = false
     var routeGeofences: [String: [GeofenceDataModel]] = [:]
     var routesStatus: [String: RouteStatus] = [:]
-    
-    struct RouteStatus {
-        var id: String
-        var isActive: Bool = false
-        var simulateIndex: Int = 0
-        var busAnnotation: ImageAnnotation?
-    }
     
     var routeToggleState: Bool = false
     var trackingToggleState: Bool = false
@@ -224,7 +226,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingEventReceived(_:)), name: Notification.trackingEvent, object: nil)
         navigationController?.navigationBar.tintColor = .lsTetriary
         
@@ -238,7 +239,22 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         scrollView.isHidden = !Reachability.shared.isInternetReachable
         noInternetConnectionView.isHidden = Reachability.shared.isInternetReachable
         
-        startTracking()
+        centerMap()
+        let userInfo = ["state": true]
+        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: userInfo)
+        //trackingOptionExpand()
+        Task {
+            try await Task.sleep(for: .seconds(2))
+            await startTracking()
+        }
+    }
+    
+    func centerMap() {
+        trackingVC?.trackingMapView.mapView.mapView.setCenter(CLLocationCoordinate2D(latitude: 49.27046144661014, longitude: -123.13319444634126), zoomLevel: 12, animated: false)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+
     }
     
     @objc private func updateButtonStyle(_ notification: Notification) {
@@ -255,20 +271,8 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func updateButtonStyle(state: Bool) {
-        guard viewModel !== nil else {
-            return
-        }
-        viewModel.changeTrackingStatus(state)
         self.headerView.updateButtonStyle(isTrackingStarted: state)
         self.view.setNeedsLayout()
-    }
-    
-    
-    @objc private func updateTrackingHistory(_ notification: Notification) {
-        guard (notification.object as? TrackingHistoryViewModelProtocol) !== viewModel else { return }
-        guard let history = notification.userInfo?["history"] as? [TrackingHistoryPresentation] else { return }
-        viewModel.setHistory(history)
-        reloadTableView()
     }
     
     @objc private func trackingEventReceived(_ notification: Notification) {
@@ -288,7 +292,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     private func setupHandlers() {
         headerView.trackingButtonHandler = { state in
-             self.startTracking()
+            Task {
+                await self.startTracking()
+            }
         }
         
         headerView.showAlertCallback = showAlert(_:)
@@ -296,6 +302,12 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             self?.present(alertController, animated: true)
         }
         scrollView.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissTrackingSimulation), name: Notification.dismissTrackingSimulation, object: nil)
+    }
+    
+    @objc func dismissTrackingSimulation() {
+        self.dismissBottomSheet()
     }
     
     private func setupViews() {
@@ -342,6 +354,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
         
         tableView.snp.makeConstraints {
+            $0.top.equalTo(trackingHeaderView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -382,13 +395,14 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         generateRouteToggles()
 
         setChangeMenu()
-        if let route = busRoutes.first {
+        if let route = viewModel.busRoutes.first {
             setTrackingHeaders(route: route)
         }
     }
+    var activeRouteId: String?
     
     func setChangeMenu() {
-        let menuItems = busRoutes.map { route in
+        let menuItems = viewModel.busRoutes.map { route in
             UIAction(title: route.name) { _ in
                 print("Selected route: \(route.name)")
                 self.setTrackingHeaders(route: route)
@@ -399,20 +413,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         changeRouteButton.menu = menu
     }
     
-    func getBusRoutesData() -> BusRoutesData? {
-        do {
-            if let jsonData = JsonHelper.loadJSONFile(fileName: "RoutesData") {
-                let decoder = JSONDecoder()
-                let busRoutesData = try decoder.decode(BusRoutesData.self, from: jsonData)
-                return busRoutesData
-            }
-            return nil
-        }
-        catch {
-            print("Error decoding BusRoutesData: \(error)")
-            return nil
-        }
-    }
+
     
     func generateRouteToggles() {
         routeContainerView.addArrangedSubview(routeHeaderView)
@@ -432,7 +433,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         
         routeHeaderView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(56)
+            $0.height.equalTo(Constants.collapsedRouteHeight)
         }
         
         routeIcon.snp.makeConstraints {
@@ -467,9 +468,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             $0.leading.trailing.equalToSuperview()
         }
         
-        let busRoutesData = getBusRoutesData()
-        busRoutes = busRoutesData?.busRoutesData ?? []
-            for route in busRoutes {
+        for route in viewModel.busRoutes {
                 routesStatus[route.id] = RouteStatus(id: route.id, isActive: false, simulateIndex: 0)
                 let routeToggle = RouteToggleView()
                 routeToggle.id = route.id
@@ -516,6 +515,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func setTrackingHeaders(route: BusRoute) {
+        activeRouteId = route.id
         let words = route.name.split(separator: " ")
         if let lastWord = words.last {
             let firstPart = words.dropLast().joined(separator: " ")
@@ -530,6 +530,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func evaluateSelectedRoutes() {
         let count = routeToggles.count(where: { $0.getState()})
         routesDetailLabel.text = "\(count) routes active"
+    }
+    
+    func getActiveRouteCoordinates() -> [RouteCoordinate] {
+        routesStatus.first(where: { $0.key == activeRouteId })?.value.routeCoordinates ?? []
     }
     
     private func toggleRouteOption(state: inout Bool) {
@@ -548,7 +552,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     private func toggleTrackingOption(state: inout Bool) {
         state.toggle()
         trackingExpandImage.image = UIImage(systemName: state ? "chevron.down" : "chevron.up")
-        tableView.isHidden = !state
         let height = state ? Constants.expandedTrackingHeight: Constants.collapsedTrackingHeight
         trackingContainerView.snp.updateConstraints {
             $0.height.equalTo(height)
@@ -557,45 +560,48 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func adjustTableViewHeight() {
+        
+        let tableContentHeight =  getActiveRouteCoordinates().count * Int(Constants.trackingRowHeight) + 20
+        print("tableView height: \(tableContentHeight)")
         tableView.snp.remakeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            if(isiPad){
-                $0.height.equalTo(self.view.snp.height).offset(-350)
-            }
-            else {
-                let contentHeight = min(tableView.contentSize.height+100, UIScreen.main.bounds.height - 400)
-                $0.height.equalTo(contentHeight)
-            }
+            $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo(tableContentHeight)
         }
+        trackingContainerView.snp.updateConstraints {
+            $0.height.equalTo(tableContentHeight+Constants.collapsedTrackingHeight)
+        }
+        
+        updateScrollViewContentSize()
     }
     
     func updateScrollViewContentSize() {
-        let scrollHeight: CGFloat = 1200
+        let scrollHeight: CGFloat = CGFloat(getActiveRouteCoordinates().count * Int(Constants.trackingRowHeight) + 60 + Constants.expandedRouteHeight)
         let totalContentHeight = scrollHeight
         scrollViewContentView.snp.updateConstraints {
             $0.height.equalTo(totalContentHeight)
         }
     }
     
-    func startTracking() {
+    func startTracking() async {
         isTrackingActive.toggle()
-
+        centerMap()
+        
         updateButtonStyle(state: isTrackingActive)
         if !isTrackingActive {
+            trackingVC?.viewModel.stopIoTSubscription()
             return
         }
-        trackingVC?.trackingMapView.mapView.mapView.setCenter(CLLocationCoordinate2D(latitude: 49.27046144661014, longitude: -123.13319444634126), zoomLevel: 12, animated: false)
+        
+        trackingVC?.viewModel.startIoTSubscription()
         let count = routeToggles.count(where: { $0.getState()})
         if count == 0 {
             routeToggles.first?.changeState()
         }
         clearGeofences()
-        Task {
-            await fetchGeoFences()
-            drawGeofences()
-        }
+
+        await fetchGeoFences()
+        drawGeofences()
         drawTrackingRoutes()
-        
         //Start tracking
         simulateTrackingRoutes()
     }
@@ -614,48 +620,63 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func simulateTrackingRoute(routeToggle: RouteToggleView) {
-        if let id = routeToggle.id, routeToggle.getState() == true {
-            if let routesData = busRoutes.first(where: { $0.id == id }) {
-                let coordinates = convertToCoordinates(from: routesData.coordinates)
-                self.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[self.routesStatus[id]!.simulateIndex])
+        if let id = routeToggle.id, routeToggle.getState() == true,
+           let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
+            let coordinates = convertToCoordinates(from: routesData.coordinates)
+            self.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[self.routesStatus[id]!.simulateIndex])
+            
+            // Move the annotation along the route every second
+            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) { timer in
+                if !self.isTrackingActive {
+                    timer.invalidate()
+                    return
+                }
+                if self.routesStatus[id]!.simulateIndex >= coordinates.count {
+                    for jIndex in 0..<coordinates.count {
+                        self.trackingVC?.trackingMapView.updateFeatureColor(at: jIndex, sourceId: id, isCovered: false)
+                    }
+                    self.routesStatus[id]!.simulateIndex = 0
+                    self.routesStatus[id]?.routeCoordinates = []
+                    self.reloadTableView()
+                }
                 
-               // Move the annotation along the route every second
-               Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) { timer in
-                   if !self.isTrackingActive {
-                       timer.invalidate()
-                       return
-                   }
-                   if self.routesStatus[id]!.simulateIndex >= coordinates.count {
-                       for jIndex in 0..<coordinates.count {
-                           self.trackingVC?.trackingMapView.updateFeatureColor(at: jIndex, sourceId: id, isCovered: false)
-                       }
-                       self.routesStatus[id]!.simulateIndex = 0
-                   }
+                // Move annotation forward
+                UIView.animate(withDuration: 0.5) {
+                    self.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.routesStatus[id]!.simulateIndex]
+                    
+                    self.trackingVC?.trackingMapView.updateDashLayer(routeId: id, coordinates: [coordinates[self.routesStatus[id]!.simulateIndex]])
+                    self.trackingVC?.trackingMapView.updateFeatureColor(at: self.routesStatus[id]!.simulateIndex, sourceId: id, isCovered: true)
+                    
+                }
+                self.routesStatus[id]!.simulateIndex += 1
+                if let routeStatus = self.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
+                    self.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex] ))
+                    self.reloadTableView()
+                    Task {
+                        await self.batchEvaluateGeofence(coordinate: coordinates[self.routesStatus[id]!.simulateIndex], collectionName: routesData.geofenceCollection)
+                    }
+                }
 
-                   // Move annotation forward
-                   UIView.animate(withDuration: 0.5) {
-                       self.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.routesStatus[id]!.simulateIndex]
-                       self.trackingVC?.trackingMapView.updateDashLayer(routeId: id, coordinates: [coordinates[self.routesStatus[id]!.simulateIndex]])
-                       self.trackingVC?.trackingMapView.updateFeatureColor(at: self.routesStatus[id]!.simulateIndex, sourceId: id, isCovered: true)
-                       self.routesStatus[id]!.simulateIndex += 1
-                   }
-               }
             }
         }
     }
     
     func fetchGeoFences() async {
         if routeGeofences.count > 0 { return }
-        for route in busRoutes {
+        for route in viewModel.busRoutes {
                 let geofences = await trackingVC?.viewModel.fetchListOfGeofences(collectionName: route.geofenceCollection)
                 routeGeofences[route.geofenceCollection] = geofences
         }
+    }
+
+    func batchEvaluateGeofence(coordinate: CLLocationCoordinate2D, collectionName: String) async {
+        await trackingVC?.viewModel.evaluateGeofence(coordinate: coordinate, collectionName: collectionName)
     }
     
     func drawGeofences() {
         for routeToggle in routeToggles {
             if let id = routeToggle.id, routeToggle.getState() == true {
-                if let geofenceCollection = busRoutes.first(where: { $0.id == id })?.geofenceCollection, let geofences = routeGeofences[geofenceCollection] {
+                if let geofenceCollection = viewModel.busRoutes.first(where: { $0.id == id })?.geofenceCollection, let geofences = routeGeofences[geofenceCollection] {
                     trackingVC?.viewModel.showGeofences(routeId: id, geofences: geofences)
                 }
             }
@@ -669,7 +690,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func drawTrackingRoutes() {
         for routeToggle in routeToggles {
             if let id = routeToggle.id, routeToggle.getState() == true, !routesStatus[id]!.isActive {
-                if let routesData = busRoutes.first(where: { $0.id == id }) {
+                if let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
                     let coordinates = convertToCoordinates(from: routesData.coordinates)
                     trackingVC?.viewModel.drawTrackingRoute(routeId: id, coordinates: coordinates)
                     routesStatus[id]?.isActive = true
@@ -695,12 +716,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         let userInfo = ["isVisible" : isVisible]
         NotificationCenter.default.post(name: Notification.trackingAppearanceChanged, object: nil, userInfo: userInfo)
     }
-}
-
-extension TrackingSimulationController: TrackingHistoryViewModelOutputDelegate {
-    func stopTracking() {
-        
-    }
     
     func reloadTableView() {
         DispatchQueue.main.async {
@@ -710,49 +725,3 @@ extension TrackingSimulationController: TrackingHistoryViewModelOutputDelegate {
     }
 }
 
-extension TrackingSimulationController: UIPopoverPresentationControllerDelegate {
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none // Ensures popover on all devices
-    }
-}
-
-class MenuViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 10
-
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
-        let option1 = UIButton(type: .system)
-        option1.setTitle("Option 1", for: .normal)
-        option1.addTarget(self, action: #selector(option1Tapped), for: .touchUpInside)
-
-        let option2 = UIButton(type: .system)
-        option2.setTitle("Option 2", for: .normal)
-        option2.addTarget(self, action: #selector(option2Tapped), for: .touchUpInside)
-
-        stackView.addArrangedSubview(option1)
-        stackView.addArrangedSubview(option2)
-
-        view.addSubview(stackView)
-
-        NSLayoutConstraint.activate([
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-    }
-
-    @objc func option1Tapped() {
-        print("Option 1 Selected")
-        dismiss(animated: true)
-    }
-
-    @objc func option2Tapped() {
-        print("Option 2 Selected")
-        dismiss(animated: true)
-    }
-}
