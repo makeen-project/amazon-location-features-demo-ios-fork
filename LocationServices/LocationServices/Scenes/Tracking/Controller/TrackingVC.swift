@@ -115,7 +115,7 @@ final class TrackingVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMapView(_:)), name: Notification.refreshMapView, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingState(_:)), name: Notification.updateStartTrackingButton, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingState(_:)), name: Notification.updateTrackingHeader, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
     }

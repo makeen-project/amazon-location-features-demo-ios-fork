@@ -15,7 +15,7 @@ final class TrackingRouteHeaderView: UIView {
     var showAlertCallback: ((AlertModel)->())?
     var showAlertControllerCallback: ((UIAlertController)->())?
     
-    private var titleTopOffset: CGFloat = 27
+    private var titleTopOffset: CGFloat = 10
     
     private let titleLabel: LargeTitleLabel = {
         let label = LargeTitleLabel(labelText: StringConstant.trackers)
@@ -51,40 +51,8 @@ final class TrackingRouteHeaderView: UIView {
         
         toggleTrackingStatus()
     }
-    
-    private func showChangeStyleAlert() {
-        //TODO: AlertModel can be updated to be more flexible and be suited for this case
-        let alert = UIAlertController(title: StringConstant.enableTracking,
-                                      message: StringConstant.trackingChangeToHere, preferredStyle: UIAlertController.Style.alert)
-        
-        let termsAndConditionsAction = UIAlertAction(title: StringConstant.viewTermsAndConditions,
-                                                     style: .default,
-                                                     handler: { [weak self] _ in
-            guard let url = URL(string: StringConstant.termsAndConditionsTrackingURL) else { return }
-            UIApplication.shared.open(url)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                self?.showChangeStyleAlert()
-            })
-        })
-        alert.addAction(termsAndConditionsAction)
-        
-        
-        let continueAction = UIAlertAction(title: StringConstant.continueToTracker,
-                                           style: .default,
-                                           handler: { [weak self] _ in
-            self?.trackingButtonHandler?(true)
-        })
 
-        alert.addAction(continueAction)
-        
-        showAlertControllerCallback?(alert)
-    }
-    
-    private func toggleTrackingStatus() {
-        if UserDefaultsHelper.getAppState() == .loggedIn {
-            isTrackingStarted.toggle()
-        }
-        
+    private func toggleTrackingStatus() {        
         trackingButtonHandler?(isTrackingStarted)
     }
     
@@ -135,7 +103,7 @@ final class TrackingRouteHeaderView: UIView {
         }
         
         detailLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(5)
+            $0.top.equalTo(titleLabel.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalTo(trackingActionButton.snp.leading).offset(-5)
             $0.height.equalTo(18)
@@ -143,7 +111,7 @@ final class TrackingRouteHeaderView: UIView {
         }
         
         trackingActionButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.top.equalToSuperview().offset(titleTopOffset)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
             $0.width.equalTo(132)

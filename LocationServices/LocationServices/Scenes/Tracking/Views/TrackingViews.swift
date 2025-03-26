@@ -209,43 +209,55 @@ final class TrackingMapView: UIView {
         }
     }
     
-    func generateBusImage(size: CGSize = CGSize(width: 72, height: 572)) -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(size: size)
+    func generateBusImage(size: CGSize = CGSize(width: 128, height: 128)) -> UIImage? {
+        let strokeWidth: CGFloat = 20
+        let expandedSize = CGSize(width: size.width + strokeWidth * 2, height: size.height + strokeWidth * 2)
 
+        let renderer = UIGraphicsImageRenderer(size: expandedSize)
+        
         return renderer.image { context in
-            let rect = CGRect(origin: .zero, size: size)
-            let circleRect = rect.insetBy(dx: 3, dy: 3) // Adjust for stroke width
+            let center = CGPoint(x: expandedSize.width / 2, y: expandedSize.height / 2)
 
-            // Create a circular path
-            let path = UIBezierPath(ovalIn: circleRect)
+            // Outer Stroke Circle
+            let outerCircleRadius = (size.width) + (strokeWidth) // Push stroke outside
+            let outerPath = UIBezierPath(
+                arcCenter: center,
+                radius: outerCircleRadius,
+                startAngle: 0,
+                endAngle: .pi * 2,
+                clockwise: true
+            )
+            UIColor.lsPrimary.withAlphaComponent(0.3).setStroke()
+            outerPath.lineWidth = strokeWidth
+            outerPath.stroke()
 
-            // Clip to the circle so the white background stays inside
-            path.addClip()
-
-            // Fill the clipped area with white
+            // Inner White Circle
+            let innerCircleRadius = size.width / 2
+            let innerPath = UIBezierPath(
+                arcCenter: center,
+                radius: innerCircleRadius,
+                startAngle: 0,
+                endAngle: .pi * 2,
+                clockwise: true
+            )
             UIColor.white.setFill()
-            context.fill(rect)
+            innerPath.fill()
 
-            // Draw the blue circle (stroke)
-            let strokeColor = UIColor.lsPrimary.withAlphaComponent(0.3)
-            strokeColor.setStroke()
-            path.lineWidth = 100
-            path.stroke()
-
-            // Draw the bus icon inside the circle
+            // Draw the Bus Icon
             if let busIcon = UIImage(systemName: "bus.fill") {
                 let iconSize = CGSize(width: size.width * 0.6, height: size.height * 0.6)
-                let iconOrigin = CGPoint(x: (size.width - iconSize.width) / 2, y: (size.height - iconSize.height) / 2)
+                let iconOrigin = CGPoint(
+                    x: (expandedSize.width - iconSize.width) / 2,
+                    y: (expandedSize.height - iconSize.height) / 2
+                )
                 let iconRect = CGRect(origin: iconOrigin, size: iconSize)
 
-                UIColor.black.setFill() // Set icon color
                 busIcon.withTintColor(.black, renderingMode: .alwaysOriginal).draw(in: iconRect)
             }
         }
     }
 
-
-    
+ 
     func addRouteBusAnnotation(id: String, coordinate: CLLocationCoordinate2D) -> ImageAnnotation {
         let busAnnotation = ImageAnnotation(image: generateBusImage()!, identifier: "\(id)-bus")
         busAnnotation.coordinate = coordinate
@@ -390,29 +402,50 @@ extension TrackingMapView: MapOverlayItemsOutputDelegate {
     }
 }
 
-class BusAnnotationView: MLNAnnotationView {
-    override init(annotation: MLNAnnotation?, reuseIdentifier: String?) {
-        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        setupView()
-    }
+//class BusAnnotationView: MLNAnnotationView {
+//    override init(annotation: MLNAnnotation?, reuseIdentifier: String?) {
+//        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+//        setupView()
+//    }
+//
+//    required init?(coder aDecoder: NSCoder) {
+//        super.init(coder: aDecoder)
+//        setupView()
+//    }
+//
+//    private func setupView() {
+//        let size: CGFloat = 30
+//        frame = CGRect(x: 0, y: 0, width: size, height: size)
+//
+//        layer.cornerRadius = size / 2
+//        layer.backgroundColor = UIColor.white.cgColor // White background
+//        layer.borderColor = UIColor.lsPrimary.withAlphaComponent(0.3).cgColor // Blue with 30% opacity
+//        layer.borderWidth = 3
+//
+//        let imageView = UIImageView(image: UIImage(systemName: "bus.fill"))
+//        imageView.tintColor = .black
+//        imageView.frame = CGRect(x: 5, y: 5, width: size - 10, height: size - 10)
+//        addSubview(imageView)
+//    }
+//}
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupView()
-    }
 
-    private func setupView() {
-        let size: CGFloat = 30
-        frame = CGRect(x: 0, y: 0, width: size, height: size)
-
-        layer.cornerRadius = size / 2
-        layer.backgroundColor = UIColor.white.cgColor // White background
-        layer.borderColor = UIColor.lsPrimary.withAlphaComponent(0.3).cgColor // Blue with 30% opacity
-        layer.borderWidth = 3
-
-        let imageView = UIImageView(image: UIImage(systemName: "bus.fill"))
-        imageView.tintColor = .black
-        imageView.frame = CGRect(x: 5, y: 5, width: size - 10, height: size - 10)
-        addSubview(imageView)
-    }
-}
+//extension UIImage {
+//    func circle() -> UIImage? {
+//        guard let cgImage = self.cgImage else { return nil }
+//        let contextSize = CGSize(width: self.size.width, height: self.size.height)
+//
+//        UIGraphicsBeginImageContextWithOptions(contextSize, false, 0.0)
+//        let context = UIGraphicsGetCurrentContext()!
+//
+//        let rect = CGRect(x: 0, y: 0, width: contextSize.width, height: contextSize.height)
+//        context.addEllipse(in: rect)
+//        context.clip()
+//
+//        self.draw(in: rect)
+//        let result = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//
+//        return result
+//    }
+//}

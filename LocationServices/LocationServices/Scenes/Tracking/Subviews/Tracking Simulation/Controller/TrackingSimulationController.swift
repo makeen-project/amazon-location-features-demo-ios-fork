@@ -24,11 +24,11 @@ struct RouteCoordinate {
 
 final class TrackingSimulationController: UIViewController, UIScrollViewDelegate {
     enum Constants {
-        static let titleOffsetiPhone: CGFloat = 27
+        static let titleOffsetiPhone: CGFloat = 16
         static let titleOffsetiPad: CGFloat = 0
-        static let collapsedRouteHeight: Int = 56
+        static let collapsedRouteHeight: Int = 64
         static let expandedRouteHeight: Int = 400
-        static let collapsedTrackingHeight: Int = 56
+        static let collapsedTrackingHeight: Int = 64
         static let expandedTrackingHeight: Int = 400
         static let trackingRowHeight: CGFloat = 64
     }
@@ -56,6 +56,12 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         return view
     }()
     
+    private let mainContentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     var routeContainerView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -64,7 +70,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         stackView.backgroundColor = .white
         stackView.layer.cornerRadius = 8
         stackView.clipsToBounds = true
-        
         return stackView
     }()
     
@@ -128,7 +133,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     var trackingContainerView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillProportionally
         stackView.spacing = 1
         stackView.backgroundColor = .white
         stackView.layer.cornerRadius = 8
@@ -185,6 +190,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     private var trackingSeperatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .lsLight2
+        view.isHidden = true
         return view
     }()
     
@@ -225,8 +231,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(trackingEventReceived(_:)), name: Notification.trackingEvent, object: nil)
         navigationController?.navigationBar.tintColor = .lsTetriary
         
         scrollView.delegate = self
@@ -240,12 +244,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         noInternetConnectionView.isHidden = Reachability.shared.isInternetReachable
         
         centerMap()
-        let userInfo = ["state": true]
-        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: userInfo)
-        //trackingOptionExpand()
+        NotificationCenter.default.post(name: Notification.updateTrackingHeader, object: nil, userInfo:  ["state": true])
+        
         Task {
             try await Task.sleep(for: .seconds(2))
-            await startTracking()
+            //await startTracking()
         }
     }
     
@@ -275,21 +278,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         self.view.setNeedsLayout()
     }
     
-    @objc private func trackingEventReceived(_ notification: Notification) {
-        guard let model = notification.userInfo?["trackingEvent"] as? TrackingEventModel else { return }
-        
-        let eventText: String
-        switch model.trackerEventType {
-        case .enter:
-            eventText = StringConstant.entered
-        case .exit:
-            eventText = StringConstant.exited
-        }
-        
-        let alertModel = AlertModel(title: model.geofenceId, message: "\(StringConstant.tracker) \(eventText) \(model.geofenceId)", cancelButton: nil)
-        showAlert(alertModel)
-    }
-    
     private func setupHandlers() {
         headerView.trackingButtonHandler = { state in
             Task {
@@ -309,13 +297,25 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     @objc func dismissTrackingSimulation() {
         self.dismissBottomSheet()
     }
+    var eView : UIView = {
+        let view = UIView()
+        view.backgroundColor = .lsLight2
+        return view
+    }()
     
     private func setupViews() {
-        scrollView.isScrollEnabled = true
         view.backgroundColor = .searchBarBackgroundColor
+        
         view.addSubview(headerView)
         view.addSubview(scrollView)
+        
         scrollView.addSubview(scrollViewContentView)
+        
+        scrollViewContentView.addSubview(eView)
+        eView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
         scrollViewContentView.addSubview(routeContainerView)
         scrollViewContentView.addSubview(trackingContainerView)
 
@@ -327,12 +327,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         trackingHeaderView.addSubview(changeRouteButton)
         trackingHeaderView.addSubview(trackingExpandImage)
         trackingHeaderView.addSubview(trackingSeperatorView)
-        
-        view.addSubview(noInternetConnectionView)
-        
+
         headerView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
-            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(60)
         }
         
         scrollView.snp.makeConstraints {
@@ -343,7 +342,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         scrollViewContentView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
             $0.width.equalTo(scrollView.frameLayoutGuide)
-            $0.height.equalTo(1000)
+            $0.height.equalTo(500)
         }
         
         trackingContainerView.snp.makeConstraints {
@@ -353,9 +352,14 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             $0.height.equalTo(Constants.collapsedTrackingHeight)
         }
         
+        trackingHeaderView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(Constants.collapsedTrackingHeight)
+        }
+        
         tableView.snp.makeConstraints {
-            $0.top.equalTo(trackingHeaderView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
         }
         
         trackingLabel.snp.makeConstraints {
@@ -369,27 +373,23 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
         
         changeRouteButton.snp.makeConstraints {
-            $0.centerY.equalTo(trackingExpandImage.snp.centerY)
+            $0.top.equalToSuperview().offset(14)
             $0.trailing.equalTo(trackingExpandImage.snp.leading).offset(-16)
             $0.width.equalTo(60)
             $0.height.equalTo(18)
         }
         
         trackingExpandImage.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.top.equalToSuperview().offset(14)
             $0.trailing.equalTo(-16)
             $0.width.height.equalTo(24)
         }
         
         trackingSeperatorView.snp.makeConstraints {
+            $0.top.equalTo(trackingDetailLabel.snp.bottom).offset(10)
             $0.height.equalTo(1)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-        }
-        
-        noInternetConnectionView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(30)
-            $0.leading.trailing.equalToSuperview()
         }
         
         generateRouteToggles()
@@ -399,21 +399,33 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             setTrackingHeaders(route: route)
         }
     }
-    var activeRouteId: String?
     
-    func setChangeMenu() {
-        let menuItems = viewModel.busRoutes.map { route in
-            UIAction(title: route.name) { _ in
-                print("Selected route: \(route.name)")
-                self.setTrackingHeaders(route: route)
-            }
+    var tableContentHeight = 0
+    var trackingContainerHeight = 0
+    
+    func adjustTableViewHeight() {
+        tableContentHeight = trackingToggleState ?  (getActiveRouteCoordinates().count * Int(Constants.trackingRowHeight) + 20): 0
+        trackingContainerHeight = trackingToggleState ?  (tableContentHeight + 20 + Constants.collapsedTrackingHeight): Constants.collapsedTrackingHeight
+        print("tableView height: \(tableContentHeight)")
+        tableView.snp.updateConstraints {
+            $0.height.equalTo(tableContentHeight)
         }
-
-        let menu = UIMenu(children: menuItems)
-        changeRouteButton.menu = menu
+        trackingContainerView.snp.updateConstraints {
+            $0.height.equalTo(trackingContainerHeight)
+        }
+        tableView.layoutIfNeeded()
+        tableView.layoutSubviews()
+        updateScrollViewContentSize()
     }
     
-
+    func updateScrollViewContentSize() {
+        let scrollHeight: CGFloat = CGFloat(trackingContainerHeight + (routeToggleState ? Constants.expandedRouteHeight : Constants.collapsedRouteHeight))
+        let totalContentHeight = scrollHeight+100
+        print("totalContentHeight: \(totalContentHeight)")
+        scrollViewContentView.snp.updateConstraints {
+            $0.height.equalTo(totalContentHeight)
+        }
+    }
     
     func generateRouteToggles() {
         routeContainerView.addArrangedSubview(routeHeaderView)
@@ -425,7 +437,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         routeContainerView.addArrangedSubview(routeTogglesContainerView)
         
         routeContainerView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(10)
+            $0.top.equalTo(eView.snp.bottom).offset(5)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(Constants.collapsedRouteHeight)
@@ -514,6 +526,20 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
     }
     
+    var activeRouteId: String?
+    func setChangeMenu() {
+        let menuItems = viewModel.busRoutes.map { route in
+            UIAction(title: route.name) { _ in
+                print("Selected route: \(route.name)")
+                self.setTrackingHeaders(route: route)
+            }
+        }
+
+        let menu = UIMenu(children: menuItems)
+        changeRouteButton.menu = menu
+    }
+    
+    
     func setTrackingHeaders(route: BusRoute) {
         activeRouteId = route.id
         let words = route.name.split(separator: " ")
@@ -546,40 +572,18 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             $0.height.equalTo(height)
         }
 
-        updateScrollViewContentSize()
+        //updateScrollViewContentSize()
     }
     
     private func toggleTrackingOption(state: inout Bool) {
         state.toggle()
+        trackingSeperatorView.isHidden = !state
         trackingExpandImage.image = UIImage(systemName: state ? "chevron.down" : "chevron.up")
         let height = state ? Constants.expandedTrackingHeight: Constants.collapsedTrackingHeight
         trackingContainerView.snp.updateConstraints {
             $0.height.equalTo(height)
         }
-        updateScrollViewContentSize()
-    }
-    
-    func adjustTableViewHeight() {
-        
-        let tableContentHeight =  getActiveRouteCoordinates().count * Int(Constants.trackingRowHeight) + 20
-        print("tableView height: \(tableContentHeight)")
-        tableView.snp.remakeConstraints {
-            $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(tableContentHeight)
-        }
-        trackingContainerView.snp.updateConstraints {
-            $0.height.equalTo(tableContentHeight+Constants.collapsedTrackingHeight)
-        }
-        
-        updateScrollViewContentSize()
-    }
-    
-    func updateScrollViewContentSize() {
-        let scrollHeight: CGFloat = CGFloat(getActiveRouteCoordinates().count * Int(Constants.trackingRowHeight) + 60 + Constants.expandedRouteHeight)
-        let totalContentHeight = scrollHeight
-        scrollViewContentView.snp.updateConstraints {
-            $0.height.equalTo(totalContentHeight)
-        }
+        //updateScrollViewContentSize()
     }
     
     func startTracking() async {
@@ -698,19 +702,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             }
         }
     }
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if scrollView == self.tableView {
-//            let isReachedBottom = scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.size.height
-//            self.tableView.isScrollEnabled = !isReachedBottom
-//            self.scrollView.isScrollEnabled = isReachedBottom
-//        } else if scrollView == self.scrollView {
-//            let isReachedTop = scrollView.contentOffset.y <= 0
-//            self.tableView.isScrollEnabled = isReachedTop
-//            self.scrollView.isScrollEnabled = !isReachedTop
-//        }
-//        self.scrollView.isScrollEnabled = false
-//    }
     
     private func trackingAppearanceChanged(isVisible: Bool) {
         let userInfo = ["isVisible" : isVisible]
