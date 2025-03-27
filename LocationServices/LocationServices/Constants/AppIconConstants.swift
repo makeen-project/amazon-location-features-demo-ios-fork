@@ -82,5 +82,7 @@ extension UIImage {
     static let simulationBackground = UIImage(named: "icon-simulation-bg")
     static let notificationIcon = UIImage(named: "icon-notification")
     static let routeIcon = UIImage(named: "icon-route")
+    
+    static let busAnnotation = UIImage(named: "bus-annotation")!
 }
 

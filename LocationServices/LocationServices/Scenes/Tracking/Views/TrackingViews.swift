@@ -180,10 +180,16 @@ final class TrackingMapView: UIView {
     }
     
     func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
+        for i in 1..<coordinates.count {
+            createDashLayer(routeId: "\(routeId)-\(i)", coordinates: [coordinates[i-1], coordinates[i]])
+        }
+        createTrackingAnnotations(sourceId: "\(routeId)-track", coordinates: coordinates, strokeColor: UIColor.lightGray)
+    }
+    
+    func createDashLayer(routeId: String, coordinates: [CLLocationCoordinate2D]) {
         let source = createTrackingSource(coordinates: coordinates, identifier: "\(routeId)-dash-source")
         let dashedLayer = createDashedLayer(source: source, identifier: "\(routeId)-dash-layer", strokeColor: .lsGrey)
         mapView.draw(layer: dashedLayer, source: source)
-        createTrackingAnnotations(sourceId: "\(routeId)-track", coordinates: coordinates, strokeColor: UIColor.lightGray)
     }
     
     func updateDashLayer(routeId: String, coordinates: [CLLocationCoordinate2D]) {
@@ -192,15 +198,25 @@ final class TrackingMapView: UIView {
         mapView.draw(layer: dashedLayer, source: source)
     }
     
-    func deleteTrackingRoute(routeId: String) {
+    func deleteTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
         guard let style = mapView.mapView.style else { return }
-        if let existingSource = style.source(withIdentifier: "\(routeId)-dash-source") {
-            style.removeSource(existingSource)
-        }
-        if let existingLayer = style.layer(withIdentifier: "\(routeId)-dash-layer") {
-            style.removeLayer(existingLayer)
-        }
         
+        for i in 0..<coordinates.count {
+            if let existingSource = style.source(withIdentifier: "\(routeId)-\(i)-dash-source") {
+                style.removeSource(existingSource)
+            }
+            if let existingLayer = style.layer(withIdentifier: "\(routeId)-\(i)-dash-layer") {
+                style.removeLayer(existingLayer)
+            }
+            
+            if let existingSource = style.source(withIdentifier: "\(routeId)-\(i)-update-dash-source") {
+                style.removeSource(existingSource)
+            }
+            if let existingLayer = style.layer(withIdentifier: "\(routeId)-\(i)-update-dash-layer") {
+                style.removeLayer(existingLayer)
+            }
+        }
+
         if let existingSource = style.source(withIdentifier: "\(routeId)-track") {
             style.removeSource(existingSource)
         }
@@ -209,57 +225,18 @@ final class TrackingMapView: UIView {
         }
     }
     
-    func generateBusImage(size: CGSize = CGSize(width: 128, height: 128)) -> UIImage? {
-        let strokeWidth: CGFloat = 20
-        let expandedSize = CGSize(width: size.width + strokeWidth * 2, height: size.height + strokeWidth * 2)
-
-        let renderer = UIGraphicsImageRenderer(size: expandedSize)
-        
-        return renderer.image { context in
-            let center = CGPoint(x: expandedSize.width / 2, y: expandedSize.height / 2)
-
-            // Outer Stroke Circle
-            let outerCircleRadius = (size.width) + (strokeWidth) // Push stroke outside
-            let outerPath = UIBezierPath(
-                arcCenter: center,
-                radius: outerCircleRadius,
-                startAngle: 0,
-                endAngle: .pi * 2,
-                clockwise: true
-            )
-            UIColor.lsPrimary.withAlphaComponent(0.3).setStroke()
-            outerPath.lineWidth = strokeWidth
-            outerPath.stroke()
-
-            // Inner White Circle
-            let innerCircleRadius = size.width / 2
-            let innerPath = UIBezierPath(
-                arcCenter: center,
-                radius: innerCircleRadius,
-                startAngle: 0,
-                endAngle: .pi * 2,
-                clockwise: true
-            )
-            UIColor.white.setFill()
-            innerPath.fill()
-
-            // Draw the Bus Icon
-            if let busIcon = UIImage(systemName: "bus.fill") {
-                let iconSize = CGSize(width: size.width * 0.6, height: size.height * 0.6)
-                let iconOrigin = CGPoint(
-                    x: (expandedSize.width - iconSize.width) / 2,
-                    y: (expandedSize.height - iconSize.height) / 2
-                )
-                let iconRect = CGRect(origin: iconOrigin, size: iconSize)
-
-                busIcon.withTintColor(.black, renderingMode: .alwaysOriginal).draw(in: iconRect)
-            }
+    func deleteUpdateDashLayer(routeId: String) {
+        guard let style = mapView.mapView.style else { return }
+        if let existingSource = style.source(withIdentifier: "\(routeId)-update-dash-source") {
+            style.removeSource(existingSource)
+        }
+        if let existingLayer = style.layer(withIdentifier: "\(routeId)-update-dash-layer") {
+            style.removeLayer(existingLayer)
         }
     }
-
  
     func addRouteBusAnnotation(id: String, coordinate: CLLocationCoordinate2D) -> ImageAnnotation {
-        let busAnnotation = ImageAnnotation(image: generateBusImage()!, identifier: "\(id)-bus")
+        let busAnnotation = ImageAnnotation(image: UIImage.busAnnotation, identifier: "\(id)-bus")
         busAnnotation.coordinate = coordinate
         mapView.mapView.addAnnotation(busAnnotation)
         return busAnnotation
@@ -302,8 +279,6 @@ private extension TrackingMapView {
         
         return source
     }
-    
-
     
     func transformHistoryToCoordinates(_ history: [TrackingHistoryPresentation]) -> [CLLocationCoordinate2D] {
         return history.compactMap { history -> CLLocationCoordinate2D? in
@@ -367,10 +342,10 @@ private extension TrackingMapView {
 
         // Create the circle layer with dynamic color expression
         let circleLayer = MLNCircleStyleLayer(identifier: "\(sourceId)-circle-layer", source: shapeSource)
-        circleLayer.circleRadius = NSExpression(forConstantValue: 6)
+        circleLayer.circleRadius = NSExpression(forConstantValue: 4)
         circleLayer.circleColor = NSExpression(forConstantValue: UIColor.white)
         circleLayer.circleStrokeColor = NSExpression(format: "TERNARY(isCovered == 1, %@, %@)", UIColor.lsPrimary, UIColor.lsGrey)
-        circleLayer.circleStrokeWidth = NSExpression(forConstantValue: 3)
+        circleLayer.circleStrokeWidth = NSExpression(forConstantValue: 2)
 
         style.addLayer(circleLayer)
     }
@@ -401,51 +376,3 @@ extension TrackingMapView: MapOverlayItemsOutputDelegate {
         // TODO: Will be implemented later
     }
 }
-
-//class BusAnnotationView: MLNAnnotationView {
-//    override init(annotation: MLNAnnotation?, reuseIdentifier: String?) {
-//        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-//        setupView()
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        setupView()
-//    }
-//
-//    private func setupView() {
-//        let size: CGFloat = 30
-//        frame = CGRect(x: 0, y: 0, width: size, height: size)
-//
-//        layer.cornerRadius = size / 2
-//        layer.backgroundColor = UIColor.white.cgColor // White background
-//        layer.borderColor = UIColor.lsPrimary.withAlphaComponent(0.3).cgColor // Blue with 30% opacity
-//        layer.borderWidth = 3
-//
-//        let imageView = UIImageView(image: UIImage(systemName: "bus.fill"))
-//        imageView.tintColor = .black
-//        imageView.frame = CGRect(x: 5, y: 5, width: size - 10, height: size - 10)
-//        addSubview(imageView)
-//    }
-//}
-
-
-//extension UIImage {
-//    func circle() -> UIImage? {
-//        guard let cgImage = self.cgImage else { return nil }
-//        let contextSize = CGSize(width: self.size.width, height: self.size.height)
-//
-//        UIGraphicsBeginImageContextWithOptions(contextSize, false, 0.0)
-//        let context = UIGraphicsGetCurrentContext()!
-//
-//        let rect = CGRect(x: 0, y: 0, width: contextSize.width, height: contextSize.height)
-//        context.addEllipse(in: rect)
-//        context.clip()
-//
-//        self.draw(in: rect)
-//        let result = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
-//
-//        return result
-//    }
-//}

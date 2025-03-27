@@ -248,7 +248,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         
         Task {
             try await Task.sleep(for: .seconds(2))
-            //await startTracking()
+            await startTracking()
         }
     }
     
@@ -513,7 +513,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                         self?.simulateTrackingRoute(routeToggle: routeToggle)
                     } else {
                         if let routeId = routeToggle.id {
-                            self?.trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId)
+                            let coordinates = self?.viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
+                            let cllCoordinates = self?.convertToCoordinates(from: coordinates) ?? []
+                            self?.trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId, coordinates: cllCoordinates)
                             self?.routesStatus[routeId]?.isActive = false
                             self?.routesStatus[routeId]?.simulateIndex = 0
                         }
@@ -572,7 +574,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             $0.height.equalTo(height)
         }
 
-        //updateScrollViewContentSize()
+        updateScrollViewContentSize()
     }
     
     private func toggleTrackingOption(state: inout Bool) {
@@ -583,7 +585,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         trackingContainerView.snp.updateConstraints {
             $0.height.equalTo(height)
         }
-        //updateScrollViewContentSize()
+        updateScrollViewContentSize()
     }
     
     func startTracking() async {
@@ -638,6 +640,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 if self.routesStatus[id]!.simulateIndex >= coordinates.count {
                     for jIndex in 0..<coordinates.count {
                         self.trackingVC?.trackingMapView.updateFeatureColor(at: jIndex, sourceId: id, isCovered: false)
+                        self.trackingVC?.trackingMapView.deleteUpdateDashLayer(routeId: "\(id)-\(jIndex)")
                     }
                     self.routesStatus[id]!.simulateIndex = 0
                     self.routesStatus[id]?.routeCoordinates = []
@@ -646,12 +649,16 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 
                 // Move annotation forward
                 UIView.animate(withDuration: 0.5) {
-                    self.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.routesStatus[id]!.simulateIndex]
-                    
-                    self.trackingVC?.trackingMapView.updateDashLayer(routeId: id, coordinates: [coordinates[self.routesStatus[id]!.simulateIndex]])
-                    self.trackingVC?.trackingMapView.updateFeatureColor(at: self.routesStatus[id]!.simulateIndex, sourceId: id, isCovered: true)
-                    
+                    if let simulateIndex = self.routesStatus[id]?.simulateIndex {
+                        self.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.routesStatus[id]!.simulateIndex]
+                        if simulateIndex > 0 {
+                            let coordinates = [coordinates[simulateIndex-1], coordinates[simulateIndex]]
+                            self.trackingVC?.trackingMapView.updateDashLayer(routeId: "\(id)-\(simulateIndex)", coordinates: coordinates)
+                        }
+                        self.trackingVC?.trackingMapView.updateFeatureColor(at: simulateIndex, sourceId: id, isCovered: true)
+                    }
                 }
+                
                 self.routesStatus[id]!.simulateIndex += 1
                 if let routeStatus = self.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
                     self.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex] ))
