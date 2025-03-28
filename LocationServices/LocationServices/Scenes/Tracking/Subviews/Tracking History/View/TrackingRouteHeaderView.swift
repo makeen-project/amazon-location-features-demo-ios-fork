@@ -82,9 +82,8 @@ final class TrackingRouteHeaderView: UIView {
         setupViews()
     }
     
-    override init(frame: CGRect) {
+    private override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
     }
     
     required init?(coder: NSCoder) {

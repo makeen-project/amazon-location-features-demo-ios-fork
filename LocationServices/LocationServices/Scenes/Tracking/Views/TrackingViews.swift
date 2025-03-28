@@ -239,6 +239,7 @@ final class TrackingMapView: UIView {
         let busAnnotation = ImageAnnotation(image: UIImage.busAnnotation, identifier: "\(id)-bus")
         busAnnotation.coordinate = coordinate
         mapView.mapView.addAnnotation(busAnnotation)
+        
         return busAnnotation
     }
     
@@ -291,19 +292,19 @@ private extension TrackingMapView {
     }
     
     func createDashedLayer(source: MLNSource, identifier: String = "dashed-layer", strokeColor: UIColor) -> MLNStyleLayer {
-        let lineJoinCap = NSExpression(forConstantValue: "round")
-        let lineWidth = NSExpression(forConstantValue: 5) //NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",[16: 5, 20: 20])
-        
-        let dashedLayer = MLNLineStyleLayer(identifier: identifier, source: source)
-        dashedLayer.lineJoin = lineJoinCap
-        dashedLayer.lineCap = lineJoinCap
-        dashedLayer.lineColor = NSExpression(forConstantValue: strokeColor)
-        dashedLayer.lineWidth = lineWidth
-        dashedLayer.lineDashPattern = NSExpression(forConstantValue: [0, 1.7])
-        
-        return dashedLayer
-    }
-    
+            let lineJoinCap = NSExpression(forConstantValue: "round")
+        let lineWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'exponential', 1.5, %@)",[16: 5, 20: 20]) //NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",[16: 5, 20: 5])
+            //NSExpression(forConstantValue: 5)
+            let dashedLayer = MLNLineStyleLayer(identifier: identifier, source: source)
+            dashedLayer.lineJoin = lineJoinCap
+            dashedLayer.lineCap = lineJoinCap
+            dashedLayer.lineColor = NSExpression(forConstantValue: strokeColor)
+            dashedLayer.lineWidth = lineWidth
+            dashedLayer.lineDashPattern = NSExpression(forConstantValue: [0, 1.7])
+            
+            return dashedLayer
+        }
+
     func createTrackingAnnotaions(_ history: [TrackingHistoryPresentation]) -> [MLNAnnotation] {
         let coordinates = transformHistoryToCoordinates(history)
         let annotations = coordinates.map {

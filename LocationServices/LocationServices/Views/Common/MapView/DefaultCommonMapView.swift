@@ -144,17 +144,19 @@ extension DefaultCommonMapView: MLNMapViewDelegate {
             }
         case is ImageAnnotation:
             guard let imageAnnotation = annotation as? ImageAnnotation else { return nil }
+            let identifier = imageAnnotation.identifier ?? Constant.imageAnnotationViewIdentifier
+            print("image annotation identifier: \(identifier)")
             let imageAnnotationView: MLNAnnotationView
-            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: imageAnnotation.identifier ?? Constant.imageAnnotationViewIdentifier) as? ImageAnnotationView {
+            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? ImageAnnotationView {
                 annotationView.annotation = imageAnnotation
                 annotationView.addImage(imageAnnotation.image)
                 
                 imageAnnotationView = annotationView
             } else {
-                imageAnnotationView = ImageAnnotationView(annotation: imageAnnotation, reuseIdentifier: imageAnnotation.identifier ?? Constant.imageAnnotationViewIdentifier)
+                imageAnnotationView = ImageAnnotationView(annotation: imageAnnotation, reuseIdentifier: identifier)
             }
             
-            imageAnnotationView.accessibilityIdentifier = ViewsIdentifiers.General.imageAnnotationView
+            imageAnnotationView.accessibilityIdentifier = imageAnnotation.identifier
             return imageAnnotationView
         default:
             return nil

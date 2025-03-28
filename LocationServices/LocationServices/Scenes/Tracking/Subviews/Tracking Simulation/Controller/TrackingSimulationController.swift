@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import CoreLocation
+import MapLibre
 
 struct RouteStatus {
     var id: String
@@ -25,7 +26,7 @@ struct RouteCoordinate {
 final class TrackingSimulationController: UIViewController, UIScrollViewDelegate {
     enum Constants {
         static let titleOffsetiPhone: CGFloat = 16
-        static let titleOffsetiPad: CGFloat = 0
+        static let titleOffsetiPad: CGFloat = 100
         static let collapsedRouteHeight: Int = 64
         static let expandedRouteHeight: Int = 400
         static let collapsedTrackingHeight: Int = 64
@@ -36,8 +37,8 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     private(set) lazy var headerView: TrackingRouteHeaderView = {
-        let titleTopOffset: CGFloat = isiPad ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
-        return TrackingRouteHeaderView(titleTopOffset: titleTopOffset)
+
+        return TrackingRouteHeaderView(titleTopOffset: 0)
     }()
     private let noInternetConnectionView = NoInternetConnectionView()
     
@@ -248,7 +249,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         
         Task {
             try await Task.sleep(for: .seconds(2))
-            await startTracking()
+            //await startTracking()
         }
     }
     
@@ -256,6 +257,43 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         trackingVC?.trackingMapView.mapView.mapView.setCenter(CLLocationCoordinate2D(latitude: 49.27046144661014, longitude: -123.13319444634126), zoomLevel: 12, animated: false)
     }
     
+    func fitMapToRoute() {
+        var allCoordinates: [CLLocationCoordinate2D] = []
+
+        // Collect coordinates from all active routes
+        for route in routeToggles.filter({ $0.getState() == true }) {
+            if let routeCoordinates = viewModel.busRoutes.first(where: { $0.id == route.id })?.coordinates {
+                let coordinate = convertToCoordinates(from: routeCoordinates)
+                allCoordinates.append(contentsOf: coordinate)
+            }
+        }
+
+        // Ensure we have coordinates to work with
+        guard let first = allCoordinates.first else { return }
+
+        // Determine the bounding box (min/max lat & lon)
+        var minLat = first.latitude
+        var minLon = first.longitude
+        var maxLat = first.latitude
+        var maxLon = first.longitude
+
+        for coord in allCoordinates {
+            minLat = min(minLat, coord.latitude)
+            minLon = min(minLon, coord.longitude)
+            maxLat = max(maxLat, coord.latitude)
+            maxLon = max(maxLon, coord.longitude)
+        }
+
+        // Create bounds
+        let sw = CLLocationCoordinate2D(latitude: minLat, longitude: minLon)
+        let ne = CLLocationCoordinate2D(latitude: maxLat, longitude: maxLon)
+        let bounds = MLNCoordinateBounds(sw: sw, ne: ne)
+
+        // Set the map view to show all routes
+        let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
+        trackingVC?.trackingMapView.mapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {})
+    }
+
     override func viewDidAppear(_ animated: Bool) {
 
     }
@@ -266,11 +304,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func routeOptionExpand() {
-        toggleRouteOption(state: &routeToggleState)
+        toggleRouteOption()
     }
     
     @objc func trackingOptionExpand() {
-        toggleTrackingOption(state: &trackingToggleState)
+        toggleTrackingOption()
     }
     
     func updateButtonStyle(state: Bool) {
@@ -328,8 +366,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         trackingHeaderView.addSubview(trackingExpandImage)
         trackingHeaderView.addSubview(trackingSeperatorView)
 
+        let titleTopOffset: CGFloat = isiPad ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
+        
         headerView.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(titleTopOffset)
             $0.width.equalToSuperview()
             $0.height.equalTo(60)
         }
@@ -509,6 +549,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                     self?.clearGeofences()
                     self?.drawGeofences()
                     self?.drawTrackingRoutes()
+                    self?.fitMapToRoute()
                     if isOn {
                         self?.simulateTrackingRoute(routeToggle: routeToggle)
                     } else {
@@ -523,9 +564,8 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 }
                 
                 routeToggles.append(routeToggle)
-
-            routeToggles[0].setState(isOn: true)
         }
+        routeToggles[0].setState(isOn: true)
     }
     
     var activeRouteId: String?
@@ -554,7 +594,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
     }
     
-    
     func evaluateSelectedRoutes() {
         let count = routeToggles.count(where: { $0.getState()})
         routesDetailLabel.text = "\(count) routes active"
@@ -564,11 +603,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         routesStatus.first(where: { $0.key == activeRouteId })?.value.routeCoordinates ?? []
     }
     
-    private func toggleRouteOption(state: inout Bool) {
-        state.toggle()
-        routeExpandImage.image = UIImage(systemName: state ? "chevron.down" : "chevron.up")
-        routeTogglesContainerView.isHidden = !state
-        let height = state ? Constants.expandedRouteHeight: Constants.collapsedRouteHeight
+    private func toggleRouteOption() {
+        routeToggleState.toggle()
+        routeExpandImage.image = UIImage(systemName: routeToggleState ? "chevron.down" : "chevron.up")
+        routeTogglesContainerView.isHidden = !routeToggleState
+        let height = routeToggleState ? Constants.expandedRouteHeight: Constants.collapsedRouteHeight
         
         routeContainerView.snp.updateConstraints {
             $0.height.equalTo(height)
@@ -577,11 +616,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         updateScrollViewContentSize()
     }
     
-    private func toggleTrackingOption(state: inout Bool) {
-        state.toggle()
-        trackingSeperatorView.isHidden = !state
-        trackingExpandImage.image = UIImage(systemName: state ? "chevron.down" : "chevron.up")
-        let height = state ? Constants.expandedTrackingHeight: Constants.collapsedTrackingHeight
+    private func toggleTrackingOption() {
+        trackingToggleState.toggle()
+        trackingSeperatorView.isHidden = !trackingToggleState
+        trackingExpandImage.image = UIImage(systemName: trackingToggleState ? "chevron.down" : "chevron.up")
+        let height = trackingToggleState ? Constants.expandedTrackingHeight: Constants.collapsedTrackingHeight
         trackingContainerView.snp.updateConstraints {
             $0.height.equalTo(height)
         }
@@ -604,7 +643,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             routeToggles.first?.changeState()
         }
         clearGeofences()
-
+        fitMapToRoute()
         await fetchGeoFences()
         drawGeofences()
         drawTrackingRoutes()
@@ -628,15 +667,18 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func simulateTrackingRoute(routeToggle: RouteToggleView) {
         if let id = routeToggle.id, routeToggle.getState() == true,
            let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
+            
             let coordinates = convertToCoordinates(from: routesData.coordinates)
             self.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[self.routesStatus[id]!.simulateIndex])
             
             // Move the annotation along the route every second
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) { timer in
-                if !self.isTrackingActive {
+                if !self.isTrackingActive || routeToggle.getState() == false {
                     timer.invalidate()
                     return
                 }
+                print("route id: \(id)")
+                //Reset and delete the tracking route
                 if self.routesStatus[id]!.simulateIndex >= coordinates.count {
                     for jIndex in 0..<coordinates.count {
                         self.trackingVC?.trackingMapView.updateFeatureColor(at: jIndex, sourceId: id, isCovered: false)

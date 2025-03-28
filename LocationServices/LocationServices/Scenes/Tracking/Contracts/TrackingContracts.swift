@@ -8,12 +8,9 @@
 import Foundation
 import CoreLocation
 
-protocol TrackingNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
+protocol TrackingNavigationDelegate: AnyObject {
     func showNextTrackingScene()
-    func showTrackingHistory(isTrackingActive: Bool)
     func showMapStyleScene()
-    func showLoginFlow()
-    func showLoginSuccess()
     func showAttribution()
     func showDashboardFlow()
 }

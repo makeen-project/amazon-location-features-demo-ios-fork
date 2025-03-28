@@ -67,7 +67,6 @@ final class TrackingVC: UIViewController {
         self.navigationItem.backButtonTitle = ""
         self.view.backgroundColor = .white
         trackingMapView.delegate = self
-        authActionsHelper.delegate = delegate
         setupNotifications()
         setupHandlers()
         setupViews()

@@ -15,6 +15,7 @@ enum TrackingSimulationDashoardConstant {
 
 final class TrackingSimulationDashboardView: UIView {
     var dashboardButtonHandler: VoidHandler?
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
@@ -24,6 +25,7 @@ final class TrackingSimulationDashboardView: UIView {
         button.isUserInteractionEnabled = true
         button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(simulationDismiss), for: .touchUpInside)
+        button.isHidden = isiPad
         return button
     }()
     

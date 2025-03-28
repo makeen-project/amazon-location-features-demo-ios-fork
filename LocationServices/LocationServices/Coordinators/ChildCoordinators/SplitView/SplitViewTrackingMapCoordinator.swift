@@ -34,7 +34,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         let controller = TrackingDashboardBuilder.create()
         controller.delegate = self
         controller.trackingSimulationHandler = { [weak self] in
-            self?.showTrackingHistory(isTrackingActive: true)
+            self?.showTrackingSimulationScene()
         }
         return controller
     }()
@@ -68,43 +68,43 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
 }
 
 extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
-    func showNextTrackingScene() {
-        setSupplementary()
-        splitViewController.show(.supplementary)
-    }
-    
     func showDashboardFlow() {
         historyIsRootController = false
         guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
         showNextTrackingScene()
     }
     
-    func showTrackingSimulation() {
+    func showNextTrackingScene() {
+        setSupplementary()
+        splitViewController.show(.supplementary)
+    }
+    
+    func showTrackingSimulationScene() {
         let controller = TrackingSimulationIntroBuilder.create()
-        controller.modalPresentationStyle = .formSheet
-        controller.isModalInPresentation = true
+        controller.modalPresentationStyle = .automatic
+        controller.isModalInPresentation = false
         
+        controller.delegate = self
+        controller.trackingSimulationHandler = { [weak self] in
+            self?.showRouteTrackingScene()
+        }
         controller.dismissHandler = { [weak self] in
             self?.splitViewController.dismiss(animated: true)
         }
-        
-        if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-        }
-        
-        splitViewController.present(controller, animated: true)
+
+        supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitDelegate?.showSupplementary()
     }
     
-    func showTrackingHistory(isTrackingActive: Bool = false) {
-        historyIsRootController = true
-        let controller = historyController
-        controller.viewModel.changeTrackingStatus(isTrackingActive)
-        guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
-        supplementaryNavigationController?.setViewControllers([controller],
-                                                              animated: true)
+    func showRouteTrackingScene() {
+        let controller = TrackingSimulationBuilder.create()
+        controller.modalPresentationStyle = .automatic
+        controller.isModalInPresentation = false
+        controller.trackingVC = secondaryController
+        controller.viewModel = secondaryController.viewModel
         
-        // Starting tracking by default when tapping on Enable tracking button
-        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": isTrackingActive])
+        supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitDelegate?.showSupplementary()
     }
     
     func showMapStyleScene() {
@@ -120,43 +120,6 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         }
         
         splitViewController.present(controller, animated: true)
-    }
-    
-    func showLoginFlow() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
-        
-        let controller = LoginVCBuilder.create()
-        controller.dismissHandler = { [weak self] in
-            self?.splitViewController.dismiss(animated: true)
-        }
-        
-        controller.postLoginHandler = { [weak self] in
-            self?.showLoginSuccess()
-        }
-        
-        controller.modalPresentationStyle = .formSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-        }
-        splitViewController.present(controller, animated: true)
-    }
-    
-    func showLoginSuccess() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
-        
-        splitViewController.dismiss(animated: true) { [weak self] in
-            let controller = PostLoginBuilder.create()
-            controller.dismissHandler = { [weak self] in
-                self?.splitViewController.dismiss(animated: true)
-            }
-            controller.modalPresentationStyle = .formSheet
-
-            if let sheet = controller.sheetPresentationController {
-                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-            }
-            self?.splitViewController.present(controller, animated: true)
-        }
     }
     
     func showAttribution() {
