@@ -13,6 +13,7 @@ final class TrackingSimulationIntroController: UIViewController {
     weak var delegate: TrackingNavigationDelegate?
     var trackingSimulationHandler: VoidHandler?
     var dismissHandler: VoidHandler?
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     private var dashboardView = TrackingSimulationDashboardView()
     
@@ -46,6 +47,14 @@ final class TrackingSimulationIntroController: UIViewController {
     private func setupHandlers() {
         dashboardView.dashboardButtonHandler = { [weak self] in
             self?.trackingSimulationHandler?()
+        }
+        dashboardView.maybeButtonHandler = { [weak self] in
+            if self?.isiPad == true {
+                self?.navigationController?.popViewController(animated: true)
+            }
+            else {
+                self?.dismissBottomSheet()
+            }
         }
     }
 }

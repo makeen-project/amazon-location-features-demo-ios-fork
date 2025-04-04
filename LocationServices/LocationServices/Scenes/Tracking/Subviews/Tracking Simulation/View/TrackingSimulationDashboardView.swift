@@ -15,6 +15,7 @@ enum TrackingSimulationDashoardConstant {
 
 final class TrackingSimulationDashboardView: UIView {
     var dashboardButtonHandler: VoidHandler?
+    var maybeButtonHandler: VoidHandler?
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
     private lazy var closeButton: UIButton = {
@@ -152,6 +153,7 @@ final class TrackingSimulationDashboardView: UIView {
     }
     
     @objc private func simulationDismiss() {
+        maybeButtonHandler?()
     }
     
     override func layoutSubviews() {
