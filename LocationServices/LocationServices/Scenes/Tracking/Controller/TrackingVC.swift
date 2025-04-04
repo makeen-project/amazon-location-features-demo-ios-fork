@@ -122,7 +122,6 @@ final class TrackingVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingState(_:)), name: Notification.updateTrackingHeader, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
     }
     
     private func setupKeyboardNotifications() {
@@ -146,12 +145,6 @@ final class TrackingVC: UIViewController {
     
     @objc override func keyboardWillHide(notification: NSNotification) {
         trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
-    }
-    
-    @objc private func updateTrackingHistory(_ notification: Notification) {
-        guard (notification.object as? TrackingViewModelProtocol) !== viewModel else { return }
-        guard let history = notification.userInfo?["history"] as? [TrackingHistoryPresentation] else { return }
-        drawTrack(history: history)
     }
     
     @objc private func refreshMapView(_ notification: Notification) {
@@ -283,12 +276,6 @@ extension TrackingVC: TrackingViewModelDelegate {
     
     func showGeofences(routeId: String, _ models: [GeofenceDataModel]) {
         trackingMapView.showGeofenceAnnotations(models)
-    }
-    
-    func drawTrack(history: [TrackingHistoryPresentation]) {
-        DispatchQueue.main.async {
-            self.trackingMapView.drawTrack(history: history)
-        }
     }
     
     func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
