@@ -17,6 +17,8 @@ final class TrackingVC: UIViewController {
         static let trackingMapViewBottomOffset: CGFloat = 130
     }
     
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
+    
     var geofenceHandler: VoidHandler?
     var directionHandler: VoidHandler?
     
@@ -72,8 +74,7 @@ final class TrackingVC: UIViewController {
         setupViews()
         locationManagerSetup()
         trackingHeaderView.isHidden = true
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            
+        if isiPad {
             grabberIcon.isHidden = true
         }
     }
@@ -91,9 +92,14 @@ final class TrackingVC: UIViewController {
     
     private func setupHandlers() {
         trackingHeaderView.exitButtonHandler =  { [weak self] in
+            self?.trackingHeaderView.isHidden = true
             //show explore view
             NotificationCenter.default.post(name: Notification.dismissTrackingSimulation, object: self, userInfo: nil)
-            self?.tabBarController?.selectedIndex = 0
+            if self?.isiPad == true {
+            }
+            else {
+                self?.tabBarController?.selectedIndex = 0
+            }
         }
     }
     
@@ -206,9 +212,17 @@ final class TrackingVC: UIViewController {
         }
         
         trackingHeaderView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            if isiPad {
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(70)
+                $0.width.equalTo(350)
+                $0.centerX.equalToSuperview()
+            }
+            else {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.leading.equalToSuperview().offset(16)
+                $0.trailing.equalToSuperview().offset(-16)
+            }
+
             $0.height.equalTo(40)
         }
     }

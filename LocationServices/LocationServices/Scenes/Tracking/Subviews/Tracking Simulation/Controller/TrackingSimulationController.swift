@@ -249,7 +249,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         
         Task {
             try await Task.sleep(for: .seconds(2))
-            //await startTracking()
+            await startTracking()
         }
     }
     
@@ -333,8 +333,19 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func dismissTrackingSimulation() {
-        self.dismissBottomSheet()
+        if isTrackingActive {
+            Task {
+                await startTracking()
+            }
+        }
+        if isiPad {
+            self.navigationController?.popViewController(animated: true)
+        }
+        else {
+            self.dismissBottomSheet()
+        }
     }
+    
     var eView : UIView = {
         let view = UIView()
         view.backgroundColor = .lsLight2
