@@ -223,6 +223,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.post(name: Notification.resetMapLayerItems, object: nil, userInfo: nil)
+        if isTrackingActive {
+            Task {
+                await startTracking()
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -250,6 +255,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         Task {
             try await Task.sleep(for: .seconds(2))
             await startTracking()
+        }
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navigationController?.navigationBar.isHidden = true
         }
     }
     
