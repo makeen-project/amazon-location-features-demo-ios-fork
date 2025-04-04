@@ -50,7 +50,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         
         floatingView = MapFloatingViewHandler(viewController: controller)
         floatingView?.delegate = splitDelegate
-        floatingView?.setupNavigationSearch(state: .onlySecondaryVisible)
+        floatingView?.setupNavigationSearch(state: .primaryVisible, hideSearch: true)
         return controller
     }()
     
@@ -63,7 +63,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     }
     
     func setupNavigationSearch(state: MapSearchState) {
-        floatingView?.setupNavigationSearch(state: state)
+        floatingView?.setupNavigationSearch(state: .primaryVisible, hideSearch: true)
     }
 }
 
