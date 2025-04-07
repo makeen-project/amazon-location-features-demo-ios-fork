@@ -286,7 +286,7 @@ extension GeofenceVC: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
-            NotificationCenter.default.post(name: Notification.Name("GrantedLocationPermissions"), object: nil, userInfo: ["userLocation": manager.location as Any])
+            NotificationCenter.default.post(name: Notification.grantedLocationPermissions, object: nil, userInfo: ["userLocation": manager.location as Any])
             geofenceMapView.grantedLocationPermissions()
         default:
             break
