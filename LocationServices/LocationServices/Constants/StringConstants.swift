@@ -198,12 +198,11 @@ enum StringConstant {
     }
     
     enum TabBar {
-        static let explore: String = "Explore"
+        static let explore: String = "Navigate"
         static let tracking: String = "Trackers"
         static let geofence: String = "Geofences"
         static let settings: String = "Settings"
-        static let about: String = "About"
-        static let more: String = "More"
+        static let about: String = "More"
     }
     
     enum Errors {
