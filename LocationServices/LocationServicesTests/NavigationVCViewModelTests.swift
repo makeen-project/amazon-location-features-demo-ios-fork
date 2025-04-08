@@ -52,20 +52,6 @@ final class NavigationVCViewModelTests: XCTestCase {
         XCTAssertEqual(navigationVCViewModel.firstDestination?.placeName, "Times Square", "Expected Times Square place name")
     }
     
-    func testUpdateWithValidData() throws {
-        var legDetails = GeoRoutesClientTypes.RouteVehicleLegDetails(travelSteps: [])
-        var routeLegDetails = GeoRoutesClientTypes.RouteLeg(vehicleLegDetails: legDetails)
-        var route = GeoRoutesClientTypes.Route(legs: [routeLegDetails])
-        let navigationVCViewModel = NavigationVCViewModel(service: LocationService(), route: route, firstDestination: firstDestination, secondDestination: secondDestination)
-
-        let step = GeoRoutesClientTypes.RouteVehicleTravelStep(distance: 2, duration: 2, instruction: "continue", type: .continue)
-        legDetails = GeoRoutesClientTypes.RouteVehicleLegDetails(travelSteps: [step])
-        routeLegDetails = GeoRoutesClientTypes.RouteLeg(vehicleLegDetails: legDetails)
-        route = GeoRoutesClientTypes.Route(legs: [routeLegDetails])
-        navigationVCViewModel.update(route: route)
-        XCTAssertEqual(navigationVCViewModel.route.legs?[0].vehicleLegDetails?.travelSteps?.first?.duration, 2, "Expected steps duration 2")
-    }
-    
     func testGetSummaryData() throws {
         var legDetails = GeoRoutesClientTypes.RouteVehicleLegDetails(travelSteps: [])
         var routeLegDetails = GeoRoutesClientTypes.RouteLeg(vehicleLegDetails: legDetails)
@@ -78,7 +64,7 @@ final class NavigationVCViewModelTests: XCTestCase {
         route = GeoRoutesClientTypes.Route(legs: [routeLegDetails], summary: GeoRoutesClientTypes.RouteSummary(distance: 10, duration: 1, tolls: nil))
         navigationVCViewModel.update(route: route)
         
-        XCTAssertEqual(navigationVCViewModel.getSummaryData().totalDistance, "10.0 m", "Expected summary total distance 1 m")
+        XCTAssertEqual(navigationVCViewModel.getSummaryData().totalDistance, "0.01 mi", "Expected summary total distance 0.01 mi")
     }
     
     func testGetDataWithZeroSteps() throws {

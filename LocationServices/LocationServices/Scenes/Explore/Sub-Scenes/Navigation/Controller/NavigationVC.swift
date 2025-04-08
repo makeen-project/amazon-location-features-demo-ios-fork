@@ -13,6 +13,7 @@ final class NavigationVC: UIViewController {
     enum Constants {
         static let navigationHeaderHeight: CGFloat = 80
         static let titleLeadingOffset: CGFloat = 16
+        static let navigationCellRowHeight: CGFloat = 52
     }
     
     weak var delegate: ExploreNavigationDelegate?
@@ -238,15 +239,17 @@ final class NavigationVC: UIViewController {
 
         destinationStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(Constants.titleLeadingOffset)
-            $0.top.equalTo(tableView.snp.bottom).offset(16)
+            $0.top.equalTo(tableView.snp.bottom).offset(32)
             $0.height.equalTo(44)
         }
     }
 
     private func adjustTableViewHeight() {
         tableView.layoutIfNeeded()
+        let legsCount = viewModel.getData().count
+        let height = CGFloat(legsCount) * Constants.navigationCellRowHeight
         tableView.snp.updateConstraints {
-            $0.height.equalTo(tableView.contentSize.height+50)
+            $0.height.equalTo(height)
         }
     }
     
@@ -291,12 +294,12 @@ private extension NavigationVC {
             let mapHeaderData = (distance: datas[0].distance, street: mapData.instruction, stepImage: mapData.getStepImage())
             let summaryData = viewModel.getSummaryData()
             let data: [String: Any] = ["MapViewValues" : mapHeaderData, "SummaryData": summaryData]
-            NotificationCenter.default.post(name: Notification.Name("UpdateMapViewValues"), object: nil, userInfo: data)
+            NotificationCenter.default.post(name: Notification.updateMapViewValues, object: nil, userInfo: data)
         }
     }
     
     func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateNavigationSteps(_:)), name: Notification.Name("NavigationStepsUpdated"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateNavigationSteps(_:)), name: Notification.navigationStepsUpdated, object: nil)
     }
     
     @objc private func updateNavigationSteps(_ notification: Notification) {

@@ -286,19 +286,19 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                     routeTime = Date.convertStringToDate(routeTime, format: "yyyy-MM-dd'T'HH:mm:ssXXX")?.convertTimeString() ?? ""
                     switch model.travelMode {
                     case .car:
-                        directionVM.carTypeDistane = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.carTypeDistane = model.route.summary?.distance.formatDistance() ?? ""
                         directionVM.carTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                         directionVM.carTypeTime = routeTime
                     case .scooter:
-                        directionVM.scooterTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.scooterTypeDistance = model.route.summary?.distance.formatDistance() ?? ""
                         directionVM.scooterTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                         directionVM.scooterTypeTime = routeTime
                     case .pedestrian:
-                        directionVM.walkingTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.walkingTypeDistance = model.route.summary?.distance.formatDistance() ?? ""
                         directionVM.walkingTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                         directionVM.walkingTypeTime = routeTime
                     case .truck:
-                        directionVM.truckTypeDistance = model.route.summary?.distance.formatToKmString() ?? ""
+                        directionVM.truckTypeDistance = model.route.summary?.distance.formatDistance() ?? ""
                         directionVM.truckTypeDuration = model.route.summary?.duration.convertSecondsToMinString() ?? ""
                         directionVM.truckTypeTime = routeTime
                     default: break

@@ -31,7 +31,7 @@ final class POICardView: UIView {
             if let distance = dataModel.distance, distance != 0 {
                 self.distanceLabel.isHidden = false
                 self.dotView.isHidden = false
-                self.distanceLabel.text = distance.formatToKmString()
+                self.distanceLabel.text = distance.formatDistance()
             } else {
                 self.dotView.isHidden = true
                 self.distanceLabel.isHidden = true
@@ -422,7 +422,7 @@ final class POICardView: UIView {
     
     @objc private func poiCardDismiss() {
         delegate?.dismissPoiView()
-        NotificationCenter.default.post(name: Notification.Name("POICardDismissed"), object: nil)
+        NotificationCenter.default.post(name: Notification.poiCardDismissed, object: nil)
     }
     
     func setupViews() {

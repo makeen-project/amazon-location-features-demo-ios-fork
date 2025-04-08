@@ -33,7 +33,7 @@ extension Notification {
     static let grantedLocationPermissions = Notification.Name("GrantedLocationPermissions")
     static let validateMapColor = Notification.Name("ValidateMapColor")
     static let validatePoliticalView = Notification.Name("ValidatePoliticalView")
-    static let focusOnLocation = Notification.Name("focusOnLocation")
+    static let focusOnLocation = Notification.Name("FocusOnLocation")
     
     static let searchAppearanceChanged = Notification.Name("SearchAppearanceChanged")
     static let trackingAppearanceChanged = Notification.Name("TrackingAppearanceChanged")
@@ -44,4 +44,14 @@ extension Notification {
     static let geofenceRadiusDragged = Notification.Name("GeofenceRadiusDragged")
     
     static let dismissTrackingSimulation = Notification.Name("DismissTrackingSimulation")
+    static let shownSearchResults = Notification.Name("ShownSearchResults")
+    static let poiCardDismissed = Notification.Name("POICardDismissed")
+    static let directionViewDismissed = Notification.Name("DirectionViewDismissed")
+    static let navigationViewDismissed = Notification.Name("NavigationViewDismissed")
+    static let updateMapViewButtons = Notification.Name("UpdateMapViewButtons")
+    static let updateMapViewValues = Notification.Name("UpdateMapViewValues")
+    static let navigationStepsUpdated = Notification.Name("NavigationStepsUpdated")
+    static let navigationSteps = Notification.Name("NavigationSteps")
+    static let directionLineString = Notification.Name("DirectionLineString")
+    
 }

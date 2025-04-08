@@ -9,8 +9,7 @@ import UIKit
 import SnapKit
 
 private enum CustomSelectableConstants {
-    static let circleImage = UIImage(systemName: "circle.fill")
-    static let checkMarkImage = UIImage(systemName: "checkmark.circle.fill")
+    static let checkMarkImage = UIImage.checkMark
 }
 
 final class AmazonCustomSelectableView: UIView {
@@ -33,7 +32,7 @@ final class AmazonCustomSelectableView: UIView {
     
     private var selectionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(CustomSelectableConstants.circleImage, for: .normal)
+        button.setImage(nil, for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.tintColor = .searchBarBackgroundColor
         button.layer.borderColor = UIColor.searchBarTintColor.cgColor
@@ -76,7 +75,7 @@ final class AmazonCustomSelectableView: UIView {
             selectionButton.layer.borderWidth = 0
             selectionButton.layer.borderColor = UIColor.lsPrimary.cgColor
         } else {
-            selectionButton.setImage(CustomSelectableConstants.circleImage, for: .normal)
+            selectionButton.setImage(nil, for: .normal)
             selectionButton.tintColor = .searchBarBackgroundColor
             selectionButton.layer.borderWidth = 1
             selectionButton.layer.borderColor = UIColor.searchBarTintColor.cgColor
@@ -96,7 +95,7 @@ final class AmazonCustomSelectableView: UIView {
             selectionButton.layer.borderWidth = 0
             selectionButton.layer.borderColor = UIColor.lsPrimary.cgColor
         } else {
-            selectionButton.setImage(CustomSelectableConstants.circleImage, for: .normal)
+            selectionButton.setImage(nil, for: .normal)
             selectionButton.tintColor = .searchBarBackgroundColor
             selectionButton.layer.borderWidth = 1
             selectionButton.layer.borderColor = UIColor.searchBarTintColor.cgColor
