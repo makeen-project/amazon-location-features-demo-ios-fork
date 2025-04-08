@@ -383,6 +383,9 @@
 		F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */; };
 		F18DEEE62C75947000335F3E /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEE52C75947000335F3E /* Logger.swift */; };
 		F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */; };
+		F18E2D362DA58A4E00A34D67 /* UnitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D332DA58A4D00A34D67 /* UnitModel.swift */; };
+		F18E2D372DA58A4E00A34D67 /* UnitTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D342DA58A4D00A34D67 /* UnitTypes.swift */; };
+		F18E2D392DA58A7600A34D67 /* UnitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D382DA58A7600A34D67 /* UnitHelper.swift */; };
 		F18FFB4E2D48EF7900573B54 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = F18FFB4D2D48EF7900573B54 /* Polyline */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
 		F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */; };
@@ -831,6 +834,9 @@
 		F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoCredentials.swift; sourceTree = "<group>"; };
 		F18DEEE52C75947000335F3E /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		F18DEEFB2C7774B500335F3E /* MqttIoTContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttIoTContext.swift; sourceTree = "<group>"; };
+		F18E2D332DA58A4D00A34D67 /* UnitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitModel.swift; sourceTree = "<group>"; };
+		F18E2D342DA58A4D00A34D67 /* UnitTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTypes.swift; sourceTree = "<group>"; };
+		F18E2D382DA58A7600A34D67 /* UnitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitHelper.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
 		F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardView.swift; sourceTree = "<group>"; };
 		F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVC.swift; sourceTree = "<group>"; };
@@ -1334,8 +1340,8 @@
 				F1F0C5862A0E5401009C7151 /* ErrorHandler.swift */,
 				F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */,
 				F18DEEE32C75942E00335F3E /* CognitoCredentials.swift */,
-				F18055E02D65DDD800045301 /* UnitHelper.swift */,
 				F18DEEE52C75947000335F3E /* Logger.swift */,
+				F18E2D382DA58A7600A34D67 /* UnitHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2446,11 +2452,11 @@
 		ADD139502980831C0003F917 /* Units */ = {
 			isa = PBXGroup;
 			children = (
-				F18055DB2D64D2B100045301 /* Models */,
 				ADD139542980866E0003F917 /* Conracts */,
 				ADD13953298086620003F917 /* Viewmodel */,
 				ADD139522980865B0003F917 /* Builder */,
 				ADD13951298086560003F917 /* Controller */,
+				F18E2D352DA58A4D00A34D67 /* Models */,
 			);
 			path = Units;
 			sourceTree = "<group>";
@@ -3042,6 +3048,15 @@
 			path = iot;
 			sourceTree = "<group>";
 		};
+		F18E2D352DA58A4D00A34D67 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F18E2D332DA58A4D00A34D67 /* UnitModel.swift */,
+				F18E2D342DA58A4D00A34D67 /* UnitTypes.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		F1A306B82D30234E00B16126 /* ArrivalCard */ = {
 			isa = PBXGroup;
 			children = (
@@ -3433,6 +3448,8 @@
 				AD2AF0D3292EABC800149904 /* SettingsPresentation.swift in Sources */,
 				AD33F4C9295189A6005719D3 /* RouteOptionsView.swift in Sources */,
 				AD2AF06E292E9AA600149904 /* TabBarCoordinatorConstants.swift in Sources */,
+				F18E2D362DA58A4E00A34D67 /* UnitModel.swift in Sources */,
+				F18E2D372DA58A4E00A34D67 /* UnitTypes.swift in Sources */,
 				AD300A30294BDE3A00355423 /* LocationServicesCustomFonts.swift in Sources */,
 				ADCF384E299166FB008289BB /* TrackingServiceable.swift in Sources */,
 				ADBD7FBB2949C687005DB4E4 /* POICardVC.swift in Sources */,
@@ -3551,7 +3568,6 @@
 				AD20616D2968A83A005F8BBB /* LoginVC.swift in Sources */,
 				ADBDDEFA29842CC500696EC6 /* ExploreMapStyleViewModel.swift in Sources */,
 				ADD1397E29809BF00003F917 /* ResetPasswordBuilder.swift in Sources */,
-				F18055DD2D64D2CF00045301 /* UnitModel.swift in Sources */,
 				ADBDDEEF29830E8B00696EC6 /* CommonSelectableCell.swift in Sources */,
 				ADD13970298097890003F917 /* DataProviderViewModel.swift in Sources */,
 				ADD5D7BB296F7EFC0022480B /* GeofenceDashboardVC.swift in Sources */,
@@ -3578,7 +3594,6 @@
 				ADC1249C2978A56E00B08C20 /* GeofenceDashboardContracts.swift in Sources */,
 				8AD132752A267FCC00608FCD /* KeyboardObserver.swift in Sources */,
 				F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */,
-				F18055E12D65DDE200045301 /* UnitHelper.swift in Sources */,
 				ADD5D7E2296F87FF0022480B /* AddGeofenceContracts.swift in Sources */,
 				AD2AF09F292EA91200149904 /* GeofenceCoordinator.swift in Sources */,
 				AD2AF064292E929C00149904 /* Coordinator.swift in Sources */,
@@ -3601,6 +3616,7 @@
 				AD33F4B92950F42A005719D3 /* DirectionViewModel.swift in Sources */,
 				AD625EAE293CDFA900C67B44 /* NetworkCore.swift in Sources */,
 				ADD1394A298069F50003F917 /* SettingVC+TableView.swift in Sources */,
+				F18E2D392DA58A7600A34D67 /* UnitHelper.swift in Sources */,
 				8AFBAFE0296F19BC0022A7E3 /* RouteTravelMode+Extension.swift in Sources */,
 				8A439F0429C0A7D900B59D0B /* WelcomeVC.swift in Sources */,
 				8A1110D6297AB20300BC86E1 /* LSFaux3DUserLocationAnnotationView.swift in Sources */,
@@ -3614,7 +3630,6 @@
 				8A0EB58A2983F9CF00FBB3E5 /* GeofenceAnnotation.swift in Sources */,
 				8A439F0829C0BA1B00B59D0B /* UIApplication+Extension.swift in Sources */,
 				ADF26F59292FECA9000147A0 /* SearchTextField.swift in Sources */,
-				F18055DF2D64D32200045301 /* UnitTypes.swift in Sources */,
 				AD20616F2968A841005F8BBB /* LoginVCBuilder.swift in Sources */,
 				F18DEEE42C75942E00335F3E /* CognitoCredentials.swift in Sources */,
 				ADBD7FBD2949C699005DB4E4 /* POICardVCBuilder.swift in Sources */,
