@@ -92,7 +92,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         controller.isInSplitViewController = true
         controller.directionScreenStyle = directionScreenStyle
         controller.dismissHandler = { [weak self] in
-            NotificationCenter.default.post(name: Notification.Name("DirectionViewDismissed"), object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.directionViewDismissed, object: nil, userInfo: nil)
             self?.supplementaryNavigationController?.popViewController(animated: true)
         }
         
@@ -235,7 +235,7 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
     }
     
     func closeNavigationScene() {
-        NotificationCenter.default.post(name: Notification.Name("NavigationViewDismissed"), object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: Notification.navigationViewDismissed, object: nil, userInfo: nil)
         supplementaryNavigationController?.popViewController(animated: true)
         isSearchHidden = false
         displayModeChanged(displayMode: splitViewController.displayMode)

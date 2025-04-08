@@ -129,6 +129,6 @@ extension DirectionVC: UITableViewDataSource {
                                     "DepartureLocation": departureLocation,
                                     "DestinationLocation": destinationLocation,
                                     "routeType": routeType]
-        NotificationCenter.default.post(name: Notification.Name("DirectionLineString"), object: nil, userInfo: datas)
+        NotificationCenter.default.post(name: Notification.directionLineString, object: nil, userInfo: datas)
     }
 }
