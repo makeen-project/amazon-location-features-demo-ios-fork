@@ -150,6 +150,10 @@ enum StringConstant {
     static let greatDistanceErrorMessage = "Can't calculate via Esri, kindly switch to HERE provider"
     static let invalidUrlError = "URL is invalid. Can't open it"
     
+    // Tracking Simulation
+    static let exitTracking = ""
+    static let exitTrackingAlertMessage = "Are you sure you want to exit simulation?"
+    
     //login
     enum LoginInfo {
         enum DefaultConfig: ConstantsLoginInfoConfig {

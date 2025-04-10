@@ -92,14 +92,17 @@ final class TrackingVC: UIViewController {
     
     private func setupHandlers() {
         trackingHeaderView.exitButtonHandler =  { [weak self] in
-            self?.trackingHeaderView.isHidden = true
-            //show explore view
-            NotificationCenter.default.post(name: Notification.dismissTrackingSimulation, object: self, userInfo: nil)
-            if self?.isiPad == true {
+            let alertModel = AlertModel(title: StringConstant.exitTracking, message: StringConstant.exitTrackingAlertMessage, cancelButton: StringConstant.cancel, okButton: StringConstant.exit) {
+                self?.trackingHeaderView.isHidden = true
+                //show explore view
+                NotificationCenter.default.post(name: Notification.dismissTrackingSimulation, object: self, userInfo: nil)
+                if self?.isiPad == true {
+                }
+                else {
+                    self?.tabBarController?.selectedIndex = 0
+                }
             }
-            else {
-                self?.tabBarController?.selectedIndex = 0
-            }
+            self?.showAlert(alertModel)
         }
     }
     
