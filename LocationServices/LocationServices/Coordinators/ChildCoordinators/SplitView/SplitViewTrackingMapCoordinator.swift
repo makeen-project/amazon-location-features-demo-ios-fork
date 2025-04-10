@@ -30,11 +30,11 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         }
     }
     
-    private lazy var dashboardController: TrackingDashboardController = {
-        let controller = TrackingDashboardBuilder.create()
+    private lazy var dashboardController: TrackingSimulationIntroController = {
+        let controller = TrackingSimulationIntroBuilder.create()
         controller.delegate = self
         controller.trackingSimulationHandler = { [weak self] in
-            self?.showTrackingSimulationScene()
+            self?.showRouteTrackingScene()
         }
         return controller
     }()
