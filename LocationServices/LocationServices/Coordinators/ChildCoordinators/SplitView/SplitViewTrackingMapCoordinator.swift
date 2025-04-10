@@ -104,7 +104,7 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         controller.viewModel = secondaryController.viewModel
         
         supplementaryNavigationController?.pushViewController(controller, animated: true)
-        splitDelegate?.showSupplementary()
+        splitViewController.hide(.primary)
     }
     
     func showMapStyleScene() {

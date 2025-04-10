@@ -127,17 +127,6 @@ final class TrackingSimulationDashboardView: UIView {
         return button
     }()
     
-    private lazy var maybeLaterButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle(StringConstant.maybeLater, for: .normal)
-        button.titleLabel?.font = UIFont.amazonFont(type: .regular, size: 16)
-        button.titleLabel?.textAlignment = .center
-        button.addTarget(self, action: #selector(simulationDismiss), for: .touchUpInside)
-        button.tintColor = .black
-        return button
-    }()
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -161,10 +150,6 @@ final class TrackingSimulationDashboardView: UIView {
         
     }
     
-    func hideMaybeLaterButton(state: Bool) {
-        self.maybeLaterButton.isHidden = true // state
-    }
-    
     private func setupViews() {
         self.backgroundColor = .white
         
@@ -179,7 +164,6 @@ final class TrackingSimulationDashboardView: UIView {
         self.addSubview(notificationsView)
         
         self.addSubview(startButton)
-        self.addSubview(maybeLaterButton)
         
         trackersView.addSubview(trackersIcon)
         trackersView.addSubview(trackersLabel)
@@ -299,13 +283,6 @@ final class TrackingSimulationDashboardView: UIView {
         
         startButton.snp.makeConstraints {
             $0.top.greaterThanOrEqualTo(notificationsView.snp.bottom).offset(64)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(48)
-        }
-        
-        maybeLaterButton.snp.makeConstraints {
-            $0.top.greaterThanOrEqualTo(startButton.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(48)

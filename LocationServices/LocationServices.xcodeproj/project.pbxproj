@@ -219,8 +219,6 @@
 		AD625EA9293CDC6900C67B44 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD625EA8293CDC6900C67B44 /* HTTPMethod.swift */; };
 		AD625EAE293CDFA900C67B44 /* NetworkCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD625EAD293CDFA900C67B44 /* NetworkCore.swift */; };
 		AD989727298B0A250041E867 /* TrackingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989726298B0A250041E867 /* TrackingDashboardView.swift */; };
-		AD989734298B2B2D0041E867 /* TrackingDashboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989733298B2B2D0041E867 /* TrackingDashboardController.swift */; };
-		AD989736298B2DF00041E867 /* TrackingDashboardBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989735298B2DF00041E867 /* TrackingDashboardBuilder.swift */; };
 		AD989742298C521E0041E867 /* TrackingHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989741298C521E0041E867 /* TrackingHistoryVC.swift */; };
 		AD989744298C534C0041E867 /* TrackingHistory+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989743298C534C0041E867 /* TrackingHistory+TableView.swift */; };
 		AD989746298C53E40041E867 /* TrackingHistoryContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD989745298C53E40041E867 /* TrackingHistoryContracts.swift */; };
@@ -671,8 +669,6 @@
 		AD625EA8293CDC6900C67B44 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		AD625EAD293CDFA900C67B44 /* NetworkCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCore.swift; sourceTree = "<group>"; };
 		AD989726298B0A250041E867 /* TrackingDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDashboardView.swift; sourceTree = "<group>"; };
-		AD989733298B2B2D0041E867 /* TrackingDashboardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDashboardController.swift; sourceTree = "<group>"; };
-		AD989735298B2DF00041E867 /* TrackingDashboardBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDashboardBuilder.swift; sourceTree = "<group>"; };
 		AD989741298C521E0041E867 /* TrackingHistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHistoryVC.swift; sourceTree = "<group>"; };
 		AD989743298C534C0041E867 /* TrackingHistory+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackingHistory+TableView.swift"; sourceTree = "<group>"; };
 		AD989745298C53E40041E867 /* TrackingHistoryContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHistoryContracts.swift; sourceTree = "<group>"; };
@@ -2031,44 +2027,9 @@
 			children = (
 				F1FAC8512D772E33000238C4 /* New Group */,
 				AD98973B298C4F670041E867 /* Tracking History */,
-				AD98972B298B291F0041E867 /* Tracking Dashboard */,
 				F18055E42D71F18F00045301 /* Tracking Simulation */,
 			);
 			path = Subviews;
-			sourceTree = "<group>";
-		};
-		AD98972B298B291F0041E867 /* Tracking Dashboard */ = {
-			isa = PBXGroup;
-			children = (
-				F1FAC8632D77521E000238C4 /* View */,
-				AD98972E298B2B000041E867 /* Builder */,
-				AD989732298B2B210041E867 /* Controller */,
-				AD98972F298B2B0A0041E867 /* ViewModel */,
-			);
-			path = "Tracking Dashboard";
-			sourceTree = "<group>";
-		};
-		AD98972E298B2B000041E867 /* Builder */ = {
-			isa = PBXGroup;
-			children = (
-				AD989735298B2DF00041E867 /* TrackingDashboardBuilder.swift */,
-			);
-			path = Builder;
-			sourceTree = "<group>";
-		};
-		AD98972F298B2B0A0041E867 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		AD989732298B2B210041E867 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				AD989733298B2B2D0041E867 /* TrackingDashboardController.swift */,
-			);
-			path = Controller;
 			sourceTree = "<group>";
 		};
 		AD98973B298C4F670041E867 /* Tracking History */ = {
@@ -3139,13 +3100,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		F1FAC8632D77521E000238C4 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3525,7 +3479,6 @@
 				ADD1395C298087840003F917 /* UnitSceneBuilder.swift in Sources */,
 				ADBD7FC22949CBC2005DB4E4 /* BottomSheetTransitioningDelegate.swift in Sources */,
 				8A276E2629DFF9FD00B74136 /* TermsAndConditionsVCBuilder.swift in Sources */,
-				AD989734298B2B2D0041E867 /* TrackingDashboardController.swift in Sources */,
 				F1C4DC542CC1614800AA235A /* ColorSegmentControl.swift in Sources */,
 				F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */,
 				ADD139902980A2590003F917 /* RouteOptionContracts.swift in Sources */,
@@ -3720,7 +3673,6 @@
 				8A1110DC297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift in Sources */,
 				8A145A322A161DDD00C106BF /* LargeTitleLabel.swift in Sources */,
 				8A6C40772A0CE84F00A4C40D /* SplitViewGeofencingMapCoordinator.swift in Sources */,
-				AD989736298B2DF00041E867 /* TrackingDashboardBuilder.swift in Sources */,
 				8AB3F19E29C8AF22008FDF37 /* ViewsIdentifiers.swift in Sources */,
 				8A1110DC297AB5BA00BC86E1 /* LSUserLocationHeadingArrowLayer.swift in Sources */,
 				ADD5D7DB296F87800022480B /* AddGeofenceNameTextField.swift in Sources */,
