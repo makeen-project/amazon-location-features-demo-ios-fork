@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 enum SettingsCellType {
-    case units, dataProvider, mapStyle, routeOption, resetPassword, awsCloud
+    case units, dataProvider, mapStyle, routeOption
     
     var title: String {
         switch self {
@@ -21,10 +21,6 @@ enum SettingsCellType {
             return StringConstant.mapStyle
         case .routeOption:
             return StringConstant.defaultRouteOptions
-        case .resetPassword:
-            return StringConstant.resetPassword
-        case .awsCloud:
-            return StringConstant.connectYourAWSAccount
         }
     }
     
@@ -38,10 +34,6 @@ enum SettingsCellType {
             return .mapStyleIcon
         case .routeOption:
             return .routeOption
-        case .resetPassword:
-            return .resetPasswordIcon
-        case .awsCloud:
-            return .awsCloudFormationIcon
         }
     }
     

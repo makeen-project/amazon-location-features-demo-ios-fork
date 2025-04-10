@@ -204,7 +204,6 @@ enum StringConstant {
     enum TabBar {
         static let explore: String = "Navigate"
         static let tracking: String = "Trackers"
-        static let geofence: String = "Geofences"
         static let settings: String = "Settings"
         static let about: String = "More"
     }
