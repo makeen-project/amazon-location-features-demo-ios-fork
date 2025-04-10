@@ -96,7 +96,7 @@ enum StringConstant {
     static let simulation = "Simulation"
     static let trackersGeofences = "Trackers and Geofences"
     static let trackersGeofencesHeader = "Tracking and Geofence simulation"
-    static let trackersGeofencesDetail = "Enter the tracking simulation to view the path across Vacouver streets that crosses geofences"
+    static let trackersGeofencesDetail = "Enter the Trackers simulation to view the path across Vancouver streets that crosses Geofences"
     static let startTrackingSimulation = "Try Trackers & Geofences Simulation"
     static let trackersDetail = "Visualize your location history on the map"
     static let geofences = "Geofences"

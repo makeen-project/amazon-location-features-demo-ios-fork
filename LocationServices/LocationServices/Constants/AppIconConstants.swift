@@ -32,6 +32,7 @@ extension UIImage {
     static let annotationIcon = UIImage(named: "annotation-icon")!
     static let selectedPlace = UIImage(named: "selected-place")!
     static let stepIcon = UIImage(named: "step-icon")!
+    static let stepIconFirst = UIImage(named: "step-icon-first")!
     static let carIcon = UIImage(systemName: "car.fill")!
     static let closeIcon = UIImage(named: "icon-close")!
     static let swapDestinations = UIImage(named: "swapDestinations")!

@@ -9,18 +9,6 @@ import UIKit
 import SnapKit
 import CoreLocation
 
-struct TrackSimulationCellModel {
-    var stepState: StepState
-    var coordinates: CLLocationCoordinate2D
-    var time: String
-    
-    init(stepState: StepState, time: String, coordinates: CLLocationCoordinate2D) {
-        self.coordinates = coordinates
-        self.time = time
-        self.stepState = stepState
-    }
-}
-
 final class TrackSimulationCell: UITableViewCell {
     static let reuseId: String = "trackingSimulationCell"
     
@@ -35,23 +23,46 @@ final class TrackSimulationCell: UITableViewCell {
         didSet {
             self.coordinateLabel.text = "\(model.coordinate.latitude), \(model.coordinate.longitude)"
             self.timeLabel.text = model.time.convertTimeString()
+            self.routeLabel.text = model.routeTitle
             stepImage.image = .stepIcon
             stepLineStackView.isHidden = false
-//            switch model.stepState{
-//            case .first:
-//                stepLineStackView.isHidden = false
-//            case .last:
-//                stepLineStackView.isHidden = true
-//            }
+            switch model.stepState{
+            case .first:
+                routeLabel.isHidden = false
+                stepImage.image = .stepIconFirst
+            case .last:
+                routeLabel.isHidden = true
+                stepImage.image = .stepIcon
+            }
+            
+            stepImage.snp.remakeConstraints {
+                $0.centerY.equalTo(informationStackView.snp.centerY)
+                $0.leading.equalToSuperview()
+                if model.stepState == .first {
+                    $0.height.width.equalTo(20)
+                } else {
+                    $0.height.width.equalTo(16)
+                }
+            }
         }
     }
+    
+    private var routeLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = .amazonFont(type: .regular, size: 13)
+        label.textColor = .lsTetriary
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
     
     private var coordinateLabel: UILabel = {
         let label = UILabel()
         label.text = StringConstant.coordinateLabelText
         label.textAlignment = .left
-        label.font = .amazonFont(type: .medium, size: 13)
-        label.textColor = .black
+        label.font = .amazonFont(type: .regular, size: 13)
+        label.textColor = .lsGrey
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
@@ -62,7 +73,7 @@ final class TrackSimulationCell: UITableViewCell {
         label.text = StringConstant.timeLabelText
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textColor = .searchBarTintColor
+        label.textColor = .lsGrey
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         return label
@@ -125,6 +136,7 @@ final class TrackSimulationCell: UITableViewCell {
     private func setupViews() {
         
         informationStackView.removeArrangedSubViews()
+        informationStackView.addArrangedSubview(routeLabel)
         informationStackView.addArrangedSubview(coordinateLabel)
         informationStackView.addArrangedSubview(timeLabel)
         

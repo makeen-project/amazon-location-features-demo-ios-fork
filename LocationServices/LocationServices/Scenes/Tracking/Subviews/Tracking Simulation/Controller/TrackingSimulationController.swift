@@ -21,6 +21,8 @@ struct RouteStatus {
 struct RouteCoordinate {
     var time: Date
     var coordinate: CLLocationCoordinate2D
+    var routeTitle: String
+    var stepState: StepState
 }
 
 final class TrackingSimulationController: UIViewController, UIScrollViewDelegate {
@@ -722,7 +724,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 
                 self.routesStatus[id]!.simulateIndex += 1
                 if let routeStatus = self.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
-                    self.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex] ))
+                    self.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex], routeTitle: routesData.name, stepState: routeStatus.simulateIndex <= 1 ? .first : .last ))
                     self.reloadTableView()
                     Task {
                         await self.batchEvaluateGeofence(coordinate: coordinates[self.routesStatus[id]!.simulateIndex], collectionName: routesData.geofenceCollection)
