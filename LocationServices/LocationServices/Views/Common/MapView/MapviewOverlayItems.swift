@@ -25,7 +25,7 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
     enum Constants {
         static let topStackViewTopOffsetiPhone: CGFloat = 60
-        static let topStackViewTopOffsetiPad: CGFloat = 0
+        static let topStackViewTopOffsetiPad: CGFloat = -20
         
         static let bottomStackViewHorizontalOffset: CGFloat = 16
         static let bottomStackViewBottomOffset: CGFloat = 16
@@ -39,36 +39,6 @@ final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     /// UI Elements
     
    private var containerView: UIView = UIView()
-    
-//   private lazy var directonButton: UIButton = {
-//        let button = UIButton(type: .system)
-//        button.tintColor = .maplightGrayColor
-//        button.backgroundColor = .white
-//        button.layer.cornerRadius = 8
-//        button.setImage(.directionMapIcon, for: .normal)
-//        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
-//                                                                      leading: 23,
-//                                                                      bottom: 23,
-//                                                                      trailing: 23)
-//        button.addTarget(self, action: #selector(directionAction), for: .touchUpInside)
-//       button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
-//        return button
-//    }()
-//    
-//    private lazy var locateMeButton: UIButton = {
-//        let button = UIButton(type: .system)
-//        button.tintColor = .maplightGrayColor
-//        button.backgroundColor = .white
-//        button.layer.cornerRadius = 8
-//        button.setImage(.locateMeMapIcon, for: .normal)
-//        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 23,
-//                                                                      leading: 23,
-//                                                                      bottom: 23,
-//                                                                      trailing: 23)
-//        button.addTarget(self, action: #selector(locateMeAction), for: .touchUpInside)
-//        button.setShadow(shadowOpacity: 0.3, shadowBlur: 5)
-//        return button
-//    }()
     
     private lazy var mapStyleButton: UIButton = {
         let button = UIButton(type: .system)
@@ -137,8 +107,6 @@ private extension MapOverlayItems {
         topStackView.removeArrangedSubViews()
         bottomStackView.removeArrangedSubViews()
         topStackView.addArrangedSubview(mapStyleButton)
-//        bottomStackView.addArrangedSubview(locateMeButton)
-//        bottomStackView.addArrangedSubview(directonButton)
     }
     
     func setupViews() {
@@ -151,31 +119,22 @@ private extension MapOverlayItems {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
         
-//        dividerView.snp.makeConstraints {
-//            $0.height.width.equalTo(1)
-//        }
-        
         mapStyleButton.snp.makeConstraints {
             $0.height.width.equalTo(48)
         }
         
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         topStackView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(
-                isiPad ? Constants.topStackViewTopOffsetiPad : Constants.topStackViewTopOffsetiPhone
-            )
+            if isiPad {
+                $0.top.equalTo(self.safeAreaLayoutGuide).offset(Constants.topStackViewTopOffsetiPad)
+            }
+            else {
+                $0.top.equalTo(self.safeAreaLayoutGuide).offset(Constants.topStackViewTopOffsetiPhone)
+            }
             $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(48)
             $0.height.equalTo(48)
         }
-        
-//        directonButton.snp.makeConstraints {
-//            $0.height.width.equalTo(48)
-//        }
-//        
-//        locateMeButton.snp.makeConstraints {
-//            $0.height.width.equalTo(48)
-//        }
         
         bottomStackView.snp.remakeConstraints {
             $0.bottom.equalToSuperview()
