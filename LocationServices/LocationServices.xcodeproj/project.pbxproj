@@ -349,7 +349,6 @@
 		F1021F482A1B6C9D00B84312 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F472A1B6C9D00B84312 /* UIImageView+Extension.swift */; };
 		F1021F4C2A1D079400B84312 /* TrackingHistoryEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1021F4B2A1D079400B84312 /* TrackingHistoryEmptyView.swift */; };
 		F10625742D89D75900312572 /* TrackingSimulationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10625732D89D75200312572 /* TrackingSimulationCell.swift */; };
-		F10625762D8D7F2400312572 /* NotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10625752D8D7F1E00312572 /* NotificationHelper.swift */; };
 		F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F529D1A908001D3464 /* UITestAWSScreen.swift */; };
 		F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */; };
 		F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */; };
@@ -384,6 +383,7 @@
 		F18E2D362DA58A4E00A34D67 /* UnitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D332DA58A4D00A34D67 /* UnitModel.swift */; };
 		F18E2D372DA58A4E00A34D67 /* UnitTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D342DA58A4D00A34D67 /* UnitTypes.swift */; };
 		F18E2D392DA58A7600A34D67 /* UnitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D382DA58A7600A34D67 /* UnitHelper.swift */; };
+		F18E2D412DAD220E00A34D67 /* InAppNotificationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D3F2DAD220E00A34D67 /* InAppNotificationBanner.swift */; };
 		F18FFB4E2D48EF7900573B54 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = F18FFB4D2D48EF7900573B54 /* Polyline */; };
 		F19616BE2AC45E530070172F /* GeofenceDashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */; };
 		F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */; };
@@ -800,7 +800,6 @@
 		F1021F4A2A1B864400B84312 /* LocationServicesUnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = LocationServicesUnitTests.xctestplan; path = ../LocationServicesUnitTests.xctestplan; sourceTree = "<group>"; };
 		F1021F4B2A1D079400B84312 /* TrackingHistoryEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHistoryEmptyView.swift; sourceTree = "<group>"; };
 		F10625732D89D75200312572 /* TrackingSimulationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationCell.swift; sourceTree = "<group>"; };
-		F10625752D8D7F1E00312572 /* NotificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHelper.swift; sourceTree = "<group>"; };
 		F10994F529D1A908001D3464 /* UITestAWSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAWSScreen.swift; sourceTree = "<group>"; };
 		F10994F729D1AB2B001D3464 /* AWSConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectUITests.swift; sourceTree = "<group>"; };
 		F10994F929D1C834001D3464 /* UITestSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSettingsScreen.swift; sourceTree = "<group>"; };
@@ -833,6 +832,7 @@
 		F18E2D332DA58A4D00A34D67 /* UnitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitModel.swift; sourceTree = "<group>"; };
 		F18E2D342DA58A4D00A34D67 /* UnitTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTypes.swift; sourceTree = "<group>"; };
 		F18E2D382DA58A7600A34D67 /* UnitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitHelper.swift; sourceTree = "<group>"; };
+		F18E2D3F2DAD220E00A34D67 /* InAppNotificationBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppNotificationBanner.swift; sourceTree = "<group>"; };
 		F19616BD2AC45E530070172F /* GeofenceDashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceDashboardViewModelTests.swift; sourceTree = "<group>"; };
 		F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardView.swift; sourceTree = "<group>"; };
 		F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVC.swift; sourceTree = "<group>"; };
@@ -1321,7 +1321,6 @@
 			children = (
 				F1AD36F92CCBABC700E1BB7B /* AuthHelpers */,
 				AD16A42129357F38006AEA8E /* UserDefaultsHelper.swift */,
-				F10625752D8D7F1E00312572 /* NotificationHelper.swift */,
 				F1FAC8682D784D03000238C4 /* JsonHelper.swift */,
 				F11E04622CD516DD003F1641 /* KeyChainHelper.swift */,
 				8A3CC5EB2968510600A542DC /* DebounceManager.swift */,
@@ -1423,6 +1422,7 @@
 		AD2AF02E292E892000149904 /* LocationServices */ = {
 			isa = PBXGroup;
 			children = (
+				F18E2D402DAD220E00A34D67 /* Notifications */,
 				F18DEEF72C77504900335F3E /* iot */,
 				AD300A14294BDD8E00355423 /* Resources */,
 				ADBD7FB32949B553005DB4E4 /* Views */,
@@ -3018,6 +3018,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		F18E2D402DAD220E00A34D67 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				F18E2D3F2DAD220E00A34D67 /* InAppNotificationBanner.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		F1A306B82D30234E00B16126 /* ArrivalCard */ = {
 			isa = PBXGroup;
 			children = (
@@ -3440,6 +3448,7 @@
 				AD3E370C2986DDD00041D952 /* ExploreMapStyleVC+TableView.swift in Sources */,
 				ADBDDEF12983176300696EC6 /* DataProviderVC+TableView.swift in Sources */,
 				ADABECDB293FD9CC00E66FC5 /* SearchPresentation.swift in Sources */,
+				F18E2D412DAD220E00A34D67 /* InAppNotificationBanner.swift in Sources */,
 				8A85A75C29A40A1E0022ABE0 /* TrackingHistorySectionHeaderView.swift in Sources */,
 				8A10E37F29E97950005165CD /* SplashContracts.swift in Sources */,
 				ADD139AB2981D72C0003F917 /* MapStyleModel.swift in Sources */,
@@ -3552,7 +3561,6 @@
 				AD2AF064292E929C00149904 /* Coordinator.swift in Sources */,
 				8AFBAFDA296F002A0022A7E3 /* RouteModel.swift in Sources */,
 				ADABECD7293FD56B00E66FC5 /* SearchModel.swift in Sources */,
-				F10625762D8D7F2400312572 /* NotificationHelper.swift in Sources */,
 				ADC124A02979E3C200B08C20 /* AddGeofenceVC+TableView.swift in Sources */,
 				ADAF3657294A841000DC4774 /* Array+Extension.swift in Sources */,
 				8ACAAD7629F14B9D00523256 /* CLLocationManager+Extension.swift in Sources */,

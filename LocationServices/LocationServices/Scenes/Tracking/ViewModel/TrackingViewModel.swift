@@ -193,8 +193,9 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         let stopId = Int(model.geofenceId.split(separator: "-").last?.lowercased() ?? "0")
         if let busRoute = busRoutes.first(where:  { $0.id == busRouteId }),
            let stop = busRoute.stopCoordinates.first(where: { $0.id == stopId })?.stopProperties {
-            let body = "\(busRoute.name.split(separator: " ").dropLast().joined(separator: " ")): \(eventText) \(stop.stop_name)"
-            NotificationsHelper.scheduleNotification(title: StringConstant.trackingNotificationTitle, body: body)
+            let message = "\(busRoute.name.split(separator: " ").dropLast().joined(separator: " ")): \(eventText) \(stop.stop_name)"
+            let userInfo = ["title": StringConstant.trackingNotificationTitle, "message": message]
+            NotificationCenter.default.post(name: Notification.showTrackingNotification, object: nil, userInfo: userInfo)
         }
     }
     

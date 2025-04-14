@@ -37,6 +37,7 @@ extension Notification {
     
     static let searchAppearanceChanged = Notification.Name("SearchAppearanceChanged")
     static let trackingAppearanceChanged = Notification.Name("TrackingAppearanceChanged")
+    static let showTrackingNotification = Notification.Name("ShowTrackingNotification")
     static let geofenceAppearanceChanged = Notification.Name("GeofenceAppearanceChanged")
     
     static let authorizationStatusChanged = Notification.Name("AuthorizationStatusChanged")

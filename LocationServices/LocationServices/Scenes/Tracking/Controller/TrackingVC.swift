@@ -125,6 +125,8 @@ final class TrackingVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingState(_:)), name: Notification.updateTrackingHeader, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showTrackingNotification(_:)), name: Notification.showTrackingNotification, object: nil)
     }
     
     private func setupKeyboardNotifications() {
@@ -188,6 +190,17 @@ final class TrackingVC: UIViewController {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         trackingHeaderView.isHidden = isVisible
         grabberIcon.isHidden = isVisible
+    }
+    
+    @objc private func showTrackingNotification(_ notification: Notification) {
+        guard let title = notification.userInfo?["title"] as? String,
+              let message = notification.userInfo?["message"] as? String else {
+            return
+        }
+        DispatchQueue.main.async {
+            let banner = InAppNotificationBanner(title: title, message: message, image: GeneralHelper.getAppIcon())
+            banner.show(in: self.view)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
