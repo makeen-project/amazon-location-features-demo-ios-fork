@@ -13,7 +13,8 @@ class InAppNotificationBanner: UIView {
     private let iconImageView = UIImageView()
     private let titleLabel = UILabel()
     private let messageLabel = UILabel()
-    private static var isShowing = false
+
+    private static var currentBanner: InAppNotificationBanner?
 
     init(title: String, message: String, image: UIImage? = nil) {
         super.init(frame: CGRect.zero)
@@ -62,10 +63,13 @@ class InAppNotificationBanner: UIView {
     }
 
     func show(in view: UIView) {
-        guard !Self.isShowing else { return }
-        Self.isShowing = true
-
         DispatchQueue.main.async {
+            // Remove current banner if it exists
+            if let existingBanner = Self.currentBanner {
+                existingBanner.dismiss(immediate: true)
+            }
+
+            Self.currentBanner = self
             view.addSubview(self)
 
             self.snp.makeConstraints {
@@ -75,17 +79,36 @@ class InAppNotificationBanner: UIView {
 
             view.layoutIfNeeded()
 
+            // Animate banner slide-in
             UIView.animate(withDuration: 0.3) {
                 self.transform = CGAffineTransform(translationX: 0, y: 120)
             }
 
+            // Auto dismiss after 3 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.transform = .identity
-                }) { _ in
-                    self.removeFromSuperview()
-                    Self.isShowing = false
+                self.dismiss()
+            }
+        }
+    }
+
+    private func dismiss(immediate: Bool = false) {
+        DispatchQueue.main.async {
+            let animation = {
+                self.transform = .identity
+            }
+
+            let completion: (Bool) -> Void = { _ in
+                self.removeFromSuperview()
+                if Self.currentBanner === self {
+                    Self.currentBanner = nil
                 }
+            }
+
+            if immediate {
+                animation()
+                completion(true)
+            } else {
+                UIView.animate(withDuration: 0.3, animations: animation, completion: completion)
             }
         }
     }
