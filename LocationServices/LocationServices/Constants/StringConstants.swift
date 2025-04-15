@@ -92,7 +92,7 @@ enum StringConstant {
     
     static let startTracking = "Start Tracking"
     static let stopTracking = "Stop Tracking"
-    static let startSimulation = "Start Simulation"
+    static let startSimulation = "Try Trackers & Geofences simulation"
     static let simulation = "Simulation"
     static let trackersGeofences = "Trackers and Geofences"
     static let trackersGeofencesHeader = "Tracking and Geofence simulation"

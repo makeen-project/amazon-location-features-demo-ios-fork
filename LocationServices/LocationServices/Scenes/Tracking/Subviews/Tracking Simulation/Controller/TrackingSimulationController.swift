@@ -698,7 +698,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                     timer.invalidate()
                     return
                 }
-                print("route id: \(id)")
                 //Reset and delete the tracking route
                 if self.routesStatus[id]!.simulateIndex >= coordinates.count {
                     for jIndex in 0..<coordinates.count {
@@ -713,11 +712,19 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 // Move annotation forward
                 UIView.animate(withDuration: 0.5) {
                     if let simulateIndex = self.routesStatus[id]?.simulateIndex {
+                        //Change bus annotation's coordinates for route
                         self.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.routesStatus[id]!.simulateIndex]
+                        
+                        print("+++++++++route id: \(id)++++++++++")
+                        print("+++++++++bus annotation coordinate: \(self.routesStatus[id]!.busAnnotation!.coordinate.latitude), \(self.routesStatus[id]!.busAnnotation!.coordinate.longitude)++++++++++")
+                        
                         if simulateIndex > 0 {
+                            //Updating in between stops color
                             let coordinates = [coordinates[simulateIndex-1], coordinates[simulateIndex]]
                             self.trackingVC?.trackingMapView.updateDashLayer(routeId: "\(id)-\(simulateIndex)", coordinates: coordinates)
                         }
+                        
+                        //updating stops color
                         self.trackingVC?.trackingMapView.updateFeatureColor(at: simulateIndex, sourceId: id, isCovered: true)
                     }
                 }
