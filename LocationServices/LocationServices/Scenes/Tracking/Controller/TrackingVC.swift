@@ -97,6 +97,7 @@ final class TrackingVC: UIViewController {
                 //show explore view
                 NotificationCenter.default.post(name: Notification.dismissTrackingSimulation, object: self, userInfo: nil)
                 if self?.isiPad == true {
+                    NotificationCenter.default.post(name: Notification.showExploreScene, object: nil, userInfo: nil)
                 }
                 else {
                     self?.tabBarController?.selectedIndex = 0

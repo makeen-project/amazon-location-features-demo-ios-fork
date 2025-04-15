@@ -343,16 +343,18 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func dismissTrackingSimulation() {
-        if isTrackingActive {
-            Task {
+        Task {
+            if isTrackingActive {
                 await startTracking()
             }
-        }
-        if isiPad {
-            self.navigationController?.popViewController(animated: true)
-        }
-        else {
-            self.dismissBottomSheet()
+            DispatchQueue.main.async {
+                if self.isiPad {
+                    self.navigationController?.popViewController(animated: true)
+                }
+                else {
+                    self.dismissBottomSheet()
+                }
+            }
         }
     }
     

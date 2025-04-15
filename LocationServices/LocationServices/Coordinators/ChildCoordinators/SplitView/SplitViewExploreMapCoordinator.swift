@@ -51,8 +51,13 @@ final class SplitViewExploreMapCoordinator: Coordinator {
     
     init(splitViewController: UISplitViewController) {
         self.splitViewController = splitViewController
+        setupNotifications()
     }
-
+    
+    func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(startExploreScene(_:)), name: Notification.showExploreScene, object: nil)
+    }
+    
     func start() {
         showExploreScene()
     }
@@ -63,6 +68,11 @@ final class SplitViewExploreMapCoordinator: Coordinator {
         
         let routeButtonState: RouteButtonState = displayMode.isOnlySecondary ? .showRoute : .hideRoute
         secondaryController.mapNavigationActionsView.updateRouteButton(state: routeButtonState)
+    }
+    
+    @objc private func startExploreScene(_ notification: Notification) {
+        splitViewController.show(.primary)
+        showExploreScene()
     }
 }
 
