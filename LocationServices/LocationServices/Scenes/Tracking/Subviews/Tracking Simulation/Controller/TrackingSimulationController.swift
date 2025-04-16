@@ -10,21 +10,6 @@ import SnapKit
 import CoreLocation
 import MapLibre
 
-struct RouteStatus {
-    var id: String
-    var isActive: Bool = false
-    var simulateIndex: Int = 0
-    var busAnnotation: ImageAnnotation?
-    var routeCoordinates: [RouteCoordinate] = []
-}
-
-struct RouteCoordinate {
-    var time: Date
-    var coordinate: CLLocationCoordinate2D
-    var routeTitle: String
-    var stepState: StepState
-}
-
 final class TrackingSimulationController: UIViewController, UIScrollViewDelegate {
     enum Constants {
         static let titleOffsetiPhone: CGFloat = 16
@@ -210,8 +195,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     private var routeToggles: [RouteToggleView] = []
     var isTrackingActive: Bool = false
-    var routeGeofences: [String: [GeofenceDataModel]] = [:]
-    var routesStatus: [String: RouteStatus] = [:]
     
     var routeToggleState: Bool = false
     var trackingToggleState: Bool = false
@@ -544,7 +527,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
         
         for route in viewModel.busRoutes {
-                routesStatus[route.id] = RouteStatus(id: route.id, isActive: false, simulateIndex: 0)
+                viewModel.routesStatus[route.id] = RouteStatus(id: route.id, isActive: false, simulateIndex: 0)
                 let routeToggle = RouteToggleView()
                 routeToggle.id = route.id
                 routeToggle.optionTitle.text = route.name
@@ -580,8 +563,8 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                             let coordinates = self?.viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
                             let cllCoordinates = self?.convertToCoordinates(from: coordinates) ?? []
                             self?.trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId, coordinates: cllCoordinates)
-                            self?.routesStatus[routeId]?.isActive = false
-                            self?.routesStatus[routeId]?.simulateIndex = 0
+                            self?.viewModel.routesStatus[routeId]?.isActive = false
+                            self?.viewModel.routesStatus[routeId]?.simulateIndex = 0
                         }
                     }
                 }
@@ -623,7 +606,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func getActiveRouteCoordinates() -> [RouteCoordinate] {
-        routesStatus.first(where: { $0.key == activeRouteId })?.value.routeCoordinates ?? []
+        viewModel.routesStatus.first(where: { $0.key == activeRouteId })?.value.routeCoordinates ?? []
     }
     
     private func toggleRouteOption() {
@@ -692,7 +675,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
            let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
             
             let coordinates = convertToCoordinates(from: routesData.coordinates)
-            self.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[self.routesStatus[id]!.simulateIndex])
+            self.viewModel.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[self.viewModel.routesStatus[id]!.simulateIndex])
             
             // Move the annotation along the route every second
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) { timer in
@@ -701,24 +684,25 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                     return
                 }
                 //Reset and delete the tracking route
-                if self.routesStatus[id]!.simulateIndex >= coordinates.count {
+                if self.viewModel.routesStatus[id]!.simulateIndex >= coordinates.count {
                     for jIndex in 0..<coordinates.count {
                         self.trackingVC?.trackingMapView.updateFeatureColor(at: jIndex, sourceId: id, isCovered: false)
                         self.trackingVC?.trackingMapView.deleteUpdateDashLayer(routeId: "\(id)-\(jIndex)")
                     }
-                    self.routesStatus[id]!.simulateIndex = 0
-                    self.routesStatus[id]?.routeCoordinates = []
+                    self.viewModel.routesStatus[id]!.simulateIndex = 0
+                    self.viewModel.routesStatus[id]!.geofenceIndex = 1
+                    self.viewModel.routesStatus[id]?.routeCoordinates = []
                     self.reloadTableView()
                 }
                 
                 // Move annotation forward
                 UIView.animate(withDuration: 0.5) {
-                    if let simulateIndex = self.routesStatus[id]?.simulateIndex {
+                    if let simulateIndex = self.viewModel.routesStatus[id]?.simulateIndex {
                         //Change bus annotation's coordinates for route
-                        self.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.routesStatus[id]!.simulateIndex]
+                        self.viewModel.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.viewModel.routesStatus[id]!.simulateIndex]
                         
                         print("+++++++++route id: \(id)++++++++++")
-                        print("+++++++++bus annotation coordinate: \(self.routesStatus[id]!.busAnnotation!.coordinate.latitude), \(self.routesStatus[id]!.busAnnotation!.coordinate.longitude)++++++++++")
+                        print("+++++++++bus annotation coordinate: \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.latitude), \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.longitude)++++++++++")
                         
                         if simulateIndex > 0 {
                             //Updating in between stops color
@@ -731,12 +715,14 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                     }
                 }
                 
-                self.routesStatus[id]!.simulateIndex += 1
-                if let routeStatus = self.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
-                    self.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex], routeTitle: routesData.name, stepState: routeStatus.simulateIndex <= 1 ? .first : .last ))
+                self.viewModel.routesStatus[id]!.simulateIndex += 1
+                if let routeStatus = self.viewModel.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
+                    
+                    self.viewModel.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex], routeTitle: "", stepState: .point ))
                     self.reloadTableView()
+                    
                     Task {
-                        await self.batchEvaluateGeofence(coordinate: coordinates[self.routesStatus[id]!.simulateIndex], collectionName: routesData.geofenceCollection)
+                        await self.batchEvaluateGeofence(coordinate: coordinates[self.viewModel.routesStatus[id]!.simulateIndex], collectionName: routesData.geofenceCollection)
                     }
                 }
 
@@ -745,10 +731,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func fetchGeoFences() async {
-        if routeGeofences.count > 0 { return }
+        if viewModel.routeGeofences.count > 0 { return }
         for route in viewModel.busRoutes {
                 let geofences = await trackingVC?.viewModel.fetchListOfGeofences(collectionName: route.geofenceCollection)
-                routeGeofences[route.geofenceCollection] = geofences
+            viewModel.routeGeofences[route.geofenceCollection] = geofences
         }
     }
 
@@ -759,7 +745,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func drawGeofences() {
         for routeToggle in routeToggles {
             if let id = routeToggle.id, routeToggle.getState() == true {
-                if let geofenceCollection = viewModel.busRoutes.first(where: { $0.id == id })?.geofenceCollection, let geofences = routeGeofences[geofenceCollection] {
+                if let geofenceCollection = viewModel.busRoutes.first(where: { $0.id == id })?.geofenceCollection, let geofences = viewModel.routeGeofences[geofenceCollection] {
                     trackingVC?.viewModel.showGeofences(routeId: id, geofences: geofences)
                 }
             }
@@ -772,11 +758,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     func drawTrackingRoutes() {
         for routeToggle in routeToggles {
-            if let id = routeToggle.id, routeToggle.getState() == true, !routesStatus[id]!.isActive {
+            if let id = routeToggle.id, routeToggle.getState() == true, !viewModel.routesStatus[id]!.isActive {
                 if let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
                     let coordinates = convertToCoordinates(from: routesData.coordinates)
                     trackingVC?.viewModel.drawTrackingRoute(routeId: id, coordinates: coordinates)
-                    routesStatus[id]?.isActive = true
+                    viewModel.routesStatus[id]?.isActive = true
                 }
             }
         }

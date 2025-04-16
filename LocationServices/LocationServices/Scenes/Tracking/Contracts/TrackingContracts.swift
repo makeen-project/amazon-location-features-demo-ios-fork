@@ -18,7 +18,8 @@ protocol TrackingNavigationDelegate: AnyObject {
 protocol TrackingViewModelProtocol: AnyObject {
     var delegate: TrackingViewModelDelegate? { get set }
     var busRoutes: [BusRoute] { get set }
-    
+    var routesStatus: [String: RouteStatus] { get set }
+    var routeGeofences: [String: [GeofenceDataModel]] { get set }
     func startIoTSubscription()
     func stopIoTSubscription()
     func fetchListOfGeofences(collectionName: String) async -> [GeofenceDataModel]?

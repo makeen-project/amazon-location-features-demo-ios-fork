@@ -12,6 +12,25 @@ import AWSIoTEvents
 import AWSCognitoIdentity
 import AwsCommonRuntimeKit
 
+struct RouteStatus {
+    var id: String
+    var isActive: Bool = false
+    var simulateIndex: Int = 0
+    var busAnnotation: ImageAnnotation?
+    var routeCoordinates: [RouteCoordinate] = []
+    var geofenceIndex = 1
+}
+enum RouteStepState {
+    case stop, point
+}
+
+struct RouteCoordinate {
+    var time: Date
+    var coordinate: CLLocationCoordinate2D
+    var routeTitle: String
+    var stepState: RouteStepState
+}
+
 final class TrackingViewModel: TrackingViewModelProtocol {
     enum Constants {
         static let majorDistanceChange: CGFloat = 30
@@ -30,6 +49,8 @@ final class TrackingViewModel: TrackingViewModelProtocol {
                                         qos: .background)
     
     var busRoutes: [BusRoute] = []
+    var routesStatus: [String: RouteStatus] = [:]
+    var routeGeofences: [String: [GeofenceDataModel]] = [:]
     
     init(trackingService: TrackingServiceable, geofenceService: GeofenceServiceable) {
         self.trackingService = trackingService
@@ -185,6 +206,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         switch model.trackerEventType {
         case .enter:
             eventText = StringConstant.entered
+            
         case .exit:
             eventText = StringConstant.exited
         }
@@ -193,9 +215,23 @@ final class TrackingViewModel: TrackingViewModelProtocol {
         let stopId = Int(model.geofenceId.split(separator: "-").last?.lowercased() ?? "0")
         if let busRoute = busRoutes.first(where:  { $0.id == busRouteId }),
            let stop = busRoute.stopCoordinates.first(where: { $0.id == stopId })?.stopProperties {
+            
+            if model.trackerEventType == .enter {
+                let geofences = routeGeofences[busRoute.geofenceCollection]
+                if let geofence = geofences?.first(where: { $0.id == model.geofenceId }), let lat = geofence.lat,
+                   let long = geofence.long,
+                   var routeStatus = routesStatus[busRoute.id] {
+                    let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                    
+                    routesStatus[busRoute.id]?.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates, routeTitle: "Bus stop number \(routeStatus.geofenceIndex)", stepState: .stop))
+                    routesStatus[busRoute.id]?.geofenceIndex += 1
+                }
+            }
+            
             let message = "\(busRoute.name.split(separator: " ").dropLast().joined(separator: " ")): \(eventText) \(stop.stop_name)"
             let userInfo = ["title": StringConstant.trackingNotificationTitle, "message": message]
             NotificationCenter.default.post(name: Notification.showTrackingNotification, object: nil, userInfo: userInfo)
+            
         }
     }
     

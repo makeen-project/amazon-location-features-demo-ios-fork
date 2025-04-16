@@ -27,10 +27,10 @@ final class TrackSimulationCell: UITableViewCell {
             stepImage.image = .stepIcon
             stepLineStackView.isHidden = false
             switch model.stepState{
-            case .first:
+            case .stop:
                 routeLabel.isHidden = false
                 stepImage.image = .stepIconFirst
-            case .last:
+            case .point:
                 routeLabel.isHidden = true
                 stepImage.image = .stepIcon
             }
@@ -38,7 +38,7 @@ final class TrackSimulationCell: UITableViewCell {
             stepImage.snp.remakeConstraints {
                 $0.centerY.equalTo(informationStackView.snp.centerY)
                 $0.leading.equalToSuperview()
-                if model.stepState == .first {
+                if model.stepState == .stop {
                     $0.height.width.equalTo(20)
                 } else {
                     $0.height.width.equalTo(16)
