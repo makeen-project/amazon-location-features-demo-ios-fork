@@ -565,6 +565,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                             self?.trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId, coordinates: cllCoordinates)
                             self?.viewModel.routesStatus[routeId]?.isActive = false
                             self?.viewModel.routesStatus[routeId]?.simulateIndex = 0
+                            self?.viewModel.routesStatus[routeId]?.geofenceIndex = 1
                         }
                     }
                 }

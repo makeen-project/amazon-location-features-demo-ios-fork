@@ -220,7 +220,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
                 let geofences = routeGeofences[busRoute.geofenceCollection]
                 if let geofence = geofences?.first(where: { $0.id == model.geofenceId }), let lat = geofence.lat,
                    let long = geofence.long,
-                   var routeStatus = routesStatus[busRoute.id] {
+                   let routeStatus = routesStatus[busRoute.id] {
                     let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long)
                     
                     routesStatus[busRoute.id]?.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates, routeTitle: "Bus stop number \(routeStatus.geofenceIndex)", stepState: .stop))
