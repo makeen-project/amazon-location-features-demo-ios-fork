@@ -24,7 +24,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     private(set) lazy var headerView: TrackingRouteHeaderView = {
-
+        
         return TrackingRouteHeaderView(titleTopOffset: 0)
     }()
     private let noInternetConnectionView = NoInternetConnectionView()
@@ -190,7 +190,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         tableView.isHidden = false
         return tableView
     }()
-
+    
     var viewModel: TrackingViewModelProtocol!
     
     private var routeToggles: [RouteToggleView] = []
@@ -252,7 +252,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     func fitMapToRoute() {
         var allCoordinates: [CLLocationCoordinate2D] = []
-
+        
         // Collect coordinates from all active routes
         for route in routeToggles.filter({ $0.getState() == true }) {
             if let routeCoordinates = viewModel.busRoutes.first(where: { $0.id == route.id })?.coordinates {
@@ -260,35 +260,35 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 allCoordinates.append(contentsOf: coordinate)
             }
         }
-
+        
         // Ensure we have coordinates to work with
         guard let first = allCoordinates.first else { return }
-
+        
         // Determine the bounding box (min/max lat & lon)
         var minLat = first.latitude
         var minLon = first.longitude
         var maxLat = first.latitude
         var maxLon = first.longitude
-
+        
         for coord in allCoordinates {
             minLat = min(minLat, coord.latitude)
             minLon = min(minLon, coord.longitude)
             maxLat = max(maxLat, coord.latitude)
             maxLon = max(maxLon, coord.longitude)
         }
-
+        
         // Create bounds
         let sw = CLLocationCoordinate2D(latitude: minLat, longitude: minLon)
         let ne = CLLocationCoordinate2D(latitude: maxLat, longitude: maxLon)
         let bounds = MLNCoordinateBounds(sw: sw, ne: ne)
-
+        
         // Set the map view to show all routes
         let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
         trackingVC?.trackingMapView.mapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {})
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
-
+        
     }
     
     @objc private func updateButtonStyle(_ notification: Notification) {
@@ -362,7 +362,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
         scrollViewContentView.addSubview(routeContainerView)
         scrollViewContentView.addSubview(trackingContainerView)
-
+        
         trackingContainerView.addArrangedSubview(trackingHeaderView)
         trackingContainerView.addArrangedSubview(tableView)
         
@@ -371,7 +371,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         trackingHeaderView.addSubview(changeRouteButton)
         trackingHeaderView.addSubview(trackingExpandImage)
         trackingHeaderView.addSubview(trackingSeperatorView)
-
+        
         let titleTopOffset: CGFloat = isiPad ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
         
         headerView.snp.makeConstraints {
@@ -439,7 +439,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
         
         generateRouteToggles()
-
+        
         setChangeMenu()
         if let route = viewModel.busRoutes.first {
             setTrackingHeaders(route: route)
@@ -527,50 +527,50 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
         
         for route in viewModel.busRoutes {
-                viewModel.routesStatus[route.id] = RouteStatus(id: route.id, isActive: false, simulateIndex: 0)
-                let routeToggle = RouteToggleView()
-                routeToggle.id = route.id
-                routeToggle.optionTitle.text = route.name
-                let seperatorView: UIView = {
-                    let view = UIView()
-                    view.backgroundColor = .lsLight2
-                    return view
-                }()
-                routeTogglesContainerView.addArrangedSubview(routeToggle)
-                routeTogglesContainerView.addArrangedSubview(seperatorView)
-                
-                routeToggle.snp.makeConstraints {
-                    $0.leading.equalToSuperview().offset(16)
-                    $0.trailing.equalToSuperview()
-                }
-                
-                seperatorView.snp.makeConstraints {
-                    $0.height.equalTo(1)
-                    $0.leading.equalToSuperview().offset(16)
-                    $0.trailing.equalToSuperview()
-                }
-                
-                routeToggle.boolHandler = { [weak self] isOn in
-                    self?.evaluateSelectedRoutes()
-                    self?.clearGeofences()
-                    self?.drawGeofences()
-                    self?.drawTrackingRoutes()
-                    self?.fitMapToRoute()
-                    if isOn {
-                        self?.simulateTrackingRoute(routeToggle: routeToggle)
-                    } else {
-                        if let routeId = routeToggle.id {
-                            let coordinates = self?.viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
-                            let cllCoordinates = self?.convertToCoordinates(from: coordinates) ?? []
-                            self?.trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId, coordinates: cllCoordinates)
-                            self?.viewModel.routesStatus[routeId]?.isActive = false
-                            self?.viewModel.routesStatus[routeId]?.simulateIndex = 0
-                            self?.viewModel.routesStatus[routeId]?.geofenceIndex = 1
-                        }
+            viewModel.routesStatus[route.id] = RouteStatus(id: route.id, isActive: false, simulateIndex: 0)
+            let routeToggle = RouteToggleView()
+            routeToggle.id = route.id
+            routeToggle.optionTitle.text = route.name
+            let seperatorView: UIView = {
+                let view = UIView()
+                view.backgroundColor = .lsLight2
+                return view
+            }()
+            routeTogglesContainerView.addArrangedSubview(routeToggle)
+            routeTogglesContainerView.addArrangedSubview(seperatorView)
+            
+            routeToggle.snp.makeConstraints {
+                $0.leading.equalToSuperview().offset(16)
+                $0.trailing.equalToSuperview()
+            }
+            
+            seperatorView.snp.makeConstraints {
+                $0.height.equalTo(1)
+                $0.leading.equalToSuperview().offset(16)
+                $0.trailing.equalToSuperview()
+            }
+            
+            routeToggle.boolHandler = { [weak self] isOn in
+                self?.evaluateSelectedRoutes()
+                self?.clearGeofences()
+                self?.drawGeofences()
+                self?.drawTrackingRoutes()
+                self?.fitMapToRoute()
+                if isOn {
+                    self?.simulateTrackingRoute(routeToggle: routeToggle)
+                } else {
+                    if let routeId = routeToggle.id {
+                        let coordinates = self?.viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
+                        let cllCoordinates = self?.convertToCoordinates(from: coordinates) ?? []
+                        self?.trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId, coordinates: cllCoordinates)
+                        self?.viewModel.routesStatus[routeId]?.isActive = false
+                        self?.viewModel.routesStatus[routeId]?.simulateIndex = 0
+                        self?.viewModel.routesStatus[routeId]?.geofenceIndex = 1
                     }
                 }
-                
-                routeToggles.append(routeToggle)
+            }
+            
+            routeToggles.append(routeToggle)
         }
         routeToggles[0].setState(isOn: true)
     }
@@ -583,7 +583,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 self.setTrackingHeaders(route: route)
             }
         }
-
+        
         let menu = UIMenu(children: menuItems)
         changeRouteButton.menu = menu
     }
@@ -595,7 +595,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         if let lastWord = words.last {
             let firstPart = words.dropLast().joined(separator: " ")
             let lastPart = String(lastWord)
-
+            
             trackingLabel.text = firstPart
             trackingDetailLabel.text = lastPart
         }
@@ -619,7 +619,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         routeContainerView.snp.updateConstraints {
             $0.height.equalTo(height)
         }
-
+        
         updateScrollViewContentSize()
     }
     
@@ -726,7 +726,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                         await self.batchEvaluateGeofence(coordinate: coordinates[self.viewModel.routesStatus[id]!.simulateIndex], collectionName: routesData.geofenceCollection)
                     }
                 }
-
+                
             }
         }
     }
@@ -734,11 +734,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func fetchGeoFences() async {
         if viewModel.routeGeofences.count > 0 { return }
         for route in viewModel.busRoutes {
-                let geofences = await trackingVC?.viewModel.fetchListOfGeofences(collectionName: route.geofenceCollection)
+            let geofences = await trackingVC?.viewModel.fetchListOfGeofences(collectionName: route.geofenceCollection)
             viewModel.routeGeofences[route.geofenceCollection] = geofences
         }
     }
-
+    
     func batchEvaluateGeofence(coordinate: CLLocationCoordinate2D, collectionName: String) async {
         await trackingVC?.viewModel.evaluateGeofence(coordinate: coordinate, collectionName: collectionName)
     }
