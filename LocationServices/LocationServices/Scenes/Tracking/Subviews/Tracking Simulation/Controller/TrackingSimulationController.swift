@@ -247,7 +247,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func centerMap() {
-        trackingVC?.trackingMapView.mapView.mapView.setCenter(CLLocationCoordinate2D(latitude: 49.27046144661014, longitude: -123.13319444634126), zoomLevel: 12, animated: false)
+        trackingVC?.trackingMapView.commonMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: 49.27046144661014, longitude: -123.13319444634126), zoomLevel: 12, animated: false)
     }
     
     func fitMapToRoute() {
@@ -284,7 +284,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         
         // Set the map view to show all routes
         let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
-        trackingVC?.trackingMapView.mapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {})
+        trackingVC?.trackingMapView.commonMapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {})
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -554,20 +554,22 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 self?.evaluateSelectedRoutes()
                 self?.clearGeofences()
                 self?.drawGeofences()
-                self?.drawTrackingRoutes()
-                self?.fitMapToRoute()
                 if isOn {
+                    self?.drawTrackingRoutes(routeToggle: routeToggle)
                     self?.simulateTrackingRoute(routeToggle: routeToggle)
+
                 } else {
                     if let routeId = routeToggle.id {
                         let coordinates = self?.viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
                         let cllCoordinates = self?.convertToCoordinates(from: coordinates) ?? []
                         self?.trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId, coordinates: cllCoordinates)
+                        self?.trackingVC?.trackingMapView.commonMapView.removeBusAnnotation(id: "\(routeId)-bus")
                         self?.viewModel.routesStatus[routeId]?.isActive = false
                         self?.viewModel.routesStatus[routeId]?.simulateIndex = 0
                         self?.viewModel.routesStatus[routeId]?.geofenceIndex = 1
                     }
                 }
+                self?.fitMapToRoute()
             }
             
             routeToggles.append(routeToggle)
@@ -745,10 +747,14 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     func drawGeofences() {
         for routeToggle in routeToggles {
-            if let id = routeToggle.id, routeToggle.getState() == true {
-                if let geofenceCollection = viewModel.busRoutes.first(where: { $0.id == id })?.geofenceCollection, let geofences = viewModel.routeGeofences[geofenceCollection] {
-                    trackingVC?.viewModel.showGeofences(routeId: id, geofences: geofences)
-                }
+            drawGeofences(routeToggle: routeToggle)
+        }
+    }
+    
+    func drawGeofences(routeToggle: RouteToggleView) {
+        if let id = routeToggle.id, routeToggle.getState() == true {
+            if let geofenceCollection = viewModel.busRoutes.first(where: { $0.id == id })?.geofenceCollection, let geofences = viewModel.routeGeofences[geofenceCollection] {
+                trackingVC?.viewModel.showGeofences(routeId: id, geofences: geofences)
             }
         }
     }
@@ -759,12 +765,16 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     func drawTrackingRoutes() {
         for routeToggle in routeToggles {
-            if let id = routeToggle.id, routeToggle.getState() == true, !viewModel.routesStatus[id]!.isActive {
-                if let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
-                    let coordinates = convertToCoordinates(from: routesData.coordinates)
-                    trackingVC?.viewModel.drawTrackingRoute(routeId: id, coordinates: coordinates)
-                    viewModel.routesStatus[id]?.isActive = true
-                }
+            drawTrackingRoutes(routeToggle: routeToggle)
+        }
+    }
+    
+    func drawTrackingRoutes(routeToggle: RouteToggleView) {
+        if let id = routeToggle.id, routeToggle.getState() == true, !viewModel.routesStatus[id]!.isActive {
+            if let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
+                let coordinates = convertToCoordinates(from: routesData.coordinates)
+                trackingVC?.viewModel.drawTrackingRoute(routeId: id, coordinates: coordinates)
+                viewModel.routesStatus[id]?.isActive = true
             }
         }
     }

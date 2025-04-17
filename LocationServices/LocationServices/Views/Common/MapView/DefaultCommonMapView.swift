@@ -358,4 +358,21 @@ extension DefaultCommonMapView {
             self.mapView.removeAnnotation(data)
         })
     }
+    
+    func removeGeofenceAnnotations() {
+        self.mapView.annotations?.forEach({ data in
+            if data is GeofenceAnnotation {
+                self.mapView.removeAnnotation(data)
+            }
+        })
+    }
+    
+    func removeBusAnnotation(id: String) {
+        self.mapView.annotations?.forEach({ data in
+            if let busAnnotation = (data as? ImageAnnotation),
+               busAnnotation.identifier == id {
+                self.mapView.removeAnnotation(data)
+            }
+        })
+    }
 }

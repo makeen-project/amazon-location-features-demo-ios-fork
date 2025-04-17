@@ -143,7 +143,7 @@ final class TrackingMapView: UIView {
     }
     
     func removeGeofencesFromMap() {
-        commonMapView.removeAllAnnotations()
+        commonMapView.removeGeofenceAnnotations()
     }
     
     func showGeofenceAnnotations(_ models: [GeofenceDataModel]) {
@@ -219,7 +219,10 @@ final class TrackingMapView: UIView {
     }
  
     func addRouteBusAnnotation(id: String, coordinate: CLLocationCoordinate2D) -> ImageAnnotation {
-        let busAnnotation = ImageAnnotation(image: UIImage.busAnnotation, identifier: "\(id)-bus")
+        //remove same id old bus annotation if exist
+        let id = "\(id)-bus"
+        commonMapView.removeBusAnnotation(id: id)
+        let busAnnotation = ImageAnnotation(image: UIImage.busAnnotation, identifier: id)
         busAnnotation.coordinate = coordinate
         commonMapView.mapView.addAnnotation(busAnnotation)
         return busAnnotation
