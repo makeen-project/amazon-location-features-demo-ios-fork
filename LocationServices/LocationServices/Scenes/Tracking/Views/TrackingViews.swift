@@ -34,12 +34,12 @@ final class TrackingMapView: UIView {
     
     var delegate: TrackingMapViewOutputDelegate? {
         didSet {
-            mapView.delegate = delegate
+            commonMapView.delegate = delegate
         }
     }
     
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
-    public var mapView: DefaultCommonMapView = DefaultCommonMapView()
+    public var commonMapView: DefaultCommonMapView = DefaultCommonMapView()
     private var mapLayer: MapOverlayItems = MapOverlayItems()
     
     private var trackingAnnotations: [MLNAnnotation] = []
@@ -63,7 +63,7 @@ final class TrackingMapView: UIView {
         super.init(frame: frame)
         self.isUserInteractionEnabled = true
         mapLayer.delegate = self
-        mapView.delegate = delegate
+        commonMapView.delegate = delegate
         setupViews()
     }
     
@@ -73,12 +73,12 @@ final class TrackingMapView: UIView {
     
     private func setupViews() {
         
-        self.addSubview(mapView)
+        self.addSubview(commonMapView)
         self.addSubview(amazonMapLogo)
         self.addSubview(infoButton)
         self.addSubview(mapLayer)
        
-        mapView.snp.makeConstraints {
+        commonMapView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
         }
         
@@ -129,21 +129,21 @@ final class TrackingMapView: UIView {
     }
     
     func getUserLocation() -> (lat: Double?, long: Double?) {
-        let userLocation = mapView.getUserLocation()
+        let userLocation = commonMapView.getUserLocation()
         return (userLocation?.latitude, userLocation?.longitude)
     }
     
     func grantedLocationPermissions() {
-        self.mapView.grantedLocationPermissions()
+        self.commonMapView.grantedLocationPermissions()
     }
     
     func reloadMap() {
-        mapView.setupMapView(locateMe: false)
+        commonMapView.setupMapView(locateMe: false)
         amazonMapLogo.tintColor = GeneralHelper.getAmazonMapLogo()
     }
     
     func removeGeofencesFromMap() {
-        mapView.removeAllAnnotations()
+        commonMapView.removeAllAnnotations()
     }
     
     func showGeofenceAnnotations(_ models: [GeofenceDataModel]) {
@@ -155,11 +155,11 @@ final class TrackingMapView: UIView {
             let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long)
             return GeofenceAnnotation(id: model.id, radius: Double(radius), title: model.name, coordinate: coordinates)
         }
-        mapView.addAnnotations(annotations: annotations)
+        commonMapView.addAnnotations(annotations: annotations)
     }
     
     func drawGeofenceCirle(id: String?, lat: Double?, long: Double?, radius: Double, title: String?) {
-        mapView.drawGeofenceCircle(id: id, latitude: lat, longitude: long, radius: radius, title: title)
+        commonMapView.drawGeofenceCircle(id: id, latitude: lat, longitude: long, radius: radius, title: title)
     }
     
     func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
@@ -172,17 +172,17 @@ final class TrackingMapView: UIView {
     func createDashLayer(routeId: String, coordinates: [CLLocationCoordinate2D]) {
         let source = createTrackingSource(coordinates: coordinates, identifier: "\(routeId)-dash-source")
         let dashedLayer = createDashedLayer(source: source, identifier: "\(routeId)-dash-layer", strokeColor: .lsGrey)
-        mapView.draw(layer: dashedLayer, source: source)
+        commonMapView.draw(layer: dashedLayer, source: source)
     }
     
     func updateDashLayer(routeId: String, coordinates: [CLLocationCoordinate2D]) {
         let source = createTrackingSource(coordinates: coordinates, identifier: "\(routeId)-update-dash-source")
         let dashedLayer = createDashedLayer(source: source, identifier: "\(routeId)-update-dash-layer", strokeColor: .lsPrimary)
-        mapView.draw(layer: dashedLayer, source: source)
+        commonMapView.draw(layer: dashedLayer, source: source)
     }
     
     func deleteTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
-        guard let style = mapView.mapView.style else { return }
+        guard let style = commonMapView.mapView.style else { return }
         
         for i in 0..<coordinates.count {
             if let existingSource = style.source(withIdentifier: "\(routeId)-\(i)-dash-source") {
@@ -209,7 +209,7 @@ final class TrackingMapView: UIView {
     }
     
     func deleteUpdateDashLayer(routeId: String) {
-        guard let style = mapView.mapView.style else { return }
+        guard let style = commonMapView.mapView.style else { return }
         if let existingSource = style.source(withIdentifier: "\(routeId)-update-dash-source") {
             style.removeSource(existingSource)
         }
@@ -221,15 +221,14 @@ final class TrackingMapView: UIView {
     func addRouteBusAnnotation(id: String, coordinate: CLLocationCoordinate2D) -> ImageAnnotation {
         let busAnnotation = ImageAnnotation(image: UIImage.busAnnotation, identifier: "\(id)-bus")
         busAnnotation.coordinate = coordinate
-        mapView.mapView.addAnnotation(busAnnotation)
-        
+        commonMapView.mapView.addAnnotation(busAnnotation)
         return busAnnotation
     }
     
     func updateFeatureColor(at index: Int, sourceId: String, isCovered: Bool) {
         if let routeFeatures = routesFeatures["\(sourceId)-track"] {
             routeFeatures[index].attributes = ["index": index, "isCovered": isCovered ? 1 : 0]
-            guard let style = mapView.mapView.style,
+            guard let style = commonMapView.mapView.style,
                   let source = style.source(withIdentifier: "\(sourceId)-track") as? MLNShapeSource else { return }
             let updatedShapeCollection = MLNShapeCollectionFeature(shapes: routeFeatures)
             source.shape = updatedShapeCollection
@@ -241,7 +240,7 @@ final class TrackingMapView: UIView {
     }
     
     func update(userLocation: CLLocation?, userHeading: CLHeading?) {
-        mapView.update(userLocation: userLocation, userHeading: userHeading)
+        commonMapView.update(userLocation: userLocation, userHeading: userHeading)
     }
     
     var routesFeatures: [String:[MLNPointFeature]] = [:]
@@ -269,7 +268,7 @@ private extension TrackingMapView {
         }
     
     func createTrackingAnnotations(sourceId: String, coordinates: [CLLocationCoordinate2D], strokeColor: UIColor) {
-        guard let style = mapView.mapView.style else { return }
+        guard let style = commonMapView.mapView.style else { return }
 
         // Convert coordinates to MLNPointFeature with properties
         let features = coordinates.enumerated().map { (index, coordinate) -> MLNPointFeature in
@@ -314,7 +313,7 @@ extension TrackingMapView: MapOverlayItemsOutputDelegate {
     }
     
     func locateMeButtonAction() {
-        mapView.locateMeAction()
+        commonMapView.locateMeAction()
     }
     
     func geofenceButtonAction() {
