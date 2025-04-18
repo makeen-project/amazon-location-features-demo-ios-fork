@@ -94,15 +94,6 @@ final class SplitViewCoordinator: Coordinator {
         return coordinator
     }
     
-    private func getGeofenceCoordinator() -> Coordinator {
-        if let coordinator = childCoordinators.first(where: { $0 is SplitViewGeofencingMapCoordinator }) {
-            return coordinator
-        }
-        let coordinator = SplitViewGeofencingMapCoordinator(splitViewController: splitViewController)
-        coordinator.splitDelegate = self
-        return coordinator
-    }
-    
     private func getSettingsCoordinator() -> Coordinator {
         if let coordinator = childCoordinators.first(where: { $0 is SplitViewSettingsCoordinator }) {
             return coordinator
@@ -135,7 +126,6 @@ final class SplitViewCoordinator: Coordinator {
         }
         (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: splitViewController.displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
-        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
     }
 }
 
@@ -213,7 +203,6 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
         
         (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
-        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
         
         sideBarButtonItem?.accessibilityIdentifier = ViewsIdentifiers.General.sideBarButton
         sideBarButtonItem?.tintColor = .lsPrimary

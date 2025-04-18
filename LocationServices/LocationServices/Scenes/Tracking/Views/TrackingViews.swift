@@ -10,7 +10,7 @@ import SnapKit
 import MapLibre
 
 protocol TrackingMapViewDelegate {
-    var delegate: GeofenceMapViewOutputDelegate { get set }
+    var delegate: TrackingMapViewOutputDelegate { get set }
 }
 
 protocol TrackingMapViewOutputDelegate: BottomSheetPresentable {
