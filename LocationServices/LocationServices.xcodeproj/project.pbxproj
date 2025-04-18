@@ -1404,7 +1404,6 @@
 				AD2AF0B2292EAAD300149904 /* Builder */,
 				AD2AF0A0292EA95D00149904 /* Contracts */,
 				AD2AF0A1292EA9EB00149904 /* Controller */,
-				AD2AF0A4292EAA0300149904 /* Presentation */,
 				AD2AF0A2292EA9F200149904 /* ViewModel */,
 				AD2AF0A3292EA9F800149904 /* Views */,
 			);
@@ -1468,13 +1467,6 @@
 				AD2AF0A7292EAA1C00149904 /* TrackingViews.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		AD2AF0A4292EAA0300149904 /* Presentation */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Presentation;
 			sourceTree = "<group>";
 		};
 		AD2AF0B2292EAAD300149904 /* Builder */ = {
