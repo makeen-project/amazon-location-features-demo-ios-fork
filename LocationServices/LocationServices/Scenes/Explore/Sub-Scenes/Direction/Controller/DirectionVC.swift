@@ -154,7 +154,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         Task {
             try await calculateRoute()
         }
-        changeExploreActionButtonsVisibility(geofenceIsHidden: false, directionIsHidden: true, mapStyleIsHidden: true)
+        changeExploreActionButtonsVisibility(geofenceIsHidden: true, directionIsHidden: true, mapStyleIsHidden: true)
         
         setupNotifications()
     }
@@ -187,6 +187,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         activityIndicator.snp.updateConstraints {
             $0.width.height.equalTo(50)
         }
+        closeButton.isHidden = true
     }
     
     func hideLoadingIndicator() {
@@ -194,6 +195,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         activityIndicator.snp.updateConstraints {
             $0.width.height.equalTo(0)
         }
+        closeButton.isHidden = false
     }
 
     private func applyStyles() {

@@ -209,9 +209,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         super.viewWillDisappear(animated)
         NotificationCenter.default.post(name: Notification.resetMapLayerItems, object: nil, userInfo: nil)
         if isTrackingActive {
-            Task {
-                await startTracking()
-            }
+            startTracking()
         }
     }
     
@@ -237,10 +235,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         centerMap()
         NotificationCenter.default.post(name: Notification.updateTrackingHeader, object: nil, userInfo:  ["state": true])
         
-        Task {
-            try await Task.sleep(for: .seconds(2))
-            await startTracking()
-        }
+        startTracking()
         if UIDevice.current.userInterfaceIdiom == .pad {
             navigationController?.navigationBar.isHidden = true
         }
@@ -311,9 +306,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     private func setupHandlers() {
         headerView.trackingButtonHandler = { state in
-            Task {
-                await self.startTracking()
-            }
+            self.startTracking()
         }
         
         headerView.showAlertCallback = showAlert(_:)
@@ -326,10 +319,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func dismissTrackingSimulation() {
-        Task {
             if isTrackingActive {
-                await startTracking()
+                startTracking()
             }
+            trackingVC?.trackingMapView.commonMapView.removeAllAnnotations()
             DispatchQueue.main.async {
                 if self.isiPad {
                     self.navigationController?.popViewController(animated: true)
@@ -338,7 +331,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                     self.dismissBottomSheet()
                 }
             }
-        }
     }
     
     var eView : UIView = {
@@ -636,7 +628,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         updateScrollViewContentSize()
     }
     
-    func startTracking() async {
+    func startTracking() {
         isTrackingActive.toggle()
         centerMap()
         
@@ -653,8 +645,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         }
         clearGeofences()
         fitMapToRoute()
-        await fetchGeoFences()
-        drawGeofences()
+        Task {
+            await fetchGeoFences()
+            drawGeofences()
+        }
         drawTrackingRoutes()
         //Start tracking
         simulateTrackingRoutes()
