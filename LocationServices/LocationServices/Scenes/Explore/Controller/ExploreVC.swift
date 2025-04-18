@@ -158,18 +158,6 @@ extension ExploreVC: ExploreViewOutputDelegate {
         delegate?.showArrivalCardScene(route: route)
     }
     
-    func loginButtonTapped() {
-        switch LoginViewModel.getAuthStatus() {
-        case .authorized:
-            showLogoutAlert()
-        case .customConfig:
-            (UIApplication.shared.delegate as? AppDelegate)?.navigationController = navigationController
-            viewModel.login()
-        case .defaultConfig:
-            delegate?.showLoginFlow()
-        }
-    }
-    
     func searchTextTapped(userLocation: CLLocationCoordinate2D?) {
         if let userLocation = userLocation {
             delegate?.showSearchSceneWith(lat: userLocation.latitude, long: userLocation.longitude)
@@ -190,18 +178,8 @@ extension ExploreVC: ExploreViewOutputDelegate {
         locationManager.performLocationDependentAction(action)
     }
     
-    private func processAppRestartAfterAWSConnection() {
-        guard UserDefaultsHelper.get(for: Bool.self, key: .showSignInOnAppStart) ?? false else { return }
-        UserDefaultsHelper.save(value: false, key: .showSignInOnAppStart)
-        
-        if let customConnectFromSettings = UserDefaultsHelper.get(for: Bool.self, key: .awsCustomConnectFromSettings), customConnectFromSettings == false {
-            delegate?.showLoginSuccess()
-        }
-    }
-    
     private func showWelcomeScreenIfNeeded() {
         guard viewModel.shouldShowWelcome() else {
-            processAppRestartAfterAWSConnection()
             return
         }
         

@@ -46,8 +46,6 @@ protocol ExploreNavigationDelegate: AnyObject {
     func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?)
     func showArrivalCardScene(route: RouteModel)
     func showNavigationview(route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?)
-    func showLoginFlow()
-    func showLoginSuccess()
     func showAttribution()
     func showWelcome()
     
@@ -64,7 +62,6 @@ protocol ExploreViewDelegate: AnyObject {
 }
 
 protocol ExploreViewOutputDelegate: AnyObject, BottomSheetPresentable {
-    func loginButtonTapped()
     func searchTextTapped(userLocation: CLLocationCoordinate2D?)
     func showPoiCard(cardData: [MapModel])
     func showDirectionView(userLocation: CLLocationCoordinate2D?)

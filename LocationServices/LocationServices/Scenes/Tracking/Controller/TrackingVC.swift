@@ -55,7 +55,6 @@ final class TrackingVC: UIViewController {
             viewModel.delegate = self
         }
     }
-    private let authActionsHelper = AuthActionsHelper()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -182,8 +181,6 @@ final class TrackingVC: UIViewController {
     @objc private func tabSelected(_ notification: Notification) {
         guard let viewController = notification.userInfo?["viewController"] as? UIViewController,
               viewController === self || viewController === self.navigationController else { return }
-        
-        authActionsHelper.tryToPerformAuthAction {}
     }
     
     @objc private func trackingAppearanceChanged(_ notification: Notification) {

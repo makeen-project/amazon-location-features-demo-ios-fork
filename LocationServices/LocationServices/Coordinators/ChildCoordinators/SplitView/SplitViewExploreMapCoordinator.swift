@@ -177,43 +177,6 @@ extension SplitViewExploreMapCoordinator: ExploreNavigationDelegate {
         supplementaryNavigationController?.pushViewController(controller, animated: false)
     }
     
-    func showLoginFlow() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
-        
-        let controller = LoginVCBuilder.create()
-        controller.dismissHandler = { [weak self] in
-            self?.splitViewController.dismiss(animated: true)
-        }
-        
-        controller.postLoginHandler = { [weak self] in
-            self?.showLoginSuccess()
-        }
-        
-        controller.modalPresentationStyle = .formSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-        }
-        splitViewController.present(controller, animated: true)
-    }
-    
-    func showLoginSuccess() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
-        
-        splitViewController.dismiss(animated: true) { [weak self] in
-            let controller = PostLoginBuilder.create()
-            controller.dismissHandler = { [weak self] in
-                self?.splitViewController.dismiss(animated: true)
-            }
-            controller.modalPresentationStyle = .formSheet
-
-            if let sheet = controller.sheetPresentationController {
-                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-            }
-            self?.splitViewController.present(controller, animated: true)
-        }
-    }
-    
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
         controller.closeCallback = { [weak self] in

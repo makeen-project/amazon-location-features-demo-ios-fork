@@ -989,10 +989,6 @@ extension ExploreView: SearchBarViewOutputDelegate {
         delegate?.searchTextTapped(userLocation: mapView.userLocation?.coordinate)
     }
     
-    func accountButtonTapped() {
-        delegate?.loginButtonTapped()
-    }
-    
     func searchTextDeactivated() {
         // TODO: Will be implemented later
     }
