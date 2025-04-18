@@ -23,11 +23,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     
     private var historyIsRootController: Bool = false
     private var supplementaryController: UIViewController {
-        if historyIsRootController {
-            return historyController
-        } else {
             return dashboardController
-        }
     }
     
     private lazy var dashboardController: TrackingSimulationIntroController = {
@@ -36,11 +32,6 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         controller.trackingSimulationHandler = { [weak self] in
             self?.showRouteTrackingScene()
         }
-        return controller
-    }()
-    
-    private lazy var historyController: TrackingHistoryVC = {
-        let controller = TrackingHistoryBuilder.create(isTrackingActive: false)
         return controller
     }()
     

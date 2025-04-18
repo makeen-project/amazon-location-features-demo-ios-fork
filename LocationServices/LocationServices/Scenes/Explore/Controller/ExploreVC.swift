@@ -439,10 +439,6 @@ extension ExploreVC {
     @objc private func refreshMapView(_ notification: Notification) {
         exploreView.setupMapView(locateMe: false)
     }
-    
-    @objc private func logoutAction() {
-        viewModel.logout()
-    }
         
     @objc private func searchAppearanceChanged(_ notification: Notification) {
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
@@ -459,22 +455,6 @@ extension ExploreVC {
         if let mapStyleIsHidden = notification.userInfo?[StringConstant.NotificationsInfoField.mapStyleIsHidden] as? Bool {
             exploreView.hideMapStyleButton(state: mapStyleIsHidden)
         }
-    }
-    
-    /// Alert view refactored to generic later
-    
-    func showLogoutAlert() {
-        let alert = UIAlertController(title: "Log out",
-                                      message: "Are you sure you want to sign out? Geofence and Tracking information is not availabe without sign in", preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Cancel",
-                                      style: .default,
-                                      handler: nil))
-        alert.addAction(UIAlertAction(title: "Log out",
-                                      style: .destructive,
-                                      handler: { _ in
-            self.viewModel.logout()
-        }))
-        self.present(alert, animated: true, completion: nil)
     }
 }
 

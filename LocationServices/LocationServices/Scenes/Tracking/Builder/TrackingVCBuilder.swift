@@ -12,9 +12,8 @@ final class TrackingVCBuilder {
     
     static func create() -> TrackingVC {
         let controller = TrackingVC()
-        let trackingService = TrackingAPIService()
         let geofenceService = GeofenceAPIService()
-        let vm = TrackingViewModel(trackingService: trackingService, geofenceService: geofenceService)
+        let vm = TrackingViewModel(geofenceService: geofenceService)
         controller.viewModel = vm
         return controller
     }

@@ -139,3 +139,15 @@ class GeneralHelper {
     }
     
 }
+
+
+struct CustomConnectionModel: Codable {
+    var identityPoolId: String
+    var userPoolClientId: String
+    var userPoolId: String
+    var userDomain: String
+    var webSocketUrl: String
+    var apiKey: String
+    
+    var region: String
+}

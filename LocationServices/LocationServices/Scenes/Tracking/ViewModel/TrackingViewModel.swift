@@ -37,12 +37,9 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     }
     
     weak var delegate: TrackingViewModelDelegate?
-    
-    private let trackingService: TrackingServiceable
     private let geofenceService: GeofenceServiceable
     
     private var lastLocation: CLLocation?
-    private var history: [TrackingHistoryPresentation] = []
     var mqttClient: Mqtt5Client?
     var mqttIoTContext: MqttIoTContext?
     let backgroundQueue = DispatchQueue(label: "background_queue",
@@ -52,8 +49,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
     var routesStatus: [String: RouteStatus] = [:]
     var routeGeofences: [String: [GeofenceDataModel]] = [:]
     
-    init(trackingService: TrackingServiceable, geofenceService: GeofenceServiceable) {
-        self.trackingService = trackingService
+    init(geofenceService: GeofenceServiceable) {
         self.geofenceService = geofenceService
         busRoutes = getBusRoutesData()?.busRoutesData ?? []
     }

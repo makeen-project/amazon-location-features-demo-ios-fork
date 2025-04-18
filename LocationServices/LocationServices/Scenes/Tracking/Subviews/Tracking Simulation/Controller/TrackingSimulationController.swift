@@ -319,18 +319,18 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func dismissTrackingSimulation() {
-            if isTrackingActive {
-                startTracking()
+        if isTrackingActive {
+            startTracking()
+        }
+        trackingVC?.trackingMapView.commonMapView.removeAllAnnotations()
+        DispatchQueue.main.async {
+            if self.isiPad {
+                self.navigationController?.popViewController(animated: true)
             }
-            trackingVC?.trackingMapView.commonMapView.removeAllAnnotations()
-            DispatchQueue.main.async {
-                if self.isiPad {
-                    self.navigationController?.popViewController(animated: true)
-                }
-                else {
-                    self.dismissBottomSheet()
-                }
+            else {
+                self.dismissBottomSheet()
             }
+        }
     }
     
     var eView : UIView = {
@@ -549,7 +549,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 if isOn {
                     self?.drawTrackingRoutes(routeToggle: routeToggle)
                     self?.simulateTrackingRoute(routeToggle: routeToggle)
-
+                    
                 } else {
                     if let routeId = routeToggle.id {
                         let coordinates = self?.viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
@@ -716,10 +716,12 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 if let routeStatus = self.viewModel.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
                     
                     self.viewModel.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex], routeTitle: "", stepState: .point ))
+                    
                     self.reloadTableView()
                     
                     Task {
-                        await self.batchEvaluateGeofence(coordinate: coordinates[self.viewModel.routesStatus[id]!.simulateIndex], collectionName: routesData.geofenceCollection)
+                        let coordinate = coordinates[routeStatus.simulateIndex]
+                        await self.batchEvaluateGeofence(coordinate: coordinate, collectionName: routesData.geofenceCollection)
                     }
                 }
                 

@@ -12,8 +12,6 @@ import AWSGeoRoutes
 
 protocol ExploreViewModelProtocol: AnyObject {
     var delegate: ExploreViewModelOutputDelegate? { get set }
-    func login()
-    func logout()
     
     func activateRoute(route: RouteModel)
     func deactivateRoute()
@@ -23,9 +21,6 @@ protocol ExploreViewModelProtocol: AnyObject {
 }
 
 protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {
-    func loginCompleted(_ presentation: ExplorePresentation)
-    func logoutCompleted()
-    
     func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes)
     func userReachedDestination(_ destination: MapModel)
     func showAnnotation(model: SearchPresentation, force: Bool)

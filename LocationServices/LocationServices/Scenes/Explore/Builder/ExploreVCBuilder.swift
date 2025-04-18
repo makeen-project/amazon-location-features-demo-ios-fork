@@ -10,11 +10,11 @@ import UIKit
 final class ExploreVCBuilder {
     static func create() -> ExploreVC {
         let controller = ExploreVC()
-        let awsLoginService = AWSLoginService.default()
+        let awsAuthService = AWSAuthService.default()
         let routingService = RoutingAPIService()
         let locationService = LocationService()
         let viewModel = ExploreViewModel(routingService: routingService, locationService: locationService)
-        viewModel.awsLoginService = awsLoginService
+        viewModel.awsAuthService = awsAuthService
         controller.viewModel = viewModel
         return controller
     }

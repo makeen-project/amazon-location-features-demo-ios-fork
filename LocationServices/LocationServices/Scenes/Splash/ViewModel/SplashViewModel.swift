@@ -7,18 +7,16 @@
 
 import Foundation
 
-final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProtocol {
+final class SplashViewModel: SplashViewModelProtocol {
     
     var setupCompleteHandler: VoidHandler?
-    private let loginService: AWSLoginService
+    private let authService: AWSAuthService
     private var observeLogoutResult: Bool = true
     
     weak var delegate: SplashViewModelDelegate?
     
-    init(loginService: AWSLoginService) {
-        self.loginService = loginService
-        
-        loginService.delegate = self
+    init(authService: AWSAuthService) {
+        self.authService = authService
     }
     
     func setupDefaults() {
@@ -39,7 +37,7 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
             return
         }
         
-        let isValid = try await loginService.validate(identityPoolId: customConfiguration.identityPoolId)
+        let isValid = try await CognitoAuthHelper.validate(identityPoolId: customConfiguration.identityPoolId)
         
         if !isValid {
                 UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
@@ -84,11 +82,5 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
         DispatchQueue.main.async {
             self.setupCompleteHandler?()
         }
-    }
-    
-    // MARK: - AWSLoginServiceOutputProtocol
-    func logoutResult(_ error: Error?) {
-        guard observeLogoutResult else { return }
-        setupCompleted()
     }
 }

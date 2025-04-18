@@ -10,9 +10,7 @@ import UIKit
 final class SettingsVCBuilder {
     static func create() -> SettingsVC {
         let controller = SettingsVC()
-        let awsLoginService = AWSLoginService.default()
         let viewModel = SettingsViewModel()
-        viewModel.awsLoginService = awsLoginService
         controller.viewModel = viewModel
         return controller
     }

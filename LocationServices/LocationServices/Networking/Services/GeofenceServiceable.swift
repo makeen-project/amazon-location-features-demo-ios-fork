@@ -16,39 +16,11 @@ enum GeofenceError: Error {
 }
 
 protocol GeofenceServiceable {
-    func putGeofence(with id: String, lat: Double, long: Double, radius: Double) async -> Result<GeofenceDataModel,  Error>
-    func deleteGeofence(with id: String) async -> Result<String, Error>
     func getGeofenceList(collectionName: String) async -> Result<[GeofenceDataModel], Error>
     func evaluateGeofence(lat: Double, long: Double, collectionName: String) async throws
 }
 
 struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
-    
-    func putGeofence(with id: String, lat: Double, long: Double, radius: Double) async -> Result<GeofenceDataModel,  Error> {
-        do {
-            let result = try await putGeofence(with: id, center: [long, lat], radius: radius)
-            let model = GeofenceDataModel(id: result!.geofenceId, lat: lat, long: long, radius: radius)
-             return .success(model)
-        }
-        catch {
-            return .failure(error)
-        }
-    }
-    
-    func deleteGeofence(with id: String) async -> Result<String, Error> {
-        do {
-            let result = try await deleteGeofences(with: [id])
-            if let error = result!.errors?.first {
-                return .failure(GeofenceError.deleteGeofence(error.error!.message!))
-            }
-            else {
-                return .success("")
-            }
-        }
-        catch {
-            return .failure(error)
-        }
-    }
     
     func getGeofenceList(collectionName: String) async -> Result<[GeofenceDataModel], Error> {
         do {
