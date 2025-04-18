@@ -287,7 +287,6 @@
 		ADF26F5E292FFAC7000147A0 /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF26F5D292FFAC7000147A0 /* TypeAlias.swift */; };
 		ADF26F6329300E53000147A0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADF26F6229300E53000147A0 /* Security.framework */; };
 		ADF26F6529300E59000147A0 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADF26F6429300E59000147A0 /* SafariServices.framework */; };
-		ADF26F72293028BE000147A0 /* AWSAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF26F71293028BD000147A0 /* AWSAuthService.swift */; };
 		ADF26F7829303E16000147A0 /* AWSUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF26F7729303E16000147A0 /* AWSUserModel.swift */; };
 		DF8005DF2A0A6C6A00758BBE /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */; };
 		DF8005E12A0A737000758BBE /* WebViewVCBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */; };
@@ -686,7 +685,6 @@
 		ADF26F5D292FFAC7000147A0 /* TypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
 		ADF26F6229300E53000147A0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		ADF26F6429300E59000147A0 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
-		ADF26F71293028BD000147A0 /* AWSAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSAuthService.swift; sourceTree = "<group>"; };
 		ADF26F7729303E16000147A0 /* AWSUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSUserModel.swift; sourceTree = "<group>"; };
 		DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
 		DF8005E02A0A737000758BBE /* WebViewVCBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVCBuilder.swift; sourceTree = "<group>"; };
@@ -2427,7 +2425,6 @@
 		ADF26F70293028B0000147A0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				ADF26F71293028BD000147A0 /* AWSAuthService.swift */,
 				ADABECD4293FD44200E66FC5 /* LocationSearchService.swift */,
 				ADB0B99A295AF23C00C219EC /* RoutingService.swift */,
 				ADC124A12979EA5F00B08C20 /* GeofenceService.swift */,
@@ -2997,7 +2994,6 @@
 				AD2AF0E5292EAC8700149904 /* AboutCoordinator.swift in Sources */,
 				DF8005DF2A0A6C6A00758BBE /* WebViewVC.swift in Sources */,
 				8ACD71D42A091AFC00EC23F3 /* MapSearchFloatingView.swift in Sources */,
-				ADF26F72293028BE000147A0 /* AWSAuthService.swift in Sources */,
 				ADB0B9A5295BAE2B00C219EC /* Double+Extension.swift in Sources */,
 				ADBDDEFA29842CC500696EC6 /* ExploreMapStyleViewModel.swift in Sources */,
 				ADD1397E29809BF00003F917 /* ResetPasswordBuilder.swift in Sources */,

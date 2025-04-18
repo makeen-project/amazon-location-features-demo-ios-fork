@@ -10,14 +10,9 @@ import Foundation
 final class SplashViewModel: SplashViewModelProtocol {
     
     var setupCompleteHandler: VoidHandler?
-    private let authService: AWSAuthService
     private var observeLogoutResult: Bool = true
     
     weak var delegate: SplashViewModelDelegate?
-    
-    init(authService: AWSAuthService) {
-        self.authService = authService
-    }
     
     func setupDefaults() {
         UserDefaultsHelper.removeObject(for: .navigationRoute)

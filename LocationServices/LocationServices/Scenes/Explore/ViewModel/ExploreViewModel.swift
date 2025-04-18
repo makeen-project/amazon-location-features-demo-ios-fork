@@ -13,16 +13,10 @@ import UIKit
 final class ExploreViewModel: ExploreViewModelProtocol {
     
     private let routingService: RoutingServiceable
+    let locationService: LocationServiceable
     private var selectedRoute: RouteModel?
     
     var delegate: ExploreViewModelOutputDelegate?
-    
-    var awsAuthService: AWSAuthService! {
-        didSet {
-            
-        }
-    }
-    let locationService: LocationServiceable
     
     init(routingService: RoutingServiceable, locationService: LocationServiceable) {
         self.routingService = routingService
