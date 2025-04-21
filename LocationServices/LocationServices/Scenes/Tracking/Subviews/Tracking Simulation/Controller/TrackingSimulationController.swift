@@ -255,11 +255,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 allCoordinates.append(contentsOf: coordinate)
             }
         }
-        
+
         // Ensure we have coordinates to work with
         guard let first = allCoordinates.first else { return }
         
-        // Determine the bounding box (min/max lat & lon)
+        // Determine bounding box
         var minLat = first.latitude
         var minLon = first.longitude
         var maxLat = first.latitude
@@ -272,7 +272,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             maxLon = max(maxLon, coord.longitude)
         }
         
-        // Create bounds
         let sw = CLLocationCoordinate2D(latitude: minLat, longitude: minLon)
         let ne = CLLocationCoordinate2D(latitude: maxLat, longitude: maxLon)
         let bounds = MLNCoordinateBounds(sw: sw, ne: ne)
@@ -280,7 +279,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         // Set the map view to show all routes
         let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
         trackingVC?.trackingMapView.commonMapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {})
+        
+        trackingVC?.trackingMapView.commonMapView.mapView.cameraThatFitsCoordinateBounds(bounds, edgePadding: edgePadding)
     }
+
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -709,6 +711,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                         
                         //updating stops color
                         self.trackingVC?.trackingMapView.updateFeatureColor(at: simulateIndex, sourceId: id, isCovered: true)
+                        self.fitMapToRoute()
                     }
                 }
                 

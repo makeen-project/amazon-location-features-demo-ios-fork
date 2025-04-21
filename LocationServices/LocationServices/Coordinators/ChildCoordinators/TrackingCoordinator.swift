@@ -45,8 +45,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         controller.trackingSimulationHandler = { [weak self] in
             self?.showRouteTrackingScene()
         }
-        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
-        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.90))
+        controller.presentBottomSheet(parentController: trackingController!)
+        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 1))
         currentBottomSheet = controller
         
         controller.dismissHandler = { [weak self] in
