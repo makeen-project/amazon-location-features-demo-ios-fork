@@ -66,17 +66,17 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showMapStyleScene() {
-        dismissCurrentScene()
+        currentBottomSheet?.updateBottomSheetHeight(to: 0)
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.currentBottomSheet?.dismissBottomSheet()
-            self?.showDashboardFlow()
-            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
+            controller.dismissBottomSheet()
+            self?.currentBottomSheet?.updateBottomSheetHeight(to: controller.getMediumDetentHeight())
+            NotificationCenter.default.post(name: Notification.trackingMapStyleDimissed, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
         }
-        currentBottomSheet?.dismissBottomSheet()
+        NotificationCenter.default.post(name: Notification.trackingMapStyleAppearing, object: nil, userInfo: nil)
         controller.presentBottomSheet(parentController: trackingController!)
-        controller.setBottomSheetHeight(to: controller.getLargeDetentHeight())
-        currentBottomSheet = controller
+        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.9))
     }
     
     func showAttribution() {

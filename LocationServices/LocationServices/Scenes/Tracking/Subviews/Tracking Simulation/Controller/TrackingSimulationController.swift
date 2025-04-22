@@ -228,6 +228,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         setupHandlers()
         setupViews()
         setupTableView()
+        setupNotifications()
         
         scrollView.isHidden = !Reachability.shared.isInternetReachable
         noInternetConnectionView.isHidden = Reachability.shared.isInternetReachable
@@ -301,9 +302,19 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         toggleTrackingOption()
     }
     
+    @objc func refreshTrackingSimulation() {
+        startTracking()
+    }
+    
     func updateButtonStyle(state: Bool) {
         self.headerView.updateButtonStyle(isTrackingStarted: state)
         self.view.setNeedsLayout()
+    }
+    
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshTrackingSimulation), name: Notification.trackingMapStyleDimissed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissTrackingSimulation), name: Notification.dismissTrackingSimulation, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(trackingMapStyleAppearing), name: Notification.trackingMapStyleAppearing, object: nil)
     }
     
     private func setupHandlers() {
@@ -316,8 +327,23 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             self?.present(alertController, animated: true)
         }
         scrollView.delegate = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissTrackingSimulation), name: Notification.dismissTrackingSimulation, object: nil)
+    }
+    
+    @objc func trackingMapStyleAppearing() {
+        if isTrackingActive {
+            startTracking()
+        }
+        trackingVC?.trackingMapView.commonMapView.removeGeofenceAnnotations()
+        for routeToggle in routeToggles {
+            if let routeId = routeToggle.id {
+                let coordinates = viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
+                let cllCoordinates = convertToCoordinates(from: coordinates)
+                
+                trackingVC?.trackingMapView.deleteTrackingRoute(routeId: routeId, coordinates: cllCoordinates)
+                trackingVC?.trackingMapView.commonMapView.removeBusAnnotation(id: "\(routeId)-bus")
+                viewModel.routesStatus[routeId]?.isActive = false
+            }
+        }
     }
     
     @objc func dismissTrackingSimulation() {
@@ -769,7 +795,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func drawTrackingRoutes(routeToggle: RouteToggleView) {
-        if let id = routeToggle.id, routeToggle.getState() == true, !viewModel.routesStatus[id]!.isActive {
+        if let id = routeToggle.id, (routeToggle.getState() == true && !viewModel.routesStatus[id]!.isActive) {
             if let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
                 let coordinates = convertToCoordinates(from: routesData.coordinates)
                 trackingVC?.viewModel.drawTrackingRoute(routeId: id, coordinates: coordinates)

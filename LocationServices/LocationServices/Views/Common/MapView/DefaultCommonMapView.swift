@@ -359,6 +359,12 @@ extension DefaultCommonMapView {
         })
     }
     
+    func removeAllSources() {
+        self.mapView.style?.sources.forEach({ data in
+            self.mapView.style?.removeSource(data)
+        })
+    }
+    
     func removeGeofenceAnnotations() {
         self.mapView.annotations?.forEach({ data in
             if data is GeofenceAnnotation {
