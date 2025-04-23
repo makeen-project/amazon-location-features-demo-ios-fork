@@ -105,11 +105,13 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         controller.isModalInPresentation = true
         controller.dismissHandler = { [weak self] in
             self?.splitViewController.dismiss(animated: true)
+            NotificationCenter.default.post(name: Notification.trackingMapStyleDimissed, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
         }
         if let sheet = controller.sheetPresentationController {
             sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
-        
+        NotificationCenter.default.post(name: Notification.trackingMapStyleAppearing, object: nil, userInfo: nil)
         splitViewController.present(controller, animated: true)
     }
     
