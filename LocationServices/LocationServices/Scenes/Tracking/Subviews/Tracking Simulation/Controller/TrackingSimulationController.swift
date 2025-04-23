@@ -286,7 +286,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
 
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        print("viewDidAppear")
     }
     
     @objc private func updateButtonStyle(_ notification: Notification) {
@@ -303,7 +303,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func refreshTrackingSimulation() {
-        startTracking()
+        self.startTracking(fillCovered: true)
     }
     
     func updateButtonStyle(state: Bool) {
@@ -656,7 +656,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         updateScrollViewContentSize()
     }
     
-    func startTracking() {
+    func startTracking(fillCovered: Bool = false) {
         isTrackingActive.toggle()
         centerMap()
         
@@ -677,7 +677,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             await fetchGeoFences()
             drawGeofences()
         }
-        drawTrackingRoutes()
+        drawTrackingRoutes(fillCovered: fillCovered)
         //Start tracking
         simulateTrackingRoutes()
     }
@@ -700,7 +700,12 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
            let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
             
             let coordinates = convertToCoordinates(from: routesData.coordinates)
-            self.viewModel.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[self.viewModel.routesStatus[id]!.simulateIndex])
+            if var simulateIndex = self.viewModel.routesStatus[id]?.simulateIndex {
+                if simulateIndex >= coordinates.count {
+                    simulateIndex = simulateIndex - 1
+                }
+                self.viewModel.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[simulateIndex])
+            }
             
             // Move the annotation along the route every second
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) { timer in
@@ -788,18 +793,34 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         trackingVC?.removeGeofencesFromMap()
     }
     
-    func drawTrackingRoutes() {
+    func drawTrackingRoutes(fillCovered: Bool = false) {
         for routeToggle in routeToggles {
-            drawTrackingRoutes(routeToggle: routeToggle)
+            drawTrackingRoutes(routeToggle: routeToggle, fillCovered: fillCovered)
         }
     }
     
-    func drawTrackingRoutes(routeToggle: RouteToggleView) {
+    func drawTrackingRoutes(routeToggle: RouteToggleView, fillCovered: Bool = false) {
         if let id = routeToggle.id, (routeToggle.getState() == true && !viewModel.routesStatus[id]!.isActive) {
             if let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
                 let coordinates = convertToCoordinates(from: routesData.coordinates)
                 trackingVC?.viewModel.drawTrackingRoute(routeId: id, coordinates: coordinates)
                 viewModel.routesStatus[id]?.isActive = true
+                // filling out the previous tracking points
+                if fillCovered {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        for i in 0..<self.viewModel.routesStatus[id]!.simulateIndex {
+                            print("+++++++++ simulateIndex: \(i) route id: \(id)++++++++++")
+                            if i > 0 {
+                                //Updating in between stops color
+                                let coordinates = [coordinates[i-1], coordinates[i]]
+                                self.trackingVC?.trackingMapView.updateDashLayer(routeId: "\(id)-\(i)", coordinates: coordinates)
+                            }
+                            
+                            //updating stops color
+                            self.trackingVC?.trackingMapView.updateFeatureColor(at: i, sourceId: id, isCovered: true)
+                        }
+                    }
+                }
             }
         }
     }
