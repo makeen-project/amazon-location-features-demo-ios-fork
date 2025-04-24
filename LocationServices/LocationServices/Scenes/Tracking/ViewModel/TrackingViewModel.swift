@@ -19,6 +19,7 @@ struct RouteStatus {
     var busAnnotation: ImageAnnotation?
     var routeCoordinates: [RouteCoordinate] = []
     var geofenceIndex = 1
+    var timer: Timer? = nil
 }
 enum RouteStepState {
     case stop, point

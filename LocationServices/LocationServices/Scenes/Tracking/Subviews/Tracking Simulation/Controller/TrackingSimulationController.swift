@@ -244,6 +244,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     func centerMap() {
         trackingVC?.trackingMapView.commonMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: 49.27046144661014, longitude: -123.13319444634126), zoomLevel: 12, animated: false)
+        trackingVC?.trackingMapView.commonMapView.mapView.allowsScrolling = false
+        trackingVC?.trackingMapView.commonMapView.mapView.allowsRotating = false
+        trackingVC?.trackingMapView.commonMapView.mapView.allowsZooming = false
+        trackingVC?.trackingMapView.commonMapView.mapView.allowsTilting = false
     }
     
     func fitMapToRoute() {
@@ -280,8 +284,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         // Set the map view to show all routes
         let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
         trackingVC?.trackingMapView.commonMapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {})
-        
-        trackingVC?.trackingMapView.commonMapView.mapView.cameraThatFitsCoordinateBounds(bounds, edgePadding: edgePadding)
     }
 
     
@@ -587,6 +589,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                         self?.viewModel.routesStatus[routeId]?.isActive = false
                         self?.viewModel.routesStatus[routeId]?.simulateIndex = 0
                         self?.viewModel.routesStatus[routeId]?.geofenceIndex = 1
+                        self?.viewModel.routesStatus[routeId]?.timer?.invalidate()
                     }
                 }
                 self?.fitMapToRoute()
@@ -657,29 +660,31 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func startTracking(fillCovered: Bool = false) {
-        isTrackingActive.toggle()
-        centerMap()
-        
-        updateButtonStyle(state: isTrackingActive)
-        if !isTrackingActive {
-            trackingVC?.viewModel.stopIoTSubscription()
-            return
+        DispatchQueue.main.async {
+            self.isTrackingActive.toggle()
+            
+            
+            self.updateButtonStyle(state: self.isTrackingActive)
+            if !self.isTrackingActive {
+                self.trackingVC?.viewModel.stopIoTSubscription()
+                return
+            }
+            
+            self.trackingVC?.viewModel.startIoTSubscription()
+            let count = self.routeToggles.count(where: { $0.getState()})
+            if count == 0 {
+                self.routeToggles.first?.changeState()
+            }
+            self.clearGeofences()
+            self.fitMapToRoute()
+            Task {
+                await self.fetchGeoFences()
+                self.drawGeofences()
+            }
+            self.drawTrackingRoutes(fillCovered: fillCovered)
+            //Start tracking
+            self.simulateTrackingRoutes()
         }
-        
-        trackingVC?.viewModel.startIoTSubscription()
-        let count = routeToggles.count(where: { $0.getState()})
-        if count == 0 {
-            routeToggles.first?.changeState()
-        }
-        clearGeofences()
-        fitMapToRoute()
-        Task {
-            await fetchGeoFences()
-            drawGeofences()
-        }
-        drawTrackingRoutes(fillCovered: fillCovered)
-        //Start tracking
-        simulateTrackingRoutes()
     }
     
     func convertToCoordinates(from array: [[Double]]) -> [CLLocationCoordinate2D] {
@@ -708,57 +713,58 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             }
             
             // Move the annotation along the route every second
-            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) { timer in
-                if !self.isTrackingActive || routeToggle.getState() == false {
-                    timer.invalidate()
-                    return
-                }
-                //Reset and delete the tracking route
-                if self.viewModel.routesStatus[id]!.simulateIndex >= coordinates.count {
-                    for jIndex in 0..<coordinates.count {
-                        self.trackingVC?.trackingMapView.updateFeatureColor(at: jIndex, sourceId: id, isCovered: false)
-                        self.trackingVC?.trackingMapView.deleteUpdateDashLayer(routeId: "\(id)-\(jIndex)")
+            viewModel.routesStatus[id]?.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
+                DispatchQueue.main.async {
+                    if !self.isTrackingActive || routeToggle.getState() == false {
+                        timer.invalidate()
+                        return
                     }
-                    self.viewModel.routesStatus[id]!.simulateIndex = 0
-                    self.viewModel.routesStatus[id]!.geofenceIndex = 1
-                    self.viewModel.routesStatus[id]?.routeCoordinates = []
-                    self.reloadTableView()
-                }
-                
-                // Move annotation forward
-                UIView.animate(withDuration: 0.5) {
-                    if let simulateIndex = self.viewModel.routesStatus[id]?.simulateIndex {
-                        //Change bus annotation's coordinates for route
-                        self.viewModel.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.viewModel.routesStatus[id]!.simulateIndex]
-                        
-                        print("+++++++++route id: \(id)++++++++++")
-                        print("+++++++++bus annotation coordinate: \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.latitude), \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.longitude)++++++++++")
-                        
-                        if simulateIndex > 0 {
-                            //Updating in between stops color
-                            let coordinates = [coordinates[simulateIndex-1], coordinates[simulateIndex]]
-                            self.trackingVC?.trackingMapView.updateDashLayer(routeId: "\(id)-\(simulateIndex)", coordinates: coordinates)
+                    //Reset and delete the tracking route
+                    if self.viewModel.routesStatus[id]!.simulateIndex >= coordinates.count {
+                        for jIndex in 0..<coordinates.count {
+                            self.trackingVC?.trackingMapView.updateFeatureColor(at: jIndex, sourceId: id, isCovered: false)
+                            self.trackingVC?.trackingMapView.deleteUpdateDashLayer(routeId: "\(id)-\(jIndex)")
                         }
+                        self.viewModel.routesStatus[id]!.simulateIndex = 0
+                        self.viewModel.routesStatus[id]!.geofenceIndex = 1
+                        self.viewModel.routesStatus[id]?.routeCoordinates = []
+                        self.reloadTableView()
+                    }
+                    
+                    // Move annotation forward
+                    UIView.animate(withDuration: 0.5) {
+                        if let simulateIndex = self.viewModel.routesStatus[id]?.simulateIndex {
+                            //Change bus annotation's coordinates for route
+                            self.viewModel.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.viewModel.routesStatus[id]!.simulateIndex]
+                            
+                            print("+++++++++route id: \(id)++++++++++")
+                            print("+++++++++bus annotation coordinate: \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.latitude), \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.longitude)++++++++++")
+                            
+                            if simulateIndex > 0 {
+                                //Updating in between stops color
+                                let coordinates = [coordinates[simulateIndex-1], coordinates[simulateIndex]]
+                                self.trackingVC?.trackingMapView.updateDashLayer(routeId: "\(id)-\(simulateIndex)", coordinates: coordinates)
+                            }
+                            
+                            //updating stops color
+                            self.trackingVC?.trackingMapView.updateFeatureColor(at: simulateIndex, sourceId: id, isCovered: true)
+                            //self.fitMapToRoute()
+                        }
+                    }
+                    
+                    self.viewModel.routesStatus[id]!.simulateIndex += 1
+                    if let routeStatus = self.viewModel.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
                         
-                        //updating stops color
-                        self.trackingVC?.trackingMapView.updateFeatureColor(at: simulateIndex, sourceId: id, isCovered: true)
-                        self.fitMapToRoute()
+                        self.viewModel.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex], routeTitle: "", stepState: .point ))
+                        
+                        self.reloadTableView()
+                        
+                        Task {
+                            let coordinate = coordinates[routeStatus.simulateIndex]
+                            await self.batchEvaluateGeofence(coordinate: coordinate, collectionName: routesData.geofenceCollection)
+                        }
                     }
                 }
-                
-                self.viewModel.routesStatus[id]!.simulateIndex += 1
-                if let routeStatus = self.viewModel.routesStatus[id], routeStatus.simulateIndex < coordinates.count {
-                    
-                    self.viewModel.routesStatus[id]!.routeCoordinates.append(RouteCoordinate(time: Date(), coordinate: coordinates[routeStatus.simulateIndex], routeTitle: "", stepState: .point ))
-                    
-                    self.reloadTableView()
-                    
-                    Task {
-                        let coordinate = coordinates[routeStatus.simulateIndex]
-                        await self.batchEvaluateGeofence(coordinate: coordinate, collectionName: routesData.geofenceCollection)
-                    }
-                }
-                
             }
         }
     }

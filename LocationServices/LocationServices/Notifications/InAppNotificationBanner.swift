@@ -15,6 +15,7 @@ class InAppNotificationBanner: UIView {
     private let messageLabel = UILabel()
 
     private static var currentBanner: InAppNotificationBanner?
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
 
     init(title: String, message: String, image: UIImage? = nil) {
         super.init(frame: CGRect.zero)
@@ -73,7 +74,13 @@ class InAppNotificationBanner: UIView {
             view.addSubview(self)
 
             self.snp.makeConstraints {
-                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.leading.equalToSuperview().inset(16)
+                if self.isiPad {
+                    $0.trailing.equalToSuperview().offset(-70)
+                }
+                else {
+                    $0.trailing.equalToSuperview().offset(-90)
+                }
                 $0.top.equalTo(view.safeAreaLayoutGuide).offset(-125)
             }
 
