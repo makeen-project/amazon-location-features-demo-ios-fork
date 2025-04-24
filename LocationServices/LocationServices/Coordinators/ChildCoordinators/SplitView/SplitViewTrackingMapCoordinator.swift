@@ -42,6 +42,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         floatingView = MapFloatingViewHandler(viewController: controller)
         floatingView?.delegate = splitDelegate
         floatingView?.setupNavigationSearch(state: .primaryVisible, hideSearch: true)
+        floatingView?.setSideBarButtonVisibility(state: true)
         return controller
     }()
     
