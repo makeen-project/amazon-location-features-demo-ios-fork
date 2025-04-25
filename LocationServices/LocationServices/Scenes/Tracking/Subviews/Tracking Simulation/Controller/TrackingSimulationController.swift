@@ -283,7 +283,21 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         
         // Set the map view to show all routes
         let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
-        trackingVC?.trackingMapView.commonMapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {})
+        DispatchQueue.main.async {
+            self.trackingVC?.trackingMapView.commonMapView.mapView.automaticallyAdjustsContentInset = true
+            self.trackingVC?.trackingMapView.commonMapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {
+                self.forceRefreshAnnotations()
+            })
+
+        }
+    }
+    
+    func forceRefreshAnnotations() {
+        // Hacky workaround: slightly pan the map to force a redraw
+        if let center = self.trackingVC?.trackingMapView.commonMapView.mapView.centerCoordinate {
+            self.trackingVC?.trackingMapView.commonMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: center.latitude + 0.00001, longitude: center.longitude), animated: false)
+            self.trackingVC?.trackingMapView.commonMapView.mapView.setCenter(center, animated: false)
+        }
     }
 
     

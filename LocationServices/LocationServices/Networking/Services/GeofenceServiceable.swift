@@ -30,7 +30,7 @@ struct GeofenceAPIService: AWSGeofenceServiceProtocol, GeofenceServiceable {
                 return .success(models)
             }
             else {
-                return .failure(GeofenceError.listGeofence("No geofence founc"))
+                return .failure(GeofenceError.listGeofence("No geofence found"))
             }
         }
         catch {
