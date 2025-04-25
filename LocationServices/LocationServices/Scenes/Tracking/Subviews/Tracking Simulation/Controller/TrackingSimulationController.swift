@@ -31,7 +31,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingHistoryScrollView
+        scrollView.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingSimulationScrollView
         scrollView.backgroundColor = .clear
         scrollView.alwaysBounceVertical = true
         scrollView.isDirectionalLockEnabled = true
@@ -132,7 +132,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     private lazy var trackingHeaderView: UIButton = {
         let button = UIButton(type: .system)
-        button.accessibilityIdentifier = ViewsIdentifiers.Routing.routeOptionsVisibilityButton
+        button.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingHeaderView
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(trackingOptionExpand), for: .touchUpInside)
         return button
@@ -184,7 +184,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingHistoryTableView
+        tableView.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingPointsTableView
         tableView.separatorStyle = .none
         tableView.layer.cornerRadius = 10
         tableView.isHidden = false

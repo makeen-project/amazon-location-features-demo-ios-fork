@@ -140,13 +140,19 @@ struct ViewsIdentifiers {
     }
     
     struct Tracking {
+        static let startTrackingSimulationButton = "StartTrackingSimulationButton"
+        
         static let enableTrackingButton = "EnableTrackingButton"
+        static let trackingHeaderView = "TrackingHeaderView"
         static let trackingActionButton = "TrackingActionButton"
-        static let trackingHistoryTableView  = "TrackingHistoryTableView"
+        static let trackingPointsTableView  = "TrackingPointsTableView"
         static let trackingStartedLabel = "TrackingStartedLabel"
         static let trackingStoppedLabel = "TrackingStoppedLabel"
-        static let deleteTrackingDataButton = "DeleteTrackingDataButton"
         static let trackingAnnotationImage = "TrackingAnnotationImage"
-        static let trackingHistoryScrollView  = "TrackingHistoryScrollView"
+        static let trackingSimulationScrollView  = "TrackingSimulationScrollView"
+        
+        static let trackingSimulationStartedLabel = "TrackingSimulationStartedLabel"
+        static let trackingRoutesExpandButton = "trackingRoutesExpandButton"
+        static let trackingPointsExpandButton = "trackingPointsExpandButton"
     }
 }

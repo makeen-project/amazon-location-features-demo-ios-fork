@@ -110,7 +110,7 @@ final class TrackingSimulationDashboardView: UIView {
     
     private lazy var startButton: AmazonLocationButton =  {
         let button = AmazonLocationButton(title: StringConstant.startSimulation)
-        button.accessibilityIdentifier = ViewsIdentifiers.Tracking.enableTrackingButton
+        button.accessibilityIdentifier = ViewsIdentifiers.Tracking.startTrackingSimulationButton
         button.addTarget(self, action: #selector(commonButtonAction), for: .touchUpInside)
         return button
     }()

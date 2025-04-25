@@ -14,18 +14,19 @@ struct UITestTrackingScreen: UITestScreen {
     
     private enum Identifiers {
         static var awsConnectTitleLabel: String { ViewsIdentifiers.AWSConnect.awsConnectTitleLabel }
-        static var enableTrackingButton: String { ViewsIdentifiers.Tracking.enableTrackingButton }
         static var trackingActionButton: String { ViewsIdentifiers.Tracking.trackingActionButton }
-        static var trackingHistoryTableView: String {
-            ViewsIdentifiers.Tracking.trackingHistoryTableView }
-        static var trackingHistoryScrollView: String { ViewsIdentifiers.Tracking.trackingHistoryScrollView }
+        static var trackingPointsExpandButton: String { ViewsIdentifiers.Tracking.trackingPointsExpandButton }
+        static var trackingPointsTableView: String { ViewsIdentifiers.Tracking.trackingPointsTableView }
+        static var trackingSimulationScrollView: String { ViewsIdentifiers.Tracking.trackingSimulationScrollView }
         static var bottomGrabberView: String {
             ViewsIdentifiers.General.bottomGrabberView
         }
         static var trackingStartedLabel: String { ViewsIdentifiers.Tracking.trackingStartedLabel }
         static var trackingStoppedLabel: String { ViewsIdentifiers.Tracking.trackingStoppedLabel }
-        static var deleteTrackingDataButton: String { ViewsIdentifiers.Tracking.deleteTrackingDataButton }
         static var imageAnnotationView: String { ViewsIdentifiers.General.imageAnnotationView }
+        
+        static var startTrackingSimulationButton: String { ViewsIdentifiers.Tracking.startTrackingSimulationButton }
+        static var trackingSimulationStartedLabel: String { ViewsIdentifiers.Tracking.trackingSimulationStartedLabel }
     }
     
     enum Constants {
@@ -33,20 +34,13 @@ struct UITestTrackingScreen: UITestScreen {
         static let geofenceEntered = "\(StringConstant.tracker) \(StringConstant.entered)"
         static let geofenceExited = "\(StringConstant.tracker) \(StringConstant.exited)"
     }
-    
-    func waitForAWSConnectionScreen() -> UITestAWSScreen {
-        let label = app.otherElements[Identifiers.awsConnectTitleLabel].firstMatch
-        XCTAssertFalse(label.waitForExistence(timeout: UITestWaitTime.regular.time))
-        
-        return UITestAWSScreen(app: app)
-    }
-    
-    func tapEnableTrackingButton() -> Self {
-        let enableTrackingButton = app.buttons.matching(identifier: Identifiers.enableTrackingButton).element
+
+    func tapStartTrackingSimulationButton() -> Self {
+        let enableTrackingButton = app.buttons.matching(identifier: Identifiers.startTrackingSimulationButton).element
           
           XCTAssertTrue(enableTrackingButton.waitForExistence(timeout: UITestWaitTime.regular.time))
         enableTrackingButton.tap()
-          return self
+        return self
     }
     
     func continueTrackingAlert() -> Self {
@@ -75,6 +69,14 @@ struct UITestTrackingScreen: UITestScreen {
         return self
     }
     
+    func tapTrackingPointsExpandButton() -> Self {
+        let trackingActionButton = app.buttons.matching(identifier: Identifiers.trackingPointsExpandButton).element
+          
+        XCTAssertTrue(trackingActionButton.waitForExistence(timeout: UITestWaitTime.regular.time))
+        trackingActionButton.tap()
+        return self
+    }
+    
     func verifyTrackingStartedLabel() -> Self {
         let label = app.staticTexts[Identifiers.trackingStartedLabel]
         XCTAssertTrue(label.waitForExistence(timeout: UITestWaitTime.regular.time))
@@ -87,19 +89,9 @@ struct UITestTrackingScreen: UITestScreen {
         return self
     }
     
-    func verifyTrackingHistoryStarted() -> Self {
-        let table = app.tables[Identifiers.trackingHistoryTableView]
-        XCTAssertTrue(table.waitForExistence(timeout: UITestWaitTime.regular.time))
-        let cell = table.cells.firstMatch
-        XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.long.time))
-        return self
-    }
-    
-    func verifyTrackingHistoryDeleted() -> Self {
-        let table = app.tables[Identifiers.trackingHistoryTableView]
-        XCTAssertTrue(table.waitForExistence(timeout: UITestWaitTime.regular.time))
-        let cellCount = table.cells.count
-        XCTAssertEqual(cellCount, 0)
+    func verifyTrackingPoints() -> Self {
+        let table = app.tables[Identifiers.trackingPointsTableView]
+        XCTAssertGreaterThan(table.cells.count, 0, "Tracking points list should have at least one row")
         return self
     }
     
@@ -109,37 +101,6 @@ struct UITestTrackingScreen: UITestScreen {
         XCTAssertTrue(view.waitForExistence(timeout: UITestWaitTime.regular.time))
         view.tap()
         Thread.sleep(forTimeInterval: 1)
-        return self
-    }
-    
-    func tapDeleteTrackingDataButton() -> Self {
-        let deleteTrackingDataButton = app.buttons.matching(identifier: Identifiers.deleteTrackingDataButton).element
-         
-        XCTAssertTrue(deleteTrackingDataButton.waitForExistence(timeout: UITestWaitTime.regular.time))
-        deleteTrackingDataButton.tap()
-        return self
-    }
-    
-    func verifyTrackingAnnotations() -> Self {
-        let annotationImage = app.descendants(matching: .any).matching(identifier: Identifiers.imageAnnotationView).firstMatch
-        if(annotationImage.waitForExistence(timeout: UITestWaitTime.long.time)) {
-            XCTAssertTrue(true, "Tracking points found")
-        }
-        else {
-            let alert = app.alerts.element
-            if(alert.waitForExistence(timeout: UITestWaitTime.long.time)){
-                alert.buttons.firstMatch.tap()
-                if(annotationImage.waitForExistence(timeout: UITestWaitTime.long.time)) {
-                    XCTAssertTrue(true, "Tracking points found")
-                }
-                else {
-                    _ = verifyTrackingHistoryStarted()
-                }
-            }
-            else {
-                _ = verifyTrackingHistoryStarted()
-            }
-        }
         return self
     }
     
@@ -163,4 +124,28 @@ struct UITestTrackingScreen: UITestScreen {
         return self
     }
     
+    func waitForTrackingPoints() -> Self {
+        let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "bus_route")
+        let annotationImage = app.descendants(matching: .any).matching(predicate).element
+        if(annotationImage.waitForExistence(timeout: UITestWaitTime.long.time)) {
+            XCTAssertTrue(true, "Tracking points found")
+        }
+        else {
+            XCTFail("Tracking points not found")
+        }
+        return self
+    }
+    
+    func verifyTrackingSimulationStartedLabel() -> Self {
+        let label = app.staticTexts[Identifiers.trackingStartedLabel]
+        XCTAssertTrue(label.waitForExistence(timeout: UITestWaitTime.regular.time))
+        return self
+    }
+    
+    func waitForTrackingSimulation() -> UITestAWSScreen {
+        let label = XCUIApplication().staticTexts[Identifiers.trackingStoppedLabel]
+        XCTAssertEqual(label.label, StringConstant.Tracking.noTracking)
+        
+        return UITestAWSScreen(app: app)
+    }
 }
