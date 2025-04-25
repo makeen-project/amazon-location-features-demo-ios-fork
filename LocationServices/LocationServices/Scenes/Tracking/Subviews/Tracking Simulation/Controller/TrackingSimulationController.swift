@@ -284,7 +284,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         // Set the map view to show all routes
         let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
         DispatchQueue.main.async {
-            self.trackingVC?.trackingMapView.commonMapView.mapView.automaticallyAdjustsContentInset = true
             self.trackingVC?.trackingMapView.commonMapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {
                 self.forceRefreshAnnotations()
             })
@@ -705,7 +704,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 self.routeToggles.first?.changeState()
             }
             self.clearGeofences()
-            self.fitMapToRoute()
             Task {
                 await self.fetchGeoFences()
                 self.drawGeofences()
@@ -713,6 +711,10 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             self.drawTrackingRoutes(fillCovered: fillCovered)
             //Start tracking
             self.simulateTrackingRoutes()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.fitMapToRoute()
+            }
         }
     }
     

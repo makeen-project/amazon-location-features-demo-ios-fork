@@ -70,7 +70,7 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
             controller.dismissBottomSheet()
-            self?.currentBottomSheet?.updateBottomSheetHeight(to: controller.getMediumDetentHeight())
+            self?.currentBottomSheet?.updateBottomSheetHeight(to: controller.getSmallDetentHeight())
             NotificationCenter.default.post(name: Notification.trackingMapStyleDimissed, object: nil, userInfo: nil)
             NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
         }
