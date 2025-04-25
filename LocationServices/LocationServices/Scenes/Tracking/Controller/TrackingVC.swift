@@ -220,12 +220,12 @@ final class TrackingVC: UIViewController {
         
         trackingHeaderView.snp.makeConstraints {
             if isiPad {
-                $0.top.equalTo(view.safeAreaLayoutGuide).offset(70)
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(80)
                 $0.width.equalTo(350)
                 $0.centerX.equalToSuperview()
             }
             else {
-                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(80)
                 $0.leading.equalToSuperview().offset(16)
                 $0.trailing.equalToSuperview().offset(-16)
             }

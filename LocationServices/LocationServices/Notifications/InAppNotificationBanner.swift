@@ -74,13 +74,7 @@ class InAppNotificationBanner: UIView {
             view.addSubview(self)
 
             self.snp.makeConstraints {
-                $0.leading.equalToSuperview().inset(16)
-                if self.isiPad {
-                    $0.trailing.equalToSuperview().offset(-70)
-                }
-                else {
-                    $0.trailing.equalToSuperview().offset(-90)
-                }
+                $0.leading.trailing.equalToSuperview().inset(16)
                 $0.top.equalTo(view.safeAreaLayoutGuide).offset(-125)
             }
 
