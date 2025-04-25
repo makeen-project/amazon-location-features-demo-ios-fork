@@ -319,7 +319,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func refreshTrackingSimulation() {
-        self.startTracking(fillCovered: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.startTracking(fillCovered: true)
+        }
     }
     
     func updateButtonStyle(state: Bool) {
@@ -365,6 +367,19 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     @objc func dismissTrackingSimulation() {
         if isTrackingActive {
             startTracking()
+        }
+        DispatchQueue.main.async {
+            for routeToggle in self.routeToggles {
+                routeToggle.setState(isOn: false)
+            }
+            if let routesStatus = self.viewModel?.routesStatus {
+                for routeStatus in routesStatus {
+                    self.viewModel.routesStatus[routeStatus.key]?.isActive = false
+                    self.viewModel.routesStatus[routeStatus.key]?.simulateIndex = 0
+                    self.viewModel.routesStatus[routeStatus.key]?.geofenceIndex = 1
+                    self.viewModel.routesStatus[routeStatus.key]?.timer?.invalidate()
+                }
+            }
         }
         trackingVC?.trackingMapView.commonMapView.removeAllAnnotations()
         DispatchQueue.main.async {
