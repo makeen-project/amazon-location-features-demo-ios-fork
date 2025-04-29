@@ -752,13 +752,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
            let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
             
             let coordinates = convertToCoordinates(from: routesData.coordinates)
-            if var simulateIndex = self.viewModel.routesStatus[id]?.simulateIndex {
-                if simulateIndex >= coordinates.count {
-                    simulateIndex = simulateIndex - 1
-                }
-                self.viewModel.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[simulateIndex])
-            }
-            
             // Move the annotation along the route every second
             viewModel.routesStatus[id]?.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
                 DispatchQueue.main.async {
@@ -856,6 +849,14 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         if let id = routeToggle.id, (routeToggle.getState() == true && !viewModel.routesStatus[id]!.isActive) {
             if let routesData = viewModel.busRoutes.first(where: { $0.id == id }) {
                 let coordinates = convertToCoordinates(from: routesData.coordinates)
+
+                if var simulateIndex = self.viewModel.routesStatus[id]?.simulateIndex {
+                    if simulateIndex >= coordinates.count {
+                        simulateIndex = simulateIndex - 1
+                    }
+                    self.viewModel.routesStatus[id]!.busAnnotation = trackingVC!.trackingMapView.addRouteBusAnnotation(id: id, coordinate: coordinates[simulateIndex])
+                }
+                
                 trackingVC?.viewModel.drawTrackingRoute(routeId: id, coordinates: coordinates)
                 viewModel.routesStatus[id]?.isActive = true
                 // filling out the previous tracking points
