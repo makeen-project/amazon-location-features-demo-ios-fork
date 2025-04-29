@@ -246,7 +246,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         trackingVC?.trackingMapView.commonMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: 49.27046144661014, longitude: -123.13319444634126), zoomLevel: 12, animated: false)
         trackingVC?.trackingMapView.commonMapView.mapView.allowsScrolling = false
         trackingVC?.trackingMapView.commonMapView.mapView.allowsRotating = false
-        trackingVC?.trackingMapView.commonMapView.mapView.allowsZooming = false
+        trackingVC?.trackingMapView.commonMapView.mapView.allowsZooming = true
         trackingVC?.trackingMapView.commonMapView.mapView.allowsTilting = false
     }
     
@@ -319,7 +319,13 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     @objc func refreshTrackingSimulation() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.startTracking(fillCovered: true)
+            if self.shouldResumeTracking {
+                self.startTracking(fillCovered: true)
+            }
+            else {
+                self.drawTracksandGeofences(fillCovered: true)
+            }
+            self.shouldResumeTracking = false
         }
     }
     
@@ -346,9 +352,15 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         scrollView.delegate = self
     }
     
+    var shouldResumeTracking: Bool = false
+    
     @objc func trackingMapStyleAppearing() {
         if isTrackingActive {
             startTracking()
+            shouldResumeTracking = true
+        }
+        else {
+            shouldResumeTracking = false
         }
         trackingVC?.trackingMapView.commonMapView.removeGeofenceAnnotations()
         for routeToggle in routeToggles {
@@ -699,16 +711,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             }
             
             self.trackingVC?.viewModel.startIoTSubscription()
-            let count = self.routeToggles.count(where: { $0.getState()})
-            if count == 0 {
-                self.routeToggles.first?.changeState()
-            }
-            self.clearGeofences()
-            Task {
-                await self.fetchGeoFences()
-                self.drawGeofences()
-            }
-            self.drawTrackingRoutes(fillCovered: fillCovered)
+            self.drawTracksandGeofences(fillCovered: fillCovered)
             //Start tracking
             self.simulateTrackingRoutes()
 
@@ -716,6 +719,19 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 self.fitMapToRoute()
             }
         }
+    }
+    
+    func drawTracksandGeofences(fillCovered: Bool = false) {
+        let count = self.routeToggles.count(where: { $0.getState()})
+        if count == 0 {
+            self.routeToggles.first?.changeState()
+        }
+        self.clearGeofences()
+        Task {
+            await self.fetchGeoFences()
+            self.drawGeofences()
+        }
+        self.drawTrackingRoutes(fillCovered: fillCovered)
     }
     
     func convertToCoordinates(from array: [[Double]]) -> [CLLocationCoordinate2D] {
