@@ -285,7 +285,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
         DispatchQueue.main.async {
             self.trackingVC?.trackingMapView.commonMapView.mapView.setVisibleCoordinateBounds(bounds, edgePadding: edgePadding, animated: true, completionHandler: {
-                self.forceRefreshAnnotations()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.forceRefreshAnnotations()
+                }
             })
 
         }
