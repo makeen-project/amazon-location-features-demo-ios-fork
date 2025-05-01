@@ -194,10 +194,18 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     var viewModel: TrackingViewModelProtocol!
     
     private var routeToggles: [RouteToggleView] = []
-    var isTrackingActive: Bool = false
+    //var isTrackingActive: Bool = false
     
     var routeToggleState: Bool = false
     var trackingToggleState: Bool = false
+    
+    func isTrackingActive() -> Bool {
+        return UserDefaultsHelper.get(for: Bool.self, key: .isTrackingActive) ?? false
+    }
+    
+    func setTrackingActive(_ state: Bool) {
+        return UserDefaultsHelper.save(value: state, key: .isTrackingActive)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -208,13 +216,14 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.post(name: Notification.resetMapLayerItems, object: nil, userInfo: nil)
-        if isTrackingActive {
-            startTracking()
+        if isTrackingActive() {
+            stopTracking()
         }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        removeNotifications()
         trackingAppearanceChanged(isVisible: false)
     }
     
@@ -300,11 +309,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             self.trackingVC?.trackingMapView.commonMapView.mapView.setCenter(center, animated: false)
         }
     }
-
-    
-    override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear")
-    }
     
     @objc private func updateButtonStyle(_ notification: Notification) {
         let state = (notification.userInfo?["state"] as? Bool) ?? false
@@ -318,9 +322,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     @objc func trackingOptionExpand() {
         toggleTrackingOption()
     }
-    
+
     @objc func refreshTrackingSimulation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.async {
             if self.shouldResumeTracking {
                 self.startTracking(fillCovered: true)
             }
@@ -342,9 +346,20 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         NotificationCenter.default.addObserver(self, selector: #selector(trackingMapStyleAppearing), name: Notification.trackingMapStyleAppearing, object: nil)
     }
     
+    private func removeNotifications() {
+        NotificationCenter.default.removeObserver(self, name: Notification.trackingMapStyleDimissed, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.dismissTrackingSimulation, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.trackingMapStyleAppearing, object: nil)
+    }
+    
     private func setupHandlers() {
         headerView.trackingButtonHandler = { state in
-            self.startTracking()
+            if !self.isTrackingActive() {
+                self.startTracking()
+            }
+            else {
+                self.stopTracking()
+            }
         }
         
         headerView.showAlertCallback = showAlert(_:)
@@ -357,8 +372,8 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     var shouldResumeTracking: Bool = false
     
     @objc func trackingMapStyleAppearing() {
-        if isTrackingActive {
-            startTracking()
+        if isTrackingActive() {
+            stopTracking()
             shouldResumeTracking = true
         }
         else {
@@ -378,8 +393,8 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     @objc func dismissTrackingSimulation() {
-        if isTrackingActive {
-            startTracking()
+        if isTrackingActive() {
+            stopTracking()
         }
         DispatchQueue.main.async {
             for routeToggle in self.routeToggles {
@@ -393,6 +408,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                     self.viewModel.routesStatus[routeStatus.key]?.timer?.invalidate()
                 }
             }
+            self.removeNotifications()
         }
         trackingVC?.trackingMapView.commonMapView.removeAllAnnotations()
         DispatchQueue.main.async {
@@ -516,7 +532,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func adjustTableViewHeight() {
         tableContentHeight = trackingToggleState ?  (getActiveRouteCoordinates().count * Int(Constants.trackingRowHeight) + 20): 0
         trackingContainerHeight = trackingToggleState ?  (tableContentHeight + 20 + Constants.collapsedTrackingHeight): Constants.collapsedTrackingHeight
-        print("tableView height: \(tableContentHeight)")
         tableView.snp.updateConstraints {
             $0.height.equalTo(tableContentHeight)
         }
@@ -531,7 +546,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func updateScrollViewContentSize() {
         let scrollHeight: CGFloat = CGFloat(trackingContainerHeight + (routeToggleState ? Constants.expandedRouteHeight : Constants.collapsedRouteHeight))
         let totalContentHeight = scrollHeight+100
-        print("totalContentHeight: \(totalContentHeight)")
         scrollViewContentView.snp.updateConstraints {
             $0.height.equalTo(totalContentHeight)
         }
@@ -646,7 +660,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     func setChangeMenu() {
         let menuItems = viewModel.busRoutes.map { route in
             UIAction(title: route.name) { _ in
-                print("Selected route: \(route.name)")
                 self.setTrackingHeaders(route: route)
             }
         }
@@ -702,16 +715,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func startTracking(fillCovered: Bool = false) {
-        DispatchQueue.main.async {
-            self.isTrackingActive.toggle()
-            
-            
-            self.updateButtonStyle(state: self.isTrackingActive)
-            if !self.isTrackingActive {
-                self.trackingVC?.viewModel.stopIoTSubscription()
-                return
-            }
-            
+            self.setTrackingActive(true)
+            self.updateButtonStyle(state: self.isTrackingActive())
+
             self.trackingVC?.viewModel.startIoTSubscription()
             self.drawTracksandGeofences(fillCovered: fillCovered)
             //Start tracking
@@ -720,6 +726,13 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.fitMapToRoute()
             }
+    }
+    
+    func stopTracking() {
+        DispatchQueue.main.async {
+            self.setTrackingActive(false)
+            self.updateButtonStyle(state: self.isTrackingActive())
+            self.trackingVC?.viewModel.stopIoTSubscription()
         }
     }
     
@@ -757,7 +770,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             // Move the annotation along the route every second
             viewModel.routesStatus[id]?.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
                 DispatchQueue.main.async {
-                    if !self.isTrackingActive || routeToggle.getState() == false {
+                    if !self.isTrackingActive() || routeToggle.getState() == false {
                         timer.invalidate()
                         return
                     }
@@ -778,9 +791,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                         if let simulateIndex = self.viewModel.routesStatus[id]?.simulateIndex {
                             //Change bus annotation's coordinates for route
                             self.viewModel.routesStatus[id]!.busAnnotation!.coordinate = coordinates[self.viewModel.routesStatus[id]!.simulateIndex]
-                            
-                            print("+++++++++route id: \(id)++++++++++")
-                            print("+++++++++bus annotation coordinate: \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.latitude), \(self.viewModel.routesStatus[id]!.busAnnotation!.coordinate.longitude)++++++++++")
                             
                             if simulateIndex > 0 {
                                 //Updating in between stops color
@@ -865,7 +875,6 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                 if fillCovered {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         for i in 0..<self.viewModel.routesStatus[id]!.simulateIndex {
-                            print("+++++++++ simulateIndex: \(i) route id: \(id)++++++++++")
                             if i > 0 {
                                 //Updating in between stops color
                                 let coordinates = [coordinates[i-1], coordinates[i]]

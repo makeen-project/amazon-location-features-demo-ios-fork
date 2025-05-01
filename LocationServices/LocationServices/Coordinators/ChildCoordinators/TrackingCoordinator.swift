@@ -71,12 +71,16 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         controller.dismissHandler = { [weak self] in
             controller.dismissBottomSheet()
             self?.currentBottomSheet?.updateBottomSheetHeight(to: controller.getSmallDetentHeight())
-            NotificationCenter.default.post(name: Notification.trackingMapStyleDimissed, object: nil, userInfo: nil)
-            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: Notification.trackingMapStyleDimissed, object: nil, userInfo: nil)
+                NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            }
         }
-        NotificationCenter.default.post(name: Notification.trackingMapStyleAppearing, object: nil, userInfo: nil)
-        controller.presentBottomSheet(parentController: trackingController!)
-        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.9))
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.trackingMapStyleAppearing, object: nil, userInfo: nil)
+            controller.presentBottomSheet(parentController: self.trackingController!)
+            controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.9))
+        }
     }
     
     func showAttribution() {

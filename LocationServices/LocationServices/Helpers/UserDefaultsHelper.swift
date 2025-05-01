@@ -41,6 +41,8 @@ enum UserDefaultKeyType: String {
     // if app is in navigation mode
     case isNavigationMode
     case navigationRoute
+    
+    case isTrackingActive
 }
 
 enum AppState: Int {

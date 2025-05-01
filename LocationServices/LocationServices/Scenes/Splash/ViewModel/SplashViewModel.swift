@@ -17,6 +17,7 @@ final class SplashViewModel: SplashViewModelProtocol {
     func setupDefaults() {
         UserDefaultsHelper.removeObject(for: .navigationRoute)
         UserDefaultsHelper.removeObject(for: .isNavigationMode)
+        UserDefaultsHelper.removeObject(for: .isTrackingActive)
     }
     
     func setupAWS() {
