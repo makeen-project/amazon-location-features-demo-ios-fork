@@ -27,25 +27,13 @@ final class SplashViewModel: SplashViewModelProtocol {
     }
     
     func setupAWSConfiguration() async throws {
-        let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
-        guard let customConfiguration else {
-            try await setupValidAWSConfiguration()
-            return
-        }
-        
-        let isValid = try await CognitoAuthHelper.validate(identityPoolId: customConfiguration.identityPoolId)
-        
-        if !isValid {
-                UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
-                // remove custom configuration
-                UserDefaultsHelper.removeObject(for: .awsConnect)
-                
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Notification.wasResetToDefaultConfig, object: self)
+        if let regions = (Bundle.main.object(forInfoDictionaryKey: "AWSRegions") as? String)?.components(separatedBy: ",") {
+            RegionSelector.shared.setClosestRegion(apiRegions: regions) { [self]_ in 
+                Task {
+                    try await setupValidAWSConfiguration()
                 }
+            }
         }
-        
-        try await self.setupValidAWSConfiguration()
     }
     
     private func setupValidAWSConfiguration() async throws {
@@ -54,17 +42,6 @@ final class SplashViewModel: SplashViewModelProtocol {
             setupCompleted()
             return
         }
-
-        // Here we connected and should set appropriate flags for it
-        // possible connection states:
-        // awsConnected - we are connected to default AWS configuration.
-        // awsCustomConnected - we are connected to custom AWS configuration.
-        
-        if let isCustomConnection = UserDefaultsHelper.get(for: Bool.self, key: .awsCustomConnect), isCustomConnection == true {
-            UserDefaultsHelper.save(value: true, key: .awsCustomConnected)
-            UserDefaultsHelper.removeObject(for: .awsCustomConnect)
-        }
-        
         try await initializeMobileClient(configurationModel: configurationModel)
     }
     

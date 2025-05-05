@@ -8,10 +8,6 @@
 import Foundation
 
 enum UserDefaultKeyType: String {
-    case userInitial
-    // we keep UserDataModel there
-    case awsConnect
-    case showSignInOnAppStart
     case unitType
     case mapStyle
     case mapStyleColorType
@@ -24,12 +20,6 @@ enum UserDefaultKeyType: String {
     case dirtRoadsOptions
     // means we attach the policy to AWSLocation for tracking
     case attachedPolicy
-    // use when we are going to connect via CF form
-    case awsCustomConnect
-    // use when we are connected to custom settings via CF form
-    case awsCustomConnected
-    // use when we connect via CF form from settings, thus we don't need to open sign-in automatically.
-    case awsCustomConnectFromSettings
     
     // states of the application:
     case appState
@@ -43,6 +33,8 @@ enum UserDefaultKeyType: String {
     case navigationRoute
     
     case isTrackingActive
+    
+    case fastestRegion
 }
 
 enum AppState: Int {

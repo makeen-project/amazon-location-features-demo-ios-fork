@@ -325,6 +325,7 @@
 		F18E2D412DAD220E00A34D67 /* InAppNotificationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D3F2DAD220E00A34D67 /* InAppNotificationBanner.swift */; };
 		F18E2D432DB267DE00A34D67 /* TrackingRouteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D422DB267D600A34D67 /* TrackingRouteHeaderView.swift */; };
 		F18E2D452DB2686500A34D67 /* RouteToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D442DB2685D00A34D67 /* RouteToggleView.swift */; };
+		F18E2D472DC4D42E00A34D67 /* RegionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D462DC4D42800A34D67 /* RegionSelector.swift */; };
 		F18FFB4E2D48EF7900573B54 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = F18FFB4D2D48EF7900573B54 /* Polyline */; };
 		F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */; };
 		F1A306BE2D3023E300B16126 /* ArrivalCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */; };
@@ -712,6 +713,7 @@
 		F18E2D3F2DAD220E00A34D67 /* InAppNotificationBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppNotificationBanner.swift; sourceTree = "<group>"; };
 		F18E2D422DB267D600A34D67 /* TrackingRouteHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingRouteHeaderView.swift; sourceTree = "<group>"; };
 		F18E2D442DB2685D00A34D67 /* RouteToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteToggleView.swift; sourceTree = "<group>"; };
+		F18E2D462DC4D42800A34D67 /* RegionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionSelector.swift; sourceTree = "<group>"; };
 		F1A306B62D2FFD4D00B16126 /* ArrivalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardView.swift; sourceTree = "<group>"; };
 		F1A306BD2D3023DA00B16126 /* ArrivalCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardVC.swift; sourceTree = "<group>"; };
 		F1A306BF2D3023EA00B16126 /* ArrivalCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalCardViewModel.swift; sourceTree = "<group>"; };
@@ -1184,6 +1186,7 @@
 		AD16A42029357F2B006AEA8E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				F18E2D462DC4D42800A34D67 /* RegionSelector.swift */,
 				F1AD36F92CCBABC700E1BB7B /* AuthHelpers */,
 				AD16A42129357F38006AEA8E /* UserDefaultsHelper.swift */,
 				F1FAC8682D784D03000238C4 /* JsonHelper.swift */,
@@ -2869,6 +2872,7 @@
 				F10625742D89D75900312572 /* TrackingSimulationCell.swift in Sources */,
 				8A439EFB29BB968800B59D0B /* AttributionVCBuilder.swift in Sources */,
 				ADD13962298088380003F917 /* AmazonCustomSelectableView.swift in Sources */,
+				F18E2D472DC4D42E00A34D67 /* RegionSelector.swift in Sources */,
 				ADABECD9293FD65B00E66FC5 /* AppConstants.swift in Sources */,
 				8AEFDDC72A262F5300090D9E /* GradientView.swift in Sources */,
 				F11E04632CD516DD003F1641 /* KeyChainHelper.swift in Sources */,
