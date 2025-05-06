@@ -78,7 +78,6 @@ final class SplitViewCoordinator: Coordinator {
         
         let coordinator = SplitViewExploreMapCoordinator(splitViewController: splitViewController)
         coordinator.geofenceHandler = { [weak self] in
-            //TO DO: Need to show tracking simulation
             self?.showNextScene(type: .tracking)
         }
         coordinator.splitDelegate = self
