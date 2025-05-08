@@ -16,9 +16,9 @@ final class TrackingHistoryVC: UIViewController {
     }
     
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
-    private(set) lazy var headerView: TrackingHistoryHeaderView = {
+    private(set) lazy var headerView: TrackingRouteHeaderView = {
         let titleTopOffset: CGFloat = isiPad ? Constants.titleOffsetiPad : Constants.titleOffsetiPhone
-        return TrackingHistoryHeaderView(titleTopOffset: titleTopOffset)
+        return TrackingRouteHeaderView(titleTopOffset: titleTopOffset)
     }()
     private let noInternetConnectionView = NoInternetConnectionView()
     

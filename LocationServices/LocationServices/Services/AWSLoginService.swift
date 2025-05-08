@@ -22,7 +22,7 @@ protocol AWSLoginServiceProtocol {
     func logout(skipPolicy: Bool)
     func validate(identityPoolId: String) async throws -> Bool
     func disconnectAWS()
-    func getAWSConfigurationModel() -> CustomConnectionModel?
+    //func getAWSConfigurationModel() -> CustomConnectionModel?
 }
 
 protocol AWSLoginServiceOutputProtocol {
@@ -261,22 +261,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         UserDefaultsHelper.setAppState(state: .initial)
     }
     
-    
-    func getAWSConfigurationModel() -> CustomConnectionModel? {
-        var defaultConfiguration: CustomConnectionModel? = nil
-        // default configuration
-        if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String,
-           let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") as? String,
-           let region = Bundle.main.object(forInfoDictionaryKey: "AWSRegion") as? String{
-            defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, userPoolClientId: "", userPoolId: "", userDomain: "", webSocketUrl: "", apiKey: apiKey, region: region)
-        }
-
-        // custom configuration
-        let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
-        
-        return customConfiguration ?? defaultConfiguration
-    }
-    
     func attachPolicy(cognitoCredentials: CognitoCredentials) async throws {
         do {
             guard let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect) else { return }
@@ -306,7 +290,6 @@ final class AWSLoginService: NSObject, AWSLoginServiceProtocol, ASWebAuthenticat
         UserDefaultsHelper.save(value: false, key: .attachedPolicy)
         print("Detached policy successully...")
     }
-   
     
     func validate(identityPoolId: String) async throws -> Bool {
         do {

@@ -9,13 +9,12 @@ import UIKit
 import SnapKit
 
 enum SideBarCellType {
-    case explore, tracking, geofence, settings, about
+    case explore, tracking, settings, about
     
     var title: String {
         switch self {
         case .explore: return StringConstant.TabBar.explore
         case .tracking: return StringConstant.TabBar.tracking
-        case .geofence: return StringConstant.TabBar.geofence
         case .settings: return StringConstant.TabBar.settings
         case .about: return StringConstant.TabBar.about
         }
@@ -25,7 +24,6 @@ enum SideBarCellType {
         switch self {
         case .explore: return UIImage.exploreIcon
         case .tracking: return UIImage.trackingIcon
-        case .geofence: return UIImage.geofenceIcon
         case .settings: return UIImage.settingsIcon
         case .about: return UIImage.about
         }
@@ -45,7 +43,6 @@ enum SideBarCellType {
         switch self {
         case .explore: return ViewsIdentifiers.General.exploreTabBarButton
         case .tracking: return ViewsIdentifiers.General.trackingTabBarButton
-        case .geofence: return ViewsIdentifiers.General.geofenceTabBarButton
         case .settings: return ViewsIdentifiers.General.settingsTabBarButton
         case .about: return ViewsIdentifiers.General.aboutTabBarButton
         }

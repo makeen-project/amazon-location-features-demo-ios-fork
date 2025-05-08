@@ -199,6 +199,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
         } else {
             isSearching = true
             filteredPoliticalViews = PoliticalViewTypes.filter {
+                $0.countryCode.lowercased().contains(query.lowercased()) ||
                 $0.fullName.lowercased().contains(query.lowercased()) ||
                 $0.politicalDescription.lowercased().contains(query.lowercased())
             }

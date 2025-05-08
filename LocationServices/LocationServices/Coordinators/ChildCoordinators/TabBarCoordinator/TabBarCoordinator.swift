@@ -51,7 +51,7 @@ private extension TabBarCoordinator {
 
 private extension TabBarCoordinator {
     func getAllPages() -> [UINavigationController] {
-        let allPages: [TabBarPage] = [.explore, .tracking, .geofence, .settings, .about]
+        let allPages: [TabBarPage] = [.explore, .tracking, .settings, .about]
         return allPages.map { getTabBarController($0) }
     }
 
@@ -65,7 +65,6 @@ private extension TabBarCoordinator {
         switch page {
         case .explore: startExploreScene(navigationController)
         case .tracking: startTrackingScene(navigationController)
-        case .geofence: startGeofenceScene(navigationController)
         case .about: startAboutScene(navigationController)
         case .settings: startSettingsScene(navigationController)
         }
@@ -77,7 +76,7 @@ private extension TabBarCoordinator {
         let exploreCoordinator = ExploreCoordinator(navigationController: navigationController)
         exploreCoordinator.delegate = self
         exploreCoordinator.geofenceHandler = {
-            self.tabBarController.selectedIndex = TabBarPage.geofence.pageOrder
+            self.tabBarController.selectedIndex = TabBarPage.tracking.pageOrder
         }
         childCoordinators.append(exploreCoordinator)
         exploreCoordinator.start()
@@ -87,7 +86,7 @@ private extension TabBarCoordinator {
         let exploreCoordinator = TrackingCoordinator(navigationController: navigationController)
         exploreCoordinator.delegate = self
         exploreCoordinator.didSendEventClosure = {
-            self.tabBarController.selectedIndex = TabBarPage.geofence.pageOrder
+            self.tabBarController.selectedIndex = TabBarPage.tracking.pageOrder
         }
         
         exploreCoordinator.didSendDirectionEvent = {

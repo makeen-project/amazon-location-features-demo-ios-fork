@@ -30,7 +30,6 @@ final class TrackingCoordinator: Coordinator {
 }
 
 extension TrackingCoordinator: TrackingNavigationDelegate {
- 
     func dismissCurrentScene() {
         self.navigationController.dismiss(animated: true)
     }
@@ -39,27 +38,43 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         showDashboardFlow()
     }
     
-    func showDashboardFlow() {
-        let controller = TrackingDashboardBuilder.create()
-        controller.delegate = self
-        controller.trackingHistoryHandler = { [weak self] in
-            self?.showTrackingHistory(isTrackingActive: true)
-        }
-        currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: trackingController!)
-        controller.enableBottomSheetGrab(smallHeight: 0.48)
-        currentBottomSheet = controller
-    }
+//    func showDashboardFlow1() {
+//        currentBottomSheet?.dismissBottomSheet()
+//        let controller = TrackingDashboardBuilder.create()
+//        controller.delegate = self
+//        controller.trackingSimulationHandler = { [weak self] in
+//            self?.showTrackingSimulationScene()
+//        }
+//        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+//        controller.enableBottomSheetGrab(smallHeight: 0.48)
+//        currentBottomSheet = controller
+//    }
     
-    func showTrackingHistory(isTrackingActive: Bool = false) {
-        let controller = TrackingHistoryBuilder.create(isTrackingActive: isTrackingActive)
+    func showDashboardFlow() {
         currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: trackingController!)
-        controller.enableBottomSheetGrab(smallHeight: 0.14)
+        let controller = TrackingSimulationIntroBuilder.create()
+        controller.delegate = self
+        controller.trackingSimulationHandler = { [weak self] in
+            self?.showRouteTrackingScene()
+        }
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.90))
         currentBottomSheet = controller
         
-        // Starting tracking by default when tapping on Enable tracking button
-        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": isTrackingActive])
+        controller.dismissHandler = { [weak self] in
+            self?.currentBottomSheet?.dismissBottomSheet()
+        }
+    }
+    
+    func showRouteTrackingScene() {
+        let controller = TrackingSimulationBuilder.create()
+        controller.trackingVC = trackingController
+        controller.viewModel = trackingController?.viewModel
+        currentBottomSheet?.dismissBottomSheet()
+        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
+        controller.enableBottomSheetGrab(smallHeight: 0.27, mediumHeight: 0.50, largeHeight: 0.90)
+        controller.updateBottomSheetHeight(to: controller.getSmallDetentHeight())
+        currentBottomSheet = controller
     }
     
     func showMapStyleScene() {
@@ -67,66 +82,13 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
             self?.currentBottomSheet?.dismissBottomSheet()
-            if(self?.trackingController?.viewModel.isTrackingActive == true){
-                self?.showTrackingHistory(isTrackingActive: true)
-            }
-            else { self?.showDashboardFlow() }
-            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            self?.showDashboardFlow()
+            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
         }
         currentBottomSheet?.dismissBottomSheet()
         controller.presentBottomSheet(parentController: trackingController!)
         controller.setBottomSheetHeight(to: controller.getLargeDetentHeight())
         currentBottomSheet = controller
-    }
-    
-    func showLoginFlow() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = navigationController
-        
-        let controller = LoginVCBuilder.create()
-        controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
-            let height:CGFloat = 8
-            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
-        }
-        
-        controller.postLoginHandler = { [weak self] in
-            self?.showLoginSuccess()
-        }
-        let height:CGFloat = 8
-        NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
-        controller.modalPresentationStyle = .pageSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.selectedDetentIdentifier = .large
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-        }
-        navigationController.present(controller, animated: true)
-    }
-    
-    func showLoginSuccess() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = navigationController
-        
-        navigationController.dismiss(animated: true) { [weak self] in
-            let controller = PostLoginBuilder.create()
-            controller.dismissHandler = { [weak self] in
-                self?.navigationController.dismiss(animated: true)
-                let height:CGFloat = 8
-                NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
-            }
-            let height:CGFloat = 8
-            NotificationCenter.default.post(name: Notification.updateMapLayerItems, object: nil, userInfo: ["height": height])
-            controller.modalPresentationStyle = .pageSheet
-
-            if let sheet = controller.sheetPresentationController {
-                sheet.detents = [.large()]
-                sheet.selectedDetentIdentifier = .large
-                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-            }
-            self?.navigationController.present(controller, animated: true)
-        }
     }
     
     func showAttribution() {

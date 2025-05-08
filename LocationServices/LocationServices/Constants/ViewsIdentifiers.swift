@@ -16,11 +16,10 @@ struct ViewsIdentifiers {
         static let welcomeContinueButton = "WelcomeContinueButton"
         static let userLocationAnnotation = "UserLocationAnnotation"
         static let locateMeButton = "LocateMeButton"
-        static let exploreTabBarButton = "Explore"
+        static let exploreTabBarButton = "Navigate"
         static let settingsTabBarButton = "Settings"
         static let trackingTabBarButton = "Tracking"
-        static let geofenceTabBarButton = "Geofence"
-        static let aboutTabBarButton = "About"
+        static let aboutTabBarButton = "More"
         static let sideBarButton = "SideBarButton"
         static let fullScreenButton = "FullScreenButton"
         static let mapStyles = "MapStyles"
@@ -124,7 +123,6 @@ struct ViewsIdentifiers {
     
     struct Settings {
         static let routeOptionCell = StringConstant.defaultRouteOptions
-        static let awsCloudCell = StringConstant.connectYourAWSAccount
         static let dataProviderCell = StringConstant.dataProvider
         static let mapStyleCell = StringConstant.mapStyle
     }

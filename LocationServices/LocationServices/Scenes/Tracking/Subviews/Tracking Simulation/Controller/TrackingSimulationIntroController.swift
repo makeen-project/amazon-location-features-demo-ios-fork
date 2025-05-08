@@ -1,5 +1,5 @@
 //
-//  TrackingDashboard.swift
+//  TrackingSimulationIntroController.swift
 //  LocationServices
 //
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -8,20 +8,14 @@
 import UIKit
 import SnapKit
 
-final class TrackingDashboardController: UIViewController {
+final class TrackingSimulationIntroController: UIViewController {
     
     weak var delegate: TrackingNavigationDelegate?
-    var trackingHistoryHandler: VoidHandler?
+    var trackingSimulationHandler: VoidHandler?
+    var dismissHandler: VoidHandler?
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
-    private var dashboardView = CommonDashboardView(
-        title: StringConstant.enableTracking,
-        detail: StringConstant.enableTrackingDescription,
-        image: .locateMeMapIcon,
-        iconBackgroundColor: .white,
-        buttonTitle: StringConstant.enableTracking
-    )
-    
-    private let authActionsHelper = AuthActionsHelper()
+    private var dashboardView = TrackingSimulationDashboardView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +23,6 @@ final class TrackingDashboardController: UIViewController {
         navigationItem.backButtonTitle = ""
         setupHandlers()
         setupViews()
-        authActionsHelper.delegate = delegate
         if UIDevice.current.userInterfaceIdiom == .pad {
             navigationController?.isNavigationBarHidden = false
         }
@@ -39,23 +32,28 @@ final class TrackingDashboardController: UIViewController {
         self.view.addSubview(dashboardView)
         if UIDevice.current.userInterfaceIdiom == .pad {
             dashboardView.snp.makeConstraints {
-                $0.centerY.equalToSuperview().multipliedBy(0.9)
-                $0.leading.equalToSuperview().offset(24)
-                $0.trailing.equalToSuperview().offset(-24)
+                $0.top.leading.trailing.equalToSuperview()
+                $0.bottom.equalTo(view.safeAreaLayoutGuide)
             }
         }
         else {
             dashboardView.snp.makeConstraints {
-                $0.top.leading.equalTo(view.safeAreaLayoutGuide).offset(16)
-                $0.trailing.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+                $0.top.leading.trailing.equalToSuperview()
+                $0.bottom.equalTo(view.safeAreaLayoutGuide)
             }
         }
     }
     
     private func setupHandlers() {
         dashboardView.dashboardButtonHandler = { [weak self] in
-            self?.authActionsHelper.tryToPerformAuthAction { [weak self] in
-                self?.trackingHistoryHandler?()
+            self?.trackingSimulationHandler?()
+        }
+        dashboardView.maybeButtonHandler = { [weak self] in
+            if self?.isiPad == true {
+                self?.navigationController?.popViewController(animated: true)
+            }
+            else {
+                self?.dismissBottomSheet()
             }
         }
     }

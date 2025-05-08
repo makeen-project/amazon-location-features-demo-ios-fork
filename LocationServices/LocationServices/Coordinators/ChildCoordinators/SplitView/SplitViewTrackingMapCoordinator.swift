@@ -30,11 +30,11 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         }
     }
     
-    private lazy var dashboardController: TrackingDashboardController = {
-        let controller = TrackingDashboardBuilder.create()
+    private lazy var dashboardController: TrackingSimulationIntroController = {
+        let controller = TrackingSimulationIntroBuilder.create()
         controller.delegate = self
-        controller.trackingHistoryHandler = { [weak self] in
-            self?.showTrackingHistory(isTrackingActive: true)
+        controller.trackingSimulationHandler = { [weak self] in
+            self?.showRouteTrackingScene()
         }
         return controller
     }()
@@ -50,7 +50,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         
         floatingView = MapFloatingViewHandler(viewController: controller)
         floatingView?.delegate = splitDelegate
-        floatingView?.setupNavigationSearch(state: .onlySecondaryVisible)
+        floatingView?.setupNavigationSearch(state: .primaryVisible, hideSearch: true)
         return controller
     }()
     
@@ -63,32 +63,48 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     }
     
     func setupNavigationSearch(state: MapSearchState) {
-        floatingView?.setupNavigationSearch(state: state)
+        floatingView?.setupNavigationSearch(state: .primaryVisible, hideSearch: true)
     }
 }
 
 extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
-    func showNextTrackingScene() {
-        setSupplementary()
-        splitViewController.show(.supplementary)
-    }
-    
     func showDashboardFlow() {
         historyIsRootController = false
         guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
         showNextTrackingScene()
     }
     
-    func showTrackingHistory(isTrackingActive: Bool = false) {
-        historyIsRootController = true
-        let controller = historyController
-        controller.viewModel.changeTrackingStatus(isTrackingActive)
-        guard splitViewController.viewController(for: .secondary) == secondaryController else { return }
-        supplementaryNavigationController?.setViewControllers([controller],
-                                                              animated: true)
+    func showNextTrackingScene() {
+        setSupplementary()
+        splitViewController.show(.supplementary)
+    }
+    
+    func showTrackingSimulationScene() {
+        let controller = TrackingSimulationIntroBuilder.create()
+        controller.modalPresentationStyle = .automatic
+        controller.isModalInPresentation = false
         
-        // Starting tracking by default when tapping on Enable tracking button
-        NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: nil, userInfo: ["state": isTrackingActive])
+        controller.delegate = self
+        controller.trackingSimulationHandler = { [weak self] in
+            self?.showRouteTrackingScene()
+        }
+        controller.dismissHandler = { [weak self] in
+            self?.splitViewController.dismiss(animated: true)
+        }
+
+        supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitDelegate?.showSupplementary()
+    }
+    
+    func showRouteTrackingScene() {
+        let controller = TrackingSimulationBuilder.create()
+        controller.modalPresentationStyle = .automatic
+        controller.isModalInPresentation = false
+        controller.trackingVC = secondaryController
+        controller.viewModel = secondaryController.viewModel
+        
+        supplementaryNavigationController?.pushViewController(controller, animated: true)
+        splitViewController.hide(.primary)
     }
     
     func showMapStyleScene() {
@@ -104,43 +120,6 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         }
         
         splitViewController.present(controller, animated: true)
-    }
-    
-    func showLoginFlow() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
-        
-        let controller = LoginVCBuilder.create()
-        controller.dismissHandler = { [weak self] in
-            self?.splitViewController.dismiss(animated: true)
-        }
-        
-        controller.postLoginHandler = { [weak self] in
-            self?.showLoginSuccess()
-        }
-        
-        controller.modalPresentationStyle = .formSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-        }
-        splitViewController.present(controller, animated: true)
-    }
-    
-    func showLoginSuccess() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = supplementaryNavigationController
-        
-        splitViewController.dismiss(animated: true) { [weak self] in
-            let controller = PostLoginBuilder.create()
-            controller.dismissHandler = { [weak self] in
-                self?.splitViewController.dismiss(animated: true)
-            }
-            controller.modalPresentationStyle = .formSheet
-
-            if let sheet = controller.sheetPresentationController {
-                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-            }
-            self?.splitViewController.present(controller, animated: true)
-        }
     }
     
     func showAttribution() {

@@ -61,7 +61,7 @@ final class LoginViewModel: LoginViewModelProtocol {
 
                 let isValid = try await awsLoginService.validate(identityPoolId: identityPoolId)
                 if isValid {
-                    let configurationModel = awsLoginService.getAWSConfigurationModel()
+                    let configurationModel = GeneralHelper.getAWSConfigurationModel()
                     DispatchQueue.main.async {
                         var userDomainValid = userDomain
                         var webSocketUrlValid = webSocketUrl

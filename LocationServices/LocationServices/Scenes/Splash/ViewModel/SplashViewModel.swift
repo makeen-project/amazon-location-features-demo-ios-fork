@@ -55,7 +55,7 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
     }
     
     private func setupValidAWSConfiguration() async throws {
-        guard let configurationModel = await loginService.getAWSConfigurationModel() else {
+        guard let configurationModel = GeneralHelper.getAWSConfigurationModel() else {
             print("Can't read default configuration from awsconfiguration.json")
             setupCompleted()
             return

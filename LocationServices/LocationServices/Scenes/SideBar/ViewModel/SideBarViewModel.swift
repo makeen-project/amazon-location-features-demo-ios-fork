@@ -8,7 +8,7 @@
 import Foundation
 
 final class SideBarViewModel: SideBarViewModelProtocol {
-    private let datas: [SideBarCellModel] = [SideBarCellModel(type: .explore), SideBarCellModel(type: .tracking), SideBarCellModel(type: .geofence), SideBarCellModel(type: .settings), SideBarCellModel(type: .about)]
+    private let datas: [SideBarCellModel] = [SideBarCellModel(type: .explore), SideBarCellModel(type: .tracking), SideBarCellModel(type: .settings), SideBarCellModel(type: .about)]
     
     func getCellItems(_ indexPath: IndexPath) -> SideBarCellModel {
         return datas[indexPath.row]

@@ -47,10 +47,6 @@ extension SplitViewSettingsCoordinator: SettingsNavigationDelegate {
             showMapStyleScene()
         case .routeOption:
             showRouteOptionScene()
-        case .resetPassword:
-            showResetPasswordScene()
-        case .awsCloud:
-            showAwsCloudFormationscene()
         }
     }
     

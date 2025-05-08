@@ -23,6 +23,8 @@
 	<string>$(API_KEY)</string>
 	<key>AWSRegion</key>
 	<string>$(AWS_REGION)</string>
+	<key>WebSocketUrl</key>
+	<string>${SIMULATION_WEB_SOCKET_URL}</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>MLNAccuracyAuthorizationDescription</key>

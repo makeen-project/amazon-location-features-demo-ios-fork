@@ -43,7 +43,8 @@ class MqttIoTContext: ObservableObject {
          onLifecycleEventConnectionFailure: OnLifecycleEventConnectionFailure? = nil,
          onLifecycleEventDisconnection: OnLifecycleEventDisconnection? = nil, 
          onWebSocketHandshake: OnWebSocketHandshakeIntercept? = nil,
-         topicName: String) {
+         topicName: String,
+         identityId: String) {
 
         self.contextName = contextName
         self.publishCount = 0
@@ -103,23 +104,29 @@ class MqttIoTContext: ObservableObject {
             do {
                 self.printView(contextName + " Mqtt5ClientTests: onWebSocketHandshake")
                 
-                if let customModel = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect),
-                let credentialsProvider = await AWSLoginService.default().credentialsProvider {
+                if let customModel = GeneralHelper.getAWSConfigurationModel() {
                     
                     let region = customModel.identityPoolId.toRegionString()
-                    let signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4,
-                                                  signatureType: SignatureType.requestQueryParams,
-                                                  service: "iotdevicegateway",
-                                                  region: region,
-                                                  credentialsProvider: credentialsProvider,
-                                                  omitSessionToken: true)
-                    let returnedRequest = try await Signer.signRequest(request: request, config:signingConfig)
-                    complete(returnedRequest, AWS_OP_SUCCESS)
+                    let credentialsOutput = try await CognitoAuthHelper.getAWSCredentials(identityId: identityId, region: region)
+                    if let cognitoCredentials = credentialsOutput.credentials
+                        {
+                        let credentialsProvider = try CredentialsProvider(source: .static(accessKey: cognitoCredentials.accessKeyId!, secret: cognitoCredentials.secretKey!, sessionToken: cognitoCredentials.sessionToken!))
+                        let signingConfig = SigningConfig(algorithm: SigningAlgorithmType.signingV4,
+                                                          signatureType: SignatureType.requestQueryParams,
+                                                          service: "iotdevicegateway",
+                                                          region: region,
+                                                          credentialsProvider: credentialsProvider,
+                                                          omitSessionToken: true)
+                        let returnedRequest = try await Signer.signRequest(request: request, config:signingConfig)
+                        complete(returnedRequest, AWS_OP_SUCCESS)
+                    }
+                    else {
+                        complete(request, AWS_OP_SUCCESS)
+                    }
                 }
                 else {
                     complete(request, AWS_OP_SUCCESS)
                 }
-                
             }
             catch
             {

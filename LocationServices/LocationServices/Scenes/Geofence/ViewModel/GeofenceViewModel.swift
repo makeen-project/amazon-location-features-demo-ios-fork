@@ -49,7 +49,7 @@ final class GeofenceViewModel: GeofenceViewModelProtocol {
             return
         }
         
-        let result = await geofenceService.getGeofenceList()
+        let result = await geofenceService.getGeofenceList(collectionName: "")
             switch result {
             case .success(let geofences):
                 DispatchQueue.main.async {
