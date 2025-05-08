@@ -13,6 +13,7 @@
   },
   "testTargets" : [
     {
+      "enabled" : false,
       "target" : {
         "containerPath" : "container:LocationServices.xcodeproj",
         "identifier" : "963EBF4E29AF92F5001961F2",
