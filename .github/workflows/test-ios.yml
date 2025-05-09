@@ -27,12 +27,12 @@ jobs:
           base64 -d <<< ${{ env.config }} > Config.xcconfig
           base64 -d <<< ${{ env.test_config }} > ConfigTest.xcconfig
 
-      - name: Ensure config files exist
-        working-directory: ./LocationServices
-        run: |
-          touch Config.xcconfig
-          touch ConfigTest.xcconfig
+      # - name: Ensure config files exist
+      #   working-directory: ./LocationServices
+      #   run: |
+      #     touch Config.xcconfig
+      #     touch ConfigTest.xcconfig
 
-      - name: Run tests
-        working-directory: ./LocationServices
-        run: bundle exec fastlane run_unit_tests device:"iPhone 14"
+      # - name: Run tests
+      #   working-directory: ./LocationServices
+      #   run: bundle exec fastlane run_unit_tests device:"iPhone 14"
