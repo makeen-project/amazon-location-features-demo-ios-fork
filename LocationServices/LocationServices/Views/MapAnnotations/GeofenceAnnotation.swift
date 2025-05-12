@@ -68,8 +68,6 @@ class GeofenceAnnotationView: MLNAnnotationView {
         
         if frame.size.equalTo(.zero) {
             updateFrame()
-            //addIcon()
-            //addTitle()
         }
         
         if titleLabel.text != annotation?.title {
@@ -123,8 +121,6 @@ class GeofenceAnnotationView: MLNAnnotationView {
             let accuracyRingSize: CGFloat = self.calculateAccuracyRingSize(radius: radius)
             let accuracyRingLayer = self.circleLayer(with: accuracyRingSize)
             accuracyRingLayer.backgroundColor = mapView.tintColor.withAlphaComponent(0.3).cgColor
-            //accuracyRingLayer.borderColor = mapView.tintColor.cgColor
-            //accuracyRingLayer.borderWidth = 2
             accuracyRingLayer.shouldRasterize = false
             accuracyRingLayer.allowsGroupOpacity = false
             

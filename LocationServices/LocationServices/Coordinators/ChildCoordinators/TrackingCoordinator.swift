@@ -38,18 +38,6 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         showDashboardFlow()
     }
     
-//    func showDashboardFlow1() {
-//        currentBottomSheet?.dismissBottomSheet()
-//        let controller = TrackingDashboardBuilder.create()
-//        controller.delegate = self
-//        controller.trackingSimulationHandler = { [weak self] in
-//            self?.showTrackingSimulationScene()
-//        }
-//        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
-//        controller.enableBottomSheetGrab(smallHeight: 0.48)
-//        currentBottomSheet = controller
-//    }
-    
     func showDashboardFlow() {
         currentBottomSheet?.dismissBottomSheet()
         let controller = TrackingSimulationIntroBuilder.create()
