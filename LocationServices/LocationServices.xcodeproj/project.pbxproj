@@ -369,7 +369,7 @@
 		F1FAC8552D773476000238C4 /* TrackingSimulationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8542D773471000238C4 /* TrackingSimulationBuilder.swift */; };
 		F1FAC8572D7738F8000238C4 /* TrackingSimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8562D7738F0000238C4 /* TrackingSimulationView.swift */; };
 		F1FAC8592D774B74000238C4 /* TrackingSimulationController+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8582D774B61000238C4 /* TrackingSimulationController+TableView.swift */; };
-		F1FAC85C2D774BE1000238C4 /* TrackingSimulationContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC85B2D774BD8000238C4 /* TrackingSimulationContracts.swift */; };
+		F1FAC85C2D774BE1000238C4 /* TrackingSimulationViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC85B2D774BD8000238C4 /* TrackingSimulationViewModelProtocol.swift */; };
 		F1FAC8652D77E388000238C4 /* RoutesData.json in Resources */ = {isa = PBXBuildFile; fileRef = F1FAC8642D77E388000238C4 /* RoutesData.json */; };
 		F1FAC8672D77E671000238C4 /* BusRoutesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8662D77E661000238C4 /* BusRoutesData.swift */; };
 		F1FAC8692D784D19000238C4 /* JsonHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8682D784D03000238C4 /* JsonHelper.swift */; };
@@ -750,7 +750,7 @@
 		F1FAC8542D773471000238C4 /* TrackingSimulationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationBuilder.swift; sourceTree = "<group>"; };
 		F1FAC8562D7738F0000238C4 /* TrackingSimulationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationView.swift; sourceTree = "<group>"; };
 		F1FAC8582D774B61000238C4 /* TrackingSimulationController+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackingSimulationController+TableView.swift"; sourceTree = "<group>"; };
-		F1FAC85B2D774BD8000238C4 /* TrackingSimulationContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationContracts.swift; sourceTree = "<group>"; };
+		F1FAC85B2D774BD8000238C4 /* TrackingSimulationViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationViewModelProtocol.swift; sourceTree = "<group>"; };
 		F1FAC8642D77E388000238C4 /* RoutesData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = RoutesData.json; sourceTree = "<group>"; };
 		F1FAC8662D77E661000238C4 /* BusRoutesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRoutesData.swift; sourceTree = "<group>"; };
 		F1FAC8682D784D03000238C4 /* JsonHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonHelper.swift; sourceTree = "<group>"; };
@@ -2542,7 +2542,7 @@
 			isa = PBXGroup;
 			children = (
 				F1FAC8662D77E661000238C4 /* BusRoutesData.swift */,
-				F1FAC85B2D774BD8000238C4 /* TrackingSimulationContracts.swift */,
+				F1FAC85B2D774BD8000238C4 /* TrackingSimulationViewModelProtocol.swift */,
 			);
 			path = Contracts;
 			sourceTree = "<group>";
@@ -3030,7 +3030,7 @@
 				8A54FFDA2A02722400694CE6 /* SplitViewAboutCoordinator.swift in Sources */,
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
 				F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */,
-				F1FAC85C2D774BE1000238C4 /* TrackingSimulationContracts.swift in Sources */,
+				F1FAC85C2D774BE1000238C4 /* TrackingSimulationViewModelProtocol.swift in Sources */,
 				ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
 				ADC474FE2971E7A300AAE7A3 /* AmazonLocationLabel.swift in Sources */,

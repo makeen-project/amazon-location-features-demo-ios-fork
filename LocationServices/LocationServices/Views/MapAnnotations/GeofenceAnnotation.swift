@@ -68,8 +68,6 @@ class GeofenceAnnotationView: MLNAnnotationView {
         
         if frame.size.equalTo(.zero) {
             updateFrame()
-            //addIcon()
-            //addTitle()
         }
         
         if titleLabel.text != annotation?.title {
