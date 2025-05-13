@@ -64,9 +64,4 @@ extension SettingsCoordinator: SettingsNavigationDelegate {
         let controller = RouteOptionBuilder.create()
         navigationController.pushViewController(controller, animated: true)
     }
-    
-    private func showResetPasswordScene() {
-        let controller = ResetPasswordBuilder.create()
-        navigationController.pushViewController(controller, animated: true)
-    }
 }

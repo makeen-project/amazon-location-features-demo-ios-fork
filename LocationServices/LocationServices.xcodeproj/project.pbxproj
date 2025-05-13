@@ -258,11 +258,6 @@
 		ADD1396C298097020003F917 /* DataProviderBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1396B298097020003F917 /* DataProviderBuilder.swift */; };
 		ADD1396E298097620003F917 /* DataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1396D298097620003F917 /* DataProviderProtocol.swift */; };
 		ADD13970298097890003F917 /* DataProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1396F298097890003F917 /* DataProviderViewModel.swift */; };
-		ADD13978298098760003F917 /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD13977298098760003F917 /* ResetPasswordVC.swift */; };
-		ADD1397B298098CF0003F917 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1397A298098CF0003F917 /* ResetPasswordView.swift */; };
-		ADD1397E29809BF00003F917 /* ResetPasswordBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1397D29809BF00003F917 /* ResetPasswordBuilder.swift */; };
-		ADD1398029809C360003F917 /* ResetPasswordContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1397F29809C360003F917 /* ResetPasswordContracts.swift */; };
-		ADD1398229809C640003F917 /* ResetPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1398129809C640003F917 /* ResetPasswordViewModel.swift */; };
 		ADD1398A2980A1480003F917 /* RouteOptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD139892980A1480003F917 /* RouteOptionVC.swift */; };
 		ADD1398E2980A24E0003F917 /* RouteOptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1398D2980A24E0003F917 /* RouteOptionViewModel.swift */; };
 		ADD139902980A2590003F917 /* RouteOptionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1398F2980A2590003F917 /* RouteOptionContracts.swift */; };
@@ -647,11 +642,6 @@
 		ADD1396B298097020003F917 /* DataProviderBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProviderBuilder.swift; sourceTree = "<group>"; };
 		ADD1396D298097620003F917 /* DataProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProviderProtocol.swift; sourceTree = "<group>"; };
 		ADD1396F298097890003F917 /* DataProviderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProviderViewModel.swift; sourceTree = "<group>"; };
-		ADD13977298098760003F917 /* ResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
-		ADD1397A298098CF0003F917 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
-		ADD1397D29809BF00003F917 /* ResetPasswordBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordBuilder.swift; sourceTree = "<group>"; };
-		ADD1397F29809C360003F917 /* ResetPasswordContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordContracts.swift; sourceTree = "<group>"; };
-		ADD1398129809C640003F917 /* ResetPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModel.swift; sourceTree = "<group>"; };
 		ADD139892980A1480003F917 /* RouteOptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteOptionVC.swift; sourceTree = "<group>"; };
 		ADD1398D2980A24E0003F917 /* RouteOptionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteOptionViewModel.swift; sourceTree = "<group>"; };
 		ADD1398F2980A2590003F917 /* RouteOptionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteOptionContracts.swift; sourceTree = "<group>"; };
@@ -2081,7 +2071,6 @@
 			children = (
 				ADD139962981C3B80003F917 /* MapStyle */,
 				ADD139832980A10D0003F917 /* RouteOptions */,
-				ADD13971298098350003F917 /* Reset Password */,
 				ADD139632980961F0003F917 /* Data Provider */,
 				ADD139502980831C0003F917 /* Units */,
 			);
@@ -2183,58 +2172,6 @@
 				ADD1396F298097890003F917 /* DataProviderViewModel.swift */,
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		ADD13971298098350003F917 /* Reset Password */ = {
-			isa = PBXGroup;
-			children = (
-				ADD13979298098C60003F917 /* Views */,
-				ADD13976298098570003F917 /* ViewModel */,
-				ADD13975298098520003F917 /* Contracts */,
-				ADD139742980984D0003F917 /* Controller */,
-				ADD13972298098460003F917 /* Builder */,
-			);
-			path = "Reset Password";
-			sourceTree = "<group>";
-		};
-		ADD13972298098460003F917 /* Builder */ = {
-			isa = PBXGroup;
-			children = (
-				ADD1397D29809BF00003F917 /* ResetPasswordBuilder.swift */,
-			);
-			path = Builder;
-			sourceTree = "<group>";
-		};
-		ADD139742980984D0003F917 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				ADD13977298098760003F917 /* ResetPasswordVC.swift */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		ADD13975298098520003F917 /* Contracts */ = {
-			isa = PBXGroup;
-			children = (
-				ADD1397F29809C360003F917 /* ResetPasswordContracts.swift */,
-			);
-			path = Contracts;
-			sourceTree = "<group>";
-		};
-		ADD13976298098570003F917 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				ADD1398129809C640003F917 /* ResetPasswordViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		ADD13979298098C60003F917 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				ADD1397A298098CF0003F917 /* ResetPasswordView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		ADD139832980A10D0003F917 /* RouteOptions */ = {
@@ -2940,9 +2877,7 @@
 				ADBD7FB62949B579005DB4E4 /* POICardView.swift in Sources */,
 				8A85A75E29A5059D0022ABE0 /* MapStyleSectionHeaderView.swift in Sources */,
 				96E742AA2967381900D5C0BC /* Sequence+Extension.swift in Sources */,
-				ADD13978298098760003F917 /* ResetPasswordVC.swift in Sources */,
 				F1D1BC402D1043F300D263B6 /* RouteTypeSegment.swift in Sources */,
-				ADD1398029809C360003F917 /* ResetPasswordContracts.swift in Sources */,
 				ADC1245329774A7700B08C20 /* DefaultCommonMapView.swift in Sources */,
 				8A3360DA296C3BE400320B87 /* MLNCoordinateBounds+Extension.swift in Sources */,
 				ADBDDEF429842C5C00696EC6 /* ExploreMapStyleVC.swift in Sources */,
@@ -2983,7 +2918,6 @@
 				8ACD71D42A091AFC00EC23F3 /* MapSearchFloatingView.swift in Sources */,
 				ADB0B9A5295BAE2B00C219EC /* Double+Extension.swift in Sources */,
 				ADBDDEFA29842CC500696EC6 /* ExploreMapStyleViewModel.swift in Sources */,
-				ADD1397E29809BF00003F917 /* ResetPasswordBuilder.swift in Sources */,
 				ADBDDEEF29830E8B00696EC6 /* CommonSelectableCell.swift in Sources */,
 				ADD13970298097890003F917 /* DataProviderViewModel.swift in Sources */,
 				8A276E2429DFF9C900B74136 /* TermsAndConditionsVC.swift in Sources */,
@@ -3083,7 +3017,6 @@
 				AD2AF0DD292EAC0500149904 /* AboutVC.swift in Sources */,
 				F1FAC8552D773476000238C4 /* TrackingSimulationBuilder.swift in Sources */,
 				F1B642692A2F330D00FB40E3 /* UIColor+Extension.swift in Sources */,
-				ADD1398229809C640003F917 /* ResetPasswordViewModel.swift in Sources */,
 				9660600129A4F20100FB88D0 /* StringConstants.swift in Sources */,
 				AD2AF0D5292EABD000149904 /* SettingsViewModel.swift in Sources */,
 				ADF26F5E292FFAC7000147A0 /* TypeAlias.swift in Sources */,
@@ -3127,7 +3060,6 @@
 				AD2AF0E9292EAC9800149904 /* SettingsCoordinator.swift in Sources */,
 				AD2AF081292EA5C900149904 /* ExplorePresentation.swift in Sources */,
 				AD625EA7293CDC5F00C67B44 /* HTTPClient.swift in Sources */,
-				ADD1397B298098CF0003F917 /* ResetPasswordView.swift in Sources */,
 				ADD1396C298097020003F917 /* DataProviderBuilder.swift in Sources */,
 				ADD139A22981C5050003F917 /* MapStyleVC.swift in Sources */,
 				8A439EF929BB965100B59D0B /* AttributionVC.swift in Sources */,
