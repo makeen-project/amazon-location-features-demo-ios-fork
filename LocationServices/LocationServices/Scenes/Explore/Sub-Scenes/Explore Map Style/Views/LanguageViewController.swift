@@ -20,7 +20,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
     
     private var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Select Language"
+        label.text = StringConstant.selectLanguage
         label.font = .boldSystemFont(ofSize: 18)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

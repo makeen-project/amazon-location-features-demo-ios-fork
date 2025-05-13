@@ -21,7 +21,7 @@ final class LanguageView: UIButton {
         label.font = .amazonFont(type: .medium, size: 18)
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left
-        label.text = "Map Language"
+        label.text = StringConstant.mapLanguage
         return label
     }()
     

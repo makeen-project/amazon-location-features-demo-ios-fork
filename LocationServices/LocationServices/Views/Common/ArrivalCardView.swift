@@ -12,7 +12,7 @@ final class ArrivalCardView: UIView {
     weak var delegate: ArrivalCardViewModelOutputDelegate?
     var arrivalCardModel: ArrivalCardViewModel! {
         didSet {
-            self.poiTitle.text = "You've arrived!"
+            self.poiTitle.text = StringConstant.arrivalCardTitle
             self.poiLabel.text = arrivalCardModel.route.destinationPlaceName
             if let address = arrivalCardModel.route.destinationPlaceAddress, address != "" {
                 self.poiAddress.text = address

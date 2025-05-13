@@ -30,7 +30,7 @@ struct UITestTrackingScreen: UITestScreen {
     }
     
     enum Constants {
-        static let continueToTracker = StringConstant.continueToTracker
+        //static let continueToTracker = StringConstant.continueToTracker
         static let geofenceEntered = "\(StringConstant.tracker) \(StringConstant.entered)"
         static let geofenceExited = "\(StringConstant.tracker) \(StringConstant.exited)"
     }

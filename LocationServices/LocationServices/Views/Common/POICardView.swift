@@ -240,7 +240,7 @@ final class POICardView: UIView {
         label.textAlignment = .left
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .black
-        label.text = "Schedule"
+        label.text = StringConstant.poiCardSchedule
         return label
     }()
     

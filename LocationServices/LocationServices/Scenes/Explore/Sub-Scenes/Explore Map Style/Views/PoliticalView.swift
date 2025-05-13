@@ -21,7 +21,7 @@ final class PoliticalView: UIButton {
         label.font = .amazonFont(type: .medium, size: 18)
         label.textColor = .mapDarkBlackColor
         label.textAlignment = .left
-        label.text = "Political view"
+        label.text = StringConstant.politicalView
         return label
     }()
     
@@ -126,7 +126,7 @@ final class PoliticalView: UIButton {
             itemSubtitle.textColor = .mapStyleTintColor
         }
         else {
-            itemSubtitle.text = "Map representation for different countries"
+            itemSubtitle.text = StringConstant.mapRepresentation
             itemSubtitle.textColor = .gray
         }
     }

@@ -22,7 +22,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
     
     private var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Political View"
+        label.text = StringConstant.politicalView
         label.font = .boldSystemFont(ofSize: 18)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -118,7 +118,7 @@ final class DirectionSearchView: UIView {
     }()
     
     func setMyLocationText() {
-        self.firstDestinationTextField.text = "My Location"
+        self.firstDestinationTextField.text = StringConstant.myLocation
     }
     
     convenience init(titleTopOffset: CGFloat, isCloseButtonHidden: Bool) {

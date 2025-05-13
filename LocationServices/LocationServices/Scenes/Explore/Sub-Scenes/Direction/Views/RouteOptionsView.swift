@@ -354,15 +354,15 @@ final class RouteOptionsView: UIView {
         dateFormatter.locale = Locale(identifier: "en_US")
         if leaveSegmentControl.selectedSegmentIndex == 0 {
             leaveOptionToggleButton.routeOptionTitle.textColor = .lsTetriary
-            leaveOptionToggleButton.routeOptionTitle.text = "Leave now"
+            leaveOptionToggleButton.routeOptionTitle.text = StringConstant.leaveNow
         }
         else if leaveSegmentControl.selectedSegmentIndex == 1 {
             leaveOptionToggleButton.routeOptionTitle.textColor = .lsPrimary
-            leaveOptionToggleButton.routeOptionTitle.text = "Leave at \(dateFormatter.string(from: selectedDate))"
+            leaveOptionToggleButton.routeOptionTitle.text = "\(StringConstant.leaveAt) \(dateFormatter.string(from: selectedDate))"
         }
         else if leaveSegmentControl.selectedSegmentIndex == 2 {
             leaveOptionToggleButton.routeOptionTitle.textColor = .lsPrimary
-            leaveOptionToggleButton.routeOptionTitle.text = "Arrive by \(dateFormatter.string(from: selectedDate))"
+            leaveOptionToggleButton.routeOptionTitle.text = "\(StringConstant.arriveBy) \(dateFormatter.string(from: selectedDate))"
         }
     }
     
@@ -418,11 +418,11 @@ final class RouteOptionsView: UIView {
     func setAvoidTitle() {
         let avoidCount = [tollOption.getState(), ferriesOption.getState(), uturnsOption.getState(), tunnelsOption.getState(), dirtRoadsOption.getState()].filter{$0}.count
         if avoidCount == 0 {
-            avoidOptionToggleButton.routeOptionTitle.text = "Route Options"
+            avoidOptionToggleButton.routeOptionTitle.text = StringConstant.routeOptions
             avoidOptionToggleButton.routeOptionTitle.textColor = .lsTetriary
         }
         else {
-            avoidOptionToggleButton.routeOptionTitle.text = "\(avoidCount) Options"
+            avoidOptionToggleButton.routeOptionTitle.text = "\(avoidCount) \(StringConstant.options)"
             avoidOptionToggleButton.routeOptionTitle.textColor = .lsPrimary
         }
     }

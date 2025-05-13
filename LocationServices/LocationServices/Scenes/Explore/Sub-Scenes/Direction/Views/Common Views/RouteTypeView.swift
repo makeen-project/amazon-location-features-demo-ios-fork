@@ -121,7 +121,7 @@ final class RouteTypeView: UIView {
     
     private var selectedLabel: UILabel = {
         let label = UILabel()
-        label.text = "Selected"
+        label.text = StringConstant.selected
         label.font = .amazonFont(type: .bold, size: 14)
         label.textColor = .lsPrimary
         label.lineBreakMode = .byTruncatingTail
