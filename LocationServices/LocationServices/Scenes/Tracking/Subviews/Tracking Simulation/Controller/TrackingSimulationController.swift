@@ -683,7 +683,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     
     func evaluateSelectedRoutes() {
         let count = routeToggles.count(where: { $0.getState()})
-        routesDetailLabel.text = "\(count) routes active"
+        routesDetailLabel.text = "\(count) \(StringConstant.routesActive)"
     }
     
     func getActiveRouteCoordinates() -> [RouteCoordinate] {
