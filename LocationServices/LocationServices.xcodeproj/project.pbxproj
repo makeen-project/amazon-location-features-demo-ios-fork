@@ -249,7 +249,6 @@
 		ADC97398295F4596005AE918 /* NavigationPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC97397295F4596005AE918 /* NavigationPresentation.swift */; };
 		ADD1394A298069F50003F917 /* SettingVC+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD13949298069F50003F917 /* SettingVC+TableView.swift */; };
 		ADD1394D29806A1B0003F917 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1394C29806A1B0003F917 /* SettingsCell.swift */; };
-		ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1394E298073040003F917 /* SettingsButtonView.swift */; };
 		ADD139582980867D0003F917 /* UnitSceneContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD139572980867D0003F917 /* UnitSceneContracts.swift */; };
 		ADD1395A2980874A0003F917 /* UnitSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD139592980874A0003F917 /* UnitSceneViewModel.swift */; };
 		ADD1395C298087840003F917 /* UnitSceneBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD1395B298087840003F917 /* UnitSceneBuilder.swift */; };
@@ -301,6 +300,7 @@
 		F11E046F2CE788EA003F1641 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E046E2CE788DA003F1641 /* LanguageView.swift */; };
 		F11E04712CE788FD003F1641 /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04702CE788F3003F1641 /* LanguageViewController.swift */; };
 		F11E04732CE791A3003F1641 /* LanguageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04722CE791A1003F1641 /* LanguageViewCell.swift */; };
+		F1343E9B2DD35CD1002A347F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1343E9A2DD35CD1002A347F /* Localizable.xcstrings */; };
 		F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */; };
 		F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */; };
 		F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */; };
@@ -638,7 +638,6 @@
 		ADC97397295F4596005AE918 /* NavigationPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPresentation.swift; sourceTree = "<group>"; };
 		ADD13949298069F50003F917 /* SettingVC+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingVC+TableView.swift"; sourceTree = "<group>"; };
 		ADD1394C29806A1B0003F917 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
-		ADD1394E298073040003F917 /* SettingsButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsButtonView.swift; sourceTree = "<group>"; };
 		ADD139572980867D0003F917 /* UnitSceneContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSceneContracts.swift; sourceTree = "<group>"; };
 		ADD139592980874A0003F917 /* UnitSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSceneViewModel.swift; sourceTree = "<group>"; };
 		ADD1395B298087840003F917 /* UnitSceneBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSceneBuilder.swift; sourceTree = "<group>"; };
@@ -689,6 +688,18 @@
 		F11E046E2CE788DA003F1641 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
 		F11E04702CE788F3003F1641 /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
 		F11E04722CE791A1003F1641 /* LanguageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewCell.swift; sourceTree = "<group>"; };
+		F1343E982DD35B86002A347F /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343E9A2DD35CD1002A347F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		F1343E9C2DD37EE3002A347F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343E9D2DD37EF9002A347F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343E9E2DD37F06002A347F /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343E9F2DD37F34002A347F /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343EA02DD37F41002A347F /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343EA12DD37F47002A347F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343EA22DD37F51002A347F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F1343EA32DD37F69002A347F /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		F1343EA42DD37F86002A347F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		F1343EA52DD37F92002A347F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		F139208429EE918E0042CBC9 /* AWSLocationTravelModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocationTravelModeTests.swift; sourceTree = "<group>"; };
 		F139208529EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtensionTests.swift; sourceTree = "<group>"; };
 		F139208629EE918E0042CBC9 /* CLLocationExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CLLocationExtensionTests.swift; sourceTree = "<group>"; };
@@ -1232,6 +1243,7 @@
 		AD2AF02E292E892000149904 /* LocationServices */ = {
 			isa = PBXGroup;
 			children = (
+				F1343E992DD35CA1002A347F /* Localization */,
 				F18E2D402DAD220E00A34D67 /* Notifications */,
 				F18DEEF72C77504900335F3E /* iot */,
 				AD300A14294BDD8E00355423 /* Resources */,
@@ -1545,7 +1557,6 @@
 			children = (
 				ADD1394B29806A0E0003F917 /* Cell */,
 				AD2AF0D6292EABD800149904 /* SettingsView.swift */,
-				ADD1394E298073040003F917 /* SettingsButtonView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2433,6 +2444,14 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		F1343E992DD35CA1002A347F /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				F1343E9A2DD35CD1002A347F /* Localizable.xcstrings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		F18055E42D71F18F00045301 /* Tracking Simulation */ = {
 			isa = PBXGroup;
 			children = (
@@ -2665,6 +2684,17 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
+				de,
+				es,
+				fr,
+				hi,
+				it,
+				ja,
+				ko,
+				"pt-PT",
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = AD2AF023292E892000149904;
 			packageReferences = (
@@ -2712,6 +2742,7 @@
 				F1FAC8652D77E388000238C4 /* RoutesData.json in Resources */,
 				AD300A34294BE23800355423 /* AmazonEmber_BdIt.ttf in Resources */,
 				AD300A35294BE23800355423 /* AmazonEmber_He.ttf in Resources */,
+				F1343E9B2DD35CD1002A347F /* Localizable.xcstrings in Resources */,
 				AD300A36294BE23800355423 /* AmazonEmber_HeIt.ttf in Resources */,
 				AD300A37294BE23800355423 /* AmazonEmber_Lt.ttf in Resources */,
 				AD300A38294BE23800355423 /* AmazonEmber_LtIt.ttf in Resources */,
@@ -3035,7 +3066,6 @@
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
 				F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */,
 				F1FAC85C2D774BE1000238C4 /* TrackingSimulationContracts.swift in Sources */,
-				ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
 				ADC474FE2971E7A300AAE7A3 /* AmazonLocationLabel.swift in Sources */,
 				8ABDF63A29A52AE300122966 /* ExploreMapStyleCellViewModel.swift in Sources */,
@@ -3129,6 +3159,17 @@
 			isa = PBXVariantGroup;
 			children = (
 				AD2AF03E292E892200149904 /* Base */,
+				F1343E982DD35B86002A347F /* ar */,
+				F1343E9C2DD37EE3002A347F /* de */,
+				F1343E9D2DD37EF9002A347F /* es */,
+				F1343E9E2DD37F06002A347F /* fr */,
+				F1343E9F2DD37F34002A347F /* hi */,
+				F1343EA02DD37F41002A347F /* it */,
+				F1343EA12DD37F47002A347F /* ja */,
+				F1343EA22DD37F51002A347F /* ko */,
+				F1343EA32DD37F69002A347F /* pt-PT */,
+				F1343EA42DD37F86002A347F /* zh-Hans */,
+				F1343EA52DD37F92002A347F /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -3141,6 +3182,7 @@
 			baseConfigurationReference = 8A94BA8E29E01F1E0070D3E0 /* ConfigTest.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -3193,6 +3235,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Test;
@@ -3354,6 +3397,7 @@
 			baseConfigurationReference = 96D4047D29B65B9D0031097B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -3406,6 +3450,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -3415,6 +3460,7 @@
 			baseConfigurationReference = 96D4047D29B65B9D0031097B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -3460,6 +3506,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};

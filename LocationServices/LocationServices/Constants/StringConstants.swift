@@ -31,7 +31,6 @@ enum StringConstant {
     
     //urls
     static let baseDomain: String = "https://location.aws.com"
-    static let cfTemplateURL = "https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/create?stackName=amazon-location-resources-setup&templateURL=https://amazon-location-demo-resources.s3.amazonaws.com/location-services.yaml"
     static var termsAndConditionsURL: String { baseDomain + "/demo/terms/" }
     static let esriDataProviderLearnMoreURL = "https://www.esri.com/en-us/legal/terms/data-attributions"
     static let hereDataProviderLearnMoreURL = "https://legal.here.com/en-gb/terms/general-content-supplier-terms-and-notices"
@@ -49,13 +48,6 @@ enum StringConstant {
     
     // strings:
     static let directions = "Directions"
-    static let geofence = "Geofence"
-    static let login = "Login"
-    static let amazonLocationDetail = """
-                                                  Add a geofence to get notified when your device
-                                                  enters or exits it
-                                                  """
-    static let addGeofence = "Add Geofence"
     static let maybeLater = "Maybe later"
     static let checkYourConnection = "Check your internet connection and try again"
     static let amazonLocatinCannotReach = "Amazon Location can't reach the internet"
@@ -68,20 +60,20 @@ enum StringConstant {
     static let restartAppTitle = "Restart Amazon Location App "
     static let restartAppExplanation = "Amazon Location app must be closed and reopened to apply the new configuration"
     static let terminate = "Ok"
-    static let resetToDefaultConfigTitle = "Reset stack"
-    static let resetToDefaultConfigExplanation = "Stack is corrupted, switching back to default stack"
+//    static let resetToDefaultConfigTitle = "Reset stack"
+//    static let resetToDefaultConfigExplanation = "Stack is corrupted, switching back to default stack"
     static let awsStackInvalidTitle = "Invalid AWS Stack"
     static let awsStackInvalidExplanation = "Stack is not invalid anymore or deleted, app will disconnect from AWS and restart"
-    static let notAllFieldsAreConfigured = "Not all the fields are configured"
-    static let incorrectIdentityPoolIdMessage = "Failed to connect AWS account, invalid IdentityPoolId or region"
+//    static let notAllFieldsAreConfigured = "Not all the fields are configured"
+//    static let incorrectIdentityPoolIdMessage = "Failed to connect AWS account, invalid IdentityPoolId or region"
     static let failedToCalculateRoute = "Failed to calculate route"
-    static let geofenceNoIdentifier = "Couldn't delete geofence, no identifier exists"
-    static let deleteGeofence = "Delete geofence"
-    static let deleteGeofenceAlertMessage = "Are you sure you want to delete geofence?"
-    static let logout = "Logout"
-    static let logoutAlertMessage = "Are you sure you want to logout?"
-    static let disconnectAWS = "Disconnect AWS"
-    static let disconnectAWSAlertMessage = "Are you sure you want to Disconnect AWS?"
+//    static let geofenceNoIdentifier = "Couldn't delete geofence, no identifier exists"
+//    static let deleteGeofence = "Delete geofence"
+//    static let deleteGeofenceAlertMessage = "Are you sure you want to delete geofence?"
+//    static let logout = "Logout"
+//    static let logoutAlertMessage = "Are you sure you want to logout?"
+//    static let disconnectAWS = "Disconnect AWS"
+//    static let disconnectAWSAlertMessage = "Are you sure you want to Disconnect AWS?"
     static let noInternetConnection = "No internet connection"
     static let enableTracking = "Enable Tracker"
     static let trackers = "Trackers"
@@ -154,33 +146,6 @@ enum StringConstant {
     static let exitTracking = ""
     static let exitTrackingAlertMessage = "Are you sure you want to exit simulation?"
     
-    //login
-    enum LoginInfo {
-        enum DefaultConfig: ConstantsLoginInfoConfig {
-            static let mainTitle = "Connect AWS Account"
-            static let subHeader = "How to connect:"
-            static let firstItemTitle = "Click here to run a CloudFormation template to securely create required resources."
-            static let firstItemTitleClickablePart = "Click here"
-            static let firstItemText = "You can delete these resources through the stack deletion option or ‘Manage resources’ pages in the menu on the left."
-        }
-        
-        enum CustomConfig: ConstantsLoginInfoConfig {
-            static let mainTitle = "You are connected"
-            static let subHeader = "How to remove:"
-            static let firstItemTitle = "Click here to remove a CloudFormation template"
-            static let firstItemTitleClickablePart = "Click here"
-            static let firstItemText = "It will securely create all required resources."
-        }
-        
-        enum ClosingAppRequired {
-            static let title = "Closing app required"
-            static let defaultConfigSubtitle = "Amazon Location app needs to be closed in order to apply your account configuration. This means that you'll need to manually reopen the app after it closes."
-            static let customConfigSubtitle = "Amazon Location app needs to be closed in order to apply default configuration. This means that you'll need to manually reopen the app after it closes."
-        }
-        
-        static let continueToExplore = "Continue to Explore"
-    }
-    
     enum AboutTab {
         static let title = "More"
         static let cellAttributionTitle = "Attribution"
@@ -208,10 +173,6 @@ enum StringConstant {
         static let about: String = "More"
     }
     
-    enum Errors {
-        static let requestCanceledCode = -999
-    }
-    
     enum NotificationsInfoField {
         static let geofenceIsHidden = "geofenceIsHidden"
         static let mapStyleIsHidden = "mapStyleIsHidden"
@@ -221,11 +182,11 @@ enum StringConstant {
     static let units = "Units"
     static let dataProvider = "Data Provider"
     static let mapStyle = "Map style"
-    static let resetPassword = "Reset password"
-    static let connectYourAWSAccount = "Connect your AWS Account"
+    //static let resetPassword = "Reset password"
+    //static let connectYourAWSAccount = "Connect your AWS Account"
     static let defaultRouteOptions = "Default route options"
     static let partnerAttributionTitle = "Partner Attribution"
-    static let partnerAttributionESRIDescription = "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community"
+    //static let partnerAttributionESRIDescription = "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community"
     static let partnerAttributionHEREDescription = "© AWS, HERE"
     static let softwareAttributionTitle = "Software Attribution"
     static let softwareAttributionDescription = "Click learn more for software attribution"
@@ -253,35 +214,4 @@ enum StringConstant {
     static let hideRoute = "Hide Route"
     
     static let trackingNotificationTitle = "Amazon Location"
-}
-
-protocol ConstantsLoginInfoConfig {
-    static var mainTitle: String { get }
-    static var mainSubtitle: String { get }
-    static var subHeader: String { get }
-    static var firstNumber: String { get }
-    static var secondNumber: String { get }
-    static var thirdNumber: String { get }
-    static var firstItemTitle: String { get }
-    static var firstItemTitleClickablePart: String { get }
-    static var firstItemText: String { get }
-    static var secondItemTitle: String { get }
-    static var secondItemText: String { get }
-    static var learnMoreURL: String { get }
-    static var secondItemTextClickablePart: String { get }
-    static var thirdItemTitle: String { get }
-    static var thirdItemText: String { get }
-}
-
-extension ConstantsLoginInfoConfig {
-    static var mainSubtitle: String { "Connect your AWS account to enable Geofences and Trackers. This will ensure your tracking and geofencing data is only stored in your account. After you log in, all features of the Demo App will run using resources you deploy in your AWS account. Log out if you wish to continue running the Demo App using resources in AWS’s demo app account." }
-    static var firstNumber: String { "1" }
-    static var secondNumber: String { "2" }
-    static var thirdNumber: String { "3" }
-    static var learnMoreURL: String { StringConstant.helpURL }
-    static var secondItemTitle: String { "Connect the demo app with the recently created AWS resources by copying in input fields." }
-    static var secondItemText: String { "From your CloudFormation output section copy the corresponding named values as reflected in the right section form (IdentityPoolId etc.). Learn more" }
-    static var secondItemTextClickablePart: String { "Learn more" }
-    static var thirdItemTitle: String { "Login using the generated user credentials." }
-    static var thirdItemText: String { "Now you should be able to use the geofences and trackers features using data stored in your account." }
 }

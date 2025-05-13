@@ -225,7 +225,6 @@ extension ExploreVC {
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMapView(_:)), name: Notification.refreshMapView, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(showWasResetToDefaultConfigAlert(_:)), name: Notification.wasResetToDefaultConfig, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchAppearanceChanged(_:)), name: Notification.searchAppearanceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(exploreActionButtonsVisibilityChanged(_:)), name: Notification.exploreActionButtonsVisibilityChanged, object: nil)
         
@@ -350,11 +349,6 @@ extension ExploreVC {
             let offset:CGFloat = ((notification.userInfo?["height"] as? CGFloat) ?? size)-80
             self.exploreView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
-    }
-        
-    @objc private func showWasResetToDefaultConfigAlert(_ notification: Notification) {
-        let model = AlertModel(title: StringConstant.resetToDefaultConfigTitle, message: StringConstant.resetToDefaultConfigExplanation, cancelButton: nil)
-        showAlert(model)
     }
 
     @objc private func drawDirectionRoute(_ notification: Notification) {

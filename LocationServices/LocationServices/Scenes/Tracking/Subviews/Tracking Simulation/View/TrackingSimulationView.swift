@@ -26,19 +26,19 @@ final class TrackingSimulationView: UIView {
         return iv
     }()
     
-    private let titleLabel = AmazonLocationLabel(labelText: StringConstant.geofence,
+    private let titleLabel = AmazonLocationLabel(labelText: "",
                                                  font: TrackingDashoardConstant.titleFont,
                                                  fontColor: .black,
                                                  textAlignment: .center)
     
-    private let detailLabel = AmazonLocationLabel(labelText: StringConstant.amazonLocationDetail,
+    private let detailLabel = AmazonLocationLabel(labelText: "",
                                                   font: TrackingDashoardConstant.detailLabelFont,
                                                   isMultiline: true,
                                                   fontColor: .lsGrey,
                                                   textAlignment: .center)
     
     private lazy var comonButton: AmazonLocationButton =  {
-        let button = AmazonLocationButton(title: StringConstant.addGeofence)
+        let button = AmazonLocationButton(title: "")
         button.accessibilityIdentifier = ViewsIdentifiers.Tracking.enableTrackingButton
         button.addTarget(self, action: #selector(commonButtonAction), for: .touchUpInside)
         return button
