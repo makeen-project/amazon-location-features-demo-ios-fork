@@ -1265,6 +1265,193 @@
     "Political view" : {
 
     },
+    "PoliticalDescriptionArgentina" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argentina's view on the Southern Patagonian Ice Field and Tierra Del Fuego, including the Falkland Islands, South Georgia, and South Sandwich Islands"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionCyprus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyprus's political view"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionEgypt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Egypt's view on Bir Tawil"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionGeorgia" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Georgia's political view"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionGreece" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greece's political view"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionIndiaPoliticalDescriptionIndia" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "India's view on Gilgit-Baltistan"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionKenya" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kenya's view on the Ilemi Triangle"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionMorocco" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morocco's view on Western Sahara"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionPalestine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palestine's political view"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionRussia" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Russia's view on Crimea"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionSerbia" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sudan's view on the Halaib Triangle"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionSudan" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serbia's view on Kosovo, Vukovar, and Sarengrad Islands"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionSuriname" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suriname's view on the Courantyne Headwaters and Lawa Headwaters"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionSyria" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Syria's view on the Golan Heights"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionTanzania" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanzania's view on Lake Malawi"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionTürkiye" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Türkiye's view on Cyprus and Northern Cyprus"
+          }
+        }
+      }
+    },
+    "PoliticalDescriptionUruguay" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uruguay's view on Rincon de Artigas"
+          }
+        }
+      }
+    },
     "Preview" : {
 
     },
