@@ -16,7 +16,7 @@ class ErrorHandler {
     
     static func handleAWSStackDeletedError(delegate: AlertPresentable?) {
         DispatchQueue.main.async {
-            let model = AlertModel(title: StringConstant.awsStackInvalidTitle, message: StringConstant.awsStackInvalidExplanation, cancelButton: nil, okButton: StringConstant.terminate)
+            let model = AlertModel(title: String.awsStackInvalidTitle, message: String.awsStackInvalidExplanation, cancelButton: nil, okButton: StringConstant.terminate)
             model.okHandler = {
                 UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
             }

@@ -24,6 +24,15 @@ extension String {
     static let cellCanNotBeDequed = "Cell can't be dequed"
     
     //static let errorToBeImplemented = "to be implemented"
+    // errors
+    static let domainErrorLocalizedDescription = "The operation couldn’t be completed. (kCLErrorDomain error 0.)"
+    static let testExpectationError = "expectation not matched after waiting"
+    static let sessionExpiredError = "Session is expired. Please sign out and sign in back to continue access all features. Otherwise you could face unexpected behaviour in the app"
+    static let greatDistanceErrorTitle = "Distance is greater than 400 km"
+    static let greatDistanceErrorMessage = "Can't calculate via Esri, kindly switch to HERE provider"
+    static let invalidUrlError = "URL is invalid. Can't open it"
+    static let awsStackInvalidTitle = "Invalid AWS Stack"
+    static let awsStackInvalidExplanation = "Stack is not invalid anymore or deleted, app will disconnect from AWS and restart"
 }
 
 // Strings
@@ -51,24 +60,11 @@ enum StringConstant {
     static let maybeLater = "Maybe later"
     static let checkYourConnection = "Check your internet connection and try again"
     static let amazonLocatinCannotReach = "Amazon Location can't reach the internet"
-    //static let navigationNotAvailable = "Navigation is not available"
-    //static let selectYourCurrentLocation = "Select your current location as starting point to enable navigation"
-    //static let cantCreateARoute = "Can't create a route"
-    //static let trackingDataStorage = "Tracking Data Storage"
-    //static let trackingDisplayData = "We only display data for the last 3 paths that you track with Amazon Location."
-    //static let deleteTrackingData = "Delete Tracking Data"
-    //static let restartAppTitle = "Restart Amazon Location App "
-    //static let restartAppExplanation = "Amazon Location app must be closed and reopened to apply the new configuration"
     static let terminate = "Ok"
-    static let awsStackInvalidTitle = "Invalid AWS Stack"
-    static let awsStackInvalidExplanation = "Stack is not invalid anymore or deleted, app will disconnect from AWS and restart"
     static let failedToCalculateRoute = "Failed to calculate route"
     static let noInternetConnection = "No internet connection"
-    //static let enableTracking = "Enable Tracker"
     static let trackers = "Trackers"
     static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
-    //static let viewTermsAndConditions = "View Terms and Conditions"
-    //static let continueToTracker = "Continue"
     static let enableTrackingDescription = "Enabling the feature will allow you to track your device and get notified when the device enters or exits any of your geofences."
     
     static let startTracking = "Start Tracking"
@@ -123,14 +119,6 @@ enum StringConstant {
     static let coordinateLabelText = "50.54943, 30.21989"
     static let timeLabelText = "11:22 pm"
     
-    // errors
-    static let domainErrorLocalizedDescription = "The operation couldn’t be completed. (kCLErrorDomain error 0.)"
-    static let testExpectationError = "expectation not matched after waiting"
-    static let sessionExpiredError = "Session is expired. Please sign out and sign in back to continue access all features. Otherwise you could face unexpected behaviour in the app"
-    static let greatDistanceErrorTitle = "Distance is greater than 400 km"
-    static let greatDistanceErrorMessage = "Can't calculate via Esri, kindly switch to HERE provider"
-    static let invalidUrlError = "URL is invalid. Can't open it"
-    
     // Tracking Simulation
     static let exitTracking = ""
     static let exitTrackingAlertMessage = "Are you sure you want to exit simulation?"
@@ -173,7 +161,6 @@ enum StringConstant {
     static let mapStyle = "Map style"
     static let defaultRouteOptions = "Default route options"
     static let partnerAttributionTitle = "Partner Attribution"
-    //static let partnerAttributionESRIDescription = "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community"
     static let partnerAttributionHEREDescription = "© AWS, HERE"
     static let softwareAttributionTitle = "Software Attribution"
     static let softwareAttributionDescription = "Click learn more for software attribution"
@@ -195,8 +182,6 @@ enum StringConstant {
     static let demo = "Demo"
     static let routeOverview = "Route Overview"
     
-    //static let loginVcTitle = "AWS CloudFormation"
-    //static let trackingHistory = "Tracking History"
     static let viewRoute = "View Route"
     static let hideRoute = "Hide Route"
     
@@ -216,4 +201,21 @@ enum StringConstant {
     static let options = "Options"
     static let selected = "Selected"
     static let routesActive = "routes active"
+    static let politicalLight = "Light"
+    static let politicalDark = "Dark"
+    
+    // Languages
+    static let deutsch = "Deutsch"
+    static let spanish = "Español"
+    static let english = "English"
+    static let french = "Français"
+    static let italian = "Italiano"
+    static let protugeseBrasil = "Português Brasileiro"
+    static let simplifiedChinese = "简体中文"
+    static let traditionalChinese = "繁体中文"
+    static let japanese = "日本語"
+    static let korean = "한국어"
+    static let arabic = "العربية"
+    static let hebrew = "עברית"
+    static let hindi = "हिन्दी"
 }

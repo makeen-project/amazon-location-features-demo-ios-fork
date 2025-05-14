@@ -2632,6 +2632,7 @@
 				"pt-PT",
 				"zh-Hans",
 				"zh-Hant",
+				he,
 			);
 			mainGroup = AD2AF023292E892000149904;
 			packageReferences = (
