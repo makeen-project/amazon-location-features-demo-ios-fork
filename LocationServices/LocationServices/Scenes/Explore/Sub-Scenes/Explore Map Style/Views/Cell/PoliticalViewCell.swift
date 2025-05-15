@@ -80,7 +80,7 @@ class PoliticalViewCell: UITableViewCell {
         else {
             itemIcon.isHidden = false
         }
-        itemTitle.text = politicalView.fullName
+        itemTitle.text = politicalView.countryCode
         itemIcon.text = countryFlag
         itemIcon.font = UIFont.systemFont(ofSize: 24)
         itemSubtitle.text = politicalView.politicalDescription

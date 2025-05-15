@@ -8,31 +8,27 @@
 import Foundation
 import CoreLocation
 
-protocol TrackingNavigationDelegate: AnyObject, AuthActionsHelperDelegate {
+protocol TrackingNavigationDelegate: AnyObject {
     func showNextTrackingScene()
-    func showTrackingHistory(isTrackingActive: Bool)
     func showMapStyleScene()
-    func showLoginFlow()
-    func showLoginSuccess()
     func showAttribution()
     func showDashboardFlow()
 }
 
 protocol TrackingViewModelProtocol: AnyObject {
     var delegate: TrackingViewModelDelegate? { get set }
-    var isTrackingActive: Bool { get }
-    var hasHistory: Bool { get }
-    
-    func startTracking()
-    func stopTracking()
-    func trackLocationUpdate(location: CLLocation?)
-    func fetchListOfGeofences() async
-    func updateHistory() async
-    func resetHistory()
+    var busRoutes: [BusRoute] { get set }
+    var routesStatus: [String: RouteStatus] { get set }
+    var routeGeofences: [String: [GeofenceDataModel]] { get set }
+    func startIoTSubscription()
+    func stopIoTSubscription()
+    func fetchListOfGeofences(collectionName: String) async -> [GeofenceDataModel]?
+    func showGeofences(routeId: String, geofences: [GeofenceDataModel])
+    func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D])
+    func evaluateGeofence(coordinate: CLLocationCoordinate2D, collectionName: String) async
 }
 
 protocol TrackingViewModelDelegate: AnyObject, AlertPresentable {
-    func drawTrack(history: [TrackingHistoryPresentation])
-    func historyLoaded()
-    func showGeofences(_ models: [GeofenceDataModel])
+    func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D])
+    func showGeofences(routeId: String, _ models: [GeofenceDataModel])
 }

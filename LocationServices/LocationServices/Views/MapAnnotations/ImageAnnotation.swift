@@ -10,9 +10,10 @@ import MapLibre
 
 class ImageAnnotation:MLNPointAnnotation {
     var image: UIImage?
-    
-    init(image: UIImage) {
+    var identifier: String?
+    init(image: UIImage, identifier: String? = "ImageAnnotationViewIdentifier") {
         self.image = image
+        self.identifier = identifier
         super.init()
     }
     
@@ -24,7 +25,7 @@ class ImageAnnotation:MLNPointAnnotation {
 class ImageAnnotationView: MLNAnnotationView {
     
     enum Constants {
-        static let size: CGSize = CGSize(width: 16, height: 16)
+        static let size: CGSize = CGSize(width: 32, height: 32)
     }
     
     private var imageView: UIImageView?
@@ -41,7 +42,6 @@ class ImageAnnotationView: MLNAnnotationView {
     
     func addImage(_ image: UIImage?) {
         guard let image else { return }
-        self.imageView?.removeFromSuperview()
         
         let imageView = UIImageView()
         self.imageView = imageView
@@ -49,7 +49,5 @@ class ImageAnnotationView: MLNAnnotationView {
         addSubview(imageView)
 
         imageView.image = image
-        
-        imageView.setShadow()
     }
 }

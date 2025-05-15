@@ -144,17 +144,19 @@ extension DefaultCommonMapView: MLNMapViewDelegate {
             }
         case is ImageAnnotation:
             guard let imageAnnotation = annotation as? ImageAnnotation else { return nil }
+            let identifier = imageAnnotation.identifier ?? Constant.imageAnnotationViewIdentifier
+            print("image annotation identifier: \(identifier)")
             let imageAnnotationView: MLNAnnotationView
-            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constant.imageAnnotationViewIdentifier) as? ImageAnnotationView {
+            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? ImageAnnotationView {
                 annotationView.annotation = imageAnnotation
                 annotationView.addImage(imageAnnotation.image)
                 
                 imageAnnotationView = annotationView
             } else {
-                imageAnnotationView = ImageAnnotationView(annotation: imageAnnotation, reuseIdentifier: Constant.imageAnnotationViewIdentifier)
+                imageAnnotationView = ImageAnnotationView(annotation: imageAnnotation, reuseIdentifier: identifier)
             }
             
-            imageAnnotationView.accessibilityIdentifier = ViewsIdentifiers.General.imageAnnotationView
+            imageAnnotationView.accessibilityIdentifier = imageAnnotation.identifier
             return imageAnnotationView
         default:
             return nil
@@ -354,6 +356,23 @@ extension DefaultCommonMapView {
     func removeAllAnnotations() {
         self.mapView.annotations?.forEach({ data in
             self.mapView.removeAnnotation(data)
+        })
+    }
+    
+    func removeGeofenceAnnotations() {
+        self.mapView.annotations?.forEach({ data in
+            if data is GeofenceAnnotation {
+                self.mapView.removeAnnotation(data)
+            }
+        })
+    }
+    
+    func removeBusAnnotation(id: String) {
+        self.mapView.annotations?.forEach({ data in
+            if let busAnnotation = (data as? ImageAnnotation),
+               busAnnotation.identifier == id {
+                self.mapView.removeAnnotation(data)
+            }
         })
     }
 }

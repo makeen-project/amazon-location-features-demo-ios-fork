@@ -84,6 +84,7 @@ enum StringConstant {
     static let disconnectAWSAlertMessage = "Are you sure you want to Disconnect AWS?"
     static let noInternetConnection = "No internet connection"
     static let enableTracking = "Enable Tracker"
+    static let trackers = "Trackers"
     static let trackingChangeToHere = "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions."
     static let viewTermsAndConditions = "View Terms and Conditions"
     static let continueToTracker = "Continue"
@@ -91,12 +92,27 @@ enum StringConstant {
     
     static let startTracking = "Start Tracking"
     static let stopTracking = "Stop Tracking"
+    static let startSimulation = "Try Trackers & Geofences simulation"
+    static let simulation = "Simulation"
+    static let trackersGeofences = "Trackers and Geofences"
+    static let trackersGeofencesHeader = "Tracking and Geofence simulation"
+    static let trackersGeofencesDetail = "Enter the Trackers simulation to view the path across Vancouver streets that crosses Geofences"
+    static let startTrackingSimulation = "Try Trackers & Geofences Simulation"
+    static let trackersDetail = "Visualize your location history on the map"
+    static let geofences = "Geofences"
+    static let geofencesDetail = "Define virtual boundaries around a specific area to detect entry and exit events"
+    static let notifications = "Notifications"
+    static let notificationsDetail = "Get geofence messages when you enter and leave locations"
+    static let routesNotifications = "Routes Notifications"
     
     static let emptyTrackingHistory = "No tracking history available"
     
     static let tracker = "Tracker"
-    static let entered = "entered"
-    static let exited = "exited"
+    static let entered = "Entered"
+    static let exited = "Exited"
+    static let exit = "Exit"
+    
+    static let change = "Change"
     
     static let go = "Go"
     static let preview = "Preview"
@@ -133,6 +149,10 @@ enum StringConstant {
     static let greatDistanceErrorTitle = "Distance is greater than 400 km"
     static let greatDistanceErrorMessage = "Can't calculate via Esri, kindly switch to HERE provider"
     static let invalidUrlError = "URL is invalid. Can't open it"
+    
+    // Tracking Simulation
+    static let exitTracking = ""
+    static let exitTrackingAlertMessage = "Are you sure you want to exit simulation?"
     
     //login
     enum LoginInfo {
@@ -177,17 +197,15 @@ enum StringConstant {
     }
     
     enum Tracking {
-        static let noTracking = "Not tracking your device location"
-        static let isTracking = "Tracking your device location"
+        static let noTracking = "Device tracking inactive"
+        static let isTracking = "Device tracking is active"
     }
     
     enum TabBar {
-        static let explore: String = "Explore"
+        static let explore: String = "Navigate"
         static let tracking: String = "Trackers"
-        static let geofence: String = "Geofences"
         static let settings: String = "Settings"
-        static let about: String = "About"
-        static let more: String = "More"
+        static let about: String = "More"
     }
     
     enum Errors {
@@ -233,6 +251,8 @@ enum StringConstant {
     static let trackingHistory = "Tracking History"
     static let viewRoute = "View Route"
     static let hideRoute = "Hide Route"
+    
+    static let trackingNotificationTitle = "Amazon Location"
 }
 
 protocol ConstantsLoginInfoConfig {

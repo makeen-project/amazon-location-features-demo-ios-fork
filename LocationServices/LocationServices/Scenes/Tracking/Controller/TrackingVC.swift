@@ -17,11 +17,13 @@ final class TrackingVC: UIViewController {
         static let trackingMapViewBottomOffset: CGFloat = 130
     }
     
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
+    
     var geofenceHandler: VoidHandler?
     var directionHandler: VoidHandler?
     
     private var isTrackingActive: Bool = false
-    private var trackingMapView: TrackingMapView = TrackingMapView()
+    public var trackingMapView: TrackingMapView = TrackingMapView()
     private var userLocation: CLLocation?
     
     private lazy var locationManager: LocationManager = {
@@ -37,17 +39,11 @@ final class TrackingVC: UIViewController {
         return button
     }()
     
-    private lazy var historyHeaderView: TrackingHistoryHeaderView = {
-        let view = TrackingHistoryHeaderView(titleTopOffset: Constants.titleTopOffset)
-        view.backgroundColor = .searchBarBackgroundColor
+    private lazy var trackingHeaderView: TrackingHeaderView = {
+        let view = TrackingHeaderView()
+        view.backgroundColor = .white
         view.layer.cornerRadius = Constants.headerCornerRadius
         view.isUserInteractionEnabled = true
-        view.layer.maskedCorners  = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        let tap = UITapGestureRecognizer(target: self, action: #selector(openHistory))
-        view.addGestureRecognizer(tap)
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(openHistory))
-        view.addGestureRecognizer(pan)
-        
         return view
     }()
     
@@ -73,20 +69,18 @@ final class TrackingVC: UIViewController {
         self.navigationItem.backButtonTitle = ""
         self.view.backgroundColor = .white
         trackingMapView.delegate = self
-        authActionsHelper.delegate = delegate
         setupNotifications()
         setupHandlers()
         setupViews()
         locationManagerSetup()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            historyHeaderView.isHidden = true
+        trackingHeaderView.isHidden = true
+        if isiPad {
             grabberIcon.isHidden = true
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        historyHeaderView.updateButtonStyle(isTrackingStarted: false)
         removeKeyboardNotifications()
     }
     
@@ -97,29 +91,25 @@ final class TrackingVC: UIViewController {
     }
     
     private func setupHandlers() {
-        historyHeaderView.trackingButtonHandler =  { [weak self] state in
-            if UserDefaultsHelper.getAppState() == .loggedIn {
-                NotificationCenter.default.post(name: Notification.updateStartTrackingButton, object: self, userInfo: ["state": state])
-            } else  {
-                self?.delegate?.showLoginFlow()
+        trackingHeaderView.exitButtonHandler =  { [weak self] in
+            let alertModel = AlertModel(title: StringConstant.exitTracking, message: StringConstant.exitTrackingAlertMessage, cancelButton: StringConstant.cancel, okButton: StringConstant.exit) {
+                self?.trackingHeaderView.isHidden = true
+                //show explore view
+                NotificationCenter.default.post(name: Notification.dismissTrackingSimulation, object: self, userInfo: nil)
+                if self?.isiPad == true {
+                    NotificationCenter.default.post(name: Notification.showExploreScene, object: nil, userInfo: nil)
+                }
+                else {
+                    self?.tabBarController?.selectedIndex = 0
+                }
             }
-        }
-        
-        historyHeaderView.showAlertCallback = showAlert(_:)
-        historyHeaderView.showAlertControllerCallback = { [weak self] alertController in
-            self?.present(alertController, animated: true)
+            self?.showAlert(alertModel)
         }
     }
     
     func locationManagerSetup() {
         locationManager.performLocationDependentAction {
             self.locationManager.startUpdatingLocation()
-        }
-    }
-    
-    func showGeofenceAnnotations() {
-        Task {
-            await viewModel.fetchListOfGeofences()
         }
     }
     
@@ -134,10 +124,10 @@ final class TrackingVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshMapView(_:)), name: Notification.refreshMapView, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateButtonStyle(_:)), name: Notification.updateStartTrackingButton, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingState(_:)), name: Notification.updateTrackingHeader, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackingAppearanceChanged(_:)), name: Notification.trackingAppearanceChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTrackingHistory(_:)), name: Notification.updateTrackingHistory, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showTrackingNotification(_:)), name: Notification.showTrackingNotification, object: nil)
     }
     
     private func setupKeyboardNotifications() {
@@ -163,12 +153,6 @@ final class TrackingVC: UIViewController {
         trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: 0)
     }
     
-    @objc private func updateTrackingHistory(_ notification: Notification) {
-        guard (notification.object as? TrackingViewModelProtocol) !== viewModel else { return }
-        guard let history = notification.userInfo?["history"] as? [TrackingHistoryPresentation] else { return }
-        drawTrack(history: history)
-    }
-    
     @objc private func refreshMapView(_ notification: Notification) {
         trackingMapView.reloadMap()
     }
@@ -184,25 +168,14 @@ final class TrackingVC: UIViewController {
         guard !isInSplitViewController else { return }
         DispatchQueue.main.async {
             let size = self.view.bounds.size.height / 2 - 20
-            let offset:CGFloat = (notification.userInfo?["height"] as? CGFloat) ?? size
+            let offset:CGFloat = ((notification.userInfo?["height"] as? CGFloat) ?? size)-80
             self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: offset)
         }
     }
     
-    @objc private func updateButtonStyle(_ notification: Notification) {
+    @objc private func updateTrackingState(_ notification: Notification) {
         let state = (notification.userInfo?["state"] as? Bool) ?? false
-        if state {
-            viewModel.startTracking()
-            viewModel.trackLocationUpdate(location: userLocation)
-            
-            if (notification.object as? Self) === self {
-                delegate?.showTrackingHistory(isTrackingActive: state)
-            }
-        } else {
-            viewModel.stopTracking()
-        }
-        
-        self.historyHeaderView.updateButtonStyle(isTrackingStarted: state)
+        trackingHeaderView.isHidden = !state
         self.view.setNeedsLayout()
     }
     
@@ -213,61 +186,28 @@ final class TrackingVC: UIViewController {
         authActionsHelper.tryToPerformAuthAction {}
     }
     
-    @objc func openHistory() {
-        openLoginFlow(skipDashboard: true)
-    }
-    
     @objc private func trackingAppearanceChanged(_ notification: Notification) {
         guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
-        historyHeaderView.isHidden = isVisible
+        trackingHeaderView.isHidden = isVisible
         grabberIcon.isHidden = isVisible
-        historyHeaderView.updateButtonStyle(isTrackingStarted: viewModel.isTrackingActive)
     }
     
-    @objc private func authorizationStatusChanged(_ notification: Notification) {
+    @objc private func showTrackingNotification(_ notification: Notification) {
+        guard let title = notification.userInfo?["title"] as? String,
+              let message = notification.userInfo?["message"] as? String else {
+            return
+        }
         DispatchQueue.main.async {
-            switch LoginViewModel.getAuthStatus() {
-            case .authorized:
-                if !self.isInSplitViewController {
-                    self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
-                }
-                Task {
-                    await self.viewModel.updateHistory()
-                }
-            case .customConfig, .defaultConfig:
-                self.delegate?.showDashboardFlow()
-            }
-            self.showGeofenceAnnotations()
+            let banner = InAppNotificationBanner(title: title, message: message, image: GeneralHelper.getAppIcon())
+            banner.show(in: self.view)
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        openLoginFlow(skipDashboard: viewModel.hasHistory)
-        showGeofenceAnnotations()
+        delegate?.showDashboardFlow()
         setupKeyboardNotifications()
-    }
-    
-    func openLoginFlow(skipDashboard: Bool) {
-        switch LoginViewModel.getAuthStatus() {
-        case .authorized:
-            if !isInSplitViewController {
-                self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
-            }
-            if skipDashboard {
-                delegate?.showTrackingHistory(isTrackingActive: viewModel.isTrackingActive)
-            } else {
-                Task {
-                    await viewModel.updateHistory()
-                }
-                delegate?.showNextTrackingScene()
-            }
-        case .customConfig:
-            delegate?.showLoginSuccess()
-        case .defaultConfig:
-            delegate?.showLoginFlow()
-        }
     }
     
     private func setupViews() {
@@ -276,9 +216,24 @@ final class TrackingVC: UIViewController {
         }
         navigationController?.navigationBar.isHidden = !isInSplitViewController
         self.view.addSubview(trackingMapView)
-
+        self.view.addSubview(trackingHeaderView)
         trackingMapView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        trackingHeaderView.snp.makeConstraints {
+            if isiPad {
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(70)
+                $0.width.equalTo(350)
+                $0.centerX.equalToSuperview()
+            }
+            else {
+                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.leading.equalToSuperview().offset(16)
+                $0.trailing.equalToSuperview().offset(-16)
+            }
+
+            $0.height.equalTo(40)
         }
     }
 }
@@ -286,8 +241,6 @@ final class TrackingVC: UIViewController {
 extension TrackingVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         userLocation = manager.location
-        viewModel.trackLocationUpdate(location: manager.location)
-        trackingMapView.update(userLocation: manager.location, userHeading: manager.heading)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
@@ -298,8 +251,7 @@ extension TrackingVC: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
-            viewModel.trackLocationUpdate(location: manager.location)
-            NotificationCenter.default.post(name: Notification.grantedLocationPermissions, object: nil, userInfo: ["userLocation": manager.location as Any])
+            NotificationCenter.default.post(name: Notification.Name("GrantedLocationPermissions"), object: nil, userInfo: ["userLocation": manager.location as Any])
             trackingMapView.grantedLocationPermissions()
         default:
             break
@@ -319,7 +271,7 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
         Task {
             guard let lat = userLocation?.coordinate.latitude,
                   let long = userLocation?.coordinate.longitude else { return }
-            try await GeofenceAPIService().evaluateGeofence(lat: lat, long: long)
+            try await GeofenceAPIService().evaluateGeofence(lat: lat, long: long, collectionName: GeofenceServiceConstant.collectionName)
             self.geofenceHandler?()
         }
     }
@@ -334,29 +286,18 @@ extension TrackingVC: TrackingMapViewOutputDelegate {
 }
 
 extension TrackingVC: TrackingViewModelDelegate {
-    func historyLoaded() {
-        guard LoginViewModel.getAuthStatus() == .authorized,
-              viewModel.hasHistory else { return }
-        
-        DispatchQueue.main.async {
-            if !self.isInSplitViewController {
-                self.trackingMapView.updateBottomViewsSpacings(additionalBottomOffset: Constants.trackingMapViewBottomOffset)
-            }
-            self.delegate?.showTrackingHistory(isTrackingActive: self.viewModel.isTrackingActive)
-        }
-    }
     
     func removeGeofencesFromMap() {
         trackingMapView.removeGeofencesFromMap()
     }
     
-    func showGeofences(_ models: [GeofenceDataModel]) {
+    func showGeofences(routeId: String, _ models: [GeofenceDataModel]) {
         trackingMapView.showGeofenceAnnotations(models)
     }
     
-    func drawTrack(history: [TrackingHistoryPresentation]) {
+    func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
         DispatchQueue.main.async {
-            self.trackingMapView.drawTrack(history: history)
+            self.trackingMapView.drawTrackingRoute(routeId: routeId, coordinates: coordinates)
         }
     }
 }

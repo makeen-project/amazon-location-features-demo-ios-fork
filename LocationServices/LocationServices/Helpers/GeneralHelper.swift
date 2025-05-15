@@ -29,26 +29,26 @@ class GeneralHelper {
     }
     
     static func getImageAndText(image: UIImage,
-                             string: String,
-                             isImageBeforeText: Bool,
-                             segFont: UIFont? = nil) -> UIImage {
+                                string: String,
+                                isImageBeforeText: Bool,
+                                segFont: UIFont? = nil) -> UIImage {
         let font = segFont ?? UIFont.systemFont(ofSize: 16, weight: .medium)
         let expectedTextSize = (string as NSString).size(withAttributes: [.font: font])
         let width = expectedTextSize.width + image.size.width + 5
         let height = max(expectedTextSize.height, image.size.width)
         let size = CGSize(width: width, height: height)
-
+        
         let renderer = UIGraphicsImageRenderer(size: size)
         return renderer.image { context in
             let fontTopPosition: CGFloat = (height - expectedTextSize.height) / 2
             let textOrigin: CGFloat = isImageBeforeText
-                ? image.size.width + 5
-                : 0
+            ? image.size.width + 5
+            : 0
             let textPoint: CGPoint = CGPoint.init(x: textOrigin, y: fontTopPosition)
             string.draw(at: textPoint, withAttributes: [.font: font])
             let alignment: CGFloat = isImageBeforeText
-                ? 0
-                : expectedTextSize.width + 5
+            ? 0
+            : expectedTextSize.width + 5
             let rect = CGRect(x: alignment,
                               y: (height - image.size.height) / 2,
                               width: image.size.width,
@@ -74,7 +74,7 @@ class GeneralHelper {
             symbolLayer.text = NSExpression(mglJSONObject: expression)
         }
     }
-
+    
     static func recurseExpression(exp: Any, prevPropertyRegex: String, nextProperty: String, language: String) -> Any {
         if let arrayExp = exp as? [Any] {
             guard arrayExp.first as? String == "coalesce" else {
@@ -111,5 +111,31 @@ class GeneralHelper {
         
         return exp
     }
-
+    
+    static func getAWSConfigurationModel() -> CustomConnectionModel? {
+        var defaultConfiguration: CustomConnectionModel? = nil
+        // default configuration
+        if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String,
+           let region = Bundle.main.object(forInfoDictionaryKey: "AWSRegion") as? String,
+           let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") as? String,
+           let webSocketUrl = Bundle.main.object(forInfoDictionaryKey: "WebSocketUrl") as? String {
+            defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, userPoolClientId: "", userPoolId: "", userDomain: "", webSocketUrl: webSocketUrl, apiKey: apiKey, region: region)
+        }
+        
+        // custom configuration
+        let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
+        
+        return customConfiguration ?? defaultConfiguration
+    }
+    
+    static func getAppIcon() -> UIImage? {
+        if let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+           let primaryIcons = iconsDictionary["CFBundlePrimaryIcon"] as? [String: Any],
+           let iconFiles = primaryIcons["CFBundleIconFiles"] as? [String],
+           let lastIcon = iconFiles.last {
+            return UIImage(named: lastIcon)
+        }
+        return nil
+    }
+    
 }

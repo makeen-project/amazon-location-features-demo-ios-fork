@@ -63,8 +63,7 @@ final class SettingsViewModel: SettingsViewModelProtocol {
         datas = [
             SettingsCellModel(type: .units, subTitle: unitType?.title ?? ""),
             SettingsCellModel(type: .mapStyle, subTitle: mapStyle?.title ?? ""),
-            SettingsCellModel(type: .routeOption),
-            SettingsCellModel(type: .awsCloud)
+            SettingsCellModel(type: .routeOption)
         ]
     }
 }

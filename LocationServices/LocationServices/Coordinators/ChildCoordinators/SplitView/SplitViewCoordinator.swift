@@ -66,7 +66,6 @@ final class SplitViewCoordinator: Coordinator {
         switch type {
         case .explore: return getExploreCoordinator()
         case .tracking: return getTrackingCoordinator()
-        case .geofence: return getGeofenceCoordinator()
         case .settings: return getSettingsCoordinator()
         case .about: return getAboutCoordinator()
         }
@@ -79,7 +78,8 @@ final class SplitViewCoordinator: Coordinator {
         
         let coordinator = SplitViewExploreMapCoordinator(splitViewController: splitViewController)
         coordinator.geofenceHandler = { [weak self] in
-            self?.showNextScene(type: .geofence)
+            //TO DO: Need to show tracking simulation
+            self?.showNextScene(type: .tracking)
         }
         coordinator.splitDelegate = self
         return coordinator
