@@ -30,9 +30,9 @@ enum MapStyleColorType: String, Codable {
     var colorName: String {
         switch self {
         case .light:
-            return "Light"
+            return NSLocalizedString("Light", comment: "")
         case .dark:
-            return "Dark"
+            return NSLocalizedString("Dark", comment: "")
         }
     }
 }
@@ -46,24 +46,24 @@ struct PoliticalViewType: Codable {
 
 
 let PoliticalViewTypes: [PoliticalViewType] = [
-    PoliticalViewType(countryCode: "", flagCode: "", fullName: "No Political View", politicalDescription: ""),
-    PoliticalViewType(countryCode: "ARG", flagCode: "AR", fullName: "Argentina", politicalDescription: "Argentina's view on the Southern Patagonian Ice Field and Tierra Del Fuego, including the Falkland Islands, South Georgia, and South Sandwich Islands"),
-    PoliticalViewType(countryCode: "CYP", flagCode: "CY", fullName: "Cyprus", politicalDescription: "Cyprus's political view"),
-    PoliticalViewType(countryCode: "EGY", flagCode: "EG", fullName: "Egypt", politicalDescription: "Egypt's view on Bir Tawil"),
-    PoliticalViewType(countryCode: "GEO", flagCode: "GE", fullName: "Georgia", politicalDescription: "Georgia's political view"),
-    PoliticalViewType(countryCode: "GRC", flagCode: "GR", fullName: "Greece", politicalDescription: "Greece's political view"),
-    PoliticalViewType(countryCode: "IND", flagCode: "IN", fullName: "India", politicalDescription: "India's view on Gilgit-Baltistan"),
-    PoliticalViewType(countryCode: "KEN", flagCode: "KE", fullName: "Kenya", politicalDescription: "Kenya's view on the Ilemi Triangle"),
-    PoliticalViewType(countryCode: "MAR", flagCode: "MA", fullName: "Morocco", politicalDescription: "Morocco's view on Western Sahara"),
-    PoliticalViewType(countryCode: "PSE", flagCode: "PS", fullName: "Palestine", politicalDescription: "Palestine's political view"),
-    PoliticalViewType(countryCode: "RUS", flagCode: "RU", fullName: "Russia", politicalDescription: "Russia's view on Crimea"),
-    PoliticalViewType(countryCode: "SDN", flagCode: "SD", fullName: "Sudan", politicalDescription: "Sudan's view on the Halaib Triangle"),
-    PoliticalViewType(countryCode: "SRB", flagCode: "RS", fullName: "Serbia", politicalDescription: "Serbia's view on Kosovo, Vukovar, and Sarengrad Islands"),
-    PoliticalViewType(countryCode: "SUR", flagCode: "SR", fullName: "Suriname", politicalDescription: "Suriname's view on the Courantyne Headwaters and Lawa Headwaters"),
-    PoliticalViewType(countryCode: "SYR", flagCode: "SY", fullName: "Syria", politicalDescription: "Syria's view on the Golan Heights"),
-    PoliticalViewType(countryCode: "TUR", flagCode: "TR", fullName: "Türkiye", politicalDescription: "Türkiye's view on Cyprus and Northern Cyprus"),
-    PoliticalViewType(countryCode: "TZA", flagCode: "TZ", fullName: "Tanzania", politicalDescription: "Tanzania's view on Lake Malawi"),
-    PoliticalViewType(countryCode: "URY", flagCode: "UY", fullName: "Uruguay", politicalDescription: "Uruguay's view on Rincon de Artigas"),
+    PoliticalViewType(countryCode: "", flagCode: "", fullName: NSLocalizedString("No Political View", comment: ""), politicalDescription: ""),
+    PoliticalViewType(countryCode: "ARG", flagCode: "AR", fullName: "Argentina", politicalDescription: NSLocalizedString("ArgentinaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "CYP", flagCode: "CY", fullName: "Cyprus", politicalDescription: NSLocalizedString("CyprusPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "EGY", flagCode: "EG", fullName: "Egypt", politicalDescription: NSLocalizedString("EgyptPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "GEO", flagCode: "GE", fullName: "Georgia", politicalDescription: NSLocalizedString("GeorgiaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "GRC", flagCode: "GR", fullName: "Greece", politicalDescription: NSLocalizedString("GreecePoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "IND", flagCode: "IN", fullName: "India", politicalDescription: NSLocalizedString("IndiaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "KEN", flagCode: "KE", fullName: "Kenya", politicalDescription: NSLocalizedString("KenyaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "MAR", flagCode: "MA", fullName: "Morocco", politicalDescription: NSLocalizedString("MoroccoPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "PSE", flagCode: "PS", fullName: "Palestine", politicalDescription: NSLocalizedString("PalestinePoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "RUS", flagCode: "RU", fullName: "Russia", politicalDescription: NSLocalizedString("RussiaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "SDN", flagCode: "SD", fullName: "Sudan", politicalDescription: NSLocalizedString("SudanPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "SRB", flagCode: "RS", fullName: "Serbia", politicalDescription: NSLocalizedString("SerbiaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "SUR", flagCode: "SR", fullName: "Suriname", politicalDescription: NSLocalizedString("SurinamePoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "SYR", flagCode: "SY", fullName: "Syria", politicalDescription: NSLocalizedString("SyriaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "TUR", flagCode: "TR", fullName: "Türkiye", politicalDescription: NSLocalizedString("TurkeyPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "TZA", flagCode: "TZ", fullName: "Tanzania", politicalDescription: NSLocalizedString("TanzaniaPoliticalView", comment: "")),
+    PoliticalViewType(countryCode: "URY", flagCode: "UY", fullName: "Uruguay", politicalDescription: NSLocalizedString("UruguayPoliticalView", comment: "")),
 ]
 
 
