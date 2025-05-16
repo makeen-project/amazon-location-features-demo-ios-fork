@@ -3431,92 +3431,6 @@
         }
       }
     },
-    "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's **Terms & Conditions** for use." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "بواسطة تنزيل، تثبيت، أو باستخدام ال Amazon الموقع نسخة تجريبية التطبيق، أنت يوافق إلى ال التطبيقات **الشروط & الشروط** من أجل استخدم."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Von wird heruntergeladen, installieren, oder unter Verwendung von die Amazon Standort Demoversion App, Sie zustimmen zu die Apps's **Bedingungen & Bedingungen** zum verwenden."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's **Terms & Conditions** for use."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Por descargando, instalar, o usando la Amazon Ubicación Demo Aplicación, tú acordar a la Apps's **Términos y Condiciones** por usar."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Par téléchargement, installation, ou en utilisant le Amazon Emplacement Démo Application, vous d'accord pour le Applis **Termes et Conditions** pour utiliser."
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "על ידי הורדה, התקנה, או לנצל ה Amazon מיקום הדגמה אפליקציה, אתה מסכים כדי ה אפליקציות **תנאים & תנאים** בשביל להשתמש."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "द्वारा डाउनलोड कर रहा है, स्थापित कर रहा है, या इस्तेमाल करते हुए यह Amazon लोकेशन डेमो ऐप, आप सहमत हैं को यह ऐप्लिकेशन's **शर्तें & शर्तें** के लिए उपयोग करें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Di scaricamento, installazione, o utilizzando lo Amazon Posizione Dimostrazione App, voi concordare a lo App **Termini & Condizioni** per uso."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "によって ダウンロード中、 インストール、 または を使用します その Amazon ロケーション デモ アプリ、 あなた 同意する に その アプリ **規約 & 条件** にとって 使用。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "에 의해 다운로드, 설치, 또는 를 사용하여 그 Amazon 위치 데모 앱, 당신 동의하다 에 그 앱 '의 **약관 & 조건** ...에 대한 용도."
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Por baixando, instalando, ou usando a Amazon Localização Demo Aplicativo, você aceita para a Aplicativos **Termos & Condições** pelo usar."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "由 正在下载， 正在安装， 要么 使用 这 Amazon 地点 演示 应用程序， 你 同意 到 这 应用程序 **条款 & 条件** 为了 使用。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通過 下載， 安裝， 或者 運用 該 Amazon 位置 演示 應用程序， 您 同意 至 該 應用 的 ** 條款 & 條件 ** 為了 使用。"
-          }
-        }
-      }
-    },
-    "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's Terms & Conditions for use." : {
-
-    },
     "Can't calculate via Esri, kindly switch to HERE provider" : {
 
     },
@@ -6599,6 +6513,89 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成"
+          }
+        }
+      }
+    },
+    "DownloadTermsConditions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بواسطة تنزيل، تثبيت، أو باستخدام ال Amazon الموقع نسخة تجريبية التطبيق، أنت يوافق إلى ال التطبيقات **الشروط & الشروط** من أجل استخدم."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von wird heruntergeladen, installieren, oder unter Verwendung von die Amazon Standort Demoversion App, Sie zustimmen zu die Apps's **Bedingungen & Bedingungen** zum verwenden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By downloading, installing, or using the Amazon Location Demo App, you agree to the App's **Terms & Conditions** for use."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por descargando, instalar, o usando la Amazon Ubicación Demo Aplicación, tú acordar a la Apps's **Términos y Condiciones** por usar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par téléchargement, installation, ou en utilisant le Amazon Emplacement Démo Application, vous d'accord pour le Applis **Termes et Conditions** pour utiliser."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "על ידי הורדה, התקנה, או לנצל ה Amazon מיקום הדגמה אפליקציה, אתה מסכים כדי ה אפליקציות **תנאים & תנאים** בשביל להשתמש."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "द्वारा डाउनलोड कर रहा है, स्थापित कर रहा है, या इस्तेमाल करते हुए यह Amazon लोकेशन डेमो ऐप, आप सहमत हैं को यह ऐप्लिकेशन's **शर्तें & शर्तें** के लिए उपयोग करें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di scaricamento, installazione, o utilizzando lo Amazon Posizione Dimostrazione App, voi concordare a lo App **Termini & Condizioni** per uso."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "によって ダウンロード中、 インストール、 または を使用します その Amazon ロケーション デモ アプリ、 あなた 同意する に その アプリ **規約 & 条件** にとって 使用。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "에 의해 다운로드, 설치, 또는 를 사용하여 그 Amazon 위치 데모 앱, 당신 동의하다 에 그 앱 '의 **약관 & 조건** ...에 대한 용도."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por baixando, instalando, ou usando a Amazon Localização Demo Aplicativo, você aceita para a Aplicativos **Termos & Condições** pelo usar."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "由 正在下载， 正在安装， 要么 使用 这 Amazon 地点 演示 应用程序， 你 同意 到 这 应用程序 **条款 & 条件** 为了 使用。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通過 下載， 安裝， 或者 運用 該 Amazon 位置 演示 應用程序， 您 同意 至 該 應用 的 ** 條款 & 條件 ** 為了 使用。"
           }
         }
       }
@@ -11358,9 +11355,6 @@
         }
       }
     },
-    "Map Language" : {
-
-    },
     "Map representation for different countries" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12029,7 +12023,87 @@
       }
     },
     "More" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أكثر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "יוֹתֵר"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अधिक"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di più"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もっと"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mais"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多的"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多的"
+          }
+        }
+      }
     },
     "MoroccoPoliticalView" : {
       "extractionState" : "manual",
@@ -19547,39 +19621,36 @@
       }
     },
     "Welcome to\nAmazon Location Demo" : {
-
-    },
-    "Welcome to Amazon Location Demo" : {
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "أهلا بك toAmazon الموقع نسخة تجريبية"
+            "value" : "أهلا بك to\nAmazon الموقع نسخة تجريبية"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Willkommen toAmazon Standort Demoversion"
+            "value" : "Willkommen to\nAmazon Standort Demoversion"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Welcome toAmazon Location Demo"
+            "value" : "Welcome to\nAmazon Location Demo"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bienvenido toAmazon Ubicación Demo"
+            "value" : "Bienvenido to\nAmazon Ubicación Demo"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bienvenue toAmazon Emplacement Démo"
+            "value" : "Bienvenue to\nAmazon Emplacement Démo"
           }
         },
         "he" : {
@@ -19591,25 +19662,25 @@
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "वेलकम toAmazon लोकेशन डेमो"
+            "value" : "वेलकम to\nAmazon लोकेशन डेमो"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Benvenuto toAmazon Posizione Dimostrazione"
+            "value" : "Benvenuto to\nAmazon Posizione Dimostrazione"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ウェルカム toAmazon ロケーション デモ"
+            "value" : "ウェルカム to\nAmazon ロケーション デモ"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "어서 오십시오 toAmazon 위치 데모"
+            "value" : "어서 오십시오 to\nAmazon 위치 데모"
           }
         },
         "pt-PT" : {
@@ -19621,13 +19692,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "欢迎光临 toAmazon 地点 演示"
+            "value" : "欢迎光临 to\nAmazon 地点 演示"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "歡迎 toAmazon 位置 演示"
+            "value" : "歡迎 to\nAmazon 位置 演示"
           }
         }
       }

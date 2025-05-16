@@ -24,7 +24,7 @@ final class ColorSegmentControl: UISegmentedControl {
     }
     
     func setup() {
-        let colorNames = [MapStyleColorType.light.colorName, MapStyleColorType.dark.colorName]
+        let colorNames = [MapStyleColorType.light.colorLabel, MapStyleColorType.dark.colorLabel]
         
         let lightImage = GeneralHelper.getImageAndText(image: UIImage(systemName: "sun.max")!, string: colorNames[0], isImageBeforeText: true)
         let darkImage = GeneralHelper.getImageAndText(image: UIImage(systemName: "moon")!, string: colorNames[1], isImageBeforeText: true)

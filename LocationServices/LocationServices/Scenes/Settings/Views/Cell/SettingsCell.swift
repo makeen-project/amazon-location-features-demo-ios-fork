@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 enum SettingsCellType {
-    case units, dataProvider, mapStyle, routeOption
+    case units, dataProvider, mapStyle, routeOption, language
     
     var title: String {
         switch self {
@@ -21,19 +21,23 @@ enum SettingsCellType {
             return StringConstant.mapStyle
         case .routeOption:
             return StringConstant.defaultRouteOptions
+        case .language:
+            return StringConstant.language
         }
     }
     
     var itemIcon: UIImage {
         switch self {
         case .units:
-            return .unitIcons
+            return .unitIcon
         case .dataProvider:
             return .dataProviderIcon
         case .mapStyle:
             return .mapStyleIcon
         case .routeOption:
             return .routeOption
+        case .language:
+            return .languageIcon
         }
     }
     

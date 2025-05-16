@@ -115,7 +115,7 @@ final class LanguageView: UIButton {
 
     public func setLanguage() {
         var language = Locale.currentLanguageIdentifier()
-        var selectedIndex = languageSwitcherData.firstIndex(where: { type in
+        let selectedIndex = languageSwitcherData.firstIndex(where: { type in
             if type.value == language {
                 return true
             }

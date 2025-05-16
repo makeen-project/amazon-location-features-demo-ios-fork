@@ -42,7 +42,7 @@ final class SearchTextField: UIView {
         textField.textColor = .mapDarkBlackColor
         textField.font = .amazonFont(type: .medium, size: 14)
         textField.attributedPlaceholder = NSAttributedString(
-            string: "Search",
+            string: NSLocalizedString("Search", comment: ""),
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
         textField.isUserInteractionEnabled = true

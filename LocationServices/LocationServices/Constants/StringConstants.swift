@@ -134,7 +134,7 @@ enum StringConstant {
     }
     
     enum About {
-        static let descriptionTitle = NSLocalizedString("By downloading, installing, or using the Amazon Location Demo App, you agree to the App's Terms & Conditions for use.", comment: "")
+        static let descriptionTitle = NSLocalizedString("DownloadTermsConditions", comment: "")
         static let appTermsOfUse = NSLocalizedString("Terms & Conditions", comment: "")
         static let appTermsOfUseURL = termsAndConditionsURL
         static let copyright = NSLocalizedString("© \(Calendar.current.component(.year, from: Date())), Amazon Web Services, Inc. or its affiliates. All rights reserved.", comment: "")
@@ -194,7 +194,7 @@ enum StringConstant {
     static let language = NSLocalizedString("Language", comment: "")
     static let politicalView = NSLocalizedString("Political view", comment: "")
     static let mapRepresentation = NSLocalizedString("Map representation for different countries", comment: "")
-    static let mapLanguage = NSLocalizedString("Map Language", comment: "")
+    static let mapLanguage = NSLocalizedString("Map language", comment: "")
     static let selectLanguage = NSLocalizedString("Select Language", comment: "")
     static let leaveNow = NSLocalizedString("Leave now", comment: "")
     static let leaveAt = NSLocalizedString("Leave at", comment: "")

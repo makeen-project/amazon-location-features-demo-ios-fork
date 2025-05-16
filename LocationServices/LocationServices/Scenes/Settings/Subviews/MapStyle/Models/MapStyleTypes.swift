@@ -30,6 +30,15 @@ enum MapStyleColorType: String, Codable {
     var colorName: String {
         switch self {
         case .light:
+            return "Light"
+        case .dark:
+            return "Dark"
+        }
+    }
+    
+    var colorLabel: String {
+        switch self {
+        case .light:
             return NSLocalizedString("Light", comment: "")
         case .dark:
             return NSLocalizedString("Dark", comment: "")
@@ -70,76 +79,77 @@ let PoliticalViewTypes: [PoliticalViewType] = [
 struct LanguageSwitcherData: Codable {
     let value: String
     let label: String
+    let mapOnly: Bool
 }
 
 let languageSwitcherData: [LanguageSwitcherData] = [
-LanguageSwitcherData(value: "en", label: "English" ), // English
-LanguageSwitcherData(value: "ar", label: "العربية" ), // Arabic
-LanguageSwitcherData(value: "as", label: "অসমীয়া" ), // Assamese
-LanguageSwitcherData(value: "az", label: "Azərbaycan dili" ), // Azerbaijani
-LanguageSwitcherData(value: "be", label: "беларуская" ), // Belarusian
-LanguageSwitcherData(value: "bg", label: "български" ), // Bulgarian
-LanguageSwitcherData(value: "bn", label: "বাংলা" ), // Bengali
-LanguageSwitcherData(value: "bs", label: "Bosanski" ), // Bosnian
-LanguageSwitcherData(value: "ca", label: "Català" ), // Catalan
-LanguageSwitcherData(value: "cs", label: "Čeština" ), // Czech
-LanguageSwitcherData(value: "cy", label: "Cymraeg" ), // Welsh
-LanguageSwitcherData(value: "da", label: "Dansk" ), // Danish
-LanguageSwitcherData(value: "de", label: "Deutsch" ), // German
-LanguageSwitcherData(value: "el", label: "Ελληνικά" ), // Greek
-LanguageSwitcherData(value: "es", label: "Español" ), // Spanish
-LanguageSwitcherData(value: "et", label: "Eesti" ), // Estonian
-LanguageSwitcherData(value: "eu", label: "Euskara" ), // Basque
-LanguageSwitcherData(value: "fi", label: "Suomi" ), // Finnish
-LanguageSwitcherData(value: "fo", label: "Føroyskt" ), // Faroese
-LanguageSwitcherData(value: "fr", label: "Français" ), // French
-LanguageSwitcherData(value: "ga", label: "Gaeilge" ), // Irish
-LanguageSwitcherData(value: "gl", label: "Galego" ), // Galician
-LanguageSwitcherData(value: "gn", label: "Avañe'ẽ" ), // Guarani
-LanguageSwitcherData(value: "gu", label: "ગુજરાતી" ), // Gujarati
-LanguageSwitcherData(value: "he", label: "עברית" ), // Hebrew
-LanguageSwitcherData(value: "hi", label: "हिन्दी" ), // Hindi
-LanguageSwitcherData(value: "hr", label: "Hrvatski" ), // Croatian
-LanguageSwitcherData(value: "hu", label: "Magyar" ), // Hungarian
-LanguageSwitcherData(value: "hy", label: "Հայերեն" ), // Armenian
-LanguageSwitcherData(value: "id", label: "Bahasa Indonesia" ), // Indonesian
-LanguageSwitcherData(value: "is", label: "Íslenska" ), // Icelandic
-LanguageSwitcherData(value: "it", label: "Italiano" ), // Italian
-LanguageSwitcherData(value: "ja", label: "日本語" ), // Japanese
-LanguageSwitcherData(value: "ka", label: "ქართული" ), // Georgian
-LanguageSwitcherData(value: "kk", label: "Қазақша" ), // Kazakh
-LanguageSwitcherData(value: "km", label: "ភាសាខ្មែរ" ), // Khmer
-LanguageSwitcherData(value: "kn", label: "ಕನ್ನಡ" ), // Kannada
-LanguageSwitcherData(value: "ko", label: "한국어" ), // Korean
-LanguageSwitcherData(value: "ky", label: "Кыргызча" ), // Kyrgyz
-LanguageSwitcherData(value: "lt", label: "Lietuvių" ), // Lithuanian
-LanguageSwitcherData(value: "lv", label: "Latviešu" ), // Latvian
-LanguageSwitcherData(value: "mk", label: "Македонски" ), // Macedonian
-LanguageSwitcherData(value: "ml", label: "മലയാളം" ), // Malayalam
-LanguageSwitcherData(value: "mr", label: "मराठी" ), // Marathi
-LanguageSwitcherData(value: "ms", label: "Bahasa Melayu" ), // Malay
-LanguageSwitcherData(value: "mt", label: "Malti" ), // Maltese
-LanguageSwitcherData(value: "my", label: "မြန်မာ" ), // Burmese
-LanguageSwitcherData(value: "nl", label: "Nederlands" ), // Dutch
-LanguageSwitcherData(value: "no", label: "Norsk" ), // Norwegian
-LanguageSwitcherData(value: "or", label: "ଓଡ଼ିଆ" ), // Odia
-LanguageSwitcherData(value: "pa", label: "ਪੰਜਾਬੀ" ), // Punjabi
-LanguageSwitcherData(value: "pl", label: "Polski" ), // Polish
-LanguageSwitcherData(value: "pt", label: "Português" ), // Portuguese
-LanguageSwitcherData(value: "ro", label: "Română" ), // Romanian
-LanguageSwitcherData(value: "ru", label: "Русский" ), // Russian
-LanguageSwitcherData(value: "sk", label: "Slovenčina" ), // Slovak
-LanguageSwitcherData(value: "sl", label: "Slovenščina" ), // Slovenian
-LanguageSwitcherData(value: "sq", label: "Shqip" ), // Albanian
-LanguageSwitcherData(value: "sr", label: "Српски" ), // Serbian
-LanguageSwitcherData(value: "sv", label: "Svenska" ), // Swedish
-LanguageSwitcherData(value: "ta", label: "தமிழ்" ), // Tamil
-LanguageSwitcherData(value: "te", label: "తెలుగు" ), // Telugu
-LanguageSwitcherData(value: "th", label: "ไทย" ), // Thai
-LanguageSwitcherData(value: "tr", label: "Türkçe" ), // Turkish
-LanguageSwitcherData(value: "uk", label: "Українська" ), // Ukrainian
-LanguageSwitcherData(value: "uz", label: "Oʻzbekcha" ), // Uzbek
-LanguageSwitcherData(value: "vi", label: "Tiếng Việt" ), // Vietnamese
-LanguageSwitcherData(value: "zh", label: "中文 (简体)" ), // Chinese (Simplified)
-LanguageSwitcherData(value: "zh-Hant", label: "中文 (繁體)" ) // Chinese (Traditional)
+    LanguageSwitcherData(value: "en", label: "English", mapOnly: false), // English
+    LanguageSwitcherData(value: "ar", label: "العربية", mapOnly: false), // Arabic
+    LanguageSwitcherData(value: "as", label: "অসমীয়া", mapOnly: true), // Assamese
+    LanguageSwitcherData(value: "az", label: "Azərbaycan dili", mapOnly: true), //Azerbaijani
+    LanguageSwitcherData(value: "be", label: "беларуская", mapOnly: true), //Belarusian
+    LanguageSwitcherData(value: "bg", label: "български", mapOnly: true), //Bulgarian
+    LanguageSwitcherData(value: "bn", label: "বাংলা", mapOnly: true), //Bengali
+    LanguageSwitcherData(value: "bs", label: "Bosanski", mapOnly: true), //Bosnian
+    LanguageSwitcherData(value: "ca", label: "Català", mapOnly: true), //Catalan
+    LanguageSwitcherData(value: "cs", label: "Čeština", mapOnly: true), //Czech
+    LanguageSwitcherData(value: "cy", label: "Cymraeg", mapOnly: true), //Welsh
+    LanguageSwitcherData(value: "da", label: "Dansk", mapOnly: true), //Danish
+    LanguageSwitcherData(value: "de", label: "Deutsch", mapOnly: false), //German
+    LanguageSwitcherData(value: "el", label: "Ελληνικά", mapOnly: true), //Greek
+    LanguageSwitcherData(value: "es", label: "Español", mapOnly: false), //Spanish
+    LanguageSwitcherData(value: "et", label: "Eesti", mapOnly: true), //Estonian
+    LanguageSwitcherData(value: "eu", label: "Euskara", mapOnly: true), //Basque
+    LanguageSwitcherData(value: "fi", label: "Suomi", mapOnly: true), //Finnish
+    LanguageSwitcherData(value: "fo", label: "Føroyskt", mapOnly: true), //Faroese
+    LanguageSwitcherData(value: "fr", label: "Français", mapOnly: false), //French
+    LanguageSwitcherData(value: "ga", label: "Gaeilge", mapOnly: true), //Irish
+    LanguageSwitcherData(value: "gl", label: "Galego", mapOnly: true), //Galician
+    LanguageSwitcherData(value: "gn", label: "Avañe'ẽ", mapOnly: true), //Guarani
+    LanguageSwitcherData(value: "gu", label: "ગુજરાતી", mapOnly: true), //Gujarati
+    LanguageSwitcherData(value: "he", label: "עברית", mapOnly: false), //Hebrew
+    LanguageSwitcherData(value: "hi", label: "हिन्दी", mapOnly: false), //Hindi
+    LanguageSwitcherData(value: "hr", label: "Hrvatski", mapOnly: true), //Croatian
+    LanguageSwitcherData(value: "hu", label: "Magyar", mapOnly: true), //Hungarian
+    LanguageSwitcherData(value: "hy", label: "Հայերեն", mapOnly: true), //Armenian
+    LanguageSwitcherData(value: "id", label: "Bahasa Indonesia", mapOnly: true), //Indonesian
+    LanguageSwitcherData(value: "is", label: "Íslenska", mapOnly: true), //Icelandic
+    LanguageSwitcherData(value: "it", label: "Italiano", mapOnly: false), //Italian
+    LanguageSwitcherData(value: "ja", label: "日本語", mapOnly: false), //Japanese
+    LanguageSwitcherData(value: "ka", label: "ქართული", mapOnly: true), //Georgian
+    LanguageSwitcherData(value: "kk", label: "Қазақша", mapOnly: true), //Kazakh
+    LanguageSwitcherData(value: "km", label: "ភាសាខ្មែរ", mapOnly: true), //Khmer
+    LanguageSwitcherData(value: "kn", label: "ಕನ್ನಡ", mapOnly: true), //Kannada
+    LanguageSwitcherData(value: "ko", label: "한국어", mapOnly: false), //Korean
+    LanguageSwitcherData(value: "ky", label: "Кыргызча", mapOnly: true), //Kyrgyz
+    LanguageSwitcherData(value: "lt", label: "Lietuvių", mapOnly: true), //Lithuanian
+    LanguageSwitcherData(value: "lv", label: "Latviešu", mapOnly: true), //Latvian
+    LanguageSwitcherData(value: "mk", label: "Македонски", mapOnly: true), //Macedonian
+    LanguageSwitcherData(value: "ml", label: "മലയാളം", mapOnly: true), //Malayalam
+    LanguageSwitcherData(value: "mr", label: "मराठी", mapOnly: true), //Marathi
+    LanguageSwitcherData(value: "ms", label: "Bahasa Melayu", mapOnly: true), //Malay
+    LanguageSwitcherData(value: "mt", label: "Malti", mapOnly: true), //Maltese
+    LanguageSwitcherData(value: "my", label: "မြန်မာ", mapOnly: true), //Burmese
+    LanguageSwitcherData(value: "nl", label: "Nederlands", mapOnly: true), //Dutch
+    LanguageSwitcherData(value: "no", label: "Norsk", mapOnly: true), //Norwegian
+    LanguageSwitcherData(value: "or", label: "ଓଡ଼ିଆ", mapOnly: true), //Odia
+    LanguageSwitcherData(value: "pa", label: "ਪੰਜਾਬੀ", mapOnly: true), //Punjabi
+    LanguageSwitcherData(value: "pl", label: "Polski", mapOnly: true), //Polish
+    LanguageSwitcherData(value: "pt", label: "Português", mapOnly: false), //Portuguese
+    LanguageSwitcherData(value: "ro", label: "Română", mapOnly: true), //Romanian
+    LanguageSwitcherData(value: "ru", label: "Русский", mapOnly: true), //Russian
+    LanguageSwitcherData(value: "sk", label: "Slovenčina", mapOnly: true), //Slovak
+    LanguageSwitcherData(value: "sl", label: "Slovenščina", mapOnly: true), //Slovenian
+    LanguageSwitcherData(value: "sq", label: "Shqip", mapOnly: true), //Albanian
+    LanguageSwitcherData(value: "sr", label: "Српски", mapOnly: true), //Serbian
+    LanguageSwitcherData(value: "sv", label: "Svenska", mapOnly: true), //Swedish
+    LanguageSwitcherData(value: "ta", label: "தமிழ்", mapOnly: true), //Tamil
+    LanguageSwitcherData(value: "te", label: "తెలుగు", mapOnly: true), //Telugu
+    LanguageSwitcherData(value: "th", label: "ไทย", mapOnly: true), //Thai
+    LanguageSwitcherData(value: "tr", label: "Türkçe", mapOnly: true), //Turkish
+    LanguageSwitcherData(value: "uk", label: "Українська", mapOnly: true), //Ukrainian
+    LanguageSwitcherData(value: "uz", label: "Oʻzbekcha", mapOnly: true), //Uzbek
+    LanguageSwitcherData(value: "vi", label: "Tiếng Việt", mapOnly: true), //Vietnamese
+    LanguageSwitcherData(value: "zh", label: "中文 (简体)", mapOnly: false), //Chinese (Simplified)
+    LanguageSwitcherData(value: "zh-Hant", label: "中文 (繁體)", mapOnly: false) // Chinese (Traditional)
 ]

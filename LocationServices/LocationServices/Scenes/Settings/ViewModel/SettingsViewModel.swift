@@ -27,10 +27,12 @@ final class SettingsViewModel: SettingsViewModelProtocol {
     private func populateConfiguredData() {
         let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         let unitType = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)
+        let language = UserDefaultsHelper.getObject(value: String.self, key: .language)
 
         datas = [
             SettingsCellModel(type: .units, subTitle: unitType?.title ?? ""),
             SettingsCellModel(type: .mapStyle, subTitle: mapStyle?.title ?? ""),
+            SettingsCellModel(type: .language, subTitle: language),
             SettingsCellModel(type: .routeOption)
         ]
     }

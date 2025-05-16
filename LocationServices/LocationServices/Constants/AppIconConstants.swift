@@ -54,7 +54,8 @@ extension UIImage {
     static let dataProviderIcon = UIImage(named: "icon-map")!
     static let mapStyleIcon = UIImage(named: "icon-paintroller")!
     static let routeOption = UIImage(named: "icon-shuffle")!
-    static let unitIcons = UIImage(named: "icon-people-arrows")!
+    static let unitIcon = UIImage(named: "icon-people-arrows")!
+    static let languageIcon = UIImage(systemName: "translate")!
     static let logoutIcon = UIImage(named: "icon-logout")!
     static let disconnectIcon = UIImage(named: "icon-disconnect")!
     
