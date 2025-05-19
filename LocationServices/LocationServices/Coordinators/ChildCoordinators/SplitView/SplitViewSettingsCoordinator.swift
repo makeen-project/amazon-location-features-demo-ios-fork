@@ -70,17 +70,6 @@ extension SplitViewSettingsCoordinator: SettingsNavigationDelegate {
         changeSecondaryVC(to: controller)
     }
     
-    private func showResetPasswordScene() {
-        let controller = ResetPasswordBuilder.create()
-        changeSecondaryVC(to: controller)
-    }
-    
-    private func showAwsCloudFormationscene() {
-        let controller = LoginVCBuilder.create(from: true)
-        controller.isFromSettingScene = true
-        changeSecondaryVC(to: controller)
-    }
-    
     private func changeSecondaryVC(to viewController: UIViewController) {
         splitViewController.changeSecondaryViewController(to: viewController)
         splitViewController.show(.secondary)

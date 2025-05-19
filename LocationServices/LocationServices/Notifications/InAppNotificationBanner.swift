@@ -15,6 +15,7 @@ class InAppNotificationBanner: UIView {
     private let messageLabel = UILabel()
 
     private static var currentBanner: InAppNotificationBanner?
+    private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
 
     init(title: String, message: String, image: UIImage? = nil) {
         super.init(frame: CGRect.zero)

@@ -12,13 +12,13 @@ protocol SettingsViewModelProtocol: AnyObject {
     func loadData()
     func getItemCount() -> Int
     func getCellItems(_ indexPath: IndexPath) -> SettingsCellModel
-    func logOut()
-    func disconnectAWS()
+//    func logOut()
+//    func disconnectAWS()
 }
 
 protocol SettingsViewModelOutputDelegate: AnyObject, AlertPresentable {
     func refreshViews()
-    func logoutCompleted()
+    //func logoutCompleted()
 }
 
 protocol SettingsNavigationDelegate: AnyObject {

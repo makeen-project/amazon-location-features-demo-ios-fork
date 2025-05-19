@@ -27,7 +27,6 @@ final class SettingsUITests: LocationServicesUITests {
 
         let _ = UITestTabBarScreen(app: app)
             .tapSettingsButton()
-            .waitAWSCloudRow()
             .waitMapStyleRow()
             .waitRouteOptionsRow()
     }

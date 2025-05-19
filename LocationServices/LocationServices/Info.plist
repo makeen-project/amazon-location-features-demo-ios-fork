@@ -17,14 +17,14 @@
 	</dict>
 	<key>MapName</key>
 	<string>EsriLight</string>
-	<key>IdentityPoolId</key>
-	<string>$(IDENTITY_POOL_ID)</string>
-	<key>ApiKey</key>
-	<string>$(API_KEY)</string>
-	<key>AWSRegion</key>
-	<string>$(AWS_REGION)</string>
-	<key>WebSocketUrl</key>
-	<string>${SIMULATION_WEB_SOCKET_URL}</string>
+	<key>IdentityPoolIds</key>
+	<string>$(VITE_AWS_COGNITO_IDENTITY_POOL_IDS)</string>
+	<key>ApiKeys</key>
+	<string>$(VITE_AWS_API_KEYS)</string>
+	<key>AWSRegions</key>
+	<string>$(VITE_AWS_API_KEY_REGIONS)</string>
+	<key>WebSocketUrls</key>
+	<string>${VITE_AWS_WEB_SOCKET_URLS}</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>MLNAccuracyAuthorizationDescription</key>

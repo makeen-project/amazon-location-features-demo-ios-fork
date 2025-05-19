@@ -55,7 +55,6 @@ final class TrackingVC: UIViewController {
             viewModel.delegate = self
         }
     }
-    private let authActionsHelper = AuthActionsHelper()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -182,8 +181,6 @@ final class TrackingVC: UIViewController {
     @objc private func tabSelected(_ notification: Notification) {
         guard let viewController = notification.userInfo?["viewController"] as? UIViewController,
               viewController === self || viewController === self.navigationController else { return }
-        
-        authActionsHelper.tryToPerformAuthAction {}
     }
     
     @objc private func trackingAppearanceChanged(_ notification: Notification) {
@@ -223,12 +220,12 @@ final class TrackingVC: UIViewController {
         
         trackingHeaderView.snp.makeConstraints {
             if isiPad {
-                $0.top.equalTo(view.safeAreaLayoutGuide).offset(70)
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(80)
                 $0.width.equalTo(350)
                 $0.centerX.equalToSuperview()
             }
             else {
-                $0.top.equalTo(view.safeAreaLayoutGuide)
+                $0.top.equalTo(view.safeAreaLayoutGuide).offset(80)
                 $0.leading.equalToSuperview().offset(16)
                 $0.trailing.equalToSuperview().offset(-16)
             }

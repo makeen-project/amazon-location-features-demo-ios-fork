@@ -364,7 +364,8 @@ final class ExploreView: UIView, NavigationMapProtocol {
         let leftInset = staticInset + self.safeAreaInsets.left
         // add small bottom padding on ipad
         let IPAD_INTENTIONAL_BOTTOM_PADDING = CGFloat(200) // Introduces bottom gutter/padding on iPad to assure modals don't overlap with the rendered route
-        let bottomInset = (self.delegate?.getBottomSheetHeight() ?? 0) + (self.isiPad ? IPAD_INTENTIONAL_BOTTOM_PADDING : 0)
+        let IPHONE_INTENTIONAL_BOTTOM_PADDING = CGFloat(500)
+        let bottomInset = (self.delegate?.getBottomSheetHeight() ?? 0) + (self.isiPad ? IPAD_INTENTIONAL_BOTTOM_PADDING : IPHONE_INTENTIONAL_BOTTOM_PADDING)
         let rightInset = staticInset + self.safeAreaInsets.right
         
         let edgePadding = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
@@ -987,10 +988,6 @@ extension ExploreView: MLNMapViewDelegate {
 extension ExploreView: SearchBarViewOutputDelegate {
     func searchTextActivated() {
         delegate?.searchTextTapped(userLocation: mapView.userLocation?.coordinate)
-    }
-    
-    func accountButtonTapped() {
-        delegate?.loginButtonTapped()
     }
     
     func searchTextDeactivated() {

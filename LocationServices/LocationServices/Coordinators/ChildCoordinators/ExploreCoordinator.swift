@@ -146,51 +146,6 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
             currentBottomSheet = controller
     }
     
-    func showLoginFlow() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = navigationController
-        
-        let controller = LoginVCBuilder.create()
-        controller.dismissHandler = { [weak self] in
-            self?.navigationController.dismiss(animated: true)
-            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
-        }
-        
-        controller.postLoginHandler = { [weak self] in
-            self?.showLoginSuccess()
-        }
-        
-        controller.modalPresentationStyle = .pageSheet
-
-        if let sheet = controller.sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.selectedDetentIdentifier = .large
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-        }
-        navigationController.present(controller, animated: true)
-    }
-    
-    func showLoginSuccess() {
-        (UIApplication.shared.delegate as? AppDelegate)?.navigationController = navigationController
-        
-        navigationController.dismiss(animated: true) { [weak self] in
-            let controller = PostLoginBuilder.create()
-            controller.dismissHandler = { [weak self] in
-                self?.navigationController.dismiss(animated: true)
-                NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
-            }
-            controller.modalPresentationStyle = .pageSheet
-
-            if let sheet = controller.sheetPresentationController {
-                sheet.detents = [.large()]
-                sheet.selectedDetentIdentifier = .large
-                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
-            }
-            self?.navigationController.present(controller, animated: true)
-        }
-    }
-    
     func showAttribution() {
         let controller = AttributionVCBuilder.create()
         controller.closeCallback = { [weak self] in

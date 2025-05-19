@@ -13,16 +13,10 @@ import UIKit
 final class ExploreViewModel: ExploreViewModelProtocol {
     
     private let routingService: RoutingServiceable
+    let locationService: LocationServiceable
     private var selectedRoute: RouteModel?
     
     var delegate: ExploreViewModelOutputDelegate?
-    
-    var awsLoginService: AWSLoginService! {
-        didSet {
-            awsLoginService.delegate = self
-        }
-    }
-    let locationService: LocationServiceable
     
     init(routingService: RoutingServiceable, locationService: LocationServiceable) {
         self.routingService = routingService
@@ -84,16 +78,6 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         }
     }
     
-    func login() {
-        Task {
-            try await awsLoginService.login()
-        }
-    }
-    
-    func logout() {
-        awsLoginService.logout()
-    }
-    
     func loadPlace(for coordinates: CLLocationCoordinate2D, userLocation: CLLocationCoordinate2D?) async {
         var biasLocation = userLocation
         if let mapCenter = UserDefaultsHelper.getObject(value: LocationCoordinate2D.self, key: .mapCenter) {
@@ -119,19 +103,5 @@ final class ExploreViewModel: ExploreViewModelProtocol {
         let welcomeShownVersion = UserDefaultsHelper.get(for: String.self, key: .termsAndConditionsAgreedVersion)
         let currentVersion = UIApplication.appVersion()
         return welcomeShownVersion != currentVersion
-    }
-}
-
-extension ExploreViewModel: AWSLoginServiceOutputProtocol {
-    func loginResult(_ user: AWSUserModel?, error: Error?) {
-        guard let user = user else { return }
-        let presentation = ExplorePresentation(model: user)
-        UserDefaultsHelper.save(value: presentation.userInitial, key: .userInitial)
-        delegate?.loginCompleted(presentation)
-    }
-    
-    func logoutResult(_ error: Error?) {
-        delegate?.logoutCompleted()
-        print("Logout Successfully")
     }
 }

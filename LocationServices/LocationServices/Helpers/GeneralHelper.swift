@@ -115,17 +115,21 @@ class GeneralHelper {
     static func getAWSConfigurationModel() -> CustomConnectionModel? {
         var defaultConfiguration: CustomConnectionModel? = nil
         // default configuration
-        if let identityPoolId = Bundle.main.object(forInfoDictionaryKey: "IdentityPoolId") as? String,
-           let region = Bundle.main.object(forInfoDictionaryKey: "AWSRegion") as? String,
-           let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") as? String,
-           let webSocketUrl = Bundle.main.object(forInfoDictionaryKey: "WebSocketUrl") as? String {
-            defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, userPoolClientId: "", userPoolId: "", userDomain: "", webSocketUrl: webSocketUrl, apiKey: apiKey, region: region)
+        if let identityPoolIds = (Bundle.main.object(forInfoDictionaryKey: "IdentityPoolIds") as? String)?.components(separatedBy: ","),
+           let regions = (Bundle.main.object(forInfoDictionaryKey: "AWSRegions") as? String)?.components(separatedBy: ","),
+           let apiKeys = (Bundle.main.object(forInfoDictionaryKey: "ApiKeys") as? String)?.components(separatedBy: ","),
+           let webSocketUrls = (Bundle.main.object(forInfoDictionaryKey: "WebSocketUrls") as? String)?.components(separatedBy: ",") {
+            
+                if let region = RegionSelector.shared.getClosestRegion(),
+                   let regionIndex = regions.firstIndex(of: region) {
+                    let identityPoolId = identityPoolIds[regionIndex]
+                    let apiKey = apiKeys[regionIndex]
+                    let webSocketUrl = webSocketUrls[regionIndex]
+                    
+                    defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, webSocketUrl: webSocketUrl, apiKey: apiKey, region: region)
+                }
         }
-        
-        // custom configuration
-        let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
-        
-        return customConfiguration ?? defaultConfiguration
+        return defaultConfiguration
     }
     
     static func getAppIcon() -> UIImage? {
@@ -138,4 +142,12 @@ class GeneralHelper {
         return nil
     }
     
+}
+
+
+struct CustomConnectionModel: Codable {
+    var identityPoolId: String
+    var webSocketUrl: String
+    var apiKey: String
+    var region: String
 }

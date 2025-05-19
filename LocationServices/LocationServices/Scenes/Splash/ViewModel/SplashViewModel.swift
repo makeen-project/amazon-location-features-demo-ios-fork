@@ -7,23 +7,17 @@
 
 import Foundation
 
-final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProtocol {
+final class SplashViewModel: SplashViewModelProtocol {
     
     var setupCompleteHandler: VoidHandler?
-    private let loginService: AWSLoginService
     private var observeLogoutResult: Bool = true
     
     weak var delegate: SplashViewModelDelegate?
     
-    init(loginService: AWSLoginService) {
-        self.loginService = loginService
-        
-        loginService.delegate = self
-    }
-    
     func setupDefaults() {
         UserDefaultsHelper.removeObject(for: .navigationRoute)
         UserDefaultsHelper.removeObject(for: .isNavigationMode)
+        UserDefaultsHelper.removeObject(for: .isTrackingActive)
     }
     
     func setupAWS() {
@@ -33,25 +27,13 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
     }
     
     func setupAWSConfiguration() async throws {
-        let customConfiguration = UserDefaultsHelper.getObject(value: CustomConnectionModel.self, key: .awsConnect)
-        guard let customConfiguration else {
-            try await setupValidAWSConfiguration()
-            return
-        }
-        
-        let isValid = try await loginService.validate(identityPoolId: customConfiguration.identityPoolId)
-        
-        if !isValid {
-                UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
-                // remove custom configuration
-                UserDefaultsHelper.removeObject(for: .awsConnect)
-                
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Notification.wasResetToDefaultConfig, object: self)
+        if let regions = (Bundle.main.object(forInfoDictionaryKey: "AWSRegions") as? String)?.components(separatedBy: ",") {
+            RegionSelector.shared.setClosestRegion(apiRegions: regions) { [self]_ in 
+                Task {
+                    try await setupValidAWSConfiguration()
                 }
+            }
         }
-        
-        try await self.setupValidAWSConfiguration()
     }
     
     private func setupValidAWSConfiguration() async throws {
@@ -60,17 +42,6 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
             setupCompleted()
             return
         }
-
-        // Here we connected and should set appropriate flags for it
-        // possible connection states:
-        // awsConnected - we are connected to default AWS configuration.
-        // awsCustomConnected - we are connected to custom AWS configuration.
-        
-        if let isCustomConnection = UserDefaultsHelper.get(for: Bool.self, key: .awsCustomConnect), isCustomConnection == true {
-            UserDefaultsHelper.save(value: true, key: .awsCustomConnected)
-            UserDefaultsHelper.removeObject(for: .awsCustomConnect)
-        }
-        
         try await initializeMobileClient(configurationModel: configurationModel)
     }
     
@@ -84,11 +55,5 @@ final class SplashViewModel: SplashViewModelProtocol, AWSLoginServiceOutputProto
         DispatchQueue.main.async {
             self.setupCompleteHandler?()
         }
-    }
-    
-    // MARK: - AWSLoginServiceOutputProtocol
-    func logoutResult(_ error: Error?) {
-        guard observeLogoutResult else { return }
-        setupCompleted()
     }
 }

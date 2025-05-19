@@ -45,8 +45,8 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
         controller.trackingSimulationHandler = { [weak self] in
             self?.showRouteTrackingScene()
         }
-        controller.presentBottomSheet(parentController: TabBarCoordinator.tabBarController!)
-        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.90))
+        controller.presentBottomSheet(parentController: trackingController!)
+        controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 1))
         currentBottomSheet = controller
         
         controller.dismissHandler = { [weak self] in
@@ -66,17 +66,21 @@ extension TrackingCoordinator: TrackingNavigationDelegate {
     }
     
     func showMapStyleScene() {
-        dismissCurrentScene()
+        currentBottomSheet?.updateBottomSheetHeight(to: 0)
         let controller = ExploreMapStyleBuilder.create()
         controller.dismissHandler = { [weak self] in
-            self?.currentBottomSheet?.dismissBottomSheet()
-            self?.showDashboardFlow()
-            NotificationCenter.default.post(name: Notification.Name("updateMapViewButtons"), object: nil, userInfo: nil)
+            controller.dismissBottomSheet()
+            self?.currentBottomSheet?.updateBottomSheetHeight(to: controller.getSmallDetentHeight())
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: Notification.trackingMapStyleDimissed, object: nil, userInfo: nil)
+                NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
+            }
         }
-        currentBottomSheet?.dismissBottomSheet()
-        controller.presentBottomSheet(parentController: trackingController!)
-        controller.setBottomSheetHeight(to: controller.getLargeDetentHeight())
-        currentBottomSheet = controller
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.trackingMapStyleAppearing, object: nil, userInfo: nil)
+            controller.presentBottomSheet(parentController: self.trackingController!)
+            controller.setBottomSheetHeight(to: controller.getDetentHeight(heightFactor: 0.9))
+        }
     }
     
     func showAttribution() {

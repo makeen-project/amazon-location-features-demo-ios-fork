@@ -52,7 +52,7 @@ final class TrackingRouteHeaderView: UIView {
         toggleTrackingStatus()
     }
 
-    private func toggleTrackingStatus() {        
+    private func toggleTrackingStatus() {
         trackingButtonHandler?(isTrackingStarted)
     }
     
