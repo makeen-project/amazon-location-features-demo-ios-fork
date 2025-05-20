@@ -12,7 +12,8 @@ enum UserDefaultKeyType: String {
     case mapStyle
     case mapStyleColorType
     case politicalView
-    case language
+    case AppleLanguages
+    case mapLanguage
     case tollOptions
     case ferriesOptions
     case uturnsOptions

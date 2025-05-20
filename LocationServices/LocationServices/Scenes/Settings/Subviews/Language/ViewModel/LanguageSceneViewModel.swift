@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
+import UIKit
 final class LanguageSceneViewModel: LanguageSceneViewModelProcotol {
     
     var delegate: LanguageSceneViewModelOutputDelegate?
@@ -37,7 +38,7 @@ final class LanguageSceneViewModel: LanguageSceneViewModelProcotol {
     }
     
     func saveSelectedState(_ indexPath: IndexPath) {
-        let language = initialDatas[indexPath.row].title
+        let language = initialDatas[indexPath.row].identifier
         saveLanguageSettingsData(language: language)
         delegate?.updateTableView(index: indexPath.row)
     }
@@ -60,6 +61,8 @@ private extension LanguageSceneViewModel {
     }
     
     func saveLanguageSettingsData(language: String) {
-        UserDefaultsHelper.saveObject(value: language, key: .language)
+        // Reload root view controller or restart UI
+        LanguageManager.shared.currentLanguage = language
+        LanguageManager.shared.reloadRootViewController()
     }
 }

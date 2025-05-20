@@ -11,8 +11,6 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    var navigationController: UINavigationController?
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // setup initial state of app:
@@ -26,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
         Reachability.shared.startMonitoring()
-        
+        //LanguageManager.shared
         return true
     }
 

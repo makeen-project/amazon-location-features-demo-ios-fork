@@ -58,7 +58,7 @@ class GeneralHelper {
     }
     
     static func setMapLanguage(mapView: MLNMapView, style: MLNStyle) {
-        let language = Locale.currentLanguageIdentifier()
+        let language = Locale.currentMapLanguageIdentifier()
         
         style.localizeLabels(into: Locale(identifier: language))
         

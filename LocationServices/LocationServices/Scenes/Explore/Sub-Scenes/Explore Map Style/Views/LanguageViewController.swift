@@ -48,7 +48,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
     
     @objc private func clearLanguage() {
         selectedIndexPath = nil
-        UserDefaultsHelper.removeObject(for: .language)
+        UserDefaultsHelper.removeObject(for: .mapLanguage)
         tableView.reloadData()
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }
@@ -98,7 +98,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
         tableView.layer.masksToBounds = true
         
 
-        let language = Locale.currentLanguageIdentifier()
+        let language = Locale.currentMapLanguageIdentifier()
         var selectedIndex = languageSwitcherData.firstIndex(where: { type in
             if type.value == language {
                 return true
@@ -147,7 +147,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         selectedIndexPath = indexPath
-        UserDefaultsHelper.saveObject(value: languageSwitcherData[indexPath.row], key: .language)
+        UserDefaultsHelper.saveObject(value: languageSwitcherData[indexPath.row], key: .mapLanguage)
         tableView.reloadData()
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }

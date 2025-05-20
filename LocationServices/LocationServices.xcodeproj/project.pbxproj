@@ -308,6 +308,7 @@
 		F139208F29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139208E29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift */; };
 		F139DBCA29F0346300D4BA98 /* RouteOptionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */; };
 		F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */; };
+		F146A56E2DDBAD4B00CD5D6B /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F146A56D2DDBAD3E00CD5D6B /* LanguageManager.swift */; };
 		F14ACD4B2D8845F2004BDCDC /* TrackingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14ACD4A2D8845ED004BDCDC /* TrackingHeaderView.swift */; };
 		F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */; };
 		F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */; };
@@ -707,6 +708,7 @@
 		F139208E29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreMapStyleViewModelTests.swift; sourceTree = "<group>"; };
 		F139DBC929F0346300D4BA98 /* RouteOptionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteOptionViewModelTests.swift; sourceTree = "<group>"; };
 		F139DBCF29F0401400D4BA98 /* ExploreViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewModelTests.swift; sourceTree = "<group>"; };
+		F146A56D2DDBAD3E00CD5D6B /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		F14ACD4A2D8845ED004BDCDC /* TrackingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingHeaderView.swift; sourceTree = "<group>"; };
 		F166819B29D3218D00FBD27C /* UITestTabBarScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTabBarScreen.swift; sourceTree = "<group>"; };
 		F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestTrackingScreen.swift; sourceTree = "<group>"; };
@@ -2306,6 +2308,7 @@
 		ADF26F5A292FEE52000147A0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				F146A56D2DDBAD3E00CD5D6B /* LanguageManager.swift */,
 				96E742A92967381800D5C0BC /* Sequence+Extension.swift */,
 				ADF26F5B292FEE5E000147A0 /* UIStackView+Extensions.swift */,
 				ADF26F5D292FFAC7000147A0 /* TypeAlias.swift */,
@@ -2968,6 +2971,7 @@
 				F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */,
 				AD38BA06294BE6A60087C2FC /* UITableView+Extension.swift in Sources */,
 				AD2AF0E3292EAC2300149904 /* WelcomeBottomView.swift in Sources */,
+				F146A56E2DDBAD4B00CD5D6B /* LanguageManager.swift in Sources */,
 				8AD67F9A29D1B243004A5F7D /* MapStyleTypes+Image.swift in Sources */,
 				8A10E37D29E97948005165CD /* SplashBuilder.swift in Sources */,
 				AD2AF074292EA44500149904 /* ExploreCoordinator.swift in Sources */,
@@ -3067,9 +3071,8 @@
 				AD2AF07D292EA57A00149904 /* ExploreContracts.swift in Sources */,
 				F1A306B72D2FFD5600B16126 /* ArrivalCardView.swift in Sources */,
 				F1343EB22DD65DA9002A347F /* LanguageSceneViewModel.swift in Sources */,
-				F1FAC85C2D774BE1000238C4 /* TrackingSimulationContracts.swift in Sources */,
 				F1FAC85C2D774BE1000238C4 /* TrackingSimulationViewModelProtocol.swift in Sources */,
-				ADD1394F298073040003F917 /* SettingsButtonView.swift in Sources */,
+				F1FAC85C2D774BE1000238C4 /* TrackingSimulationViewModelProtocol.swift in Sources */,
 				AD33F4C7295187AC005719D3 /* DirectionVC+Tableview.swift in Sources */,
 				ADC474FE2971E7A300AAE7A3 /* AmazonLocationLabel.swift in Sources */,
 				8ABDF63A29A52AE300122966 /* ExploreMapStyleCellViewModel.swift in Sources */,
