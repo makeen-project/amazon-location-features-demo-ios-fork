@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController()
         let language = LanguageManager.shared.currentLanguage
         //Bundle.setLanguage(language)
+        LanguageManager.shared.loadStrings()
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

@@ -47,10 +47,10 @@ final class LanguageSceneViewModel: LanguageSceneViewModelProcotol {
 private extension LanguageSceneViewModel {
     func getDataFromLocal() -> Int {
         var currentDataIndex = 0
-        let localData =  UserDefaultsHelper.getObject(value: String.self, key: .unitType)
-        
+        let localData = Locale.currentAppLanguageIdentifier()
+         
         for index in initialDatas.indices {
-            if initialDatas[index].title == localData {
+            if initialDatas[index].identifier == localData {
                 currentDataIndex = index
                 initialDatas[index].isSelected = true
             } else {

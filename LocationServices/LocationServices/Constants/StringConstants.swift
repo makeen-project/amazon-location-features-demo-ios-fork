@@ -18,6 +18,7 @@ extension String {
     
     //static let errorDelegeGeofence = "Delete Geofence error:"
     static let errorUserDefaultsSave = "User Default save error:"
+    static let errorUserDefaultsGet = "User Default get error:"
     //static let errorCannotReadDefaultConfiguration = "Can't read default configuration from awsconfiguration.json"
     
     static let errorCellCannotBeInititalized = "Cell can't be initilized"
@@ -147,7 +148,7 @@ enum StringConstant {
     
     enum TabBar {
         static let explore: String = NSLocalizedString("Navigate", comment: "")
-        static let tracking: String = NSLocalizedString("Trackers", comment: "")
+        static let tracking: String = LanguageManager.shared.localizedString(forKey: "Trackers") //NSLocalizedString("Trackers", comment: "")
         static let settings: String = NSLocalizedString("Settings", comment: "")
         static let about: String = NSLocalizedString("More", comment: "")
     }

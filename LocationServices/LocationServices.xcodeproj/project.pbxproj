@@ -367,6 +367,7 @@
 		F1F0C5872A0E5401009C7151 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F0C5862A0E5401009C7151 /* ErrorHandler.swift */; };
 		F1F0C5892A13C19E009C7151 /* GeneralHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */; };
 		F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */; };
+		F1F8108B2DDDEA79007E7E8C /* Localizations.json in Resources */ = {isa = PBXBuildFile; fileRef = F1F8108A2DDDEA6A007E7E8C /* Localizations.json */; };
 		F1FAC8532D773468000238C4 /* TrackingSimulationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8522D77345E000238C4 /* TrackingSimulationController.swift */; };
 		F1FAC8552D773476000238C4 /* TrackingSimulationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8542D773471000238C4 /* TrackingSimulationBuilder.swift */; };
 		F1FAC8572D7738F8000238C4 /* TrackingSimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FAC8562D7738F0000238C4 /* TrackingSimulationView.swift */; };
@@ -761,6 +762,7 @@
 		F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralHelper.swift; sourceTree = "<group>"; };
 		F1F8061929D5EDCB002BDF85 /* TrackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingUITests.swift; sourceTree = "<group>"; };
 		F1F8063229D7683E002BDF85 /* TrackingSimulateLocation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackingSimulateLocation.xctestplan; sourceTree = "<group>"; };
+		F1F8108A2DDDEA6A007E7E8C /* Localizations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Localizations.json; sourceTree = "<group>"; };
 		F1FAC8522D77345E000238C4 /* TrackingSimulationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationController.swift; sourceTree = "<group>"; };
 		F1FAC8542D773471000238C4 /* TrackingSimulationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationBuilder.swift; sourceTree = "<group>"; };
 		F1FAC8562D7738F0000238C4 /* TrackingSimulationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationView.swift; sourceTree = "<group>"; };
@@ -1245,7 +1247,6 @@
 		AD2AF02E292E892000149904 /* LocationServices */ = {
 			isa = PBXGroup;
 			children = (
-				F1343E992DD35CA1002A347F /* Localization */,
 				F18E2D402DAD220E00A34D67 /* Notifications */,
 				F18DEEF72C77504900335F3E /* iot */,
 				AD300A14294BDD8E00355423 /* Resources */,
@@ -1262,6 +1263,8 @@
 				AD2AF031292E892000149904 /* SceneDelegate.swift */,
 				AD2AF03B292E892200149904 /* Assets.xcassets */,
 				F1FAC8642D77E388000238C4 /* RoutesData.json */,
+				F1F8108A2DDDEA6A007E7E8C /* Localizations.json */,
+				F1343E9A2DD35CD1002A347F /* Localizable.xcstrings */,
 				AD2AF03D292E892200149904 /* LaunchScreen.storyboard */,
 				AD2AF040292E892200149904 /* Info.plist */,
 				AD2AF038292E892000149904 /* LocationServices.xcdatamodeld */,
@@ -2395,14 +2398,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		F1343E992DD35CA1002A347F /* Localization */ = {
-			isa = PBXGroup;
-			children = (
-				F1343E9A2DD35CD1002A347F /* Localizable.xcstrings */,
-			);
-			path = Localization;
-			sourceTree = "<group>";
-		};
 		F1343EA62DD641DB002A347F /* Language */ = {
 			isa = PBXGroup;
 			children = (
@@ -2760,6 +2755,7 @@
 				AD300A40294BE23900355423 /* AmazonEmberCdRC_LtIt.ttf in Resources */,
 				AD300A41294BE23900355423 /* AmazonEmberCdRC_Rg.ttf in Resources */,
 				AD300A42294BE23900355423 /* AmazonEmberCdRC_RgIt.ttf in Resources */,
+				F1F8108B2DDDEA79007E7E8C /* Localizations.json in Resources */,
 				AD300A43294BE23900355423 /* AmazonEmberCdRC_Th.ttf in Resources */,
 				AD300A44294BE23900355423 /* AmazonEmberCdRC_ThIt.ttf in Resources */,
 				AD300A45294BE23900355423 /* AmazonEmberDisplay_Bd.ttf in Resources */,
