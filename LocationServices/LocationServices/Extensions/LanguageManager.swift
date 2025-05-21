@@ -44,13 +44,7 @@ class LanguageManager {
     }
 
     func localizedString(forKey key: String) -> String {
-        print("localizedString(forKey: \(key))")
-        var translation = key
-//        if #available(iOS 18.4, *) {
-//            translation = Bundle.main.localizedString(forKey: key, value: nil, table: nil, localizations: [.init(identifier: currentLanguage)])
-//        } else {
-            translation = translations[key]?[currentLanguage] ?? key
-//        }
+        let translation = translations[key]?[currentLanguage] ?? key
         return translation
     }
     

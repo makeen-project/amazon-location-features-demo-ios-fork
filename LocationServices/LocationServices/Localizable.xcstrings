@@ -336,9 +336,6 @@
         }
       }
     },
-    "© AWS, HERE" : {
-
-    },
     "<![CDATA[Explore the power of Trackers & Geofences]]>" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -920,12 +917,6 @@
         }
       }
     },
-    "11:22 pm" : {
-
-    },
-    "50.54943, 30.21989" : {
-
-    },
     "About" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1258,12 +1249,6 @@
         }
       }
     },
-    "Allow \"LocationServices\" to use your location" : {
-
-    },
-    "Allow \"LocationServices\" to use your location?" : {
-
-    },
     "Amazon Location" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1429,9 +1414,6 @@
           }
         }
       }
-    },
-    "Amazon Location will use your location to create a route to the selected location" : {
-
     },
     "Amazon password" : {
       "extractionState" : "manual",
@@ -1681,9 +1663,6 @@
           }
         }
       }
-    },
-    "App version: " : {
-
     },
     "Are you sure you want to delete geofence?" : {
       "extractionState" : "manual",
@@ -2847,9 +2826,6 @@
         }
       }
     },
-    "Avoid uturns" : {
-
-    },
     "AWS CloudFormation" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3430,9 +3406,6 @@
           }
         }
       }
-    },
-    "Can't calculate via Esri, kindly switch to HERE provider" : {
-
     },
     "Cancel" : {
       "extractionState" : "manual",
@@ -5426,9 +5399,6 @@
         }
       }
     },
-    "Data Provider" : {
-
-    },
     "Default route options" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5760,9 +5730,6 @@
           }
         }
       }
-    },
-    "Demo" : {
-
     },
     "Destination will be on the left" : {
       "extractionState" : "manual",
@@ -6096,9 +6063,6 @@
         }
       }
     },
-    "directionIsHidden" : {
-
-    },
     "Directions" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6430,9 +6394,6 @@
           }
         }
       }
-    },
-    "Distance is greater than 400 km" : {
-
     },
     "Done" : {
       "extractionState" : "manual",
@@ -7015,9 +6976,6 @@
         }
       }
     },
-    "Enable Location" : {
-
-    },
     "Enabling the feature will allow you to track your device and get notified when the device enters or exits any of your geofences." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7266,9 +7224,6 @@
           }
         }
       }
-    },
-    "Enter the Trackers simulation to view the path across Vancouver streets that crosses Geofences" : {
-
     },
     "Enter the tracking simulation to view the path across Vancouver streets that crosses geofences" : {
       "extractionState" : "manual",
@@ -8100,9 +8055,6 @@
         }
       }
     },
-    "Error" : {
-
-    },
     "Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8434,9 +8386,6 @@
           }
         }
       }
-    },
-    "Failed to calculate route" : {
-
     },
     "For smooth simulation experience please allow notification permission from settings." : {
       "extractionState" : "manual",
@@ -8852,9 +8801,6 @@
           }
         }
       }
-    },
-    "geofenceIsHidden" : {
-
     },
     "Geofences" : {
       "extractionState" : "manual",
@@ -9354,9 +9300,6 @@
         }
       }
     },
-    "Hide Route" : {
-
-    },
     "How to connect to" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9772,9 +9715,6 @@
         }
       }
     },
-    "In DataSource Esri, all waypoints must be within 400km" : {
-
-    },
     "IndiaPoliticalView" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9857,9 +9797,6 @@
           }
         }
       }
-    },
-    "Info" : {
-
     },
     "It will securely create all required resources." : {
       "extractionState" : "manual",
@@ -11604,9 +11541,6 @@
         }
       }
     },
-    "mapStyleIsHidden" : {
-
-    },
     "Maybe later" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12354,12 +12288,6 @@
         }
       }
     },
-    "Navigate" : {
-
-    },
-    "No internet connection" : {
-
-    },
     "No map language" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -13026,9 +12954,6 @@
           }
         }
       }
-    },
-    "Ok" : {
-
     },
     "OK" : {
       "extractionState" : "manual",
@@ -14192,9 +14117,6 @@
         }
       }
     },
-    "Reachability" : {
-
-    },
     "Region" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14693,9 +14615,6 @@
         }
       }
     },
-    "Route Overview" : {
-
-    },
     "routes active" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14861,9 +14780,6 @@
           }
         }
       }
-    },
-    "Routes Notifications" : {
-
     },
     "RussiaPoliticalView" : {
       "extractionState" : "manual",
@@ -15611,12 +15527,6 @@
           }
         }
       }
-    },
-    "Select Language" : {
-
-    },
-    "Selected" : {
-
     },
     "Selected time cannot be in the past!" : {
       "extractionState" : "manual",
@@ -17776,9 +17686,6 @@
         }
       }
     },
-    "Tracker" : {
-
-    },
     "Tracker entered" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -18526,12 +18433,6 @@
         }
       }
     },
-    "Try Trackers & Geofences simulation" : {
-
-    },
-    "Try Trackers & Geofences Simulation" : {
-
-    },
     "TurkeyPoliticalView" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -18863,9 +18764,6 @@
           }
         }
       }
-    },
-    "URL is invalid. Can't open it" : {
-
     },
     "UruguayPoliticalView" : {
       "extractionState" : "manual",
@@ -19282,9 +19180,6 @@
         }
       }
     },
-    "View Route" : {
-
-    },
     "Visualize your location history on the map" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19450,9 +19345,6 @@
           }
         }
       }
-    },
-    "We need your location to detect your location in map" : {
-
     },
     "We only display data for the last 3 paths that you track with Amazon Location." : {
       "extractionState" : "manual",
@@ -19785,12 +19677,6 @@
           }
         }
       }
-    },
-    "You can use any data provider except Esri for your asset management or device tracking use cases. If you want to use Esri for your asset management or tracking user case, please read terms and conditions." : {
-
-    },
-    "You've arrived!" : {
-
     },
     "You’ve arrived!" : {
       "extractionState" : "manual",
