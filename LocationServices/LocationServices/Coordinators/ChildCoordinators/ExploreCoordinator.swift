@@ -76,7 +76,7 @@ extension ExploreCoordinator: ExploreNavigationDelegate {
 
         // first location as my current location
         if controller.firstDestination == nil, let lat, let long {
-            controller.firstDestination = DirectionTextFieldModel(placeName: "My Location", placeAddress: nil, lat: lat, long: long)
+            controller.firstDestination = DirectionTextFieldModel(placeName: StringConstant.myLocation, placeAddress: nil, lat: lat, long: long)
         }        
 
         if let secondDestination {

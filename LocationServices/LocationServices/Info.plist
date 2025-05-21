@@ -34,6 +34,8 @@
 	<string>You&apos;ll get to plan routes from your current location, improved search results, track your device and create geofences when you turn on Location Services for Amazon Location Demo App.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>You&apos;ll get to plan routes from your current location, improved search results, track your device and create geofences when you turn on Location Services for Amazon Location Demo App.</string>
+	<key>CFBundleExecutable</key>
+	<string></string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

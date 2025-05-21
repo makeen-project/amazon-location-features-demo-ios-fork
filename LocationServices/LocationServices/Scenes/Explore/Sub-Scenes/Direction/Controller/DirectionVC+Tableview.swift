@@ -49,7 +49,7 @@ extension DirectionVC: UITableViewDataSource {
         } else {
             destination = firstDestination
         }
-        let isMyLocationSelected = destination?.placeName == "My Location"
+        let isMyLocationSelected = destination?.placeName == StringConstant.myLocation
         
         if viewModel.numberOfRowsInSection() == 0 && !isInitalState && !isMyLocationSelected {
             tableView.setEmptyView()

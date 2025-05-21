@@ -27,7 +27,7 @@ final class SettingsViewModel: SettingsViewModelProtocol {
     private func populateConfiguredData() {
         let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         let unitType = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)
-        let language = Locale.currentAppLanguageIdentifier()
+        let language = Locale.current.localizedString(forLanguageCode: Locale.currentAppLanguageIdentifier())?.localizedCapitalized 
 
         datas = [
             SettingsCellModel(type: .units, subTitle: unitType?.title ?? ""),

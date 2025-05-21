@@ -55,7 +55,7 @@ final class DirectionSearchView: UIView {
         tf.accessibilityIdentifier = ViewsIdentifiers.Routing.departureTextField
         tf.font = .amazonFont(type: .medium, size: 14)
         tf.attributedPlaceholder = NSAttributedString(
-            string: "Search Starting Point",
+            string: StringConstant.searchStartingPoint,
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
         tf.tintColor = .lsPrimary
@@ -78,7 +78,7 @@ final class DirectionSearchView: UIView {
         tf.accessibilityIdentifier = ViewsIdentifiers.Routing.destinationTextField
         tf.font = .amazonFont(type: .medium, size: 14)
         tf.attributedPlaceholder = NSAttributedString(
-            string: "Search Destination",
+            string: StringConstant.searchDestination,
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.searchBarTintColor, NSAttributedString.Key.font: UIFont.amazonFont(type: .medium, size: 14)]
         )
         tf.tintColor = .lsPrimary

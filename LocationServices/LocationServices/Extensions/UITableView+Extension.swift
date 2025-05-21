@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 
 extension UITableView {
-    func setEmptyView(title: String = "No matching places found",
-                      message: String = "Make sure your search is spelled correctly. Try adding a city, postcode, or country.") {
+    func setEmptyView(title: String = StringConstant.noMatchingPlacesFound,
+                      message: String = StringConstant.searchSpelledCorrectly) {
         let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
         emptyView.accessibilityIdentifier = ViewsIdentifiers.Search.noResultsView
         let image = UIImageView(image: .searchIcon.withRenderingMode(.alwaysTemplate))

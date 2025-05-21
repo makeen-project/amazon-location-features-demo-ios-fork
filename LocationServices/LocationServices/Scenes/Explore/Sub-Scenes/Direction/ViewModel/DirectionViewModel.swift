@@ -64,10 +64,10 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     
     func searchWithSuggestion(text: String, userLat: Double?, userLong: Double?) async {
         
-        guard !text.isEmpty && text != "My Location" else {
+        guard !text.isEmpty && text != StringConstant.myLocation else {
             presentation = []
             
-            if text != "My Location" {
+            if text != StringConstant.myLocation {
                 addMyLocationItem()
             }
             
@@ -109,9 +109,9 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     }
     
     func searchWith(text: String, userLat: Double?, userLong: Double?) async throws {
-        guard !text.isEmpty && text != "My Location" else {
+        guard !text.isEmpty && text != StringConstant.myLocation else {
             presentation = []
-            if text != "My Location" {
+            if text != StringConstant.myLocation {
                 addMyLocationItem()
             }
             delegate?.searchResult(mapModel: [])
@@ -148,13 +148,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
     
     func getMyLocationItem() -> SearchPresentation {
         let model = SearchPresentation(placeId: "myLocation",
-                                       fullLocationAddress: "My Location",
+                                       fullLocationAddress: StringConstant.myLocation,
                                        distance: nil,
                                        countryName: nil,
                                        cityName: nil,
                                        placeLat: userLocation?.lat,
                                        placeLong: userLocation?.long,
-                                       name: "My Location")
+                                       name: StringConstant.myLocation)
         return model
     }
     

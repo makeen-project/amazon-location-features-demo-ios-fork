@@ -11,18 +11,10 @@ extension Locale {
     static func currentMapLanguageIdentifier() -> String {
         return UserDefaultsHelper.get(for: String.self, key: .mapLanguage) ?? currentAppLanguageIdentifier()
     }
-    
-//    static func currentMapLanguageLabel() -> String {
-//        return (UserDefaultsHelper.getObject(value: LanguageSwitcherData.self, key: .mapLanguage)?.label) ?? currentAppLanguageLabel()
-//    }
-    
+
     static func currentAppLanguageIdentifier() -> String {
-        let appLanguage = UserDefaultsHelper.get(for: [String].self, key: .AppleLanguages)?.first ?? String(( Locale.preferredLanguages.first ?? Locale.current.identifier).prefix(2))
-        print("appLanguage: \(appLanguage)")
+        let appLanguage =  String((UserDefaultsHelper.get(for: [String].self, key: .AppleLanguages)?.first)?.prefix(2) ??
+                                  (Locale.preferredLanguages.first ?? Locale.current.identifier).prefix(2))
         return appLanguage
     }
-    
-//    static func currentAppLanguageLabel() -> String {
-//        return (UserDefaultsHelper.getObject(value: LanguageSwitcherData.self, key: .AppleLanguages)?.label) ?? String(( Locale.preferredLanguages.first ?? Locale.current.identifier))
-//    }
 }

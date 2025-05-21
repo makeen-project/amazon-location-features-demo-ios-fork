@@ -43,7 +43,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
     
     private var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Search"
+        searchBar.placeholder = StringConstant.search
         searchBar.image(for: .search, state: .normal)
         searchBar.backgroundColor = .clear
         searchBar.searchTextField.backgroundColor = .white

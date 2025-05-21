@@ -133,7 +133,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         applyStyles()
         viewModel.loadLocalOptions()
         
-        if firstDestination?.placeName == "My Location" {
+        if firstDestination?.placeName == StringConstant.myLocation {
             directionSearchView.setMyLocationText()
         }
         locationManagerSetup()
@@ -244,7 +244,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                                                       lat: nil, long: nil)
                 }
                 
-                if self?.firstDestination?.placeName != "My Location"  && self?.secondDestination?.placeName != "My Location" {
+                if self?.firstDestination?.placeName != StringConstant.myLocation  && self?.secondDestination?.placeName != StringConstant.myLocation {
                     self?.viewModel.addMyLocationItem()
                 }
             }
@@ -372,11 +372,11 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         
         self.userLocation = (userLocation.coordinate.latitude, userLocation.coordinate.longitude)
         
-        let currentLocation = DirectionTextFieldModel(placeName: "My Location", placeAddress: nil, lat: self.userLocation?.lat, long: self.userLocation?.long)
+        let currentLocation = DirectionTextFieldModel(placeName: StringConstant.myLocation, placeAddress: nil, lat: self.userLocation?.lat, long: self.userLocation?.long)
         
-        if firstDestination?.placeName == "My Location" {
+        if firstDestination?.placeName == StringConstant.myLocation {
             firstDestination = currentLocation
-        } else if secondDestination?.placeName == "My Location" {
+        } else if secondDestination?.placeName == StringConstant.myLocation {
             secondDestination = currentLocation
         }
 //        Task {
@@ -509,8 +509,8 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setupSearchTitleDestinations() {
-        self.directionSearchView.changeSearchRouteName(with: firstDestination?.placeName == "My Location" ? firstDestination?.placeName : "\(firstDestination?.placeName ?? ""), \(firstDestination?.placeAddress ?? "")", isDestination: false)
-        self.directionSearchView.changeSearchRouteName(with: secondDestination?.placeName == "My Location" ? secondDestination?.placeName : "\(secondDestination?.placeName ?? ""), \(secondDestination?.placeAddress ?? "")", isDestination: true)
+        self.directionSearchView.changeSearchRouteName(with: firstDestination?.placeName == StringConstant.myLocation ? firstDestination?.placeName : "\(firstDestination?.placeName ?? ""), \(firstDestination?.placeAddress ?? "")", isDestination: false)
+        self.directionSearchView.changeSearchRouteName(with: secondDestination?.placeName == StringConstant.myLocation ? secondDestination?.placeName : "\(secondDestination?.placeName ?? ""), \(secondDestination?.placeAddress ?? "")", isDestination: true)
     }
     
     func calculateAllRoutes(avoidTolls: Bool = false,
@@ -565,7 +565,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                                                                 arrivalTime: arrivalTime) {
                 DispatchQueue.main.async {
                     self.directionView.isHidden = false
-                    let isPreview = self.firstDestination?.placeName != "My Location"
+                    let isPreview = self.firstDestination?.placeName != StringConstant.myLocation
                     self.directionView.setup(model: directionVM, isPreview: isPreview, routeType: routeType)
                     self.directionView.showOptionsStackView()
                     self.setupSearchTitleDestinations()
@@ -579,7 +579,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
             }
             else {
                 self.directionView.isHidden = false
-                let isPreview = self.firstDestination?.placeName != "My Location"
+                let isPreview = self.firstDestination?.placeName != StringConstant.myLocation
                 self.directionView.hideLoader(isPreview: isPreview, routeType: routeType)
             }
         }
@@ -590,10 +590,10 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
     }
     
     private func updateMyLocationDestination() {
-        if firstDestination?.placeName == "My Location" {
+        if firstDestination?.placeName == StringConstant.myLocation {
             firstDestination?.lat = userLocation?.lat
             firstDestination?.long = userLocation?.long
-        } else if secondDestination?.placeName == "My Location" {
+        } else if secondDestination?.placeName == StringConstant.myLocation {
             secondDestination?.lat = userLocation?.lat
             secondDestination?.long = userLocation?.long
         }
@@ -620,8 +620,8 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
             let userLoc = CLLocationCoordinate2D(latitude: userLat, longitude: userlong)
             let secondDestinationCoordinates = CLLocationCoordinate2D(latitude: destinationLat, longitude: destinationLong)
             
-            let isStartFromCurrentLocation = firstDestination?.placeName == "My Location"
-            let isEndWithCurrentLocation = secondDestination?.placeName == "My Location"
+            let isStartFromCurrentLocation = firstDestination?.placeName == StringConstant.myLocation
+            let isEndWithCurrentLocation = secondDestination?.placeName == StringConstant.myLocation
             
             if isStartFromCurrentLocation {
                 return (userLoc, secondDestinationCoordinates)
@@ -654,7 +654,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                         self.updateScrollViewContentSize()
                     }
                     
-                    let isPreview = self.firstDestination?.placeName != "My Location"
+                    let isPreview = self.firstDestination?.placeName != StringConstant.myLocation
                     self.directionView.setup(model: directionVM, isPreview: isPreview, routeType: routeType)
                     
                     self.sendDirectionsToExploreVC(data: data,
@@ -697,7 +697,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         let departureTime = viewModel.leaveTime
         let arrivalTime = viewModel.arrivalTime
         
-        let isPreview = departurePlaceName != "My Location"
+        let isPreview = departurePlaceName != StringConstant.myLocation
         
         let routeModel = RouteModel(departurePosition: departureLoc, destinationPosition: destinationLoc, travelMode: type, avoidFerries: avoidFerries, avoidTolls: avoidToll, avoidUturns: avoidUturns, avoidTunnels: avoidTunnels, avoidDirtRoads: avoidDirtRoads, isPreview: isPreview, departurePlaceName: departurePlaceName, departurePlaceAddress: departurePlaceAddress, destinationPlaceName: destinationPlaceName, destinationPlaceAddress: destinationPlaceAddress, departNow: departNow, departureTime: departureTime, arrivalTime: arrivalTime)
         
@@ -765,7 +765,7 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
     }
     
     func isMyLocationAlreadySelected() -> Bool {
-        return [firstDestination, secondDestination].contains(where: { $0?.placeName == "My Location" })
+        return [firstDestination, secondDestination].contains(where: { $0?.placeName == StringConstant.myLocation })
     }
 }
 

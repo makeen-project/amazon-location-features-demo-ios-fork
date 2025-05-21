@@ -18,7 +18,7 @@ final class VersionVC: UIViewController {
     
     private var appVersionLabel: UILabel = {
         var label = UILabel()
-        label.text = StringConstant.appVersion + UIApplication.appVersion()
+        label.text = "\(StringConstant.appVersion)  \(UIApplication.appVersion())"
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
         label.textAlignment = .left
