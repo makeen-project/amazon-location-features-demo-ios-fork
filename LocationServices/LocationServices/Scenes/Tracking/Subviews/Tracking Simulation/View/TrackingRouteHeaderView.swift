@@ -108,12 +108,11 @@ final class TrackingRouteHeaderView: UIView {
             $0.height.equalTo(18)
             $0.bottom.equalToSuperview()
         }
-        
+        trackingActionButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         trackingActionButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(titleTopOffset)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(40)
-            $0.width.equalTo(132)
         }
     }
 }

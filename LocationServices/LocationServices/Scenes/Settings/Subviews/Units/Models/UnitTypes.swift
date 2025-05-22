@@ -13,22 +13,22 @@ enum UnitTypes: Codable  {
     var title: String {
         switch self {
         case .automatic:
-            return "Automatic"
+            return StringConstant.automaticUnit
         case .imperial:
-            return "Imperial"
+            return StringConstant.imperialUnit
         case .metric:
-            return "Metric"
+            return StringConstant.metricUnit
         }
     }
     
     var subTitle: String {
         switch self {
         case .automatic:
-            return "Based on your browser settings (\(UnitHelper.getLocaleUnit().subTitle))"
+            return "\(StringConstant.automaticUnit) (\(UnitHelper.getLocaleUnit().subTitle))"
         case .imperial:
-            return "Miles, pounds"
+            return StringConstant.imperialSubtitle
         case .metric:
-            return "Kilometers, kilograms"
+            return StringConstant.metricSubtitle
         }
     }
 }

@@ -83,7 +83,7 @@ enum StringConstant {
     static let geofencesDetail = LanguageManager.shared.localizedString(forKey:"Define virtual boundaries around a specific area to detect entry and exit events")
     static let notifications = LanguageManager.shared.localizedString(forKey:"Notifications")
     static let notificationsDetail = LanguageManager.shared.localizedString(forKey:"Get geofence messages when you enter and leave locations")
-    static let routesNotifications = LanguageManager.shared.localizedString(forKey:"Routes Notifications")
+    static let routesNotifications = LanguageManager.shared.localizedString(forKey:"Routes notifications")
     
     static let emptyTrackingHistory = LanguageManager.shared.localizedString(forKey:"No tracking history available")
     
@@ -212,6 +212,12 @@ enum StringConstant {
     static let routesActive = LanguageManager.shared.localizedString(forKey:"routes active")
     static let politicalLight = LanguageManager.shared.localizedString(forKey:"Light")
     static let politicalDark = LanguageManager.shared.localizedString(forKey:"Dark")
+    
+    static let automaticUnit = LanguageManager.shared.localizedString(forKey:"Automatic")
+    static let imperialUnit = LanguageManager.shared.localizedString(forKey:"Imperial")
+    static let metricUnit = LanguageManager.shared.localizedString(forKey:"Metric")
+    static let imperialSubtitle = LanguageManager.shared.localizedString(forKey:"Miles, pounds")
+    static let metricSubtitle = LanguageManager.shared.localizedString(forKey:"Kilometers, kilograms")
     
     // Languages
     static let deutsch = "Deutsch"

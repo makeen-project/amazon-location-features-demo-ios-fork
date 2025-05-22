@@ -2906,168 +2906,85 @@
                 }
             }
         },
-        "Based on your browser settings (Kilometers, kilograms)" : {
+        "Based on your browser settings" : {
             "extractionState" : "manual",
             "localizations" : {
                 "ar" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "على أساس في ك المتصفح الإعدادات (الكيلومترات، كيلوغرام)"
+                        "value" : "على أساس في ك المتصفح الإعدادات"
                     }
                 },
                 "de" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "Basiert auf dein Browser Einstellungen (Kilometer, Kilogramm)"
+                        "value" : "Basiert auf dein Browser Einstellungen"
                     }
                 },
                 "en" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "Based on your browser settings (Kilometers, kilograms)"
+                        "value" : "Based on your browser settings"
                     }
                 },
                 "es" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "Basado en vuestro navegador ajustes (Kilómetros, kilogramos)"
+                        "value" : "Basado en vuestro navegador ajustes"
                     }
                 },
                 "fr" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "Basé sur votre navigateur paramètres (Kilomètres, kilogrammes)"
+                        "value" : "Basé sur votre navigateur paramètres"
                     }
                 },
                 "he" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "מבוסס על שלך דפדפן הגדרות (קילומטרים, קילוגרמים)"
+                        "value" : "מבוסס על שלך דפדפן הגדרות"
                     }
                 },
                 "hi" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "आधारित के ऊपर तुम्हारा ब्राउज़र सेटिंग्स (किलोमीटर, किलोग्राम)"
+                        "value" : "आधारित के ऊपर तुम्हारा ब्राउज़र सेटिंग्स"
                     }
                 },
                 "it" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "Basato sul tuo browser impostazioni (Chilometri, chilogrammi)"
+                        "value" : "Basato sul tuo browser impostazioni"
                     }
                 },
                 "ja" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "ベース オン きみの ブラウザ 設定 (キロメートル、 キログラム)"
+                        "value" : "ベース オン きみの ブラウザ 設定"
                     }
                 },
                 "ko" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "기반 ...에 당신의 브라우저 설정 (킬로미터, 킬로그램)"
+                        "value" : "기반 ...에 당신의 브라우저 설정"
                     }
                 },
                 "pt-PT" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "Sediada em seu browser configurações (Quilômetros, quilogramas)"
+                        "value" : "Sediada em seu browser configurações"
                     }
                 },
                 "zh-Hans" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "基于 上 您的 浏览器 设置 （千米， 千克）"
+                        "value" : "基于 上 您的 浏览器 设置"
                     }
                 },
                 "zh-Hant" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "基於 上 你的 瀏覽器 設置 (公里, 公斤)"
-                    }
-                }
-            }
-        },
-        "Based on your browser settings (Miles, pounds)" : {
-            "extractionState" : "manual",
-            "localizations" : {
-                "ar" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "على أساس في ك المتصفح الإعدادات (مايلز، جنيه)"
-                    }
-                },
-                "de" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "Basiert auf dein Browser Einstellungen (Meilen, Pfund)"
-                    }
-                },
-                "en" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "Based on your browser settings (Miles, pounds)"
-                    }
-                },
-                "es" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "Basado en vuestro navegador ajustes (Millas, libras)"
-                    }
-                },
-                "fr" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "Basé sur votre navigateur paramètres (Kilomètres, livres)"
-                    }
-                },
-                "he" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "מבוסס על שלך דפדפן הגדרות (מיילס, פאונד)"
-                    }
-                },
-                "hi" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "आधारित के ऊपर तुम्हारा ब्राउज़र सेटिंग्स (माइल्स, पाउंड)"
-                    }
-                },
-                "it" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "Basato sul tuo browser impostazioni (Miglia, sterline)"
-                    }
-                },
-                "ja" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "ベース オン きみの ブラウザ 設定 (マイル、 ポンド)"
-                    }
-                },
-                "ko" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "기반 ...에 당신의 브라우저 설정 (마일즈, 파운드)"
-                    }
-                },
-                "pt-PT" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "Sediada em seu browser configurações (Milhas, libras)"
-                    }
-                },
-                "zh-Hans" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "基于 上 您的 浏览器 设置 （迈尔斯， 磅）"
-                    }
-                },
-                "zh-Hant" : {
-                    "stringUnit" : {
-                        "state" : "translated",
-                        "value" : "基於 上 你的 瀏覽器 設置 （英里， 英鎊)"
+                        "value" : "基於 上 你的 瀏覽器 設置"
                     }
                 }
             }
