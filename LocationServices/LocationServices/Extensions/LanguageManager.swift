@@ -5,12 +5,7 @@ private var bundleKey: UInt8 = 0
 
 class LanguageManager {
     static let shared = LanguageManager()
-    
-    private(set) var translations: [String: [String: String]] = [:] // [key: [lang: value]]
-    
-//    private var defaultLanguage: LanguageSwitcherData {
-//        return Locale.preferredLanguages.first ?? "en"
-//    }
+    private(set) var translations: [String: [String: String]] = [:]
 
     var currentLanguage: String {
         get {
@@ -18,6 +13,8 @@ class LanguageManager {
         }
         set {
             UserDefaultsHelper.save(value: [newValue], key: .AppleLanguages)
+            loadStrings()
+            reloadUI()
         }
     }
     
@@ -47,15 +44,35 @@ class LanguageManager {
         let translation = translations[key]?[currentLanguage] ?? key
         return translation
     }
-    
-    func reloadRootViewController() {
-         let sceneDelegate = UIApplication.shared.connectedScenes
-             .first?.delegate as? SceneDelegate
-         let nav = UINavigationController()
-         sceneDelegate?.window?.rootViewController = nav
-         sceneDelegate?.coordinator = AppCoordinator(navigationController: nav, window: sceneDelegate?.window)
-         sceneDelegate?.coordinator?.start()
-     }
+
+    func reloadUI() {
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first,
+              let window = windowScene.windows.first else {
+            return
+        }
+
+        // Determine language direction (RTL or LTR)
+        let currentLanguage = LanguageManager.shared.currentLanguage // Replace with your actual method
+        let isRTL = Locale.Language(identifier:currentLanguage).characterDirection == .rightToLeft
+        let semantic: UISemanticContentAttribute = isRTL ? .forceRightToLeft : .forceLeftToRight
+
+        // Apply semantic direction globally
+        UIView.appearance().semanticContentAttribute = semantic
+        window.semanticContentAttribute = semantic
+
+        // Rebuild rootViewController
+        let nav = UINavigationController()
+        let sceneDelegate = windowScene.delegate as? SceneDelegate
+        sceneDelegate?.window?.rootViewController = nav
+        sceneDelegate?.coordinator = AppCoordinator(navigationController: nav, window: sceneDelegate?.window)
+        sceneDelegate?.coordinator?.start()
+
+        // Animate the transition
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+    }
+
 }
 
 struct XCStringsFile: Decodable {
@@ -76,34 +93,4 @@ struct XCLocalization: Decodable {
 struct XCStringUnit: Decodable {
     let state: String
     let value: String
-}
-
-
-
-private class LocalizedBundle: Bundle, @unchecked Sendable {
-    override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
-        if let bundle = objc_getAssociatedObject(self, &bundleKey) as? Bundle {
-            return bundle.localizedString(forKey: key, value: value, table: tableName)
-        } else {
-            return super.localizedString(forKey: key, value: value, table: tableName)
-        }
-    }
-}
-
-extension Bundle {
-    static func setLanguage(_ language: String) {
-        defer {
-            object_setClass(Bundle.main, LocalizedBundle.self)
-        }
-
-        let path = Bundle.main.path(forResource: language, ofType: "lproj")
-        let value = path != nil ? Bundle(path: path!) : nil
-        objc_setAssociatedObject(Bundle.main, &bundleKey, value, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-
-    static func swizzleLocalization() {
-        // One-time swizzle check
-        guard object_getClass(Bundle.main) != LocalizedBundle.self else { return }
-        object_setClass(Bundle.main, LocalizedBundle.self)
-    }
 }

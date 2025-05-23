@@ -28,12 +28,12 @@
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>MLNAccuracyAuthorizationDescription</key>
-		<string>We need your location to detect your location in map</string>
+		<string>$(NSLocationWhenInUseUsageDescription)</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>You&apos;ll get to plan routes from your current location, improved search results, track your device and create geofences when you turn on Location Services for Amazon Location Demo App.</string>
+	<string>$(NSLocationWhenInUseUsageDescription)</string>
 	<key>NSLocationUsageDescription</key>
-	<string>You&apos;ll get to plan routes from your current location, improved search results, track your device and create geofences when you turn on Location Services for Amazon Location Demo App.</string>
+	<string>$(NSLocationWhenInUseUsageDescription)</string>
 	<key>CFBundleExecutable</key>
 	<string></string>
 	<key>CFBundleURLTypes</key>

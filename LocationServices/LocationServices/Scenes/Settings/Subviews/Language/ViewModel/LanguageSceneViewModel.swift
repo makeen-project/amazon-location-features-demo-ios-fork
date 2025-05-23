@@ -63,6 +63,5 @@ private extension LanguageSceneViewModel {
     func saveLanguageSettingsData(language: String) {
         // Reload root view controller or restart UI
         LanguageManager.shared.currentLanguage = language
-        LanguageManager.shared.reloadRootViewController()
     }
 }
