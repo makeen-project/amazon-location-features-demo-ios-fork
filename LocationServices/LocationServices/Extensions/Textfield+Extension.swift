@@ -43,4 +43,20 @@ extension UITextField {
             self.rightViewMode = .always
         }
     }
+    
+    /// Applies proper semantic content direction, text alignment, and refreshes placeholder for current language direction
+    func applyLocaleDirection() {
+        let isRTL = Locale.Language(identifier:LanguageManager.shared.currentLanguage).characterDirection == .rightToLeft
+        self.semanticContentAttribute = isRTL ? .forceRightToLeft : .forceLeftToRight
+        self.textAlignment = isRTL ? .right : .left
+    }
+}
+
+extension UITextView {
+    /// Applies proper semantic content direction, text alignment, and refreshes placeholder for current language direction
+    func applyLocaleDirection() {
+        let isRTL = Locale.Language(identifier:LanguageManager.shared.currentLanguage).characterDirection == .rightToLeft
+        self.semanticContentAttribute = isRTL ? .forceRightToLeft : .forceLeftToRight
+        self.textAlignment = isRTL ? .right : .left
+    }
 }

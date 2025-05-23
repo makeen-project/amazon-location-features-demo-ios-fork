@@ -27,7 +27,7 @@ final class TrackingRouteHeaderView: UIView {
         let label = UILabel()
         label.accessibilityIdentifier = ViewsIdentifiers.Tracking.trackingStoppedLabel
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.textColor = .searchBarTintColor
         label.text = StringConstant.Tracking.noTracking
         label.minimumScaleFactor = 0.5

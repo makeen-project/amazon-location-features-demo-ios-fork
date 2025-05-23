@@ -142,7 +142,7 @@ final class POICardView: UIView {
     
     private let poiAddress: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .searchBarTintColor
         label.numberOfLines = 2
@@ -177,7 +177,7 @@ final class POICardView: UIView {
     
     private let distanceLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .bold, size: 13)
         label.textColor = .black
         label.numberOfLines = 2
@@ -194,7 +194,7 @@ final class POICardView: UIView {
     private let durationLabel: UILabel = {
         let label = UILabel()
         label.accessibilityIdentifier = ViewsIdentifiers.PoiCard.travelTimeLabel
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .bold, size: 13)
         label.textColor = .black
         label.numberOfLines = 2
@@ -237,7 +237,7 @@ final class POICardView: UIView {
     
     private let scheduleTitleLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .black
         label.text = StringConstant.poiCardSchedule
@@ -254,7 +254,7 @@ final class POICardView: UIView {
     
     private let scheduleDetail: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .black
         label.numberOfLines = 0
@@ -307,13 +307,13 @@ final class POICardView: UIView {
         textView.backgroundColor = .searchBarBackgroundColor
         textView.linkTextAttributes = [.foregroundColor: UIColor.lsPrimary]
         textView.font = .amazonFont(type: .regular, size: 13)
-        textView.textAlignment = .left
+        textView.applyLocaleDirection()
         return textView
     }()
     
     private let errorLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsInfo
         label.numberOfLines = 0
@@ -357,7 +357,7 @@ final class POICardView: UIView {
     private let directionLabel: UILabel = {
         let label = UILabel()
         label.text = StringConstant.directions
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .bold, size: 16)
         label.textColor = .white
         label.numberOfLines = 2

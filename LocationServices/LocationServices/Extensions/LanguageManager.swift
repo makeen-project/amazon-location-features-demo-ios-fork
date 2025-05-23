@@ -60,6 +60,9 @@ class LanguageManager {
 
         // Apply semantic direction globally
         UIView.appearance().semanticContentAttribute = semantic
+        UILabel.appearance().semanticContentAttribute = semantic
+        UITextField.appearance().semanticContentAttribute = semantic
+        UITextView.appearance().semanticContentAttribute = semantic
         window.semanticContentAttribute = semantic
 
         // Rebuild rootViewController

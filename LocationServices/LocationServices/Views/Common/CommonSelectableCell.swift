@@ -39,7 +39,7 @@ final class CommonSelectableCell: UITableViewCell {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .lsTetriary
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     
@@ -47,7 +47,7 @@ final class CommonSelectableCell: UITableViewCell {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     

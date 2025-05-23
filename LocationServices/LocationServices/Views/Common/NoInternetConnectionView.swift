@@ -18,7 +18,7 @@ final class NoInternetConnectionView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .bold, size: 16)
         label.textColor = .black
         label.numberOfLines = 0
@@ -29,7 +29,7 @@ final class NoInternetConnectionView: UIView {
     
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .tertiaryLabel
         label.numberOfLines = 0

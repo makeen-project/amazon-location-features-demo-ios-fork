@@ -59,7 +59,7 @@ final class AboutCell: UITableViewCell {
         var label = UILabel()
         label.font = Constants.itemTitleFont
         label.textColor = .mapDarkBlackColor
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     

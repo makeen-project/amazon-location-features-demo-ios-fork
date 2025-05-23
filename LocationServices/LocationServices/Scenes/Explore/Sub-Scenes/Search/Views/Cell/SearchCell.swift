@@ -82,7 +82,7 @@ final class SearchCell: UITableViewCell {
     
     private let locationTitle: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .tertiaryColor
         label.lineBreakMode = .byTruncatingTail
@@ -93,7 +93,7 @@ final class SearchCell: UITableViewCell {
     private let locationAddress: UILabel = {
         let label = UILabel()
         label.accessibilityIdentifier = ViewsIdentifiers.Search.cellAddressLabel
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .gray
         label.numberOfLines = 0
@@ -104,7 +104,7 @@ final class SearchCell: UITableViewCell {
     private let locationDistance: UILabel = {
         let label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.textColor = .gray
         label.setContentHuggingPriority(UILayoutPriority(251), for: .horizontal)
         label.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)

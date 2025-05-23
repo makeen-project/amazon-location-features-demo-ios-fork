@@ -20,7 +20,7 @@ final class PoliticalView: UIButton {
         var label = UILabel()
         label.font = .amazonFont(type: .medium, size: 18)
         label.textColor = .mapDarkBlackColor
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.text = StringConstant.politicalView
         return label
     }()
@@ -29,7 +29,7 @@ final class PoliticalView: UIButton {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .gray
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.text = ""
         label.accessibilityIdentifier = ViewsIdentifiers.General.politicalViewSubtitle
         return label

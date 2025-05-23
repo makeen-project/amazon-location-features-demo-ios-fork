@@ -19,7 +19,7 @@ final class MapStyleSectionHeaderView: UICollectionReusableView {
     
     private var titleLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .gray
         label.numberOfLines = 1

@@ -28,7 +28,7 @@ final class LargeTitleLabel: UILabel {
     }
     
     private func setup() {
-        textAlignment = .left
+        applyLocaleDirection()
         font = .amazonFont(type: .bold, size: Constants.labelFontSize)
         textColor = .lsTetriary
     }

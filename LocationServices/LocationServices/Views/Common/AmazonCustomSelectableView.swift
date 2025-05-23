@@ -18,7 +18,7 @@ final class AmazonCustomSelectableView: UIView {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .mapDarkBlackColor
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     
@@ -26,7 +26,7 @@ final class AmazonCustomSelectableView: UIView {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .searchBarTintColor
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     

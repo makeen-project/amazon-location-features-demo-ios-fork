@@ -49,7 +49,7 @@ final class TrackSimulationCell: UITableViewCell {
     
     private var routeLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsTetriary
         label.numberOfLines = 2
@@ -60,7 +60,7 @@ final class TrackSimulationCell: UITableViewCell {
     private var coordinateLabel: UILabel = {
         let label = UILabel()
         label.text = StringConstant.coordinateLabelText
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
         label.numberOfLines = 2
@@ -71,7 +71,7 @@ final class TrackSimulationCell: UITableViewCell {
     private var timeLabel = {
         let label = UILabel()
         label.text = StringConstant.timeLabelText
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
         label.numberOfLines = 2

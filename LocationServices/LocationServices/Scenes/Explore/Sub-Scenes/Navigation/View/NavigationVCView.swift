@@ -103,7 +103,7 @@ final class NavigationHeaderView: UIView {
     
     private let distanceLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
         label.numberOfLines = 2
@@ -121,7 +121,7 @@ final class NavigationHeaderView: UIView {
     
     private var timeLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
         label.numberOfLines = 2

@@ -9,7 +9,7 @@ class PoliticalViewCell: UITableViewCell {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .mapDarkBlackColor
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.text = StringConstant.politicalView
         return label
     }()
@@ -18,7 +18,7 @@ class PoliticalViewCell: UITableViewCell {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .gray
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.text = StringConstant.mapRepresentation
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping

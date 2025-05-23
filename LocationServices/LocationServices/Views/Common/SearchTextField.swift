@@ -49,6 +49,7 @@ final class SearchTextField: UIView {
         textField.clearButtonMode = .always
         textField.addTarget(self, action: #selector(textFieldTapped), for: .touchDown)
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        textField.applyLocaleDirection()
         return textField
     }()
     

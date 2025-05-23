@@ -68,7 +68,7 @@ final class ArrivalCardView: UIView {
     
     private let poiLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .bold, size: 14)
         label.textColor = .lsTetriary
         label.numberOfLines = 2
@@ -78,7 +78,7 @@ final class ArrivalCardView: UIView {
     
     private let poiAddress: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 14)
         label.textColor = .searchBarTintColor
         label.numberOfLines = 3

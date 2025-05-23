@@ -90,7 +90,7 @@ final class SideBarCell: UITableViewCell {
         var label = UILabel()
         label.font = Constants.itemTitleFont
         label.textColor = .lsTetriary
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     

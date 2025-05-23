@@ -99,7 +99,7 @@ final class RouteTypeView: UIView {
         label.font = .amazonFont(type: .regular, size: 14)
         label.textColor = .lsGrey
         label.text = ""
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     
@@ -108,7 +108,7 @@ final class RouteTypeView: UIView {
         label.font = .amazonFont(type: .regular, size: 14)
         label.textColor = .lsGrey
         label.text = ""
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         return label
     }()
     

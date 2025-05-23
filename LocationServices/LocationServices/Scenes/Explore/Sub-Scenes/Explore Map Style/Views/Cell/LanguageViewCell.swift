@@ -8,7 +8,7 @@ class LanguageViewCell: UITableViewCell {
         var label = UILabel()
         label.font = .amazonFont(type: .regular, size: 16)
         label.textColor = .mapDarkBlackColor
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.text = StringConstant.language
         return label
     }()

@@ -63,6 +63,7 @@ final class DirectionSearchView: UIView {
         tf.clearButtonMode = .whileEditing
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingDidBegin)
+        tf.applyLocaleDirection()
         return tf
     }()
 
@@ -86,6 +87,7 @@ final class DirectionSearchView: UIView {
         tf.clearButtonMode = .whileEditing
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingDidBegin)
+        tf.applyLocaleDirection()
         return tf
     }()
     

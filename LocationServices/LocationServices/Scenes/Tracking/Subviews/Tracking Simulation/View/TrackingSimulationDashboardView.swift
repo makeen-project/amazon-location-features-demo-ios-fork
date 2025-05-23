@@ -57,7 +57,7 @@ final class TrackingSimulationDashboardView: UIView {
                                                  font: TrackingSimulationDashoardConstant.title2Font,
                                                  fontColor: .black,
                                                  textAlignment: .left)
-    
+
     private let trackersDetailLabel = AmazonLocationLabel(labelText: StringConstant.trackersDetail,
                                                   font: TrackingSimulationDashoardConstant.detailLabelFont,
                                                   isMultiline: true,

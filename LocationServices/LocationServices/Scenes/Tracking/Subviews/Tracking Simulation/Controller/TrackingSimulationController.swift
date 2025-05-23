@@ -89,7 +89,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         let label = UILabel()
         label.font = UIFont.amazonFont(type: .regular, size: 13)
         label.textColor = .black
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.numberOfLines = 0
         label.text = StringConstant.routesNotifications
         return label
@@ -99,7 +99,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         let label = UILabel()
         label.font = UIFont.amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.numberOfLines = 0
         return label
     }()
@@ -142,7 +142,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         let label = UILabel()
         label.font = UIFont.amazonFont(type: .regular, size: 13)
         label.textColor = .black
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.numberOfLines = 0
         label.text = StringConstant.routesNotifications
         return label
@@ -152,7 +152,7 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         let label = UILabel()
         label.font = UIFont.amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.numberOfLines = 0
         return label
     }()

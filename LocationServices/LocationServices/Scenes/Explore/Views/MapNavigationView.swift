@@ -36,7 +36,7 @@ final class MapNavigationView: UIView {
     private let streetLabel: UILabel = {
         let label = UILabel()
         label.text = " "
-        label.textAlignment = .left
+        label.applyLocaleDirection()
         label.font = .amazonFont(type: .medium, size: 20)
         label.textColor = .lsGrey
         label.numberOfLines = 2
