@@ -27,12 +27,12 @@ final class SettingsViewModel: SettingsViewModelProtocol {
     private func populateConfiguredData() {
         let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         let unitType = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)
-        let language = languageSwitcherData.first(where: { $0.value == Locale.currentAppLanguageIdentifier()})?.label 
+        let languageTitle = languageSwitcherData.first(where: { $0.value == Locale.currentAppLanguageIdentifier()})?.label
 
         datas = [
             SettingsCellModel(type: .units, subTitle: unitType?.title ?? ""),
             SettingsCellModel(type: .mapStyle, subTitle: mapStyle?.title ?? ""),
-            SettingsCellModel(type: .language, subTitle: language),
+            SettingsCellModel(type: .language, subTitle: languageTitle),
             SettingsCellModel(type: .routeOption)
         ]
     }

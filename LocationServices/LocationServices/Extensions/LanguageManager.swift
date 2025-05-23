@@ -54,7 +54,7 @@ class LanguageManager {
         }
 
         // Determine language direction (RTL or LTR)
-        let currentLanguage = LanguageManager.shared.currentLanguage // Replace with your actual method
+        let currentLanguage = LanguageManager.shared.currentLanguage
         let isRTL = Locale.Language(identifier:currentLanguage).characterDirection == .rightToLeft
         let semantic: UISemanticContentAttribute = isRTL ? .forceRightToLeft : .forceLeftToRight
 
