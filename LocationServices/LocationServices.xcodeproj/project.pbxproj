@@ -291,6 +291,13 @@
 		F111DF0F29F0214B00D08641 /* MapStyleViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F111DF0E29F0214B00D08641 /* MapStyleViewModelTests.swift */; };
 		F11603C82DE09F8400FD837D /* Label+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11603C72DE09F7C00FD837D /* Label+Extension.swift */; };
 		F116047E2DE4D15500FD837D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F116047C2DE4D15500FD837D /* InfoPlist.strings */; };
+		F11604982DE5CF9300FD837D /* RegionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11604922DE5CF9300FD837D /* RegionModel.swift */; };
+		F11604992DE5CF9300FD837D /* RegionSceneBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F116048B2DE5CF9300FD837D /* RegionSceneBuilder.swift */; };
+		F116049A2DE5CF9300FD837D /* RegionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11604952DE5CF9300FD837D /* RegionViewModel.swift */; };
+		F116049B2DE5CF9300FD837D /* RegionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F116048F2DE5CF9300FD837D /* RegionVC.swift */; };
+		F116049C2DE5CF9300FD837D /* RegionVC+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11604902DE5CF9300FD837D /* RegionVC+TableView.swift */; };
+		F116049D2DE5CF9300FD837D /* RegionTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11604932DE5CF9300FD837D /* RegionTypes.swift */; };
+		F116049E2DE5CF9300FD837D /* RegionSceneContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F116048D2DE5CF9300FD837D /* RegionSceneContracts.swift */; };
 		F11E045E2CD509A2003F1641 /* AmazonLocationiOSAuthSDK in Frameworks */ = {isa = PBXBuildFile; productRef = F11E045D2CD509A2003F1641 /* AmazonLocationiOSAuthSDK */; };
 		F11E04612CD515C0003F1641 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F11E04602CD515C0003F1641 /* KeychainSwift */; };
 		F11E04632CD516DD003F1641 /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04622CD516DD003F1641 /* KeyChainHelper.swift */; };
@@ -697,6 +704,13 @@
 		F11604882DE4D1DF00FD837D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F11604892DE4D1E000FD837D /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		F116048A2DE4D1E100FD837D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F116048B2DE5CF9300FD837D /* RegionSceneBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionSceneBuilder.swift; sourceTree = "<group>"; };
+		F116048D2DE5CF9300FD837D /* RegionSceneContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionSceneContracts.swift; sourceTree = "<group>"; };
+		F116048F2DE5CF9300FD837D /* RegionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionVC.swift; sourceTree = "<group>"; };
+		F11604902DE5CF9300FD837D /* RegionVC+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RegionVC+TableView.swift"; sourceTree = "<group>"; };
+		F11604922DE5CF9300FD837D /* RegionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionModel.swift; sourceTree = "<group>"; };
+		F11604932DE5CF9300FD837D /* RegionTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionTypes.swift; sourceTree = "<group>"; };
+		F11604952DE5CF9300FD837D /* RegionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionViewModel.swift; sourceTree = "<group>"; };
 		F11E04622CD516DD003F1641 /* KeyChainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainHelper.swift; sourceTree = "<group>"; };
 		F11E046E2CE788DA003F1641 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
 		F11E04702CE788F3003F1641 /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
@@ -2101,6 +2115,7 @@
 		ADD13948298069000003F917 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				F11604972DE5CF9300FD837D /* Region */,
 				F1343EA62DD641DB002A347F /* Language */,
 				ADD139962981C3B80003F917 /* MapStyle */,
 				ADD139832980A10D0003F917 /* RouteOptions */,
@@ -2414,6 +2429,60 @@
 				DF8005DE2A0A6C6A00758BBE /* WebViewVC.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		F116048C2DE5CF9300FD837D /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				F116048B2DE5CF9300FD837D /* RegionSceneBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		F116048E2DE5CF9300FD837D /* Contracts */ = {
+			isa = PBXGroup;
+			children = (
+				F116048D2DE5CF9300FD837D /* RegionSceneContracts.swift */,
+			);
+			path = Contracts;
+			sourceTree = "<group>";
+		};
+		F11604912DE5CF9300FD837D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F116048F2DE5CF9300FD837D /* RegionVC.swift */,
+				F11604902DE5CF9300FD837D /* RegionVC+TableView.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F11604942DE5CF9300FD837D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F11604922DE5CF9300FD837D /* RegionModel.swift */,
+				F11604932DE5CF9300FD837D /* RegionTypes.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F11604962DE5CF9300FD837D /* Viewmodel */ = {
+			isa = PBXGroup;
+			children = (
+				F11604952DE5CF9300FD837D /* RegionViewModel.swift */,
+			);
+			path = Viewmodel;
+			sourceTree = "<group>";
+		};
+		F11604972DE5CF9300FD837D /* Region */ = {
+			isa = PBXGroup;
+			children = (
+				F116048C2DE5CF9300FD837D /* Builder */,
+				F116048E2DE5CF9300FD837D /* Contracts */,
+				F11604912DE5CF9300FD837D /* Controller */,
+				F11604942DE5CF9300FD837D /* Models */,
+				F11604962DE5CF9300FD837D /* Viewmodel */,
+			);
+			path = Region;
 			sourceTree = "<group>";
 		};
 		F1343EA62DD641DB002A347F /* Language */ = {
@@ -2983,6 +3052,13 @@
 				ADD1399E2981C4140003F917 /* MapStyleBuilder.swift in Sources */,
 				ADC9738E295EEA4D005AE918 /* NavigationVCView.swift in Sources */,
 				ADD139A62981C7360003F917 /* MapStyleVC+CollectionView.swift in Sources */,
+				F11604982DE5CF9300FD837D /* RegionModel.swift in Sources */,
+				F11604992DE5CF9300FD837D /* RegionSceneBuilder.swift in Sources */,
+				F116049A2DE5CF9300FD837D /* RegionViewModel.swift in Sources */,
+				F116049B2DE5CF9300FD837D /* RegionVC.swift in Sources */,
+				F116049C2DE5CF9300FD837D /* RegionVC+TableView.swift in Sources */,
+				F116049D2DE5CF9300FD837D /* RegionTypes.swift in Sources */,
+				F116049E2DE5CF9300FD837D /* RegionSceneContracts.swift in Sources */,
 				F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */,
 				AD38BA06294BE6A60087C2FC /* UITableView+Extension.swift in Sources */,
 				AD2AF0E3292EAC2300149904 /* WelcomeBottomView.swift in Sources */,

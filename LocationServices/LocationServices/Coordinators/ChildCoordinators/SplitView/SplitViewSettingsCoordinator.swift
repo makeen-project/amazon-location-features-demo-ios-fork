@@ -49,6 +49,8 @@ extension SplitViewSettingsCoordinator: SettingsNavigationDelegate {
             showRouteOptionScene()
         case .language:
             showLanguageScene()
+        case .region:
+            showRegionScene()
         }
     }
     
@@ -73,6 +75,11 @@ extension SplitViewSettingsCoordinator: SettingsNavigationDelegate {
     }
     
     private func showLanguageScene() {
+        let controller = LanguageSceneBuilder.create()
+        changeSecondaryVC(to: controller)
+    }
+    
+    private func showRegionScene() {
         let controller = LanguageSceneBuilder.create()
         changeSecondaryVC(to: controller)
     }

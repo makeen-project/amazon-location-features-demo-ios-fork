@@ -41,13 +41,13 @@ class RegionSelector {
         dispatchGroup.notify(queue: .main) {
             let fastestRegion = mapping.min(by: { $0.value < $1.value })?.key
             if let fastest = fastestRegion {
-                UserDefaultsHelper.save(value: fastest, key: .fastestRegion)
+                UserDefaultsHelper.save(value: fastest, key: .awsRegion)
             }
             completion(fastestRegion)
         }
     }
     
     func getClosestRegion() -> String? {
-        return UserDefaultsHelper.get(for: String.self, key: .fastestRegion)
+        return UserDefaultsHelper.get(for: String.self, key: .awsRegion)
     }
 }

@@ -238,6 +238,10 @@ enum StringConstant {
     static var tanzaniaPoliticalView: String {  LanguageManager.shared.localizedString(forKey:"TanzaniaPoliticalView") }
     static var uruguayPoliticalView: String {  LanguageManager.shared.localizedString(forKey:"UruguayPoliticalView") }
     
+    static var region: String {  LanguageManager.shared.localizedString(forKey:"Region") }
+    static var euWest1: String = "eu-west-1"
+    static var usEast1: String = "us-east-1"
+    
     // Languages
     static let deutsch = "Deutsch"
     static let spanish = "Español"

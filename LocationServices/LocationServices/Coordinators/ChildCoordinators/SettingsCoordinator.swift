@@ -44,6 +44,8 @@ extension SettingsCoordinator: SettingsNavigationDelegate {
             showRouteOptionScene()
         case .language:
             showLanguageScene()
+        case .region:
+            showRegionScene()
         }
     }
     
@@ -69,6 +71,11 @@ extension SettingsCoordinator: SettingsNavigationDelegate {
     
     private func showLanguageScene() {
         let controller = LanguageSceneBuilder.create()
+        navigationController.pushViewController(controller, animated: true)
+    }
+    
+    private func showRegionScene() {
+        let controller = RegionSceneBuilder.create()
         navigationController.pushViewController(controller, animated: true)
     }
 }

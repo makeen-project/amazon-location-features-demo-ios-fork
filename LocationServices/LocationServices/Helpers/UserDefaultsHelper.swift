@@ -35,7 +35,7 @@ enum UserDefaultKeyType: String {
     
     case isTrackingActive
     
-    case fastestRegion
+    case awsRegion
 }
 
 enum AppState: Int {
