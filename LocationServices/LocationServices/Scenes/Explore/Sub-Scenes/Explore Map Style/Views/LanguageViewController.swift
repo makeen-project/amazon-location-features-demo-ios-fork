@@ -99,7 +99,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
         
 
         let language = Locale.currentMapLanguageIdentifier()
-        var selectedIndex = languageSwitcherData.firstIndex(where: { type in
+        var selectedIndex = mapLanguageSwitcherData.firstIndex(where: { type in
             if type.value == language {
                 return true
             }
@@ -117,7 +117,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return languageSwitcherData.count
+        return mapLanguageSwitcherData.count
     }
     
     private var checkedIcon: UIImageView = {
@@ -132,7 +132,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ViewsIdentifiers.General.languageViewCell, for: indexPath) as? LanguageViewCell else {
             return UITableViewCell()
         }
-        let language = languageSwitcherData[indexPath.row]
+        let language = mapLanguageSwitcherData[indexPath.row]
         cell.configure(with: language)
         
         if let selectedIndexPath = selectedIndexPath, selectedIndexPath == indexPath {
@@ -147,7 +147,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         selectedIndexPath = indexPath
-        UserDefaultsHelper.saveObject(value: languageSwitcherData[indexPath.row], key: .mapLanguage)
+        UserDefaultsHelper.saveObject(value: mapLanguageSwitcherData[indexPath.row], key: .mapLanguage)
         tableView.reloadData()
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }

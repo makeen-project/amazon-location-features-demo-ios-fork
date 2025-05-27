@@ -13,8 +13,11 @@ extension Locale {
     }
 
     static func currentAppLanguageIdentifier() -> String {
-        let appLanguage =  String((UserDefaultsHelper.get(for: [String].self, key: .AppleLanguages)?.first)?.prefix(2) ??
-                                  (Locale.preferredLanguages.first ?? Locale.current.identifier).prefix(2))
+        var appLanguage =  String((UserDefaultsHelper.get(for: [String].self, key: .AppleLanguages)?.first) ??
+                                  (Locale.preferredLanguages.first ?? Locale.current.identifier))
+        if !(appLanguage.contains("pt-") || appLanguage.contains("zh-") || appLanguage.contains("zh-")) {
+            appLanguage = appLanguage.prefix(2).lowercased()
+        }
         return appLanguage
     }
 }
