@@ -1,9 +1,9 @@
 //
-//  Label+Extension.swift
+//  UILabel+Extension.swift
 //  LocationServices
 //
-//  Created by Zeeshan Sheikh on 23/05/2025.
-//
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
 
 import UIKit
 
