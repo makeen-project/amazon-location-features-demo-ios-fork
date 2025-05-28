@@ -27,8 +27,9 @@ final class SettingsViewModel: SettingsViewModelProtocol {
     private func populateConfiguredData() {
         let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
         let unitType = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)
-        let languageTitle = languageSwitcherData.first(where: { $0.value == Locale.currentAppLanguageIdentifier()})?.label
+        let languageTitle = appLanguageSwitcherData.first(where: { $0.value == Locale.currentAppLanguageIdentifier()})?.label
         let regionType = UserDefaultsHelper.getObject(value: String.self, key: .awsRegion)
+        
         datas = [
             SettingsCellModel(type: .units, subTitle: unitType?.title ?? ""),
             SettingsCellModel(type: .mapStyle, subTitle: mapStyle?.title ?? ""),

@@ -14,13 +14,11 @@ final class LanguageSceneViewModel: LanguageSceneViewModelProcotol {
     private var initialDatas: [CommonSelectableCellModel] = []
     
     init() {
-        for language in languageSwitcherData {
-            if !language.mapOnly {
-                initialDatas.append(CommonSelectableCellModel(title: language.label,
-                                          subTitle: "",
-                                          isSelected: false,
-                                          identifier: language.value))
-            }
+        for language in appLanguageSwitcherData {
+            initialDatas.append(CommonSelectableCellModel(title: language.label,
+                                                          subTitle: "",
+                                                          isSelected: false,
+                                                          identifier: language.value))
         }
     }
     

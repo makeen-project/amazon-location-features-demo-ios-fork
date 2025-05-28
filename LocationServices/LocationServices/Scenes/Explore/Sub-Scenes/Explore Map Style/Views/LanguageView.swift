@@ -115,14 +115,14 @@ final class LanguageView: UIButton {
 
     public func setLanguage() {
         var language = Locale.currentMapLanguageIdentifier()
-        let selectedIndex = languageSwitcherData.firstIndex(where: { type in
+        let selectedIndex = mapLanguageSwitcherData.firstIndex(where: { type in
             if type.value == language {
                 return true
             }
             return false
         })
         if selectedIndex != nil {
-            language =  languageSwitcherData[selectedIndex!].label
+            language =  mapLanguageSwitcherData[selectedIndex!].label
         }
         itemSubtitle.text = language
         itemSubtitle.textColor = .mapStyleTintColor
