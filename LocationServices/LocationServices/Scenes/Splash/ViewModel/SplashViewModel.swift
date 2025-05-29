@@ -27,28 +27,14 @@ final class SplashViewModel: SplashViewModelProtocol {
     }
     
     func setupAWSConfiguration() async throws {
-        if let regions = (Bundle.main.object(forInfoDictionaryKey: "AWSRegions") as? String)?.components(separatedBy: ",") {
+        if let regions = RegionSelector.shared.getBundleRegions() {
             RegionSelector.shared.setClosestRegion(apiRegions: regions) { [self]_ in 
                 Task {
-                    try await setupValidAWSConfiguration()
+                    try await GeneralHelper.setupValidAWSConfiguration()
+                    self.setupCompleted()
                 }
             }
         }
-    }
-    
-    private func setupValidAWSConfiguration() async throws {
-        guard let configurationModel = GeneralHelper.getAWSConfigurationModel() else {
-            print("Can't read default configuration from awsconfiguration.json")
-            setupCompleted()
-            return
-        }
-        try await initializeMobileClient(configurationModel: configurationModel)
-    }
-    
-    private func initializeMobileClient(configurationModel: CustomConnectionModel) async throws {
-        try await CognitoAuthHelper.initialise(identityPoolId: configurationModel.identityPoolId)
-        try await ApiAuthHelper.initialise(apiKey: configurationModel.apiKey, region: configurationModel.region)
-        self.setupCompleted()
     }
     
     private func setupCompleted() {

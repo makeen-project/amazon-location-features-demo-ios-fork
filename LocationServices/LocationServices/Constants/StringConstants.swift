@@ -241,6 +241,10 @@ enum StringConstant {
     static var region: String {  LanguageManager.shared.localizedString(forKey:"Region") }
     static var euWest1: String = "eu-west-1"
     static var usEast1: String = "us-east-1"
+    static var euWest1FullName: String = "Europe (Ireland) \(euWest1)"
+    static var usEast1FullName: String = "Us-East (N. Virginia) \(usEast1)"
+    static var euWest1ListTitle: String = "Europe"
+    static var usEast1ListTitle: String = "Us-East"
     
     // Languages
     static let deutsch = "Deutsch"

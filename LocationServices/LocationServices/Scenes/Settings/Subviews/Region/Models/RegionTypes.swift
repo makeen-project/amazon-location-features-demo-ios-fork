@@ -20,4 +20,27 @@ enum RegionTypes: Codable  {
             return StringConstant.usEast1
         }
     }
+    
+    var displayTitle: String {
+        switch self {
+        case .automatic:
+            return StringConstant.automaticUnit
+        case .euWest1:
+            return StringConstant.euWest1FullName
+        case .usEast1:
+            return StringConstant.usEast1FullName
+        }
+    }
+    
+    var listTitle: String {
+        switch self {
+        case .automatic:
+            return StringConstant.automaticUnit
+        case .euWest1:
+            return StringConstant.euWest1ListTitle
+        case .usEast1:
+            return StringConstant.usEast1ListTitle
+        }
+    }
+    
 }

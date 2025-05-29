@@ -12,8 +12,30 @@ class RegionSelector {
     static let shared = RegionSelector()
     private init() {}
 
+    func getBundleRegions() -> [String]? {
+        let regions = (Bundle.main.object(forInfoDictionaryKey: "AWSRegions") as? String)?.components(separatedBy: ",")
+        return regions
+    }
+
+    func getCachedRegion() -> String? {
+        return UserDefaultsHelper.get(for: String.self, key: .awsRegion)
+    }
+    
+    func isAutoRegion() -> Bool? {
+        return UserDefaultsHelper.get(for: Bool.self, key: .isAutoRegion)
+    }
+    
+    func saveCachedRegion(region: String, isAutoRegion: Bool) {
+        UserDefaultsHelper.save(value: region, key: .awsRegion)
+        UserDefaultsHelper.save(value: isAutoRegion, key: .isAutoRegion)
+    }
+    
+    func clearCachedRegion() {
+        UserDefaultsHelper.removeObject(for: .awsRegion)
+    }
+    
     func setClosestRegion(apiRegions: [String], completion: @escaping (String?) -> Void) {
-        if let cachedRegion = getClosestRegion(),
+        if let cachedRegion = getCachedRegion(),
            apiRegions.contains(cachedRegion) {
             completion(cachedRegion)
             return
@@ -41,13 +63,11 @@ class RegionSelector {
         dispatchGroup.notify(queue: .main) {
             let fastestRegion = mapping.min(by: { $0.value < $1.value })?.key
             if let fastest = fastestRegion {
-                UserDefaultsHelper.save(value: fastest, key: .awsRegion)
+                self.saveCachedRegion(region: fastest, isAutoRegion: true)
             }
             completion(fastestRegion)
         }
     }
     
-    func getClosestRegion() -> String? {
-        return UserDefaultsHelper.get(for: String.self, key: .awsRegion)
-    }
+
 }

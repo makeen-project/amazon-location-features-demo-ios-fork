@@ -112,6 +112,14 @@ class GeneralHelper {
         return exp
     }
     
+    static func setupValidAWSConfiguration() async throws {
+        guard let configurationModel = GeneralHelper.getAWSConfigurationModel() else {
+            print("Can't read default configuration from awsconfiguration.json")
+            return
+        }
+        try await GeneralHelper.initializeMobileClient(configurationModel: configurationModel)
+    }
+    
     static func getAWSConfigurationModel() -> CustomConnectionModel? {
         var defaultConfiguration: CustomConnectionModel? = nil
         // default configuration
@@ -120,7 +128,7 @@ class GeneralHelper {
            let apiKeys = (Bundle.main.object(forInfoDictionaryKey: "ApiKeys") as? String)?.components(separatedBy: ","),
            let webSocketUrls = (Bundle.main.object(forInfoDictionaryKey: "WebSocketUrls") as? String)?.components(separatedBy: ",") {
             
-                if let region = RegionSelector.shared.getClosestRegion(),
+                if let region = RegionSelector.shared.getCachedRegion(),
                    let regionIndex = regions.firstIndex(of: region) {
                     let identityPoolId = identityPoolIds[regionIndex]
                     let apiKey = apiKeys[regionIndex]
@@ -130,6 +138,11 @@ class GeneralHelper {
                 }
         }
         return defaultConfiguration
+    }
+    
+    private static func initializeMobileClient(configurationModel: CustomConnectionModel) async throws {
+        try await CognitoAuthHelper.initialise(identityPoolId: configurationModel.identityPoolId)
+        try await ApiAuthHelper.initialise(apiKey: configurationModel.apiKey, region: configurationModel.region)
     }
     
     static func getAppIcon() -> UIImage? {

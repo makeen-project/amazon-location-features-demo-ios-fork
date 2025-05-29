@@ -27,15 +27,13 @@ enum UserDefaultKeyType: String {
     case termsAndConditionsAgreedVersion
     case signedInIdentityId
     case identityId
-    
     case mapCenter
     // if app is in navigation mode
     case isNavigationMode
     case navigationRoute
-    
     case isTrackingActive
-    
     case awsRegion
+    case isAutoRegion
 }
 
 enum AppState: Int {
