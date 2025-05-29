@@ -155,6 +155,36 @@ class GeneralHelper {
         return nil
     }
     
+    static func reloadUI() {
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first,
+              let window = windowScene.windows.first else {
+            return
+        }
+
+        // Determine language direction (RTL or LTR)
+        let currentLanguage = LanguageManager.shared.currentLanguage
+        let isRTL = Locale.Language(identifier:currentLanguage).characterDirection == .rightToLeft
+        let semantic: UISemanticContentAttribute = isRTL ? .forceRightToLeft : .forceLeftToRight
+
+        // Apply semantic direction globally
+        UIView.appearance().semanticContentAttribute = semantic
+        UILabel.appearance().semanticContentAttribute = semantic
+        UITextField.appearance().semanticContentAttribute = semantic
+        UITextView.appearance().semanticContentAttribute = semantic
+        window.semanticContentAttribute = semantic
+
+        // Rebuild rootViewController
+        let nav = UINavigationController()
+        let sceneDelegate = windowScene.delegate as? SceneDelegate
+        sceneDelegate?.window?.rootViewController = nav
+        sceneDelegate?.coordinator = AppCoordinator(navigationController: nav, window: sceneDelegate?.window)
+        sceneDelegate?.coordinator?.start()
+
+        // Animate the transition
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
+    }
 }
 
 

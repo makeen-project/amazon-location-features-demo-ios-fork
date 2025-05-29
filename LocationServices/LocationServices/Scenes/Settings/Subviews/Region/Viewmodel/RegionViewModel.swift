@@ -89,8 +89,6 @@ private extension RegionSceneViewModel {
         } else {
             RegionSelector.shared.saveCachedRegion(region: region, isAutoRegion: false)
         }
-        Task {
-            try await GeneralHelper.setupValidAWSConfiguration()
-        }
+        GeneralHelper.reloadUI()
     }
 }
