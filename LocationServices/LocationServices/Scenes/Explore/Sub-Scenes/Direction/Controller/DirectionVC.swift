@@ -152,7 +152,9 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         }
         
         Task {
+            self.showLoadingIndicator()
             try await calculateRoute()
+            self.hideLoadingIndicator()
         }
         changeExploreActionButtonsVisibility(geofenceIsHidden: true, directionIsHidden: true, mapStyleIsHidden: true)
         
@@ -339,6 +341,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         
         directionView.leaveOptionsHandler = { [weak self] option in
             Task {
+                self?.showLoadingIndicator()
                 try await self?.calculateAllRoutes(avoidTolls: self?.viewModel.avoidTolls ?? false,
                                                    avoidFerries: self?.viewModel.avoidFerries ?? false,
                                                    avoidUturns: self?.viewModel.avoidUturns ?? false,
@@ -347,6 +350,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                                    leaveNow: option.leaveNow,
                                                    leaveTime: option.leaveTime,
                                                    arrivalTime: option.arrivalTime)
+                self?.hideLoadingIndicator()
             }
         }
         
@@ -547,10 +551,11 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         guard let (departureLocation, destinationLocation) = getRouteLocations(currentModel: currentModel) else { return }
         
         guard isDistanceValid(departureLoc: departureLocation, destinationLoc: destinationLocation) else { return }
-        
-        showLoadingIndicator()
-        self.tableView.isHidden = true
-        self.updateScrollViewContentSize()
+        DispatchQueue.main.async {
+            
+            self.tableView.isHidden = true
+            self.updateScrollViewContentSize()
+        }
         do {
             if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLocation,
                                                                                 departurePosition: departureLocation,
@@ -574,7 +579,6 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                                    departureLocation: departureLocation,
                                                    destinationLocation: destinationLocation,
                                                    routeType: routeType)
-                    self.hideLoadingIndicator()
                 }
             }
             else {
@@ -642,12 +646,9 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
             let destinationLoc = CLLocationCoordinate2D(latitude: destinationLat, longitude: destinationLong)
             
             guard isDistanceValid(departureLoc: departureLoc, destinationLoc: destinationLoc) else { return }
-            showLoadingIndicator()
-
             for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
                 if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, travelMode: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime) {
                     DispatchQueue.main.async {
-                        self.hideLoadingIndicator()
                         self.directionView.isHidden = false
                         self.tableView.isHidden = true
                         self.directionView.showOptionsStackView()

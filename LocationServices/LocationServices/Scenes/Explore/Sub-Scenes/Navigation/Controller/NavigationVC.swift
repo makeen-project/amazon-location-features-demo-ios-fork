@@ -168,9 +168,9 @@ final class NavigationVC: UIViewController {
             lat = viewModel.secondDestination?.placeLat
             long = viewModel.secondDestination?.placeLong
         }
-        
-        delegate?.showDirections(isRouteOptionEnabled: true, firstDestination: viewModel.firstDestination, secondDestination: viewModel.secondDestination, lat: lat, long: long)
         delegate?.closeNavigationScene()
+        delegate?.showDirections(isRouteOptionEnabled: true, firstDestination: viewModel.firstDestination, secondDestination: viewModel.secondDestination, lat: lat, long: long)
+        
     }
     
     @objc private func hideScreen() {
