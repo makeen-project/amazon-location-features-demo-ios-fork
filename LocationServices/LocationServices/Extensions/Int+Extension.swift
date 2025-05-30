@@ -9,12 +9,16 @@ import UIKit
 
 extension Int {
     private static let durationFormatter: DateComponentsFormatter = {
+        let calendar = Calendar(identifier: .gregorian)
+        var componentsCalendar = calendar
+        componentsCalendar.locale = Locale(identifier: LanguageManager.shared.currentLanguage)
+
         let formatter = DateComponentsFormatter()
+        formatter.calendar = componentsCalendar
+        formatter.allowedUnits = [.day, .hour, .minute]
         formatter.maximumUnitCount = 2
         formatter.unitsStyle = .short
         formatter.zeroFormattingBehavior = .dropAll
-        formatter.allowedUnits = [.day, .hour, .minute]
-        
         return formatter
     }()
     
@@ -24,6 +28,7 @@ extension Int {
     }
 
     func convertSecondsToMinString() -> String {
+        Self.durationFormatter.calendar?.locale = Locale(identifier: LanguageManager.shared.currentLanguage)
         if let formattedString = Self.durationFormatter.string(from: Double(self)) {
             return formattedString
         } else {

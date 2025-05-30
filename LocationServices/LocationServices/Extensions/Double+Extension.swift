@@ -10,16 +10,21 @@ import UIKit
 extension Double {
     
     private static let durationFormatter: DateComponentsFormatter = {
+        let calendar = Calendar(identifier: .gregorian)
+        var componentsCalendar = calendar
+        componentsCalendar.locale = Locale(identifier: LanguageManager.shared.currentLanguage)
+
         let formatter = DateComponentsFormatter()
+        formatter.calendar = componentsCalendar
+        formatter.allowedUnits = [.day, .hour, .minute]
         formatter.maximumUnitCount = 2
         formatter.unitsStyle = .short
         formatter.zeroFormattingBehavior = .dropAll
-        formatter.allowedUnits = [.day, .hour, .minute]
-        
         return formatter
     }()
     
     func convertSecondsToMinString() -> String {
+        Self.durationFormatter.calendar?.locale = Locale(identifier: LanguageManager.shared.currentLanguage)
         if let formattedString = Self.durationFormatter.string(from: self) {
             return formattedString
         } else {
