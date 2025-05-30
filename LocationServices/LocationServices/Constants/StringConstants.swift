@@ -237,6 +237,12 @@ enum StringConstant {
     static var turkeyPoliticalView: String {  LanguageManager.shared.localizedString(forKey:"TurkeyPoliticalView") }
     static var tanzaniaPoliticalView: String {  LanguageManager.shared.localizedString(forKey:"TanzaniaPoliticalView") }
     static var uruguayPoliticalView: String {  LanguageManager.shared.localizedString(forKey:"UruguayPoliticalView") }
+    static var m: String {  LanguageManager.shared.localizedString(forKey:"m") }
+    static var km: String {  LanguageManager.shared.localizedString(forKey:"km") }
+    static var mi: String {  LanguageManager.shared.localizedString(forKey:"mi") }
+    static var min: String {  LanguageManager.shared.localizedString(forKey:"min") }
+    static var hr: String {  LanguageManager.shared.localizedString(forKey:"hr") }
+    static var sec: String {  LanguageManager.shared.localizedString(forKey:"sec") }
     
     static var region: String {  LanguageManager.shared.localizedString(forKey:"Region") }
     static var euWest1: String = "eu-west-1"

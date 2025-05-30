@@ -213,7 +213,7 @@ final class RouteTypeView: UIView {
     }
     
     func updateSelectedLabel(state: Bool) {
-        self.selectedLabel.text = state ? "Selected" : ""
+        self.selectedLabel.text = state ? StringConstant.selected : ""
     }
     
     required init?(coder: NSCoder) {

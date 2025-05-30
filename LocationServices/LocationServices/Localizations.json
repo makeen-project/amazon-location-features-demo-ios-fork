@@ -167,85 +167,85 @@
                 }
             }
         },
-        "• Selected" : {
+        "Selected" : {
             "extractionState" : "manual",
             "localizations" : {
                 "ar" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• تم اختيارها"
+                        "value" : "تم اختيارها"
                     }
                 },
                 "de" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• Ausgewählt"
+                        "value" : "Ausgewählt"
                     }
                 },
                 "en" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• Selected"
+                        "value" : "Selected"
                     }
                 },
                 "es" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• Seleccionado"
+                        "value" : "Seleccionado"
                     }
                 },
                 "fr" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• Sélectionné"
+                        "value" : "Sélectionné"
                     }
                 },
                 "he" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• נבחר"
+                        "value" : "נבחר"
                     }
                 },
                 "hi" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• चुने गए"
+                        "value" : "चुने गए"
                     }
                 },
                 "it" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• Selezionato"
+                        "value" : "Selezionato"
                     }
                 },
                 "ja" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• 選択済み"
+                        "value" : "選択済み"
                     }
                 },
                 "ko" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• 선택됨"
+                        "value" : "선택됨"
                     }
                 },
                 "pt-PT" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• Selecionado"
+                        "value" : "Selecionado"
                     }
                 },
                 "zh-Hans" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• 已选中"
+                        "value" : "已选中"
                     }
                 },
                 "zh-Hant" : {
                     "stringUnit" : {
                         "state" : "translated",
-                        "value" : "• 已選"
+                        "value" : "已選"
                     }
                 }
             }
