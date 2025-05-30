@@ -9,7 +9,7 @@ import Foundation
 
 extension Locale {
     static func currentMapLanguageIdentifier() -> String {
-        return UserDefaultsHelper.get(for: String.self, key: .mapLanguage) ?? currentAppLanguageIdentifier()
+        return UserDefaultsHelper.get(for: String.self, key: .mapLanguage) ?? "en"
     }
 
     static func currentAppLanguageIdentifier() -> String {

@@ -128,7 +128,7 @@ final class RouteOptionsView: UIView {
     }()
     
     private lazy var leaveSegmentControl: UISegmentedControl = {
-        let segment = UISegmentedControl(items: ["Leave now", "Leave at", "Arrive by"])
+        let segment = UISegmentedControl(items: [StringConstant.leaveNow, StringConstant.leaveAt, StringConstant.arriveBy])
         segment.backgroundColor = .clear
         
         segment.tintColor = .clear

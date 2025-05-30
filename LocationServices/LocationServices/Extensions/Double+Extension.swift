@@ -24,7 +24,7 @@ extension Double {
             return formattedString
         } else {
             let min = Int(self / 60)
-            return "\(min) min"
+            return "\(min) \(StringConstant.min)"
         }
     }
     
@@ -35,10 +35,10 @@ extension Double {
         
         if unitType == .metric {
             let result = (num / 1000 * factor).rounded() / factor // Convert meters to km and round
-            return String(format: "%.\(decimalPoints)f km", result)
+            return String(format: "%.\(decimalPoints)f \(StringConstant.km)", result)
         } else {
             let numMiles = (convertMetersToMiles(meters: num) * factor).rounded() / factor
-            return String(format: "%.\(decimalPoints)f mi", numMiles)
+            return String(format: "%.\(decimalPoints)f \(StringConstant.mi)", numMiles)
         }
     }
 

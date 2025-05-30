@@ -50,7 +50,7 @@ extension AWSRoutingServiceProtocol {
             departNow = nil
         }
         let measureUnit = UnitHelper.getResolvedUnit() == .imperial ? GeoRoutesClientTypes.MeasurementSystem.imperial : GeoRoutesClientTypes.MeasurementSystem.metric
-        let input = CalculateRoutesInput(arrivalTime: arrivalTime?.convertDateToIsoString(), avoid: routeAvoidanceOptions, departNow: departNow, departureTime: departureTime?.convertDateToIsoString(), destination: destination, instructionsMeasurementSystem: measureUnit, legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .flexiblePolyline, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
+        let input = CalculateRoutesInput(arrivalTime: arrivalTime?.convertDateToIsoString(), avoid: routeAvoidanceOptions, departNow: departNow, departureTime: departureTime?.convertDateToIsoString(), destination: destination,  instructionsMeasurementSystem: measureUnit, languages: [Locale.currentAppLanguageIdentifier(), "en"], legAdditionalFeatures: legAdditionalFeatures, legGeometryFormat: .flexiblePolyline, maxAlternatives: 0, origin: origin, travelMode: travelMode, travelStepType: .default)
         
         if let client = AmazonLocationClient.getRoutesClient() {
             let result = try await client.calculateRoutes(input: input)

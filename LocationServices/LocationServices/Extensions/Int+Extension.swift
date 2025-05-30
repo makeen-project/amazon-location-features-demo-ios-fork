@@ -28,7 +28,7 @@ extension Int {
             return formattedString
         } else {
             let min = Int(self / 60)
-            return "\(min) min"
+            return "\(min) \(StringConstant.min)"
         }
     }
 }
