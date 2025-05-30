@@ -478,7 +478,7 @@ final class POICardView: UIView {
         
         containerView.snp.makeConstraints {
             $0.top.bottom.leading.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview()
         }
         
         topStackView.snp.makeConstraints {
@@ -628,7 +628,7 @@ final class POICardView: UIView {
         
         directionLabel.snp.makeConstraints {
             $0.height.equalTo(22)
-            $0.width.equalTo(77)
+            $0.width.equalTo(150)
             $0.leading.equalTo(directionIcon.snp.trailing).offset(19)
         }
         
