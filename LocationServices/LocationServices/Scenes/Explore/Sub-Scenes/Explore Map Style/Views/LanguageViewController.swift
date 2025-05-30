@@ -147,7 +147,7 @@ class LanguageViewController: UIViewController, UISearchBarDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         selectedIndexPath = indexPath
-        UserDefaultsHelper.saveObject(value: mapLanguageSwitcherData[indexPath.row], key: .mapLanguage)
+        UserDefaultsHelper.save(value: mapLanguageSwitcherData[indexPath.row].value, key: .mapLanguage)
         tableView.reloadData()
         NotificationCenter.default.post(name: Notification.refreshMapView, object: nil, userInfo: nil)
     }
