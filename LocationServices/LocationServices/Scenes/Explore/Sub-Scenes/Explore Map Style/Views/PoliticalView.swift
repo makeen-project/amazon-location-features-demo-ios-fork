@@ -100,11 +100,16 @@ final class PoliticalView: UIButton {
         self.isUserInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         self.addGestureRecognizer(tapGestureRecognizer)
-        
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(validatePoliticalView(_:)), name: Notification.validateMapColor, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
         
         setPoliticalView()
         validatePoliticalView()
+    }
+    
+    @objc func removeNotificationObservers(_ notification: Notification) {
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func validatePoliticalView(_ notification: Notification) {

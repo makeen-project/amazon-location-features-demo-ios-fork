@@ -275,8 +275,13 @@ final class DirectionView: UIView {
         routeOptions.leaveOptionsHandler = { [weak self] options in
             self?.leaveOptionsHandler?(options)
         }
-        
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(updateRouteContainerConstraint(_:)), name: Notification.updateMapLayerItems, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
+    }
+    
+    @objc func removeNotificationObservers(_ notification: Notification) {
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func updateRouteContainerConstraint(_ notification: Notification) {

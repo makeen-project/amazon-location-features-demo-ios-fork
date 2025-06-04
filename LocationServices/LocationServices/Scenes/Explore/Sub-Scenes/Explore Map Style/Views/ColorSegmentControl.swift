@@ -38,9 +38,14 @@ final class ColorSegmentControl: UISegmentedControl {
         self.selectedSegmentIndex = (colorType != nil && colorType! == .dark) ? 1 : 0
         
         self.addTarget(self, action: #selector(mapColorChanged(_:)), for: .valueChanged)
-        
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(validateMapColor(_:)), name: Notification.validateMapColor, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
         validateMapColor()
+    }
+    
+    @objc func removeNotificationObservers(_ notification: Notification) {
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func validateMapColor(_ notification: Notification) {

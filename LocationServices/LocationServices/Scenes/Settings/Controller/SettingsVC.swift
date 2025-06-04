@@ -80,7 +80,9 @@ final class SettingsVC: UIViewController {
     }
     
     private func setupNotifications() {
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(authorizationStatusChanged(_:)), name: Notification.authorizationStatusChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
     }
     
     @objc private func authorizationStatusChanged(_ notification: Notification) {

@@ -299,7 +299,9 @@ private extension NavigationVC {
     }
     
     func setupNotifications() {
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(updateNavigationSteps(_:)), name: Notification.navigationStepsUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
     }
     
     @objc private func updateNavigationSteps(_ notification: Notification) {

@@ -104,11 +104,13 @@ final class AttributionVC: UIViewController {
         setupViews()
         updateSpacerViews()
         if UIDevice.current.userInterfaceIdiom == .pad {
+            NotificationCenter.default.removeObserver(self)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(deviceOrientationDidChange(_:)),
                                                    name: UIDevice.orientationDidChangeNotification,
                                                    object: nil)
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
     }
     
     // MARK: - Functions

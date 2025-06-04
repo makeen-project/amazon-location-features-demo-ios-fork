@@ -174,7 +174,7 @@ class GeneralHelper {
         UITextField.appearance().semanticContentAttribute = semantic
         UITextView.appearance().semanticContentAttribute = semantic
         window.semanticContentAttribute = semantic
-
+        NotificationCenter.default.post(name: Notification.removeNotificationObservers, object: nil)
         // Rebuild rootViewController
         let nav = UINavigationController()
         let sceneDelegate = windowScene.delegate as? SceneDelegate

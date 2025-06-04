@@ -57,4 +57,5 @@ extension Notification {
     static let navigationSteps = Notification.Name("NavigationSteps")
     static let directionLineString = Notification.Name("DirectionLineString")
     
+    static let removeNotificationObservers = Notification.Name("RemoveNotificationObservers")
 }

@@ -46,6 +46,10 @@ final class ExploreVC: UIViewController {
         return countOfNavigationViewsInParentView > 1.5
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHandlers()
@@ -206,11 +210,14 @@ extension ExploreVC: ExploreViewModelOutputDelegate {
 }
 
 extension ExploreVC {
+
     func setupNotifications() {
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(updateLocation(_:)), name: Notification.userLocation, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(selectPlace(_:)), name: Notification.selectedPlace, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateButtonConstraits(_:)), name: Notification.updateMapViewButtons, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(drawDirectionRoute(_:)), name: Notification.directionLineString, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.navigationSteps, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showNavigationScene(_:)), name: Notification.navigationSteps, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(dismissNavigationScene(_:)), name: Notification.navigationViewDismissed, object: nil)
@@ -231,7 +238,8 @@ extension ExploreVC {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMapLayerItems(_:)), name: Notification.updateMapLayerItems, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(focusOnLocation(_:)), name: Notification.focusOnLocation, object: nil)
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
     }
     
     private func setupKeyboardNotifications() {
