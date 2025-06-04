@@ -740,9 +740,11 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
                 firstDestination = searchTextModel
             }
             directionView.disableRouteTypesView()
+            self.showLoadingIndicator()
             for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
                 try await calculateGenericRoute(currentModel: currentModel, routeType: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime)
             }
+            self.hideLoadingIndicator()
             DispatchQueue.main.async {
                 self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
             }
