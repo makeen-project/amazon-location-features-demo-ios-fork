@@ -486,7 +486,8 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                 avoidDirtRoads: Bool = false,
                                 leaveNow: Bool? = nil,
                                 leaveTime: Date? = nil,
-                                arrivalTime: Date? = nil) async throws {
+                                arrivalTime: Date? = nil,
+                                drawDirections: Bool) async throws {
         directionSearchView.closeKeyboard()
         self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
         
@@ -511,7 +512,8 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                         avoidDirtRoads: avoidDirtRoads,
                                         leaveNow: leaveNow,
                                         leaveTime: leaveTime,
-                                        arrivalTime: arrivalTime)
+                                        arrivalTime: arrivalTime,
+                                        drawDirections: drawDirections)
     }
     
     func setupSearchTitleDestinations() {
@@ -528,7 +530,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                             leaveTime: Date? = nil,
                             arrivalTime: Date? = nil) async throws {
         directionView.disableRouteTypesView()
-        for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
+        for routeType in [RouteTypes.car, .pedestrian, .scooter, .truck] {
             try await calculateRoute(routeType: routeType,
                                            avoidTolls: avoidTolls,
                                            avoidFerries: avoidFerries,
@@ -537,8 +539,10 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                            avoidDirtRoads: avoidDirtRoads,
                                            leaveNow: leaveNow,
                                            leaveTime: leaveTime,
-                                           arrivalTime: arrivalTime)
+                                           arrivalTime: arrivalTime,
+                                           drawDirections: routeType == .car ? true: false)
         }
+        self.viewModel.selectedTravelMode = .car
     }
     
     func calculateGenericRoute(currentModel: SearchCellViewModel, routeType: RouteTypes = .car,
@@ -549,7 +553,8 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                avoidDirtRoads: Bool = false,
                                leaveNow: Bool? = nil,
                                leaveTime: Date? = nil,
-                               arrivalTime: Date? = nil) async throws {
+                               arrivalTime: Date? = nil,
+                               drawDirections: Bool = true) async throws {
         guard let (departureLocation, destinationLocation) = getRouteLocations(currentModel: currentModel) else { return }
         
         guard isDistanceValid(departureLoc: departureLocation, destinationLoc: destinationLocation) else { return }
@@ -577,10 +582,12 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                     self.directionView.showOptionsStackView()
                     self.setupSearchTitleDestinations()
                     self.view.endEditing(true)
-                    self.sendDirectionsToExploreVC(data: data,
-                                                   departureLocation: departureLocation,
-                                                   destinationLocation: destinationLocation,
-                                                   routeType: routeType)
+                    if drawDirections {
+                        self.sendDirectionsToExploreVC(data: data,
+                                                       departureLocation: departureLocation,
+                                                       destinationLocation: destinationLocation,
+                                                       routeType: routeType)
+                    }
                 }
             }
             else {
@@ -648,7 +655,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
             let destinationLoc = CLLocationCoordinate2D(latitude: destinationLat, longitude: destinationLong)
             
             guard isDistanceValid(departureLoc: departureLoc, destinationLoc: destinationLoc) else { return }
-            for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
+            for routeType in [RouteTypes.car, .pedestrian, .scooter, .truck] {
                 if let (data, directionVM) = try await viewModel.calculateRouteWith(destinationPosition: destinationLoc, departurePosition: departureLoc, travelMode: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime) {
                     DispatchQueue.main.async {
                         self.directionView.isHidden = false
@@ -659,12 +666,14 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                     
                     let isPreview = self.firstDestination?.placeName != StringConstant.myLocation
                     self.directionView.setup(model: directionVM, isPreview: isPreview, routeType: routeType)
-                    
-                    self.sendDirectionsToExploreVC(data: data,
-                                                   departureLocation: departureLoc,
-                                                   destinationLocation: destinationLoc, routeType: routeType)
+                    if routeType == .car {
+                        self.sendDirectionsToExploreVC(data: data,
+                                                       departureLocation: departureLoc,
+                                                       destinationLocation: destinationLoc, routeType: routeType)
+                    }
                 }
             }
+            self.viewModel.selectedTravelMode = .car
         }
     }
     
@@ -741,9 +750,10 @@ extension DirectionVC: DirectionViewModelOutputDelegate {
             }
             directionView.disableRouteTypesView()
             self.showLoadingIndicator()
-            for routeType in [RouteTypes.truck, .scooter, .pedestrian, .car] {
-                try await calculateGenericRoute(currentModel: currentModel, routeType: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime)
+            for routeType in [RouteTypes.car, .pedestrian, .scooter, .truck] {
+                try await calculateGenericRoute(currentModel: currentModel, routeType: routeType, avoidFerries: viewModel.avoidFerries, avoidTolls: viewModel.avoidTolls, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime, drawDirections: routeType == .car ? true: false)
             }
+            self.viewModel.selectedTravelMode = .car
             self.hideLoadingIndicator()
             DispatchQueue.main.async {
                 self.sheetPresentationController?.selectedDetentIdentifier = Constants.mediumId
@@ -799,7 +809,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
     }
     
     func changeRoute(type: RouteTypes) async throws {
-        try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime )
+        try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime, drawDirections: true)
     }
 }
 
