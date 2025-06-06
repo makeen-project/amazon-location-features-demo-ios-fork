@@ -21,7 +21,7 @@ protocol ExploreViewModelProtocol: AnyObject {
 }
 
 protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {
-    func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes)
+    func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes, isPreview: Bool)
     func userReachedDestination(_ destination: MapModel)
     func showAnnotation(model: SearchPresentation, force: Bool)
 }

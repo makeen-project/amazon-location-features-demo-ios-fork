@@ -116,6 +116,12 @@ extension GeoRoutesClientTypes.RouteFerryTravelStep {
     var image: UIImage? {
         var imageName = "step-icon"
         switch self.type {
+        case .arrive:
+            imageName = "depart"
+        case .continue:
+            imageName = "arrow-up"
+        case .depart:
+            imageName = "depart"
         case .none:
             imageName = "step-icon"
         case .some(_):

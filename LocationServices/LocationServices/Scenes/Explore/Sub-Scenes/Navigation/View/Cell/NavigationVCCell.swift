@@ -27,6 +27,10 @@ struct NavigationCellModel {
         self.ferryStep = model.ferryStep
         self.distance = ""
         self.instruction = ""
+        if let step = model.ferryStep {
+            self.distance =  String(step.distance.formatDistance(decimalPoints: 2))
+            self.instruction = step.instruction!
+        }
         if let step = model.pedestrianStep {
             self.distance =  String(step.distance.formatDistance(decimalPoints: 2))
             self.instruction = step.instruction!

@@ -315,7 +315,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
         delegate?.showDirectionView(userLocation: (mapView.locationManager.authorizationStatus == .authorizedAlways || mapView.locationManager.authorizationStatus == .authorizedWhenInUse) ? mapView.userLocation?.coordinate : nil)
     }
     
-    func drawCalculatedRouteWith(_ geoDatas: [Data], departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, isRecalculation: Bool, routeType: RouteTypes) {
+    func drawCalculatedRouteWith(_ geoDatas: [Data], departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, isRecalculation: Bool, routeType: RouteTypes, isPreview: Bool) {
         DispatchQueue.main.async {
             
             let isDashedLine: Bool
@@ -341,6 +341,14 @@ final class ExploreView: UIView, NavigationMapProtocol {
             
             self.mapView.setDirection(0, animated: false)
             self.mapView.setVisibleCoordinateBounds(coordinateBounds, edgePadding: edgePadding, animated: false, completionHandler: nil)
+            if let isNavigationMode = UserDefaultsHelper.get(for: Bool.self, key: .isNavigationMode), isNavigationMode {
+                if isPreview {
+                    self.focusNavigationMode()
+                }
+                else {
+                    self.focus(on: departureLocation)
+                }
+            }
         }
     }
     

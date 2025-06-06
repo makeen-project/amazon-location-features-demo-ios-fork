@@ -74,7 +74,7 @@ final class ExploreViewModel: ExploreViewModelProtocol {
                                                                  departureTime: selectedRoute.departureTime,
                                                                  arrivalTime: selectedRoute.arrivalTime)
         for route in result {
-            self.delegate?.routeReCalculated(direction: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode)
+            self.delegate?.routeReCalculated(direction: try route.value.get(), departureLocation: userLocation, destinationLocation: selectedRoute.destinationPosition, routeType: selectedRoute.travelMode, isPreview: false)
         }
     }
     

@@ -202,11 +202,6 @@ extension ExploreVC: ExploreViewOutputDelegate {
 }
 
 extension ExploreVC: ExploreViewModelOutputDelegate {
-    func loginCompleted(_ presentation: ExplorePresentation) {
-    }
-    
-    func logoutCompleted() {
-    }
 }
 
 extension ExploreVC {
@@ -363,11 +358,12 @@ extension ExploreVC {
         guard let data = notification.userInfo?["LineString"] as? [Data],
               let departureLocation = notification.userInfo?["DepartureLocation"] as? CLLocationCoordinate2D,
               let destinationLocation = notification.userInfo?["DestinationLocation"] as? CLLocationCoordinate2D,
-              let routeType = notification.userInfo?["routeType"] as? RouteTypes else {
+              let routeType = notification.userInfo?["routeType"] as? RouteTypes,
+              let isPreview = notification.userInfo?["isPreview"] as? Bool else {
             return
         }
         
-        exploreView.drawCalculatedRouteWith(data, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: false, routeType: routeType)
+        exploreView.drawCalculatedRouteWith(data, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: false, routeType: routeType, isPreview: isPreview)
     }
     
     @objc private func updateButtonConstraits(_ notification: Notification) {
@@ -502,7 +498,7 @@ extension ExploreVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     }
     
-    func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes) {
+    func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes, isPreview: Bool) {
             let userInfo = ["route": direction.route]
         NotificationCenter.default.post(name: Notification.navigationStepsUpdated, object: nil, userInfo: userInfo)
             let encoder = JSONEncoder()
@@ -514,7 +510,7 @@ extension ExploreVC: CLLocationManagerDelegate {
                         datas.append(data)
                     }
                 }
-                self.exploreView.drawCalculatedRouteWith(datas, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: true, routeType: routeType)
+                self.exploreView.drawCalculatedRouteWith(datas, departureLocation: departureLocation, destinationLocation: destinationLocation, isRecalculation: true, routeType: routeType, isPreview: isPreview)
             } catch {
                 print(String.errorJSONDecoder)
             }

@@ -586,7 +586,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                         self.sendDirectionsToExploreVC(data: data,
                                                        departureLocation: departureLocation,
                                                        destinationLocation: destinationLocation,
-                                                       routeType: routeType)
+                                                       routeType: routeType, isPreview: isPreview)
                     }
                 }
             }
@@ -669,7 +669,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                     if routeType == .car {
                         self.sendDirectionsToExploreVC(data: data,
                                                        departureLocation: departureLoc,
-                                                       destinationLocation: destinationLoc, routeType: routeType)
+                                                       destinationLocation: destinationLoc, routeType: routeType, isPreview: isPreview)
                     }
                 }
             }
