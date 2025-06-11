@@ -10,7 +10,6 @@
 		8A063E9F29C9C238001FF40C /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD16A42129357F38006AEA8E /* UserDefaultsHelper.swift */; };
 		8A063EA029C9C245001FF40C /* ViewsIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB3F19D29C8AF22008FDF37 /* ViewsIdentifiers.swift */; };
 		8A063EA129C9C256001FF40C /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A439F0729C0BA1B00B59D0B /* UIApplication+Extension.swift */; };
-		8A063EA229C9C27C001FF40C /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
 		8A0AF02A2A03CBE9003E503D /* UISplitViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0AF0292A03CBE8003E503D /* UISplitViewController+Extension.swift */; };
 		8A0EB58A2983F9CF00FBB3E5 /* GeofenceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0EB5892983F9CF00FBB3E5 /* GeofenceAnnotation.swift */; };
 		8A10E37D29E97948005165CD /* SplashBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10E37C29E97948005165CD /* SplashBuilder.swift */; };
@@ -92,7 +91,6 @@
 		8ADB62A229F2A455002C7971 /* AlertPresentableMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADB62A129F2A455002C7971 /* AlertPresentableMock.swift */; };
 		8ADB62A529F2B671002C7971 /* XCTWaiter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0A6E129DDFC5700B79078 /* XCTWaiter+Extension.swift */; };
 		8ADB62A629F2B677002C7971 /* UITestWaitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0E38E29CCC1ED00C338F5 /* UITestWaitTime.swift */; };
-		8ADB62A729F2B67C002C7971 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
 		8AE83A912A274B2F00CF6E7C /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE83A902A274B2F00CF6E7C /* UIView+Extension.swift */; };
 		8AEFDDC72A262F5300090D9E /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEFDDC62A262F5300090D9E /* GradientView.swift */; };
 		8AF7D2AB2976B3F700E1563E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7D2AA2976B3F700E1563E /* LocationManager.swift */; };
@@ -304,6 +302,9 @@
 		F11E046F2CE788EA003F1641 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E046E2CE788DA003F1641 /* LanguageView.swift */; };
 		F11E04712CE788FD003F1641 /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04702CE788F3003F1641 /* LanguageViewController.swift */; };
 		F11E04732CE791A3003F1641 /* LanguageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11E04722CE791A1003F1641 /* LanguageViewCell.swift */; };
+		F12C1E322DF9CE930064F611 /* String+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C1E312DF9CE850064F611 /* String+Constants.swift */; };
+		F12C1E332DF9CEC60064F611 /* String+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C1E312DF9CE850064F611 /* String+Constants.swift */; };
+		F12C1E342DF9CEC60064F611 /* String+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C1E312DF9CE850064F611 /* String+Constants.swift */; };
 		F1343E9B2DD35CD1002A347F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1343E9A2DD35CD1002A347F /* Localizable.xcstrings */; };
 		F1343EAC2DD6585A002A347F /* LanguageSceneBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1343EAB2DD65859002A347F /* LanguageSceneBuilder.swift */; };
 		F1343EAE2DD65999002A347F /* LanguageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1343EAD2DD65991002A347F /* LanguageVC.swift */; };
@@ -715,6 +716,7 @@
 		F11E046E2CE788DA003F1641 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
 		F11E04702CE788F3003F1641 /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
 		F11E04722CE791A1003F1641 /* LanguageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewCell.swift; sourceTree = "<group>"; };
+		F12C1E312DF9CE850064F611 /* String+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Constants.swift"; sourceTree = "<group>"; };
 		F1343E982DD35B86002A347F /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		F1343E9A2DD35CD1002A347F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F1343E9C2DD37EE3002A347F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -2343,6 +2345,7 @@
 		ADF26F5A292FEE52000147A0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				F12C1E312DF9CE850064F611 /* String+Constants.swift */,
 				F11603C72DE09F7C00FD837D /* Label+Extension.swift */,
 				F146A56D2DDBAD3E00CD5D6B /* LanguageManager.swift */,
 				96E742A92967381800D5C0BC /* Sequence+Extension.swift */,
@@ -2893,13 +2896,13 @@
 				F10994FA29D1C834001D3464 /* UITestSettingsScreen.swift in Sources */,
 				8AD0E38F29CCC1ED00C338F5 /* UITestWaitTime.swift in Sources */,
 				8A7088B729EE96000066BF60 /* UITestConstants.swift in Sources */,
-				8A063EA229C9C27C001FF40C /* StringConstants.swift in Sources */,
 				8A063EA129C9C256001FF40C /* UIApplication+Extension.swift in Sources */,
 				8AD0E39129CCC72500C338F5 /* UITestSwipeDirection.swift in Sources */,
 				8A4EE63029D4B45D00B699A9 /* UITestRouteOptionsScreen.swift in Sources */,
 				F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */,
 				8A47805729C9BDA900B098CA /* UITestExploreScreen.swift in Sources */,
 				8AB3F19329C8A1C3008FDF37 /* LocationServicesUITests.swift in Sources */,
+				F12C1E342DF9CEC60064F611 /* String+Constants.swift in Sources */,
 				8AB3F19C29C8ABF8008FDF37 /* MapUITests.swift in Sources */,
 				F10994F629D1A908001D3464 /* UITestAWSScreen.swift in Sources */,
 				8A4EE62E29D4B0EE00B699A9 /* NavigationUITests.swift in Sources */,
@@ -2925,7 +2928,6 @@
 				F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */,
 				F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */,
 				8ADB629E29F2A051002C7971 /* GeofenceAPIServiceMock.swift in Sources */,
-				8ADB62A729F2B67C002C7971 /* StringConstants.swift in Sources */,
 				F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */,
 				F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */,
 				F1E5F8FE29E9916800639EEC /* MLNCoordinateBoundsExtensionTests.swift in Sources */,
@@ -2951,6 +2953,7 @@
 				F1E5F8F029E986F300639EEC /* UserDefaultsHelperTests.swift in Sources */,
 				F1E5F8ED29E94EF000639EEC /* SettingsDefaultValueHelperTests.swift in Sources */,
 				F111DF0F29F0214B00D08641 /* MapStyleViewModelTests.swift in Sources */,
+				F12C1E332DF9CEC60064F611 /* String+Constants.swift in Sources */,
 				F139208829EE918E0042CBC9 /* AWSLocationTravelModeTests.swift in Sources */,
 				8AA33B1529F1604F00AEF483 /* PlaceholderAnimatorTests.swift in Sources */,
 				F1E5F8F629E988F900639EEC /* ReachabilityTests.swift in Sources */,
@@ -3059,6 +3062,7 @@
 				F116049C2DE5CF9300FD837D /* RegionVC+TableView.swift in Sources */,
 				F116049D2DE5CF9300FD837D /* RegionTypes.swift in Sources */,
 				F116049E2DE5CF9300FD837D /* RegionSceneContracts.swift in Sources */,
+				F12C1E322DF9CE930064F611 /* String+Constants.swift in Sources */,
 				F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */,
 				AD38BA06294BE6A60087C2FC /* UITableView+Extension.swift in Sources */,
 				AD2AF0E3292EAC2300149904 /* WelcomeBottomView.swift in Sources */,

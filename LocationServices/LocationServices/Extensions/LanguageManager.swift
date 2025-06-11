@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-private var bundleKey: UInt8 = 0
+var bundleKey: UInt8 = 0
 
 class LanguageManager {
     static let shared = LanguageManager()

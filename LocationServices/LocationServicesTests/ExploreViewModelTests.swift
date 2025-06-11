@@ -152,7 +152,7 @@ final class ExploreViewModelTests: XCTestCase {
     }
 }
 
-class MockExploreViewModelOutputDelegate : ExploreViewModelOutputDelegate {
+class MockExploreViewModelOutputDelegate : ExploreViewModelOutputDelegate {    
     var isLoginCompleted = false
     var isLogoutCompleted = false
     var isRouteReCalculated = false
@@ -168,7 +168,7 @@ class MockExploreViewModelOutputDelegate : ExploreViewModelOutputDelegate {
         isLogoutCompleted = true
     }
     
-    func routeReCalculated(direction: LocationServices.DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: LocationServices.RouteTypes) {
+    func routeReCalculated(direction: LocationServices.DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: LocationServices.RouteTypes, isPreview: Bool) {
         self.isRouteReCalculated = true
     }
     
