@@ -101,8 +101,8 @@ final class MapSearchFloatingView: UIView {
         }
     }
     
-    func setSideBarButtonVisibility(state: Bool) {
-        sideBarButton.isHidden = state
+    func setSideBarButtonVisibility(isHidden: Bool) {
+        sideBarButton.isHidden = isHidden
     }
     
     private func configure() {

@@ -56,8 +56,8 @@ class MapFloatingViewHandler {
         }
     }
     
-    func setSideBarButtonVisibility(state: Bool) {
-        mapSearchFloatingView.setSideBarButtonVisibility(state: state)
+    func setSideBarButtonVisibility(isHidden: Bool) {
+        mapSearchFloatingView.setSideBarButtonVisibility(isHidden: isHidden)
     }
 }
 
