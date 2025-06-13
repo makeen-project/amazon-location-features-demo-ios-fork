@@ -56,7 +56,7 @@ final class TrackingViewModelTests: XCTestCase {
 
 class MockTrackingViewModelDelegate : TrackingViewModelDelegate {
     func drawTrackingRoute(routeId: String, coordinates: [CLLocationCoordinate2D]) {
-        hasDrawnTrack = true
+        hasDrawnTrackingRoute = true
     }
     
     func showGeofences(routeId: String, _ models: [LocationServices.GeofenceDataModel]) {
@@ -64,8 +64,7 @@ class MockTrackingViewModelDelegate : TrackingViewModelDelegate {
     }
     
 
-    var hasDrawnTrack = false
-    var hasHistoryLoaded = false
+    var hasDrawnTrackingRoute = false
     var hasShownGeofences = false
     var hasShownAlert = false
     
