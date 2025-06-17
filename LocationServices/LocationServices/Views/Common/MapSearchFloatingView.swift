@@ -101,6 +101,10 @@ final class MapSearchFloatingView: UIView {
         }
     }
     
+    func setSideBarButtonVisibility(isHidden: Bool) {
+        sideBarButton.isHidden = isHidden
+    }
+    
     private func configure() {
         self.addSubview(containerStackView)
         containerStackView.addArrangedSubview(sideBarButton)

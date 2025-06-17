@@ -78,7 +78,6 @@ final class SplitViewCoordinator: Coordinator {
         
         let coordinator = SplitViewExploreMapCoordinator(splitViewController: splitViewController)
         coordinator.geofenceHandler = { [weak self] in
-            //TO DO: Need to show tracking simulation
             self?.showNextScene(type: .tracking)
         }
         coordinator.splitDelegate = self
@@ -90,15 +89,6 @@ final class SplitViewCoordinator: Coordinator {
             return coordinator
         }
         let coordinator = SplitViewTrackingMapCoordinator(splitViewController: splitViewController)
-        coordinator.splitDelegate = self
-        return coordinator
-    }
-    
-    private func getGeofenceCoordinator() -> Coordinator {
-        if let coordinator = childCoordinators.first(where: { $0 is SplitViewGeofencingMapCoordinator }) {
-            return coordinator
-        }
-        let coordinator = SplitViewGeofencingMapCoordinator(splitViewController: splitViewController)
         coordinator.splitDelegate = self
         return coordinator
     }
@@ -135,7 +125,6 @@ final class SplitViewCoordinator: Coordinator {
         }
         (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: splitViewController.displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
-        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
     }
 }
 
@@ -213,7 +202,6 @@ extension SplitViewCoordinator: UISplitViewControllerDelegate {
         
         (getExploreCoordinator() as? SplitViewExploreMapCoordinator)?.displayModeChanged(displayMode: displayMode)
         (getTrackingCoordinator() as? SplitViewTrackingMapCoordinator)?.setupNavigationSearch(state: mapState)
-        (getGeofenceCoordinator() as? SplitViewGeofencingMapCoordinator)?.setupNavigationSearch(state: mapState)
         
         sideBarButtonItem?.accessibilityIdentifier = ViewsIdentifiers.General.sideBarButton
         sideBarButtonItem?.tintColor = .lsPrimary

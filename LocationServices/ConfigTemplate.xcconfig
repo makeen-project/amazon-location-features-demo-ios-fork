@@ -8,6 +8,7 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-IDENTITY_POOL_ID = REGION:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-AWS_REGION = REGION
-API_KEY = XXXX
+VITE_AWS_API_KEY_REGIONS=xxxxx,xxxxx
+VITE_AWS_API_KEYS= xxxxx,xxxxx
+VITE_AWS_COGNITO_IDENTITY_POOL_IDS=xxxxx,xxxxx
+VITE_AWS_WEB_SOCKET_URLS=xxxxx,xxxxx

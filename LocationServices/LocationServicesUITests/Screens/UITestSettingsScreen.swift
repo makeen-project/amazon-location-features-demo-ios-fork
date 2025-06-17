@@ -12,18 +12,12 @@ struct UITestSettingsScreen: UITestScreen {
     
     private enum Identifiers {
         static var routeOptionCell: String { ViewsIdentifiers.Settings.routeOptionCell }
-        static var awsCloudCell: String { ViewsIdentifiers.Settings.awsCloudCell }
         static var dataProviderCell: String { ViewsIdentifiers.Settings.dataProviderCell }
         static var mapStyleCell: String { ViewsIdentifiers.Settings.mapStyleCell }
     }
     
     func waitRouteOptionsRow() -> Self {
         let _ = getRouteOptionCell()
-        return self
-    }
-    
-    func waitAWSCloudRow() -> Self {
-        let _ = getAWSCloudCell()
         return self
     }
     
@@ -37,13 +31,6 @@ struct UITestSettingsScreen: UITestScreen {
         cell.tap()
         
         return UITestRouteOptionsScreen(app: app)
-    }
-    
-    func tapConnectAWSRow() -> UITestAWSScreen {
-        let cell = getAWSCloudCell()
-        cell.tap()
-        
-        return UITestAWSScreen(app: app)
     }
     
     func tapMapStyleRow() -> UITestSettingsMapStyleScreen {
@@ -64,14 +51,6 @@ struct UITestSettingsScreen: UITestScreen {
         XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
         return cell
     }
-    
-    private func getAWSCloudCell() -> XCUIElement {
-        app.activate()
-        let cell = app.cells[Identifiers.awsCloudCell]
-        XCTAssertTrue(cell.waitForExistence(timeout: UITestWaitTime.regular.time))
-        return cell
-    }
-
     
     private func getMapStyleCell() -> XCUIElement {
         app.activate()

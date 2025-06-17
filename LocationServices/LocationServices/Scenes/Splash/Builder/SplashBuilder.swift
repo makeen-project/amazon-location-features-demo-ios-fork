@@ -10,9 +10,7 @@ import UIKit
 final class SplashBuilder {
     static func create() -> SplashVC {
         let vc = SplashVC()
-        let service = AWSLoginService.default()
-        service.viewController = vc
-        let vm = SplashViewModel(loginService: service)
+        let vm = SplashViewModel()
         vc.viewModel = vm
         return vc
     }

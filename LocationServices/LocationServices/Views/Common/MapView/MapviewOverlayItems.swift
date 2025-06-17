@@ -24,8 +24,8 @@ protocol MapOverlayItemsOutputDelegate: AnyObject {
 final class MapOverlayItems: UIView, MapOverlayItemsProtocol {
     
     enum Constants {
-        static let topStackViewTopOffsetiPhone: CGFloat = 60
-        static let topStackViewTopOffsetiPad: CGFloat = -20
+        static let topStackViewTopOffsetiPhone: CGFloat = 130
+        static let topStackViewTopOffsetiPad: CGFloat = 120
         
         static let bottomStackViewHorizontalOffset: CGFloat = 16
         static let bottomStackViewBottomOffset: CGFloat = 16

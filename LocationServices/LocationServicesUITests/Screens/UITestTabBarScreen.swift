@@ -21,7 +21,6 @@ struct UITestTabBarScreen: UITestScreen {
         static var exploreTabBarButton: String { ViewsIdentifiers.General.exploreTabBarButton }
         static var settingsTabBarButton: String { ViewsIdentifiers.General.settingsTabBarButton }
         static var trackingTabBarButton: String { ViewsIdentifiers.General.trackingTabBarButton }
-        static var geofenceTabBarButton: String { ViewsIdentifiers.General.geofenceTabBarButton }
         static var aboutTabBarButton: String { ViewsIdentifiers.General.aboutTabBarButton }
         static var sideBarButton: String { ViewsIdentifiers.General.sideBarButton }
         static var fullScreenButton: String { ViewsIdentifiers.General.fullScreenButton }
@@ -56,14 +55,6 @@ struct UITestTabBarScreen: UITestScreen {
         return UITestTrackingScreen(app: app)
     }
     
-    func tapGeofenceButton() -> UITestGeofenceScreen {
-        showSideBar()
-        let settingsButton = getGeofenceTabBarButton()
-        settingsButton.tap()
-        
-        return UITestGeofenceScreen(app: app)
-    }
-    
     func tapAboutButton() -> UITestExploreScreen {
         showSideBar()
         let button = getAboutTabBarButton()
@@ -92,12 +83,6 @@ struct UITestTabBarScreen: UITestScreen {
     
     private func getTrackingTabBarButton() -> XCUIElement {
         let button = getBarItem(identifier: Identifiers.trackingTabBarButton)
-        XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
-        return button
-    }
-
-    private func getGeofenceTabBarButton() -> XCUIElement {
-        let button = getBarItem(identifier: Identifiers.geofenceTabBarButton)
         XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
         return button
     }

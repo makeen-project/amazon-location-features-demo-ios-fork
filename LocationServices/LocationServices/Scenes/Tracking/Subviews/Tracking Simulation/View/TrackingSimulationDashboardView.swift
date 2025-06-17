@@ -18,18 +18,6 @@ final class TrackingSimulationDashboardView: UIView {
     var maybeButtonHandler: VoidHandler?
     private var isiPad = UIDevice.current.userInterfaceIdiom == .pad
     
-    private lazy var closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(.closeIcon, for: .normal)
-        button.tintColor = .closeButtonTintColor
-        button.backgroundColor = .closeButtonBackgroundColor
-        button.isUserInteractionEnabled = true
-        button.layer.cornerRadius = 15
-        button.addTarget(self, action: #selector(simulationDismiss), for: .touchUpInside)
-        button.isHidden = isiPad
-        return button
-    }()
-    
     private let backgroundIcon: UIImageView = {
         let imageView = UIImageView(image: .simulationBackground)
         imageView.backgroundColor = .clear
@@ -122,7 +110,7 @@ final class TrackingSimulationDashboardView: UIView {
     
     private lazy var startButton: AmazonLocationButton =  {
         let button = AmazonLocationButton(title: StringConstant.startSimulation)
-        button.accessibilityIdentifier = ViewsIdentifiers.Tracking.enableTrackingButton
+        button.accessibilityIdentifier = ViewsIdentifiers.Tracking.startTrackingSimulationButton
         button.addTarget(self, action: #selector(commonButtonAction), for: .touchUpInside)
         return button
     }()
@@ -152,8 +140,7 @@ final class TrackingSimulationDashboardView: UIView {
     
     private func setupViews() {
         self.backgroundColor = .white
-        
-        self.addSubview(closeButton)
+
         self.addSubview(backgroundIcon)
         self.addSubview(simulationLabel)
         self.addSubview(mainLabel)
@@ -178,17 +165,11 @@ final class TrackingSimulationDashboardView: UIView {
         notificationsView.addSubview(notificationsDetailLabel)
         
         backgroundIcon.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(self.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
             $0.leading.equalToSuperview().offset(32)
             $0.trailing.equalToSuperview().offset(-32)
             $0.height.equalTo(246)
-        }
-        
-        closeButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
-            $0.trailing.equalToSuperview().offset(-11)
-            $0.height.width.equalTo(30)
         }
         
         simulationLabel.snp.makeConstraints {

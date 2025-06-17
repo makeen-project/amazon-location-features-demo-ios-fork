@@ -55,6 +55,10 @@ class MapFloatingViewHandler {
             }
         }
     }
+    
+    func setSideBarButtonVisibility(isHidden: Bool) {
+        mapSearchFloatingView.setSideBarButtonVisibility(isHidden: isHidden)
+    }
 }
 
 extension MapFloatingViewHandler: MapSearchFloatingViewDelegate {

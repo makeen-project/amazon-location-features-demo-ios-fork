@@ -19,9 +19,6 @@ class ErrorHandler {
             let model = AlertModel(title: StringConstant.awsStackInvalidTitle, message: StringConstant.awsStackInvalidExplanation, cancelButton: nil, okButton: StringConstant.terminate)
             model.okHandler = {
                 UserDefaultsHelper.setAppState(state: .prepareDefaultAWSConnect)
-                
-                // remove custom configuration
-                UserDefaultsHelper.removeObject(for: .awsConnect)
             }
             delegate?.showAlert(model)
         }

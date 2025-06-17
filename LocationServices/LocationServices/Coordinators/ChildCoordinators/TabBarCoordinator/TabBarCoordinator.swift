@@ -101,23 +101,7 @@ private extension TabBarCoordinator {
         childCoordinators.append(exploreCoordinator)
         exploreCoordinator.start()
         
-    }
-
-    func startGeofenceScene(_ navigationController: UINavigationController) {
-        let exploreCoordinator = GeofenceCoordinator(navigationController: navigationController)
-        exploreCoordinator.delegate = self
-        exploreCoordinator.directionHandler = {
-            self.tabBarController.selectedIndex = TabBarPage.explore.pageOrder
-            self.childCoordinators.removeAll()
-            let exploreCoordinator = ExploreCoordinator(navigationController: navigationController)
-            exploreCoordinator.delegate = self
-            self.childCoordinators.append(exploreCoordinator)
-            exploreCoordinator.showDirections(isRouteOptionEnabled: nil, firstDestination: nil,
-                                              secondDestination: nil, lat: nil, long: nil)
-        }
-        childCoordinators.append(exploreCoordinator)
-        exploreCoordinator.start()
-    }
+    } 
 
     func startSettingsScene(_ navigationController: UINavigationController) {
         let exploreCoordinator = SettingsCoordinator(navigationController: navigationController)

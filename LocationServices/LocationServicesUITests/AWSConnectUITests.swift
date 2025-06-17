@@ -16,13 +16,4 @@ final class AWSConnectUITests: LocationServicesUITests {
     override func tearDownWithError() throws {
         super.tearDown()
     }
-
-    func connectAWSAccount() throws -> XCUIApplication {
-        let app = startApp()
-        let _ = UITestTabBarScreen(app: app)
-            .tapSettingsButton()
-            .tapConnectAWSRow()
-            .connectAWSConnect()
-        return app
-    }
 }

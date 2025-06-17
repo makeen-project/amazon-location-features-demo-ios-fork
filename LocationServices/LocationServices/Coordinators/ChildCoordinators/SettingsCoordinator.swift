@@ -69,14 +69,4 @@ extension SettingsCoordinator: SettingsNavigationDelegate {
         let controller = ResetPasswordBuilder.create()
         navigationController.pushViewController(controller, animated: true)
     }
-    
-    private func showAwsCloudFormationscene() {
-        let controller = LoginVCBuilder.create(from: true)
-        controller.dismissHandler = { [weak self] in
-            self?.navigationController.popViewController(animated: true)
-        }
-        controller.isFromSettingScene = true
-        navigationController.pushViewController(controller, animated: true)
-    }
-    
 }

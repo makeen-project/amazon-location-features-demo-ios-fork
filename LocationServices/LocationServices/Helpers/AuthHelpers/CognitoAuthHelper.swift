@@ -47,6 +47,19 @@ public class CognitoAuthHelper {
         }
     }
     
+    static func validate(identityPoolId: String) async throws -> Bool {
+        do {
+            let id = try await getAWSIdentityId(identityPoolId: identityPoolId)
+            if id != nil  {
+                return true
+            }
+            return false
+        }
+        catch {
+            throw error
+        }
+    }
+    
     static func getAWSCredentials(identityId: String, region: String) async throws -> GetCredentialsForIdentityOutput {
         do {
             if cognitoIdentityClient == nil {

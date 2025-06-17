@@ -109,7 +109,7 @@ final class TrackingSimulationView: UIView {
         
         iconView.snp.makeConstraints {
             $0.height.width.equalTo(35)
-            $0.centerX.centerY.equalToSuperview(                  )
+            $0.centerX.centerY.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints {

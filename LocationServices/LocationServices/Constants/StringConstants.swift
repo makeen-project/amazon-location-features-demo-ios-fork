@@ -182,7 +182,7 @@ enum StringConstant {
     }
     
     enum AboutTab {
-        static let title = "About"
+        static let title = "More"
         static let cellAttributionTitle = "Attribution"
         static let cellLegalTitle = "Terms & Conditions"
         static let cellVersionTitle = "Version"
@@ -231,7 +231,7 @@ enum StringConstant {
     static let softwareAttributionDescription = "Click learn more for software attribution"
     static let learnMore = "Learn More"
     static let attribution = "Attribution"
-    static let about = "About"
+    static let about = "More"
     static let version = "Version"
     static let welcomeTitle = "Welcome to\nAmazon Location Demo"
     static let continueString = "Continue"

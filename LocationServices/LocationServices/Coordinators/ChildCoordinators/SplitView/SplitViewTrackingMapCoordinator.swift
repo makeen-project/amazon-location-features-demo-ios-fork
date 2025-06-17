@@ -23,11 +23,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
     
     private var historyIsRootController: Bool = false
     private var supplementaryController: UIViewController {
-        if historyIsRootController {
-            return historyController
-        } else {
             return dashboardController
-        }
     }
     
     private lazy var dashboardController: TrackingSimulationIntroController = {
@@ -39,11 +35,6 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         return controller
     }()
     
-    private lazy var historyController: TrackingHistoryVC = {
-        let controller = TrackingHistoryBuilder.create(isTrackingActive: false)
-        return controller
-    }()
-    
     private lazy var secondaryController: TrackingVC = {
         let controller = TrackingVCBuilder.create()
         controller.delegate = self
@@ -51,6 +42,7 @@ final class SplitViewTrackingMapCoordinator: Coordinator {
         floatingView = MapFloatingViewHandler(viewController: controller)
         floatingView?.delegate = splitDelegate
         floatingView?.setupNavigationSearch(state: .primaryVisible, hideSearch: true)
+        floatingView?.setSideBarButtonVisibility(isHidden: true)
         return controller
     }()
     
@@ -114,11 +106,13 @@ extension SplitViewTrackingMapCoordinator: TrackingNavigationDelegate {
         controller.isModalInPresentation = true
         controller.dismissHandler = { [weak self] in
             self?.splitViewController.dismiss(animated: true)
+            NotificationCenter.default.post(name: Notification.trackingMapStyleDimissed, object: nil, userInfo: nil)
+            NotificationCenter.default.post(name: Notification.updateMapViewButtons, object: nil, userInfo: nil)
         }
         if let sheet = controller.sheetPresentationController {
             sheet.preferredCornerRadius = NumberConstants.formSheetDefaultCornerRadius
         }
-        
+        NotificationCenter.default.post(name: Notification.trackingMapStyleAppearing, object: nil, userInfo: nil)
         splitViewController.present(controller, animated: true)
     }
     

@@ -12,8 +12,6 @@ import AWSGeoRoutes
 
 protocol ExploreViewModelProtocol: AnyObject {
     var delegate: ExploreViewModelOutputDelegate? { get set }
-    func login()
-    func logout()
     
     func activateRoute(route: RouteModel)
     func deactivateRoute()
@@ -23,9 +21,6 @@ protocol ExploreViewModelProtocol: AnyObject {
 }
 
 protocol ExploreViewModelOutputDelegate: AnyObject, AlertPresentable {
-    func loginCompleted(_ presentation: ExplorePresentation)
-    func logoutCompleted()
-    
     func routeReCalculated(direction: DirectionPresentation, departureLocation: CLLocationCoordinate2D, destinationLocation: CLLocationCoordinate2D, routeType: RouteTypes)
     func userReachedDestination(_ destination: MapModel)
     func showAnnotation(model: SearchPresentation, force: Bool)
@@ -46,8 +41,6 @@ protocol ExploreNavigationDelegate: AnyObject {
     func showPoiCardScene(cardData: [MapModel], lat: Double?, long: Double?)
     func showArrivalCardScene(route: RouteModel)
     func showNavigationview(route: GeoRoutesClientTypes.Route, firstDestination: MapModel?, secondDestination: MapModel?)
-    func showLoginFlow()
-    func showLoginSuccess()
     func showAttribution()
     func showWelcome()
     
@@ -64,7 +57,6 @@ protocol ExploreViewDelegate: AnyObject {
 }
 
 protocol ExploreViewOutputDelegate: AnyObject, BottomSheetPresentable {
-    func loginButtonTapped()
     func searchTextTapped(userLocation: CLLocationCoordinate2D?)
     func showPoiCard(cardData: [MapModel])
     func showDirectionView(userLocation: CLLocationCoordinate2D?)
