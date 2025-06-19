@@ -12,12 +12,12 @@ final class RegionSceneViewModel: RegionSceneViewModelProcotol {
     
     private var initialDatas: [CommonSelectableCellModel] = []
     init() {
-        let awsRegion = RegionSelector.shared.getCachedRegion()
+        let awsRegion = AWSRegionSelector.shared.getCachedRegion()
         initialDatas.append(CommonSelectableCellModel(title: "\(StringConstant.automaticUnit) - \(awsRegion ?? "")",
                                                       subTitle: "",
                                                       isSelected: true,
                                                       identifier: StringConstant.automaticUnit))
-        RegionSelector.shared.getBundleRegions()?.forEach {
+        AWSRegionSelector.shared.getBundleRegions()?.forEach {
             var title = ""
             if $0 == RegionTypes.euWest1.title {
                 title = RegionTypes.euWest1.displayTitle
@@ -54,8 +54,8 @@ final class RegionSceneViewModel: RegionSceneViewModelProcotol {
 private extension RegionSceneViewModel {
     func getDataFromLocal() -> Int {
         var currentDataIndex = 0
-        let localData = RegionSelector.shared.getCachedRegion()
-        let isAutoRegion = RegionSelector.shared.isAutoRegion()
+        let localData = AWSRegionSelector.shared.getCachedRegion()
+        let isAutoRegion = AWSRegionSelector.shared.isAutoRegion()
         
         if isAutoRegion == true {
             for index in initialDatas.indices {
@@ -78,16 +78,16 @@ private extension RegionSceneViewModel {
     
     func saveRegionSettingsData(region: String) {
         if region == StringConstant.automaticUnit {
-            RegionSelector.shared.clearCachedRegion()
-            if let bundleRegions = RegionSelector.shared.getBundleRegions() {
-                RegionSelector.shared.setClosestRegion(apiRegions: bundleRegions) { detectedRegion in
+            AWSRegionSelector.shared.clearCachedRegion()
+            if let bundleRegions = AWSRegionSelector.shared.getBundleRegions() {
+                AWSRegionSelector.shared.setFastestAWSRegion(apiRegions: bundleRegions) { detectedRegion in
                     if let detectedRegion = detectedRegion {
-                        RegionSelector.shared.saveCachedRegion(region: detectedRegion, isAutoRegion: true)
+                        AWSRegionSelector.shared.saveCachedRegion(region: detectedRegion, isAutoRegion: true)
                     }
                 }
             }
         } else {
-            RegionSelector.shared.saveCachedRegion(region: region, isAutoRegion: false)
+            AWSRegionSelector.shared.saveCachedRegion(region: region, isAutoRegion: false)
         }
         GeneralHelper.reloadUI()
     }

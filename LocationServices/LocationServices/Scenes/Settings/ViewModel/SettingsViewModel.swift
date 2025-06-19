@@ -29,7 +29,7 @@ final class SettingsViewModel: SettingsViewModelProtocol {
         let unitType = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)
         let languageTitle = appLanguageSwitcherData.first(where: { $0.value == Locale.currentAppLanguageIdentifier()})?.label
         
-        let region = RegionSelector.shared.getCachedRegion()
+        let region = AWSRegionSelector.shared.getCachedRegion()
         var regionTitle = ""
         if region == RegionTypes.euWest1.title {
             regionTitle = RegionTypes.euWest1.listTitle
@@ -37,7 +37,7 @@ final class SettingsViewModel: SettingsViewModelProtocol {
         else if region == RegionTypes.usEast1.title {
             regionTitle = RegionTypes.usEast1.listTitle
         }
-        let isAutoRegion = RegionSelector.shared.isAutoRegion()
+        let isAutoRegion = AWSRegionSelector.shared.isAutoRegion()
         
         datas = [
             SettingsCellModel(type: .units, subTitle: unitType?.title ?? ""),

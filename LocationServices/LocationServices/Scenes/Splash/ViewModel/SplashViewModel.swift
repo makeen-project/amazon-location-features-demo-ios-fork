@@ -27,7 +27,7 @@ final class SplashViewModel: SplashViewModelProtocol {
     }
     
     func setupAWSConfiguration() async throws {
-        if let regions = RegionSelector.shared.getBundleRegions() {
+        if let regions = AWSRegionSelector.shared.getBundleRegions() {
             AWSRegionSelector.shared.setFastestAWSRegion(apiRegions: regions) { [self]_ in
                 Task {
                     try await GeneralHelper.setupValidAWSConfiguration()

@@ -18,7 +18,7 @@ class AWSRegionSelector {
     }
 
     func getCachedRegion() -> String? {
-        return UserDefaultsHelper.get(for: String.self, key: .awsRegion)
+        return UserDefaultsHelper.get(for: String.self, key: .fastestAWSRegion)
     }
     
     func isAutoRegion() -> Bool? {
@@ -26,12 +26,12 @@ class AWSRegionSelector {
     }
     
     func saveCachedRegion(region: String, isAutoRegion: Bool) {
-        UserDefaultsHelper.save(value: region, key: .awsRegion)
+        UserDefaultsHelper.save(value: region, key: .fastestAWSRegion)
         UserDefaultsHelper.save(value: isAutoRegion, key: .isAutoRegion)
     }
     
     func clearCachedRegion() {
-        UserDefaultsHelper.removeObject(for: .awsRegion)
+        UserDefaultsHelper.removeObject(for: .fastestAWSRegion)
     }
     
     func setFastestAWSRegion(apiRegions: [String], completion: @escaping (String?) -> Void) {
