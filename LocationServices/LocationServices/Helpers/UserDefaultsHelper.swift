@@ -32,7 +32,7 @@ enum UserDefaultKeyType: String {
     case isNavigationMode
     case navigationRoute
     case isTrackingActive
-    case awsRegion
+    case fastestAWSRegion
     case isAutoRegion
 }
 

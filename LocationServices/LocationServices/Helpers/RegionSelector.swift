@@ -7,9 +7,9 @@
 
 import Foundation
 
-class RegionSelector {
+class AWSRegionSelector {
     
-    static let shared = RegionSelector()
+    static let shared = AWSRegionSelector()
     private init() {}
 
     func getBundleRegions() -> [String]? {
@@ -34,8 +34,8 @@ class RegionSelector {
         UserDefaultsHelper.removeObject(for: .awsRegion)
     }
     
-    func setClosestRegion(apiRegions: [String], completion: @escaping (String?) -> Void) {
-        if let cachedRegion = getCachedRegion(),
+    func setFastestAWSRegion(apiRegions: [String], completion: @escaping (String?) -> Void) {
+        if let cachedRegion = getFastestAWSRegion(),
            apiRegions.contains(cachedRegion) {
             completion(cachedRegion)
             return
@@ -61,13 +61,15 @@ class RegionSelector {
         }
         
         dispatchGroup.notify(queue: .main) {
-            let fastestRegion = mapping.min(by: { $0.value < $1.value })?.key
-            if let fastest = fastestRegion {
+            let fastestAWSRegion = mapping.min(by: { $0.value < $1.value })?.key
+            if let fastest = fastestAWSRegion {
                 self.saveCachedRegion(region: fastest, isAutoRegion: true)
             }
-            completion(fastestRegion)
+            completion(fastestAWSRegion)
         }
     }
     
-
+    func getFastestAWSRegion() -> String? {
+        return UserDefaultsHelper.get(for: String.self, key: .fastestAWSRegion)
+    }
 }

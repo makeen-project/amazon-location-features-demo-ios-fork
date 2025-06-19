@@ -128,7 +128,7 @@ class GeneralHelper {
            let apiKeys = (Bundle.main.object(forInfoDictionaryKey: "ApiKeys") as? String)?.components(separatedBy: ","),
            let webSocketUrls = (Bundle.main.object(forInfoDictionaryKey: "WebSocketUrls") as? String)?.components(separatedBy: ",") {
             
-                if let region = RegionSelector.shared.getCachedRegion(),
+                if let region = AWSRegionSelector.shared.getFastestAWSRegion(),
                    let regionIndex = regions.firstIndex(of: region) {
                     let identityPoolId = identityPoolIds[regionIndex]
                     let apiKey = apiKeys[regionIndex]
