@@ -328,6 +328,20 @@
 		F17CC37B2E057F520036E64F /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F146A56D2DDBAD3E00CD5D6B /* LanguageManager.swift */; };
 		F17CC37C2E057F610036E64F /* GeneralHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F0C5882A13C19E009C7151 /* GeneralHelper.swift */; };
 		F17CC37D2E057F770036E64F /* Locale+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3471CB2975D30B00BAF374 /* Locale+Extension.swift */; };
+		F17CC37E2E059F660036E64F /* CognitoAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */; };
+		F17CC37F2E059F660036E64F /* CognitoAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */; };
+		F17CC3802E059F7E0036E64F /* MapStyleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD139AA2981D72C0003F917 /* MapStyleModel.swift */; };
+		F17CC3812E059F7E0036E64F /* MapStyleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD139AA2981D72C0003F917 /* MapStyleModel.swift */; };
+		F17CC3822E05A0F90036E64F /* AWSRegionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D462DC4D42800A34D67 /* AWSRegionSelector.swift */; };
+		F17CC3832E05A0F90036E64F /* AWSRegionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18E2D462DC4D42800A34D67 /* AWSRegionSelector.swift */; };
+		F17CC3842E05A1110036E64F /* ApiAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */; };
+		F17CC3852E05A1110036E64F /* ApiAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */; };
+		F17CC3862E05A1450036E64F /* Notificaton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC1249D2979BB8300B08C20 /* Notificaton+Extension.swift */; };
+		F17CC3872E05A1450036E64F /* Notificaton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC1249D2979BB8300B08C20 /* Notificaton+Extension.swift */; };
+		F17CC3882E05A1890036E64F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF031292E892000149904 /* SceneDelegate.swift */; };
+		F17CC3892E05A1890036E64F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF031292E892000149904 /* SceneDelegate.swift */; };
+		F17CC38A2E05A1B80036E64F /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF065292E92A300149904 /* AppCoordinator.swift */; };
+		F17CC38B2E05A1B80036E64F /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2AF065292E92A300149904 /* AppCoordinator.swift */; };
 		F18055E32D71EF1300045301 /* TrackingSimulationDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E22D71EEFF00045301 /* TrackingSimulationDashboardView.swift */; };
 		F18055E82D71F2D200045301 /* TrackingSimulationIntroBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E72D71F2B000045301 /* TrackingSimulationIntroBuilder.swift */; };
 		F18055EA2D71F30500045301 /* TrackingSimulationIntroController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E92D71F2F900045301 /* TrackingSimulationIntroController.swift */; };
@@ -2895,6 +2909,7 @@
 				8AD0A6E329DDFC9700B79078 /* XCTWaiter+Extension.swift in Sources */,
 				8A063E9F29C9C238001FF40C /* UserDefaultsHelper.swift in Sources */,
 				F17CC37C2E057F610036E64F /* GeneralHelper.swift in Sources */,
+				F17CC38B2E05A1B80036E64F /* AppCoordinator.swift in Sources */,
 				8A063EA029C9C245001FF40C /* ViewsIdentifiers.swift in Sources */,
 				F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */,
 				8AD67F9529D1A6CD004A5F7D /* UITestMapStyleScreen.swift in Sources */,
@@ -2918,14 +2933,20 @@
 				F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */,
 				F17CC37A2E057EF10036E64F /* StringConstants.swift in Sources */,
 				8AD67F9829D1AA11004A5F7D /* MapStyleTypes.swift in Sources */,
+				F17CC3832E05A0F90036E64F /* AWSRegionSelector.swift in Sources */,
+				F17CC3892E05A1890036E64F /* SceneDelegate.swift in Sources */,
 				8A7088B929EE972C0066BF60 /* UITestScreenshotComparator.swift in Sources */,
+				F17CC3872E05A1450036E64F /* Notificaton+Extension.swift in Sources */,
 				8A7B920329CDD6A4006F8814 /* UITestSearchScreen.swift in Sources */,
+				F17CC3812E059F7E0036E64F /* MapStyleModel.swift in Sources */,
 				8A4D5FB329D6F64A00A79D3C /* SettingsUITests.swift in Sources */,
 				8AD67F9C29D1D594004A5F7D /* UITestRoutingScreen.swift in Sources */,
+				F17CC3852E05A1110036E64F /* ApiAuthHelper.swift in Sources */,
 				F166819C29D3218D00FBD27C /* UITestTabBarScreen.swift in Sources */,
 				8AD67FA029D1E39C004A5F7D /* UITestRouteType.swift in Sources */,
 				8AD67FA229D1E5B3004A5F7D /* UITestNavigationScreen.swift in Sources */,
 				8A4D5FB529D6FA5000A79D3C /* UITestSettingsMapStyleScreen.swift in Sources */,
+				F17CC37F2E059F660036E64F /* CognitoAuthHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2937,7 +2958,10 @@
 				F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */,
 				8ADB629E29F2A051002C7971 /* GeofenceAPIServiceMock.swift in Sources */,
 				F1E5F8F229E9880600639EEC /* DebounceManagerTests.swift in Sources */,
+				F17CC3862E05A1450036E64F /* Notificaton+Extension.swift in Sources */,
 				F139DBD029F0401400D4BA98 /* ExploreViewModelTests.swift in Sources */,
+				F17CC37E2E059F660036E64F /* CognitoAuthHelper.swift in Sources */,
+				F17CC3802E059F7E0036E64F /* MapStyleModel.swift in Sources */,
 				F1E5F8FE29E9916800639EEC /* MLNCoordinateBoundsExtensionTests.swift in Sources */,
 				F139208F29EEB7640042CBC9 /* ExploreMapStyleViewModelTests.swift in Sources */,
 				F1B2388329EFD402001E2066 /* DirectionViewModelTests.swift in Sources */,
@@ -2945,16 +2969,20 @@
 				F139208B29EE918E0042CBC9 /* DateExtensionTests.swift in Sources */,
 				F17BE2B029F819C2001A4ADF /* SearchViewModelTests.swift in Sources */,
 				F1CE147229EFC63600680447 /* NavigationVCViewModelTests.swift in Sources */,
+				F17CC38A2E05A1B80036E64F /* AppCoordinator.swift in Sources */,
+				F17CC3882E05A1890036E64F /* SceneDelegate.swift in Sources */,
 				F139208A29EE918E0042CBC9 /* CLLocationExtensionTests.swift in Sources */,
 				F139208929EE918E0042CBC9 /* CLLocationCoordinate2DExtensionTests.swift in Sources */,
 				F1E5F8F829E9898300639EEC /* StringExtensionTests.swift in Sources */,
 				8ADB62A529F2B671002C7971 /* XCTWaiter+Extension.swift in Sources */,
+				F17CC3842E05A1110036E64F /* ApiAuthHelper.swift in Sources */,
 				8A834D9529F2EF4F0091D89C /* GeofenceDataModel+Extension.swift in Sources */,
 				8ACAAD7429F13FA400523256 /* LocationManagerTests.swift in Sources */,
 				F1E5F8EC29E94EF000639EEC /* NSMutableAttributedStringExtensionTests.swift in Sources */,
 				F1013B4A2AC31EB8003CFD15 /* TrackingViewModelTests.swift in Sources */,
 				8ADB62A629F2B677002C7971 /* UITestWaitTime.swift in Sources */,
 				F1E5F8FC29E98AFB00639EEC /* DoubleExtensionTests.swift in Sources */,
+				F17CC3822E05A0F90036E64F /* AWSRegionSelector.swift in Sources */,
 				F1B2388729F01B88001E2066 /* AboutViewModelTests.swift in Sources */,
 				F139DBCA29F0346300D4BA98 /* RouteOptionViewModelTests.swift in Sources */,
 				8ADB62A229F2A455002C7971 /* AlertPresentableMock.swift in Sources */,
