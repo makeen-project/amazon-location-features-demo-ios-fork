@@ -324,6 +324,8 @@
 		F166819E29D3230B00FBD27C /* UITestTrackingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166819D29D3230B00FBD27C /* UITestTrackingScreen.swift */; };
 		F17BE2AE29F7F564001A4ADF /* RoutingAPIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AD29F7F564001A4ADF /* RoutingAPIServiceMock.swift */; };
 		F17BE2B029F819C2001A4ADF /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17BE2AF29F819C2001A4ADF /* SearchViewModelTests.swift */; };
+		F17CC3782E0565D90036E64F /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9660600029A4F20100FB88D0 /* StringConstants.swift */; };
+		F17CC3792E0565E40036E64F /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F146A56D2DDBAD3E00CD5D6B /* LanguageManager.swift */; };
 		F18055E32D71EF1300045301 /* TrackingSimulationDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E22D71EEFF00045301 /* TrackingSimulationDashboardView.swift */; };
 		F18055E82D71F2D200045301 /* TrackingSimulationIntroBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E72D71F2B000045301 /* TrackingSimulationIntroBuilder.swift */; };
 		F18055EA2D71F30500045301 /* TrackingSimulationIntroController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E92D71F2F900045301 /* TrackingSimulationIntroController.swift */; };
@@ -2901,6 +2903,7 @@
 				8A4EE63029D4B45D00B699A9 /* UITestRouteOptionsScreen.swift in Sources */,
 				F10994F829D1AB2B001D3464 /* AWSConnectUITests.swift in Sources */,
 				8A47805729C9BDA900B098CA /* UITestExploreScreen.swift in Sources */,
+				F17CC3792E0565E40036E64F /* LanguageManager.swift in Sources */,
 				8AB3F19329C8A1C3008FDF37 /* LocationServicesUITests.swift in Sources */,
 				F12C1E342DF9CEC60064F611 /* String+Constants.swift in Sources */,
 				8AB3F19C29C8ABF8008FDF37 /* MapUITests.swift in Sources */,
@@ -2909,6 +2912,7 @@
 				8A47805929C9BDC800B098CA /* UITestScreen.swift in Sources */,
 				8AD6029029D2FF07009E6F9E /* UITestPoiCardScreen.swift in Sources */,
 				F1F8061A29D5EDCB002BDF85 /* TrackingUITests.swift in Sources */,
+				F17CC3782E0565D90036E64F /* StringConstants.swift in Sources */,
 				8AD67F9829D1AA11004A5F7D /* MapStyleTypes.swift in Sources */,
 				8A7088B929EE972C0066BF60 /* UITestScreenshotComparator.swift in Sources */,
 				8A7B920329CDD6A4006F8814 /* UITestSearchScreen.swift in Sources */,
