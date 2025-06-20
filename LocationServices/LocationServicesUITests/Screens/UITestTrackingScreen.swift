@@ -30,9 +30,9 @@ struct UITestTrackingScreen: UITestScreen {
     }
     
     enum Constants {
-        static let geofenceEntered = "Tracker Entered"
-        static let geofenceExited = "Tracker Exited"
-        static let noTracking = "Device tracking inactive"
+        static let geofenceEntered = "\(StringConstant.tracker) \(StringConstant.entered)"
+        static let geofenceExited = "\(StringConstant.tracker) \(StringConstant.exited)"
+        static let noTracking = StringConstant.Tracking.noTracking
     }
 
     func tapStartTrackingSimulationButton() -> Self {

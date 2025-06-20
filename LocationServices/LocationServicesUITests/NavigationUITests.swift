@@ -25,7 +25,7 @@ final class NavigationUITests: LocationServicesUITests {
         static let pedestrianDepartureAddress = "cloverdale perth"
         static let pedestrianDestinationAddress = "Kewdale Perth"
         
-        static let myLocation = "My Location"
+        static let myLocation = StringConstant.myLocation
         
         static let navigationStartLocation = CLLocation(latitude: 40.728489, longitude: -74.007167)
         static let navigationMoveLocation = CLLocation(latitude: 40.741940, longitude: -73.974948)
