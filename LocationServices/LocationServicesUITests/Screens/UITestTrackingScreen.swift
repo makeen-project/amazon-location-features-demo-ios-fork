@@ -30,9 +30,9 @@ struct UITestTrackingScreen: UITestScreen {
     }
     
     enum Constants {
-        //static let continueToTracker = StringConstant.continueToTracker
-        static let geofenceEntered = "\(StringConstant.tracker) \(StringConstant.entered)"
-        static let geofenceExited = "\(StringConstant.tracker) \(StringConstant.exited)"
+        static let geofenceEntered = "Tracker Entered"
+        static let geofenceExited = "Tracker Exited"
+        static let noTracking = "Device tracking inactive"
     }
 
     func tapStartTrackingSimulationButton() -> Self {
@@ -144,7 +144,7 @@ struct UITestTrackingScreen: UITestScreen {
     
     func waitForTrackingSimulation() -> UITestAWSScreen {
         let label = XCUIApplication().staticTexts[Identifiers.trackingStoppedLabel]
-        XCTAssertEqual(label.label, StringConstant.Tracking.noTracking)
+        XCTAssertEqual(label.label, Constants.noTracking)
         
         return UITestAWSScreen(app: app)
     }

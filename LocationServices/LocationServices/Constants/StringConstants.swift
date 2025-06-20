@@ -225,20 +225,4 @@ enum StringConstant {
     static var usEast1FullName: String = "Us-East (N. Virginia) \(usEast1)"
     static var euWest1ListTitle: String = "Europe"
     static var usEast1ListTitle: String = "Us-East"
-    
-    // Languages
-    static let deutsch = "Deutsch"
-    static let spanish = "Español"
-    static let english = "English"
-    static let french = "Français"
-    static let italian = "Italiano"
-    static let protugeseBrasil = "Português Brasileiro"
-    static let simplifiedChinese = "简体中文"
-    static let traditionalChinese = "繁体中文"
-    static let japanese = "日本語"
-    static let korean = "한국어"
-    static let arabic = "العربية"
-    static let hebrew = "עברית"
-    static let hindi = "हिन्दी"
-
 }
