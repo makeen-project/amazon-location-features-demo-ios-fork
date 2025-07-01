@@ -951,7 +951,7 @@ extension ExploreView: MLNMapViewDelegate {
     func mapViewDidFinishRenderingMap(_ mapView: MLNMapView, fullyRendered: Bool) {
         Task {
             let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.explorer)]
-            try await AnalyticsHelper.shared.recordEvent(EventType.screenOpen,properties: properties)
+            try await AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen,properties: properties)
         }
         
         if(gridBackgroundView != nil){

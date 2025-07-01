@@ -356,6 +356,8 @@
 		F1B2388729F01B88001E2066 /* AboutViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388629F01B88001E2066 /* AboutViewModelTests.swift */; };
 		F1B642692A2F330D00FB40E3 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B642682A2F330D00FB40E3 /* UIColor+Extension.swift */; };
 		F1B73A442E13D674009E2C4F /* AnalyticsCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B73A432E13D661009E2C4F /* AnalyticsCredentialsProvider.swift */; };
+		F1B73A472E1404E3009E2C4F /* AnalyticsEventInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B73A462E1404D5009E2C4F /* AnalyticsEventInput.swift */; };
+		F1B73A492E1404F1009E2C4F /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B73A482E1404E9009E2C4F /* AnalyticsEvent.swift */; };
 		F1BA942B2C510CAC002FEB51 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = F1BA942A2C510CAC002FEB51 /* MapLibre */; };
 		F1BA943B2C526646002FEB51 /* AmazonLocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */; };
 		F1BA94442C624B63002FEB51 /* CognitoAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */; };
@@ -786,6 +788,8 @@
 		F1B2388629F01B88001E2066 /* AboutViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModelTests.swift; sourceTree = "<group>"; };
 		F1B642682A2F330D00FB40E3 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		F1B73A432E13D661009E2C4F /* AnalyticsCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsCredentialsProvider.swift; sourceTree = "<group>"; };
+		F1B73A462E1404D5009E2C4F /* AnalyticsEventInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEventInput.swift; sourceTree = "<group>"; };
+		F1B73A482E1404E9009E2C4F /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
 		F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationClient.swift; sourceTree = "<group>"; };
 		F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoAuthHelper.swift; sourceTree = "<group>"; };
 		F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiAuthHelper.swift; sourceTree = "<group>"; };
@@ -1249,7 +1253,6 @@
 		AD16A42029357F2B006AEA8E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				F17CC3992E0AD5E20036E64F /* AnalyticsHelper.swift */,
 				F18E2D462DC4D42800A34D67 /* AWSRegionSelector.swift */,
 				F1AD36F92CCBABC700E1BB7B /* AuthHelpers */,
 				AD16A42129357F38006AEA8E /* UserDefaultsHelper.swift */,
@@ -1301,6 +1304,7 @@
 				AD300A14294BDD8E00355423 /* Resources */,
 				ADBD7FB32949B553005DB4E4 /* Views */,
 				AD625EA0293CDC2500C67B44 /* Networking */,
+				F1B73A452E140496009E2C4F /* Analytics */,
 				AD16A42029357F2B006AEA8E /* Helpers */,
 				ADF26F7629303DBB000147A0 /* Models */,
 				ADF26F70293028B0000147A0 /* Services */,
@@ -2679,6 +2683,16 @@
 			path = AuthHelpers;
 			sourceTree = "<group>";
 		};
+		F1B73A452E140496009E2C4F /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				F1B73A482E1404E9009E2C4F /* AnalyticsEvent.swift */,
+				F1B73A462E1404D5009E2C4F /* AnalyticsEventInput.swift */,
+				F17CC3992E0AD5E20036E64F /* AnalyticsHelper.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 		F1FAC85A2D774BCE000238C4 /* Contracts */ = {
 			isa = PBXGroup;
 			children = (
@@ -3012,6 +3026,7 @@
 				AD2AF06E292E9AA600149904 /* TabBarCoordinatorConstants.swift in Sources */,
 				F18E2D362DA58A4E00A34D67 /* UnitModel.swift in Sources */,
 				F18E2D372DA58A4E00A34D67 /* UnitTypes.swift in Sources */,
+				F1B73A492E1404F1009E2C4F /* AnalyticsEvent.swift in Sources */,
 				AD300A30294BDE3A00355423 /* LocationServicesCustomFonts.swift in Sources */,
 				ADBD7FBB2949C687005DB4E4 /* POICardVC.swift in Sources */,
 				F1FAC8672D77E671000238C4 /* BusRoutesData.swift in Sources */,
@@ -3109,6 +3124,7 @@
 				F18DEEE62C75947000335F3E /* Logger.swift in Sources */,
 				8A76327C297EAE270064D60F /* MLNMapViewDelegate+Extension.swift in Sources */,
 				8A85A75A29A3A9C80022ABE0 /* TrackingEventModel.swift in Sources */,
+				F1B73A472E1404E3009E2C4F /* AnalyticsEventInput.swift in Sources */,
 				AD625E94293BCEE200C67B44 /* SearchVCBuilder.swift in Sources */,
 				AD625E98293BEEA000C67B44 /* SearchVC+TableView.swift in Sources */,
 				ADB0B9A0295AF59600C219EC /* DirectionPresentation.swift in Sources */,
