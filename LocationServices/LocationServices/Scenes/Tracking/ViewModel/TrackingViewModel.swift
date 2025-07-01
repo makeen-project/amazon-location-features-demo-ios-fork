@@ -163,7 +163,7 @@ final class TrackingViewModel: TrackingViewModelProtocol {
             return
         }
         do {
-            let identityIdOutput = try await CognitoAuthHelper.getAWSIdentityId(identityPoolId: configuration.identityPoolId)
+            let identityIdOutput = try await CognitoAuthHelper.shared.getAWSIdentityId()
             if let identityId = identityIdOutput.identityId {
                 UserDefaultsHelper.save(value: identityId, key: .identityId)
                 mqttIoTContext = MqttIoTContext(onPublishReceived: {payloadData in

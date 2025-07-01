@@ -126,7 +126,9 @@ class GeneralHelper {
         if let identityPoolIds = (Bundle.main.object(forInfoDictionaryKey: "IdentityPoolIds") as? String)?.components(separatedBy: ","),
            let regions = (Bundle.main.object(forInfoDictionaryKey: "AWSRegions") as? String)?.components(separatedBy: ","),
            let apiKeys = (Bundle.main.object(forInfoDictionaryKey: "ApiKeys") as? String)?.components(separatedBy: ","),
-           let webSocketUrls = (Bundle.main.object(forInfoDictionaryKey: "WebSocketUrls") as? String)?.components(separatedBy: ",") {
+           let webSocketUrls = (Bundle.main.object(forInfoDictionaryKey: "WebSocketUrls") as? String)?.components(separatedBy: ","),
+           let analyticsAppId = (Bundle.main.object(forInfoDictionaryKey: "AnalyticsAppId") as? String),
+           let analyticsIdentityPoolId = (Bundle.main.object(forInfoDictionaryKey: "AnalyticsIdentityPoolId") as? String) {
             
                 if let region = AWSRegionSelector.shared.getFastestAWSRegion(),
                    let regionIndex = regions.firstIndex(of: region) {
@@ -134,14 +136,14 @@ class GeneralHelper {
                     let apiKey = apiKeys[regionIndex]
                     let webSocketUrl = webSocketUrls[regionIndex]
                     
-                    defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, webSocketUrl: webSocketUrl, apiKey: apiKey, region: region)
+                    defaultConfiguration = CustomConnectionModel(identityPoolId: identityPoolId, webSocketUrl: webSocketUrl, apiKey: apiKey, region: region, analyticsAppId: analyticsAppId, analyticsIdentityPoolId: analyticsIdentityPoolId)
                 }
         }
         return defaultConfiguration
     }
     
     private static func initializeMobileClient(configurationModel: CustomConnectionModel) async throws {
-        try await CognitoAuthHelper.initialise(identityPoolId: configurationModel.identityPoolId)
+        try await CognitoAuthHelper.shared.initialise()
         try await ApiAuthHelper.initialise(apiKey: configurationModel.apiKey, region: configurationModel.region)
     }
     
@@ -193,4 +195,7 @@ struct CustomConnectionModel: Codable {
     var webSocketUrl: String
     var apiKey: String
     var region: String
+    
+    var analyticsAppId: String
+    var analyticsIdentityPoolId: String
 }

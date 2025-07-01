@@ -27,7 +27,7 @@ protocol AWSGeofenceServiceProtocol {
 extension AWSGeofenceServiceProtocol {
     func fetchGeofenceList(collectionName: String) async throws -> ListGeofencesOutput? {
         do {
-            if let client = CognitoAuthHelper.default().locationClient {
+            if let client = await CognitoAuthHelper.shared.locationClient {
                 let input = ListGeofencesInput(collectionName: "\(GeofenceServiceConstant.collectionNamePrefix)\(collectionName)")
                 let result = try await client.listGeofences(input: input)
                 return result
@@ -50,7 +50,7 @@ extension AWSGeofenceServiceProtocol {
                 devicePositionUpdate.positionProperties = ["region": identityId.toRegionString(), "id": identityId.toId()]
             }
             let input = BatchEvaluateGeofencesInput(collectionName: "\(GeofenceServiceConstant.collectionNamePrefix)\(collectionName)", devicePositionUpdates: [devicePositionUpdate])
-            if let client = CognitoAuthHelper.default().locationClient {
+            if let client = await CognitoAuthHelper.shared.locationClient {
                 let result = try await client.batchEvaluateGeofences(input: input)
                 return result
             } else {

@@ -329,6 +329,8 @@
 		F17CC3922E097FDD0036E64F /* PoliticalViewTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17CC3912E097FD60036E64F /* PoliticalViewTypes.swift */; };
 		F17CC3942E0980590036E64F /* MapStyleColorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17CC3932E09804D0036E64F /* MapStyleColorTypes.swift */; };
 		F17CC3962E0980970036E64F /* MapStyleColorType+Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17CC3952E0980860036E64F /* MapStyleColorType+Label.swift */; };
+		F17CC3982E0ACDCF0036E64F /* AWSPinpoint in Frameworks */ = {isa = PBXBuildFile; productRef = F17CC3972E0ACDCF0036E64F /* AWSPinpoint */; };
+		F17CC39A2E0AD5F70036E64F /* AnalyticsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17CC3992E0AD5E20036E64F /* AnalyticsHelper.swift */; };
 		F18055E32D71EF1300045301 /* TrackingSimulationDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E22D71EEFF00045301 /* TrackingSimulationDashboardView.swift */; };
 		F18055E82D71F2D200045301 /* TrackingSimulationIntroBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E72D71F2B000045301 /* TrackingSimulationIntroBuilder.swift */; };
 		F18055EA2D71F30500045301 /* TrackingSimulationIntroController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18055E92D71F2F900045301 /* TrackingSimulationIntroController.swift */; };
@@ -353,6 +355,7 @@
 		F1B2388529F011C5001E2066 /* POICardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */; };
 		F1B2388729F01B88001E2066 /* AboutViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B2388629F01B88001E2066 /* AboutViewModelTests.swift */; };
 		F1B642692A2F330D00FB40E3 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B642682A2F330D00FB40E3 /* UIColor+Extension.swift */; };
+		F1B73A442E13D674009E2C4F /* AnalyticsCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B73A432E13D661009E2C4F /* AnalyticsCredentialsProvider.swift */; };
 		F1BA942B2C510CAC002FEB51 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = F1BA942A2C510CAC002FEB51 /* MapLibre */; };
 		F1BA943B2C526646002FEB51 /* AmazonLocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */; };
 		F1BA94442C624B63002FEB51 /* CognitoAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */; };
@@ -757,6 +760,7 @@
 		F17CC3912E097FD60036E64F /* PoliticalViewTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoliticalViewTypes.swift; sourceTree = "<group>"; };
 		F17CC3932E09804D0036E64F /* MapStyleColorTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStyleColorTypes.swift; sourceTree = "<group>"; };
 		F17CC3952E0980860036E64F /* MapStyleColorType+Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapStyleColorType+Label.swift"; sourceTree = "<group>"; };
+		F17CC3992E0AD5E20036E64F /* AnalyticsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsHelper.swift; sourceTree = "<group>"; };
 		F18055E22D71EEFF00045301 /* TrackingSimulationDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationDashboardView.swift; sourceTree = "<group>"; };
 		F18055E72D71F2B000045301 /* TrackingSimulationIntroBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationIntroBuilder.swift; sourceTree = "<group>"; };
 		F18055E92D71F2F900045301 /* TrackingSimulationIntroController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingSimulationIntroController.swift; sourceTree = "<group>"; };
@@ -781,6 +785,7 @@
 		F1B2388429F011C5001E2066 /* POICardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POICardViewModelTests.swift; sourceTree = "<group>"; };
 		F1B2388629F01B88001E2066 /* AboutViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModelTests.swift; sourceTree = "<group>"; };
 		F1B642682A2F330D00FB40E3 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		F1B73A432E13D661009E2C4F /* AnalyticsCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsCredentialsProvider.swift; sourceTree = "<group>"; };
 		F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonLocationClient.swift; sourceTree = "<group>"; };
 		F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoAuthHelper.swift; sourceTree = "<group>"; };
 		F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiAuthHelper.swift; sourceTree = "<group>"; };
@@ -844,6 +849,7 @@
 				F11E045E2CD509A2003F1641 /* AmazonLocationiOSAuthSDK in Frameworks */,
 				F11E04612CD515C0003F1641 /* KeychainSwift in Frameworks */,
 				ADF26F6529300E59000147A0 /* SafariServices.framework in Frameworks */,
+				F17CC3982E0ACDCF0036E64F /* AWSPinpoint in Frameworks */,
 				F1E368932CB6C93B00AF3A5B /* AWSIoTEvents in Frameworks */,
 				ADF26F6329300E53000147A0 /* Security.framework in Frameworks */,
 				F1E368602CB6C25E00AF3A5B /* AWSClientRuntime in Frameworks */,
@@ -1243,6 +1249,7 @@
 		AD16A42029357F2B006AEA8E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				F17CC3992E0AD5E20036E64F /* AnalyticsHelper.swift */,
 				F18E2D462DC4D42800A34D67 /* AWSRegionSelector.swift */,
 				F1AD36F92CCBABC700E1BB7B /* AuthHelpers */,
 				AD16A42129357F38006AEA8E /* UserDefaultsHelper.swift */,
@@ -2664,6 +2671,7 @@
 		F1AD36F92CCBABC700E1BB7B /* AuthHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				F1B73A432E13D661009E2C4F /* AnalyticsCredentialsProvider.swift */,
 				F1BA94452C6258F0002FEB51 /* ApiAuthHelper.swift */,
 				F1BA94432C624B63002FEB51 /* CognitoAuthHelper.swift */,
 				F1BA943A2C526646002FEB51 /* AmazonLocationClient.swift */,
@@ -2760,6 +2768,7 @@
 				F11E045D2CD509A2003F1641 /* AmazonLocationiOSAuthSDK */,
 				F11E04602CD515C0003F1641 /* KeychainSwift */,
 				F18FFB4D2D48EF7900573B54 /* Polyline */,
+				F17CC3972E0ACDCF0036E64F /* AWSPinpoint */,
 			);
 			productName = LocationServices;
 			productReference = ADAE4FFA2935611C0000F7FC /* LocationServices.app */;
@@ -3087,6 +3096,7 @@
 				F116049D2DE5CF9300FD837D /* RegionTypes.swift in Sources */,
 				F116049E2DE5CF9300FD837D /* RegionSceneContracts.swift in Sources */,
 				F12C1E322DF9CE930064F611 /* String+Constants.swift in Sources */,
+				F17CC39A2E0AD5F70036E64F /* AnalyticsHelper.swift in Sources */,
 				F18DEEFC2C7774B500335F3E /* MqttIoTContext.swift in Sources */,
 				AD38BA06294BE6A60087C2FC /* UITableView+Extension.swift in Sources */,
 				AD2AF0E3292EAC2300149904 /* WelcomeBottomView.swift in Sources */,
@@ -3203,6 +3213,7 @@
 				AD33F4B52950F403005719D3 /* DirectionVC.swift in Sources */,
 				8A439F0629C0A80300B59D0B /* WelcomeVCBuilder.swift in Sources */,
 				ADF26F5C292FEE5E000147A0 /* UIStackView+Extensions.swift in Sources */,
+				F1B73A442E13D674009E2C4F /* AnalyticsCredentialsProvider.swift in Sources */,
 				AD2AF077292EA54D00149904 /* ExploreVC.swift in Sources */,
 				F1C4DC642CC7ADD800AA235A /* PoliticalViewController.swift in Sources */,
 				ADB46519295D57A6004088AE /* DirectionTextFieldModel.swift in Sources */,
@@ -3851,6 +3862,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F11E045F2CD515C0003F1641 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		F17CC3972E0ACDCF0036E64F /* AWSPinpoint */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1E3685E2CB6C25E00AF3A5B /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSPinpoint;
 		};
 		F18FFB4D2D48EF7900573B54 /* Polyline */ = {
 			isa = XCSwiftPackageProductDependency;

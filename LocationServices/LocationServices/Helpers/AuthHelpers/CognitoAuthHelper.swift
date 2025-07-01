@@ -6,75 +6,49 @@
 // SPDX-License-Identifier: MIT-0
 
 import Foundation
-import AWSSDKIdentity
 import AmazonLocationiOSAuthSDK
 import AWSLocation
-import AwsCommonRuntimeKit
 import AWSCognitoIdentity
 
-public class CognitoAuthHelper {
+actor CognitoAuthHelper {
+    static let shared = CognitoAuthHelper()
+    
+    private(set) var locationClient: LocationClient?
+    private(set) var identityPoolId: String?
+    private(set) var cognitoIdentityClient: CognitoIdentityClient?
 
-    private static var _sharedInstance: CognitoAuthHelper?
-    var locationClient: LocationClient?
-    var identityPoolId: String?
-    private init() {
-    }
-    
-    static func initialise(identityPoolId: String) async throws {
-        _sharedInstance = CognitoAuthHelper()
-        if let identityPoolId = GeneralHelper.getAWSConfigurationModel()?.identityPoolId {
-            
-            let authHelper = try await AuthHelper.withIdentityPoolId(identityPoolId: identityPoolId)
-            let config = authHelper.getLocationClientConfig()
-            let client = LocationClient(config: config)
-            _sharedInstance?.locationClient = client
-            _sharedInstance?.identityPoolId = identityPoolId
+    private init() {}
+
+    func initialise() async throws {
+        guard let identityPoolId = GeneralHelper.getAWSConfigurationModel()?.identityPoolId else {
+            throw NSError(domain: "MissingIdentityPoolId", code: 0)
         }
+
+        let authHelper = try await AuthHelper.withIdentityPoolId(identityPoolId: identityPoolId)
+        let config = authHelper.getLocationClientConfig()
+        self.locationClient = LocationClient(config: config)
+        self.identityPoolId = identityPoolId
     }
-    
-    private static var cognitoIdentityClient: CognitoIdentityClient?
-    static func getAWSIdentityId(identityPoolId: String) async throws -> GetIdOutput {
-        do {
-            let region = identityPoolId.toRegionString()
-            if cognitoIdentityClient == nil {
-                cognitoIdentityClient = try AWSCognitoIdentity.CognitoIdentityClient(region: region)
-            }
-            let idInput = GetIdInput(identityPoolId: identityPoolId)
-            let identity = try await cognitoIdentityClient!.getId(input: idInput)
-            return identity
-        } catch {
-            throw error
+
+    func getAWSIdentityId() async throws -> GetIdOutput {
+        let region = identityPoolId?.toRegionString() ?? ""
+        if cognitoIdentityClient == nil {
+            cognitoIdentityClient = try AWSCognitoIdentity.CognitoIdentityClient(region: region)
         }
+        let input = GetIdInput(identityPoolId: identityPoolId!)
+        return try await cognitoIdentityClient!.getId(input: input)
     }
-    
-    static func validate(identityPoolId: String) async throws -> Bool {
-        do {
-            let id = try await getAWSIdentityId(identityPoolId: identityPoolId)
-            if id != nil  {
-                return true
-            }
-            return false
-        }
-        catch {
-            throw error
-        }
+
+    func validate() async throws -> Bool {
+        let id = try await getAWSIdentityId()
+        return id.identityId != nil
     }
-    
-    static func getAWSCredentials(identityId: String, region: String) async throws -> GetCredentialsForIdentityOutput {
-        do {
-            if cognitoIdentityClient == nil {
-                cognitoIdentityClient = try AWSCognitoIdentity.CognitoIdentityClient(region: region)
-            }
-            let credentialsInput = GetCredentialsForIdentityInput(identityId: identityId)
-            let credentials = try await cognitoIdentityClient!.getCredentialsForIdentity(input: credentialsInput)
-            return credentials
-            
-        } catch {
-            throw error
+
+    func getAWSCredentials(identityId: String, region: String) async throws -> GetCredentialsForIdentityOutput {
+        if cognitoIdentityClient == nil {
+            cognitoIdentityClient = try AWSCognitoIdentity.CognitoIdentityClient(region: region)
         }
-    }
-    
-    static func `default`() -> CognitoAuthHelper {
-        return _sharedInstance!
+        let credentialsInput = GetCredentialsForIdentityInput(identityId: identityId)
+        return try await cognitoIdentityClient!.getCredentialsForIdentity(input: credentialsInput)
     }
 }

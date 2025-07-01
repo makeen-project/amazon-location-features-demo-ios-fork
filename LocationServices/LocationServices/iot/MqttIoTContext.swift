@@ -107,7 +107,7 @@ class MqttIoTContext: ObservableObject {
                 if let customModel = GeneralHelper.getAWSConfigurationModel() {
                     
                     let region = customModel.identityPoolId.toRegionString()
-                    let credentialsOutput = try await CognitoAuthHelper.getAWSCredentials(identityId: identityId, region: region)
+                    let credentialsOutput = try await CognitoAuthHelper.shared.getAWSCredentials(identityId: identityId, region: region)
                     if let cognitoCredentials = credentialsOutput.credentials
                         {
                         let credentialsProvider = try CredentialsProvider(source: .static(accessKey: cognitoCredentials.accessKeyId!, secret: cognitoCredentials.secretKey!, sessionToken: cognitoCredentials.sessionToken!))

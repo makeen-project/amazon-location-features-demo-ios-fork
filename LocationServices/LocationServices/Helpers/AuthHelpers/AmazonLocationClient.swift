@@ -15,7 +15,7 @@ public class AmazonLocationClient {
     }
 
     static func getCognitoLocationClient() async throws -> LocationClient? {
-        return CognitoAuthHelper.default().locationClient
+        return await CognitoAuthHelper.shared.locationClient
     }
     
     static func getApiLocationClient() -> LocationClient? {

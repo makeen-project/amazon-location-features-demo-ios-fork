@@ -11,7 +11,7 @@ enum KeyChainType: String {
     case amazonLocationAPIKey
     case awsRegion
     case cognitoCredentials
-    case cognitoToken
+    case analyticsCredentials
 }
 
 final class KeyChainHelper {
