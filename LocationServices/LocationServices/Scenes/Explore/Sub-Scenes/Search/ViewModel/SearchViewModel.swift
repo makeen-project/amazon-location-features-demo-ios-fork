@@ -87,13 +87,11 @@ final class SearchViewModel: SearchViewModelProcotol {
                 self.delegate?.searchResult(mapModel: model, shouldDismiss: false, showOnMap: true)
         }
         
-        //Record Analytics Event
         let properties: [(String, String)] = [(AnalyticsAttribute.value, text),
                                               (AnalyticsAttribute.type, text.isCoordinate() ? AnalyticsAttributeValue.coordinates : AnalyticsAttributeValue.text),
                                               (AnalyticsAttribute.triggeredBy, AnalyticsEvent.placeSearch),
                                               (AnalyticsAttribute.action, AnalyticsAttributeValue.autocomplete)]
         AnalyticsHelper.shared.recordEvent(AnalyticsEvent.placeSearch, properties: properties)
-        //Record Analytics Event End
     }
     
     func numberOfRowsInSection() -> Int {

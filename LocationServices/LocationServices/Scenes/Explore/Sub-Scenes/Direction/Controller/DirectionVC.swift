@@ -260,7 +260,7 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                                             userLat: self?.userLocation?.lat,
                                                             userLong: self?.userLocation?.long)
             }
-            
+
             let properties: [(String, String)] = [(AnalyticsAttribute.value, model.searchText),
                                                   (AnalyticsAttribute.type, model.searchText.isCoordinate() ? AnalyticsAttributeValue.coordinates : AnalyticsAttributeValue.text),
                                                   (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.routeModule),
@@ -820,7 +820,7 @@ extension DirectionVC: DirectionViewOutputDelegate {
     
     func changeRoute(type: RouteTypes) async throws {
         try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime, drawDirections: true)
-        
+
         let properties: [(String, String)] = [(AnalyticsAttribute.travelMode, type.title),
                                               (AnalyticsAttribute.distanceUnit, UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)?.title ?? UnitTypes.automatic.title),
                                               (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.routeModule)]
