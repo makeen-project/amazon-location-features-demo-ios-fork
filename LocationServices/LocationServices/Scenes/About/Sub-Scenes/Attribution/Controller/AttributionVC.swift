@@ -111,6 +111,14 @@ final class AttributionVC: UIViewController {
                                                    object: nil)
         }
         NotificationCenter.default.addObserver(self, selector: #selector(removeNotificationObservers(_:)), name: Notification.removeNotificationObservers, object: nil)
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.attribution)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.attribution)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     // MARK: - Functions

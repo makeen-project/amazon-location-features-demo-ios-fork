@@ -61,5 +61,8 @@ private extension LanguageSceneViewModel {
     func saveLanguageSettingsData(language: String) {
         // Reload root view controller or restart UI
         LanguageManager.shared.currentLanguage = language
+        let properties: [(String, String)] = [(AnalyticsAttribute.language, language),
+                                              (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.settings)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.languageChanged, properties: properties)
     }
 }

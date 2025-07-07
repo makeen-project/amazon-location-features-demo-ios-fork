@@ -47,6 +47,14 @@ final class VersionVC: UIViewController {
         view.backgroundColor = .white
         setupNavigationItems()
         setupViews()
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.version)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.version)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     // MARK: - Functions

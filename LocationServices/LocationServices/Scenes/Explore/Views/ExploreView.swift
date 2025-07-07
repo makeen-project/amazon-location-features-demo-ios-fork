@@ -899,6 +899,12 @@ extension ExploreView: MLNMapViewDelegate {
         }
         
         delegate?.showPoiCard(cardData: cardData)
+        
+        let unit = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)?.title ?? UnitTypes.automatic.title
+        let properties: [(String, String)] = [(AnalyticsAttribute.travelMode, RouteTypes.car.title),
+                                              (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.placesPopup),
+                                              (AnalyticsAttribute.distanceUnit, unit)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
     }
     
     func mapView(_ mapView: MLNMapView, viewFor annotation: MLNAnnotation) -> MLNAnnotationView? {
@@ -949,11 +955,9 @@ extension ExploreView: MLNMapViewDelegate {
     }
     
     func mapViewDidFinishRenderingMap(_ mapView: MLNMapView, fullyRendered: Bool) {
-        Task {
-            let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.explorer)]
-            try await AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen,properties: properties)
-        }
-        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.explorer)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen,properties: properties)
+    
         if(gridBackgroundView != nil){
             containerView.sendSubviewToBack(gridBackgroundView!)
             gridBackgroundView?.isHidden = true

@@ -35,6 +35,9 @@ final class UnitVC: UIViewController {
         viewModel.loadCurrentData()
         setupTableView()
         setupView()
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.units)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +56,9 @@ final class UnitVC: UIViewController {
         } else {
             navigationController?.navigationBar.isHidden = false
         }
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.units)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     private func setupView() {

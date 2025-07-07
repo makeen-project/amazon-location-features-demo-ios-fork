@@ -46,11 +46,19 @@ final class SettingsVC: UIViewController {
         setupTableView()
         viewModel.loadData()
         setupNotifications()
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.settings)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.settings)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     private func setupNavigationItems() {

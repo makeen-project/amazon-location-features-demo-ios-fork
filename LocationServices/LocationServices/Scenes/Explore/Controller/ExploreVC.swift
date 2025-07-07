@@ -61,6 +61,9 @@ final class ExploreVC: UIViewController {
         setupView()
         exploreView.setupMapView()
         exploreView.setupTapGesture()
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.explorer)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +80,11 @@ final class ExploreVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setNavigationViewLayout()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.explorer)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     private var parentViewWidthForNavigationViews: CGFloat = 0
@@ -439,6 +447,12 @@ extension ExploreVC {
     }
         
     @objc private func searchAppearanceChanged(_ notification: Notification) {
+        let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
+        if let mapStyleName = mapStyle?.title {
+            let properties: [(String, String)] = [(AnalyticsAttribute.provider, mapStyleName), (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.explorer)]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.mapStyleChange, properties: properties)
+        }
+        
         guard let isVisible = notification.userInfo?["isVisible"] as? Bool else { return }
         changeSeachBarVisibility(isHidden: isVisible)
     }

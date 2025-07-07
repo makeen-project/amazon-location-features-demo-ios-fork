@@ -155,6 +155,12 @@ final class TrackingVC: UIViewController {
     }
     
     @objc private func refreshMapView(_ notification: Notification) {
+        let mapStyle = UserDefaultsHelper.getObject(value: MapStyleModel.self, key: .mapStyle)
+        if let mapStyleName = mapStyle?.title {
+            let properties: [(String, String)] = [(AnalyticsAttribute.provider, mapStyleName), (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.simulation)]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.mapStyleChange, properties: properties)
+        }
+        
         trackingMapView.reloadMap()
     }
     

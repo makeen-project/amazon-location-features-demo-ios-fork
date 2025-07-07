@@ -10,7 +10,7 @@ import AWSPinpoint
 import AmazonLocationiOSAuthSDK
 import AWSSDKIdentity
 
-actor AnalyticsHelper {
+class AnalyticsHelper {
     static let shared =  AnalyticsHelper()
     
     private(set) var analyticsAppId: String?
@@ -21,7 +21,7 @@ actor AnalyticsHelper {
     private(set) var sessionData: AnalyticsSessionData = AnalyticsSessionData()
     private(set) var userId: String? = nil
     
-    func initialise() async throws {
+    private func initialise() async throws {
         guard let awsConfig = GeneralHelper.getAWSConfigurationModel() else {
             throw NSError(domain: "MissingAWSConfiguration", code: 0)
         }
@@ -68,7 +68,7 @@ actor AnalyticsHelper {
 
     }
     
-    func createOrUpdateEndpoint() async throws {
+    private func createOrUpdateEndpoint() async throws {
         do {
             if pinpointClient == nil {
                 try await initialise()
@@ -93,93 +93,94 @@ actor AnalyticsHelper {
             print(result?.messageBody ?? "No result")
         }
         catch {
-            print(error)
+            print("Creating analytics endpoint failed: \(error)")
             throw error
         }
     }
     
-    func recordEvent(_ eventName: String, properties : [(String, String)] = []) async throws {
-        do {
-            if pinpointClient == nil {
-                try await initialise()
+    func recordEvent(_ eventName: String, properties : [(String, String)] = []) {
+        Task {
+            do {
+                if pinpointClient == nil {
+                    try await initialise()
+                }
+                
+                if let appId = analyticsAppId {
+                    
+                    var events: [AnalyticsEventInput] = []
+                    
+                    if eventName == AnalyticsEventType.sessionStop.eventType {
+                        let session = AnalyticsEventSession(id: sessionData.id!, startTimeStamp: sessionData.startTimeStamp!, stopTimeStamp: Date().convertDateToIsoString()!)
+                        events = [AnalyticsEventInput(eventType: AnalyticsEventType.sessionStop.eventType, attributes: [:], session: session)]
+                    }
+                    else {
+                        events = [AnalyticsEventInput(eventType: eventName, attributes: [:])]
+                    }
+                    
+                    let mUserId: String? = "AnonymousUser:\(endPointId)"
+                    
+                    if mUserId != userId {
+                        userId = mUserId
+                        try await createOrUpdateEndpoint()
+                    }
+                    let sessionStopEvent = events.first(where: { $0.eventType == AnalyticsEventType.sessionStop.eventType } )
+                    if sessionData.creationStatus == .notCreated {
+                        try await startSession()
+                    }
+                    
+                    if sessionStopEvent != nil {
+                        events.append(AnalyticsEventInput(eventType: AnalyticsEventType.sessionEnd.eventType, attributes: sessionStopEvent!.attributes))
+                    }
+                    
+                    var attributes: [String: String] = [:]
+                    
+                    properties.forEach { (key, value) in
+                        attributes[key] = value
+                    }
+                    
+                    attributes[AnalyticsAttribute.userAWSAccountConnectionStatus] = AnalyticsAttribute.userAWSAccountConnectionStatusNotConnected
+                    attributes[AnalyticsAttribute.userAuthenticationStatus] = AnalyticsAttribute.userAWSAccountConnectionStatusUnauthenticated
+                    
+                    events.forEach { event in
+                        event.attributes = attributes
+                    }
+                    
+                    let eventMap = Dictionary(uniqueKeysWithValues: events.map { (UUID().uuidString, $0.toEvent(sessionId: sessionData.id ?? "", sessionStart: sessionData.startTimeStamp ?? "")) })
+                    let endPoint = PinpointClientTypes.PublicEndpoint()
+                    
+                    
+                    let eventBatch: PinpointClientTypes.EventsBatch = PinpointClientTypes.EventsBatch(endpoint: endPoint, events: eventMap)
+                    let batchItem: [String: PinpointClientTypes.EventsBatch] = [endPointId: eventBatch]
+                    
+                    let eventRequest = PinpointClientTypes.EventsRequest(batchItem: batchItem)
+                    
+                    let input = PutEventsInput(
+                        applicationId: appId,
+                        eventsRequest: eventRequest
+                    )
+                    let result = try await pinpointClient?.putEvents(input: input)
+                    result?.eventsResponse?.results?.forEach { print($0) }
+                    
+                    if eventName == AnalyticsEventType.sessionStop.eventType {
+                        sessionData = AnalyticsSessionData()
+                    }
+                }
+            } catch {
+                print("Analytics recording failed: \(error)")
             }
-            
-            if let appId = analyticsAppId {
-                
-                var events: [AnalyticsEventInput] = []
-                
-                if eventName == AnalyticsEventType.sessionStop.eventType {
-                    let session = AnalyticsEventSession(id: sessionData.id!, startTimeStamp: sessionData.startTimeStamp!, stopTimeStamp: Date().convertDateToIsoString()!)
-                    events = [AnalyticsEventInput(eventType: AnalyticsEventType.sessionStop.eventType, attributes: [:], session: session)]
-                }
-                else {
-                    events = [AnalyticsEventInput(eventType: eventName, attributes: [:])]
-                }
-                
-                let mUserId: String? = "AnonymousUser:\(endPointId)"
-                
-                if mUserId != userId {
-                    userId = mUserId
-                    try await createOrUpdateEndpoint()
-                }
-                let sessionStopEvent = events.first(where: { $0.eventType == AnalyticsEventType.sessionStop.eventType } )
-                if sessionData.creationStatus == .notCreated {
-                    try await startSession()
-                }
-                
-                if sessionStopEvent != nil {
-                    events.append(AnalyticsEventInput(eventType: AnalyticsEventType.sessionEnd.eventType, attributes: sessionStopEvent!.attributes))
-                }
-                
-                var attributes: [String: String] = [:]
-                
-                properties.forEach { (key, value) in
-                    attributes[key] = value
-                }
-                
-                attributes[AnalyticsAttribute.userAWSAccountConnectionStatus] = AnalyticsAttribute.userAWSAccountConnectionStatusNotConnected
-                attributes[AnalyticsAttribute.userAuthenticationStatus] = AnalyticsAttribute.userAWSAccountConnectionStatusUnauthenticated
-                
-                events.forEach { event in
-                    event.attributes = attributes
-                }
-                
-                let eventMap = Dictionary(uniqueKeysWithValues: events.map { (UUID().uuidString, $0.toEvent(sessionId: sessionData.id ?? "", sessionStart: sessionData.startTimeStamp ?? "")) })
-                let endPoint = PinpointClientTypes.PublicEndpoint()
-                
-                
-                let eventBatch: PinpointClientTypes.EventsBatch = PinpointClientTypes.EventsBatch(endpoint: endPoint, events: eventMap)
-                let batchItem: [String: PinpointClientTypes.EventsBatch] = [endPointId: eventBatch]
-                
-                let eventRequest = PinpointClientTypes.EventsRequest(batchItem: batchItem)
-                
-                let input = PutEventsInput(
-                    applicationId: appId,
-                    eventsRequest: eventRequest
-                )
-                let result = try await pinpointClient?.putEvents(input: input)
-                result?.eventsResponse?.results?.forEach { print($0) }
-                
-                if eventName == AnalyticsEventType.sessionStop.eventType {
-                    sessionData = AnalyticsSessionData()
-                }
-            }
-        } catch {
-            print("Analytics recording failed: \(error)")
-            throw error
         }
     }
     
-    func startSession() async throws {
+    private func startSession() async throws {
         sessionData.creationStatus = .inProgress
         try await createOrUpdateEndpoint()
         sessionData.id = UUID().uuidString
         sessionData.startTimeStamp = Date().convertDateToIsoString()
-        try await recordEvent(AnalyticsEventType.sessionStart.eventType)
+        recordEvent(AnalyticsEventType.sessionStart.eventType)
         sessionData.creationStatus = .created
     }
     
-    func stopSession() async throws {
-        try await recordEvent(AnalyticsEventType.sessionStop.eventType)
+    private func stopSession() async throws {
+        recordEvent(AnalyticsEventType.sessionStop.eventType)
     }
 }

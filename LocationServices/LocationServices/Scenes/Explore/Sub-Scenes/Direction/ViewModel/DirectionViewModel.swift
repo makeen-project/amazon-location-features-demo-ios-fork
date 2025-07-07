@@ -105,7 +105,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 }
             }
         }
-        
+        //Record Analytics Event
+        let properties: [(String, String)] = [(AnalyticsAttribute.value, text),
+                                              (AnalyticsAttribute.type, text.isCoordinate() ? AnalyticsAttributeValue.coordinates : AnalyticsAttributeValue.text),
+                                              (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.routeModule),
+                                              (AnalyticsAttribute.action, AnalyticsAttributeValue.autocomplete)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.placeSearch, properties: properties)
+        //Record Analytics Event End
     }
     
     func searchWith(text: String, userLat: Double?, userLong: Double?) async throws {
@@ -140,6 +146,13 @@ final class DirectionViewModel: DirectionViewModelProtocol {
             let model = resultValue.map(MapModel.init)
             self.delegate?.searchResult(mapModel: model)
         }
+        //Record Analytics Event
+        let properties: [(String, String)] = [(AnalyticsAttribute.value, text),
+                                              (AnalyticsAttribute.type, text.isCoordinate() ? AnalyticsAttributeValue.coordinates : AnalyticsAttributeValue.text),
+                                              (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.routeModule),
+                                              (AnalyticsAttribute.action, AnalyticsAttributeValue.autocomplete)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.placeSearch, properties: properties)
+        //Record Analytics Event End
     }
     
     func numberOfRowsInSection() -> Int {
@@ -211,6 +224,7 @@ final class DirectionViewModel: DirectionViewModelProtocol {
                 }
             return false
         }
+        
     }
     
     func getCurrentNavigationRouteWith(_ type: RouteTypes) -> Result<GeoRoutesClientTypes.Route?, Error> {

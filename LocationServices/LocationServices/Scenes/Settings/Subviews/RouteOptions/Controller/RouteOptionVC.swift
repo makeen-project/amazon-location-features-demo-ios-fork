@@ -33,6 +33,9 @@ final class RouteOptionVC: UIViewController {
         setupHandlers()
         setupViews()
         viewModel.loadData()
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.defaultRouteOptions)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,6 +46,9 @@ final class RouteOptionVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.isNavigationBarHidden = true
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.defaultRouteOptions)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     private func setupViews() {

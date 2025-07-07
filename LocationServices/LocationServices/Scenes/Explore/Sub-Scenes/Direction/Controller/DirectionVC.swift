@@ -260,6 +260,12 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                                             userLat: self?.userLocation?.lat,
                                                             userLong: self?.userLocation?.long)
             }
+            
+            let properties: [(String, String)] = [(AnalyticsAttribute.value, model.searchText),
+                                                  (AnalyticsAttribute.type, model.searchText.isCoordinate() ? AnalyticsAttributeValue.coordinates : AnalyticsAttributeValue.text),
+                                                  (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.routeModule),
+                                                  (AnalyticsAttribute.action, self?.isDestination == true ? AnalyticsAttributeValue.toSearchAutocomplete : AnalyticsAttributeValue.fromSearchAutocomplete)]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.placeSearch, properties: properties)
         }
         
         directionSearchView.searchReturnHandler = { [weak self] model in
@@ -385,9 +391,6 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
         } else if secondDestination?.placeName == StringConstant.myLocation {
             secondDestination = currentLocation
         }
-//        Task {
-//            try await calculateRoute()
-//        }
     }
     
     private func setupViews() {
@@ -514,6 +517,13 @@ final class DirectionVC: UIViewController, UIScrollViewDelegate {
                                         leaveTime: leaveTime,
                                         arrivalTime: arrivalTime,
                                         drawDirections: drawDirections)
+        
+        recordEventForRoute(routeType: routeType,
+                                 avoidTolls: avoidTolls,
+                                 avoidFerries: avoidFerries,
+                                 avoidUturns: avoidUturns,
+                                 avoidTunnels: avoidTunnels,
+                                 avoidDirtRoads: avoidDirtRoads)
     }
     
     func setupSearchTitleDestinations() {
@@ -810,6 +820,29 @@ extension DirectionVC: DirectionViewOutputDelegate {
     
     func changeRoute(type: RouteTypes) async throws {
         try await calculateRoute(routeType: type, avoidTolls: viewModel.avoidTolls, avoidFerries: viewModel.avoidFerries, avoidUturns: viewModel.avoidUturns, avoidTunnels: viewModel.avoidTunnels, avoidDirtRoads: viewModel.avoidDirtRoads, leaveNow: viewModel.leaveNow, leaveTime: viewModel.leaveTime, arrivalTime: viewModel.arrivalTime, drawDirections: true)
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.travelMode, type.title),
+                                              (AnalyticsAttribute.distanceUnit, UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)?.title ?? UnitTypes.automatic.title),
+                                              (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.routeModule)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.routeOptionChanged, properties: properties)
+    }
+    
+    func recordEventForRoute(routeType: RouteTypes,
+                             avoidTolls: Bool,
+                             avoidFerries: Bool,
+                             avoidUturns: Bool,
+                             avoidTunnels: Bool,
+                             avoidDirtRoads: Bool) {
+        let unit = UserDefaultsHelper.getObject(value: UnitTypes.self, key: .unitType)?.title ?? UnitTypes.automatic.title
+        let properties: [(String, String)] = [(AnalyticsAttribute.travelMode, routeType.title),
+                                              (AnalyticsAttribute.distanceUnit, unit),
+                                              (AnalyticsAttribute.triggeredBy, AnalyticsAttributeValue.routeModule),
+                                              (AnalyticsAttribute.avoidFerries, String(avoidFerries)),
+                                              (AnalyticsAttribute.avoidTolls, String(avoidTolls)),
+                                              (AnalyticsAttribute.avoidDirtRoads, String(avoidDirtRoads)),
+                                              (AnalyticsAttribute.avoidUturns, String(avoidUturns)),
+                                              (AnalyticsAttribute.avoidTunnels, String(avoidTunnels))]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.routeSearch, properties: properties)
     }
 }
 

@@ -25,7 +25,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Reachability.shared.startMonitoring()
         //LanguageManager.shared
+        
+        // Install crash handlers early
+        installCrashHandlers()
         return true
+    }
+    
+    // Your custom crash handler installer
+    private func installCrashHandlers() {
+        // Uncaught Objective-C exceptions
+        NSSetUncaughtExceptionHandler { exception in
+            let properties: [(String, String)] = [(AnalyticsAttribute.error, exception.reason ?? "No reason provided")]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.applicationError, properties: properties)
+        }
+        var lowLevelCrash = ""
+        // Handle fatal signals (e.g., SIGABRT, SIGSEGV)
+        signal(SIGABRT) { signal in
+            let properties: [(String, String)] = [(AnalyticsAttribute.error, "Received SIGABRT")]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.applicationError, properties: properties)
+         }
+        signal(SIGILL) { signal in
+            let properties: [(String, String)] = [(AnalyticsAttribute.error, "Received SIGILL")]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.applicationError, properties: properties)
+        }
+        signal(SIGSEGV) { signal in
+            let properties: [(String, String)] = [(AnalyticsAttribute.error, "Received SIGSEGV")]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.applicationError, properties: properties)
+        }
+        signal(SIGFPE) { signal in
+            let properties: [(String, String)] = [(AnalyticsAttribute.error, "Received SIGFPE")]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.applicationError, properties: properties)
+        }
+        signal(SIGBUS) { signal in
+            let properties: [(String, String)] = [(AnalyticsAttribute.error, "Received SIGBUS")]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.applicationError, properties: properties)
+        }
+        signal(SIGPIPE) { signal in
+            let properties: [(String, String)] = [(AnalyticsAttribute.error, "Received SIGPIPE")]
+            AnalyticsHelper.shared.recordEvent(AnalyticsEvent.applicationError, properties: properties)
+        }
     }
 
     // MARK: UISceneSession Lifecycle

@@ -45,7 +45,7 @@ struct AnalyticsAttribute {
     static let avoidFerries = "AvoidFerries"
     static let avoidTolls = "AvoidTolls"
     static let avoidDirtRoads = "AvoidDirtRoads"
-    static let avoidUTurns = "AvoidUTurns"
+    static let avoidUturns = "AvoidUTurns"
     static let avoidTunnels = "AvoidTunnels"
     static let error = "error"
     static let busName = "busName"

@@ -34,6 +34,14 @@ final class AboutVC: UIViewController {
         navigationItem.title = UIDevice.current.isPad ? "" : StringConstant.AboutTab.title
         setupViews()
         setupTableView()
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.about)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.about)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     private func setupViews() {

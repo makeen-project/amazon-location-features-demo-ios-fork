@@ -225,6 +225,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         super.viewDidDisappear(animated)
         removeNotifications()
         trackingAppearanceChanged(isVisible: false)
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.simulation)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     override func viewDidLoad() {
@@ -249,6 +252,11 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
         if UIDevice.current.userInterfaceIdiom == .pad {
             navigationController?.navigationBar.isHidden = true
         }
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.simulation)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.startSimulation, properties: properties)
+        
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
     }
     
     func centerMap() {
@@ -638,6 +646,18 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
                     self?.drawTrackingRoutes(routeToggle: routeToggle)
                     self?.simulateTrackingRoute(routeToggle: routeToggle)
                     
+                    let properties: [(String, String)] = [
+                        (
+                            AnalyticsAttribute.screenName,
+                            AnalyticsAttributeValue.simulation
+                        ),
+                        (
+                            AnalyticsAttribute.busName,
+                            routeToggle.optionTitle.text ?? ""
+                        )
+                    ]
+                    AnalyticsHelper.shared.recordEvent(AnalyticsEvent.changeBusTrackingHistory, properties: properties)
+                    
                 } else {
                     if let routeId = routeToggle.id {
                         let coordinates = self?.viewModel.busRoutes.first(where: { $0.id == routeId })?.coordinates ?? []
@@ -681,6 +701,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             trackingLabel.text = firstPart
             trackingDetailLabel.text = lastPart
         }
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.simulation),
+                                              (AnalyticsAttribute.busName, route.name)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.changeBusTrackingHistory, properties: properties)
     }
     
     func evaluateSelectedRoutes() {
@@ -717,17 +740,19 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
     }
     
     func startTracking(fillCovered: Bool = false) {
-            self.setTrackingActive(true)
-            self.updateButtonStyle(state: self.isTrackingActive())
+        self.setTrackingActive(true)
+        self.updateButtonStyle(state: self.isTrackingActive())
 
-            self.trackingVC?.viewModel.startIoTSubscription()
-            self.drawTracksandGeofences(fillCovered: fillCovered)
-            //Start tracking
-            self.simulateTrackingRoutes()
+        self.trackingVC?.viewModel.startIoTSubscription()
+        self.drawTracksandGeofences(fillCovered: fillCovered)
+        //Start tracking
+        self.simulateTrackingRoutes()
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.fitMapToRoute()
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.fitMapToRoute()
+        }
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.simulation)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.startTracking, properties: properties)
     }
     
     func stopTracking() {
@@ -736,6 +761,9 @@ final class TrackingSimulationController: UIViewController, UIScrollViewDelegate
             self.updateButtonStyle(state: self.isTrackingActive())
             self.trackingVC?.viewModel.stopIoTSubscription()
         }
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.simulation)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.stopTracking, properties: properties)
+
     }
     
     func drawTracksandGeofences(fillCovered: Bool = false) {

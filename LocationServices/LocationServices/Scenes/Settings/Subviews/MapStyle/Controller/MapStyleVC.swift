@@ -96,6 +96,9 @@ final class MapStyleVC: UIViewController {
         viewModel.loadLocalMapData()
         setupCollectionView()
         setupViews()
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.mapStyle)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenOpen, properties: properties)
     }
     
     override func viewWillLayoutSubviews() {
@@ -112,6 +115,9 @@ final class MapStyleVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.isNavigationBarHidden = true
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.mapStyle)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.screenClose, properties: properties)
     }
     
     private func setupViews() {

@@ -265,7 +265,11 @@ final class DirectionSearchView: UIView {
                 self.searchTextHandler?(model)
             }
         }
+        
+        let properties: [(String, String)] = [(AnalyticsAttribute.screenName, AnalyticsAttributeValue.explorer)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.routeSearch, properties: properties)
     }
+    
 }
 
 extension DirectionSearchView: UITextFieldDelegate {

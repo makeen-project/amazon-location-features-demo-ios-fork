@@ -66,5 +66,7 @@ private extension UnitSceneViewModel {
     
     func saveUnitSettingsData(unitType: UnitTypes) {
         UserDefaultsHelper.saveObject(value: unitType, key: .unitType)
+        let properties: [(String, String)] = [(AnalyticsAttribute.type, unitType.title)]
+        AnalyticsHelper.shared.recordEvent(AnalyticsEvent.mapUnitChange, properties: properties)
     }
 }
