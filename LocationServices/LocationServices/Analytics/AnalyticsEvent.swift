@@ -65,11 +65,11 @@ struct AnalyticsAttributeValue {
     static let version = "Version"
     static let termsConditions = "Terms & Conditions"
     static let help = "Help"
-    static let placesPopup = "PLACES_POPUP"
+    static let placesPopup = "Places popup"
     static let coordinates = "Coordinates"
     static let text = "Text"
     static let autocomplete = "Autocomplete"
-    static let routeModule = "ROUTE_MODULE"
+    static let routeModule = "Route module"
     static let toSearchAutocomplete = "To search autocomplete"
     static let fromSearchAutocomplete = "From search autocomplete"
 }
