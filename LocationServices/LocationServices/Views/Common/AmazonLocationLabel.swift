@@ -39,9 +39,7 @@ final class AmazonLocationLabel: UILabel {
     ) {
         self.text = labelText
         self.font = font
-        if textAlignment == .left {
-            self.applyLocaleDirection()
-        }
+        self.applyLocaleDirection()
         if isMultiline {
             self.numberOfLines = 0
         }
