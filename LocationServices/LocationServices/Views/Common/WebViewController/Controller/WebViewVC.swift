@@ -32,7 +32,7 @@ final class WebViewVC: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     override func viewDidLoad() {

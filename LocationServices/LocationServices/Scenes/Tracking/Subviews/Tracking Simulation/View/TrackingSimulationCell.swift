@@ -59,7 +59,6 @@ final class TrackSimulationCell: UITableViewCell {
     
     private var coordinateLabel: UILabel = {
         let label = UILabel()
-        label.text = StringConstant.coordinateLabelText
         label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
@@ -70,7 +69,6 @@ final class TrackSimulationCell: UITableViewCell {
     
     private var timeLabel = {
         let label = UILabel()
-        label.text = StringConstant.timeLabelText
         label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
@@ -129,7 +127,7 @@ final class TrackSimulationCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     

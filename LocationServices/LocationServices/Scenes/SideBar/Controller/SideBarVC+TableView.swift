@@ -25,7 +25,7 @@ extension SideBarVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SideBarCell.reuseId, for: indexPath) as? SideBarCell else {
-            fatalError("\(SideBarCell.reuseId) \(String.cellCanNotBeDequed)")
+            fatalError("\(SideBarCell.reuseId) \(ErrorMessage.cellCanNotBeDequed)")
         }
         let data = viewModel.getCellItems(indexPath)
         cell.model = data

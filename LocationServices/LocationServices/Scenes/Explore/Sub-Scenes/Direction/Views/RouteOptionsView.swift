@@ -50,7 +50,7 @@ final class RouteToggleButton: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     private func setupViews() {
@@ -428,7 +428,7 @@ final class RouteOptionsView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     private func setupViews() {

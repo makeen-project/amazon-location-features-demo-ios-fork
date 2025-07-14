@@ -26,7 +26,7 @@ extension SettingsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsCell.settingCellReuseId, for: indexPath) as? SettingsCell else {
-            fatalError("\(SettingsCell.settingCellReuseId) \(String.cellCanNotBeDequed)")
+            fatalError("\(SettingsCell.settingCellReuseId) \(ErrorMessage.cellCanNotBeDequed)")
         }
         let data = viewModel.getCellItems(indexPath)
         cell.data = data

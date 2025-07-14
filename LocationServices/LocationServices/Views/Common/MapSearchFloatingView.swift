@@ -84,7 +84,7 @@ final class MapSearchFloatingView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     func setSideBarButtonState(_ state: SideBarState) {

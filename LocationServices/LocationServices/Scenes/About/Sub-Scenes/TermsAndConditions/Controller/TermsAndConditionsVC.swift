@@ -20,7 +20,7 @@ final class TermsAndConditionsVC: UIViewController {
     private var desctiptionTextView: UITextView = {
         let tw = UITextView()
         
-        let text = StringConstant.About.descriptionTitle
+        let text = StringConstant.About.downloadTermsTitle
         let attributedString = NSMutableAttributedString(string: text)
         let clickableSets = [
             (StringConstant.About.appTermsOfUse, StringConstant.About.appTermsOfUseURL)
@@ -99,9 +99,9 @@ final class TermsAndConditionsVC: UIViewController {
     @objc func handleTapOnTerms(_ recognizer: UITapGestureRecognizer) {
         let url = StringConstant.About.appTermsOfUseURL
         
-        let range = StringConstant.About.descriptionTitle.range(of: StringConstant.About.appTermsOfUse)
+        let range = StringConstant.About.downloadTermsTitle.range(of: StringConstant.About.appTermsOfUse)
         guard let range,
-              recognizer.didTapAttributedTextInLabel(tw: desctiptionTextView, inRange: NSRange(range, in: StringConstant.About.descriptionTitle)) else { return }
+              recognizer.didTapAttributedTextInLabel(tw: desctiptionTextView, inRange: NSRange(range, in: StringConstant.About.downloadTermsTitle)) else { return }
         
         openSafariBrowser(with: URL(string: url))
     }

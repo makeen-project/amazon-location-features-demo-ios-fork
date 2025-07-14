@@ -28,7 +28,7 @@ extension TrackingSimulationController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackSimulationCell.reuseId, for: indexPath) as? TrackSimulationCell else {
-            fatalError(.errorCellCannotBeInititalized)
+            fatalError(ErrorMessage.errorCellCannotBeInitialized)
         }
         let data = getActiveRouteCoordinates()[indexPath.row]
         cell.model = data

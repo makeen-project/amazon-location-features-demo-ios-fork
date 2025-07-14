@@ -14,7 +14,7 @@ final class AboutVC: UIViewController {
     }
     
     private var screenTitleLabel: LargeTitleLabel = {
-        let label = LargeTitleLabel(labelText: StringConstant.about)
+        let label = LargeTitleLabel(labelText: StringConstant.more)
         return label
     }()
     

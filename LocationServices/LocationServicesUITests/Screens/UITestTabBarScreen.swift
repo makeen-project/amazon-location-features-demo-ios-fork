@@ -18,10 +18,10 @@ struct UITestTabBarScreen: UITestScreen {
     let app: XCUIApplication
     
     private enum Identifiers {
-        static var exploreTabBarButton: String { ViewsIdentifiers.General.exploreTabBarButton }
+        static var exploreTabBarButton: String { ViewsIdentifiers.General.navigateTabBarButton }
         static var settingsTabBarButton: String { ViewsIdentifiers.General.settingsTabBarButton }
         static var trackingTabBarButton: String { ViewsIdentifiers.General.trackingTabBarButton }
-        static var aboutTabBarButton: String { ViewsIdentifiers.General.aboutTabBarButton }
+        static var aboutTabBarButton: String { ViewsIdentifiers.General.moreTabBarButton }
         static var sideBarButton: String { ViewsIdentifiers.General.sideBarButton }
         static var fullScreenButton: String { ViewsIdentifiers.General.fullScreenButton }
         static var sideBarTableView: String { ViewsIdentifiers.General.sideBarTableView }

@@ -31,7 +31,7 @@ class PoliticalViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(String.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     private func setupViews() {
@@ -83,7 +83,7 @@ class PoliticalViewCell: UITableViewCell {
         itemTitle.text = politicalView.countryCode
         itemIcon.text = countryFlag
         itemIcon.font = UIFont.systemFont(ofSize: 24)
-        itemSubtitle.text = politicalView.politicalDescription
+        itemSubtitle.text = politicalView.description
     }
     
     func flag(country: String) -> String {

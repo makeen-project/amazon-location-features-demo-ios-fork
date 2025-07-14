@@ -13,11 +13,11 @@ extension UIImage {
     static let amazonLogo = UIImage(named: "amazon_logo")!
     static let appLogo = UIImage(named: "app-logo")!
     /// TabBar Icons
-    static let exploreIcon = UIImage(named: "icon-compass")!
+    static let navigateIcon = UIImage(named: "icon-compass")!
     static let trackingIcon = UIImage(named: "icon-radar-solid")!
     static let geofenceIcon = UIImage(named: "icon-geofence")!
     static let settingsIcon = UIImage(named: "icon-gear")!
-    static let about = UIImage(named: "icon-info")!
+    static let moreIcon = UIImage(named: "icon-info")!
     
     /// Search Bar Icons
     static let searchIcon = UIImage(systemName: "magnifyingglass")!

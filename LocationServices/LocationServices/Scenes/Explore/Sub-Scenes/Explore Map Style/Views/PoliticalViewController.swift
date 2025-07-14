@@ -201,7 +201,7 @@ class PoliticalViewController: UIViewController, UISearchBarDelegate, UITableVie
             filteredPoliticalViews = PoliticalViewTypes.filter {
                 $0.countryCode.lowercased().contains(query.lowercased()) ||
                 $0.fullName.lowercased().contains(query.lowercased()) ||
-                $0.politicalDescription.lowercased().contains(query.lowercased())
+                $0.description.lowercased().contains(query.lowercased())
             }
         }
         tableView.reloadData()

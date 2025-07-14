@@ -18,7 +18,7 @@ final class AmazonLocationButton: UIButton {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     private func setupPropertiesWith(title: String) {

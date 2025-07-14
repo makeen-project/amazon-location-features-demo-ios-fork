@@ -57,7 +57,7 @@ final class ExploreMapStyleCell: UITableViewCell {
     }
 
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     private func setupCollectionView() {
@@ -146,7 +146,7 @@ private final class CollectionViewWrapperView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     override func layoutSubviews() {

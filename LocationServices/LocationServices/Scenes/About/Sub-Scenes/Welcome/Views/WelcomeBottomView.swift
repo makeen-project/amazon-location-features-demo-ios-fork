@@ -17,7 +17,7 @@ final class WelcomeBottomView: UIView {
     private var desctiptionTextView: UITextView = {
         let tw = UITextView()
         
-        let text = StringConstant.About.descriptionTitle
+        let text = StringConstant.About.downloadTermsTitle
         let attributedString = NSMutableAttributedString(string: text)
         let clickableSets = [
             (StringConstant.About.appTermsOfUse, StringConstant.About.appTermsOfUseURL)
@@ -61,7 +61,7 @@ final class WelcomeBottomView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     private func setupViews() {

@@ -141,7 +141,7 @@ final class SearchCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     override func prepareForReuse() {

@@ -51,7 +51,7 @@ final class TrackingDashboardView: UIView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError(.errorCannotInitializeView)
+        fatalError(ErrorMessage.errorCannotInitializeView)
     }
     
     override func layoutSubviews() {

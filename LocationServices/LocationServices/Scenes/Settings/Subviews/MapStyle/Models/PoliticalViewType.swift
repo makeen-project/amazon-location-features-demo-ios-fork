@@ -9,5 +9,5 @@ struct PoliticalViewType: Codable {
     let countryCode: String
     let flagCode: String
     let fullName: String
-    let politicalDescription: String
+    let description: String
 }

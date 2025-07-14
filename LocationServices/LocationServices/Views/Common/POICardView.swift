@@ -417,7 +417,7 @@ final class POICardView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     @objc private func poiCardDismiss() {

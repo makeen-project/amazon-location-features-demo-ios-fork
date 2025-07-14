@@ -49,7 +49,7 @@ final class NoInternetConnectionView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorCannotInitializeView)
+        fatalError(ErrorMessage.errorCannotInitializeView)
     }
     
     private func setupViews() {

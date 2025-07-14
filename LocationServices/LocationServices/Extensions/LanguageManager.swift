@@ -13,23 +13,25 @@ class LanguageManager {
         }
         set {
             UserDefaultsHelper.save(value: [newValue], key: .AppleLanguages)
-            loadStrings()
+            loadStrings(currentLanguage: newValue )
             GeneralHelper.reloadUI()
         }
     }
     
-    func loadStrings(from file: String = "Localizations") {
-        
+    func loadStrings(currentLanguage: String) {
         do {
-            if let url = Bundle.main.url(forResource: file, withExtension: "json") {
+            if let url = Bundle.main.url(forResource: "Localizations", withExtension: "json") {
                 let data = try Data(contentsOf: url)
                 let parsed = try JSONDecoder().decode(XCStringsFile.self, from: data)
-                
+                translations = [:]
                 for (key, entry) in parsed.strings {
                     var localizedVariants: [String: String] = [:]
                     for (lang, unit) in entry.localizations {
-                        localizedVariants[lang] = unit.stringUnit.value
+                        if lang == currentLanguage {
+                            localizedVariants[lang] = unit.stringUnit.value
+                        }
                     }
+                    print("language key: \(key)")
                     translations[key] = localizedVariants
                 }
             }
@@ -41,7 +43,10 @@ class LanguageManager {
     }
 
     func localizedString(forKey key: String) -> String {
-        let translation = translations[key]?[currentLanguage] ?? key
+        guard let translation = translations[key]?[currentLanguage] else {
+            print("translation for \(key) not found")
+            return key
+        }
         return translation
     }
 }

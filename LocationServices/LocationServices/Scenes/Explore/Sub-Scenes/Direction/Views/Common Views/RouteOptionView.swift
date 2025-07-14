@@ -43,7 +43,7 @@ final class RouteOptionView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     @objc func changeState() {

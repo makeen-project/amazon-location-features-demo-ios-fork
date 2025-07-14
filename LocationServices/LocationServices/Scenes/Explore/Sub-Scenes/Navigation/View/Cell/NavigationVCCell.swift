@@ -83,7 +83,6 @@ final class NavigationVCCell: UITableViewCell {
     
     private var streetLabel: UILabel = {
         let label = UILabel()
-        label.text = "2 min"
         label.applyLocaleDirection()
         label.font = .amazonFont(type: .bold, size: 13)
         label.textColor = .lsTetriary
@@ -94,7 +93,6 @@ final class NavigationVCCell: UITableViewCell {
     
     private var distanceLabel = {
         let label = UILabel()
-        label.text = "300 m"
         label.applyLocaleDirection()
         label.font = .amazonFont(type: .regular, size: 13)
         label.textColor = .lsGrey
@@ -124,7 +122,7 @@ final class NavigationVCCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     private func setupView() {

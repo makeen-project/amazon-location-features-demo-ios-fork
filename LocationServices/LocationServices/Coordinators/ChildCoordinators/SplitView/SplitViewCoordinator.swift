@@ -59,15 +59,15 @@ final class SplitViewCoordinator: Coordinator {
         sideBarController.delegate = self
         
         splitViewController.setViewController(sideBarController, for: .primary)
-        showNextScene(type: .explore)
+        showNextScene(type: .navigate)
     }
     
     private func getSelectedCoordinator(type: SideBarCellType) -> Coordinator {
         switch type {
-        case .explore: return getExploreCoordinator()
+        case .navigate: return getExploreCoordinator()
         case .tracking: return getTrackingCoordinator()
         case .settings: return getSettingsCoordinator()
-        case .about: return getAboutCoordinator()
+        case .more: return getAboutCoordinator()
         }
     }
     
@@ -154,7 +154,7 @@ extension SplitViewCoordinator: SplitViewVisibilityProtocol {
     }
     
     func showSearchScene() {
-        showNextScene(type: .explore)
+        showNextScene(type: .navigate)
         showSupplementary()
     }
     

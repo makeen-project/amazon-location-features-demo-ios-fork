@@ -127,7 +127,7 @@ final class PoliticalView: UIButton {
 
     public func setPoliticalView() {
         if let politicalViewType = UserDefaultsHelper.getObject(value: PoliticalViewType.self, key: .politicalView) {
-            itemSubtitle.text = "\(politicalViewType.countryCode). \(politicalViewType.politicalDescription)"
+            itemSubtitle.text = "\(politicalViewType.countryCode). \(politicalViewType.description)"
             itemSubtitle.textColor = .mapStyleTintColor
         }
         else {

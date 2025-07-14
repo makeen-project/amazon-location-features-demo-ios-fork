@@ -24,8 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
         Reachability.shared.startMonitoring()
-        //LanguageManager.shared
-        
         // Install crash handlers early
         installCrashHandlers()
         return true

@@ -49,7 +49,7 @@ final class TrackingHeaderView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     @objc private func exitTracking() {

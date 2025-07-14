@@ -50,7 +50,7 @@ final class MapNavigationView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     func updateValues(distance: String?, street: String?, stepImage: UIImage?) {

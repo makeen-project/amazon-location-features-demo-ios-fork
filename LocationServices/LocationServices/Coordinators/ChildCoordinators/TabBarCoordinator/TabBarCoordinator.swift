@@ -37,7 +37,7 @@ private extension TabBarCoordinator {
         tabBarController.setViewControllers(viewControllers, animated: true)
         tabBarController.tabBar.clipsToBounds = true
         tabBarController.hidesBottomBarWhenPushed = false
-        tabBarController.selectedIndex = TabBarPage.explore.pageOrder
+        tabBarController.selectedIndex = TabBarPage.navigate.pageOrder
         tabBarController.tabBar.isTranslucent = false
         tabBarController.view.backgroundColor = .tabBarBackgroundColor
         tabBarController.tabBar.tintColor = .lsPrimary
@@ -51,7 +51,7 @@ private extension TabBarCoordinator {
 
 private extension TabBarCoordinator {
     func getAllPages() -> [UINavigationController] {
-        let allPages: [TabBarPage] = [.explore, .tracking, .settings, .about]
+        let allPages: [TabBarPage] = [.navigate, .tracking, .settings, .more]
         return allPages.map { getTabBarController($0) }
     }
 
@@ -63,9 +63,9 @@ private extension TabBarCoordinator {
         
         navigationController.tabBarItem.accessibilityIdentifier = page.accessbilityIdentifier
         switch page {
-        case .explore: startExploreScene(navigationController)
+        case .navigate: startExploreScene(navigationController)
         case .tracking: startTrackingScene(navigationController)
-        case .about: startAboutScene(navigationController)
+        case .more: startAboutScene(navigationController)
         case .settings: startSettingsScene(navigationController)
         }
 
@@ -90,7 +90,7 @@ private extension TabBarCoordinator {
         }
         
         exploreCoordinator.didSendDirectionEvent = {
-            self.tabBarController.selectedIndex = TabBarPage.explore.pageOrder
+            self.tabBarController.selectedIndex = TabBarPage.navigate.pageOrder
             self.childCoordinators.removeAll()
             let exploreCoordinator = ExploreCoordinator(navigationController: navigationController)
             exploreCoordinator.delegate = self

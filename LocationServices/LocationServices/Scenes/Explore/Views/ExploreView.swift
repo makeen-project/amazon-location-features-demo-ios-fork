@@ -208,7 +208,7 @@ final class ExploreView: UIView, NavigationMapProtocol {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     func hideGeoFence(state: Bool) {

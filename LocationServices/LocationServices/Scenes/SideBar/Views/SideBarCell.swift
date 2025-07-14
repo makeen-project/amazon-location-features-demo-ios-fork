@@ -9,23 +9,23 @@ import UIKit
 import SnapKit
 
 enum SideBarCellType {
-    case explore, tracking, settings, about
+    case navigate, tracking, settings, more
     
     var title: String {
         switch self {
-        case .explore: return StringConstant.TabBar.explore
+        case .navigate: return StringConstant.TabBar.navigate
         case .tracking: return StringConstant.TabBar.tracking
         case .settings: return StringConstant.TabBar.settings
-        case .about: return StringConstant.TabBar.about
+        case .more: return StringConstant.TabBar.more
         }
     }
     
     private var icon: UIImage {
         switch self {
-        case .explore: return UIImage.exploreIcon
+        case .navigate: return UIImage.navigateIcon
         case .tracking: return UIImage.trackingIcon
         case .settings: return UIImage.settingsIcon
-        case .about: return UIImage.about
+        case .more: return UIImage.moreIcon
         }
     }
     
@@ -41,10 +41,10 @@ enum SideBarCellType {
     
     var accessbilityIdentifier: String {
         switch self {
-        case .explore: return ViewsIdentifiers.General.exploreTabBarButton
+        case .navigate: return ViewsIdentifiers.General.navigateTabBarButton
         case .tracking: return ViewsIdentifiers.General.trackingTabBarButton
         case .settings: return ViewsIdentifiers.General.settingsTabBarButton
-        case .about: return ViewsIdentifiers.General.aboutTabBarButton
+        case .more: return ViewsIdentifiers.General.moreTabBarButton
         }
     }
 }
@@ -102,7 +102,7 @@ final class SideBarCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -36,8 +36,6 @@ extension SettingsCoordinator: SettingsNavigationDelegate {
         switch type {
         case .units:
             showUnitScene()
-        case .dataProvider:
-            showDataProviderScene()
         case .mapStyle:
             showMapStyleScene()
         case .routeOption:
@@ -51,11 +49,6 @@ extension SettingsCoordinator: SettingsNavigationDelegate {
     
     private func showUnitScene() {
         let controller = UnitSceneBuilder.create()
-        navigationController.pushViewController(controller, animated: true)
-    }
-    
-    private func showDataProviderScene() {
-        let controller = DataProviderBuilder.create()
         navigationController.pushViewController(controller, animated: true)
     }
     

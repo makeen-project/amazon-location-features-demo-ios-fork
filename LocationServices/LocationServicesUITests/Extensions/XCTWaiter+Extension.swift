@@ -27,7 +27,7 @@ extension XCTWaiter {
 
         if result != .completed {
             XCTFail(
-                message.isEmpty ? String.testExpectationError : message,
+                message.isEmpty ? ErrorMessage.testExpectationError : message,
                 file: file,
                 line: line
             )

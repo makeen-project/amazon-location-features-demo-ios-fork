@@ -164,7 +164,7 @@ final class SearchBarView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
         
     func setupTextWith(text: String) {

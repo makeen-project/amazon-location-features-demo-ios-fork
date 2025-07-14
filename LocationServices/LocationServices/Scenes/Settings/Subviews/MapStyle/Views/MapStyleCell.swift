@@ -55,7 +55,7 @@ final class MapStyleCell: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     func isCellSelected(state: Bool) {

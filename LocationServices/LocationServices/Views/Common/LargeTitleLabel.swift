@@ -19,7 +19,7 @@ final class LargeTitleLabel: UILabel {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     convenience init(labelText: String) {

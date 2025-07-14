@@ -126,7 +126,7 @@ final class TrackingSimulationDashboardView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorCannotInitializeView)
+        fatalError(ErrorMessage.errorCannotInitializeView)
     }
     
     @objc private func simulationDismiss() {

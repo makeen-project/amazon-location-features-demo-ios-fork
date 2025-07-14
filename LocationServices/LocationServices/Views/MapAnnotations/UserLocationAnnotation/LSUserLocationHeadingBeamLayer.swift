@@ -33,7 +33,7 @@ class LSUserLocationHeadingBeamLayer: CALayer, LSUserLocationHeadingIndicator {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(.errorInitWithCoder)
+        fatalError(ErrorMessage.errorInitWithCoder)
     }
     
     override init(layer: Any) {

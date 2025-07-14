@@ -467,7 +467,7 @@ extension BottomSheetInteractiveDismissalTransition: UIViewControllerAnimatedTra
         using transitionContext: UIViewControllerContextTransitioning
     ) -> UIViewImplicitlyAnimating {
         guard let offsetAnimator = offsetAnimator else {
-            fatalError(.errorAnimatorNotSet)
+            fatalError(ErrorMessage.errorAnimatorNotSet)
         }
 
         return offsetAnimator
