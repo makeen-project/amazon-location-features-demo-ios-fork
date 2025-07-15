@@ -20,6 +20,7 @@ class AnalyticsHelper {
     private(set) var endPointId: String = UserDefaultsHelper.get(for: String.self, key: .analyticsEndpointId) ?? ""
     private(set) var sessionData: AnalyticsSessionData = AnalyticsSessionData()
     private(set) var userId: String? = nil
+    private(set) var analyticsProvider: AnalyticsCredentialsProvider? = nil
     
     private func initialise() async throws {
         guard let awsConfig = GeneralHelper.getAWSConfigurationModel() else {
@@ -31,16 +32,16 @@ class AnalyticsHelper {
             identityPoolId: awsConfig.analyticsIdentityPoolId
         )
         
-        let analyticsProvider = AnalyticsCredentialsProvider(
+        analyticsProvider = AnalyticsCredentialsProvider(
             identityPoolId: awsConfig.analyticsIdentityPoolId,
             region: region
         )
         
-        try await analyticsProvider.refreshCognitoCredentials()
+        try await analyticsProvider?.refreshCognitoCredentials()
             
         var resolver: StaticAWSCredentialIdentityResolver?
 
-        if let credentials = analyticsProvider.getCognitoCredentials() {
+        if let credentials = analyticsProvider?.getCognitoCredentials() {
             let credentialsIdentity = AWSCredentialIdentity(
                 accessKey: credentials.accessKeyId,
                 secret: credentials.secretKey,
@@ -101,7 +102,7 @@ class AnalyticsHelper {
     func recordEvent(_ eventName: String, properties : [(String, String)] = []) {
         Task {
             do {
-                if pinpointClient == nil {
+                if pinpointClient == nil || analyticsProvider?.isCongnitoCredentialsExpired() == true {
                     try await initialise()
                 }
                 

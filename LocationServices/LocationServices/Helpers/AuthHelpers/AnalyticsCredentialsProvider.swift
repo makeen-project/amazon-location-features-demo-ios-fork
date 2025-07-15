@@ -39,6 +39,14 @@ class AnalyticsCredentialsProvider {
         }
     }
     
+    func isCongnitoCredentialsExpired() -> Bool {
+        if let savedCredentials = getCognitoCredentials(), savedCredentials.expiration! > Date() {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func refreshCognitoCredentials() async throws {
         if let cognitoCredentials = try await generateCognitoCredentials() {
             setCognitoCredentials(cognitoCredentials: cognitoCredentials)
