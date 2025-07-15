@@ -18,10 +18,10 @@ struct UITestTabBarScreen: UITestScreen {
     let app: XCUIApplication
     
     private enum Identifiers {
-        static var exploreTabBarButton: String { ViewsIdentifiers.General.navigateTabBarButton }
+        static var navigateTabBarButton: String { ViewsIdentifiers.General.navigateTabBarButton }
         static var settingsTabBarButton: String { ViewsIdentifiers.General.settingsTabBarButton }
         static var trackingTabBarButton: String { ViewsIdentifiers.General.trackingTabBarButton }
-        static var aboutTabBarButton: String { ViewsIdentifiers.General.moreTabBarButton }
+        static var moreTabBarButton: String { ViewsIdentifiers.General.moreTabBarButton }
         static var sideBarButton: String { ViewsIdentifiers.General.sideBarButton }
         static var fullScreenButton: String { ViewsIdentifiers.General.fullScreenButton }
         static var sideBarTableView: String { ViewsIdentifiers.General.sideBarTableView }
@@ -32,9 +32,9 @@ struct UITestTabBarScreen: UITestScreen {
         isSupplementaryViewVisible = false
     }
     
-    func tapExploreButton() -> UITestExploreScreen {
+    func tapNavigateButton() -> UITestExploreScreen {
         showSideBar()
-        let button = getExploreTabBarButton()
+        let button = getNavigateTabBarButton()
         button.tap()
         
         return UITestExploreScreen(app: app)
@@ -69,8 +69,8 @@ struct UITestTabBarScreen: UITestScreen {
     }
     
     // MARK: - Private functions
-    private func getExploreTabBarButton() -> XCUIElement {
-        let button = getBarItem(identifier: Identifiers.exploreTabBarButton)
+    private func getNavigateTabBarButton() -> XCUIElement {
+        let button = getBarItem(identifier: Identifiers.navigateTabBarButton)
         XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
         return button
     }
@@ -88,7 +88,7 @@ struct UITestTabBarScreen: UITestScreen {
     }
     
     private func getAboutTabBarButton() -> XCUIElement {
-        let button = getBarItem(identifier: Identifiers.aboutTabBarButton)
+        let button = getBarItem(identifier: Identifiers.moreTabBarButton)
         XCTAssertTrue(button.waitForExistence(timeout: UITestWaitTime.regular.time))
         return button
     }

@@ -46,7 +46,7 @@ enum TabBarPage {
         case .navigate: return ViewsIdentifiers.General.navigateTabBarButton
         case .tracking: return ViewsIdentifiers.General.trackingTabBarButton
         case .settings: return ViewsIdentifiers.General.settingsTabBarButton
-        case .more: return ViewsIdentifiers.General.navigateTabBarButton
+        case .more: return ViewsIdentifiers.General.moreTabBarButton
         }
     }
 }

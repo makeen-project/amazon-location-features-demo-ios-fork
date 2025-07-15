@@ -53,7 +53,7 @@ final class SettingsUITests: LocationServicesUITests {
         let routingScreen = routeOptionsScreen
             .tapBackButton()
             .getTabBarScreen()
-            .tapExploreButton()
+            .tapNavigateButton()
             .tapRouting()
             .selectDepartureTextField()
             .typeInDepartureTextField(text: Constants.departureAddress)
@@ -94,7 +94,7 @@ final class SettingsUITests: LocationServicesUITests {
         Thread.sleep(forTimeInterval: 2)
         let exploreScreen = settingsScreen
             .getTabBarScreen()
-            .tapExploreButton()
+            .tapNavigateButton()
             .waitForMapToBeRendered()
         
         let screenshotAfter = exploreScreen.takeMapScreenshot()
